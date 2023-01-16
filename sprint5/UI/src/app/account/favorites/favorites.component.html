@@ -1,0 +1,24 @@
+<div class="col">
+  <h1 data-test="page-title">Favorites</h1>
+  <div *ngIf="!favorites?.length">
+    There are no favorites yet. In order to add favorites, please go to the product listing and mark some products as
+    your favorite.
+  </div>
+  <div attr.data-test="favorite-{{favorite.product.id}}" *ngFor="let favorite of favorites" class="card mb-3">
+    <div class="row no-gutters">
+      <div class="col-md-3 text-center">
+        <img src="assets/img/products/{{favorite.product.product_image.file_name}}" class="card-img"
+             alt="{{favorite.product.name}}">
+      </div>
+      <div class="col-md-7">
+        <div class="card-body">
+          <h5 data-test="product-name" class="card-title">{{favorite.product.name}}</h5>
+          <p data-test="product-description" class="card-text">{{favorite.product.description | truncate: 250}}</p>
+        </div>
+      </div>
+      <div class="col-md-2 align-self-center text-center mx-auto">
+        <button class="btn-danger btn mb-3" data-test="delete" (click)="deleteFavorite(favorite)"><i class="fa fa-remove"></i></button>
+      </div>
+    </div>
+  </div>
+</div>

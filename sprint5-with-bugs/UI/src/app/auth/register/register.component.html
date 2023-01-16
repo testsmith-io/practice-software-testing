@@ -1,0 +1,231 @@
+<div class="container auth-container">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 auth-form">
+      <h3>Customer registration</h3>
+      <form [formGroup]="register" (ngSubmit)="onSubmit()" data-test="register-form">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="first_name" class="form-label">First name</label>
+              <input formControlName="first_name"
+                     id="first_name"
+                     data-test="first-name"
+                     class="form-control"
+                     [ngClass]="{ 'is-invalid': submitted && f['first_name'].errors }"
+                     type="text"
+                     placeholder="Your first name *"
+                     value=""/>
+            </div>
+            <div data-test="first-name-error" *ngIf="f['first_name'].invalid && submitted"
+                 class="alert alert-danger">
+              <div *ngIf="f['first_name'].errors?.['required']">
+                First name is required.
+              </div>
+              <div *ngIf="f['first_name'].errors?.['pattern']">
+                Invalid character.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="last_name" class="form-label">Last name</label>
+              <input formControlName="last_name"
+                     id="last_name"
+                     data-test="last-name"
+                     class="form-control"
+                     [ngClass]="{ 'is-invalid': submitted && f['last_name'].errors }" type="text"
+                     placeholder="Your last name *"
+                     value=""/>
+            </div>
+            <div data-test="last-name-error" *ngIf="f['last_name'].invalid && submitted"
+                 class="alert alert-danger">
+              <div *ngIf="f['last_name'].errors?.['required']">
+                Last name is required.
+              </div>
+              <div *ngIf="f['last_name'].errors?.['pattern']">
+                Invalid character.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="dob" class="form-label">Date of birth</label>
+            <input formControlName="dob"
+                   id="dob"
+                   data-test="dob"
+                   class="form-control"
+                   type="date"
+                   [ngClass]="{ 'is-invalid': submitted && f['dob'].errors }"
+                   placeholder="Your Date of birth *"
+                   value=""/>
+            <div data-test="dob-error" *ngIf="f['dob'].invalid && submitted"
+                 class="alert alert-danger mt-3">
+              <div *ngIf="f['dob'].errors?.['required']">
+                Date of Birth is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="address" class="form-label">Address</label>
+            <input formControlName="address"
+                   id="address"
+                   data-test="address"
+                   class="form-control"
+                   [ngClass]="{ 'is-invalid': submitted && f['address'].errors }" type="text"
+                   placeholder="Your address *"
+                   value=""/>
+            <div data-test="address-error" *ngIf="f['address'].invalid && submitted"
+                 class="alert alert-danger mt-3">
+              <div *ngIf="f['address'].errors?.['required']">
+                Address is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group mb-3">
+              <label for="postcode" class="form-label">Postcode</label>
+              <input formControlName="postcode"
+                     id="postcode"
+                     data-test="postcode"
+                     class="form-control"
+                     [ngClass]="{ 'is-invalid': submitted && f['postcode'].errors }" type="text"
+                     placeholder="Your postcode *"
+                     value=""/>
+            </div>
+            <div data-test="postcode-error" *ngIf="f['postcode'].invalid && submitted"
+                 class="alert alert-danger">
+              <div *ngIf="f['postcode'].errors?.['required']">
+                Postcode is required.
+              </div>
+              <div *ngIf="f['postcode'].errors?.['pattern']">
+                Only 5 numbers are allowed.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="form-group mb-3">
+              <label for="city" class="form-label">City</label>
+              <input formControlName="city"
+                     id="city"
+                     data-test="city"
+                     class="form-control"
+                     [ngClass]="{ 'is-invalid': submitted && f['city'].errors }" type="text"
+                     placeholder="Your city *"
+                     value=""/>
+            </div>
+            <div data-test="city-error" *ngIf="f['city'].invalid && submitted"
+                 class="alert alert-danger">
+              <div *ngIf="f['city'].errors?.['required']">
+                City is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="state" class="form-label">Country</label>
+              <input formControlName="state"
+                     id="state"
+                     data-test="state"
+                     class="form-control"
+                     [ngClass]="{ 'is-invalid': submitted && f['state'].errors }" type="text"
+                     placeholder="Your state *"
+                     value=""/>
+            </div>
+            <div data-test="state-error" *ngIf="f['state'].invalid && submitted"
+                 class="alert alert-danger">
+              <div *ngIf="f['state'].errors?.['required']">
+                State is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="country" class="form-label">State</label>
+              <select id="country"
+                      data-test="country"
+                      formControlName="country"
+                      [ngClass]="{ 'is-invalid': submitted && f['country'].errors }" class="form-select">
+                <option value="" disabled selected hidden>Select your country *</option>
+                <option *ngFor="let country of countries" value="{{country.code}}">{{country.name}}</option>
+              </select>
+            </div>
+            <div data-test="country-error" *ngIf="f['country'].invalid && submitted"
+                 class="alert alert-danger">
+              <div *ngIf="f['country'].errors?.['required']">
+                Country is required.
+              </div>
+            </div>
+          </div>
+          <div class="form-group mb-3">
+            <label for="phone" class="form-label">Phone</label>
+            <input formControlName="phone"
+                   id="phone"
+                   data-test="phone"
+                   class="form-control"
+                   [ngClass]="{ 'is-invalid': submitted && f['phone'].errors }" type="text"
+                   placeholder="Your phone *"
+                   value=""/>
+            <div data-test="phone-error" *ngIf="f['phone'].invalid && submitted"
+                 class="alert alert-danger mt-3">
+              <div *ngIf="f['phone'].errors?.['required']">
+                Phone is required.
+              </div>
+              <div *ngIf="f['phone'].errors?.['pattern']">
+                Only numbers are allowed.
+              </div>
+            </div>
+          </div>
+          <div class="form-group mb-3">
+            <label for="email" class="form-label">E-mail address</label>
+            <input formControlName="email"
+                   id="email"
+                   data-test="email"
+                   class="form-control"
+                   [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" type="text"
+                   placeholder="Your e-mail *"
+                   value=""/>
+            <div data-test="email-error" *ngIf="f['email'].invalid && submitted"
+                 class="alert alert-danger mt-3">
+              <div *ngIf="f['email'].errors?.['required']">
+                E-mail is required.
+              </div>
+              <div *ngIf="f['email'].errors?.['pattern']">
+                E-mail format is invalid.
+              </div>
+            </div>
+          </div>
+          <div class="form-group mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input formControlName="password"
+                   id="password"
+                   data-test="password"
+                   class="form-control"
+                   [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" type="password"
+                   placeholder="Your password *"
+                   value=""/>
+            <div data-test="password-error" *ngIf="f['password'].invalid && submitted"
+                 class="alert alert-danger mt-3">
+              <div *ngIf="f['password'].errors?.['required']">
+                Password is required.
+              </div>
+              <div *ngIf="f['password'].errors?.['minlength']">
+                Password must be minimal 10 characters long.
+              </div>
+              <div *ngIf="f['password'].errors?.['maxlength']">
+                Password can not be more than 40 characters long.
+              </div>
+            </div>
+          </div>
+          <button type="submit" data-test="register-submit" class="btnSubmit mb-3">Register</button>
+          <div data-test="register-error" *ngIf="error" class="alert alert-danger">
+            <div>
+              <div class="help-block">{{error}}</div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

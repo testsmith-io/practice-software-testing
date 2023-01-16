@@ -1,0 +1,117 @@
+<div *ngIf="!invoice.invoice_date" class="container mt-5">
+  <p>This invoice doesn't exist.</p>
+</div>
+<div *ngIf="invoice.invoice_date" class="container mt-5">
+  <div class="row">
+    <div class="col">
+      <h3>General Information</h3>
+      <form>
+        <div class="form-group row">
+          <label for="invoice_date" class="col-sm-3 col-form-label">Invoice Number</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" data-test="invoice-number" id="invoice_number"
+                   value="{{invoice.invoice_number}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="invoice_date" class="col-sm-3 col-form-label">Invoice Date</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" data-test="invoice-date" id="invoice_date"
+                   value="{{invoice.invoice_date}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="total" class="col-sm-3 col-form-label">Total</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" data-test="total" id="total" value="$ {{invoice.total.toFixed(2)}}">
+          </div>
+        </div>
+      </form>
+      <div class="mb-3"></div>
+
+      <h3>Billing Address</h3>
+      <form>
+        <div class="form-group row">
+          <label for="address" class="col-sm-3 col-form-label">Address</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" data-test="address" id="address" value="{{invoice.billing_address ? 'undefined' : 'undefined' }}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="postcode" class="col-sm-3 col-form-label">Postcode</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" data-test="postcode" id="postcode"
+                   value="{{invoice.billing_postcode  ? 'undefined' : 'undefined' }}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="city" class="col-sm-3 col-form-label">City</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" data-test="city" id="city" value="{{invoice.billing_country}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="state" class="col-sm-3 col-form-label">State</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" data-test="state" id="state" value="{{invoice.billing_state ? 'undefined' : 'undefined' }}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="country" class="col-sm-3 col-form-label">Country</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" data-test="country" id="country" value="{{invoice.billing_city}}">
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col">
+      <h3>Payment Information</h3>
+      <form>
+        <div class="form-group row">
+          <label for="payment_method" class="col-sm-3 col-form-label">Payment Method</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" data-test="payment-method" id="payment_method"
+                   value="Method not found">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="account_name" class="col-sm-3 col-form-label">Account Name</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" data-test="account-name" id="account_name"
+                   value="{{invoice.payment_account_name}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="account_number" class="col-sm-3 col-form-label">Account Number</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" data-test="account-number" id="account_number"
+                   value="{{invoice.payment_account_number}}">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <h3>Products</h3>
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th scope="col">Quantity</th>
+          <th scope="col">Product</th>
+          <th class="text-end" scope="col">Price</th>
+          <th class="text-end" scope="col">Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let invoiceline of invoice.invoicelines">
+          <td>{{invoiceline.quantity}}</td>
+          <td>{{invoiceline.product.name}}<small *ngIf="invoiceline.product.is_rental"> (Item for rent, price per hour)</small></td>
+          <td class="text-end">${{invoiceline.product.price | number: '1.2-2'}}</td>
+          <td class="text-end">${{invoiceline.quantity * invoiceline.product.price | number: '1.2-2'}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

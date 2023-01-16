@@ -1,0 +1,152 @@
+<div class="row">
+  <a href="#" routerLink="/admin/orders" class="mx-3 mt-3 link-secondary" data-test="back">Back</a>
+</div>
+<div *ngIf="!invoice" class="container mt-5">
+  <p>This invoice doesn't exist.</p>
+</div>
+<div *ngIf="invoice" class="container mt-5">
+  <div class="row">
+    <div class="col">
+      <h3>General Information</h3>
+      <form [formGroup]="invoiceForm">
+        <div class="form-group row">
+          <label for="invoice_date" class="col-sm-3 col-form-label">Invoice Number</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" data-test="invoice-number" id="invoice_number"
+                   value="{{invoice.invoice_number}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="invoice_date" class="col-sm-3 col-form-label">Invoice Date</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" id="invoice_date"
+                   data-test="invoice-date"
+                   value="{{invoice.invoice_date}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="total" class="col-sm-3 col-form-label">Total</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" id="total"
+                   data-test="invoice-total"
+                   value="$ {{invoice.total.toFixed(2)}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="status" class="col-sm-3 col-form-label">Status</label>
+          <div class="col-sm-9">
+            <div class="input-group">
+              <select id="status" data-test="order-status" formControlName="status" class="form-select">
+                <option [disabled]="orderState[status] <= orderState[invoice.status]" *ngFor="let status of statuses"
+                        value="{{status}}">{{status}}</option>
+              </select>
+              <div class="input-group-append">
+                <button class="btn btn-warning" (click)="updateStatus()" type="button" data-test="update-status-submit">Update status</button>
+              </div>
+            </div>
+            <div *ngIf="isUpdated && !hideAlert" [ngClass]="fadeOutMessage()" class="alert alert-success mt-3"
+                 role="alert">
+              Status updated!
+            </div>
+            <div *ngIf="error && !hideAlert" [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
+                 role="alert">
+              {{error}}
+            </div>
+          </div>
+        </div>
+        <div class="form-group row mt-3" *ngIf="invoice.status === 'ON_HOLD' || invoice.status_message">
+          <label for="status_message" class="col-sm-3 col-form-label">Status Message</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" [readOnly]="invoice.status_message" formControlName="status_message" data-test="status-message" id="status_message">
+          </div>
+        </div>
+      </form>
+      <div class="mb-3"></div>
+
+      <h3>Billing Address</h3>
+      <form>
+        <div class="form-group row">
+          <label for="address" class="col-sm-3 col-form-label">Address</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" id="address" data-test="address" value="{{invoice.billing_address}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="postcode" class="col-sm-3 col-form-label">Postcode</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" id="postcode" data-test="postcode"
+                   value="{{invoice.billing_postcode}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="city" class="col-sm-3 col-form-label">City</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" id="city" data-test="city" value="{{invoice.billing_city}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="state" class="col-sm-3 col-form-label">State</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" data-test="state" id="state" value="{{invoice.billing_state}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="country" class="col-sm-3 col-form-label">Country</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" data-test="country" id="country" value="{{invoice.billing_country}}">
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col">
+      <h3>Payment Information</h3>
+      <form>
+        <div class="form-group row">
+          <label for="payment_method" class="col-sm-3 col-form-label">Payment Method</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" data-test="payment-method" id="payment_method"
+                   value="{{invoice.payment_method}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="account_name" class="col-sm-3 col-form-label">Account Name</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" data-test="account-name" id="account_name"
+                   value="{{invoice.payment_account_name}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="account_number" class="col-sm-3 col-form-label">Account Number</label>
+          <div class="col-sm-9">
+            <input type="text" readonly class="form-control-plaintext" data-test="account-number" id="account_number"
+                   value="{{invoice.payment_account_number}}">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <h3>Products</h3>
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th scope="col">Quantity</th>
+          <th scope="col">Product</th>
+          <th class="text-end" scope="col">Price</th>
+          <th class="text-end" scope="col">Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let invoiceline of invoice.invoicelines">
+          <td>{{invoiceline.quantity}}</td>
+          <td>{{invoiceline.product.name}}<small *ngIf="invoiceline.product.is_rental"> (Item for rent, price per
+            hour)</small></td>
+          <td class="text-end">${{invoiceline.product.price | number: '1.2-2'}}</td>
+          <td class="text-end">${{invoiceline.quantity * invoiceline.product.price | number: '1.2-2'}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

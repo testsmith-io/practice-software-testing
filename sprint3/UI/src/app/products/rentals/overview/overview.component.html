@@ -1,0 +1,16 @@
+<div class="col" *ngIf="results">
+  <h1 data-test="page-title">Rentals</h1>
+  <div *ngFor="let result of results.data; let i = index" class="card mb-3">
+    <div attr.data-test="product-{{result.id}}" routerLink="/product/{{result.id}}" class="row no-gutters">
+      <div class="col-lg-3 text-center">
+        <img src="assets/img/products/{{result.product_image.file_name}}" class="card-img" alt="...">
+      </div>
+      <div class="col-lg-9" [ngClass]="{ 'order-md-first': i % 2}">
+        <div class="card-body">
+          <h5 class="card-title">{{result.name}}</h5>
+          <p class="card-text">{{result.description}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

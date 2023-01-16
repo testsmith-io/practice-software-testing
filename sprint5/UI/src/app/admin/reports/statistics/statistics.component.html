@@ -1,0 +1,80 @@
+<h1 data-test="page-title">Statistics</h1>
+
+<div class="row mb-5">
+  <div class="col-md-6">
+    <h4>Top 10 Best Selling Categories</h4>
+    <table class="table table-hover" *ngIf="top10BestSellingCategories">
+      <thead>
+      <tr>
+        <th scope="col">Category Name</th>
+        <th scope="col">Total Earned</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of top10BestSellingCategories">
+        <td>{{item.category_name}}</td>
+        <td>${{item.total_earned}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-md-6">
+    <h4>Top 10 Most Purchased Products</h4>
+    <table class="table table-hover" *ngIf="top10PurchasedProducts">
+      <thead>
+      <tr>
+        <th scope="col">Category Name</th>
+        <th scope="col">Total Earned</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of top10PurchasedProducts">
+        <td>{{item.name}}</td>
+        <td>{{item.count}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <h4>Customer By Country</h4>
+    <table class="table table-hover" *ngIf="customerByCountry">
+      <thead>
+      <tr>
+        <th scope="col">Category Name</th>
+        <th scope="col">Total Earned</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of customerByCountry">
+        <td>{{item.customer}}</td>
+        <td>{{item.country}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-md-6">
+    <h4>Total Sales Per Country</h4>
+    <table class="table table-hover" *ngIf="totalSalesPerCountry">
+      <thead>
+      <tr>
+        <th scope="col">Category Name</th>
+        <th scope="col">Total Earned</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of totalSalesPerCountry">
+        <td>{{item.billing_country}}</td>
+        <td>${{item.total_sales}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+

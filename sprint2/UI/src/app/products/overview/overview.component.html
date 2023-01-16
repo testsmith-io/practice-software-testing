@@ -1,0 +1,98 @@
+<div class="jumbotron my-4">
+  <p class="lead">
+    <img class="img-fluid" src="../assets/img/barn-2400x1600.jpg"/>
+  </p>
+  <hr class="my-4">
+</div>
+<div class="row">
+
+</div>
+<div class="row">
+  <div data-test="filters" id="filters" class="collapse d-md-block col-md-3 mb-3">
+    <h4 class="grid-title"><i class="fa fa-arrows-up-down"></i> Sort</h4>
+    <hr>
+    <form autocomplete=off>
+      <div class="input-group mb-3">
+        <select data-test="sort" (change)="changeSorting($event)" class="form-select">
+          <option value=""></option>
+          <option value="name,asc">Name (A - Z)</option>
+          <option value="name,desc">Name (Z - A)</option>
+          <option value="price,desc">Price (High - Low)</option>
+          <option value="price,asc">Price (Low - High)</option>
+        </select>
+      </div>
+    </form>
+
+
+    <h4 class="grid-title"><i class="fa fa-search"></i> Search</h4>
+    <hr>
+    <form [formGroup]="search" (ngSubmit)="onSearchSubmit()" autocomplete=off>
+      <div class="input-group mb-3">
+        <input formControlName="query" data-test="search-query" type="text" class="form-control">
+        <div class="input-group-append">
+          <button data-test="search-submit" class="btn btn-secondary" type="submit">Search</button>
+        </div>
+      </div>
+    </form>
+
+    <h4 class="grid-title"><i class="fa fa-filter"></i> Filters</h4>
+    <hr>
+    <h4>By category:</h4>
+    <ng-template #recursiveList let-list>
+      <div *ngFor="let category of list" class="checkbox">
+        <label><input #checkboxes *ngIf="category.parent_id" type="checkbox" class="icheck" attr.data-test="category-{{category.id}}" name="category_id"
+                      value="{{category.id}}" (change)="filterByCategory($event)"/>
+          {{category.name}}</label>
+        <ul *ngIf="category.sub_categories.length > 0">
+          <ng-container
+            *ngTemplateOutlet="recursiveList; context:{ $implicit: category.sub_categories }"></ng-container>
+        </ul>
+      </div>
+    </ng-template>
+    <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: categories }"></ng-container>
+
+    <div class="py-2"></div>
+
+    <h4>By brand:</h4>
+    <div *ngFor="let brand of brands" class="checkbox">
+      <label><input #checkboxes type="checkbox" class="icheck" name="brand_id" attr.data-test="brand-{{brand.id}}" value="{{brand.id}}"
+                    (change)="filterByBrand($event)"/>{{brand.name}}
+      </label>
+    </div>
+
+  </div>
+  <div class="col-md-9">
+    <a class="btn btn-secondary d-block d-md-none btn-block mb-3" data-bs-toggle="collapse" data-test="filters" href="#filters"
+       role="button" aria-expanded="false" aria-controls="collapseExample">
+      <i class="fa fa-filter"></i> Filters
+    </a>
+    <div class="container" attr.data-test="{{resultState}}" *ngIf="results">
+      <a attr.data-test="product-{{item.id}}" routerLink="/product/{{item.id}}"
+         *ngFor="let item of results.data | paginate: { itemsPerPage: results.per_page, currentPage: p, totalItems: results.total }"
+         class="card" style="text-decoration: none; color: black;">
+        <div class="card-img-wrapper">
+          <img class="card-img-top"
+               src="assets/img/products/{{item.product_image.file_name}}">
+        </div>
+        <div class="card-body">
+          <h5 data-test="product-name" class="card-title">
+            {{item.name}}
+          </h5>
+        </div>
+        <div class="card-footer">
+          <span *ngIf="item.stock <= 0" class="float-start text-danger" data-test="out-of-stock">Out of stock</span>
+          <span class="float-end text-muted">
+                   <span data-test="product-price"
+                         [ngClass]="{'discounted' : item.discount_price}">${{item.price.toFixed(2)}}</span> <span
+            data-test="product-discount-price" *ngIf="item.discount_price"> ${{item.discount_price.toFixed(2)}}</span>
+        </span>
+        </div>
+
+      </a>
+    </div>
+    <div class="mt-3">
+      <pagination-controls [autoHide]="true" [responsive]="true"
+                           (pageChange)="handlePageChange($event)"></pagination-controls>
+    </div>
+  </div>
+</div>

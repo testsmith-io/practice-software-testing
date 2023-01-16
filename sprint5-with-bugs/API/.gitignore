@@ -1,0 +1,9 @@
+/vendor
+!/resources/views/vendor
+/.idea
+/storage/logs
+Homestead.json
+Homestead.yaml
+.env.production
+.phpunit.result.cache
+toolshop

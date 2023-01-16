@@ -1,0 +1,126 @@
+<div class="container mt-5">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+    <div class="row">
+      <h2 data-test="page-title" *ngIf="isAddMode">Add Product</h2>
+      <h2 data-test="page-title" *ngIf="!isAddMode">Edit Product</h2>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <div *ngIf="!isAddMode" class="row mb-3">
+          <label for="id" class="col-sm-4 col-form-label">Id</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" formControlName="id" data-test="id" id="id" readonly>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="name" class="col-sm-4 col-form-label">Name</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" formControlName="name" data-test="name" id="name">
+          </div>
+          <div *ngIf="submitted && f['name'].errors" class="alert alert-danger mt-3 p-2" role="alert">
+            <div *ngIf="f['name'].errors['required']">Name is required</div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="description" class="col-sm-4 col-form-label">Description</label>
+          <div class="col-sm-8">
+            <textarea class="form-control" formControlName="description" data-test="description" id="description" rows="5"></textarea>
+          </div>
+          <div *ngIf="submitted && f['description'].errors" class="alert alert-danger mt-3 p-2" role="alert">
+            <div *ngIf="f['description'].errors['required']">Description is required</div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="stock" class="col-sm-4 col-form-label">Stock</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" formControlName="stock" data-test="stock" id="stock">
+          </div>
+          <div *ngIf="submitted && f['stock'].errors" class="alert alert-danger mt-3 p-2" role="alert">
+            <div *ngIf="f['price'].errors['required']">Quantity is required</div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="price" class="col-sm-4 col-form-label">Price</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" formControlName="price" data-test="price" id="price">
+          </div>
+          <div *ngIf="submitted && f['price'].errors" class="alert alert-danger mt-3 p-2" role="alert">
+            <div *ngIf="f['price'].errors['required']">Price is required</div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="is_location_offer" class="col-sm-4 col-form-label">Location offer</label>
+          <div class="col-sm-8">
+            <input class="form-check-input d-block" formControlName="is_location_offer" type="checkbox" [checked]="false"
+                   data-test="location-offer"
+                   id="is_location_offer">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="is_rental" class="col-sm-4 col-form-label">Item for rent</label>
+          <div class="col-sm-8">
+            <input class="form-check-input d-block" formControlName="is_rental" data-test="rental" type="checkbox" [checked]="false"
+                   id="is_rental">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="brand_id" class="col-sm-4 col-form-label">Brand</label>
+          <div class="col-sm-8">
+            <select class="form-select" formControlName="brand_id" data-test="brand-id" id="brand_id">
+              <option value="" selected></option>
+              <option *ngFor="let brand of brands" value="{{brand.id}}">{{brand.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="category_id" class="col-sm-4 col-form-label">Category</label>
+          <div class="col-sm-8">
+            <select class="form-select" formControlName="category_id" data-test="category-id" id="category_id">
+              <option value="" selected></option>
+              <option *ngFor="let category of categories" value="{{category.id}}">{{category.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="product_image_id" class="col-sm-4 col-form-label">Image</label>
+          <div class="col-sm-8">
+            <select class="form-select" (change)="setImage($event)" [(ngModel)]="selectedImageId"
+                    formControlName="product_image_id"
+                    data-test="product-image-id"
+                    id="product_image_id">
+              <option value="" selected></option>
+              <option *ngFor="let image of images" value="{{image.id}}">{{image.title}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <figure *ngIf="selectedImage" class="figure">
+          <div class="card-img-wrapper">
+            <img src="assets/img/products/{{selectedImage?.file_name}}" class="figure-img img-fluid"
+                 alt="{{selectedImage?.title}}">
+          </div>
+          <figcaption class="figure-caption">Photo by <a target="_blank"
+                                                         href="{{selectedImage?.by_url}}">{{selectedImage?.by_name}}</a>
+            on <a target="_blank"
+                  href="{{selectedImage?.source_url}}">{{selectedImage?.source_name}}</a>.
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary" data-test="product-submit">Save</button>
+        <a href="#" routerLink="/admin/products" class="mx-3 link-secondary" data-test="back">Back</a>
+        <div *ngIf="isUpdated && !hideAlert" [ngClass]="fadeOutMessage()" class="alert alert-success mt-3"
+             role="alert">
+          Product saved!
+        </div>
+        <div *ngIf="error && !hideAlert" [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
+             role="alert">
+          {{error}}
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

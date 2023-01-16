@@ -1,0 +1,121 @@
+<div class="container mt-5">
+  <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" autocomplete="off">
+    <div class="row">
+      <h2>Profile</h2>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="row mb-3">
+          <label for="first_name" class="col-sm-3 col-form-label">First Name</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" formControlName="first_name" data-test="first-name" id="first_name">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="last_name" class="col-sm-3 col-form-label">Last Name</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" formControlName="last_name" data-test="last-name" id="last_name">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="email" class="col-sm-3 col-form-label">Email</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" formControlName="email" data-test="email" id="email" readonly>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="phone" class="col-sm-3 col-form-label">Phone</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" data-test="phone" id="phone" formControlName="phone">
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="row mb-3">
+          <label for="address" class="col-sm-3 col-form-label">Address</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" data-test="address" id="address" formControlName="address">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="postcode" class="col-sm-3 col-form-label">Postcode</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" data-test="postcode" id="postcode" formControlName="postcode">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="city" class="col-sm-3 col-form-label">City</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" data-test="city" id="city" formControlName="city">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="state" class="col-sm-3 col-form-label">State</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" data-test="state" id="state" formControlName="state">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="country" class="col-sm-3 col-form-label">Country</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" data-test="country" id="country" formControlName="country">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary" data-test="update-profile-submit">Update Profile</button>
+        <div *ngIf="isProfileUpdated && !hideProfileAlert" [ngClass]="fadeOutMessage()" class="alert alert-success mt-3"
+             role="alert">
+          Your profile is <strong>successfully</strong> updated!
+        </div>
+        <div *ngIf="profileError && !hideProfileAlert" [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
+             role="alert">
+          {{profileError}}
+        </div>
+      </div>
+    </div>
+  </form>
+  <form [formGroup]="passwordForm" (ngSubmit)="updatePassword()" autocomplete="off">
+    <div class="row mt-3">
+      <h2>Password</h2>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="row mb-3">
+          <label for="current-password" class="col-sm-3 col-form-label">Current Password</label>
+          <div class="col-sm-9">
+            <input type="password" class="form-control" formControlName="current_password" data-test="current-password" id="current-password">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="new-password" class="col-sm-3 col-form-label">New Password</label>
+          <div class="col-sm-9">
+            <input type="password" class="form-control" formControlName="new_password" data-test="new-password" id="new-password">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="new-password-confirm" class="col-sm-3 col-form-label">Confirm New Password</label>
+          <div class="col-sm-9">
+            <input type="password" class="form-control" formControlName="new_password_confirmation"
+                   data-test="new-password-confirm" id="new-password-confirm">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary" data-test="change-password-submit">Change Password</button>
+        <div *ngIf="isPasswordUpdated && !hidePasswordAlert" [ngClass]="fadeOutMessage()"
+             class="alert alert-success mt-3" role="alert">
+          Your password is <strong>successfully</strong> updated!
+        </div>
+        <div *ngIf="passwordError && !hidePasswordAlert" [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
+             role="alert">
+          {{passwordError}}
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,55 @@
+<div class="container auth-container">
+  <div class="row justify-content-md-center">
+    <div class="col-lg-6 auth-form">
+      <h3>Login</h3>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete=off data-test="login-form">
+        <div class="input-group mb-3">
+          <input formControlName="email"
+                 class="form-control"
+                 id="email"
+                 data-test="email"
+                 [ngClass]="{ 'is-invalid': submitted && cf['email'].errors }" type="text"
+                 placeholder="Your E-mail *"
+                 value=""/>
+        </div>
+        <div data-test="email-error" *ngIf="email.invalid && submitted"
+             class="alert alert-danger">
+          <div *ngIf="email.errors?.required">
+            E-mail is required.
+          </div>
+          <div *ngIf="email.errors?.['pattern']">
+            E-mail format is invalid.
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input formControlName="password"
+                 class="form-control"
+                 id="password"
+                 data-test="password"
+                 [ngClass]="{ 'is-invalid': submitted && cf['password'].errors }" type="password"
+                 placeholder="Your Password *" value=""/>
+        </div>
+        <div data-test="password-error" *ngIf="password.invalid && submitted"
+             class="alert alert-danger">
+          <div *ngIf="password.errors?.required">
+            Password is required.
+          </div>
+          <div *ngIf="password.errors?.['minlength'] || password.errors?.['maxlength']">
+            Password length is invalid
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="submit" data-test="login-submit" class="btnSubmit" value="Login"/>
+        </div>
+        <div data-test="login-error" *ngIf="error" class="alert alert-danger">
+          <div class="help-block">{{error}}</div>
+        </div>
+        <div class="input-group mb-3">
+          <p>Not yet an account? <a data-test="register-link" routerLink="/auth/register">Register your account</a><br/>
+            <a data-test="forgot-password-link" routerLink="/auth/forgot-password" class="ForgetPwd">Forgot your
+              Password?</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

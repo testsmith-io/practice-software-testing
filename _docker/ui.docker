@@ -1,0 +1,27 @@
+FROM node:16-alpine3.14
+
+RUN apk update && \
+    apk add bash && \
+    npm install -g npm@8.3.0
+
+RUN npm install -s -g @angular/cli
+#    && \
+#    mkdir -p /app # Create a directory where our app will be placed
+
+# Change directory so that our commands run inside this new directory
+#WORKDIR /app
+
+# Copy dependency definitions
+#COPY package*.json /app/
+
+# Install dependencies
+# RUN npm install
+
+# Get all the code needed to run the app
+#COPY . /app/
+
+# Expose the port the app runs in
+EXPOSE 4200
+
+# Serve the app
+CMD ["npm", "install --dev", "start"]

@@ -1,0 +1,26 @@
+<h1 data-test="page-title">Invoices</h1>
+
+<table class="table table-hover" *ngIf="results">
+  <thead>
+  <tr>
+    <th scope="col">Invoice Number</th>
+    <th scope="col">Billing Address</th>
+    <th scope="col">Invoice Date</th>
+    <th scope="col">Total</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let item of results.data | paginate: { itemsPerPage: results.per_page, currentPage: p, totalItems: results.total }">
+    <td>{{item.invoice_number}}</td>
+    <td>{{item.billing_address}}</td>
+    <td>{{item.invoice_date}}</td>
+    <td>${{item.total | number: '1.2-2'}}</td>
+    <td style="white-space: nowrap">
+      <a routerLink="{{item.id}}" class="btn btn-sm btn-primary mr-1">Details</a>
+    </td>
+  </tr>
+  </tbody>
+  <tfoot>
+
+  </tfoot>
+</table>

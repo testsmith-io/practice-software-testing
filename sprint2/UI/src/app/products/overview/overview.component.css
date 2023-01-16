@@ -1,0 +1,35 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-gap: 15px;
+}
+
+.card-img-top {
+  width: 100%;
+  height: 15em;
+  object-fit: cover;
+  -webkit-transition: 5s ease;
+  transition: 5s ease;
+}
+
+.card-img-top:hover {
+  background-color: lightgrey;
+  transform: scale(1.15);
+  -webkit-transform: scale(1.15);
+}
+
+.card-img-wrapper {
+  overflow: hidden;
+  height: 15em;
+}
+
+.card:hover {
+  background: #efefef;
+}
+
+.discounted {
+  text-decoration: line-through;
+  font-style: italic;
+  color: red;
+  font-size: 80%;
+}

@@ -1,0 +1,41 @@
+<div class="jumbotron my-4">
+  <p class="lead">
+    <img class="img-fluid" src="../assets/img/barn-2400x1600.jpg"/>
+  </p>
+  <hr class="my-4">
+</div>
+<div class="row">
+
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <a class="btn btn-secondary d-block d-md-none btn-block mb-3" data-bs-toggle="collapse" data-test="filters" href="#filters"
+       role="button" aria-expanded="false" aria-controls="collapseExample">
+      <i class="fa fa-filter"></i> Filters
+    </a>
+    <div class="container" *ngIf="results">
+      <a attr.data-test="product-{{item.id}}" routerLink="/product/{{item.id}}"
+         *ngFor="let item of results"
+         class="card" style="text-decoration: none; color: black;">
+        <div class="card-img-wrapper">
+          <img class="card-img-top"
+               src="assets/img/products/{{item.product_image.file_name}}">
+        </div>
+        <div class="card-body">
+          <h5 data-test="product-name" class="card-title">
+            {{item.name}}
+          </h5>
+        </div>
+        <div class="card-footer">
+          <span *ngIf="item.stock <= 0" class="float-start text-danger" data-test="out-of-stock">Out of stock</span>
+          <span class="float-end text-muted">
+                   <span data-test="product-price"
+                         [ngClass]="{'discounted' : item.discount_price}">${{item.price.toFixed(2)}}</span> <span
+            data-test="product-discount-price" *ngIf="item.discount_price"> ${{item.discount_price.toFixed(2)}}</span>
+        </span>
+        </div>
+
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<h1 data-test="page-title">Users</h1>
+
+<form [formGroup]="searchForm" class="col-lg-6 mb-3" data-test="user-search-form">
+  <div class="input-group">
+    <a routerLink="add" class="btn btn-success" data-test="user-add">Add User</a>
+    <input type="text" class="form-control" formControlName="query" data-test="user-search-query">
+    <button class="btn btn-warning" (click)="search()" type="submit" data-test="user-search-submit">Search</button>
+    <button class="btn btn-secondary" (click)="reset()" type="reset" data-test="user-search-reset">Reset</button>
+  </div>
+</form>
+
+<table class="table table-hover" *ngIf="results?.data">
+  <thead>
+  <tr>
+    <th scope="col">Id</th>
+    <th scope="col">Name</th>
+    <th scope="col">Email</th>
+    <th class="col-md-2" scope="col"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <tr
+    *ngFor="let item of results.data | paginate: { itemsPerPage: results.per_page, currentPage: p, totalItems: results.total }">
+    <td>{{item.id}}</td>
+    <td>{{item.first_name}} {{item.last_name}}</td>
+    <td>{{item.email}}</td>
+    <td style="white-space: nowrap">
+      <a routerLink="edit/{{item.id}}" attr.data-test="user-edit-{{item.id}}" class="btn btn-sm btn-primary mx-2">Edit</a>
+      <button (click)="deleteUser(item.id)" attr.data-test="user-delete-{{item.id}}" class="btn btn-sm btn-danger">
+        <span>Delete</span>
+      </button>
+    </td>
+  </tr>
+  </tbody>
+  <tfoot>
+  <pagination-controls [autoHide]="true" [responsive]="true"
+                       (pageChange)="handlePageChange($event)"></pagination-controls>
+  </tfoot>
+</table>

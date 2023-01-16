@@ -1,0 +1,101 @@
+version: '2'
+services:
+  # The Application
+  lumen-api:
+    build:
+      context: ./_docker
+      dockerfile: app.docker
+    working_dir: /var/www
+    volumes:
+      - ./${SPRINT_FOLDER}/API:/var/www:cached
+    environment:
+      - "PHP_OPCACHE_VALIDATE_TIMESTAMPS=1"
+      - "DB_PORT=3306"
+      - "DB_HOST=mariadb"
+      - "host=localhost"
+
+  angular-ui:
+    build:
+      context: ./_docker
+      dockerfile: ui.docker
+    working_dir: /app
+    volumes:
+      - ./${SPRINT_FOLDER}/UI:/app:cached
+    ports:
+      - 4200:4200
+    command: >
+      bash -c "npm install && ng serve --host 0.0.0.0 --port 4200"
+
+  # The Web Server
+  web:
+    build:
+      context: ./_docker
+      dockerfile: web.docker
+    working_dir: /var/www
+    volumes:
+      - lumen-api:/var/www
+      - phpmyadmindata:/var/www/phpmyadmin
+    ports:
+      - 8091:80
+      - 8000:81
+    depends_on:
+      - phpmyadmin
+      - lumen-api
+
+  cron:
+    build:
+      context: ./_docker/cron
+      dockerfile: Dockerfile
+    container_name: cron
+    volumes_from:
+      - lumen-api
+    working_dir: /var/www
+    environment:
+      - "PHP_OPCACHE_VALIDATE_TIMESTAMPS=1"
+      - "DB_PORT=3306"
+      - "DB_HOST=mariadb"
+      - "host=localhost"
+
+  composer:
+    restart: 'no'
+    image: composer:latest
+    command: install --no-dev --optimize-autoloader
+    volumes_from:
+      - lumen-api
+    working_dir: /var/www
+
+  # The Database
+  mariadb:
+    image: yobasystems/alpine-mariadb:10
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: toolshop
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:fpm-alpine
+    links:
+      - mariadb:db
+    environment:
+      MYSQL_USERNAME: root
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - phpmyadmindata:/var/www/html
+
+  mailhog:
+    image: mailhog/mailhog
+    logging:
+      driver: 'none'  # disable saving logs
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
+
+volumes:
+  db:
+  phpmyadmindata:
+  lumen-api:

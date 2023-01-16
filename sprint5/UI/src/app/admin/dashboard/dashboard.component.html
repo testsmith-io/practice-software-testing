@@ -1,0 +1,34 @@
+<h1 data-test="page-title">Sales over the years</h1>
+<chart [type]="type" [data]="data" [options]="options" style="height: 300px;"></chart>
+
+<h2>Latest orders</h2>
+<div *ngIf="!results?.data.length">
+  No recent invoices.
+</div>
+<table class="table table-hover" *ngIf="results?.data">
+  <thead>
+  <tr>
+    <th scope="col">Invoice Number</th>
+    <th scope="col">Billing Address</th>
+    <th scope="col">Invoice Date</th>
+    <th scope="col">Status</th>
+    <th scope="col">Total</th>
+    <th class="col-md-2" scope="col"></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let item of results.data | paginate: { itemsPerPage: results.per_page, currentPage: p, totalItems: results.total }">
+    <td>{{item.invoice_number}}</td>
+    <td>{{item.billing_address}}</td>
+    <td>{{item.invoice_date}}</td>
+    <td>{{item.status}}</td>
+    <td>${{item.total}}</td>
+    <td style="white-space: nowrap">
+      <a routerLink="/admin/orders/edit/{{item.id}}" class="btn btn-sm btn-primary mx-2">Edit</a>
+    </td>
+  </tr>
+  </tbody>
+  <tfoot>
+    <pagination-controls [autoHide]="true" [responsive]="true" (pageChange)="handlePageChange($event)"></pagination-controls>
+  </tfoot>
+</table>

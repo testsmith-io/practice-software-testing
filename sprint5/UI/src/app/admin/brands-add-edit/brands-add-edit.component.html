@@ -1,0 +1,51 @@
+<div class="container mt-5">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off" data-test="brand-form">
+    <div class="row">
+      <h2 data-test="page-title" *ngIf="isAddMode">Add Brand</h2>
+      <h2 data-test="page-title" *ngIf="!isAddMode">Edit Brand</h2>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <div *ngIf="!isAddMode" class="row mb-3">
+          <label for="id" class="col-sm-3 col-form-label">Id</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" formControlName="id" id="id" data-test="id" readonly>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="name" class="col-sm-3 col-form-label">Name</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" formControlName="name" id="name" data-test="name">
+          </div>
+          <div data-test="name-error" *ngIf="submitted && f['name'].errors" class="alert alert-danger mt-3 p-2" role="alert">
+            <div *ngIf="f['name'].errors['required']">Name is required</div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="slug" class="col-sm-3 col-form-label">Slug</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" formControlName="slug" id="slug" data-test="slug">
+          </div>
+          <div data-test="slug-error" *ngIf="submitted && f['slug'].errors" class="alert alert-danger mt-3 p-2" role="alert">
+            <div *ngIf="f['slug'].errors['required']">Slug is required</div>
+            <div *ngIf="f['slug'].errors['pattern']">Slug cannot contain spaces</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary" data-test="brand-submit">Save</button>
+        <a routerLink="/admin/brands" class="mx-3 link-secondary" data-test="back">Back</a>
+        <div data-test="brand-saved" *ngIf="isUpdated && !hideAlert" [ngClass]="fadeOutMessage()" class="alert alert-success mt-3"
+             role="alert">
+          Brand saved!
+        </div>
+        <div data-test="brand-error" *ngIf="error && !hideAlert" [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
+             role="alert">
+          {{error}}
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

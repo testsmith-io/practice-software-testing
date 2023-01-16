@@ -1,0 +1,37 @@
+<h1 data-test="page-title">Order</h1>
+
+<form [formGroup]="searchForm" class="col-lg-4 mb-3" data-test="order-search-form">
+  <div class="input-group">
+    <input type="text" class="form-control" formControlName="query" data-test="order-search-query">
+    <button class="btn btn-warning" (click)="search()" type="submit" data-test="order-search-submit">Search</button>
+    <button class="btn btn-secondary" (click)="reset()" type="reset" data-test="order-search-reset">Reset</button>
+  </div>
+</form>
+
+<table class="table table-hover" *ngIf="results?.data">
+  <thead>
+  <tr>
+    <th scope="col">Invoice Number</th>
+    <th scope="col">Billing Address</th>
+    <th scope="col">Invoice Date</th>
+    <th scope="col">Status</th>
+    <th scope="col">Total</th>
+    <th class="col-md-2" scope="col"></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let item of results.data | paginate: { itemsPerPage: results.per_page, currentPage: p, totalItems: results.total }">
+    <td>{{item.invoice_number}}</td>
+    <td>{{item.billing_address}}</td>
+    <td>{{item.invoice_date}}</td>
+    <td>{{item.status}}</td>
+    <td>${{item.total}}</td>
+    <td style="white-space: nowrap">
+      <a routerLink="edit/{{item.id}}" attr.data-test="order-edit-{{item.id}}" class="btn btn-sm btn-primary mx-2">Edit</a>
+    </td>
+  </tr>
+  </tbody>
+  <tfoot>
+    <pagination-controls [autoHide]="true" [responsive]="true" (pageChange)="handlePageChange($event)"></pagination-controls>
+  </tfoot>
+</table>

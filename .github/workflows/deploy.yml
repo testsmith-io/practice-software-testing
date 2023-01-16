@@ -1,0 +1,82 @@
+name: deploy
+
+on:
+  push:
+    branches: [ main ]
+
+concurrency: production_environment
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Make envfile sprint 5
+        uses: danielr1996/envsubst-action@1.0.0
+        env:
+          SECRET_DB: ${{ secrets.SECRET_DB }}
+          SECRET_DB_USER: ${{ secrets.SECRET_DB_USER }}
+          SECRET_DB_PASS: ${{ secrets.SECRET_DB_PASS }}
+        with:
+          input: sprint5/API/.env_template
+          output: sprint5/API/.env
+      - name: Make envfile sprint 5 with bugs
+        uses: danielr1996/envsubst-action@1.0.0
+        env:
+          SECRET_DB: ${{ secrets.SECRET_DB }}
+          SECRET_DB_USER: ${{ secrets.SECRET_DB_USER }}
+          SECRET_DB_PASS: ${{ secrets.SECRET_DB_PASS }}
+        with:
+          input: sprint5-with-bugs/API/.env_template
+          output: sprint5-with-bugs/API/.env
+      - name: Make envfile sprint 4
+        uses: danielr1996/envsubst-action@1.0.0
+        env:
+          SECRET_DB: ${{ secrets.SECRET_DB }}
+          SECRET_DB_USER: ${{ secrets.SECRET_DB_USER }}
+          SECRET_DB_PASS: ${{ secrets.SECRET_DB_PASS }}
+        with:
+          input: sprint4/API/.env_template
+          output: sprint4/API/.env
+      - name: Make envfile sprint 3
+        uses: danielr1996/envsubst-action@1.0.0
+        env:
+          SECRET_DB: ${{ secrets.SECRET_DB }}
+          SECRET_DB_USER: ${{ secrets.SECRET_DB_USER }}
+          SECRET_DB_PASS: ${{ secrets.SECRET_DB_PASS }}
+        with:
+          input: sprint3/API/.env_template
+          output: sprint3/API/.env
+      - name: Make envfile sprint 2
+        uses: danielr1996/envsubst-action@1.0.0
+        env:
+          SECRET_DB: ${{ secrets.SECRET_DB }}
+          SECRET_DB_USER: ${{ secrets.SECRET_DB_USER }}
+          SECRET_DB_PASS: ${{ secrets.SECRET_DB_PASS }}
+        with:
+          input: sprint2/API/.env_template
+          output: sprint2/API/.env
+      - name: Make envfile sprint 1
+        uses: danielr1996/envsubst-action@1.0.0
+        env:
+          SECRET_DB: ${{ secrets.SECRET_DB }}
+          SECRET_DB_USER: ${{ secrets.SECRET_DB_USER }}
+          SECRET_DB_PASS: ${{ secrets.SECRET_DB_PASS }}
+        with:
+          input: sprint1/API/.env_template
+          output: sprint1/API/.env
+      - name: Deploy
+        uses: deployphp/action@v1.0.17
+        with:
+          private-key: ${{ secrets.PRIVATE_KEY }}
+          dep: upload production

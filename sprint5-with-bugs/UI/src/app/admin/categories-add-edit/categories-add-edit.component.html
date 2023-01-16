@@ -1,0 +1,60 @@
+<div class="container mt-5">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+    <div class="row">
+      <h2 data-test="page-title" *ngIf="isAddMode">Add Category</h2>
+      <h2 data-test="page-title" *ngIf="!isAddMode">Edit Category</h2>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <div *ngIf="!isAddMode" class="row mb-3">
+          <label for="id" class="col-sm-3 col-form-label">Id</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" formControlName="id" id="id" data-test="id" readonly>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="parent_id" class="col-sm-3 col-form-label">Parent Id</label>
+          <div class="col-sm-9">
+            <select class="form-select" formControlName="parent_id" id="parent_id" data-test="parent-id">
+              <option value="" selected></option>
+              <option *ngFor="let category of categories" value="{{category.id}}">{{category.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="name" class="col-sm-3 col-form-label">Name</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" formControlName="name" id="name" data-test="name">
+          </div>
+          <div *ngIf="submitted && f['name'].errors" class="alert alert-danger mt-3 p-2" role="alert">
+            <div *ngIf="f['name'].errors['required']">Name is required</div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="slug" class="col-sm-3 col-form-label">Slug</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" formControlName="slug" id="slug" data-test="slug">
+          </div>
+          <div *ngIf="submitted && f['slug'].errors" class="alert alert-danger mt-3 p-2" role="alert">
+            <div *ngIf="f['slug'].errors['required']">Slug is required</div>
+            <div *ngIf="f['slug'].errors['pattern']">Slug cannot contain spaces</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary" data-test="category-submit">Save</button>
+        <a href="#" routerLink="/admin/categories" class="mx-3 link-secondary" data-test="back">Back</a>
+        <div *ngIf="isUpdated && !hideAlert" [ngClass]="fadeOutMessage()" class="alert alert-success mt-3"
+             role="alert">
+          Category saved!
+        </div>
+        <div *ngIf="error && !hideAlert" [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
+             role="alert">
+          {{error}}
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

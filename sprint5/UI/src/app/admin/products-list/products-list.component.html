@@ -1,0 +1,40 @@
+<h1 data-test="page-title">Products</h1>
+
+<form [formGroup]="searchForm" class="col-lg-6 mb-3" data-test="product-search-form">
+  <div class="input-group">
+    <a routerLink="add" class="btn btn-success" data-test="product-add">Add Product</a>
+    <input type="text" class="form-control" formControlName="query" data-test="product-search-query">
+    <button class="btn btn-warning" (click)="search()" type="submit" data-test="product-search-submit">Search</button>
+    <button class="btn btn-secondary" (click)="reset()" type="reset" data-test="product-search-reset">Reset</button>
+  </div>
+</form>
+
+<table class="table table-hover">
+  <thead>
+  <tr>
+    <th scope="col">Id</th>
+    <th scope="col">Name</th>
+    <th scope="col">Stock</th>
+    <th scope="col">Price</th>
+    <th class="col-md-2" scope="col"></th>
+  </tr>
+  </thead>
+
+  <tbody *ngIf="products">
+  <tr *ngFor="let product of products.data | paginate: { itemsPerPage: products.per_page, currentPage: p, totalItems: products.total }">
+    <td>{{product.id}}</td>
+    <td>{{product.name}}</td>
+    <td>{{product.stock}}</td>
+    <td>${{product.price | number: '1.2-2'}}</td>
+    <td style="white-space: nowrap">
+      <a routerLink="edit/{{product.id}}" attr.data-test="product-edit-{{product.id}}" class="btn btn-sm btn-primary mx-2">Edit</a>
+      <button (click)="deleteProduct(product.id)" attr.data-test="product-delete-{{product.id}}" class="btn btn-sm btn-danger">
+        <span>Delete</span>
+      </button>
+    </td>
+  </tr>
+  </tbody>
+  <tfoot>
+    <pagination-controls [autoHide]="true" [responsive]="true" (pageChange)="handlePageChange($event)"></pagination-controls>
+  </tfoot>
+</table>
