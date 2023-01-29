@@ -22,7 +22,9 @@
     <span
       *ngIf="product.is_rental" class="ms-1">per hour</span> <small *ngIf="product.is_rental"
                                                                     class="ms-1"> / (total $<span
-    id="total-price">{{(product.price * quantity).toFixed(2)}}</span>)</small>
+    *ngIf="!product.discount_price"
+    id="total-price">{{(product.price * quantity).toFixed(2)}}</span><span *ngIf="product.discount_price"
+                                                                           id="total-price">{{(product.discount_price * quantity).toFixed(2)}}</span>)</small>
     <p data-test="product-description" id="description">
       {{product.description}}</p>
     <div *ngIf="!product.is_rental" class="input-group quantity">
