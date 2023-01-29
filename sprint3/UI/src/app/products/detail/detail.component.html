@@ -20,16 +20,20 @@
     <span>$<span
       data-test="unit-price">{{product.price.toFixed(2)}}</span></span>
     <span
-    *ngIf="product.is_rental" class="ms-1">per hour</span> <small *ngIf="product.is_rental"
-                                                                  class="ms-1"> / (total $<span
-    id="total-price">{{(product.price * quantity).toFixed(2)}}</span>)</small>
+      *ngIf="product.is_rental" class="ms-1">per hour</span> <small *ngIf="product.is_rental"
+                                                                    class="ms-1"> / (total $<span
+    *ngIf="!product.discount_price"
+    id="total-price">{{(product.price * quantity).toFixed(2)}}</span><span *ngIf="product.discount_price"
+                                                                           id="total-price">{{(product.discount_price * quantity).toFixed(2)}}</span>)</small>
     <p data-test="product-description" id="description">
       {{product.description}}</p>
     <div *ngIf="!product.is_rental" class="input-group quantity">
-      <button class="btn btn-secondary" data-test="decrease-quantity" id="btn-decrease-quantity" (click)="minus()"><i class="fa fa-minus"></i>
+      <button class="btn btn-secondary" data-test="decrease-quantity" id="btn-decrease-quantity" (click)="minus()"><i
+        class="fa fa-minus"></i>
       </button>
       <input type="number" min="1" class="form-control" data-test="quantity" [(ngModel)]="quantity">
-      <button class="btn btn-secondary" data-test="increase-quantity" id="btn-increase-quantity" (click)="plus()"><i class="fa fa-plus"></i></button>
+      <button class="btn btn-secondary" data-test="increase-quantity" id="btn-increase-quantity" (click)="plus()"><i
+        class="fa fa-plus"></i></button>
     </div>
     <div *ngIf="product.is_rental">
       <label class="form-label">Duration (<span id="duration">{{quantity}}</span> hour(s))</label>

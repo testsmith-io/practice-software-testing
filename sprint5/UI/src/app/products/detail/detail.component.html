@@ -23,8 +23,9 @@
     <span *ngIf="product.discount_price" data-test="offer-price"
           class="ms-1">$<span id="discount-price">{{product.discount_price}}</span></span> <span
     *ngIf="product.is_rental" class="ms-1">per hour</span> <small *ngIf="product.is_rental"
-                                                                  class="ms-1"> / (total $<span
-    id="total-price">{{(product.price * quantity).toFixed(2)}}</span>)</small>
+                                                                  class="ms-1"> / (total $<span *ngIf="!product.discount_price"
+    id="total-price">{{(product.price * quantity).toFixed(2)}}</span><span *ngIf="product.discount_price"
+                                                                           id="total-price">{{(product.discount_price * quantity).toFixed(2)}}</span>)</small>
     <p data-test="product-description" id="description">
       {{product.description}}</p>
     <div *ngIf="!product.is_rental" class="input-group quantity">
@@ -37,9 +38,9 @@
       <label class="form-label">Duration (<span id="duration">{{quantity}}</span> hour(s))</label>
       <ngx-slider [(value)]="quantity" [options]="sliderOptions"></ngx-slider>
     </div>
-    <p *ngIf="product.stock <= 0" class="text-danger mt-3" data-test="out-of-stock">Out of stock</p>
+    <p *ngIf="product.stock <= 0 && !product.is_rental" class="text-danger mt-3" data-test="out-of-stock">Out of stock</p>
     <div class="btn-group mt-2">
-      <button class="btn-success btn" [disabled]="product.stock <= 0" data-test="add-to-cart" id="btn-add-to-cart" (click)="addToCart(product)">
+      <button class="btn-success btn" [disabled]="product.stock <= 0 && !product.is_rental" data-test="add-to-cart" id="btn-add-to-cart" (click)="addToCart(product)">
         <i
           class="fa fa-shopping-cart px-1"></i>Add to cart
       </button>

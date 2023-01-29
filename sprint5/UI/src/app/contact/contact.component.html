@@ -25,7 +25,8 @@
                        placeholder="Your first name *"
                        value=""/>
               </div>
-              <div *ngIf="submitted && f['first_name'].errors" id="first_name_alert" data-test="first-name-error" class="alert alert-danger mt-3 p-2"
+              <div *ngIf="submitted && f['first_name'].errors" id="first_name_alert" data-test="first-name-error"
+                   class="alert alert-danger mt-3 p-2"
                    role="alert">
                 <div *ngIf="f['first_name'].errors['required']">First name is required</div>
               </div>
@@ -42,7 +43,8 @@
                        placeholder="Your last name *"
                        value=""/>
               </div>
-              <div *ngIf="submitted && f['last_name'].errors" id="last_name_alert" data-test="last-name-error" class="alert alert-danger mt-3 p-2"
+              <div *ngIf="submitted && f['last_name'].errors" id="last_name_alert" data-test="last-name-error"
+                   class="alert alert-danger mt-3 p-2"
                    role="alert">
                 <div *ngIf="f['last_name'].errors['required']">Last name is required</div>
               </div>
@@ -57,10 +59,11 @@
                      type="email"
                      placeholder="Your email *"
                      value=""/>
-              <div *ngIf="submitted && f['email'].errors" id="email_alert" data-test="email-error" class="alert alert-danger mt-3 p-2"
+              <div *ngIf="submitted && f['email'].errors" id="email_alert" data-test="email-error"
+                   class="alert alert-danger mt-3 p-2"
                    role="alert">
                 <div *ngIf="f['email'].errors['required']">Email is required</div>
-                <div *ngIf="f['email'].errors['pattern']">Email format is invalid</div>
+                <div *ngIf="f['email'].errors['email']">Email format is invalid</div>
               </div>
             </div>
           </div>
@@ -80,7 +83,8 @@
                   <option value="status-of-order">Status of my order</option>
                 </select>
               </div>
-              <div *ngIf="submitted && f['subject'].errors" id="subject_alert" data-test="subject-error" class="alert alert-danger mt-3 p-2"
+              <div *ngIf="submitted && f['subject'].errors" id="subject_alert" data-test="subject-error"
+                   class="alert alert-danger mt-3 p-2"
                    role="alert">
                 <div *ngIf="f['subject'].errors['required']">Subject is required</div>
               </div>
@@ -97,7 +101,8 @@
                         rows="5">
               </textarea>
               </div>
-              <div *ngIf="submitted && f['message'].errors" id="message_alert" data-test="message-error" class="alert alert-danger mt-3 p-2"
+              <div *ngIf="submitted && f['message'].errors" id="message_alert" data-test="message-error"
+                   class="alert alert-danger mt-3 p-2"
                    role="alert">
                 <div *ngIf="f['message'].errors['required']">Message is required</div>
                 <div *ngIf="f['message'].errors['minlength']">Message must be minimal 50 characters</div>

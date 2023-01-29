@@ -58,7 +58,7 @@ services:
 
   composer:
     restart: 'no'
-    image: composer:latest
+    image: composer:2.5.0
     command: install --no-dev --optimize-autoloader
     volumes_from:
       - lumen-api
