@@ -5,8 +5,9 @@ works. We introduced 40+ bugs (defects) which can be found by using different te
 We also defined user stories that we can use for test planning and test design for exploratory testing sessions.
 
 ## Workshop Agenda / Script
-1.) 10 days before the training send the homework (see task-create-featureList.md) to the participants. 
-As homework the participants must prepare a feature list from the TestSmith webshop.
+1.) 10 days before the training send the homework (see featureList-task.md) to the participants. 
+As homework the participants must prepare a feature list from the TestSmith webshop. The featurelist which you should 
+use for the training you can find in featureList-overview.md
 - Example
     - Feature 1
       - Feature 1.1
@@ -34,9 +35,10 @@ As homework the participants must prepare a feature list from the TestSmith webs
   - (60min) - Documentation 
     - Test Plan (30min)
       - Hands-On:
-        - Create Risk Based Test Strategy based on Sprint Backlog (MS-Whiteboard, Miro,...)
-        - Create Sprint Test Plan (MS-Whiteboard, Miro,...)
-        - Create Test Ideas (MS-Whiteboard, Miro,...)
+        - (see task-agileTestPlanning.md)
+          - Create Risk Based Test Strategy based on Sprint Backlog (MS-Whiteboard, Miro,...)
+          - Create Sprint Test Plan (MS-Whiteboard, Miro,...)
+          - Create Test Ideas (MS-Whiteboard, Miro,...)
     - Test Specifications (15min):
       - Hands-On:
         - Create TBD
