@@ -52,5 +52,11 @@ use for the training you can find in featureList-overview.md
     - (10min) - (Sum It Up, Recap & Discussion)
 
 - (30min) - *** Lesson 3 - Exploratory Testing
+  - (content TBD)
+    - Hands-On: 
+      - (see exploratoryTesting-task.md)
 
 - (50min) - *** Lesson 4 - Exploratory Testing Mob-Testing 
+  - (content TBD)
+    - Hands-On:
+      - (see exploratoryTestingMob-Testing-task.md)
