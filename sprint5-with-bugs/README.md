@@ -32,20 +32,24 @@ use for the training you can find in featureList-overview.md
 - (85min) - *** Lesson 2 - Agile Test Planning
   - (15min) - (Whats the difference?, Dependencies, Coordination, (RBI Test Policy & ITPF))
     - No Hands-On
+
   - (60min) - Documentation 
     - Test Plan (30min)
       - Hands-On:
-        - (see task-agileTestPlanning.md)
+        - (see agileTestPlanning-task.md)
           - Create Risk Based Test Strategy based on Sprint Backlog (MS-Whiteboard, Miro,...)
           - Create Sprint Test Plan (MS-Whiteboard, Miro,...)
           - Create Test Ideas (MS-Whiteboard, Miro,...)
+          
     - Test Specifications (15min):
       - Hands-On:
-        - Create TBD
+        - (see testSpecifications-task.md)
+        
     - Test Summary Report (15min):
       - Hands-On: 
-        - Creat TBD
-  - (10min) - (Sum It Up, Recap & Discussion)
+        - (see testSummaryReport-task.md)
+  
+    - (10min) - (Sum It Up, Recap & Discussion)
 
 - (30min) - *** Lesson 3 - Exploratory Testing
 
