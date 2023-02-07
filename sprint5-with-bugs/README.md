@@ -4,7 +4,30 @@ works. We introduced 40+ bugs (defects) which can be found by using different te
 
 We also defined user stories that we can use for test planning and test design for exploratory testing sessions.
 
-## Workshop Agenda / Script
+## Schedule / Agenda
+- 1.) Homework
+  - 10 days before training
+- 2.) 
+  - Training (3h version)
+    - TBD
+  - Training (4h version)
+    - 1.00pm (OK)
+      - 15min - Intro
+      - 10min - WarmUp / Discussion Feature List
+      - 30min - *** Lesson 1 - What is Agile Testing?
+    - 2.00pm 
+      - 10min - break
+    - 2.10pm (with break) (OK)
+      - 85min - *** Lesson 2 - Agile Test Planning (with Hands-On)
+    - 3.40pm (with break)
+      - 30min - *** Lesson 3 - Exploratory Testing (with Hands-On)
+      - 50min - *** Lesson 4 - Exploratory Testing Mob-Testing (with Hands-On)
+    - 4.50pm
+      - 10min - Conclusion
+
+
+
+## Workshop Script
 1.) 10 days before the training send the homework (see featureList-task.md) to the participants. 
 As homework the participants must prepare a feature list from the TestSmith webshop. The featurelist which you should 
 use for the training you can find in featureList-overview.md
@@ -43,18 +66,23 @@ use for the training you can find in featureList-overview.md
           
     - Test Specifications (15min):
       - Hands-On:
-        - (see testSpecifications-task.md)
+        - (see testSpecifications-task.md) (***** NOT IMPLEMENTED in PowerPoint ***** )
         
-    - Test Summary Report (15min):
+    - Test Summary Report (15min): (***** NOT IMPLEMENTED in PowrePoint ***** )
       - Hands-On: 
         - (see testSummaryReport-task.md)
   
     - (10min) - (Sum It Up, Recap & Discussion)
 
 - (30min) - *** Lesson 3 - Exploratory Testing
-  - (content TBD)
+  - (What is ET, Test Ideas, Session based ET, Mob-Testing, Session sheet, Test Charter, ET Types, ET Tours
     - Hands-On: 
       - (see exploratoryTesting-task.md)
+        - Create test ideas
+        - Create test charter
+        - Play breaking news nightmare game
+        - Execute ET session with the FedEx tour.
+  - (Sum It Up, Recap & Discussion)
 
 - (50min) - *** Lesson 4 - Exploratory Testing Mob-Testing 
   - (content TBD)
