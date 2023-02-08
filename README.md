@@ -1,14 +1,3 @@
-# Using the docker image
-
-## Switch sprint
-
-Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belongs to the sprint.
-
-I will take up to 5 minutes (depending on the speed of your internet connection), if you run `docker-compose up -d` for the first
-time. Any subsequent `docker-compose up -d` will take seconds.
-
-All images together are less than 1,5 GB.
-
 # Default accounts
 
 | First name | Last name | Role   | E-mail                                | Password   |
@@ -29,7 +18,14 @@ All images together are less than 1,5 GB.
 | Sprint 5 (with bugs) | [https://with-bugs.practicesoftwaretesting.com](https://with-bugs.practicesoftwaretesting.com) | [https://api-with-bugs.practicesoftwaretesting.com](https://api-with-bugs.practicesoftwaretesting.com) | [https://api-with-bugs.practicesoftwaretesting.com](https://api-with-bugs.practicesoftwaretesting.com/api/documentation) |
 
 
-# URL's (local version)
+# Using the docker containers
+
+I will take up to 5 minutes (depending on the speed of your internet connection), if you run `docker-compose up -d` for the first
+time. Any subsequent `docker-compose up -d` will take seconds.
+
+All images together are less than 1,5 GB.
+
+## URL's (local version)
 
 | URL                                                                                | Description           |
 |------------------------------------------------------------------------------------|-----------------------|
@@ -38,6 +34,10 @@ All images together are less than 1,5 GB.
 | [http://localhost:8025](http://localhost:8025)                                     | MailHog               |
 | [http://localhost:4200](http://localhost:4200)                                     | (Angular) Application |
 | [http://localhost:8000](http://localhost:8000) (`root`/`root`)                     | PHPMyAdmin            |
+
+## Switch sprint
+
+Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belongs to the sprint.
 
 ## Migrate database schema
 
