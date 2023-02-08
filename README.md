@@ -4,14 +4,32 @@
 
 Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belongs to the sprint.
 
-I will take up to 5 minutes (depending on your internet connection), if you run `docker-compose up -d` for the first
+I will take up to 5 minutes (depending on the speed of your internet connection), if you run `docker-compose up -d` for the first
 time. Any subsequent `docker-compose up -d` will take seconds.
 
-All images are less than 1,5 GB.
+All images together are less than 1,5 GB.
 
-# URL's (hosted)
+# Default accounts
 
-# URL's (local)
+| First name | Last name | Role   | E-mail                                | Password   |
+|------------|-----------|--------|---------------------------------------|------------|
+| John       | Doe       | admin  | admin@practicesoftwaretesting.com     | welcome01  |
+| Jane       | Doe       | user   | customer@practicesoftwaretesting.com  | welcome01  |
+| Jack       | Howe      | user   | customer2@practicesoftwaretesting.com | welcome01  |
+
+# URLs (hosted versions)
+
+| Description          | Application                                                                                    | API                                                                                                    | Swagger                                                                                                                  |
+|----------------------|------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| Sprint 1             | [https://v1.practicesoftwaretesting.com](https://v1.practicesoftwaretesting.com)               | [https://api-v1.practicesoftwaretesting.com](https://api-v1.practicesoftwaretesting.com)               | [https://api-v1.practicesoftwaretesting.com](https://api-v1.practicesoftwaretesting.com/api/documentation)               |
+| Sprint 2             | [https://v2.practicesoftwaretesting.com](https://v2.practicesoftwaretesting.com)               | [https://api-v2.practicesoftwaretesting.com](https://api-v2.practicesoftwaretesting.com)               | [https://api-v2.practicesoftwaretesting.com](https://api-v2.practicesoftwaretesting.com/api/documentation)               |
+| Sprint 3             | [https://v3.practicesoftwaretesting.com](https://v3.practicesoftwaretesting.com)               | [https://api-v3.practicesoftwaretesting.com](https://api-v3.practicesoftwaretesting.com)               | [https://api-v3.practicesoftwaretesting.com](https://api-v3.practicesoftwaretesting.com/api/documentation)               |
+| Sprint 4             | [https://v4.practicesoftwaretesting.com](https://v4.practicesoftwaretesting.com)               | [https://api-v4.practicesoftwaretesting.com](https://api-v4.practicesoftwaretesting.com)               | [https://api-v4.practicesoftwaretesting.com](https://api-v4.practicesoftwaretesting.com/api/documentation)               |
+| Sprint 5             | [https://practicesoftwaretesting.com](https://practicesoftwaretesting.com)                     | [https://api.practicesoftwaretesting.com](https://api.practicesoftwaretesting.com)                     | [https://api.practicesoftwaretesting.com](https://api.practicesoftwaretesting.com/api/documentation)                     |
+| Sprint 5 (with bugs) | [https://with-bugs.practicesoftwaretesting.com](https://with-bugs.practicesoftwaretesting.com) | [https://api-with-bugs.practicesoftwaretesting.com](https://api-with-bugs.practicesoftwaretesting.com) | [https://api-with-bugs.practicesoftwaretesting.com](https://api-with-bugs.practicesoftwaretesting.com/api/documentation) |
+
+
+# URL's (local version)
 
 | URL                                                                                | Description           |
 |------------------------------------------------------------------------------------|-----------------------|
@@ -21,32 +39,26 @@ All images are less than 1,5 GB.
 | [http://localhost:4200](http://localhost:4200)                                     | (Angular) Application |
 | [http://localhost:8000](http://localhost:8000) (`root`/`root`)                     | PHPMyAdmin            |
 
-# Migrate database schema
+## Migrate database schema
 
 `docker-compose exec lumen-api php artisan migrate`
 
-# Seed database
+## Seed database
 
 `docker-compose exec lumen-api php artisan db:seed`
 
-# Generate Swagger documentation
+## Generate Swagger documentation
 
 `docker-compose exec lumen-api php artisan swagger-lume:generate`
 
-# Execute unittests
+## Execute unit tests
 
 `./vendor/bin/phpunit`
 
-# Execute unittests with coverage
+## Execute unit tests with coverage
 
 `./vendor/bin/phpunit --coverage-html report-coverage`
 
-# Default account
-
-| First name | Last name   | Role   | E-mail                               | Password   |
-|------------|-------------|--------|--------------------------------------|------------|
-| John       | Doe         | admin  | admin@practicesoftwaretesting.com    | welcome01  |
-| Jane       | Doe         | user   | customer@practicesoftwaretesting.com | welcome01  |
 
 # Sprints
 
@@ -60,6 +72,3 @@ allows you to manipulate data.
 
 The deliverable of Sprint0 is a Dockerized environment as wel as database seeding scripts. Basically, the end-result is
 an empty environment.
-
-# Naming convention
-
