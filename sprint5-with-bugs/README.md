@@ -11,16 +11,17 @@ We also defined user stories that we can use for test planning and test design f
   - Training (3h version)
     - TBD
   - Training (4h version)
-    - 1.00pm (OK)
+    - 1:00pm (OK)
       - 15min - Intro
-      - 10min - WarmUp / Discussion Feature List
+      - 10min - WarmUp / Discussion the homework
+    - 1:30pm (OK)
       - 30min - *** Lesson 1 - What is Agile Testing?
-    - 2.00pm 
+    - 2:00pm 
       - 10min - break
-    - 2.10pm (with break) (OK)
-      - 85min - *** Lesson 2 - Agile Test Planning (with Hands-On)
-    - 3.40pm (with break)
-      - 30min - *** Lesson 3 - Exploratory Testing (with Hands-On)
+    - 2:10pm (with break) (OK)
+      - 85min - *** Lesson 2 - Agile Test Planning (with Hands-On) (OK)
+    - 3:40pm (with break)
+      - 30min - *** Lesson 3 - Exploratory Testing (with Hands-On) (OK)
       - 50min - *** Lesson 4 - Exploratory Testing Mob-Testing (with Hands-On)
     - 4.50pm
       - 10min - Conclusion
@@ -53,13 +54,14 @@ use for the training you can find in featureList-overview.md
   - (10min) - (Sum It Up, Recap & Discussion)
 
 - (85min) - *** Lesson 2 - Agile Test Planning
-  - (15min) - (Whats the difference?, Dependencies, Coordination, (RBI Test Policy & ITPF))
+  - (15min) - (Whats the difference?, Dependencies, Coordination, (RBI Special: Test Policy & ITPF))
     - No Hands-On
 
   - (60min) - Documentation 
     - Test Plan (30min)
       - Hands-On:
         - (see agileTestPlanning-task.md)
+        - (see agileTestPlanning-board.png)
           - Create Risk Based Test Strategy based on Sprint Backlog (MS-Whiteboard, Miro,...)
           - Create Sprint Test Plan (MS-Whiteboard, Miro,...)
           - Create Test Ideas (MS-Whiteboard, Miro,...)
@@ -68,23 +70,25 @@ use for the training you can find in featureList-overview.md
       - Hands-On:
         - (see testSpecifications-task.md) (***** NOT IMPLEMENTED in PowerPoint ***** )
         
-    - Test Summary Report (15min): (***** NOT IMPLEMENTED in PowrePoint ***** )
+    - Test Summary Report (15min): (***** NOT IMPLEMENTED in PowerPoint ***** )
       - Hands-On: 
         - (see testSummaryReport-task.md)
   
-    - (10min) - (Sum It Up, Recap & Discussion)
+  - (10min) - (Sum It Up, Recap & Discussion)
 
 - (30min) - *** Lesson 3 - Exploratory Testing
   - (What is ET, Test Ideas, Session based ET, Mob-Testing, Session sheet, Test Charter, ET Types, ET Tours
     - Hands-On: 
       - (see exploratoryTesting-task.md)
+      - (see exploratoryTesting-board.png)
         - Create test ideas
         - Create test charter
         - Play breaking news nightmare game
         - Execute ET session with the FedEx tour.
+
   - (Sum It Up, Recap & Discussion)
 
 - (50min) - *** Lesson 4 - Exploratory Testing Mob-Testing 
-  - (content TBD)
+  - (Execute Exploratory Testing Mob-Testing sessions with different charters)
     - Hands-On:
-      - (see exploratoryTestingMob-Testing-task.md)
+      - (see exploratoryTesting-Mob-Testing-task.md)

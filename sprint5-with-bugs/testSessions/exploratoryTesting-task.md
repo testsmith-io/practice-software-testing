@@ -3,7 +3,9 @@
 #
 #
 
-## create test idea for Customer Registration
+## Create 3 test ideas to test the registration feature of the TestSmith app. Use the Data Type Attacks and 
+## Web Tests Heuristic cheat sheet as an source of inspiration for your ideas.
+
 - Already existing user
 - Special characters (ÖÜÄöüä'```) in firstname / last name
 - Wrong postcode for city
