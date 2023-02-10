@@ -19,9 +19,9 @@ We also defined user stories that we can use for test planning and test design f
       - 10min - break
     - 2.10pm (with break) (OK)
       - 85min - *** Lesson 2 - Agile Test Planning (with Hands-On)
-    - 3.40pm (with break)
-      - 30min - *** Lesson 3 - Exploratory Testing (with Hands-On)
-      - 50min - *** Lesson 4 - Exploratory Testing Mob-Testing (with Hands-On)
+    - 3.40pm (with break) (OK)
+      - 30min - *** Lesson 3 - Exploratory Testing (with Hands-On) (OK)
+      - 50min - *** Lesson 4 - Exploratory Testing Mob-Testing (with Hands-On) (OK)
     - 4.50pm
       - 10min - Conclusion
 
