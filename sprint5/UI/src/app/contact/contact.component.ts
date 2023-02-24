@@ -29,7 +29,7 @@ export class ContactComponent implements OnInit {
       {
         first_name: ['', []],
         last_name: ['', []],
-        email: ['', [Validators.required, Validators.email]],
+        email: ['', [Validators.email]],
         subject: ['', [Validators.required]],
         message: ['', [Validators.required, Validators.minLength(50)]]
       }
