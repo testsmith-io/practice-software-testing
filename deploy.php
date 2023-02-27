@@ -73,7 +73,7 @@ task('upload', function () {
         run("sudo chmod -R 777 /var/www/api{$app['api_destination']}.practicesoftwaretesting.com/storage");
         run("sudo chown -R www-data:www-data /var/www/api{$app['api_destination']}.practicesoftwaretesting.com/storage/framework");
 
-        runLocally("cd {$app['source']}/UI/ && npm install --force && npm run build");
+        runLocally("cd {$app['source']}/UI/ && npm install --legacy-peer-deps && npm run build");
         run("cd /var/www/ && mkdir -p {$app['web_destination']}practicesoftwaretesting.com_tmp/public_html");
         upload(__DIR__ . "/{$app['source']}/UI/dist/toolshop/", "/var/www/{$app['web_destination']}practicesoftwaretesting.com_tmp/public_html");
         run("sudo mv /var/www/{$app['web_destination']}practicesoftwaretesting.com /var/www/{$app['web_destination']}practicesoftwaretesting.com_bak");
