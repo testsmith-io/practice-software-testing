@@ -13,7 +13,6 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\OrderUpdate::class
     ];
 
     /**
@@ -24,10 +23,5 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        if (!app()->environment('local')) {
-            $schedule->command('migrate:fresh --seed --force')->withoutOverlapping()->everyTwoHours();
-        }
-        $schedule->command('order:update')
-            ->withoutOverlapping()->everyTenMinutes();
     }
 }
