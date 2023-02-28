@@ -10,16 +10,16 @@
     "type": "project",
     "require": {
         "php": "^7.3|^8.0",
-        "darkaonline/swagger-lume": "9.*",
+        "darkaonline/swagger-lume": "8.*",
         "fruitcake/laravel-cors": "^2.0",
         "haruncpi/laravel-id-generator": "^1.1",
-        "illuminate/mail": "v9.51.0",
+        "illuminate/mail": "^8.81",
         "laravel/helpers": "^1.5",
-        "laravel/lumen-framework": "v9.1.5",
+        "laravel/lumen-framework": "^8.3.4",
         "mehradsadeghi/laravel-filter-querystring": "^1.1",
         "mtownsend/response-xml": "^2.0",
         "php-open-source-saver/jwt-auth": "^1.4",
-        "urameshibr/lumen-form-request": "^1.5"
+        "urameshibr/lumen-form-request": "1.6"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
