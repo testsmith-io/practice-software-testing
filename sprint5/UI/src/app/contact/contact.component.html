@@ -109,6 +109,26 @@
               </div>
             </div>
 
+            <div class="form-group mb-3">
+              <label for="attachment" class="form-label">Attachment</label>
+              <div class="col-sm-12">
+              <input class="form-control"
+                     [ngClass]="{ 'is-invalid': submitted && f['attachment'].errors }"
+                     formControlName="attachment"
+                     id="attachment"
+                     data-test="attachment"
+                     (change)="changeFile($event)"
+                     type="file">
+                <small id="attachmentHelp" class="form-text text-muted">Only files with the <strong>txt</strong> extension are allowed, and files must be smaller than 5kb.</small>
+              </div>
+              <div *ngIf="submitted && f['attachment'].errors" id="attachment_alert" data-test="attachment-error"
+                   class="alert alert-danger mt-3 p-2"
+                   role="alert">
+                <div *ngIf="f['attachment'].errors['incorrectType']">File should have a txt extension.</div>
+                <div *ngIf="f['attachment'].errors['incorrectSize']">File should be empty.</div>
+              </div>
+            </div>
+
             <div class="input-group mb-3">
               <input type="submit" class="btnSubmit" data-test="contact-submit" value="Send"/>
             </div>
