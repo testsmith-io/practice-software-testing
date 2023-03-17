@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {Observable, of, switchMap, throwError} from "rxjs";
-import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpParamsOptions} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from "@angular/common/http";
 import {catchError} from "rxjs/operators";
 import {ContactMessage} from "../models/contact-message";
 

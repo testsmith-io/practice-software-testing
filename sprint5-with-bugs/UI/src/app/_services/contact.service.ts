@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
-import {Observable, throwError} from "rxjs";
-import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
+import {Observable, of, switchMap, throwError} from "rxjs";
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from "@angular/common/http";
 import {catchError} from "rxjs/operators";
 import {ContactMessage} from "../models/contact-message";
 
@@ -28,9 +28,23 @@ export class ContactService {
     return this.httpClient.post(this.apiURL + `/messages/${id}/reply`, JSON.stringify(contact), {responseType: 'json'});
   }
 
-  sendMessage(contact: ContactMessage): Observable<any> {
+  sendMessage(file: File, contact: ContactMessage): Observable<any> {
     return this.httpClient.post(this.apiURL + '/messages', JSON.stringify(contact), {responseType: 'json'})
       .pipe(
+        switchMap((searchText: any) => {
+            if (file !== null) {
+              const formData = new FormData();
+              formData.append('file', file);
+              const options: any = {
+                headers: new HttpHeaders({
+                  'Accept': `application/json`
+                })
+              }
+              return this.httpClient.post(this.apiURL + `/messages/${searchText.id}/attach-file`, formData, options);
+            }
+            return of(null);
+          }
+        ),
         catchError(this.errorHandler)
       )
   }

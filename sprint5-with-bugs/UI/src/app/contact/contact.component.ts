@@ -17,6 +17,7 @@ export class ContactComponent implements OnInit {
   showConfirmation: boolean = false;
   role: string = '';
   name: string = '';
+  private file: File = null;
 
   constructor(private formBuilder: FormBuilder,
               private contactService: ContactService,
@@ -30,6 +31,7 @@ export class ContactComponent implements OnInit {
         first_name: ['', []],
         last_name: ['', []],
         email: ['', [Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+        attachment: ['', []],
         subject: ['', [Validators.required]],
         message: ['', [Validators.required, Validators.maxLength(5)]]
       }
@@ -55,12 +57,19 @@ export class ContactComponent implements OnInit {
     return this.contact.controls;
   }
 
+  changeFile(fileEvent: any) {
+    const file: File = fileEvent.target.files[0];
+
+    if (Math.round((file.size / 1024) / 1024) > 0.5) {
+      this.contact.controls['attachment'].setErrors({'incorrectSize': true});
+    }
+    this.file = file;
+  }
+
   onSubmit() {
     this.submitted = true;
 
     if (this.contact.invalid) {
-      console.log('invalid');
-      console.log(this.contact);
       return;
     }
 
@@ -72,7 +81,7 @@ export class ContactComponent implements OnInit {
       status: 'NEW'
     };
 
-    this.contactService.sendMessage(payload).subscribe({
+    this.contactService.sendMessage(this.file, payload).subscribe({
       next: () => {
         this.showConfirmation = true;
       }, error: (err) => {
