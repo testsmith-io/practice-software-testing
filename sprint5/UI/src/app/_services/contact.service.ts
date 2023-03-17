@@ -56,7 +56,6 @@ export class ContactService {
   }
 
   errorHandler(error: HttpErrorResponse) {
-    console.log(error);
     return throwError(error.error || "server error.");
   }
 

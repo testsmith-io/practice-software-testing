@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ContactMessage} from "../../../models/contact-message";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {MessageState} from "../../../models/message-state";
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {ContactService} from "../../../_services/contact.service";
 import {ActivatedRoute} from "@angular/router";
 import {first} from "rxjs/operators";
@@ -49,8 +48,6 @@ export class MessageDetailComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-
-    // reset state on submit
     this.isUpdated = false;
 
     if (this.form.invalid) {

@@ -49,8 +49,6 @@ export class BrandsAddEditComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-
-    // reset state on submit
     this.isUpdated = false;
     this.hideAlert = false;
     this.error = '';
@@ -61,7 +59,6 @@ export class BrandsAddEditComponent implements OnInit {
 
     if (this.isAddMode) {
       this.createBrand();
-      // this.reset();
     } else {
       this.updateBrand();
     }

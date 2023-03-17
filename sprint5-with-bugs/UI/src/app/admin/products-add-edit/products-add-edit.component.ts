@@ -91,8 +91,6 @@ export class ProductsAddEditComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-
-    // reset state on submit
     this.isUpdated = false;
 
     if (this.form.invalid) {

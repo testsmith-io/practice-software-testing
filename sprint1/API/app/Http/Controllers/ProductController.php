@@ -87,35 +87,6 @@ class ProductController extends Controller
                 $query->whereIn('brand_id', explode(',', $request->get('by_brand')));
             }
             $results = $query->get();
-
-//            $query = DB::table('products')
-//                ->join('categories', 'categories.id', '=', 'products.category_id')
-//                ->join('brands', 'brands.id', '=', 'products.brand_id')
-//                ->select('products.*');
-//            if ($request->get('by_category')) {
-//                $query->whereIn('categories.id', explode(',', $request->get('by_category')));
-//            }
-//            if ($request->get('by_category_slug')) {
-//                $query->whereIn('categories.id', function ($query) use ($request) {
-//                    $query->select('id')
-//                        ->from('categories')
-//                        ->whereIn('parent_id', function ($query) use ($request) {
-//                            $query->select('id')
-//                                ->from('categories')
-//                                ->where('slug', '=', $request->get('by_category_slug'));
-//                        });
-//                });
-//            }
-//            if ($request->get('by_brand')) {
-//                $query->whereIn('brands.id', explode(',', $request->get('by_brand')));
-//            }
-//            $results = $query->groupBy('products.id', 'products.description', 'products.name', 'products.price', 'products.brand_id', 'products.category_id', 'products.product_image_id', 'products.created_at', 'products.updated_at')
-//                ->paginate();
-//
-//            foreach ($results as &$result) {
-//                $result->product_image = DB::table('product_images')->find($result->product_image_id);
-//            }
-
             return $this->preferredFormat($results);
         } else {
             return $this->preferredFormat(Product::with('product_image', 'category', 'brand')->get());

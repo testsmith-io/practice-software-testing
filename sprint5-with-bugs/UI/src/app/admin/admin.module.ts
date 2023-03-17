@@ -21,7 +21,7 @@ import {SettingsComponent} from './settings/settings.component';
 import {NgxPaginationModule} from "ngx-pagination";
 import {AverageSalesMonthComponent} from './reports/average-sales-month/average-sales-month.component';
 import {AverageSalesWeekComponent} from './reports/average-sales-week/average-sales-week.component';
-import { StatisticsComponent } from './reports/statistics/statistics.component';
+import {StatisticsComponent} from './reports/statistics/statistics.component';
 
 const routes: Routes = [
   {path: 'dashboard', component: DashboardComponent, canActivate: [AdminAuthGuard]},

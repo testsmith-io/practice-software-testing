@@ -141,9 +141,7 @@ export class CheckoutComponent implements OnInit {
     };
 
     this.customerAccountService.login(payload).pipe().subscribe(res => {
-      // localStorage.setItem('token', res['access_token']);
       this.tokenStorage.saveToken(res.access_token);
-      // this.tokenStorage.saveUser(res);
 
       this.setAddress();
       this.isLoginFailed = false;
@@ -182,7 +180,6 @@ export class CheckoutComponent implements OnInit {
     };
 
     this.checkPayment(this.cusPayment.value.payment_method, this.cusPayment.value.account_name, this.cusPayment.value.account_number).subscribe(result => {
-      console.log(result);
       if (result === true) {
         this.invoiceService.createInvoice(payload).subscribe(res => {
           this.paid = true;

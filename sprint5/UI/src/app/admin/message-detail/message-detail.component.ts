@@ -53,13 +53,10 @@ export class MessageDetailComponent implements OnInit {
 
   statusUpdate() {
     let status = this.statusForm.controls['status'].value;
-    console.log(status);
-    console.log(this.message.id);
     if (this.message.status == this.statusForm.controls['status'].value) {
       this.error = 'No new status selected.';
       return;
     }
-    console.log(11)
     this.messageService.updateStatus(this.message.id, status).pipe(first())
       .subscribe({
         next: () => {
@@ -74,8 +71,6 @@ export class MessageDetailComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-
-    // reset state on submit
     this.isUpdated = false;
 
     if (this.form.invalid) {

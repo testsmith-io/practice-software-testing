@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Invoice} from "../../../models/invoice";
 import {InvoiceService} from "../../../_services/invoice.service";
 import {first} from "rxjs/operators";

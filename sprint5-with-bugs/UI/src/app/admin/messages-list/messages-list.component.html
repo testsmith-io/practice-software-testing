@@ -15,7 +15,7 @@
     <td>{{(item.user) ? item.user.first_name + ' ' + item.user.last_name : item.name}}</td>
     <td>{{item.subject}}</td>
     <td><span class="badge rounded-pill"
-              [ngClass]="{'bg-info': item.status == 'NEW', 'bg-warning': item.status == 'IN_PROGRESS', 'bg-success': item.status == 'RESOLVED'}">{{item.status}}</span>
+              [ngClass]="{'bg-info': item.status === 'NEW', 'bg-warning': item.status === 'IN_PROGRESS', 'bg-success': item.status === 'RESOLVED'}">{{item.status}}</span>
     </td>
     <td>{{item.created_at}}</td>
     <td style="white-space: nowrap">
