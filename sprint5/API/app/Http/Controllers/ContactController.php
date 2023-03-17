@@ -144,7 +144,7 @@ class ContactController extends Controller
     public function attachFile($id, Request $request)
     {
         if ($request->hasFile('file')) {
-            if(empty($id)) {
+            if (empty($id)) {
                 $result['errors'][] = "No messageId given.";
             }
             if ($request->file('file')->getSize() != 0) {
@@ -156,7 +156,7 @@ class ContactController extends Controller
         } else {
             $result['errors'][] = "No file attached.";
         }
-        if(!empty($result['errors'])) {
+        if (!empty($result['errors'])) {
             return $this->jsonResponse($result, ResponseAlias::HTTP_BAD_REQUEST);
         } else {
             return $this->jsonResponse(['success' => 'true'], ResponseAlias::HTTP_OK);

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Routing\ResponseFactory;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Spatie\ArrayToXml\ArrayToXml;
 

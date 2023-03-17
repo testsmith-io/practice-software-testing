@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *     }
  * )
  **/
+
 /**
  * @OA\Schema(
  *     schema="ContactResponse",

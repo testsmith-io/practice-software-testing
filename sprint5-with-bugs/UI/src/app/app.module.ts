@@ -24,7 +24,7 @@ import {OverviewComponent as ProductOverviewComponent} from './products/overview
 import {DetailComponent as ProductDetailComponent} from './products/detail/detail.component';
 import {NgHttpLoaderModule} from "ng-http-loader";
 import {NgxSliderModule} from "@angular-slider/ngx-slider";
-import { PagenotfoundComponent } from './shared/pagenotfound/pagenotfound.component';
+import {PagenotfoundComponent} from './shared/pagenotfound/pagenotfound.component';
 
 @NgModule({
   declarations: [

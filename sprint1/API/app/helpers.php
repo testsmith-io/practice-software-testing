@@ -23,6 +23,5 @@ if (!function_exists('public_path')) {
     function public_path($path = '')
     {
         return app()->basePath() . '/public' . ($path ? '/' . $path : $path);
-//        return app()->make('path.public').($path ? DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR) : $path);
     }
 }

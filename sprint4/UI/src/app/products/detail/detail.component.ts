@@ -35,10 +35,9 @@ export class DetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.sub = this.route.params.subscribe(params => {
-      this.id = +params['id']; // (+) converts string 'id' to a number
+      this.id = +params['id'];
       this.getProduct(this.id);
       this.getRelatedProducts(this.id);
-      // this.getCartQuantity(this.id);
     });
   }
 

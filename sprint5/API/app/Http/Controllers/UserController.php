@@ -503,7 +503,7 @@ class UserController extends Controller
     {
         $q = $request->get('q');
 
-        return $this->preferredFormat(User::where('role', '=', 'user')->where(function($query) use ($q) {
+        return $this->preferredFormat(User::where('role', '=', 'user')->where(function ($query) use ($q) {
             $query->where('first_name', 'like', "%$q%")
                 ->orWhere('last_name', 'like', "%$q%")
                 ->orWhere('email', 'like', "%$q%")

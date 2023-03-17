@@ -3,7 +3,6 @@ import {ContactMessage} from "../../models/contact-message";
 import {ContactService} from "../../_services/contact.service";
 import {first} from "rxjs/operators";
 import {Pagination} from "../../models/pagination";
-import {Invoice} from "../../models/invoice";
 
 @Component({
   selector: 'app-messages-list',

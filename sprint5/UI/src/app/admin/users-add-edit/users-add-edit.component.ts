@@ -64,8 +64,6 @@ export class UsersAddEditComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-
-    // reset state on submit
     this.isUpdated = false;
     this.hideAlert = false;
     this.error = '';

@@ -2,11 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Brand\DestroyBrand;
-use App\Http\Requests\Brand\StoreBrand;
-use App\Http\Requests\Brand\UpdateBrand;
-use App\Models\Brand;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 

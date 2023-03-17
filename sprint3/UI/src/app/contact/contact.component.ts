@@ -40,8 +40,6 @@ export class ContactComponent implements OnInit {
     this.submitted = true;
 
     if (this.contact.invalid) {
-      console.log('invalid');
-      console.log(this.contact);
       return;
     }
 

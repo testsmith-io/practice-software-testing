@@ -26,8 +26,8 @@ class Contact extends Mailable
     {
         return $this->subject('Contact')
             ->with(['name' => $this->name,
-                            'contactSubject' => $this->contactSubject,
-                            'contactMessage' => $this->contactMessage])
+                'contactSubject' => $this->contactSubject,
+                'contactMessage' => $this->contactMessage])
             ->markdown('emails.Contact')
             ->text('emails.Contact_plain');
     }

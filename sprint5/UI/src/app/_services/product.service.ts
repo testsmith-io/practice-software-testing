@@ -93,11 +93,6 @@ export class ProductService {
       .pipe(map(this.extractData));
   }
 
-  // getProducts(page: number): Observable<Product[]> {
-  //   let params = new HttpParams().set('page', page);
-  //   return this.httpClient.get<Product[]>(environment.apiUrl + `/products`, {params: params});
-  // }
-
   getById(id: string): Observable<Product> {
     return this.httpClient.get<Product>(environment.apiUrl + `/products/${id}`);
   }

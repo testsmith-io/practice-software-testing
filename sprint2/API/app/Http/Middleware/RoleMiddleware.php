@@ -17,8 +17,6 @@ class RoleMiddleware
      */
     public function handle($request, Closure $next, $role)
     {
-//        dd(strcmp($request->user()->role, $role));
-//        dd($request);
         if ($request->user() === null) {
             return response()->json([
                 'message' => 'Unauthorized'

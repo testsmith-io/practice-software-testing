@@ -1,7 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {BrandService} from "../../_services/brand.service";
 
 @Component({
   selector: 'app-settings',
@@ -50,7 +48,6 @@ export class SettingsComponent implements OnInit {
   fadeOutMessage(): any {
     setTimeout(() => {
       this.hideAlert = true;
-      // reset state on submit
       this.isUpdated = false;
     }, 3000);
   }

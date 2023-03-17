@@ -24,7 +24,6 @@ class DestroyFavorite extends BaseFormRequest
     public function rules(): array
     {
         return [
-//            'id' => 'required|exists:favorites,id',
         ];
     }
 

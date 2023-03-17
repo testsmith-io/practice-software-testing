@@ -57,7 +57,6 @@ export class CategoriesAddEditComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
 
-    // reset state on submit
     this.isUpdated = false;
 
     if (this.form.invalid) {
