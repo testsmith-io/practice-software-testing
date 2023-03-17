@@ -33,7 +33,7 @@ export class ContactComponent implements OnInit {
         email: ['', [Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
         attachment: ['', []],
         subject: ['', [Validators.required]],
-        message: ['', [Validators.required, Validators.maxLength(5)]]
+        message: ['', [Validators.required, Validators.minLength(50)]]
       }
     );
     this.getSignedInUser();
