@@ -42,6 +42,7 @@ $router->put('categories/{id}', ['uses' => 'CategoryController@update']);
 $router->delete('categories/{id}', ['uses' => 'CategoryController@destroy']);
 
 $router->post('messages', ['uses' => 'ContactController@send']);
+$router->post('messages/{id}/attach-file', ['uses' => 'ContactController@attachFile']);
 $router->get('messages', ['uses' => 'ContactController@index']);
 $router->get('messages/{id}', ['uses' => 'ContactController@show']);
 $router->post('messages/{id}/reply', ['uses' => 'ContactController@storeReply']);

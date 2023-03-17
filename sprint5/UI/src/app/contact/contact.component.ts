@@ -83,7 +83,6 @@ export class ContactComponent implements OnInit {
       status: 'NEW'
     };
 
-    console.log(this.file);
     this.contactService.sendMessage(this.file, payload).subscribe({
       next: () => {
         this.showConfirmation = true;

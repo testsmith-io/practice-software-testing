@@ -18,7 +18,7 @@ class ContactController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:users', ['except' => ['send']]);
+        $this->middleware('auth:users', ['except' => ['send', 'attachFile']]);
         $this->middleware('assign.guard:users');
     }
 
@@ -82,6 +82,82 @@ class ContactController extends Controller
         }
 
         return $this->preferredFormat($result, ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @OA\Post(
+     *      path="/messages/{messageId}/attach-file",
+     *      operationId="attachFile",
+     *      tags={"Contact"},
+     *      summary="Attach file to contact message",
+     *      description="Attach file to contact message",
+     *      @OA\Parameter(
+     *          name="messageId",
+     *          in="path",
+     *          example=1,
+     *          description="The messageId parameter in path",
+     *          required=true,
+     *          @OA\Schema(type="integer")
+     *      ),
+     *      @OA\RequestBody(
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                @OA\Property(
+     *                    description="File",
+     *                    property="file",
+     *                    type="string", format="binary"
+     *                )
+     *             )
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Result of the file upload",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(property="success",
+     *                       type="boolean",
+     *                       example=true,
+     *                       description=""
+     *                  ),
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Returns when the resource is not found",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="Resource not found"),
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=405,
+     *          description="Returns when the method is not allowed for the requested route",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="Method is not allowed for the requested route"),
+     *          )
+     *      ),
+     * )
+     */
+    public function attachFile($id, Request $request)
+    {
+        if ($request->hasFile('file')) {
+            if(empty($id)) {
+                $result['errors'][] = "No messageId given.";
+            }
+            if ($request->file('file')->getClientOriginalExtension() != 'txt') {
+                $result['errors'][] = "The file extension is incorrect, we only accept txt files.";
+            }
+        } else {
+            $result['errors'][] = "No file attached.";
+        }
+        if(!empty($result['errors'])) {
+            return $this->jsonResponse($result, ResponseAlias::HTTP_BAD_REQUEST);
+        } else {
+            return $this->jsonResponse(['success' => 'true'], ResponseAlias::HTTP_OK);
+        }
     }
 
     /**
