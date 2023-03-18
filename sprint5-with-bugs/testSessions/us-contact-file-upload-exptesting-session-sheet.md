@@ -63,11 +63,11 @@ Test the Contact form after implementation of the file upload
 - Next test session should test the API, we assume that the integration between API and UI has errors
 
 #### Findings/Defects
-- :bangbang: PDF file - Error message: The file extension is incorrect, we only accept txt files.
+- :bangbang: BUG 47 - PDF file - Error message: The file extension is incorrect, we only accept txt files.
   - Exp Result: PDF can be uploaded
-- :bangbang: JPG file - Error message: The file extension is incorrect, we only accept txt files.
+- :bangbang: BUG 48 - JPG file - Error message: The file extension is incorrect, we only accept txt files.
   - Exp Result: JPG can be uploaded
-- :bangbang: 0KB - File will be sent
+- :bangbang: BUG 49 - 0KB - File will be sent
   - Exp Result: Error Message "Filesize must be >0 " should be displayed
 
 #### Test Notes / Summary
