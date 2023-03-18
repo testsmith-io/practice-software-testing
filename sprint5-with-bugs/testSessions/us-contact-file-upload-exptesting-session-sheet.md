@@ -1,14 +1,9 @@
 # MISSION
 Test the Contact form after implementation of the file upload
 
-### Tester(s)
-Rudolf Grötz, Matthias Zax
-
-### Date
-March 18th, 2023
-
-### Timebox
-50min
+| Tester(s)                                | Date             | Timebox | Comment      |
+|------------------------------------------|------------------|---------|--------------|
+| Rudolf Grötz, Matthias Zax               | March 18th, 2023 | 50min   |              |
 
 ### Charter
 #### UI
