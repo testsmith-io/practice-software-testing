@@ -35,7 +35,7 @@ March 18th, 2023
       - :white_check_mark: Safari 67.12 / MAC OK
       - :white_check_mark: EDGE 47.12 / WIN 11 OK
       
-  - (NOK) ACC2: Only file type txt, pdf, jpg is allowed. 
+  - :bangbang: (NOK) ACC2: Only file type txt, pdf, jpg is allowed. 
     - valid: 
       - txt: :white_check_mark: OK
       - pdf: :bangbang: NOK - Error message: The file extension is incorrect, we only accept txt files.
@@ -47,14 +47,14 @@ March 18th, 2023
     - try to select files
       :white_check_mark: CHROME / Safari / EDGE OK
     
-  - (NOK) ACC4: File size must be > 0KB and <=500KB. 
+  - :bangbang: (NOK) ACC4: File size must be > 0KB and <=500KB. 
     - valid: 
       - :white_check_mark: 1KB: OK - File will be attached and sent
       - :white_check_mark: 178KB: OK - File will be attached and sent
       - :white_check_mark:500KB: OK - File will be attached and sent
       
     - invalid: 
-      - 0KB: :bangbang: NOK - File will be sent
+      - :bangbang: 0KB: NOK - File will be sent
       - :white_check_mark: 501KB OK - Error message: File should be smaller than 500KB.
     
   - :heavy_check_mark: (OK) ACC5: If file is invalid then a error message must be displayed who describes the error.
