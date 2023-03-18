@@ -36,11 +36,11 @@ March 18th, 2023
       - :white_check_mark: EDGE 47.12 / WIN 11 OK
       
   - :bangbang: (NOK) ACC2: Only file type txt, pdf, jpg is allowed. 
-    - valid: 
+    - valid partition: 
       - txt: :white_check_mark: OK
       - pdf: :bangbang: NOK - Error message: The file extension is incorrect, we only accept txt files.
       - jpg: :bangbang: NOK - Error message: The file extension is incorrect, we only accept txt files.
-    - invalid: 
+    - invalid partition: 
       - docx: :bangbang: NOK - Seems to be a general implementation error - therefore not checked
     
   - :white_check_mark: (OK) ACC3: Only valid file type can be selected via the file dialogue. 
@@ -48,12 +48,12 @@ March 18th, 2023
       :white_check_mark: CHROME / Safari / EDGE OK
     
   - :bangbang: (NOK) ACC4: File size must be > 0KB and <=500KB. 
-    - valid: 
+    - valid partition: 
       - :white_check_mark: 1KB: OK - File will be attached and sent
       - :white_check_mark: 178KB: OK - File will be attached and sent
       - :white_check_mark:500KB: OK - File will be attached and sent
       
-    - invalid: 
+    - invalid partition: 
       - :bangbang: 0KB: NOK - File will be sent
       - :white_check_mark: 501KB OK - Error message: File should be smaller than 500KB.
     
@@ -68,7 +68,12 @@ March 18th, 2023
 - Next test session should test the API, we assume that the integration between API and UI has errors
 
 #### Findings/Defects
-- see Test Ideas
+- :bangbang: PDF file - Error message: The file extension is incorrect, we only accept txt files.
+  - Exp Result: PDF can be uploaded
+- :bangbang: JPG file - Error message: The file extension is incorrect, we only accept txt files.
+  - Exp Result: JPG can be uploaded
+- :bangbang: 0KB - File will be sent
+  - Exp Result: Error Message "Filesize must be >0 " should be displayed
 
 #### Test Notes / Summary
 - NA
