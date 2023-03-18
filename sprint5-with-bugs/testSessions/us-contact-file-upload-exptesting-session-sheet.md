@@ -57,7 +57,7 @@ March 18th, 2023
       - :bangbang: 0KB: NOK - File will be sent
       - :white_check_mark: 501KB OK - Error message: File should be smaller than 500KB.
     
-  - :heavy_check_mark: (OK) ACC5: If file is invalid then a error message must be displayed who describes the error.
+  - :white_check_mark: (OK) ACC5: If file is invalid then a error message must be displayed who describes the error.
     - :white_check_mark: Error message: The file extension is incorrect, we only accept txt files.
     - :white_check_mark: Error message: File should be smaller than 500KB.
 
