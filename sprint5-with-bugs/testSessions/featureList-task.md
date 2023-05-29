@@ -9,13 +9,13 @@ On <date> you will participate in the Agile Testing training of the GO-IT! Acade
 
 I can promise you, it will not be a death per Power Point training. You will have a lot of hands-on lessons and you can win something.
 
-Among other things, we will play the Breaking News Headline Nightmare Game to design a test strategy and we will have an exploratory testing session of an E-Commerce platform (The TestSmith Web-Shop).
+Among other things, we will play the Breaking News Headline Nightmare Game to design a test strategy and we will have an exploratory testing session of an E-Commerce platform (The Toolshop Web-Shop).
 
 For the exploratory testing session you have to prepare yourself with a small warm-up. You do not need more than 15 minutes for this warm-up.
 
 Warm-ups are pre-training instructions, that participants do before the training. The goal is to get in touch with the topic upfront to the training.
 
-In your case, you have to create a list of all features that you can find on the TestSmith Web-Shop which we will test in the training.
+In your case, you have to create a list of all features that you can find on the Toolshop Web-Shop which we will test in the training.
 
 Feature list based of www.twitter.com as an example:
 
@@ -26,7 +26,7 @@ Now, it is your turn. For your warm-up, please...
 1.) Visit the website https://practicesoftwaretesting.com/#/auth/register
 2.) Register yourself with an e-mail address: goit<anyNumber>@gmail.com (e.g. goit4711@gmail.com) - no confirmation necessary!
 3.) Login with the registered user
-4.) Explore the TestSmith Web-Shop and document any feature/function that you find and you think it is worth to test it (Registration would be a feature ;-).
+4.) Explore the Toolshop Web-Shop and document any feature/function that you find and you think it is worth to test it (Registration would be a feature ;-).
 
 Please send me your answers until <Deadline>, via E-Mail.
 

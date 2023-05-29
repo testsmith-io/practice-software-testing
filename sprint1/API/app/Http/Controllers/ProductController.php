@@ -107,14 +107,12 @@ class ProductController extends Controller
      *      ),
      *      @OA\Response(
      *          response=201,
-     *          description="Returns when user is not authenticated",
+     *          description="Returns when product is created",
      *          @OA\JsonContent(
      *              @OA\Property(property="id", type="integer", example=1),
      *              @OA\Property(property="name", type="string", example="Lorum ipsum"),
      *              @OA\Property(property="description", type="string", example="Lorum ipsum"),
-     *              @OA\Property(property="price", type="number", example=9.99),
-     *              @OA\Property(property="is_location_offer", type="boolean", example=1),
-     *              @OA\Property(property="is_rental", type="boolean", example=0),
+     *              @OA\Property(property="price", type="number", example=9.99)
      *          )
      *       ),
      *      @OA\Response(
@@ -160,7 +158,7 @@ class ProductController extends Controller
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
-     *          @OA\JsonContent(ref="#/components/schemas/BrandResponse")
+     *          @OA\JsonContent(ref="#/components/schemas/ProductResponse")
      *       ),
      *      @OA\Response(
      *          response=404,

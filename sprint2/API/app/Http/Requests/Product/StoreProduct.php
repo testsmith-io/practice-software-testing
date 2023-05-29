@@ -29,8 +29,6 @@ class StoreProduct extends BaseFormRequest
             'price' => 'numeric|required',
             'category_id' => 'required',
             'brand_id' => 'required',
-            'is_location_offer' => 'required|boolean',
-            'is_rental' => 'required|boolean',
             'product_image_id' => 'required|numeric'
         ];
     }

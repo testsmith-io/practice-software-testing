@@ -34,6 +34,6 @@ class DestroyCategory extends BaseFormRequest
      */
     public function validationData(): array
     {
-        return app('request')->route()[2];
+        return app('request')->route()->parameters;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 /**
  * @OA\Schema(
  *     schema="ImageResponse",
@@ -21,6 +23,7 @@ namespace App\Models;
  */
 class ProductImage extends BaseModel
 {
+    use HasFactory;
 
     protected $table = 'product_images';
 

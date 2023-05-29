@@ -16,7 +16,7 @@ return [
     | JWT Authentication Secret
     |--------------------------------------------------------------------------
     |
-    | Don't forget to set this in your .env.production file, as it will be used to sign
+    | Don't forget to set this in your .env file, as it will be used to sign
     | your tokens. A helper command is provided for this:
     | `php artisan jwt:secret`
     |
@@ -129,12 +129,9 @@ return [
     |
     | Specify the hashing algorithm that will be used to sign the token.
     |
-    | See here: https://github.com/namshi/jose/tree/master/src/Namshi/JOSE/Signer/OpenSSL
-    | for possible values.
-    |
     */
 
-    'algo' => env('JWT_ALGO', 'HS256'),
+    'algo' => env('JWT_ALGO', Tymon\JWTAuth\Providers\JWT\Provider::ALGO_HS256),
 
     /*
     |--------------------------------------------------------------------------
@@ -239,16 +236,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Show blacklisted token option
-    |--------------------------------------------------------------------------
-    |
-    | Specify if you want to show black listed token exception on the laravel logs.
-    |
-    */
-
-    'show_black_list_exception' => env('JWT_SHOW_BLACKLIST_EXCEPTION', true),
-    /*
-    |--------------------------------------------------------------------------
     | Cookies encryption
     |--------------------------------------------------------------------------
     |
@@ -285,7 +272,7 @@ return [
         |
         */
 
-        'jwt' => PHPOpenSourceSaver\JWTAuth\Providers\JWT\Namshi::class,
+        'jwt' => Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
 
         /*
         |--------------------------------------------------------------------------
@@ -296,7 +283,7 @@ return [
         |
         */
 
-        'auth' => PHPOpenSourceSaver\JWTAuth\Providers\Auth\Illuminate::class,
+        'auth' => Tymon\JWTAuth\Providers\Auth\Illuminate::class,
 
         /*
         |--------------------------------------------------------------------------
@@ -307,7 +294,7 @@ return [
         |
         */
 
-        'storage' => PHPOpenSourceSaver\JWTAuth\Providers\Storage\Illuminate::class,
+        'storage' => Tymon\JWTAuth\Providers\Storage\Illuminate::class,
 
     ],
 

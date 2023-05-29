@@ -7,7 +7,7 @@
             "name": "Testsmith",
             "email": "info@testsmith.io"
         },
-        "version": "1.0.0"
+        "version": "3.0.0"
     },
     "servers": [
         {
@@ -298,7 +298,7 @@
                     "Brand"
                 ],
                 "summary": "Delete specific brand",
-                "description": "",
+                "description": "Delete a specific brand",
                 "operationId": "deleteBrand",
                 "parameters": [
                     {
@@ -771,7 +771,7 @@
                     "Category"
                 ],
                 "summary": "Delete specific category",
-                "description": "",
+                "description": "Delete a specific category",
                 "operationId": "deleteCategory",
                 "parameters": [
                     {
@@ -1323,7 +1323,7 @@
                 }
             }
         },
-        "invoices/{invoiceId}/status": {
+        "/invoices/{invoiceId}/status": {
             "put": {
                 "tags": [
                     "Invoice"
@@ -1510,6 +1510,57 @@
                 }
             }
         },
+        "/payment/check": {
+            "post": {
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Check payment",
+                "description": "Check payment",
+                "operationId": "checkPayment",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "method": {
+                                        "type": "string",
+                                        "example": "Credit Card"
+                                    },
+                                    "account_name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "account_number": {
+                                        "type": "string",
+                                        "example": "9876543XX"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": "Success status"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/products": {
             "get": {
                 "tags": [
@@ -1541,6 +1592,15 @@
                         "name": "is_rental",
                         "in": "query",
                         "description": "Indication if we like to retrieve rentals products",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Can be used to sort based on specific column value, like: name,asc OR name,desc OR price,asc OR price,desc",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -1648,7 +1708,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Returns when user is not authenticated",
+                        "description": "Returns when product is created",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1747,7 +1807,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/BrandResponse"
+                                    "$ref": "#/components/schemas/ProductResponse"
                                 }
                             }
                         }
@@ -1875,7 +1935,7 @@
                     "Product"
                 ],
                 "summary": "Delete specific product",
-                "description": "",
+                "description": "Delete a specific product",
                 "operationId": "deleteProduct",
                 "parameters": [
                     {
@@ -2426,16 +2486,6 @@
                     }
                 },
                 "type": "object"
-            }
-        },
-        "securitySchemes": {
-            "apiAuth": {
-                "type": "http",
-                "description": "Login with email and password to get the authentication token",
-                "name": "Token based Based",
-                "in": "header",
-                "bearerFormat": "JWT",
-                "scheme": "bearer"
             }
         }
     }

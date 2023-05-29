@@ -19,9 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *         @OA\Property(property="product_image_id", type="integer", example=1),
  *     }
  * )
- **/
-
-/**
+ *
  * @OA\Schema(
  *     schema="ProductResponse",
  *     type="object",

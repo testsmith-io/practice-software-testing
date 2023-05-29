@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
-use Laravel\Lumen\Routing\Controller as BaseController;
+use Illuminate\Routing\Controller as BaseController;
 use Spatie\ArrayToXml\ArrayToXml;
-
 /**
  * @OA\Info(
  *   title="Toolshop API",
- *   version="0.3.0",
+ *   version="3.0.0",
  *   description="Toolshop REST API technical description",
  *   @OA\Contact(
  *     email="info@testsmith.io",
@@ -27,11 +25,13 @@ use Spatie\ArrayToXml\ArrayToXml;
  */
 class Controller extends BaseController
 {
-    protected function jsonResponse($data, $code = 200)
-    {
-        return response()->json($data, $code,
-            ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
-    }
+//    use AuthorizesRequests, ValidatesRequests;
+
+//    protected function jsonResponse($data, $code = 200)
+//    {
+//        return response()->json($data, $code,
+//            ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
+//    }
 
     private function makeXML($xml, $status = 200, array $headers = [], $xmlRoot = 'response', $encoding = null)
     {
@@ -58,22 +58,6 @@ class Controller extends BaseController
             return response()->json($data, $status,
                 ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
         }
-    }
-
-    /**
-     * Get the token array structure.
-     *
-     * @param string $token
-     *
-     * @return JsonResponse
-     */
-    protected function respondWithToken(string $token)
-    {
-        return $this->preferredFormat([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => app('auth')->factory()->getTTL() * 60
-        ]);
     }
 
 }

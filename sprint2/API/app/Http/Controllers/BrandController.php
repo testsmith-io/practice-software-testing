@@ -242,7 +242,7 @@ class BrandController extends Controller
      *      operationId="deleteBrand",
      *      tags={"Brand"},
      *      summary="Delete specific brand",
-     *      description="",
+     *      description="Delete a specific brand",
      *      @OA\Parameter(
      *          name="brandId",
      *          in="path",

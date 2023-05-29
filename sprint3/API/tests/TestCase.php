@@ -1,20 +1,33 @@
 <?php
 
-use Laravel\Lumen\Testing\DatabaseMigrations;
-use Laravel\Lumen\Testing\TestCase as BaseTestCase;
+namespace Tests;
+
+use Exception;
+use Faker\Factory;
+use Faker\Generator;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\Artisan;
 
 abstract class TestCase extends BaseTestCase
 {
+    use CreatesApplication, DatabaseMigrations;
 
-    use DatabaseMigrations;
-    /**
-     * Creates the application.
-     *
-     * @return \Laravel\Lumen\Application
-     */
-    public function createApplication()
+    private Generator $faker;
+
+    public function setUp(): void
     {
-        return require __DIR__.'/../bootstrap/app.php';
+
+        parent::setUp();
+        $this->faker = Factory::create();
+        Artisan::call('migrate:fresh');
+    }
+
+    public function __get($key)
+    {
+        if ($key === 'faker')
+            return $this->faker;
+        throw new Exception('Unknown Key Requested');
     }
 
     protected function headers($user = null): array
@@ -24,9 +37,7 @@ abstract class TestCase extends BaseTestCase
 
         if (!is_null($user)) {
             $token = app('auth')->fromUser($user);
-//            dd($token);
-            $headers['Authorization'] = 'Bearer '.$token;
-//            dd($headers);
+            $headers['Authorization'] = 'Bearer ' . $token;
         }
 
         return $headers;

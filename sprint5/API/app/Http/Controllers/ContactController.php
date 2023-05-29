@@ -9,6 +9,7 @@ use App\Models\ContactRequestReply;
 use App\Models\ContactRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -66,9 +67,9 @@ class ContactController extends Controller
      */
     public function send(StoreContact $request)
     {
-        if (app('auth')->user()) {
+        if (Auth::check()) {
             $input = $request->all();
-            $input['user_id'] = app('auth')->user()->id;
+            $input['user_id'] = Auth::user()->id;
             $result = ContactRequests::create($input);
         } else {
             $input = $request->all();
@@ -76,8 +77,8 @@ class ContactController extends Controller
         }
 
         if (App::environment('local')) {
-            $email = ($request->input('email')) ? $request->input('email') : app('auth')->user()->email;
-            $name = ($request->input('name')) ? $request->input('name') : app('auth')->user()->first_name . ' ' . app('auth')->user()->last_name;
+            $email = ($request->input('email')) ? $request->input('email') : Auth::user()->email;
+            $name = ($request->input('name')) ? $request->input('name') : Auth::user()->first_name . ' ' . Auth::user()->last_name;
             Mail::to([$email])->send(new Contact($name, $request->input('subject'), $request->input('message')));
         }
 
@@ -144,9 +145,6 @@ class ContactController extends Controller
     public function attachFile($id, Request $request)
     {
         if ($request->hasFile('file')) {
-            if (empty($id)) {
-                $result['errors'][] = "No messageId given.";
-            }
             if ($request->file('file')->getSize() != 0) {
                 $result['errors'][] = "Currently we only allow empty files.";
             }
@@ -157,9 +155,9 @@ class ContactController extends Controller
             $result['errors'][] = "No file attached.";
         }
         if (!empty($result['errors'])) {
-            return $this->jsonResponse($result, ResponseAlias::HTTP_BAD_REQUEST);
+            return $this->preferredFormat($result, ResponseAlias::HTTP_BAD_REQUEST);
         } else {
-            return $this->jsonResponse(['success' => 'true'], ResponseAlias::HTTP_OK);
+            return $this->preferredFormat(['success' => 'true'], ResponseAlias::HTTP_OK);
         }
     }
 
@@ -217,7 +215,7 @@ class ContactController extends Controller
         if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
             return $this->preferredFormat(ContactRequests::with('user')->orderBy('created_at', 'DESC')->paginate());
         } else {
-            return $this->preferredFormat(ContactRequests::where('user_id', app('auth')->user()->id)->orderBy('created_at', 'DESC')->paginate());
+            return $this->preferredFormat(ContactRequests::where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->paginate());
         }
     }
 
@@ -270,7 +268,7 @@ class ContactController extends Controller
         if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
             return $this->preferredFormat(ContactRequests::with(['user', 'replies', 'replies.user'])->where('id', $id)->orderBy('created_at', 'DESC')->first());
         } else {
-            return $this->preferredFormat(ContactRequests::with(['user', 'replies', 'replies.user'])->where('user_id', app('auth')->user()->id)->orderBy('created_at', 'DESC')->first());
+            return $this->preferredFormat(ContactRequests::with(['user', 'replies', 'replies.user'])->where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->first());
         }
     }
 
@@ -327,7 +325,7 @@ class ContactController extends Controller
     {
         $input = $request->all(['message']);
         $input['message_id'] = $id;
-        $input['user_id'] = app('auth')->user()->id;
+        $input['user_id'] = Auth::user()->id;
 
         ContactRequests::where('id', $id)->update(['status' => 'IN_PROGRESS']);
         return $this->preferredFormat(ContactRequestReply::create($input), ResponseAlias::HTTP_CREATED);
@@ -399,7 +397,7 @@ class ContactController extends Controller
      */
     public function updateStatus($id, Request $request)
     {
-        $this->validate($request, [
+        $request->validate([
             'status' => Rule::in("NEW", "IN_PROGRESS", "RESOLVED")
         ]);
 

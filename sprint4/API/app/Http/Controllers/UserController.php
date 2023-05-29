@@ -16,11 +16,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class UserController extends Controller
-{
+class UserController extends Controller {
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('auth:users', ['except' => ['login', 'store', 'forgotPassword', 'refresh']]);
         $this->middleware('assign.guard:users');
     }
@@ -54,8 +52,7 @@ class UserController extends Controller
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function index()
-    {
+    public function index() {
         return $this->preferredFormat(User::where('role', '=', 'user')->paginate());
     }
 
@@ -90,8 +87,7 @@ class UserController extends Controller
      *      )
      * )
      */
-    public function store(StoreCustomer $request)
-    {
+    public function store(StoreCustomer $request) {
         $input = $request->all();
         $input['role'] = 'user';
 
@@ -150,8 +146,7 @@ class UserController extends Controller
      *     )
      * )
      */
-    public function login(Request $request)
-    {
+    public function login(Request $request) {
         $credentials = $request->all(['email', 'password']);
 
         if (!$token = app('auth')->attempt($credentials)) {
@@ -202,9 +197,8 @@ class UserController extends Controller
      *      )
      * )
      */
-    public function forgotPassword(Request $request)
-    {
-        $this->validate($request, [
+    public function forgotPassword(Request $request) {
+        $request->validate([
             'email' => 'exists:users,email'
         ]);
 
@@ -267,13 +261,12 @@ class UserController extends Controller
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function changePassword(Request $request)
-    {
+    public function changePassword(Request $request) {
         $current = $request->get('current_password');
         $new = $request->get('new_password');
         $confirm = $request->get('new_password_confirmation');
 
-        if (!(Hash::check($current, app('auth')->user()->password))) {
+        if (!(Hash::check($current, Auth::user()->password))) {
             return $this->preferredFormat([
                 'success' => false,
                 'message' => 'Your current password does not matches with the password.',
@@ -287,7 +280,7 @@ class UserController extends Controller
             ], ResponseAlias::HTTP_BAD_REQUEST);
         }
 
-        $this->validate($request, [
+        $request->validate([
             'current_password' => 'required',
             'new_password' => 'required|string|min:8|confirmed',
         ]);
@@ -319,9 +312,8 @@ class UserController extends Controller
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function me()
-    {
-        return response()->json(app('auth')->user());
+    public function me() {
+        return response()->json(Auth::user());
     }
 
     /**
@@ -359,8 +351,7 @@ class UserController extends Controller
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function logout()
-    {
+    public function logout() {
         app('auth')->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
@@ -411,8 +402,7 @@ class UserController extends Controller
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function refresh()
-    {
+    public function refresh() {
         return $this->respondWithToken(app('auth')->refresh(true, false));
     }
 
@@ -454,8 +444,7 @@ class UserController extends Controller
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function show($id)
-    {
+    public function show($id) {
         return $this->preferredFormat(User::findOrFail($id));
     }
 
@@ -498,11 +487,10 @@ class UserController extends Controller
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function search(Request $request)
-    {
+    public function search(Request $request) {
         $q = $request->get('q');
 
-        return $this->preferredFormat(User::where('role', '=', 'user')->where(function($query) use ($q) {
+        return $this->preferredFormat(User::where('role', '=', 'user')->where(function ($query) use ($q) {
             $query->where('first_name', 'like', "%$q%")
                 ->orWhere('last_name', 'like', "%$q%")
                 ->orWhere('email', 'like', "%$q%")
@@ -561,9 +549,9 @@ class UserController extends Controller
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function update(UpdateCustomer $request, $id)
-    {
+    public function update(UpdateCustomer $request, $id) {
         if ((app('auth')->id() == $id)) {
+            //$request['password'] = app('hash')->make($request['password']);
             return $this->preferredFormat(['success' => (bool)User::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
         } else {
             return response()->json(['error' => 'You can only update your own data.'], ResponseAlias::HTTP_FORBIDDEN);
@@ -576,7 +564,7 @@ class UserController extends Controller
      *      operationId="deleteUser",
      *      tags={"User"},
      *      summary="Delete specific user",
-     *      description="",
+     *      description="Delete a specific user",
      *      @OA\Parameter(
      *          name="userId",
      *          in="path",
@@ -606,11 +594,9 @@ class UserController extends Controller
      *     security={{ "apiAuth": {} }}
      * ),
      */
-    public function destroy(DestroyCustomer $request, $id)
-    {
+    public function destroy(DestroyCustomer $request, $id) {
         try {
-                User::find($id)->delete();
-                return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
+            return response()->json(['error' => 'Only admins can delete accounts.'], ResponseAlias::HTTP_FORBIDDEN);
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {
                 return $this->preferredFormat([

@@ -15,9 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *         @OA\Property(property="slug", type="string", example="new-category", description="URL part, words separated by hyphen")
  *     }
  * )
- **/
-
-/**
+ *
  * @OA\Schema(
  *     schema="CategoryResponse",
  *     type="object",

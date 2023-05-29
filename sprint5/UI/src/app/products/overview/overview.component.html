@@ -79,6 +79,7 @@
   <div class="col-md-9">
     <h3 *ngIf="searchQuery">Searched for: {{searchQuery}}</h3>
     <div class="container" attr.data-test="{{resultState}}" *ngIf="results">
+      <div *ngIf="!results.data.length" data-test="no-results">No results found.</div>
       <a attr.data-test="product-{{item.id}}" routerLink="/product/{{item.id}}"
          *ngFor="let item of results.data | paginate: { itemsPerPage: results.per_page, currentPage: p, totalItems: results.total }"
          class="card" style="text-decoration: none; color: black;">

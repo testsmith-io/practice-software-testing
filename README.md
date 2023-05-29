@@ -41,15 +41,19 @@ Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belong
 
 ## Migrate database schema
 
-`docker-compose exec lumen-api php artisan migrate`
+`docker-compose exec laravel-api php artisan migrate`
 
 ## Seed database
 
-`docker-compose exec lumen-api php artisan db:seed`
+`docker-compose exec laravel-api php artisan db:seed`
 
 ## Generate Swagger documentation
 
-`docker-compose exec lumen-api php artisan swagger-lume:generate`
+`docker-compose exec laravel-api php artisan l5-swagger:generate`
+
+## Update order status
+
+`docker-compose exec laravel-api php artisan order:update`
 
 ## Execute unit tests
 
@@ -57,7 +61,7 @@ Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belong
 
 ## Execute unit tests with coverage
 
-`./vendor/bin/phpunit --coverage-html report-coverage`
+`./vendor/bin/phpunit --coverage-html tests/coverage`
 
 
 # Sprints
@@ -65,7 +69,7 @@ Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belong
 ## Sprint 0
 
 During this initial sprint we took some architectural decisions. We decided to implement a
-super-fast [Lumen](https://lumen.laravel.com) API, as wel as an [Angular](https://angular.io/) frontend.
+super-fast [Laravel](https://laravel.com/) API, as wel as an [Angular](https://angular.io/) frontend.
 
 Every developer or tester is able to spin up the environment on its own machine. This makes testing easier, and it
 allows you to manipulate data.

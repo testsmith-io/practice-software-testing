@@ -12,4 +12,4 @@ You can review your invoice in your account's "Invoices" section by clicking "My
 
 Best regards,
 Team Practice Software Testing
-Testsmith
+

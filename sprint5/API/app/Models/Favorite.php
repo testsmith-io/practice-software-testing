@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /** @OA\Schema(
@@ -12,9 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *         @OA\Property(property="product_id", type="integer")
  *     }
  * )
- **/
-
-/**
+ *
  * @OA\Schema(
  *     schema="FavoriteResponse",
  *     type="object",
@@ -28,6 +27,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Favorite extends BaseModel
 {
+    use HasFactory;
+
     protected $table = 'favorites';
     protected $fillable = ['user_id', 'product_id'];
 

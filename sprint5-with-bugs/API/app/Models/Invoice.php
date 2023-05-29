@@ -24,9 +24,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="invoicelines", type="array", @OA\Items(type="object", example={"product_id": 9, "quantity": 1, "unit_price": 12.01}))
  *     }
  * )
- **/
-
-/**
+ *
  * @OA\Schema(
  *     schema="InvoiceResponse",
  *     type="object",

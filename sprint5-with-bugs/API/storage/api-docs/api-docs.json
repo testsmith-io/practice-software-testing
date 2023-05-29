@@ -7,7 +7,7 @@
             "name": "Testsmith",
             "email": "info@testsmith.io"
         },
-        "version": "1.0.0"
+        "version": "5.0.0"
     },
     "servers": [
         {
@@ -2690,6 +2690,29 @@
                 "summary": "Check payment",
                 "description": "Check payment",
                 "operationId": "checkPayment",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "method": {
+                                        "type": "string",
+                                        "example": "Credit Card"
+                                    },
+                                    "account_name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "account_number": {
+                                        "type": "string",
+                                        "example": "9876543XX"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "Successful operation",

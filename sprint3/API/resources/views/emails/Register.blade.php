@@ -66,7 +66,6 @@ Password: {{ $password }}
 
 Best regards,<br>
 Team Practice Software Testing<br>
-Testsmith
 
 
 {{-- Footer --}}

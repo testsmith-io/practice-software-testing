@@ -29,7 +29,7 @@ We also defined user stories that we can use for test planning and test design f
 
 ## Workshop Script
 1.) 10 days before the training send the homework (see featureList-task.md) to the participants. 
-As homework the participants must prepare a feature list from the TestSmith webshop. The featurelist which you should 
+As homework the participants must prepare a feature list from the Toolshop webshop. The featurelist which you should 
 use for the training you can find in featureList-overview.md
 - Example
     - Feature 1

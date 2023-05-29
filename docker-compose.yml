@@ -1,7 +1,7 @@
 version: '2'
 services:
   # The Application
-  lumen-api:
+  laravel-api:
     build:
       context: ./_docker
       dockerfile: app.docker
@@ -24,7 +24,7 @@ services:
     ports:
       - 4200:4200
     command: >
-      bash -c "npm install && ng serve --host 0.0.0.0 --port 4200"
+      bash -c "npm install --force && ng serve --host 0.0.0.0 --port 4200"
 
   # The Web Server
   web:
@@ -33,14 +33,14 @@ services:
       dockerfile: web.docker
     working_dir: /var/www
     volumes:
-      - lumen-api:/var/www
+      - laravel-api:/var/www
       - phpmyadmindata:/var/www/phpmyadmin
     ports:
       - 8091:80
       - 8000:81
     depends_on:
       - phpmyadmin
-      - lumen-api
+      - laravel-api
 
   cron:
     build:
@@ -48,7 +48,7 @@ services:
       dockerfile: Dockerfile
     container_name: cron
     volumes_from:
-      - lumen-api
+      - laravel-api
     working_dir: /var/www
     environment:
       - "PHP_OPCACHE_VALIDATE_TIMESTAMPS=1"
@@ -61,7 +61,7 @@ services:
     image: composer:2.5.0
     command: install --no-dev --optimize-autoloader
     volumes_from:
-      - lumen-api
+      - laravel-api
     working_dir: /var/www
 
   # The Database
@@ -98,4 +98,4 @@ services:
 volumes:
   db:
   phpmyadmindata:
-  lumen-api:
+  laravel-api:

@@ -3,7 +3,8 @@
   <div *ngFor="let result of results.data; let i = index" class="card mb-3">
     <div attr.data-test="product-{{result.id}}" routerLink="/product/{{result.id}}" class="row no-gutters">
       <div class="col-lg-3 text-center">
-        <img src="assets/img/products/{{result.product_image.file_name}}" class="card-img" alt="...">
+        <img src="assets/img/products/{{result.product_image.file_name}}" class="img-fluid"
+             [ngClass]="i % 2 ? 'rounded-end' : 'rounded-start'" title="{{result.name}}" alt="{{result.name}}">
       </div>
       <div class="col-lg-9" [ngClass]="{ 'order-md-first': i % 2}">
         <div class="card-body">

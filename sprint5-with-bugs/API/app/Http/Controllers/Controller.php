@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
-use Laravel\Lumen\Routing\Controller as BaseController;
+use Illuminate\Routing\Controller as BaseController;
 use Spatie\ArrayToXml\ArrayToXml;
-
 /**
  * @OA\Info(
  *   title="Toolshop API",
- *   version="1.0.0",
+ *   version="5.0.0",
  *   description="Toolshop REST API technical description",
  *   @OA\Contact(
  *     email="info@testsmith.io",
@@ -27,11 +28,6 @@ use Spatie\ArrayToXml\ArrayToXml;
  */
 class Controller extends BaseController
 {
-    protected function jsonResponse($data, $code = 200)
-    {
-        return response()->json($data, $code,
-            ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
-    }
 
     private function makeXML($xml, $status = 200, array $headers = [], $xmlRoot = 'response', $encoding = null)
     {

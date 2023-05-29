@@ -22,9 +22,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="is_rental", type="boolean", example=0),
  *     }
  * )
- **/
-
-/**
+ *
  * @OA\Schema(
  *     schema="ProductResponse",
  *     type="object",

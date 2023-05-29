@@ -9,4 +9,3 @@ Password: {{ $password }}
 
 Best regards,
 Team Practice Software Testing
-Testsmith

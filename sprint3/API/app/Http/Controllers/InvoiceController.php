@@ -110,10 +110,6 @@ class InvoiceController extends Controller
 
         $invoice->invoicelines()->createMany($request->only(['invoice_items'])['invoice_items']);
 
-        foreach ($request->only(['invoice_items'])['invoice_items'] as $invoiceItem) {
-            Product::where('id', '=', $invoiceItem['product_id'])->decrement('stock', $invoiceItem['quantity']);
-        }
-
         if (App::environment('local')) {
             $items = [];
             $total = 0;
@@ -172,7 +168,7 @@ class InvoiceController extends Controller
      */
     public function show($id)
     {
-        return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('id', $id)->where('user_id', app('auth')->user()->id)->first());
+        return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('id', $id)->first());
 
     }
 
@@ -291,7 +287,7 @@ class InvoiceController extends Controller
     {
         $q = $request->get('q');
 
-        return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('user_id', app('auth')->user()->id)->orWhere('invoice_number', 'like', "%$q%")->orWhere('billing_address', 'like', "%$q%")->orWhere('status', 'like', "%$q%")->orderBy('invoice_date', 'DESC')->paginate());
+        return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('invoice_number', 'like', "%$q%")->orWhere('billing_address', 'like', "%$q%")->orWhere('status', 'like', "%$q%")->orderBy('invoice_date', 'DESC')->paginate());
     }
 
     /**
@@ -349,7 +345,7 @@ class InvoiceController extends Controller
      */
     public function update(StoreInvoice $request, $id)
     {
-        return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->where('customer_id', app('auth')->user()->id)->update($request->all())], ResponseAlias::HTTP_OK);
+        return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -397,7 +393,7 @@ class InvoiceController extends Controller
     public function destroy(DestroyInvoice $request, $id)
     {
         try {
-            Invoice::find($id)->where('customer_id', app('auth')->user()->id)->delete();
+            Invoice::find($id)->delete();
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {

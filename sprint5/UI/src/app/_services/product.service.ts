@@ -97,15 +97,15 @@ export class ProductService {
     return this.httpClient.get<Product>(environment.apiUrl + `/products/${id}`);
   }
 
-  create(category: Product): Observable<any> {
-    return this.httpClient.post(this.apiURL + '/products', JSON.stringify(category), {responseType: 'json'})
+  create(product: Product): Observable<any> {
+    return this.httpClient.post(this.apiURL + '/products', JSON.stringify(product), {responseType: 'json'})
       .pipe(
         catchError(this.errorHandler)
       )
   }
 
-  update(id: string, category: Product) {
-    return this.httpClient.put(this.apiURL + `/products/${id}`, JSON.stringify(category), {responseType: 'json'})
+  update(id: string, product: Product) {
+    return this.httpClient.put(this.apiURL + `/products/${id}`, JSON.stringify(product), {responseType: 'json'})
       .pipe(
         catchError(this.errorHandler)
       )
