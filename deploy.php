@@ -3,7 +3,6 @@
 namespace Deployer;
 
 // Project name
-set('default_timeout', 1200);
 set('application', 'my_project');
 set('writable_mode', 'chmod');
 set('keep_releases', 5);
@@ -27,7 +26,7 @@ set('log_files', 'storage/logs/*.log');
 set('repository', 'git@github.com:testsmith-io/practice-software-testing.git');
 
 // [Optional] Allocate tty for git clone. Default value is false.
-set('git_tty', true);
+set('git_tty', false);
 
 // Shared files/dirs between deploys
 add('shared_dirs', []);
