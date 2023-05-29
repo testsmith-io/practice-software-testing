@@ -69,7 +69,7 @@ task('upload', function () {
         run("curl https://api{$app['api_destination']}.practicesoftwaretesting.com");
         run("/usr/bin/php /var/www/api{$app['api_destination']}.practicesoftwaretesting.com/artisan migrate:fresh --force -vvvv");
         run("/usr/bin/php /var/www/api{$app['api_destination']}.practicesoftwaretesting.com/artisan db:seed --force -vvvv");
-        run("/usr/bin/php /var/www/api{$app['api_destination']}.practicesoftwaretesting.com/artisan swagger-lume:generate");
+        run("/usr/bin/php /var/www/api{$app['api_destination']}.practicesoftwaretesting.com/artisan l5-swagger:generate");
         run("sudo chmod -R 777 /var/www/api{$app['api_destination']}.practicesoftwaretesting.com/storage");
         run("sudo chown -R www-data:www-data /var/www/api{$app['api_destination']}.practicesoftwaretesting.com/storage/framework");
 
