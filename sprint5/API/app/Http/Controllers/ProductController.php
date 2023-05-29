@@ -144,7 +144,7 @@ class ProductController extends Controller
      *      ),
      *      @OA\Response(
      *          response=201,
-     *          description="Returns when user is not authenticated",
+     *          description="Returns when product is created",
      *          @OA\JsonContent(
      *              @OA\Property(property="id", type="integer", example=1),
      *              @OA\Property(property="name", type="string", example="Lorum ipsum"),

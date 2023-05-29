@@ -28,7 +28,7 @@ class UpdateProduct extends BaseFormRequest
             'description' => 'string|max:1250',
             'price' => '',
             'category_id' => '',
-            'brand_id' => '',
+            'brand_id' => ''
         ];
     }
 }

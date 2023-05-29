@@ -1,9 +1,8 @@
 <?php
 
-namespace Database\Factories;
+namespace database\factories;
 
 use App\Models\Brand;
-use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class BrandFactory extends Factory
@@ -20,7 +19,7 @@ class BrandFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'name' => $this->faker->name,

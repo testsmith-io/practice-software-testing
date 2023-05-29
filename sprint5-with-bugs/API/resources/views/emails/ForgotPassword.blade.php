@@ -60,7 +60,6 @@ Your password is set to: welcome02
 
 Best regards,<br>
 Team Practice Software Testing<br>
-Testsmith
 
 
 {{-- Footer --}}

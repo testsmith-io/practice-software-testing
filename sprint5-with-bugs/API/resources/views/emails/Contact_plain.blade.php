@@ -9,4 +9,3 @@ Message: {{ $contactMessage }}
 
 Best regards,
 Team Practice Software Testing
-Testsmith

@@ -19,12 +19,10 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="brand_id", type="integer", example=1),
  *         @OA\Property(property="product_image_id", type="integer", example=1),
  *         @OA\Property(property="is_location_offer", type="boolean", example=1),
- *         @OA\Property(property="is_rental", type="boolean", example=0)
+ *         @OA\Property(property="is_rental", type="boolean", example=0),
  *     }
  * )
- **/
-
-/**
+ *
  * @OA\Schema(
  *     schema="ProductResponse",
  *     type="object",

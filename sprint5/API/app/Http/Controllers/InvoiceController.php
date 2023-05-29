@@ -11,6 +11,7 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -77,7 +78,7 @@ class InvoiceController extends Controller
         if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
             return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->orderBy('invoice_date', 'DESC')->filter()->paginate());
         } else {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('user_id', app('auth')->user()->id)->orderBy('invoice_date', 'DESC')->filter()->paginate());
+            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('user_id', Auth::user()->id)->orderBy('invoice_date', 'DESC')->filter()->paginate());
         }
     }
 
@@ -153,7 +154,7 @@ class InvoiceController extends Controller
                 $items[] = $item;
             }
 
-            $user = app('auth')->user();
+            $user = Auth::user();
             Mail::to([$user->email])->send(new Checkout($user->first_name . ' ' . $user->last_name, $items, $total,));
         }
 
@@ -209,7 +210,7 @@ class InvoiceController extends Controller
         if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
             return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('id', $id)->first());
         } else {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('id', $id)->where('user_id', app('auth')->user()->id)->first());
+            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('id', $id)->where('user_id', Auth::user()->id)->first());
         }
     }
 
@@ -276,7 +277,7 @@ class InvoiceController extends Controller
      */
     public function updateStatus($id, Request $request)
     {
-        $this->validate($request, [
+        $request->validate([
             'status' => Rule::in("AWAITING_FULFILLMENT", "ON_HOLD", "AWAITING_SHIPMENT", "SHIPPED", "COMPLETED"),
             'status_message' => 'string|between:5,50|nullable'
         ]);
@@ -339,7 +340,7 @@ class InvoiceController extends Controller
         if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
             return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('invoice_number', 'like', "%$q%")->orWhere('billing_address', 'like', "%$q%")->orWhere('status', 'like', "%$q%")->orderBy('invoice_date', 'DESC')->paginate());
         } else {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('user_id', app('auth')->user()->id)->orWhere('invoice_number', 'like', "%$q%")->orWhere('billing_address', 'like', "%$q%")->orWhere('status', 'like', "%$q%")->orderBy('invoice_date', 'DESC')->paginate());
+            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('user_id', Auth::user()->id)->orWhere('invoice_number', 'like', "%$q%")->orWhere('billing_address', 'like', "%$q%")->orWhere('status', 'like', "%$q%")->orderBy('invoice_date', 'DESC')->paginate());
         }
     }
 
@@ -406,7 +407,7 @@ class InvoiceController extends Controller
      */
     public function update(StoreInvoice $request, $id)
     {
-        return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->where('customer_id', app('auth')->user()->id)->update($request->all())], ResponseAlias::HTTP_OK);
+        return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->where('customer_id', Auth::user()->id)->update($request->all())], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -462,7 +463,7 @@ class InvoiceController extends Controller
     public function destroy(DestroyInvoice $request, $id)
     {
         try {
-            Invoice::find($id)->where('customer_id', app('auth')->user()->id)->delete();
+            Invoice::find($id)->where('customer_id', Auth::user()->id)->delete();
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {

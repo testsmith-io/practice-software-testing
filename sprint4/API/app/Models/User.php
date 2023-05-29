@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Laravel\Lumen\Auth\Authorizable;
-use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject as AuthenticatableUserContract;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /** @OA\Schema(
  *     schema="UserRequest",
@@ -28,9 +27,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject as AuthenticatableUserContra
  *         @OA\Property(property="password", type="string", example="super-secret")
  *     }
  * )
- **/
-
-/**
+ *
  * @OA\Schema(
  *     schema="UserResponse",
  *     type="object",
@@ -50,32 +47,51 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject as AuthenticatableUserContra
  *     }
  * )
  */
-class User extends Model implements AuthenticatableContract, AuthorizableContract, AuthenticatableUserContract
+class User extends Authenticatable implements JWTSubject
 {
-    use Authenticatable, Authorizable, HasFactory;
+    use HasApiTokens, HasFactory, Notifiable;
 
     const CREATED_AT = null;
-    protected $hidden = ['updated_at', 'password', 'role'];
     protected $table = 'users';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = ['first_name', 'last_name', 'address', 'city', 'state', 'country', 'postcode', 'phone', 'dob', 'email', 'password', 'role'];
+
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = ['updated_at', 'password', 'role'];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+
+    ];
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed
      */
-    public function getJWTIdentifier(): mixed
-    {
+    public function getJWTIdentifier() {
         return $this->getKey();
     }
-
     /**
      * Return a key value array, containing any custom claims to be added to the JWT.
      *
      * @return array
      */
-    public function getJWTCustomClaims(): array
-    {
+    public function getJWTCustomClaims() {
         return ['role' => $this->role];
     }
 }

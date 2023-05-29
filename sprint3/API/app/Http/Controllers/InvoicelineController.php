@@ -12,7 +12,7 @@ class InvoicelineController extends Controller
 
     public function index()
     {
-        return $this->preferredFormat(Invoiceline::paginate(9));
+        return $this->preferredFormat(Invoiceline::paginate());
     }
 
     public function store(Request $request)

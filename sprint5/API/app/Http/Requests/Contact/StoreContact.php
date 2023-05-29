@@ -24,8 +24,8 @@ class StoreContact extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'name' => 'string|max:120',
-            'email' => 'string|max:120',
+            'name' => 'max:120',
+            'email' => 'max:120',
             'subject' => 'required|string|max:120',
             'message' => 'required|string|max:250',
         ];

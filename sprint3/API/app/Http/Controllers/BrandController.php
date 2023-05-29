@@ -41,7 +41,7 @@ class BrandController extends Controller
      *          @OA\JsonContent(
      *              @OA\Property(property="message", type="string", example="Method is not allowed for the requested route"),
      *          )
-     *      )
+     *      ),
      * )
      */
     public function index()
@@ -83,7 +83,7 @@ class BrandController extends Controller
      *      @OA\Response(
      *          response=422,
      *          description="Returns when the server was not able to process the content",
-     *      )
+     *      ),
      * )
      */
     public function store(StoreBrand $request)
@@ -124,7 +124,7 @@ class BrandController extends Controller
      *          @OA\JsonContent(
      *              @OA\Property(property="message", type="string", example="Method is not allowed for the requested route"),
      *          )
-     *      )
+     *      ),
      * )
      */
     public function show($id)
@@ -167,7 +167,7 @@ class BrandController extends Controller
      *          @OA\JsonContent(
      *              @OA\Property(property="message", type="string", example="Method is not allowed for the requested route"),
      *          )
-     *      )
+     *      ),
      * )
      */
     public function search(Request $request)
@@ -228,7 +228,7 @@ class BrandController extends Controller
      *      @OA\Response(
      *          response=422,
      *          description="Returns when the server was not able to process the content",
-     *      )
+     *      ),
      * )
      */
     public function update(UpdateBrand $request, $id)
@@ -242,7 +242,7 @@ class BrandController extends Controller
      *      operationId="deleteBrand",
      *      tags={"Brand"},
      *      summary="Delete specific brand",
-     *      description="",
+     *      description="Delete a specific brand",
      *      @OA\Parameter(
      *          name="brandId",
      *          in="path",
@@ -277,7 +277,7 @@ class BrandController extends Controller
      *          response=422,
      *          description="Returns when the server was not able to process the content",
      *      )
-     * )
+     * ),
      */
     public function destroy(DestroyBrand $request, $id)
     {

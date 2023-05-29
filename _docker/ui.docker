@@ -24,4 +24,4 @@ RUN npm install -s -g @angular/cli
 EXPOSE 4200
 
 # Serve the app
-CMD ["npm", "install --dev --legacy-peer-deps", "start"]
+CMD ["npm", "install --dev --legacy-peer-deps --force", "start"]

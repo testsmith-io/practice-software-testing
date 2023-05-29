@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Mehradsadeghi\FilterQueryString\FilterQueryString;
 
@@ -25,9 +26,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="invoicelines", type="array", @OA\Items(type="object", example={"product_id": 9, "quantity": 1, "unit_price": 12.01}))
  *     }
  * )
- **/
-
-/**
+ *
  * @OA\Schema(
  *     schema="InvoiceResponse",
  *     type="object",
@@ -61,6 +60,11 @@ class Invoice extends BaseModel
     protected $filters = ['in', 'sort', 'starts_with'];
     protected $table = 'invoices';
     protected $fillable = ['first_name', 'last_name', 'invoice_date', 'invoice_number', 'billing_address', 'billing_city', 'billing_state', 'billing_country', 'billing_postcode', 'total', 'payment_method', 'payment_account_name', 'payment_account_number'];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo('App\Models\User');
+    }
 
     public function invoicelines(): HasMany
     {

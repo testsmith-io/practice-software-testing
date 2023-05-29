@@ -32,7 +32,7 @@
 
 ## perform breaking news nightmare game
 - Character set
-  - TestSmith web-shop can handle orders with Cyrillic & Chinese characters. EU sues the host of the web-shop for distortion of competition for 2 million Euros.
+  - Toolshop web-shop can handle orders with Cyrillic & Chinese characters. EU sues the host of the web-shop for distortion of competition for 2 million Euros.
 
 ## perform exploratory testing tour FedEx for User Profile
 - Register a new customer and execute some CRUD actions and check if the data are handled correct (stored, deleted, updated)

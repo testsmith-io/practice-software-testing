@@ -42,6 +42,13 @@ class ProductController extends Controller
      *          required=false,
      *          @OA\Schema(type="string")
      *      ),
+     *      @OA\Parameter(
+     *          name="sort",
+     *          in="query",
+     *          description="Can be used to sort based on specific column value, like: name,asc OR name,desc OR price,asc OR price,desc",
+     *          required=false,
+     *          @OA\Schema(type="string")
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
@@ -78,7 +85,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->get('by_category') || $request->get('by_brand') || $request->get('by_category_slug')) {
+        if ($request->get('by_category') || $request->get('by_brand') || $request->get('by_category_slug') || $request->get('q')) {
             $query = Product::with('product_image', 'category', 'brand');
             if ($request->get('by_category_slug')) {
                 $ids = DB::table('categories')->select('id')
@@ -99,7 +106,12 @@ class ProductController extends Controller
             if ($request->get('is_rental')) {
                 $query->where('is_rental', '=', $request->get('is_rental') ? 1 : 0);
             }
+            if ($request->get('q')) {
+                $q = $request->get('q');
+                $query->where('name', 'like', "%$q%");
+            }
             $results = $query->filter()->paginate(9);
+
             return $this->preferredFormat($results);
         } else {
             return $this->preferredFormat(Product::where('is_rental', $request->get('is_rental') ? 1 : 0)->with('product_image', 'category', 'brand')->filter()->paginate(9));
@@ -120,7 +132,7 @@ class ProductController extends Controller
      *      ),
      *      @OA\Response(
      *          response=201,
-     *          description="Returns when user is not authenticated",
+     *          description="Returns when product is created",
      *          @OA\JsonContent(
      *              @OA\Property(property="id", type="integer", example=1),
      *              @OA\Property(property="name", type="string", example="Lorum ipsum"),
@@ -173,7 +185,7 @@ class ProductController extends Controller
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
-     *          @OA\JsonContent(ref="#/components/schemas/BrandResponse")
+     *          @OA\JsonContent(ref="#/components/schemas/ProductResponse")
      *       ),
      *      @OA\Response(
      *          response=404,
@@ -361,7 +373,7 @@ class ProductController extends Controller
      *      operationId="deleteProduct",
      *      tags={"Product"},
      *      summary="Delete specific product",
-     *      description="",
+     *      description="Delete a specific product",
      *      @OA\Parameter(
      *          name="productId",
      *          in="path",

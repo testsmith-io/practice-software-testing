@@ -14,9 +14,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="slug", type="string", example="new-brand", description="URL part, words separated by hyphen")
  *     }
  * )
- **/
-
-/**
+ *
  * @OA\Schema(
  *     schema="BrandResponse",
  *     type="object",

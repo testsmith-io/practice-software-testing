@@ -3,21 +3,21 @@
 namespace App\Exceptions;
 
 use Exception;
+use HttpException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
-use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenBlacklistedException;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenExpiredException;
-use Symfony\Component\HttpFoundation\Response as ResponseAlias;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class Handler extends ExceptionHandler
 {
@@ -41,7 +41,7 @@ class Handler extends ExceptionHandler
      * @param Throwable $e
      * @return void
      *
-     * @throws Exception
+     * @throws Exception|Throwable
      */
     public function report(Throwable $e)
     {
@@ -59,7 +59,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
-        if($e instanceof TokenExpiredException) {
+        if ($e instanceof TokenExpiredException) {
             return response()->json([
                 'message' => 'Token has expired and can no longer be refreshed',
             ], ResponseAlias::HTTP_UNAUTHORIZED);

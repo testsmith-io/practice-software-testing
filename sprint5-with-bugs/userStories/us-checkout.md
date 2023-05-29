@@ -1,5 +1,5 @@
 # US3207 - New payment method China Pay
-Background: TestSmith wants to enter the China market and must offer additional payment method.
+Background: Toolshop wants to enter the China market and must offer additional payment method.
 
 ## User Story: Enable China Pay as payment method
 

@@ -18,7 +18,9 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('name', 220);
             $table->text('description')->nullable();
+            $table->integer('stock')->nullable();
             $table->decimal('price', 10, 2);
+            $table->boolean('is_location_offer');
             $table->boolean('is_rental');
             $table->unsignedBigInteger('brand_id');
             $table->unsignedBigInteger('category_id');

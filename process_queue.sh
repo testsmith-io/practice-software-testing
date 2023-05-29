@@ -1,1 +1,1 @@
-docker-compose exec lumen-api php artisan queue:work
+docker-compose exec laravel-api php artisan queue:work

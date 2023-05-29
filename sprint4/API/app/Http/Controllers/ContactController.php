@@ -9,15 +9,14 @@ use App\Models\ContactRequestReply;
 use App\Models\ContactRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class ContactController extends Controller
-{
+class ContactController extends Controller {
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('auth:users', ['except' => ['send']]);
         $this->middleware('assign.guard:users');
     }
@@ -35,19 +34,19 @@ class ContactController extends Controller
      *          @OA\JsonContent(ref="#/components/schemas/ContactRequest")
      *      ),
      *      @OA\Response(
-     *         response=200,
-     *         description="A token",
-     *        @OA\MediaType(
-     *                mediaType="application/json",
-     *           @OA\Schema(
-     *               @OA\Property(property="access_token",
-     *                        type="boolean",
-     *                        example="super-secret-token",
-     *                        description=""
-     *                    )
-     *             )
-     *         )
-     *     ),
+     *          response=200,
+     *          description="Result of the insert",
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(property="success",
+     *                       type="boolean",
+     *                       example=true,
+     *                       description=""
+     *                  ),
+     *              )
+     *          )
+     *      ),
      *      @OA\Response(
      *          response=404,
      *          description="Returns when the resource is not found",
@@ -64,11 +63,10 @@ class ContactController extends Controller
      *      ),
      * )
      */
-    public function send(StoreContact $request)
-    {
-        if (app('auth')->user()) {
+    public function send(StoreContact $request) {
+        if (Auth::check()) {
             $input = $request->all();
-            $input['user_id'] = app('auth')->user()->id;
+            $input['user_id'] = Auth::user()->id;
             $result = ContactRequests::create($input);
         } else {
             $input = $request->all();
@@ -76,8 +74,8 @@ class ContactController extends Controller
         }
 
         if (App::environment('local')) {
-            $email = ($request->input('email')) ? $request->input('email') : app('auth')->user()->email;
-            $name = ($request->input('name')) ? $request->input('name') : app('auth')->user()->first_name . ' ' . app('auth')->user()->last_name;
+            $email = ($request->input('email')) ? $request->input('email') : Auth::user()->email;
+            $name = ($request->input('name')) ? $request->input('name') : Auth::user()->first_name . ' ' . Auth::user()->last_name;
             Mail::to([$email])->send(new Contact($name, $request->input('subject'), $request->input('message')));
         }
 
@@ -133,9 +131,8 @@ class ContactController extends Controller
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function index()
-    {
-        return $this->preferredFormat(ContactRequests::where('user_id', app('auth')->user()->id)->orderBy('created_at', 'DESC')->paginate());
+    public function index() {
+        return $this->preferredFormat(ContactRequests::where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->paginate());
     }
 
     /**
@@ -182,9 +179,8 @@ class ContactController extends Controller
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function show($id)
-    {
-        return $this->preferredFormat(ContactRequests::with(['user', 'replies', 'replies.user'])->where('user_id', app('auth')->user()->id)->orderBy('created_at', 'DESC')->first());
+    public function show($id) {
+        return $this->preferredFormat(ContactRequests::with(['user', 'replies', 'replies.user'])->where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->first());
     }
 
     /**
@@ -236,11 +232,10 @@ class ContactController extends Controller
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function storeReply(StoreContactReply $request, $id)
-    {
+    public function storeReply(StoreContactReply $request, $id) {
         $input = $request->all(['message']);
         $input['message_id'] = $id;
-        $input['user_id'] = app('auth')->user()->id;
+        $input['user_id'] = Auth::user()->id;
 
         ContactRequests::where('id', $id)->update(['status' => 'IN_PROGRESS']);
         return $this->preferredFormat(ContactRequestReply::create($input), ResponseAlias::HTTP_CREATED);
@@ -310,9 +305,8 @@ class ContactController extends Controller
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function updateStatus($id, Request $request)
-    {
-        $this->validate($request, [
+    public function updateStatus($id, Request $request) {
+        $request->validate([
             'status' => Rule::in("NEW", "IN_PROGRESS", "RESOLVED")
         ]);
 

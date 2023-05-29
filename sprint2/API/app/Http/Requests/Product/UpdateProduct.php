@@ -28,9 +28,7 @@ class UpdateProduct extends BaseFormRequest
             'description' => 'string|max:1250',
             'price' => '',
             'category_id' => '',
-            'brand_id' => '',
-            'is_location_offer' => 'boolean',
-            'is_rental' => 'boolean'
+            'brand_id' => ''
         ];
     }
 }

@@ -70,7 +70,7 @@ You can review your invoice in your account's "Invoices" section by clicking "My
 
 Best regards,<br>
 Team Practice Software Testing<br>
-Testsmith
+
 
 
 {{-- Footer --}}

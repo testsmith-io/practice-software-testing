@@ -205,7 +205,7 @@ class UserController extends Controller
      */
     public function forgotPassword(Request $request)
     {
-        $this->validate($request, [
+        $request->validate([
             'email' => 'exists:users,email'
         ]);
 
@@ -274,7 +274,7 @@ class UserController extends Controller
         $new = $request->get('new_password');
         $confirm = $request->get('new_password_confirmation');
 
-        if (!(Hash::check($current, app('auth')->user()->password))) {
+        if (!(Hash::check($current, Auth::user()->password))) {
             return $this->preferredFormat([
                 'success' => false,
                 'message' => 'Your current password does not matches with the password.',
@@ -288,7 +288,7 @@ class UserController extends Controller
             ], ResponseAlias::HTTP_BAD_REQUEST);
         }
 
-        $this->validate($request, [
+        $request->validate([
             'current_password' => 'required',
             'new_password' => 'required|string|min:8|confirmed',
         ]);
@@ -322,7 +322,7 @@ class UserController extends Controller
      */
     public function me()
     {
-        return response()->json(app('auth')->user());
+        return response()->json(Auth::user());
     }
 
     /**

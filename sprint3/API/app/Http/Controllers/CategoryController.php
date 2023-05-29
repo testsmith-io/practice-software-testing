@@ -289,7 +289,7 @@ class CategoryController extends Controller
      *      operationId="deleteCategory",
      *      tags={"Category"},
      *      summary="Delete specific category",
-     *      description="",
+     *      description="Delete a specific category",
      *      @OA\Parameter(
      *          name="categoryId",
      *          in="path",

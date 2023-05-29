@@ -19,9 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *         @OA\Property(property="message", type="string", example="Something is wrong with the website.", description="")
  *     }
  * )
- **/
-
-/**
+ *
  * @OA\Schema(
  *     schema="ContactResponse",
  *     type="object",

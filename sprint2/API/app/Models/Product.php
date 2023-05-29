@@ -18,13 +18,9 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="category_id", type="integer", example=1),
  *         @OA\Property(property="brand_id", type="integer", example=1),
  *         @OA\Property(property="product_image_id", type="integer", example=1),
- *         @OA\Property(property="is_location_offer", type="boolean", example=1),
- *         @OA\Property(property="is_rental", type="boolean", example=0),
  *     }
  * )
- **/
-
-/**
+ *
  * @OA\Schema(
  *     schema="ProductResponse",
  *     type="object",
@@ -34,8 +30,6 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="name", type="string", example="new brand"),
  *         @OA\Property(property="description", type="string", example="Lorum ipsum"),
  *         @OA\Property(property="price", type="number", example=9.99),
- *         @OA\Property(property="is_location_offer", type="boolean", example=1),
- *         @OA\Property(property="is_rental", type="boolean", example=0),
  *         @OA\Property(property="brand", ref="#/components/schemas/BrandResponse"),
  *         @OA\Property(property="category", ref="#/components/schemas/CategoryResponse"),
  *         @OA\Property(property="product_image", ref="#/components/schemas/ImageResponse")
