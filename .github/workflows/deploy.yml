@@ -78,6 +78,6 @@ jobs:
       - name: Deploy
         uses: deployphp/action@v1.0.22
         with:
-          deployer-version: "7.0.0"
+          deployer-version: "7.3.1"
           private-key: ${{ secrets.PRIVATE_KEY }}
           dep: upload production
