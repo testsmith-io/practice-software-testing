@@ -76,7 +76,7 @@ jobs:
           input: sprint1/API/.env_template
           output: sprint1/API/.env
       - name: Deploy
-        uses: deployphp/action@v1.0.17
+        uses: deployphp/action@v1.0.22
         with:
           private-key: ${{ secrets.PRIVATE_KEY }}
           dep: upload production
