@@ -26,7 +26,7 @@ set('log_files', 'storage/logs/*.log');
 set('repository', 'git@github.com:testsmith-io/practice-software-testing.git');
 
 // [Optional] Allocate tty for git clone. Default value is false.
-set('git_tty', false);
+set('git_tty', true);
 
 // Shared files/dirs between deploys
 add('shared_dirs', []);
