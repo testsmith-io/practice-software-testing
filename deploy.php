@@ -3,6 +3,7 @@
 namespace Deployer;
 
 // Project name
+set('default_timeout', 1200);
 set('application', 'my_project');
 set('writable_mode', 'chmod');
 set('keep_releases', 5);
