@@ -114,6 +114,12 @@
             <div *ngIf="f['email'].errors['required']">Email is required</div>
           </div>
         </div>
+        <div class="row mb-3">
+          <label for="failed_login_attempts" class="col-sm-3 col-form-label">Failed login attempts</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" formControlName="failed_login_attempts" data-test="failed_login_attempts" id="failed_login_attempts">
+          </div>
+        </div>
         <div *ngIf="isAddMode" class="row mb-3">
           <label for="password" class="col-sm-3 col-form-label">Password</label>
           <div class="col-sm-9">
