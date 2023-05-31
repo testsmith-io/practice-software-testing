@@ -41,11 +41,12 @@ export class UsersAddEditComponent implements OnInit {
       dob: ['', [Validators.required]],
       address: ['', [Validators.required]],
       city: ['', [Validators.required]],
-      state: ['', [Validators.required]],
+      state: ['', []],
       country: ['', [Validators.required]],
-      postcode: ['', [Validators.required]],
-      phone: ['', [Validators.required]],
+      postcode: ['', []],
+      phone: ['', []],
       email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+      failed_login_attempts: ['', []],
       password: ['', [Validators.minLength(6), Validators.maxLength(40)]],
     });
 
@@ -88,14 +89,17 @@ export class UsersAddEditComponent implements OnInit {
         }, error: (err) => {
           this.error = Object.values(err).join('\r\n');
         }, complete: () => {
-          this.hideAlert = true;
+          this.hideAlert = false;
           this.reset();
         }
       });
   }
 
   private updateUser() {
-    this.userService.update(this.id, this.form.value)
+    const formValue = { ...this.form.value }; // Create a copy of the form value
+    delete formValue.password; // Remove the password field from the form value object
+
+    this.userService.update(this.id, formValue)
       .pipe(first())
       .subscribe({
         next: () => {
@@ -103,7 +107,7 @@ export class UsersAddEditComponent implements OnInit {
         }, error: (err) => {
           this.error = Object.values(err).join('\r\n');
         }, complete: () => {
-          this.hideAlert = true;
+          this.hideAlert = false;
         }
       });
   }

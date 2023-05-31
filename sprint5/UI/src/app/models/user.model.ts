@@ -10,5 +10,5 @@ export class User {
   postcode?: boolean;
   phone?: boolean;
   email: boolean;
-  password: boolean;
+  password?: boolean;
 }
