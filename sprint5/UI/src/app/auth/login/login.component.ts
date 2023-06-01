@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit {
       const socialid = params['socialid'];
       if (socialid) {
         this.tokenStorage.saveToken(socialid);
+        this.accountService.authSub.next('changed');
         this.accountService.redirectToAccount();
       }
     });
