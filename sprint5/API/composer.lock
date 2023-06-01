@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e933841e7ca0a413d087488e7f874e3",
+    "content-hash": "80ee5c1bfcce41529757b099869648d6",
     "packages": [
         {
             "name": "brick/math",
@@ -931,44 +931,38 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "2.5.0",
+            "version": "1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "b635f279edd83fc275f822a1188157ffea568ff6"
+                "reference": "e4490cabc77465aaee90b20cfc9a770f8c04be6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/b635f279edd83fc275f822a1188157ffea568ff6",
-                "reference": "b635f279edd83fc275f822a1188157ffea568ff6",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/e4490cabc77465aaee90b20cfc9a770f8c04be6b",
+                "reference": "e4490cabc77465aaee90b20cfc9a770f8c04be6b",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2.5 || ^8.0",
-                "psr/http-factory": "^1.0",
-                "psr/http-message": "^1.1 || ^2.0",
-                "ralouphie/getallheaders": "^3.0"
+                "php": ">=5.4.0",
+                "psr/http-message": "~1.0",
+                "ralouphie/getallheaders": "^2.0.5 || ^3.0.0"
             },
             "provide": {
-                "psr/http-factory-implementation": "1.0",
                 "psr/http-message-implementation": "1.0"
             },
             "require-dev": {
-                "bamarni/composer-bin-plugin": "^1.8.1",
-                "http-interop/http-factory-tests": "^0.9",
-                "phpunit/phpunit": "^8.5.29 || ^9.5.23"
+                "ext-zlib": "*",
+                "phpunit/phpunit": "~4.8.36 || ^5.7.27 || ^6.5.14 || ^7.5.20 || ^8.5.8 || ^9.3.10"
             },
             "suggest": {
                 "laminas/laminas-httphandlerrunner": "Emit PSR-7 responses"
             },
             "type": "library",
-            "extra": {
-                "bamarni-bin": {
-                    "bin-links": true,
-                    "forward-command": false
-                }
-            },
             "autoload": {
+                "files": [
+                    "src/functions_include.php"
+                ],
                 "psr-4": {
                     "GuzzleHttp\\Psr7\\": "src/"
                 }
@@ -1007,11 +1001,6 @@
                     "name": "Tobias Schultze",
                     "email": "webmaster@tubo-world.de",
                     "homepage": "https://github.com/Tobion"
-                },
-                {
-                    "name": "Márk Sági-Kazár",
-                    "email": "mark.sagikazar@gmail.com",
-                    "homepage": "https://sagikazarmark.hu"
                 }
             ],
             "description": "PSR-7 message implementation that also provides common utility methods",
@@ -1027,7 +1016,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/2.5.0"
+                "source": "https://github.com/guzzle/psr7/tree/1.9.1"
             },
             "funding": [
                 {
@@ -1043,7 +1032,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-04-17T16:11:26+00:00"
+            "time": "2023-04-17T16:00:37+00:00"
         },
         {
             "name": "guzzlehttp/uri-template",
@@ -3035,16 +3024,16 @@
         },
         {
             "name": "psr/http-message",
-            "version": "2.0",
+            "version": "1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/http-message.git",
-                "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71"
+                "reference": "cb6ce4845ce34a8ad9e68117c10ee90a29919eba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-message/zipball/402d35bcb92c70c026d1a6a9883f06b2ead23d71",
-                "reference": "402d35bcb92c70c026d1a6a9883f06b2ead23d71",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/cb6ce4845ce34a8ad9e68117c10ee90a29919eba",
+                "reference": "cb6ce4845ce34a8ad9e68117c10ee90a29919eba",
                 "shasum": ""
             },
             "require": {
@@ -3053,7 +3042,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -3068,7 +3057,7 @@
             "authors": [
                 {
                     "name": "PHP-FIG",
-                    "homepage": "https://www.php-fig.org/"
+                    "homepage": "http://www.php-fig.org/"
                 }
             ],
             "description": "Common interface for HTTP messages",
@@ -3082,9 +3071,9 @@
                 "response"
             ],
             "support": {
-                "source": "https://github.com/php-fig/http-message/tree/2.0"
+                "source": "https://github.com/php-fig/http-message/tree/1.1"
             },
-            "time": "2023-04-04T09:54:51+00:00"
+            "time": "2023-04-04T09:50:52+00:00"
         },
         {
             "name": "psr/log",
@@ -3138,25 +3127,25 @@
         },
         {
             "name": "psr/simple-cache",
-            "version": "3.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/simple-cache.git",
-                "reference": "764e0b3939f5ca87cb904f570ef9be2d78a07865"
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/764e0b3939f5ca87cb904f570ef9be2d78a07865",
-                "reference": "764e0b3939f5ca87cb904f570ef9be2d78a07865",
+                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
+                "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0.0"
+                "php": ">=5.3.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0.x-dev"
+                    "dev-master": "1.0.x-dev"
                 }
             },
             "autoload": {
@@ -3171,7 +3160,7 @@
             "authors": [
                 {
                     "name": "PHP-FIG",
-                    "homepage": "https://www.php-fig.org/"
+                    "homepage": "http://www.php-fig.org/"
                 }
             ],
             "description": "Common interfaces for simple caching",
@@ -3183,9 +3172,9 @@
                 "simple-cache"
             ],
             "support": {
-                "source": "https://github.com/php-fig/simple-cache/tree/3.0.0"
+                "source": "https://github.com/php-fig/simple-cache/tree/master"
             },
-            "time": "2021-10-29T13:26:27+00:00"
+            "time": "2017-10-23T01:57:42+00:00"
         },
         {
             "name": "psy/psysh",
@@ -3490,24 +3479,28 @@
         },
         {
             "name": "socialconnect/auth",
-            "version": "1.5.0",
+            "version": "3.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SocialConnect/auth.git",
-                "reference": "c2115b75af690d8443592c36d7c139855cdce3ce"
+                "reference": "5bd774eb9afdb66147a973f958cc4ae348b33fbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SocialConnect/auth/zipball/c2115b75af690d8443592c36d7c139855cdce3ce",
-                "reference": "c2115b75af690d8443592c36d7c139855cdce3ce",
+                "url": "https://api.github.com/repos/SocialConnect/auth/zipball/5bd774eb9afdb66147a973f958cc4ae348b33fbd",
+                "reference": "5bd774eb9afdb66147a973f958cc4ae348b33fbd",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": ">=5.5",
-                "socialconnect/common": "^1.0"
+                "php": ">=7.1",
+                "psr/http-client": "^1.0 || ^2.0",
+                "psr/http-factory": "^1.0 || ^2.0",
+                "psr/simple-cache": "^1.0 || ^2.0 || ^3.0",
+                "socialconnect/jwx": "^1.0"
             },
             "replace": {
+                "socialconnect/common": "self.version",
                 "socialconnect/oauth1": "self.version",
                 "socialconnect/oauth2": "self.version",
                 "socialconnect/openid": "self.version",
@@ -3515,8 +3508,10 @@
                 "socialconnect/provider": "self.version"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.8.34",
-                "squizlabs/php_codesniffer": "~3.0.1"
+                "phpstan/phpstan-shim": "^0.11.12",
+                "phpunit/phpunit": "^7.5",
+                "socialconnect/http-client": "^1.0",
+                "squizlabs/php_codesniffer": "^3.3.2"
             },
             "type": "library",
             "autoload": {
@@ -3553,43 +3548,42 @@
             ],
             "support": {
                 "issues": "https://github.com/SocialConnect/auth/issues",
-                "source": "https://github.com/SocialConnect/auth/tree/1.5.0"
+                "source": "https://github.com/SocialConnect/auth/tree/3.3.5"
             },
-            "time": "2017-07-09T15:39:21+00:00"
+            "time": "2023-03-07T20:40:31+00:00"
         },
         {
-            "name": "socialconnect/common",
-            "version": "1.1.0",
+            "name": "socialconnect/http-client",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/SocialConnect/common.git",
-                "reference": "d9bc99b90a3d51bc6c753000079629bc33a63c8f"
+                "url": "https://github.com/SocialConnect/http-client.git",
+                "reference": "1166b910b6fe67be413d12ba75b8a555b921e330"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SocialConnect/common/zipball/d9bc99b90a3d51bc6c753000079629bc33a63c8f",
-                "reference": "d9bc99b90a3d51bc6c753000079629bc33a63c8f",
+                "url": "https://api.github.com/repos/SocialConnect/http-client/zipball/1166b910b6fe67be413d12ba75b8a555b921e330",
+                "reference": "1166b910b6fe67be413d12ba75b8a555b921e330",
                 "shasum": ""
             },
             "require": {
+                "ext-curl": "*",
                 "ext-json": "*",
-                "php": ">=5.5"
+                "guzzlehttp/psr7": "^1.6",
+                "php": ">=7.1",
+                "psr/http-client": "^1.0",
+                "psr/http-factory": "^1.0",
+                "psr/simple-cache": "^1.0"
             },
             "require-dev": {
-                "doctrine/cache": "^1.5.1",
-                "ext-curl": "*",
-                "guzzlehttp/guzzle": "^5.3|^6.0",
-                "phpunit/phpunit": "^4.2",
-                "squizlabs/php_codesniffer": "^2.8"
-            },
-            "suggest": {
-                "ext-curl": "Allows to use Http\\Client\\Curl",
-                "guzzlehttp/guzzle": "Allows to use Http\\Client\\Guzzle, require guzzlehttp/guzzle:~5.3|~6.0."
+                "phpstan/phpstan-shim": "^0.11.12",
+                "phpunit/phpunit": "^6.5",
+                "symfony/http-foundation": "^3.4"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "SocialConnect\\Common\\": "src/"
+                    "SocialConnect\\HttpClient\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -3602,12 +3596,70 @@
                     "email": "talk@dmtry.me"
                 }
             ],
-            "description": "Common component",
+            "description": "PSR-18 HTTP Client on top of Guzzle PSR7",
+            "keywords": [
+                "curl",
+                "http-client",
+                "psr-18"
+            ],
             "support": {
-                "issues": "https://github.com/SocialConnect/common/issues",
-                "source": "https://github.com/SocialConnect/common/tree/master"
+                "issues": "https://github.com/SocialConnect/http-client/issues",
+                "source": "https://github.com/SocialConnect/http-client/tree/1.0.0"
             },
-            "time": "2018-04-11T11:24:55+00:00"
+            "time": "2019-07-23T18:13:21+00:00"
+        },
+        {
+            "name": "socialconnect/jwx",
+            "version": "1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SocialConnect/jwx.git",
+                "reference": "2508626d461657aaa816ac1b115c5e6082d5152c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SocialConnect/jwx/zipball/2508626d461657aaa816ac1b115c5e6082d5152c",
+                "reference": "2508626d461657aaa816ac1b115c5e6082d5152c",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpstan/phpstan-shim": "^0.11.12",
+                "phpunit/phpunit": "^7.5"
+            },
+            "suggest": {
+                "ext-openssl": "Please install openssl extension to use RS encryption"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SocialConnect\\JWX\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Patsura",
+                    "email": "talk@dmtry.me"
+                }
+            ],
+            "description": "PHP library for JSON web tokens (JWT) and JWT",
+            "keywords": [
+                "JSON Web Token",
+                "JWE",
+                "jwt"
+            ],
+            "support": {
+                "issues": "https://github.com/SocialConnect/jwx/issues",
+                "source": "https://github.com/SocialConnect/jwx/tree/1.3.0"
+            },
+            "time": "2022-01-12T13:44:49+00:00"
         },
         {
             "name": "swagger-api/swagger-ui",
