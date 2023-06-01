@@ -99,7 +99,7 @@ export class LoginComponent implements OnInit {
   }
 
   socialLogin(provider: string) {
-    window.open('https://practicesoftwaretesting.com/auth/social-login?provider=' + provider, '', 'height=500,width=400');
+    window.open('https://api.practicesoftwaretesting.com/auth/social-login?provider=' + provider, '', 'height=500,width=400');
   }
 
   protected readonly environment = environment;
