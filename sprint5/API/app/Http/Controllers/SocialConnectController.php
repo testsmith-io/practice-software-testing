@@ -28,6 +28,9 @@ class SocialConnectController extends Controller
                 'github' => [
                     'applicationId' => env('APP_GITHUB_ID'),
                     'applicationSecret' => env('APP_GITHUB_SECRET'),
+                    'options' => [
+                        'fetch_emails' => true
+                    ]
                 ]
             ]
         ];
