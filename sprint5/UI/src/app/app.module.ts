@@ -24,6 +24,7 @@ import {OverviewComponent as ProductOverviewComponent} from './products/overview
 import {DetailComponent as ProductDetailComponent} from './products/detail/detail.component';
 import {NgHttpLoaderModule} from "ng-http-loader";
 import {NgxSliderModule} from "@angular-slider/ngx-slider";
+import { PrivacyComponent } from './privacy/privacy.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import {NgxSliderModule} from "@angular-slider/ngx-slider";
     ToastsComponent,
     CategoryComponent,
     OverviewComponent,
-    ProductOverviewComponent
+    ProductOverviewComponent,
+    PrivacyComponent
   ],
   imports: [
     BrowserModule,
