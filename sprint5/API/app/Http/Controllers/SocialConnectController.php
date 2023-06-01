@@ -25,6 +25,10 @@ class SocialConnectController extends Controller
                         'https://www.googleapis.com/auth/userinfo.email',
                         'https://www.googleapis.com/auth/userinfo.profile'
                     ]
+                ],
+                'github' => [
+                    'applicationId' => env('APP_GITHUB_ID'),
+                    'applicationSecret' => env('APP_GITHUB_SECRET'),
                 ]
             ]
         ];
