@@ -14,7 +14,8 @@ class SocialConnectController extends Controller
     public function __construct()
     {
         $configureProviders = [
-            'redirectUri' => 'https://api.practicesoftwaretesting.com/auth/cb',
+//            'redirectUri' => 'https://api.practicesoftwaretesting.com/auth/cb',
+            'redirectUri' => 'https://api.practicesoftwaretesting.com/auth/cb/${provider}/',
             'provider' => [
                 'google' => [
                     'applicationId' => env('APP_GOOGLE_ID'),
