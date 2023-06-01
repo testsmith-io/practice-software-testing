@@ -27,6 +27,8 @@ jobs:
           SECRET_DB: ${{ secrets.SECRET_DB }}
           SECRET_DB_USER: ${{ secrets.SECRET_DB_USER }}
           SECRET_DB_PASS: ${{ secrets.SECRET_DB_PASS }}
+          SECRET_GOOGLE_ID: ${{ secrets.SECRET_GOOGLE_ID }}
+          SECRET_GOOGLE_SECRET: ${{ secrets.SECRET_GOOGLE_SECRET }}
         with:
           input: sprint5/API/.env_template
           output: sprint5/API/.env

@@ -9,8 +9,8 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SocialConnectController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -116,5 +116,10 @@ Route::controller(UserController::class)->prefix('users')->group(function () {
     Route::get('/', 'index');
     Route::get('/{id}', 'show');
     Route::delete('/{id}', 'destroy');
+});
+
+Route::controller(SocialConnectController::class)->prefix('auth')->group(function () {
+    Route::get('/social-login', 'getAuthUrl');
+    Route::get('/cb/google', 'callbackGoogle');
 });
 
