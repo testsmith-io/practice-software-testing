@@ -121,5 +121,6 @@ Route::controller(UserController::class)->prefix('users')->group(function () {
 Route::controller(SocialConnectController::class)->prefix('auth')->group(function () {
     Route::get('/social-login', 'getAuthUrl');
     Route::get('/cb/google', 'callbackGoogle');
+    Route::get('/cb/github', 'callbackGithub');
 });
 
