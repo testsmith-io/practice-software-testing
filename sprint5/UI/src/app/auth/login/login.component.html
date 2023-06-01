@@ -2,6 +2,14 @@
   <div class="row justify-content-md-center">
     <div class="col-lg-6 auth-form">
       <h3>Login</h3>
+      <div *ngIf="environment.production" class="text-center my-3">
+        <button (click)="socialLogin('google')" class="btn btn-block btn-social btn-google">
+          <span class="fa-brands fa-google"></span> Google
+        </button>
+      </div>
+
+      <div *ngIf="environment.production" class="separator">or use</div>
+
       <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete=off data-test="login-form">
         <div class="input-group mb-3">
           <input formControlName="email"

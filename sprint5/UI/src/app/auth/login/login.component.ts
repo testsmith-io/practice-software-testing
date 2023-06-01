@@ -3,6 +3,8 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/form
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import {TokenStorageService} from "../../_services/token-storage.service";
 import {User} from "../../models/user.model";
+import {environment} from '../../../environments/environment';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -20,10 +22,19 @@ export class LoginComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private accountService: CustomerAccountService,
-              private tokenStorage: TokenStorageService) {
+              private tokenStorage: TokenStorageService,
+              private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
+    this.activatedRoute.params.subscribe(params => {
+      const socialid = params['socialid'];
+      if (socialid) {
+        this.tokenStorage.saveToken(socialid);
+        this.accountService.redirectToAccount();
+      }
+    });
+
     if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;
     }
@@ -87,4 +98,9 @@ export class LoginComponent implements OnInit {
 
   }
 
+  socialLogin(provider: string) {
+    window.open('https://practicesoftwaretesting.com/auth/social-login?provider=' + provider, '', 'height=500,width=400');
+  }
+
+  protected readonly environment = environment;
 }
