@@ -156,6 +156,14 @@ class UserController extends Controller
         $credentials = $request->all(['email', 'password']);
 
         if (!$token = app('auth')->attempt($credentials)) {
+            $user = User::where('email', '=', $credentials['email'])->first();
+            if ($user->role != "admin") {
+                if ($user['failed_login_attempts'] >= 1) {
+                    return response()->json(['error' => 'Account locked.'], ResponseAlias::HTTP_BAD_REQUEST);
+                } else {
+                    User::where('email', '=', $credentials['email'])->increment('failed_login_attempts', 1);
+                }
+            }
             return response()->json(['error' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
         }
         return $this->respondWithToken($token);
