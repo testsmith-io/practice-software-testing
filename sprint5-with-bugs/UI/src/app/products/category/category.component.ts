@@ -26,6 +26,7 @@ export class CategoryComponent implements OnInit {
   private brandsFilter: Array<number> = [];
   private categoriesFilter: Array<number> = [];
   private sorting: string = '';
+  protected readonly Math = Math;
 
   constructor(private productService: ProductService,
               private formBuilder: FormBuilder,
@@ -122,6 +123,5 @@ export class CategoryComponent implements OnInit {
       })
     });
   }
-
 
 }

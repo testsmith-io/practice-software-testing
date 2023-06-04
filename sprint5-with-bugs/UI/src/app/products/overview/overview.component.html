@@ -26,15 +26,18 @@
     <h4 class="grid-title"><i class="fa fa-arrows-left-right"></i> Price Range</h4>
     <hr>
     <div class="input-group mb-3">
-      <ngx-slider (userChangeEnd)="changePriceRange()" [(value)]="minPrice" [(highValue)]="maxPrice" [options]="options"></ngx-slider>
+      <ngx-slider (userChangeEnd)="changePriceRange()" [(value)]="minPrice" [(highValue)]="maxPrice"
+                  [options]="options"></ngx-slider>
     </div>
 
-    <h4 class="grid-title"> <img src="broken.png"> Search</h4>
+    <h4 class="grid-title"><img src="broken.png"> Search</h4>
     <hr>
     <form [formGroup]="search" (ngSubmit)="onSearchSubmit()" autocomplete=off>
       <div class="input-group mb-3">
         <input formControlName="query" data-test="search-query" type="text" class="form-control">
-        <button data-test="search-submit" (click)="reset()" class="btn btn-warning" type="reset" data-test="search-reset">X</button>
+        <button data-test="search-submit" (click)="reset()" class="btn btn-warning" type="reset"
+                data-test="search-reset">X
+        </button>
         <button class="btn btn-secondary" type="submit" data-test="search-submit">Search</button>
       </div>
     </form>
@@ -47,7 +50,8 @@
         <label><input #checkboxes *ngIf="category.parent_id" type="checkbox" class="icheck"
                       attr.data-test="category-{{category.id}}" name="category_id"
                       value="{{category.id}}" (change)="filterByCategory($event)"/>
-          <input #checkboxes *ngIf="!category.sub_categories.length && !category.parent_id" type="checkbox" class="icheck"
+          <input #checkboxes *ngIf="!category.sub_categories.length && !category.parent_id" type="checkbox"
+                 class="icheck"
                  attr.data-test="category-{{category.id}}" name="category_id"
                  value="{{category.id}}" (change)="filterByCategory($event)"/>
           {{category.name}}</label>
@@ -88,7 +92,8 @@
                src="assets/img/products/{{item.product_image.file_name}}">
         </div>
         <div class="card-body">
-          <h5 data-test="product-name" class="card-title text-end" [ngClass]="browserDetect.isFirefox()? 'text-nowrap': ''">
+          <h5 data-test="product-name" class="card-title"
+              [ngClass]="{'nowrap': browserDetect.isFirefox(), 'text-end': Math.floor(Math.random() * 100) % 2}">
             {{item.name}}
           </h5>
         </div>
