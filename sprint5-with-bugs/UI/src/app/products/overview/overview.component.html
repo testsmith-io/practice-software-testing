@@ -88,7 +88,7 @@
                src="assets/img/products/{{item.product_image.file_name}}">
         </div>
         <div class="card-body">
-          <h5 data-test="product-name" class="card-title" [ngClass]="browserDetect.isFirefox()? 'text-nowrap': ''">
+          <h5 data-test="product-name" class="card-title text-end" [ngClass]="browserDetect.isFirefox()? 'text-nowrap': ''">
             {{item.name}}
           </h5>
         </div>
