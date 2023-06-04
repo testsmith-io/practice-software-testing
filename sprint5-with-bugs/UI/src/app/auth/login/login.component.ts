@@ -76,6 +76,9 @@ export class LoginComponent implements OnInit {
         if (err.error === 'Unauthorized') {
           this.error = 'Invalid email or password';
           this.isLoginFailed = true;
+        } else {
+          this.error = err.error;
+          this.isLoginFailed = true;
         }
       },
     });
