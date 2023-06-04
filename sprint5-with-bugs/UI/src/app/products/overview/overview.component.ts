@@ -35,6 +35,7 @@ export class OverviewComponent implements OnInit {
     floor: 0,
     ceil: 200
   };
+  protected readonly Math = Math;
 
   constructor(private productService: ProductService,
               private formBuilder: FormBuilder,
@@ -176,4 +177,5 @@ export class OverviewComponent implements OnInit {
       element.nativeElement.checked = false;
     });
   }
+
 }
