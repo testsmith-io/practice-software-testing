@@ -152,7 +152,7 @@ class UserController extends Controller {
 
         if (!$token = app('auth')->attempt($credentials)) {
             $user = User::where('email', '=', $credentials['email'])->first();
-            if ($user->role != "admin") {
+            if ($user && $user->role != "admin") {
                 if ($user['failed_login_attempts'] >= 3) {
                     return response()->json(['error' => 'Account locked, too many failed attempts. Please contact the administrator.'], ResponseAlias::HTTP_LOCKED);
                 } else {
