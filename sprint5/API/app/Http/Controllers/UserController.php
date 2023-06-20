@@ -21,7 +21,7 @@ class UserController extends Controller {
     public function __construct() {
         $this->middleware('auth:users', ['except' => ['login', 'store', 'forgotPassword', 'refresh']]);
         $this->middleware('assign.guard:users');
-        $this->middleware('role:admin', ['only' => ['index', 'destroy']]);
+        $this->middleware('role:admin', ['only' => ['index', 'destroy' ]]);
     }
 
     /**
@@ -454,7 +454,11 @@ class UserController extends Controller {
      * )
      */
     public function show($id) {
-        return $this->preferredFormat(User::findOrFail($id));
+        if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
+            return $this->preferredFormat(User::findOrFail($id));
+        } else {
+            return $this->preferredFormat(User::where('user_id', Auth::user()->id)->findOrFail($id));
+        }
     }
 
     /**

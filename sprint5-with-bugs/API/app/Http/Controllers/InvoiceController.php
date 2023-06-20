@@ -20,7 +20,7 @@ class InvoiceController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:users');
+        $this->middleware('auth:users', ['except' => ['index']]);
     }
 
     /**
@@ -68,17 +68,16 @@ class InvoiceController extends Controller
      *          @OA\JsonContent(
      *              @OA\Property(property="message", type="string", example="Method is not allowed for the requested route"),
      *          )
-     *      ),
-     *     security={{ "apiAuth": {} }}
+     *      )
      * )
      */
     public function index()
     {
-        if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
+//        if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
             return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->orderBy('invoice_date', 'DESC')->paginate());
-        } else {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('user_id', app('auth')->user()->id)->orderBy('invoice_date', 'DESC')->paginate());
-        }
+//        } else {
+//            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('user_id', app('auth')->user()->id)->orderBy('invoice_date', 'DESC')->paginate());
+//        }
     }
 
     /**

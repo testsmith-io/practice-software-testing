@@ -206,6 +206,12 @@ VALUES (1, 2, '2019-04-05 22:04:47', 'INV-2019000001', 'Test street 123', 'Utrec
        (6, 2, NOW() - INTERVAL 3 DAY, 'INV-2022000001', 'Test street 123', 'Utrecht', 'Utrecht', 'The Netherlands', '1122AB', '20.14',
         'Cash on Delivery', 'Tester', '09876543ABC', NOW()),
        (7, 2, NOW() - INTERVAL 1 DAY, 'INV-2022000002', 'Test street 123', 'Utrecht', 'Utrecht', 'The Netherlands', '1122AB', '22.66',
+        'Cash on Delivery', 'Tester', '09876543ABC', NOW()),
+       (8, 3, '2021-10-30 22:04:47', 'INV-2021000003', 'Midway Road 123', 'Springdale', 'Arkansas', 'United States', '72764', '27.11',
+        'Cash on Delivery', 'Tester', '09876543ABC', NOW()),
+       (9, 3, NOW() - INTERVAL 3 DAY, 'INV-2022000003', 'Midway Road 123', 'Springdale', 'Arkansas', 'United States', '72764', '20.14',
+        'Cash on Delivery', 'Tester', '09876543ABC', NOW()),
+       (10, 3, NOW() - INTERVAL 1 DAY, 'INV-2022000004', 'Midway Road 123', 'Springdale', 'Arkansas', 'United States', '72764', '22.66',
         'Cash on Delivery', 'Tester', '09876543ABC', NOW());
 
 
@@ -229,4 +235,13 @@ VALUES (1, 3, '8.41', 1, NOW()),
        (6, 11, '20.14', 1, NOW()),
 
        (7, 1, '14.15', 1, NOW()),
-       (7, 16, '8.51', 1, NOW());
+       (7, 16, '8.51', 1, NOW()),
+
+       (8, 21, '10.19', 1, NOW()),
+       (8, 10, '7.75', 1, NOW()),
+       (8, 5, '9.17', 1, NOW()),
+
+       (9, 11, '20.14', 1, NOW()),
+
+       (10, 1, '14.15', 1, NOW()),
+       (10, 16, '8.51', 1, NOW());
