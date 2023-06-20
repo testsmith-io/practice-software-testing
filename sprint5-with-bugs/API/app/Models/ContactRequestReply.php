@@ -21,7 +21,7 @@ class ContactRequestReply extends BaseModel
 {
     use HasFactory;
 
-    protected $hidden = ['updated_at', 'message_id', 'user_id'];
+    protected $hidden = ['updated_at'];
     protected $table = 'contact_request_replies';
     protected $fillable = ['user_id', 'message_id', 'message'];
 
