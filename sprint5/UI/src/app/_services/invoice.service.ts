@@ -38,6 +38,9 @@ export class InvoiceService {
     return this.http.get(API_URL + `/invoices/${id}`, {responseType: 'json'});
   }
 
+  downloadPDF(invoice_number: string) {
+    return this.http.get<Blob>(API_URL + `/invoices/${invoice_number}/download-pdf`, { observe: 'response', responseType: 'blob' as 'json' });
+  }
   createInvoice(payload: any): Observable<any> {
     return this.http.post(API_URL + '/invoices', payload, {responseType: 'json'});
   }
@@ -50,4 +53,5 @@ export class InvoiceService {
   }
 
   private extractData = (res: any) => res;
+
 }

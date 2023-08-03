@@ -14,7 +14,13 @@ class Kernel extends ConsoleKernel
     {
         if (!app()->environment('local')) {
             $schedule->command('migrate:fresh --seed --force')->hourly();
+            $schedule->command('invoice:remove')->hourly();
         }
+        $schedule->command('queue:work --stop-when-empty')
+            ->everyMinute()
+            ->withoutOverlapping();
+        $schedule->command('invoice:generate')
+            ->everyMinute();
         $schedule->command('order:update')
             ->everyTenMinutes();
     }
