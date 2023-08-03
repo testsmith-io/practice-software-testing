@@ -255,10 +255,10 @@ class InvoiceController extends Controller {
      * )
      */
     public function downloadPDF($invoice_number) {
-        if(Storage::exists('invoices/' . $invoice_number . '.pdf')) {
-            return Storage::download('invoices/' . $invoice_number . '.pdf', $invoice_number . '.pdf');
+        if(Storage::exists('app/invoices/' . $invoice_number . '.pdf')) {
+            return Storage::download('app/invoices/' . $invoice_number . '.pdf', $invoice_number . '.pdf');
         } else {
-            return $this->preferredFormat(['message' => 'Document not created. Try again later.' . storage_path('app/file.txt')], ResponseAlias::HTTP_NOT_FOUND);
+            return $this->preferredFormat(['message' => 'Document not created. Try again later.'], ResponseAlias::HTTP_NOT_FOUND);
         }
     }
 
