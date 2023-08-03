@@ -13,14 +13,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class InvoiceController extends Controller
-{
+class InvoiceController extends Controller {
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('auth:users');
     }
 
@@ -73,8 +72,7 @@ class InvoiceController extends Controller
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function index()
-    {
+    public function index() {
         if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
             return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->orderBy('invoice_date', 'DESC')->filter()->paginate());
         } else {
@@ -127,8 +125,7 @@ class InvoiceController extends Controller
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function store(StoreInvoice $request)
-    {
+    public function store(StoreInvoice $request) {
         $input = $request->except(['invoice_items']);
         $input['invoice_date'] = date('Y-m-d H-i-s');
         $input['invoice_number'] = IdGenerator::generate(['table' => 'invoices', 'field' => 'invoice_number', 'length' => 14, 'prefix' => 'INV-' . date('Y')]);
@@ -155,7 +152,7 @@ class InvoiceController extends Controller
             }
 
             $user = Auth::user();
-            Mail::to([$user->email])->send(new Checkout($user->first_name . ' ' . $user->last_name, $items, $total,));
+            Mail::to([$user->email])->send(new Checkout($user->first_name . ' ' . $user->last_name, $items, $total));
         }
 
         return $this->preferredFormat($invoice, ResponseAlias::HTTP_CREATED);
@@ -205,12 +202,63 @@ class InvoiceController extends Controller
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function show($id)
-    {
+    public function show($id) {
         if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
             return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('id', $id)->first());
         } else {
             return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('id', $id)->where('user_id', Auth::user()->id)->first());
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *      path="/invoices/{invoice_number}/download-pdf",
+     *      operationId="downloadPDF",
+     *      tags={"Invoice"},
+     *      summary="Download already generated PDF of a specific invoice",
+     *      description="Download already generated PDF of a specific invoice",
+     *      @OA\Parameter(
+     *          name="invoice_number",
+     *          in="path",
+     *          example=1,
+     *          description="The invoice_number parameter in path",
+     *          required=true,
+     *          @OA\Schema(type="string")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/InvoiceResponse")
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Returns when user is not authenticated",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="Unauthorized"),
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Returns when the requested item is not found",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="Requested item not found"),
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=405,
+     *          description="Returns when the method is not allowed for the requested route",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="Method is not allowed for the requested route"),
+     *          )
+     *      ),
+     *     security={{ "apiAuth": {} }}
+     * )
+     */
+    public function downloadPDF($invoice_number) {
+        if(Storage::exists('invoices/' . $invoice_number . '.pdf')) {
+            return Storage::download('invoices/' . $invoice_number . '.pdf', $invoice_number . '.pdf');
+        } else {
+            return $this->preferredFormat(['message' => 'Document not created. Try again later.'], ResponseAlias::HTTP_NOT_FOUND);
         }
     }
 
@@ -275,8 +323,7 @@ class InvoiceController extends Controller
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function updateStatus($id, Request $request)
-    {
+    public function updateStatus($id, Request $request) {
         $request->validate([
             'status' => Rule::in("AWAITING_FULFILLMENT", "ON_HOLD", "AWAITING_SHIPMENT", "SHIPPED", "COMPLETED"),
             'status_message' => 'string|between:5,50|nullable'
@@ -333,8 +380,7 @@ class InvoiceController extends Controller
      *      ),
      * )
      */
-    public function search(Request $request)
-    {
+    public function search(Request $request) {
         $q = $request->get('q');
 
         if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
@@ -405,8 +451,7 @@ class InvoiceController extends Controller
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function update(StoreInvoice $request, $id)
-    {
+    public function update(StoreInvoice $request, $id) {
         return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->where('customer_id', Auth::user()->id)->update($request->all())], ResponseAlias::HTTP_OK);
     }
 
@@ -460,8 +505,7 @@ class InvoiceController extends Controller
      *     security={{ "apiAuth": {} }}
      * ),
      */
-    public function destroy(DestroyInvoice $request, $id)
-    {
+    public function destroy(DestroyInvoice $request, $id) {
         try {
             Invoice::find($id)->where('customer_id', Auth::user()->id)->delete();
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);

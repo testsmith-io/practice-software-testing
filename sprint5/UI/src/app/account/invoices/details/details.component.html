@@ -1,7 +1,18 @@
-<div *ngIf="!invoice.invoice_date" class="container mt-5">
+<div *ngIf="!invoice?.invoice_date" class="container mt-5">
   <p>This invoice doesn't exist.</p>
 </div>
-<div *ngIf="invoice.invoice_date" class="container mt-5">
+<div *ngIf="invoice?.invoice_date" class="container mt-5">
+  <div class="row mb-3">
+    <div class="input-group">
+      <button class="btn btn-warning" (click)="downloadPDF()" type="submit" data-test="brand-search-submit">Download
+        PDF
+      </button>
+    </div>
+    <div *ngIf="error && !hideAlert" [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
+         role="alert">
+      {{error}}
+    </div>
+  </div>
   <div class="row">
     <div class="col">
       <h3>General Information</h3>
@@ -23,7 +34,8 @@
         <div class="form-group row">
           <label for="total" class="col-sm-3 col-form-label">Total</label>
           <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext" data-test="total" id="total" value="$ {{invoice.total.toFixed(2)}}">
+            <input type="text" readonly class="form-control-plaintext" data-test="total" id="total"
+                   value="$ {{invoice.total.toFixed(2)}}">
           </div>
         </div>
       </form>
@@ -34,7 +46,8 @@
         <div class="form-group row">
           <label for="address" class="col-sm-3 col-form-label">Address</label>
           <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext" data-test="address" id="address" value="{{invoice.billing_address}}">
+            <input type="text" readonly class="form-control-plaintext" data-test="address" id="address"
+                   value="{{invoice.billing_address}}">
           </div>
         </div>
         <div class="form-group row">
@@ -47,19 +60,22 @@
         <div class="form-group row">
           <label for="city" class="col-sm-3 col-form-label">City</label>
           <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext" data-test="city" id="city" value="{{invoice.billing_city}}">
+            <input type="text" readonly class="form-control-plaintext" data-test="city" id="city"
+                   value="{{invoice.billing_city}}">
           </div>
         </div>
         <div class="form-group row">
           <label for="state" class="col-sm-3 col-form-label">State</label>
           <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext" data-test="state" id="state" value="{{invoice.billing_state}}">
+            <input type="text" readonly class="form-control-plaintext" data-test="state" id="state"
+                   value="{{invoice.billing_state}}">
           </div>
         </div>
         <div class="form-group row">
           <label for="country" class="col-sm-3 col-form-label">Country</label>
           <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext" data-test="country" id="country" value="{{invoice.billing_country}}">
+            <input type="text" readonly class="form-control-plaintext" data-test="country" id="country"
+                   value="{{invoice.billing_country}}">
           </div>
         </div>
       </form>
@@ -106,7 +122,8 @@
         <tbody>
         <tr *ngFor="let invoiceline of invoice.invoicelines">
           <td>{{invoiceline.quantity}}</td>
-          <td>{{invoiceline.product.name}}<small *ngIf="invoiceline.product.is_rental"> (Item for rent, price per hour)</small></td>
+          <td>{{invoiceline.product.name}}<small *ngIf="invoiceline.product.is_rental"> (Item for rent, price per
+            hour)</small></td>
           <td class="text-end">${{invoiceline.product.price | number: '1.2-2'}}</td>
           <td class="text-end">${{invoiceline.quantity * invoiceline.product.price | number: '1.2-2'}}</td>
         </tr>
