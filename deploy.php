@@ -73,6 +73,7 @@ task('upload', function () {
         run("/usr/bin/php /var/www/api{$app['api_destination']}.practicesoftwaretesting.com/artisan l5-swagger:generate");
         run("sudo chmod -R 777 /var/www/api{$app['api_destination']}.practicesoftwaretesting.com/storage");
         run("sudo chown -R www-data:www-data /var/www/api{$app['api_destination']}.practicesoftwaretesting.com/storage/framework");
+        run("sudo chown -R www-data:www-data /var/www/api{$app['api_destination']}.practicesoftwaretesting.com/storage/app");
 
         runLocally("cd {$app['source']}/UI/ && npm install --legacy-peer-deps && npm run build");
         run("cd /var/www/ && mkdir -p {$app['web_destination']}practicesoftwaretesting.com_tmp/public_html");
