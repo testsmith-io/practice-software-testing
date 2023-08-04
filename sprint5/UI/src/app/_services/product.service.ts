@@ -67,11 +67,11 @@ export class ProductService {
   }
 
 
-  getProduct(id: number): Observable<any> {
+  getProduct(id: string): Observable<any> {
     return this.httpClient.get(this.apiURL + `/products/${id}`);
   }
 
-  getRelatedProducts(id: number): Observable<any> {
+  getRelatedProducts(id: string): Observable<any> {
     return this.httpClient.get(this.apiURL + `/products/${id}/related`);
   }
 

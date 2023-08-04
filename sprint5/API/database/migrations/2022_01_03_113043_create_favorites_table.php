@@ -15,12 +15,13 @@ class CreateFavoritesTable extends Migration
     public function up()
     {
         Schema::create('favorites', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('product_id');
+            $table->ulid('id')->primary();
+            $table->ulid('user_id');
+            $table->ulid('product_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('product_id')->references('id')->on('products');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
 
             $table->unique(["user_id", "product_id"], 'user_product_unique');
         });

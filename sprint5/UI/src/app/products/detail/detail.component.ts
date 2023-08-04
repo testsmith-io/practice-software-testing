@@ -20,7 +20,7 @@ export class DetailComponent implements OnInit {
   quantity: number = 1;
   relatedProducts: Product[];
   private sub: any;
-  private id: number;
+  private id: string;
   sliderOptions: Options = {
     floor: 1,
     ceil: 10
@@ -37,7 +37,7 @@ export class DetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.sub = this.route.params.subscribe(params => {
-      this.id = +params['id'];
+      this.id = params['id'];
       this.getProduct(this.id);
       this.getRelatedProducts(this.id);
     });
@@ -54,7 +54,7 @@ export class DetailComponent implements OnInit {
     }
   }
 
-  getProduct(id: number) {
+  getProduct(id: string) {
     this.productService.getProduct(id).subscribe(response => {
       this.product = response;
       if (this.product.is_location_offer) {
@@ -64,7 +64,7 @@ export class DetailComponent implements OnInit {
     this.discount_percentage = DiscountUtil.getDiscountPercentage();
   }
 
-  getRelatedProducts(id: number) {
+  getRelatedProducts(id: string) {
     this.productService.getRelatedProducts(id).subscribe(response => {
       this.relatedProducts = response;
     });

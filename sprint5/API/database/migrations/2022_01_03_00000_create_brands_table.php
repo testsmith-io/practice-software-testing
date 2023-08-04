@@ -15,10 +15,11 @@ class CreateBrandsTable extends Migration
     public function up()
     {
         Schema::create('brands', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->string('name', 220);
             $table->string('slug', 220)->unique();
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
         });
     }
 

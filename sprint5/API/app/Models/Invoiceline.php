@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -19,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Invoiceline extends BaseModel
 {
+    use HasUlids;
     protected $table = 'invoice_items';
     protected $fillable = ['invoice_id', 'product_id', 'unit_price', 'quantity'];
 

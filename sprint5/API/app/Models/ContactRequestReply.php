@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class ContactRequestReply extends BaseModel
 {
-    use HasFactory;
+    use HasFactory, HasUlids;
 
     protected $hidden = ['updated_at', 'message_id', 'user_id'];
     protected $table = 'contact_request_replies';

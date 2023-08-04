@@ -24,7 +24,7 @@ class StoreInvoice extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|numeric|exists:users,id',
+            'user_id' => 'required|string|exists:users,id',
             'invoice_date' => 'date_format:Y-m-d',
             'billing_address' => 'required|string|max:70',
             'billing_city' => 'required|string|max:40',

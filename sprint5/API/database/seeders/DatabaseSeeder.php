@@ -15,8 +15,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $path = base_path().'/database/seeders/toolshop-data.sql';
-        DB::unprepared(file_get_contents($path));
-        $this->command->info('Toolshop database seeded!');
+        $this->call([
+            BrandSeeder::class,
+            UserSeeder::class,
+            CategorySeeder::class,
+            ProductImageSeeder::class,
+            ProductSeeder::class,
+            FavoriteSeeder::class,
+            InvoiceSeeder::class,
+            InvoiceItemSeeder::class
+        ]);
     }
 }

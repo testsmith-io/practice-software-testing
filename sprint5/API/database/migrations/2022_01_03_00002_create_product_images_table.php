@@ -15,14 +15,15 @@ class CreateProductImagesTable extends Migration
     public function up()
     {
         Schema::create('product_images', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->string('by_name', 220)->nullable();
             $table->string('by_url', 220)->nullable();
             $table->string('source_name', 220)->nullable();
             $table->string('source_url', 220)->nullable();
             $table->string('file_name', 220)->nullable();
             $table->string('title', 220)->nullable();
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
         });
     }
 

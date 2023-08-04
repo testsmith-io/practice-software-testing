@@ -26,7 +26,7 @@ class UpdateCategory extends BaseFormRequest
         return [
             'name' => 'string|max:120',
             'slug' => 'string|max:120',
-            'parent_id' => 'integer|nullable'
+            'parent_id' => 'string|nullable'
         ];
     }
 }

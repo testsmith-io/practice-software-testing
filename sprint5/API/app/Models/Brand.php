@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Mehradsadeghi\FilterQueryString\FilterQueryString;
 
@@ -29,7 +30,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  */
 class Brand extends BaseModel
 {
-    use HasFactory, FilterQueryString;
+    use HasFactory, FilterQueryString, HasUlids;
 
     protected $table = 'brands';
     protected $fillable = ['name', 'slug'];

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -49,7 +49,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  */
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasUlids;
 
     const CREATED_AT = null;
     protected $table = 'users';
@@ -59,7 +59,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array<int, string>
      */
-    protected $fillable = ['first_name', 'last_name', 'address', 'city', 'state', 'country', 'postcode', 'phone', 'dob', 'email', 'password', 'role'];
+    protected $fillable = ['first_name', 'last_name', 'address', 'city', 'state', 'country', 'postcode', 'phone', 'dob', 'email', 'password', 'role', 'failed_login_attempts'];
 
 
     /**
@@ -67,7 +67,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array<int, string>
      */
-    protected $hidden = ['updated_at', 'password', 'role', 'uid', 'failed_login_attempts'];
+    protected $hidden = ['updated_at', 'password', 'role', 'uid'];
 
     /**
      * The attributes that should be cast.
