@@ -15,14 +15,15 @@ class CreateContactRequestsTable extends Migration
     public function up()
     {
         Schema::create('contact_requests', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->ulid('id')->primary();
+            $table->ulid('user_id')->nullable();
             $table->string('name', 60)->nullable();
             $table->string('email', 60)->nullable();
             $table->string('subject', 120);
             $table->string('message', 250);
             $table->enum('status', ['NEW', 'IN_PROGRESS', 'RESOLVED'])->default('NEW');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
         });
     }
 

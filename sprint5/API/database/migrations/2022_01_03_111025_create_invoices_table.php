@@ -15,8 +15,8 @@ class CreateInvoicesTable extends Migration
     public function up()
     {
         Schema::create('invoices', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->ulid('id')->primary();
+            $table->ulid('user_id');
             $table->dateTime('invoice_date');
             $table->string('invoice_number', 70)->nullable();
             $table->string('billing_address', 70);
@@ -30,7 +30,8 @@ class CreateInvoicesTable extends Migration
             $table->string('payment_account_number', 40)->nullable();
             $table->enum('status', ['AWAITING_FULFILLMENT', 'ON_HOLD', 'AWAITING_SHIPMENT', 'SHIPPED', 'COMPLETED'])->default('AWAITING_FULFILLMENT');
             $table->string('status_message', 255)->nullable();
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

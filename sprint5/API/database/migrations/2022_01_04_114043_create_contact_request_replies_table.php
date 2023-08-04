@@ -14,11 +14,12 @@ class CreateContactRequestRepliesTable extends Migration
     public function up()
     {
         Schema::create('contact_request_replies', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('message_id');
-            $table->unsignedBigInteger('user_id');
+            $table->ulid('id')->primary();
+            $table->ulid('message_id');
+            $table->ulid('user_id');
             $table->string('message', 250);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('message_id')->references('id')->on('contact_requests');

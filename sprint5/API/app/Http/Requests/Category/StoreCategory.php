@@ -37,7 +37,7 @@ class StoreCategory extends BaseFormRequest
         return [
             'name' => 'required|string|max:120',
             'slug' => 'required|unique:categories,slug|string|max:120',
-            'parent_id' => 'integer|nullable'
+            'parent_id' => 'string|nullable'
         ];
     }
 }

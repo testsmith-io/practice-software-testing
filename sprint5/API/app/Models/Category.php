@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -22,7 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *     title="CategoryResponse",
  *     properties={
  *         @OA\Property(property="id", type="integer"),
- *         @OA\Property(property="parent_id", type="integer"),
+ *         @OA\Property(property="parent_id", type="string"),
  *         @OA\Property(property="name", type="string", example="new category"),
  *         @OA\Property(property="slug", type="string", example="new-category")
  *     }
@@ -31,7 +32,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Category extends BaseModel
 {
 
-    use HasFactory;
+    use HasFactory, HasUlids;
 
     protected $table = 'categories';
     protected $fillable = ['name', 'slug', 'parent_id'];

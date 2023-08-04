@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -23,7 +24,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class ProductImage extends BaseModel
 {
-    use HasFactory;
+    use HasFactory, HasUlids;
 
     protected $table = 'product_images';
 

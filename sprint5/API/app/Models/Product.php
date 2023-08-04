@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Mehradsadeghi\FilterQueryString\FilterQueryString;
@@ -42,7 +43,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  */
 class Product extends BaseModel
 {
-    use HasFactory, FilterQueryString;
+    use HasFactory, FilterQueryString, HasUlids;
 
     protected $table = 'products';
     protected $fillable = ['name', 'description', 'category_id', 'brand_id', 'price', 'product_image_id', 'is_location_offer', 'is_rental'];

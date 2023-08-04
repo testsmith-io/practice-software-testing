@@ -11,11 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class ProductController extends Controller
-{
+class ProductController extends Controller {
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('role:admin', ['only' => ['destroy']]);
     }
 
@@ -95,8 +93,7 @@ class ProductController extends Controller
      *      ),
      * )
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         if ($request->get('by_category') || $request->get('by_brand') || $request->get('by_category_slug') || $request->get('q')) {
             $query = Product::with('product_image', 'category', 'brand');
             if ($request->get('by_category_slug')) {
@@ -115,9 +112,7 @@ class ProductController extends Controller
             if ($request->get('by_brand')) {
                 $query->whereIn('brand_id', explode(',', $request->get('by_brand')));
             }
-            if ($request->get('is_rental')) {
-                $query->where('is_rental', '=', $request->get('is_rental') ? 1 : 0);
-            }
+            $query->where('is_rental', '=', $request->get('is_rental') ? 1 : 0);
             if ($request->get('q')) {
                 $q = $request->get('q');
                 $query->where('name', 'like', "%$q%");
@@ -174,8 +169,7 @@ class ProductController extends Controller
      *      ),
      * )
      */
-    public function store(StoreProduct $request)
-    {
+    public function store(StoreProduct $request) {
         return $this->preferredFormat(Product::create($request->all()), ResponseAlias::HTTP_CREATED);
     }
 
@@ -215,8 +209,7 @@ class ProductController extends Controller
      *      ),
      * )
      */
-    public function show($id)
-    {
+    public function show($id) {
         return $this->preferredFormat(Product::with('product_image', 'category', 'brand')->findOrFail($id));
     }
 
@@ -259,8 +252,7 @@ class ProductController extends Controller
      *      ),
      * )
      */
-    public function showRelated($id)
-    {
+    public function showRelated($id) {
         $categoryId = Product::where('id', $id)->first()->category_id;
 
         return $this->preferredFormat(Product::with('product_image', 'category', 'brand')->where('category_id', $categoryId)->where('id', '!=', $id)->get());
@@ -314,8 +306,7 @@ class ProductController extends Controller
      *      ),
      * )
      */
-    public function search(Request $request)
-    {
+    public function search(Request $request) {
         $q = $request->get('q');
 
         return $this->preferredFormat(Product::with('product_image')->where('name', 'like', "%$q%")->paginate(9));
@@ -374,8 +365,7 @@ class ProductController extends Controller
      *      ),
      * )
      */
-    public function update(UpdateProduct $request, $id)
-    {
+    public function update(UpdateProduct $request, $id) {
         return $this->preferredFormat(['success' => (bool)Product::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
     }
 
@@ -429,8 +419,7 @@ class ProductController extends Controller
      *     security={{ "apiAuth": {} }}
      * ),
      */
-    public function destroy(DestroyProduct $request, $id)
-    {
+    public function destroy(DestroyProduct $request, $id) {
         try {
             Product::find($id)->delete();
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);

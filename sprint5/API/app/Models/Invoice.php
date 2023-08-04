@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Mehradsadeghi\FilterQueryString\FilterQueryString;
@@ -11,7 +12,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *     type="object",
  *     title="InvoiceRequest",
  *     properties={
- *         @OA\Property(property="user_id", type="integer"),
+ *         @OA\Property(property="user_id", type="string"),
  *         @OA\Property(property="billing_address", type="string"),
  *         @OA\Property(property="billing_city", type="string"),
  *         @OA\Property(property="billing_country", type="string"),
@@ -50,7 +51,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  */
 class Invoice extends BaseModel
 {
-    use FilterQueryString;
+    use FilterQueryString, HasUlids;
 
     protected $filters = ['in', 'sort', 'starts_with'];
     protected $table = 'invoices';

@@ -15,11 +15,12 @@ class CreateCategoriesTable extends Migration
     public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->ulid('id')->primary();
+            $table->ulid('parent_id')->nullable();
             $table->string('name', 220);
             $table->string('slug', 220)->unique();
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
         });
 
         Schema::table('categories', function (Blueprint $table)

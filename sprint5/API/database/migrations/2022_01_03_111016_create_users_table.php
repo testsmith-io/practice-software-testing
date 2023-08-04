@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->string('uid')->nullable();
             $table->string('provider')->nullable();
             $table->string('first_name', 40);
@@ -31,7 +31,8 @@ class CreateUsersTable extends Migration
             $table->string('password')->nullable();
             $table->string('role');
             $table->integer('failed_login_attempts')->default(0);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
         });
     }
 
