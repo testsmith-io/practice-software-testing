@@ -1,1 +1,2 @@
-* * * * * cd /var/www/ && php artisan schedule:run >> /dev/null 2>&1
+#!/bin/sh
+cd /var/www/ && php artisan schedule:run

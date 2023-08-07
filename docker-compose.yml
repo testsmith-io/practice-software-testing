@@ -46,10 +46,11 @@ services:
     build:
       context: ./_docker/cron
       dockerfile: Dockerfile
+    working_dir: /var/www
     container_name: cron
+    command: crond -f -l 8
     volumes_from:
       - laravel-api
-    working_dir: /var/www
     environment:
       - "PHP_OPCACHE_VALIDATE_TIMESTAMPS=1"
       - "DB_PORT=3306"
