@@ -1,1 +1,1 @@
-docker-compose exec laravel-api php igrate:fresh --seed --force
+docker-compose exec laravel-api php migrate:fresh --seed --force
