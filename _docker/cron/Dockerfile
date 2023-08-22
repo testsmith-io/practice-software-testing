@@ -14,8 +14,6 @@ RUN apk add --no-cache --virtual build-essentials \
     docker-php-ext-install zip && \
     apk del build-essentials && rm -rf /usr/src/php*
 
-ADD startup.sh /usr/local/startup.sh
-
 ADD laravel_crontab /etc/periodic/1min/laravel_crontab
 
 RUN echo "*    *       *       *       *       run-parts /etc/periodic/1min" >> /etc/crontabs/root
