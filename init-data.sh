@@ -1,0 +1,1 @@
+docker-compose exec laravel-api php igrate:fresh --seed --force
