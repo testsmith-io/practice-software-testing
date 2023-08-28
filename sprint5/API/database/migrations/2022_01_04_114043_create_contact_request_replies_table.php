@@ -21,8 +21,8 @@ class CreateContactRequestRepliesTable extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
 
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('message_id')->references('id')->on('contact_requests');
+            $table->foreignUlid('user_id')->references('id')->on('users');
+            $table->foreignUlid('message_id')->references('id')->on('contact_requests');
         });
     }
 

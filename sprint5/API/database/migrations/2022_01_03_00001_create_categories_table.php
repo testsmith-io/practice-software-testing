@@ -25,7 +25,7 @@ class CreateCategoriesTable extends Migration
 
         Schema::table('categories', function (Blueprint $table)
         {
-            $table->foreign('parent_id')->references('id')->on('categories');
+            $table->foreignUlid('parent_id')->references('id')->on('categories');
         });
     }
 

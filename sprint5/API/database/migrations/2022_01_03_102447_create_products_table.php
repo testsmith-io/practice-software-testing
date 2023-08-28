@@ -27,9 +27,9 @@ class CreateProductsTable extends Migration
             $table->ulid('product_image_id')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
-            $table->foreign('brand_id')->references('id')->on('brands');
-            $table->foreign('category_id')->references('id')->on('categories');
-            $table->foreign('product_image_id')->references('id')->on('product_images');
+            $table->foreignUlid('brand_id')->references('id')->on('brands');
+            $table->foreignUlid('category_id')->references('id')->on('categories');
+            $table->foreignUlid('product_image_id')->references('id')->on('product_images');
         });
     }
 

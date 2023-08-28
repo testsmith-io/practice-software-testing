@@ -32,7 +32,7 @@ class CreateInvoicesTable extends Migration
             $table->string('status_message', 255)->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreignUlid('user_id')->references('id')->on('users');
         });
     }
 
