@@ -16,10 +16,8 @@ class CreateFavoritesTable extends Migration
     {
         Schema::create('favorites', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->ulid('user_id');
-            $table->ulid('product_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreignUlid('user_id')->references('id')->on('users');
+            $table->foreignUlid('product_id')->references('id')->on('products');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
 

@@ -16,8 +16,6 @@ class CreateInvoiceItemsTable extends Migration
     {
         Schema::create('invoice_items', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->ulid('invoice_id');
-            $table->ulid('product_id');
             $table->decimal('unit_price', 10,2);
             $table->integer('quantity');
             $table->timestamp('created_at')->useCurrent();

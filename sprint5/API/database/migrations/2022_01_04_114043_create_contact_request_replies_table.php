@@ -15,8 +15,6 @@ class CreateContactRequestRepliesTable extends Migration
     {
         Schema::create('contact_request_replies', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->ulid('message_id');
-            $table->ulid('user_id');
             $table->string('message', 250);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
