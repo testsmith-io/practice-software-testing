@@ -22,14 +22,11 @@ class CreateProductsTable extends Migration
             $table->decimal('price', 10, 2);
             $table->boolean('is_location_offer');
             $table->boolean('is_rental');
-            $table->ulid('brand_id');
-            $table->ulid('category_id');
-            $table->ulid('product_image_id')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
             $table->foreignUlid('brand_id')->references('id')->on('brands');
             $table->foreignUlid('category_id')->references('id')->on('categories');
-            $table->foreignUlid('product_image_id')->references('id')->on('product_images');
+            $table->foreignUlid('product_image_id')->nullable()->references('id')->on('product_images');
         });
     }
 

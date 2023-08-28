@@ -16,7 +16,6 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->ulid('parent_id')->nullable();
             $table->string('name', 220);
             $table->string('slug', 220)->unique();
             $table->timestamp('created_at')->useCurrent();
@@ -25,7 +24,7 @@ class CreateCategoriesTable extends Migration
 
         Schema::table('categories', function (Blueprint $table)
         {
-            $table->foreignUlid('parent_id')->references('id')->on('categories');
+            $table->foreignUlid('parent_id')->nullable()->references('id')->on('categories');
         });
     }
 
