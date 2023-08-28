@@ -22,8 +22,8 @@ class CreateInvoiceItemsTable extends Migration
             $table->integer('quantity');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
-            $table->foreign('invoice_id')->references('id')->on('invoices');
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreignUlid('invoice_id')->references('id')->on('invoices');
+            $table->foreignUlid('product_id')->references('id')->on('products');
         });
     }
 
