@@ -40,13 +40,13 @@ class StoreCustomer extends BaseFormRequest
         return [
             'first_name' => 'required|string|max:40',
             'last_name' => 'required|string|max:20',
-            'address' => 'required|string|max:70',
-            'city' => 'required|string|max:40',
+            'address' => 'string|max:70',
+            'city' => 'string|max:40',
             'state' => 'string|max:40',
-            'country' => 'required|string|max:40',
+            'country' => 'string|max:40',
             'postcode' => 'string|max:10',
             'phone' => 'string|max:24',
-            'dob' => 'required|date|before:' . $before,
+            'dob' => 'date|before:' . $before,
             'email' => 'required|unique:users,email|string|max:60',
             'password' => 'required|string|max:255'
         ];
