@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *     title="ContactReplyResponse",
  *     properties={
  *         @OA\Property(property="message", type="string", example="Reply message", description=""),
- *         @OA\Property(property="id", type="integer", example="1", description=""),
+ *         @OA\Property(property="id", type="string", example="1", description=""),
  *         @OA\Property(property="created_at", type="string", example="2022-08-01 08:24:56")
  *     }
  * )

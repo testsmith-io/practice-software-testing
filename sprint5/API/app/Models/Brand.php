@@ -21,7 +21,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *     type="object",
  *     title="BrandResponse",
  *     properties={
- *     @OA\Property(property="id", type="integer"),
+ *     @OA\Property(property="id", type="string"),
  *         @OA\Property(property="name", type="string", example="new brand"),
  *         @OA\Property(property="slug", type="string", example="new-brand")
  *

@@ -11,7 +11,7 @@ to avoid a brute force attack.
 
 ### UC1: 3 consecutive failed login
 GIVEN
-    user did 3 consecutive invalid login with the same username and wrong password
+    user did 3 consecutive invalid login attempts with the same email and wrong password
 WHEN
     user try to login again with the same username and wrong password
 THEN

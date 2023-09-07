@@ -186,7 +186,7 @@ class ProductController extends Controller {
      *          example=1,
      *          description="The productId parameter in path",
      *          required=true,
-     *          @OA\Schema(type="integer")
+     *          @OA\Schema(type="string")
      *      ),
      *      @OA\Response(
      *          response=200,
@@ -226,7 +226,7 @@ class ProductController extends Controller {
      *          example=1,
      *          description="The productId parameter in path",
      *          required=true,
-     *          @OA\Schema(type="integer")
+     *          @OA\Schema(type="string")
      *      ),
      *      @OA\Response(
      *          response=200,
@@ -324,7 +324,7 @@ class ProductController extends Controller {
      *          in="path",
      *          description="The productId parameter in path",
      *          required=true,
-     *          @OA\Schema(type="integer")
+     *          @OA\Schema(type="string")
      *      ),
      *      @OA\RequestBody(
      *          required=true,
@@ -381,7 +381,7 @@ class ProductController extends Controller {
      *          in="path",
      *          description="The productId parameter in path",
      *          required=true,
-     *          @OA\Schema(type="integer")
+     *          @OA\Schema(type="string")
      *      ),
      *      @OA\Response(
      *          response=204,

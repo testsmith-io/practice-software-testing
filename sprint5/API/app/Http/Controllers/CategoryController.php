@@ -156,7 +156,7 @@ class CategoryController extends Controller
      *          example=1,
      *          description="The categoryId parameter in path",
      *          required=true,
-     *          @OA\Schema(type="integer")
+     *          @OA\Schema(type="string")
      *      ),
      *      @OA\Response(
      *          response=200,
@@ -242,7 +242,7 @@ class CategoryController extends Controller
      *          example=1,
      *          description="The categoryId parameter in path",
      *          required=true,
-     *          @OA\Schema(type="integer")
+     *          @OA\Schema(type="string")
      *      ),
      *      @OA\RequestBody(
      *          required=true,
@@ -301,7 +301,7 @@ class CategoryController extends Controller
      *          example=1,
      *          description="The categoryId parameter in path",
      *          required=true,
-     *          @OA\Schema(type="integer")
+     *          @OA\Schema(type="string")
      *      ),
      *      @OA\Response(
      *          response=204,

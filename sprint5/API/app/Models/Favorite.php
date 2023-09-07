@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *     type="object",
  *     title="FavoriteRequest",
  *     properties={
- *         @OA\Property(property="product_id", type="integer")
+ *         @OA\Property(property="product_id", type="string")
  *     }
  * )
  *
