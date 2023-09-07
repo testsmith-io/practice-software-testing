@@ -43,7 +43,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  *         @OA\Property(property="phone", type="string", example="0987654321"),
  *         @OA\Property(property="dob", type="string", example="1970-01-01"),
  *         @OA\Property(property="email", type="string", example="john@doe.example"),
- *         @OA\Property(property="id", type="integer")
+ *         @OA\Property(property="id", type="string")
  *     }
  * )
  */

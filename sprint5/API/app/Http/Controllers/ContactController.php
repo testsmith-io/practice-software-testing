@@ -98,7 +98,7 @@ class ContactController extends Controller
      *          example=1,
      *          description="The messageId parameter in path",
      *          required=true,
-     *          @OA\Schema(type="integer")
+     *          @OA\Schema(type="string")
      *      ),
      *      @OA\RequestBody(
      *         @OA\MediaType(
@@ -232,7 +232,7 @@ class ContactController extends Controller
      *          example=1,
      *          description="The messageId parameter in path",
      *          required=true,
-     *          @OA\Schema(type="integer")
+     *          @OA\Schema(type="string")
      *      ),
      *      @OA\Response(
      *          response=200,
@@ -285,7 +285,7 @@ class ContactController extends Controller
      *          example=1,
      *          description="The messageId parameter in path",
      *          required=true,
-     *          @OA\Schema(type="integer")
+     *          @OA\Schema(type="string")
      *      ),
      *      @OA\RequestBody(
      *          required=true,
@@ -344,7 +344,7 @@ class ContactController extends Controller
      *          example=1,
      *          description="The messageId parameter in path",
      *          required=true,
-     *          @OA\Schema(type="integer")
+     *          @OA\Schema(type="string")
      *      ),
      *     @OA\RequestBody(
      *        @OA\MediaType(

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *     type="object",
  *     title="InvoiceLineResponse",
  *     properties={
- *         @OA\Property(property="id", type="integer", example=1),
+ *         @OA\Property(property="id", type="string", example=1),
  *         @OA\Property(property="unit_price", type="number"),
  *         @OA\Property(property="quantity", type="integer"),
  *         @OA\Property(property="product", ref="#/components/schemas/ProductResponse")

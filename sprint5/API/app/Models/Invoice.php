@@ -31,7 +31,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *     type="object",
  *     title="InvoiceResponse",
  *     properties={
- *         @OA\Property(property="id", type="integer", example=1),
+ *         @OA\Property(property="id", type="string", example=1),
  *         @OA\Property(property="invoice_date", type="string", example="2022-10-20 09:49:45"),
  *         @OA\Property(property="invoice_number", type="string", example="INV-2022000002"),
  *         @OA\Property(property="billing_address", type="string"),

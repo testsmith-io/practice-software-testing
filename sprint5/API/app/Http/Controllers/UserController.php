@@ -428,7 +428,7 @@ class UserController extends Controller {
      *          example=1,
      *          description="The userId parameter in path",
      *          required=true,
-     *          @OA\Schema(type="integer")
+     *          @OA\Schema(type="string")
      *      ),
      *      @OA\Response(
      *          response=200,
@@ -523,7 +523,7 @@ class UserController extends Controller {
      *          in="path",
      *          description="The userId parameter in path",
      *          required=true,
-     *          @OA\Schema(type="integer")
+     *          @OA\Schema(type="string")
      *      ),
      *      @OA\RequestBody(
      *          required=true,
@@ -583,7 +583,7 @@ class UserController extends Controller {
      *          in="path",
      *          description="The userId parameter in path",
      *          required=true,
-     *          @OA\Schema(type="integer")
+     *          @OA\Schema(type="string")
      *      ),
      *      @OA\Response(
      *          response=204,
