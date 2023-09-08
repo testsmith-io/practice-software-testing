@@ -24,8 +24,8 @@ class RoleMiddleware
         }
         if (strcmp($request->user()->role, $role) !== 0) {
             return response()->json([
-                'message' => 'Unauthorized'
-            ], 401);
+                'message' => 'Forbidden'
+            ], 403);
         }
         return $next($request);
     }
