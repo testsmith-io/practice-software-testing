@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class RoleMiddleware
 {
@@ -20,12 +21,12 @@ class RoleMiddleware
         if ($request->user() === null) {
             return response()->json([
                 'message' => 'Unauthorized'
-            ], 401);
+            ], ResponseAlias::HTTP_UNAUTHORIZED);
         }
         if (strcmp($request->user()->role, $role) !== 0) {
             return response()->json([
-                'message' => 'Unauthorized'
-            ], 401);
+                'message' => 'Forbidden'
+            ], ResponseAlias::HTTP_FORBIDDEN);
         }
         return $next($request);
     }

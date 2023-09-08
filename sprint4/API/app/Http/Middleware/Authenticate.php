@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 /**
  * @OA\SecurityScheme(
@@ -50,7 +51,7 @@ class Authenticate
         if ($this->auth->guard($guard)->guest()) {
             return response()->json([
                 'message' => 'Unauthorized'
-            ], 401);
+            ], ResponseAlias::HTTP_UNAUTHORIZED);
         }
 
         return $next($request);
