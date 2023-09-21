@@ -39,7 +39,7 @@ class Category extends BaseModel
 
     public function parent_category(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Category', 'parent_id');
+        return $this->belongsTo(Category::class, 'parent_id');
     }
 
     public function sub_categories(): HasMany

@@ -13,13 +13,12 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         if (!app()->environment('local')) {
-            $schedule->command('migrate:fresh --seed --force')->hourly();
-            $schedule->command('invoice:remove')->hourly();
+            $schedule->command('migrate:fresh --seed --force')->hourly()->environments(['production']);
+            $schedule->command('invoice:remove')->hourly()->environments(['production']);
         }
-        $schedule->command('queue:work --stop-when-empty')
-            ->everyMinute()
-            ->withoutOverlapping();
         $schedule->command('invoice:generate')
+            ->everyMinute();
+        $schedule->command('queue:work --stop-when-empty')
             ->everyMinute();
         $schedule->command('order:update')
             ->everyTenMinutes();

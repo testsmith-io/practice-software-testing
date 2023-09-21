@@ -74,6 +74,7 @@ Route::controller(InvoiceController::class)->prefix('invoices')->group(function 
     Route::get('/search', 'search');
     Route::get('/{id}', 'show');
     Route::get('/{id}/download-pdf', 'downloadPDF');
+    Route::get('/{id}/download-pdf-status', 'downloadPDFStatus');
     Route::put('/{id}/status', 'updateStatus');
     Route::post('', 'store');
     Route::delete('/{id}', 'destroy');

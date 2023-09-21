@@ -50,7 +50,7 @@ export class ForgotPasswordComponent implements OnInit {
         this.isUpdated = true;
         this.error = "";
       }, error: (err) => {
-        this.error = Object.values(err).join('\r\n');
+        this.error = err.message;
       }, complete: () => {
         this.hideAlert = false;
       }
