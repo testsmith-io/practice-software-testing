@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Invoice\DestroyInvoice;
 use App\Http\Requests\Invoice\StoreInvoice;
 use App\Mail\Checkout;
+use App\Models\Download;
 use App\Models\Invoice;
 use App\Models\Product;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
@@ -259,6 +260,59 @@ class InvoiceController extends Controller {
             return Storage::download('invoices/' . $invoice_number . '.pdf', $invoice_number . '.pdf');
         } else {
             return $this->preferredFormat(['message' => 'Document not created. Try again later.'], ResponseAlias::HTTP_NOT_FOUND);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *      path="/invoices/{invoice_number}/download-pdf-status",
+     *      operationId="downloadPDFStatus",
+     *      tags={"Invoice"},
+     *      summary="Retrieve the status of the PDF.",
+     *      description="Retrieve the status of the PDF. The status can be INITIATED, IN_PROGRESS, COMPLETED",
+     *      @OA\Parameter(
+     *          name="invoice_number",
+     *          in="path",
+     *          example=1,
+     *          description="The invoice_number parameter in path",
+     *          required=true,
+     *          @OA\Schema(type="string")
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/InvoiceResponse")
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Returns when user is not authenticated",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="Unauthorized"),
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Returns when the requested item is not found",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="Requested item not found"),
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=405,
+     *          description="Returns when the method is not allowed for the requested route",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="Method is not allowed for the requested route"),
+     *          )
+     *      ),
+     *     security={{ "apiAuth": {} }}
+     * )
+     */
+    public function downloadPDFStatus($invoice_number) {
+        $status = Download::where('name', $invoice_number)->get(['status']);
+        if(sizeof($status) == 0) {
+            return $this->preferredFormat(['status' => 'NOT_INITIATED'], ResponseAlias::HTTP_BAD_REQUEST);
+        } else {
+            return $this->preferredFormat(['status' => $status], ResponseAlias::HTTP_OK);
         }
     }
 

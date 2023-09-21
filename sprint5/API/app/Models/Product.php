@@ -68,12 +68,12 @@ class Product extends BaseModel
 
     public function product_image(): BelongsTo
     {
-        return $this->belongsTo('App\Models\ProductImage');
+        return $this->belongsTo(ProductImage::class);
     }
 
     public function category(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Category');
+        return $this->belongsTo(Category::class);
     }
 
     public function brand(): BelongsTo

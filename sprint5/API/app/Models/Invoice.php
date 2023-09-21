@@ -56,14 +56,15 @@ class Invoice extends BaseModel
     protected $filters = ['in', 'sort', 'starts_with'];
     protected $table = 'invoices';
     protected $fillable = ['user_id', 'invoice_date', 'invoice_number', 'billing_address', 'billing_city', 'billing_state', 'billing_country', 'billing_postcode', 'total', 'payment_method', 'payment_account_name', 'payment_account_number'];
+    protected $hidden = ['updated_at', 'document'];
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(User::class);
     }
 
     public function invoicelines(): HasMany
     {
-        return $this->hasMany('App\Models\Invoiceline');
+        return $this->hasMany(Invoiceline::class);
     }
 }

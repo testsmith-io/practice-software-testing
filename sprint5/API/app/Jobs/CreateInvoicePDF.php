@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Download;
 use App\Models\Invoice;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
@@ -27,7 +28,10 @@ class CreateInvoicePDF implements ShouldQueue {
      * Execute the job.
      */
     public function handle(): void {
-        $invoice = Invoice::with('invoicelines', 'invoicelines.product')->where('id', $this->id)->first();
+        Download::where('name', $this->id)
+        ->update(['status' => 'IN_PROGRESS']);
+
+        $invoice = Invoice::with('invoicelines', 'invoicelines.product')->where('invoice_number', $this->id)->first();
 
         $pdf = PDF::loadView('invoice', ['invoice' => $invoice])->setPaper('legal', 'portrait');
         $fileName = sprintf('%s.pdf',
@@ -36,6 +40,9 @@ class CreateInvoicePDF implements ShouldQueue {
 
         $pdfFilePath = '/invoices/' . $fileName;
         Storage::disk('local')->put($pdfFilePath, $pdf->output());
+
+        Download::where('name', $this->id)
+            ->update(['status' => 'COMPLETED']);
     }
 
 }

@@ -35,6 +35,6 @@ class Favorite extends BaseModel
 
     public function product(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Product');
+        return $this->belongsTo(Product::class);
     }
 }

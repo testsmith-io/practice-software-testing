@@ -26,11 +26,11 @@ class Invoiceline extends BaseModel
 
     public function invoice(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Invoices');
+        return $this->belongsTo(Invoice::class);
     }
 
     public function product(): BelongsTo
     {
-        return $this->belongsTo('App\Models\Product');
+        return $this->belongsTo(Product::class);
     }
 }

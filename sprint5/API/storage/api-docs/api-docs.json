@@ -158,7 +158,7 @@
                         "description": "The brandId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         },
                         "example": 1
                     }
@@ -222,7 +222,7 @@
                         "description": "The brandId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         },
                         "example": 1
                     }
@@ -307,7 +307,7 @@
                         "description": "The brandId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         },
                         "example": 1
                     }
@@ -652,7 +652,7 @@
                         "description": "The categoryId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         },
                         "example": 1
                     }
@@ -716,7 +716,7 @@
                         "description": "The categoryId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         },
                         "example": 1
                     }
@@ -801,7 +801,7 @@
                         "description": "The categoryId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         },
                         "example": 1
                     }
@@ -1136,7 +1136,7 @@
                         "description": "The messageId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         },
                         "example": 1
                     }
@@ -1225,7 +1225,7 @@
                         "description": "The messageId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         },
                         "example": 1
                     }
@@ -1312,7 +1312,7 @@
                         "description": "The messageId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         },
                         "example": 1
                     }
@@ -1410,7 +1410,7 @@
                         "description": "The messageId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         },
                         "example": 1
                     }
@@ -1684,7 +1684,7 @@
                         "description": "The favoriteId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         },
                         "example": 1
                     }
@@ -1769,7 +1769,7 @@
                         "description": "The favoriteId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -2109,7 +2109,7 @@
                         "description": "The invoiceId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         },
                         "example": 1
                     }
@@ -2194,7 +2194,7 @@
                         "description": "The invoiceId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -2299,7 +2299,7 @@
                         "description": "The invoiceId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -2369,6 +2369,180 @@
                 ]
             }
         },
+        "/invoices/{invoice_number}/download-pdf": {
+            "get": {
+                "tags": [
+                    "Invoice"
+                ],
+                "summary": "Download already generated PDF of a specific invoice",
+                "description": "Download already generated PDF of a specific invoice",
+                "operationId": "downloadPDF",
+                "parameters": [
+                    {
+                        "name": "invoice_number",
+                        "in": "path",
+                        "description": "The invoice_number parameter in path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvoiceResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Returns when user is not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Returns when the requested item is not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Requested item not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "405": {
+                        "description": "Returns when the method is not allowed for the requested route",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Method is not allowed for the requested route"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/invoices/{invoice_number}/download-pdf-status": {
+            "get": {
+                "tags": [
+                    "Invoice"
+                ],
+                "summary": "Retrieve the status of the PDF.",
+                "description": "Retrieve the status of the PDF. The status can be INITIATED, IN_PROGRESS, COMPLETED",
+                "operationId": "downloadPDFStatus",
+                "parameters": [
+                    {
+                        "name": "invoice_number",
+                        "in": "path",
+                        "description": "The invoice_number parameter in path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvoiceResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Returns when user is not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Returns when the requested item is not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Requested item not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "405": {
+                        "description": "Returns when the method is not allowed for the requested route",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Method is not allowed for the requested route"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
         "/invoices/{invoiceId}/status": {
             "put": {
                 "tags": [
@@ -2384,7 +2558,7 @@
                         "description": "The invoiceId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -2872,7 +3046,7 @@
                         "description": "The productId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         },
                         "example": 1
                     }
@@ -2936,7 +3110,7 @@
                         "description": "The productId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -3020,7 +3194,7 @@
                         "description": "The productId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -3105,7 +3279,7 @@
                         "description": "The productId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         },
                         "example": 1
                     }
@@ -4220,7 +4394,7 @@
                         "description": "The userId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         },
                         "example": 1
                     }
@@ -4279,7 +4453,7 @@
                         "description": "The userId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -4355,7 +4529,7 @@
                         "description": "The userId parameter in path",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -4489,7 +4663,7 @@
                 "title": "BrandResponse",
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "type": "string"
                     },
                     "name": {
                         "type": "string",
@@ -4522,10 +4696,10 @@
                 "title": "CategoryResponse",
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "type": "string"
                     },
                     "parent_id": {
-                        "type": "integer"
+                        "type": "string"
                     },
                     "name": {
                         "type": "string",
@@ -4548,7 +4722,7 @@
                     },
                     "id": {
                         "description": "",
-                        "type": "integer",
+                        "type": "string",
                         "example": "1"
                     },
                     "created_at": {
@@ -4622,7 +4796,7 @@
                     },
                     "id": {
                         "description": "",
-                        "type": "integer",
+                        "type": "string",
                         "example": "1"
                     },
                     "created_at": {
@@ -4632,11 +4806,32 @@
                 },
                 "type": "object"
             },
+            "DownloadResponse": {
+                "title": "DownloadResponse",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "filename": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "FavoriteRequest": {
                 "title": "FavoriteRequest",
                 "properties": {
                     "product_id": {
-                        "type": "integer"
+                        "type": "string"
                     }
                 },
                 "type": "object"
@@ -4662,7 +4857,7 @@
                 "title": "InvoiceRequest",
                 "properties": {
                     "user_id": {
-                        "type": "integer"
+                        "type": "string"
                     },
                     "billing_address": {
                         "type": "string"
@@ -4712,7 +4907,7 @@
                 "title": "InvoiceResponse",
                 "properties": {
                     "id": {
-                        "type": "integer",
+                        "type": "string",
                         "example": 1
                     },
                     "invoice_date": {
@@ -4774,7 +4969,7 @@
                 "title": "InvoiceLineResponse",
                 "properties": {
                     "id": {
-                        "type": "integer",
+                        "type": "string",
                         "example": 1
                     },
                     "unit_price": {
@@ -4803,11 +4998,11 @@
                         "example": 1.99
                     },
                     "category_id": {
-                        "type": "integer",
+                        "type": "string",
                         "example": 1
                     },
                     "brand_id": {
-                        "type": "integer",
+                        "type": "string",
                         "example": 1
                     },
                     "product_image_id": {
@@ -4829,7 +5024,7 @@
                 "title": "ProductResponse",
                 "properties": {
                     "id": {
-                        "type": "integer",
+                        "type": "string",
                         "example": 1
                     },
                     "name": {
@@ -4890,7 +5085,7 @@
                         "example": "2022-08-01 08:24:56"
                     },
                     "id": {
-                        "type": "integer"
+                        "type": "string"
                     }
                 },
                 "type": "object"
@@ -4989,7 +5184,7 @@
                         "example": "john@doe.example"
                     },
                     "id": {
-                        "type": "integer"
+                        "type": "string"
                     }
                 },
                 "type": "object"
