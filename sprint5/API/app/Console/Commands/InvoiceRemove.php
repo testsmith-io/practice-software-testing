@@ -2,8 +2,7 @@
 
 namespace app\Console\Commands;
 
-use App\Jobs\CreateInvoicePDF;
-use App\Models\Invoice;
+use App\Models\Download;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
@@ -38,5 +37,6 @@ class InvoiceRemove extends Command {
     public function handle() {
         $files = Storage::allFiles('invoices');
         Storage::delete($files);
+        Download::query()->truncate();
     }
 }
