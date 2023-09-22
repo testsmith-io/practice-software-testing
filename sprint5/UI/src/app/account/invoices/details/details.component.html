@@ -4,7 +4,7 @@
 <div *ngIf="invoice?.invoice_date" class="container mt-5">
   <div class="row mb-3">
     <div class="input-group">
-      <button class="btn btn-warning" (click)="downloadPDF()" type="submit" data-test="brand-search-submit">Download
+      <button class="btn btn-warning" [disabled]="!isDownloadReady" (click)="downloadPDF()" type="submit" data-test="download-invoice">Download
         PDF
       </button>
     </div>

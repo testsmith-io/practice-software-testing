@@ -308,11 +308,11 @@ class InvoiceController extends Controller {
      * )
      */
     public function downloadPDFStatus($invoice_number) {
-        $status = Download::where('name', $invoice_number)->get(['status']);
-        if(sizeof($status) == 0) {
+        $status = Download::where('name', $invoice_number)->first(['status']);
+        if(empty($status)) {
             return $this->preferredFormat(['status' => 'NOT_INITIATED'], ResponseAlias::HTTP_BAD_REQUEST);
         } else {
-            return $this->preferredFormat(['status' => $status], ResponseAlias::HTTP_OK);
+            return $this->preferredFormat($status, ResponseAlias::HTTP_OK);
         }
     }
 
