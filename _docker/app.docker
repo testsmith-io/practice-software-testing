@@ -14,6 +14,9 @@ RUN apk add --no-cache --virtual build-essentials \
     docker-php-ext-install zip && \
     apk del build-essentials && rm -rf /usr/src/php*
 
+RUN chown -R www-data:www-data /var/www 
+RUN chmod 755 /var/www
+
 # Copy configuration
 COPY opcache.ini $PHP_INI_DIR/conf.d/
 COPY php-ini-overrides.ini $PHP_INI_DIR/conf.d/
