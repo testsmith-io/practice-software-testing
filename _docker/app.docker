@@ -14,8 +14,9 @@ RUN apk add --no-cache --virtual build-essentials \
     docker-php-ext-install zip && \
     apk del build-essentials && rm -rf /usr/src/php*
 
-RUN chown -R www-data:www-data /var/www 
-RUN chmod 755 /var/www
+RUN addgroup --gid 1000 laravel
+RUN adduser --ingroup laravel --shell /bin/sh laravel
+USER laravel
 
 # Copy configuration
 COPY opcache.ini $PHP_INI_DIR/conf.d/
