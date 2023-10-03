@@ -58,7 +58,6 @@ services:
       - "host=localhost"
 
   composer:
-    restart: 'no'
     image: composer:2.5.0
     command: install --no-dev --optimize-autoloader && php artisan route:cache && php artisan config:cache
     volumes_from:
