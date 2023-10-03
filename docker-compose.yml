@@ -13,7 +13,6 @@ services:
       - "DB_PORT=3306"
       - "DB_HOST=mariadb"
       - "host=localhost"
-    command: chown -R www-data:www-data /var/www && chmod 755 /var/www
 
   angular-ui:
     build:
@@ -60,7 +59,7 @@ services:
 
   composer:
     image: composer:2.5.0
-    command: install --no-dev --optimize-autoloader
+    command: install --no-dev --optimize-autoloader && chown -R www-data:www-data /var/www && chmod 755 /var/www
     volumes_from:
       - laravel-api
     working_dir: /var/www
