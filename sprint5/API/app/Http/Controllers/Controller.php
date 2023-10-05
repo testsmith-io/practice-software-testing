@@ -54,7 +54,7 @@ class Controller extends BaseController
 
     protected function preferredFormat($data, $status = 200, array $headers = [], $xmlRoot = 'response')
     {
-        if (strcmp(app('request')->headers->get('Accept'), 'xml') == 0) {
+        if (str_contains(app('request')->headers->get('Accept'), 'xml')) {
             return $this->makeXML($data, $status, array_merge($headers, ['Content-Type' => app('request')->headers->get('Accept')]), $xmlRoot);
         } else {
             return response()->json($data, $status,
