@@ -29,6 +29,16 @@ Route::get('/status', function () {
         ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
 });
 
+Route::post('/refresh', function() {
+    \Illuminate\Support\Facades\Artisan::call('migrate:fresh', [
+        '--seed' => null, '--force' => null
+    ]);
+
+    \Illuminate\Support\Facades\Artisan::call('invoice:remove');
+
+    return response()->json(['result' => 'refresh done']);
+});
+
 Route::controller(BrandController::class)->prefix('brands')->group(function () {
     Route::get('', 'index');
     Route::get('/search', 'search');
