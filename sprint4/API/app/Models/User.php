@@ -77,11 +77,6 @@ class User extends Authenticatable implements JWTSubject
         'created_at' => 'datetime:Y-m-d H:i:s'
     );
 
-    public function getPhoneAttribute($value)
-    {
-        return (string)$value;
-    }
-
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
