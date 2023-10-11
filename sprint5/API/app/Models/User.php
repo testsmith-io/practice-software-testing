@@ -50,8 +50,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable, HasUlids;
-
-    const CREATED_AT = null;
+    
     protected $table = 'users';
 
     /**
@@ -74,9 +73,9 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array<string, string>
      */
-    protected $casts = [
-
-    ];
+    protected $casts = array(
+        "phone" => "string"
+    );
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
