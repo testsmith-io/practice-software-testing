@@ -17,3 +17,9 @@ RUN apk add --no-cache --virtual build-essentials \
 # Copy configuration
 COPY opcache.ini $PHP_INI_DIR/conf.d/
 COPY php-ini-overrides.ini $PHP_INI_DIR/conf.d/
+
+RUN usermod -u 1000 www-data
+
+RUN chown -R www-data:www-data /var/www
+
+USER www-data
