@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Invoice\DestroyInvoice;
 use App\Http\Requests\Invoice\StoreInvoice;
+use App\Jobs\SendCheckoutEmail;
+use App\Jobs\UpdateProductInventory;
 use App\Mail\Checkout;
+use App\Models\Cart;
 use App\Models\Download;
 use App\Models\Invoice;
 use App\Models\Product;
@@ -127,33 +130,46 @@ class InvoiceController extends Controller {
      * )
      */
     public function store(StoreInvoice $request) {
-        $input = $request->except(['invoice_items']);
-        $input['invoice_date'] = date('Y-m-d H-i-s');
-        $input['invoice_number'] = IdGenerator::generate(['table' => 'invoices', 'field' => 'invoice_number', 'length' => 14, 'prefix' => 'INV-' . date('Y')]);
+        $input = $request->except(['cart_id']);
+        $input['invoice_date'] = now();
+        $input['invoice_number'] = IdGenerator::generate(['table' => 'invoices', 'field' => 'invoice_number', 'length' => 14, 'prefix' => 'INV-' . now()->year]);
+
         $invoice = Invoice::create($input);
 
-        $invoice->invoicelines()->createMany($request->only(['invoice_items'])['invoice_items']);
+        $totalPrice = 0;
 
-        foreach ($request->only(['invoice_items'])['invoice_items'] as $invoiceItem) {
-            Product::where('id', '=', $invoiceItem['product_id'])->decrement('stock', $invoiceItem['quantity']);
-        }
+        $cart = Cart::with('cartItems', 'cartItems.product')->findOrFail($request->input('cart_id'));
+        // Iterate through cart items to calculate discounted prices
+        foreach ($cart->cartItems as $cartItem) {
+            $quantity = $cartItem['quantity'];
+            $unitPrice = $cartItem['product']->price;
 
-        if (App::environment('local')) {
-            $items = [];
-            $total = 0;
-            foreach ($request->only(['invoice_items'])['invoice_items'] as $invoiceItem) {
-                $item['quantity'] = $invoiceItem['quantity'];
-                $item['name'] = Product::findOrFail($invoiceItem['product_id'])->name;
-                $item['is_rental'] = Product::findOrFail($invoiceItem['product_id'])->is_rental;
-                $item['price'] = $invoiceItem['unit_price'];
-                $itemTotal = $invoiceItem['quantity'] * $invoiceItem['unit_price'];
-                $item['total'] = $itemTotal;
-                $total += $itemTotal;
-                $items[] = $item;
+            $discountedPrice = null;
+            if ($cartItem->discount_percentage !== null) {
+                $discountedPrice = $cartItem->product->price * (1 - ($cartItem->discount_percentage / 100));
+                // Round the discounted price to two decimal places
+                $discountedPrice = round($discountedPrice, 2);
             }
 
-            $user = Auth::user();
-            Mail::to([$user->email])->send(new Checkout($user->first_name . ' ' . $user->last_name, $items, $total));
+            // Decrement the product stock
+            UpdateProductInventory::dispatch($cartItem['product']->id, $quantity);
+
+            // Create the invoice line
+            $invoice->invoicelines()->create([
+                'product_id' => $cartItem['product']->id,
+                'unit_price' => $unitPrice,
+                'quantity' => $quantity,
+                'discount_percentage' => $cartItem->discount_percentage,
+                'discounted_price' => $discountedPrice
+            ]);
+
+            $totalPrice += $cartItem->discount_percentage ? $quantity * ($cartItem->product->price * (1 - ($cartItem->discount_percentage / 100))) : $quantity * $unitPrice;
+        }
+
+        $invoice->update(['total' => $totalPrice]);
+
+        if (App::environment('local')) {
+            SendCheckoutEmail::dispatch($invoice->id, Auth::user());
         }
 
         return $this->preferredFormat($invoice, ResponseAlias::HTTP_CREATED);
@@ -256,7 +272,7 @@ class InvoiceController extends Controller {
      * )
      */
     public function downloadPDF($invoice_number) {
-        if(Storage::exists('invoices/' . $invoice_number . '.pdf')) {
+        if (Storage::exists('invoices/' . $invoice_number . '.pdf')) {
             return Storage::download('invoices/' . $invoice_number . '.pdf', $invoice_number . '.pdf');
         } else {
             return $this->preferredFormat(['message' => 'Document not created. Try again later.'], ResponseAlias::HTTP_NOT_FOUND);
@@ -309,7 +325,7 @@ class InvoiceController extends Controller {
      */
     public function downloadPDFStatus($invoice_number) {
         $status = Download::where('name', $invoice_number)->first(['status']);
-        if(empty($status)) {
+        if (empty($status)) {
             return $this->preferredFormat(['status' => 'NOT_INITIATED'], ResponseAlias::HTTP_BAD_REQUEST);
         } else {
             return $this->preferredFormat($status, ResponseAlias::HTTP_OK);

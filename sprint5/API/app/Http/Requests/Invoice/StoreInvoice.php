@@ -31,7 +31,7 @@ class StoreInvoice extends BaseFormRequest
             'billing_state' => 'string|max:40',
             'billing_country' => 'required|string|max:40',
             'billing_postcode' => 'string|max:10',
-            'total' => 'required|numeric'
+            'total' => 'numeric'
         ];
     }
 }

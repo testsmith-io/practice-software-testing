@@ -23,7 +23,7 @@ class CreateInvoicesTable extends Migration
             $table->string('billing_state', 40)->nullable();
             $table->string('billing_country', 40);
             $table->string('billing_postcode', 10)->nullable();
-            $table->decimal('total', 10, 2);
+            $table->decimal('total', 10, 2)->nullable();
             $table->string('payment_method', 40)->nullable();
             $table->string('payment_account_name', 40)->nullable();
             $table->string('payment_account_number', 40)->nullable();

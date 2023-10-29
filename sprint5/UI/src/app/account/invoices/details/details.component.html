@@ -122,10 +122,20 @@
         <tbody>
         <tr *ngFor="let invoiceline of invoice.invoicelines">
           <td>{{invoiceline.quantity}}</td>
-          <td>{{invoiceline.product.name}}<small *ngIf="invoiceline.product.is_rental"> (Item for rent, price per
+          <td>{{invoiceline.product.name}}&nbsp;<span
+            *ngIf="invoiceline.discount_percentage"
+            class="badge rounded-pill bg-warning me-1">-{{invoiceline.discount_percentage}}%</span><br/><small *ngIf="invoiceline.product.is_rental"> (Item for rent, price per
             hour)</small></td>
-          <td class="text-end">${{invoiceline.product.price | number: '1.2-2'}}</td>
-          <td class="text-end">${{invoiceline.quantity * invoiceline.product.price | number: '1.2-2'}}</td>
+          <td class="col-md-2 text-end"><span
+            [ngClass]="{'discounted' : invoiceline.discount_percentage}">${{invoiceline.product.price | number: '1.2-2'}}</span><br
+            *ngIf="invoiceline.discounted_price"/><span
+            *ngIf="invoiceline.discount_percentage" data-test="offer-price">$<span
+            id="discount-price">{{invoiceline.discounted_price}}</span></span></td>
+          <td class="col-md-2 text-end"><span
+            [ngClass]="{'discounted' : invoiceline.discount_percentage}">${{invoiceline.quantity * invoiceline.product.price | number: '1.2-2'}}</span><br
+            *ngIf="invoiceline.discounted_price"/><span
+            *ngIf="invoiceline.discount_percentage" data-test="offer-price">$<span
+            id="discount-total-price">{{invoiceline.quantity * invoiceline.discounted_price | number: '1.2-2'}}</span></span></td>
         </tr>
         </tbody>
       </table>

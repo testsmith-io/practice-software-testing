@@ -7,22 +7,33 @@
           <th class="col-md-3" scope="col">Item</th>
           <th class="col-md-2" scope="col"></th>
           <th class="col-md-2" scope="col">Quantity</th>
-          <th class="col-md-2" scope="col">Price</th>
-          <th class="col-md-2" scope="col">Total</th>
-          <th class="col-md-1" scope="col">Total</th>
+          <th class="col-md-2 text-end" scope="col">Price</th>
+          <th class="col-md-2 text-end" scope="col">Total</th>
+          <th class="col-md-1" scope="col"></th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let item of items">
-          <td class="col-md-4"><span class="product-title">{{item.name}}</span><br><small *ngIf="item.is_rental">Item for rent, price per hour</small></td>
+          <td class="col-md-4"><span class="product-title">{{item.product.name}}&nbsp;<span
+            *ngIf="item.discount_percentage"
+            class="badge rounded-pill bg-warning me-1">-{{item.discount_percentage}}%</span></span><br><small
+            *ngIf="item.product.is_rental">Item for rent, price per hour</small></td>
           <td class="col-md-2"></td>
           <td class="col-md-2 align-middle">
             <input type="number" min="1" max="99" class="form-control quantity" (change)="updateQuantity($event, item)"
                    value="{{item.quantity}}">
           </td>
-          <td class="col-md-2 align-middle">${{item.price | number: '1.2-2'}}</td>
-          <td class="col-md-2 align-middle">${{item.total | number: '1.2-2'}}</td>
-          <td class="col-md-1 align-middle"><a class="btn btn-danger" (click)="delete(item.id)"><i
+          <td class="col-md-2 text-end"><span
+            [ngClass]="{'discounted' : item.discounted_price}">${{item.product.price | number: '1.2-2'}}</span><br
+            *ngIf="item.discounted_price"/><span
+            *ngIf="item.discounted_price" data-test="offer-price">$<span
+            id="discount-price">{{item.discounted_price}}</span></span></td>
+          <td class="col-md-2 text-end"><span
+            [ngClass]="{'discounted' : item.discounted_price}">${{item.quantity * item.product.price | number: '1.2-2'}}</span><br
+            *ngIf="item.discounted_price"/><span
+            *ngIf="item.discounted_price" data-test="offer-price">$<span
+            id="discount-total-price">{{item.quantity * item.discounted_price | number: '1.2-2'}}</span></span></td>
+          <td class="col-md-1 align-middle"><a class="btn btn-danger" (click)="delete(item.product_id)"><i
             class="fa fa-remove"></i></a></td>
         </tr>
         </tbody>
@@ -31,8 +42,8 @@
           <td class="col-md-3"></td>
           <td class="col-md-2"></td>
           <td class="col-md-2"></td>
-          <td class="col-md-2"><strong>Total</strong></td>
-          <td class="col-md-2">${{total | number: '1.2-2'}}</td>
+          <td class="col-md-2 text-end"><strong>Total</strong></td>
+          <td class="col-md-2 text-end">${{total | number: '1.2-2'}}</td>
           <td class="col-md-1"></td>
         </tr>
         </tfoot>
@@ -93,8 +104,10 @@
                 <div class="help-block">{{customerError}}</div>
               </div>
               <div class="input-group mb-3">
-                <p>Not yet an account? <a data-test="register-link" routerLink="/auth/register">Register your account</a><br/>
-                  <a data-test="forgot-password-link" routerLink="/auth/forgot-password" class="ForgetPwd">Forgot your Password?</a></p>
+                <p>Not yet an account? <a data-test="register-link" routerLink="/auth/register">Register your
+                  account</a><br/>
+                  <a data-test="forgot-password-link" routerLink="/auth/forgot-password" class="ForgetPwd">Forgot your
+                    Password?</a></p>
               </div>
             </form>
           </div>
@@ -102,7 +115,8 @@
           <ng-template #loggedIn><p>Hello {{customer.first_name}} {{customer.last_name}}, you are already logged in. You
             can proceed to checkout.</p>
             <div class="float-end">
-              <button data-test="proceed-2" [disabled]="!canExitStep2" type="button" class="btn btn-success" awNextStep>Proceed to checkout
+              <button data-test="proceed-2" [disabled]="!canExitStep2" type="button" class="btn btn-success" awNextStep>
+                Proceed to checkout
               </button>
             </div>
           </ng-template>
@@ -194,7 +208,8 @@
             </div>
           </form>
           <div class="float-end">
-            <button data-test="proceed-3" [disabled]="!cusAddress.valid" type="button" class="btn btn-success" awNextStep>Proceed to checkout
+            <button data-test="proceed-3" [disabled]="!cusAddress.valid" type="button" class="btn btn-success"
+                    awNextStep>Proceed to checkout
             </button>
           </div>
         </div>
@@ -211,7 +226,8 @@
           <h3>Payment</h3>
           <form [formGroup]="cusPayment">
             <div class="input-group mb-3">
-              <select data-test="payment-method" id="payment-method" class="form-select" formControlName="payment_method">
+              <select data-test="payment-method" id="payment-method" class="form-select"
+                      formControlName="payment_method">
                 <option value="" disabled>Choose your payment method</option>
                 <option *ngFor="let method of PaymentMethods" [ngValue]="method">{{method}}</option>
               </select>
@@ -263,7 +279,8 @@
             </div>
           </form>
           <div class="float-end">
-            <button data-test="finish" [disabled]="!cusPayment.valid" type="button" class="btn btn-success" (click)="finishFunction()">
+            <button data-test="finish" [disabled]="!cusPayment.valid" type="button" class="btn btn-success"
+                    (click)="finishFunction()">
               Confirm
             </button>
           </div>

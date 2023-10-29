@@ -46,10 +46,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
   }
 
   getCartItems() {
-    let items = this.cartService.getItems();
-    if (items != null && items.length) {
-      return items.map((item: { is_rental: number, quantity: number }) => (item.is_rental === 1) ? 1 : item.quantity).reduce((acc: any, item: any) => item + acc);
-    }
+    return this.cartService.getQuantity();
   }
 
   getSignedInUser() {

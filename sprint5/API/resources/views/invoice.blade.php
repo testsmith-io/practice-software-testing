@@ -10184,6 +10184,14 @@
         .st4 {
             fill: #5A585D;
         }
+
+        .discounted {
+            text-decoration: line-through;
+            font-style: italic;
+            color: red;
+            font-size: 80%;
+        }
+
     </style>
 </head>
 
@@ -10265,12 +10273,26 @@
                 @foreach ($invoice['invoicelines'] as $invoiceline)
                     <tr>
                         <td>{{ $invoiceline['quantity']}}</td>
-                        <td>{{ $invoiceline['product']['name']}}@if ($invoiceline['product']['is_rental'])
+                        <td>{{ $invoiceline['product']['name']}}&nbsp;@if ($invoiceline['discount_percentage'])<span
+                                class="badge rounded-pill bg-warning me-1">-{{$invoiceline['discount_percentage']}}%</span><br/>@endif @if ($invoiceline['product']['is_rental'])
                                 <small> (Item for rent, price per hour)</small>
                             @endif</td>
-                        <td class="text-end">${{ number_format($invoiceline['product']['price'],2) }}</td>
-                        <td class="text-end">
-                            ${{ number_format($invoiceline['quantity'] * $invoiceline['product']['price'],2) }}</td>
+
+                        <td class="text-end">@if ($invoiceline['discount_percentage'])
+                                <span
+                                    class="discounted">${{ number_format($invoiceline['product']['price'],2) }}</span><br/><span
+                                    data-test="offer-price">$<span id="discount-price">{{$invoiceline['discounted_price']}}</span></span>
+                            @else
+                                <span>${{ number_format($invoiceline['product']['price'],2) }}</span><br/></span>
+                        @endif</td>
+                        <td class="text-end">@if ($invoiceline['discount_percentage'])
+                                <span
+                                    class="discounted">${{ number_format($invoiceline['quantity'] * $invoiceline['product']['price'],2) }}</span><br/><span
+                                    data-test="offer-price">$<span id="discount-price">{{ number_format($invoiceline['quantity'] * $invoiceline['discounted_price'],2) }}</span></span>
+                            @else
+                                <span>${{ number_format($invoiceline['quantity'] * $invoiceline['product']['price'],2) }}</span><br/></span>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>
