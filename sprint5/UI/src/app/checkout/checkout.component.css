@@ -1,3 +1,10 @@
 .quantity {
   width: 125px;
 }
+
+.discounted {
+  text-decoration: line-through;
+  font-style: italic;
+  color: red;
+  font-size: 80%;
+}

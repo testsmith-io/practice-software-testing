@@ -5,4 +5,6 @@ export class Invoiceline {
   product!: Product;
   quantity!: number;
   unit_price!: number;
+  discount_percentage: number;
+  discounted_price: number;
 }

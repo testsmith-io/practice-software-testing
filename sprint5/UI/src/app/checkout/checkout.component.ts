@@ -1,12 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Observable, of} from "rxjs";
+import {Observable, of, map} from "rxjs";
 import {CartService} from "../_services/cart.service";
 import {CustomerAccountService} from "../shared/customer-account.service";
 import {TokenStorageService} from "../_services/token-storage.service";
 import {InvoiceService} from "../_services/invoice.service";
 import {PaymentService} from "../_services/payment.service";
 import {environment} from "../../environments/environment";
+import {Product} from "../models/product";
 
 @Component({
   selector: 'app-checkout',
@@ -46,8 +47,10 @@ export class CheckoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.items = this.cartService.getItems();
-    this.total = this.getTotal();
+    this.cartService.getItems().subscribe(items => {
+      this.items = items;
+      this.total = this.getTotal(items);
+    });
     this.setAddress();
     this.isLoggedIn = this.customerAccountService.isLoggedIn();
 
@@ -113,16 +116,24 @@ export class CheckoutComponent implements OnInit {
   }
 
   delete(id: number) {
-    this.cartService.deleteItem(id);
-    this.items = this.cartService.getItems();
-    this.total = this.getTotal();
+    this.cartService.deleteItem(id).subscribe(() => {
+      this.cartService.getItems().subscribe(items => {
+        this.items = items;
+        this.total = this.getTotal(items);
+      });
+    });
   }
 
-  private getTotal() {
-    const items = this.cartService.getItems();
-    if (items != null && items.length) {
-      return Math.floor(items
-        .reduce((sum: number, current: { total: any; }) => sum + Number(current.total), 0) * 100) / 100;
+  private getTotal(items: any) {
+    if (items?.length) {
+      // Calculate the total by iterating through cart_items
+      const total = items.reduce((sum: any, cartItem: any) => {
+        const quantity = cartItem.quantity || 0;
+        const price = cartItem.product?.price || 0;
+        return cartItem.discount_percentage ? sum + quantity * cartItem.discounted_price : sum + quantity * price;
+      }, 0);
+      // Round the total to 2 decimal places
+      return Math.round(total * 100) / 100;
     } else {
       return 0;
     }
@@ -158,12 +169,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   finishFunction() {
-    const invoiceItems: any = [];
-
-    this.cartService.getItems().forEach((item: { id: number; price: number; quantity: number }) => {
-      const invoiceItem = {'product_id': item.id, 'unit_price': item.price, 'quantity': item.quantity};
-      invoiceItems.push(invoiceItem);
-    });
+    let cartId = sessionStorage.getItem('cart_id');
 
     const payload = {
       'user_id': this.customer.id,
@@ -172,11 +178,10 @@ export class CheckoutComponent implements OnInit {
       'billing_state': this.cusAddress.value.state,
       'billing_country': this.cusAddress.value.country,
       'billing_postcode': this.cusAddress.value.postcode,
-      'total': this.getTotal(),
       'payment_method': this.cusPayment.value.payment_method,
       'payment_account_name': this.cusPayment.value.account_name,
       'payment_account_number': this.cusPayment.value.account_number,
-      'invoice_items': invoiceItems
+      'cart_id': cartId
     };
 
     this.checkPayment(this.cusPayment.value.payment_method, this.cusPayment.value.account_name, this.cusPayment.value.account_number).subscribe(result => {
@@ -189,7 +194,6 @@ export class CheckoutComponent implements OnInit {
         });
       }
     })
-
   }
 
   /*
@@ -219,9 +223,12 @@ export class CheckoutComponent implements OnInit {
   updateQuantity($event: Event, item: any) {
     if ((($event as any)?.target?.value >= 1)) {
       const quantity = (($event as any)?.target?.value >= 1) ? ($event as any)?.target?.value : 1;
-      this.cartService.replaceQuantity(item.id, parseInt(quantity));
-      this.items = this.cartService.getItems();
-      this.total = this.getTotal();
+      this.cartService.replaceQuantity(item.product.id, parseInt(quantity)).subscribe(() => {
+        this.cartService.getItems().subscribe((items) => {
+          this.items = items;
+          this.total = this.getTotal(items);
+        });
+      });
     }
   }
 

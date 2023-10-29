@@ -54,18 +54,6 @@ class Product extends BaseModel
         "price" => "double"
     );
 
-    /**
-     * Get the user's first name.
-     *
-     * @return Attribute
-     */
-    protected function price(): Attribute
-    {
-        return Attribute::get(
-            get: fn($value) => number_format($value, 2, '.', null),
-        );
-    }
-
     public function product_image(): BelongsTo
     {
         return $this->belongsTo(ProductImage::class);

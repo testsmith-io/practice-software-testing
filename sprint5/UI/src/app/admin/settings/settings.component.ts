@@ -40,8 +40,17 @@ export class SettingsComponent implements OnInit {
       return;
     }
 
-    window.localStorage.setItem('PAYMENT_ENDPOINT', this.form.controls['endpoint'].value);
-    window.localStorage.setItem('RETRIEVE_GEOLOCATION', this.form.controls['geolocation'].value);
+    const endpoint = this.form.controls['endpoint'].value;
+    const geolocation = this.form.controls['geolocation'].value;
+
+    if (endpoint !== '' && endpoint !== null) {
+      window.localStorage.setItem('PAYMENT_ENDPOINT', endpoint);
+    }
+
+    if (geolocation && geolocation !== null) {
+      window.localStorage.setItem('RETRIEVE_GEOLOCATION', geolocation);
+    }
+
     this.isUpdated = true;
   }
 
@@ -57,6 +66,7 @@ export class SettingsComponent implements OnInit {
     window.localStorage.removeItem('PAYMENT_ENDPOINT');
     window.localStorage.removeItem('RETRIEVE_GEOLOCATION');
     window.localStorage.removeItem('GEO_LOCATION');
-    window.localStorage.removeItem('cart');
+    window.localStorage.removeItem('cart_id');
+    window.localStorage.removeItem('cart_quantity');
   }
 }

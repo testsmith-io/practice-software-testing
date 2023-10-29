@@ -87,7 +87,7 @@ Thanks for your order.
 | Amount       | Product         | Price | Total |
 | :--------- | :------------- | :------------- | :------------- |
 @foreach ($items as $item)
-| {{ $item['quantity'] }} | {{ $item['name'] }} {{ ($item['is_rental'] === 1) ? " (For rent)": "" }} | $ {{ number_format($item['price'],2) }} | $ {{ number_format($item['total'],2) }} |
+| {{ $item['quantity'] }} | {{ $item['product']['name'] }} {{ ($item['discount_percentage']) ? '-'.$item['discount_percentage'].'%' : '' }} {{ ($item['is_rental'] === 1) ? " (For rent)": "" }} | $ {{ ($item['discount_percentage']) ? number_format($item['discounted_price'],2) : number_format($item['product']['price'],2) }} | $ {{ ($item['discount_percentage']) ? number_format($item['quantity'] * $item['discounted_price'],2) : number_format($item['quantity'] * $item['product']['price'],2) }} |
 @endforeach
 |  |  |  | $ {{ number_format($total,2) }} |
 @endcomponent

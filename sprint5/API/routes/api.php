@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FavoriteController;
@@ -46,6 +47,15 @@ Route::controller(BrandController::class)->prefix('brands')->group(function () {
     Route::post('', 'store');
     Route::put('/{id}', 'update');
     Route::delete('/{id}', 'destroy');
+});
+
+Route::controller(CartController::class)->prefix('carts')->group(function () {
+    Route::post('', 'createCart');
+    Route::post('/{id}', 'addItem');
+    Route::put('/{id}/product/quantity', 'updateQuantity');
+    Route::get('/{id}', 'getCart');
+    Route::delete('/{cartId}/product/{productId}', 'removeProductFromCart');
+    Route::delete('/{cartId}', 'deleteCart');
 });
 
 Route::controller(CategoryController::class)->prefix('categories')->group(function () {

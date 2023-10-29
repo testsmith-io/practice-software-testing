@@ -22,7 +22,13 @@ class Invoiceline extends BaseModel
 {
     use HasUlids;
     protected $table = 'invoice_items';
-    protected $fillable = ['invoice_id', 'product_id', 'unit_price', 'quantity'];
+    protected $fillable = ['invoice_id', 'product_id', 'unit_price', 'quantity', 'discount_percentage', 'discounted_price'];
+
+    protected $casts = array(
+        "unit_price" => "double",
+        "discount_percentage" => "double",
+        "discount_price" => "double"
+    );
 
     public function invoice(): BelongsTo
     {

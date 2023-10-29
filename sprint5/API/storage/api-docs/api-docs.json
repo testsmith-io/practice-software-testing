@@ -446,6 +446,465 @@
                 }
             }
         },
+        "/carts": {
+            "post": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Create a new cart",
+                "description": "Create a new cart",
+                "operationId": "createCart",
+                "responses": {
+                    "201": {
+                        "description": "Create cartId",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "cart_id": {
+                                            "description": "",
+                                            "type": "string",
+                                            "example": "1234"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Returns when requested item is not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Requested item not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "405": {
+                        "description": "Returns when the method is not allowed for the requested route",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Method is not allowed for the requested route"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Returns when the server was not able to process the content"
+                    }
+                }
+            }
+        },
+        "/carts/{id}": {
+            "post": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Add item to cart",
+                "description": "Add item to cart",
+                "operationId": "addItem",
+                "responses": {
+                    "201": {
+                        "description": "Create cartId",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "cart_id": {
+                                            "description": "",
+                                            "type": "string",
+                                            "example": "1234"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Returns when requested item is not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Requested item not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "405": {
+                        "description": "Returns when the method is not allowed for the requested route",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Method is not allowed for the requested route"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Returns when the server was not able to process the content"
+                    }
+                }
+            }
+        },
+        "/carts/{cartId}": {
+            "get": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Retrieve specific cart",
+                "description": "Retrieve specific cart",
+                "operationId": "getCart",
+                "parameters": [
+                    {
+                        "name": "cartId",
+                        "in": "path",
+                        "description": "The cartId parameter in path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CartResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Returns when the requested item is not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Requested item not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "405": {
+                        "description": "Returns when the method is not allowed for the requested route",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Method is not allowed for the requested route"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Update quantity of item in cart",
+                "description": "Update quantity of item in cart",
+                "operationId": "updateCartQuantity",
+                "parameters": [
+                    {
+                        "name": "cartId",
+                        "in": "path",
+                        "description": "The cartId parameter in path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": 1
+                    }
+                ],
+                "requestBody": {
+                    "description": "Brand request object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BrandRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Result of the update",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "description": "",
+                                            "type": "boolean",
+                                            "example": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Returns when the resource is not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Resource not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "405": {
+                        "description": "Returns when the method is not allowed for the requested route",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Method is not allowed for the requested route"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Returns when the server was not able to process the content"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Delete Cart",
+                "description": "Delete Cart",
+                "operationId": "deleteCart",
+                "parameters": [
+                    {
+                        "name": "cartId",
+                        "in": "path",
+                        "description": "The cartId parameter in path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": 1
+                    },
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "description": "The cartId parameter in path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Returns when user is not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Returns when the resource is not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Resource not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Returns when the entity is used elsewhere"
+                    },
+                    "405": {
+                        "description": "Returns when the method is not allowed for the requested route",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Method is not allowed for the requested route"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Returns when the server was not able to process the content"
+                    }
+                }
+            }
+        },
+        "/carts/{cartId}/product/{productId}": {
+            "delete": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Delete product from cart",
+                "description": "Delete a product from Cart",
+                "operationId": "deleteProductFromCart",
+                "parameters": [
+                    {
+                        "name": "cartId",
+                        "in": "path",
+                        "description": "The cartId parameter in path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": 1
+                    },
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "description": "The cartId parameter in path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Returns when user is not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Returns when the resource is not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Resource not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Returns when the entity is used elsewhere"
+                    },
+                    "405": {
+                        "description": "Returns when the method is not allowed for the requested route",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Method is not allowed for the requested route"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Returns when the server was not able to process the content"
+                    }
+                }
+            }
+        },
         "/categories/tree": {
             "get": {
                 "tags": [
@@ -4676,6 +5135,24 @@
                 },
                 "type": "object"
             },
+            "CartItemResponse": {
+                "title": "CartResponse",
+                "properties": {
+                    "cart_id": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "CartResponse": {
+                "title": "CartResponse",
+                "properties": {
+                    "cart_id": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "CategoryRequest": {
                 "title": "CategoryRequest",
                 "properties": {
@@ -4874,9 +5351,6 @@
                     "billing_postcode": {
                         "type": "string"
                     },
-                    "total": {
-                        "type": "number"
-                    },
                     "payment_method": {
                         "type": "string",
                         "example": "Cash on Delivery"
@@ -4895,8 +5369,7 @@
                             "type": "object",
                             "example": {
                                 "product_id": 9,
-                                "quantity": 1,
-                                "unit_price": 12.01
+                                "quantity": 1
                             }
                         }
                     }

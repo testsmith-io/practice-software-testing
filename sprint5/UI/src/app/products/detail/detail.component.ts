@@ -88,14 +88,13 @@ export class DetailComponent implements OnInit {
       const price = (product.discount_price) ? product.discount_price : product.price;
       let item = {
         'id': product.id,
-        'is_rental': product.is_rental,
-        'name': product.name,
         'quantity': this.quantity,
         'price': price,
         'total': this.quantity * price
       }
-      this.cartService.addItem(item);
-      this.toastService.show('Product added to shopping cart.', {classname: 'bg-success text-light'})
+      this.cartService.addItem(item).subscribe(() => {
+        this.toastService.show('Product added to shopping cart.', {classname: 'bg-success text-light'});
+      });
     }
   }
 

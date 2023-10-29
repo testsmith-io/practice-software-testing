@@ -3,10 +3,10 @@ Hello {{ $name }},
 Thanks for your order.
 
 @foreach ($items as $item)
-{{ $item['quantity'] }} x {{ $item['name'] }}{{ ($item['is_rental'] === 1) ? " (For rent)": "\t\t  " }}       $ {{ number_format($item['price'],2) }}      $ {{ number_format($item['total'],2) }}{{PHP_EOL}}
+{{ $item['quantity'] }} x {{ $item['product']['name'] }}{{ ($item['discount_percentage']) ? ' -'.$item['discount_percentage'].'%' : '' }} {{ ($item['is_rental'] === 1) ? " (For rent)": "\t\t  " }}       $ {{ ($item['discount_percentage']) ? number_format($item['discounted_price'],2) : number_format($item['product']['price'],2) }}      $ {{ ($item['discount_percentage']) ? number_format($item['quantity'] * $item['discounted_price'],2) : number_format($item['quantity'] *  $item['product']['price'],2) }}{{PHP_EOL}}
 @endforeach
 
-Total: $ {{ number_format($item['total'],2) }}
+Total: $ {{ number_format($total,2) }}
 
 You can review your invoice in your account's "Invoices" section by clicking "My account" on our shop.
 
