@@ -131,6 +131,7 @@ class InvoiceController extends Controller {
      */
     public function store(StoreInvoice $request) {
         $input = $request->except(['cart_id']);
+        $input['user_id'] = Auth::user()->id;
         $input['invoice_date'] = now();
         $input['invoice_number'] = IdGenerator::generate(['table' => 'invoices', 'field' => 'invoice_number', 'length' => 14, 'prefix' => 'INV-' . now()->year]);
 
