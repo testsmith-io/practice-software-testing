@@ -172,7 +172,6 @@ export class CheckoutComponent implements OnInit {
     let cartId = sessionStorage.getItem('cart_id');
 
     const payload = {
-      'user_id': this.customer.id,
       'billing_address': this.cusAddress.value.address,
       'billing_city': this.cusAddress.value.city,
       'billing_state': this.cusAddress.value.state,
