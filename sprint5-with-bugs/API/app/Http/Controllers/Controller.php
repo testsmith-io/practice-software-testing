@@ -19,7 +19,7 @@ use Spatie\ArrayToXml\ArrayToXml;
  * )
  * @OA\Server(
  *     description="Deployed environment",
- *     url="https://api.practicesoftwaretesting.com"
+ *     url="https://api-with-bugs.practicesoftwaretesting.com"
  * ),
  * @OA\Server(
  *     description="Local environment",
