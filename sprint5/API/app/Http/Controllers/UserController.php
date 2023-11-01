@@ -457,7 +457,7 @@ class UserController extends Controller {
         if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
             return $this->preferredFormat(User::findOrFail($id));
         } else {
-            return $this->preferredFormat(User::where('user_id', Auth::user()->id)->findOrFail($id));
+            return $this->preferredFormat(User::where('id', Auth::user()->id)->findOrFail($id));
         }
     }
 
