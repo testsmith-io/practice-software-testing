@@ -34,8 +34,6 @@ Route::post('/refresh', function() {
         '--seed' => null, '--force' => null
     ]);
 
-    \Illuminate\Support\Facades\Artisan::call('invoice:remove');
-
     return response()->json(['result' => 'refresh done']);
 });
 
