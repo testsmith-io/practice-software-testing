@@ -1,10 +1,13 @@
 <div class="row">
   <a href="#" routerLink="/admin/orders" class="mx-3 mt-3 link-secondary" data-test="back">Back</a>
 </div>
-<div *ngIf="!invoice" class="container mt-5">
+@if (!invoice) {
+<div class="container mt-5">
   <p>This invoice doesn't exist.</p>
 </div>
-<div *ngIf="invoice" class="container mt-5">
+}
+@if (invoice) {
+<div class="container mt-5">
   <div class="row">
     <div class="col">
       <h3>General Information</h3>
@@ -37,29 +40,37 @@
           <div class="col-sm-9">
             <div class="input-group">
               <select id="status" data-test="order-status" formControlName="status" class="form-select">
-                <option [disabled]="orderState[status] <= orderState[invoice.status]" *ngFor="let status of statuses"
+                @for (status of statuses; track status) {
+  <option [disabled]="orderState[status] <= orderState[invoice.status]"
                         value="{{status}}">{{status}}</option>
+}
               </select>
               <div class="input-group-append">
                 <button class="btn btn-warning" (click)="updateStatus()" type="button" data-test="update-status-submit">Update status</button>
               </div>
             </div>
-            <div *ngIf="isUpdated && !hideAlert" [ngClass]="fadeOutMessage()" class="alert alert-success mt-3"
+            @if (isUpdated && !hideAlert) {
+<div [ngClass]="fadeOutMessage()" class="alert alert-success mt-3"
                  role="alert">
               Status updated!
             </div>
-            <div *ngIf="error && !hideAlert" [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
+}
+            @if (error && !hideAlert) {
+<div [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
                  role="alert">
               {{error}}
             </div>
+}
           </div>
         </div>
-        <div class="form-group row mt-3" *ngIf="invoice.status === 'ON_HOLD' || invoice.status_message">
+        @if (invoice.status === 'ON_HOLD' || invoice.status_message) {
+<div class="form-group row mt-3">
           <label for="status_message" class="col-sm-3 col-form-label">Status Message</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" [readOnly]="invoice.status_message" formControlName="status_message" data-test="status-message" id="status_message">
           </div>
         </div>
+}
       </form>
       <div class="mb-3"></div>
 
@@ -138,23 +149,36 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let invoiceline of invoice.invoicelines">
+        @for (invoiceline of invoice.invoicelines; track invoiceline) {
+  <tr>
           <td>{{invoiceline.quantity}}</td>
-          <td>{{invoiceline.product.name}}<small *ngIf="invoiceline.product.is_rental"> (Item for rent, price per
-            hour)</small></td>
+          <td>{{invoiceline.product.name}}@if (invoiceline.product.is_rental) {
+<small> (Item for rent, price per
+            hour)</small>
+}</td>
           <td class="col-md-2 text-end"><span
-            [ngClass]="{'discounted' : invoiceline.discount_percentage}">${{invoiceline.product.price | number: '1.2-2'}}</span><br
-            *ngIf="invoiceline.discounted_price"/><span
-            *ngIf="invoiceline.discount_percentage" data-test="offer-price">$<span
-            id="discount-price">{{invoiceline.discounted_price}}</span></span></td>
+            [ngClass]="{'discounted' : invoiceline.discount_percentage}">${{invoiceline.product.price | number: '1.2-2'}}</span>@if (invoiceline.discounted_price) {
+<br
+           />
+}@if (invoiceline.discount_percentage) {
+<span
+            data-test="offer-price">$<span
+            id="discount-price">{{invoiceline.discounted_price}}</span></span>
+}</td>
           <td class="col-md-2 text-end"><span
-            [ngClass]="{'discounted' : invoiceline.discount_percentage}">${{invoiceline.quantity * invoiceline.product.price | number: '1.2-2'}}</span><br
-            *ngIf="invoiceline.discounted_price"/><span
-            *ngIf="invoiceline.discount_percentage" data-test="offer-price">$<span
-            id="discount-total-price">{{invoiceline.quantity * invoiceline.discounted_price | number: '1.2-2'}}</span></span></td>
+            [ngClass]="{'discounted' : invoiceline.discount_percentage}">${{invoiceline.quantity * invoiceline.product.price | number: '1.2-2'}}</span>@if (invoiceline.discounted_price) {
+<br
+           />
+}@if (invoiceline.discount_percentage) {
+<span
+            data-test="offer-price">$<span
+            id="discount-total-price">{{invoiceline.quantity * invoiceline.discounted_price | number: '1.2-2'}}</span></span>
+}</td>
         </tr>
+}
         </tbody>
       </table>
     </div>
   </div>
 </div>
+}

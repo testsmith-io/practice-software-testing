@@ -12,7 +12,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
   styleUrls: ['./users-list.component.css']
 })
 export class UsersListComponent implements OnInit {
-  p: number = 1;
+  currentPage: number = 1;
   results: Pagination<User>;
   searchForm: FormGroup | any;
 
@@ -38,7 +38,7 @@ export class UsersListComponent implements OnInit {
   }
 
   reset() {
-    this.p  = 0;
+    this.currentPage = 0;
     this.getUsers();
   }
 
@@ -56,13 +56,14 @@ export class UsersListComponent implements OnInit {
   }
 
   getUsers() {
-    this.userService.getUsers(this.p)
+    this.userService.getUsers(this.currentPage)
       .pipe(first())
       .subscribe((users) => this.results = users);
   }
 
-  handlePageChange(event: number): void {
-    this.p = event;
+  onPageChange(page: number) {
+    // Handle page change here (e.g., fetch data for the selected page)
+    this.currentPage = page;
     this.getUsers();
   }
 

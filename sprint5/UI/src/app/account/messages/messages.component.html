@@ -1,8 +1,11 @@
 <h1 data-test="page-title">Messages</h1>
-<div *ngIf="!results?.data?.length">
+@if (!results?.data?.length) {
+<div>
   There are no messages yet. Navigate to the <a data-test="contact-link" routerLink="/contact">contact form</a> and fill out the form.
 </div>
-<table class="table table-hover" *ngIf="results?.data.length">
+}
+@if (results?.data.length) {
+<table class="table table-hover">
   <thead>
   <tr>
     <th scope="col">Subject</th>
@@ -12,7 +15,8 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let item of results.data | paginate: { itemsPerPage: results.per_page, currentPage: p, totalItems: results.total }">
+  @for (item of results.data; track item) {
+  <tr>
     <td>{{item.subject}}</td>
     <td>{{item.message | truncate: 50}}</td>
     <td><span class="badge rounded-pill" [ngClass]="{'bg-info': item.status === 'NEW', 'bg-warning': item.status === 'IN_PROGRESS', 'bg-success': item.status === 'RESOLVED'}">{{item.status}}</span></td>
@@ -21,9 +25,10 @@
       <a routerLink="{{item.id}}" class="btn btn-sm btn-primary mr-1">Details</a>
     </td>
   </tr>
+}
   </tbody>
   <tfoot>
-  <pagination-controls [autoHide]="true" [responsive]="true"
-                       (pageChange)="handlePageChange($event)"></pagination-controls>
+  <app-pagination [currentPage]="currentPage" [lastPage]="results.last_page" (pageChange)="onPageChange($event)"></app-pagination>
   </tfoot>
 </table>
+}

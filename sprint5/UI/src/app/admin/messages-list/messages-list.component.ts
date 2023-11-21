@@ -11,7 +11,7 @@ import {Pagination} from "../../models/pagination";
 })
 export class MessagesListComponent implements OnInit {
 
-  p: number = 1;
+  currentPage: number = 1;
   results: Pagination<ContactMessage>;
 
   constructor(private messageService: ContactService) {
@@ -22,13 +22,14 @@ export class MessagesListComponent implements OnInit {
   }
 
   getMessages() {
-    this.messageService.getMessages(this.p)
+    this.messageService.getMessages(this.currentPage)
       .pipe(first())
       .subscribe((messages) => this.results = messages);
   }
 
-  handlePageChange(event: number): void {
-    this.p = event;
+  onPageChange(page: number) {
+    // Handle page change here (e.g., fetch data for the selected page)
+    this.currentPage = page;
     this.getMessages();
   }
 

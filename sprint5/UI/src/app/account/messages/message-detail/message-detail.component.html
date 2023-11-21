@@ -12,18 +12,22 @@
         <p class="card-text">{{message?.message}}</p>
       </div>
       <div class="card-footer">
-        <small>{{message?.created_at}}<span *ngIf="message?.email"> | {{message?.email}}</span></small>
+        <small>{{message?.created_at}}@if (message?.email) {
+<span> | {{message?.email}}</span>
+}</small>
       </div>
 
     </div>
 
     <h2>Replies</h2>
-    <div class="card bg-light text-black mb-3" *ngFor="let reply of message?.replies">
+    @for (reply of message?.replies; track reply) {
+  <div class="card bg-light text-black mb-3">
       <div class="card-header">{{reply.user.first_name}} {{reply.user.last_name}} | {{reply.created_at}}</div>
       <div class="card-body">
         <p class="card-text">{{reply.message}}</p>
       </div>
     </div>
+}
 
     <div class="card bg-light text-black mb-3">
       <div class="card-header">Add Reply</div>

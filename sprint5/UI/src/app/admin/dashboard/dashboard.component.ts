@@ -4,6 +4,8 @@ import {Invoice} from "../../models/invoice";
 import {InvoiceService} from "../../_services/invoice.service";
 import {first} from "rxjs/operators";
 import {Pagination} from "../../models/pagination";
+import { ChartConfiguration, ChartType } from 'chart.js';
+import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,9 +14,33 @@ import {Pagination} from "../../models/pagination";
 })
 export class DashboardComponent implements OnInit {
 
+  public barChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    aspectRatio: 4,
+    // We use these empty structures as placeholders for dynamic theming.
+    scales: {
+      x: {},
+      y: {
+        min: 10,
+      },
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+      datalabels: {
+        anchor: 'end',
+        align: 'end',
+      },
+    },
+  };
+  public barChartType: ChartType = 'bar';
+  public barChartPlugins = [DataLabelsPlugin];
+
+
   type = 'bar';
   data: any;
-  p: number = 1;
+  currentPage: number = 1;
   results: Pagination<Invoice>;
 
   options = {
@@ -65,13 +91,14 @@ export class DashboardComponent implements OnInit {
   }
 
   getNewInvoices() {
-    this.invoiceService.getNewInvoices(this.p)
+    this.invoiceService.getNewInvoices(this.currentPage)
       .pipe(first())
       .subscribe((invoices)=> this.results = invoices);
   }
 
-  handlePageChange(event: number): void {
-    this.p = event;
+  onPageChange(page: number) {
+    // Handle page change here (e.g., fetch data for the selected page)
+    this.currentPage = page;
     this.getNewInvoices();
   }
 

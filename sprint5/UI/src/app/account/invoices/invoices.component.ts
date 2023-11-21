@@ -10,7 +10,7 @@ import {Pagination} from "../../models/pagination";
   styleUrls: ['./invoices.component.css']
 })
 export class InvoicesComponent implements OnInit {
-  p: number = 1;
+  currentPage: number = 1;
   results: Pagination<Invoice>;
 
   constructor(private invoiceService: InvoiceService) {
@@ -21,13 +21,15 @@ export class InvoicesComponent implements OnInit {
   }
 
   getInvoices() {
-    this.invoiceService.getInvoices(this.p)
+    this.invoiceService.getInvoices(this.currentPage)
       .pipe(first())
       .subscribe((invoices) => this.results = invoices);
   }
 
-  handlePageChange(event: number): void {
-    this.p = event;
+  onPageChange(page: number) {
+    // Handle page change here (e.g., fetch data for the selected page)
+    this.currentPage = page;
     this.getInvoices();
   }
+
 }

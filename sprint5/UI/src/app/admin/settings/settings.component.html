@@ -40,14 +40,18 @@
         <small class="form-text text-muted">
           "Clear storage" will clear all settings, geolocation and cart items, but not the authentication token.
         </small>
-        <div *ngIf="isUpdated && !hideAlert" [ngClass]="fadeOutMessage()" class="alert alert-success mt-3"
+        @if (isUpdated && !hideAlert) {
+<div [ngClass]="fadeOutMessage()" class="alert alert-success mt-3"
              role="alert">
           Settings saved!
         </div>
-        <div *ngIf="error && !hideAlert" [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
+}
+        @if (error && !hideAlert) {
+<div [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
              role="alert">
           {{error}}
         </div>
+}
       </div>
     </div>
   </form>

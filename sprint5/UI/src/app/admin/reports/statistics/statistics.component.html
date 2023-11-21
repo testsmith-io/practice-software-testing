@@ -3,7 +3,8 @@
 <div class="row mb-5">
   <div class="col-md-6">
     <h4>Top 10 Best Selling Categories</h4>
-    <table class="table table-hover" *ngIf="top10BestSellingCategories">
+    @if (top10BestSellingCategories) {
+<table class="table table-hover">
       <thead>
       <tr>
         <th scope="col">Category Name</th>
@@ -11,17 +12,21 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let item of top10BestSellingCategories">
+      @for (item of top10BestSellingCategories; track item) {
+  <tr>
         <td>{{item.category_name}}</td>
         <td>${{item.total_earned}}</td>
       </tr>
+}
       </tbody>
     </table>
+}
   </div>
 
   <div class="col-md-6">
     <h4>Top 10 Most Purchased Products</h4>
-    <table class="table table-hover" *ngIf="top10PurchasedProducts">
+    @if (top10PurchasedProducts) {
+<table class="table table-hover">
       <thead>
       <tr>
         <th scope="col">Category Name</th>
@@ -29,19 +34,23 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let item of top10PurchasedProducts">
+      @for (item of top10PurchasedProducts; track item) {
+  <tr>
         <td>{{item.name}}</td>
         <td>{{item.count}}</td>
       </tr>
+}
       </tbody>
     </table>
+}
   </div>
 </div>
 
 <div class="row">
   <div class="col-md-6">
     <h4>Customer By Country</h4>
-    <table class="table table-hover" *ngIf="customerByCountry">
+    @if (customerByCountry) {
+<table class="table table-hover">
       <thead>
       <tr>
         <th scope="col">Category Name</th>
@@ -49,17 +58,21 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let item of customerByCountry">
+      @for (item of customerByCountry; track item) {
+  <tr>
         <td>{{item.customer}}</td>
         <td>{{item.country}}</td>
       </tr>
+}
       </tbody>
     </table>
+}
   </div>
 
   <div class="col-md-6">
     <h4>Total Sales Per Country</h4>
-    <table class="table table-hover" *ngIf="totalSalesPerCountry">
+    @if (totalSalesPerCountry) {
+<table class="table table-hover">
       <thead>
       <tr>
         <th scope="col">Category Name</th>
@@ -67,12 +80,15 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let item of totalSalesPerCountry">
+      @for (item of totalSalesPerCountry; track item) {
+  <tr>
         <td>{{item.billing_country}}</td>
         <td>${{item.total_sales}}</td>
       </tr>
+}
       </tbody>
     </table>
+}
   </div>
 </div>
 

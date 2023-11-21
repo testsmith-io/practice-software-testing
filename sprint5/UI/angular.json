@@ -38,7 +38,7 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/angular-archwizard/styles/archwizard.css",
+              "node_modules/@achimha/angular-archwizard/styles/archwizard.css",
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "src/styles.css"
             ],
@@ -110,7 +110,7 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/angular-archwizard/styles/archwizard.css",
+              "node_modules/@achimha/angular-archwizard/styles/archwizard.css",
               "src/styles.css"
             ],
             "scripts": []

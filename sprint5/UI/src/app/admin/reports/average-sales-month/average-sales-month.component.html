@@ -6,4 +6,12 @@
   <option value="2021">2021</option>
   <option value="2022" selected >2022</option>
 </select>
-<chart [type]="type" [data]="data" [options]="options" style="height: 300px;"></chart>
+
+<canvas
+  baseChart
+  class="chart"
+  [data]="data"
+  [options]="barChartOptions"
+  [plugins]="barChartPlugins"
+  [type]="barChartType"
+></canvas>

@@ -79,10 +79,13 @@
           <a class="nav-link" data-test="nav-contact" routerLink="/contact">Contact</a>
         </li>
         <!--        <li class="nav-item" *ngIf="!isLoggedIn">-->
-        <li class="nav-item" *ngIf="!name && role !== 'user'">
+        @if (!name && role !== 'user') {
+<li class="nav-item">
           <a class="nav-link" data-test="nav-sign-in" routerLink="/auth/login">Sign in</a>
         </li>
-        <li class="nav-item dropdown" *ngIf="name && role === 'user'">
+}
+        @if (name && role === 'user') {
+<li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" data-test="nav-user-menu" id="user-menu" role="button" data-bs-toggle="dropdown"
              aria-expanded="false">
             {{name}}
@@ -99,7 +102,9 @@
             <li><a class="dropdown-item" data-test="nav-sign-out" (click)="logout()">Sign out</a></li>
           </ul>
         </li>
-        <li class="nav-item dropdown" *ngIf="name && role === 'admin'">
+}
+        @if (name && role === 'admin') {
+<li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" data-test="nav-admin-menu" id="admin-menu" role="button" data-bs-toggle="dropdown"
              aria-expanded="false">
             {{name}}
@@ -146,10 +151,13 @@
             <li><a class="dropdown-item" data-test="nav-sign-out" (click)="logout()">Sign out</a></li>
           </ul>
         </li>
-        <li *ngIf="items && items !== 0" class="nav-item">
+}
+        @if (items && items !== 0) {
+<li class="nav-item">
           <a class="nav-link" data-test="nav-cart" routerLink="/checkout"> <i class="fa fa-shopping-cart px-1"></i><span
             class='badge rounded-pill bg-danger' data-test="cart-quantity" id='lblCartCount'>{{items}}</span></a>
         </li>
+}
       </ul>
     </div>
   </div>

@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ReportService} from "../../../_services/report.service";
+import {ChartConfiguration, ChartType} from "chart.js";
+import DataLabelsPlugin from "chartjs-plugin-datalabels";
 
 @Component({
   selector: 'app-average-sales-month',
@@ -7,6 +9,28 @@ import {ReportService} from "../../../_services/report.service";
   styleUrls: ['./average-sales-month.component.css']
 })
 export class AverageSalesMonthComponent implements OnInit {
+
+  public barChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    aspectRatio: 3,
+    // We use these empty structures as placeholders for dynamic theming.
+    scales: {
+      x: {},
+      y: {},
+    },
+    plugins: {
+      legend: {
+        display: true,
+      },
+      datalabels: {
+        anchor: 'end',
+        align: 'end',
+      },
+    },
+  };
+  public barChartType: ChartType = 'bar';
+  public barChartPlugins = [DataLabelsPlugin];
+
   type = 'bar';
   data: any;
 

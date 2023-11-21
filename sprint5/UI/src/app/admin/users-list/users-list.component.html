@@ -9,7 +9,8 @@
   </div>
 </form>
 
-<table class="table table-hover" *ngIf="results?.data">
+@if (results?.data) {
+<table class="table table-hover">
   <thead>
   <tr>
     <th scope="col">Id</th>
@@ -20,8 +21,9 @@
   </thead>
 
   <tbody>
+  @for (item of results.data; track item) {
   <tr
-    *ngFor="let item of results.data | paginate: { itemsPerPage: results.per_page, currentPage: p, totalItems: results.total }">
+   >
     <td>{{item.id}}</td>
     <td>{{item.first_name}} {{item.last_name}}</td>
     <td>{{item.email}}</td>
@@ -32,9 +34,10 @@
       </button>
     </td>
   </tr>
+}
   </tbody>
   <tfoot>
-  <pagination-controls [autoHide]="true" [responsive]="true"
-                       (pageChange)="handlePageChange($event)"></pagination-controls>
+  <app-pagination [currentPage]="currentPage" [lastPage]="results.last_page" (pageChange)="onPageChange($event)"></app-pagination>
   </tfoot>
 </table>
+}
