@@ -19,7 +19,8 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let brand of brands">
+  @for (brand of brands; track brand) {
+  <tr>
     <td>{{brand.id}}</td>
     <td>{{brand.name}}</td>
     <td>{{brand.slug}}</td>
@@ -31,5 +32,6 @@
       </button>
     </td>
   </tr>
+}
   </tbody>
 </table>

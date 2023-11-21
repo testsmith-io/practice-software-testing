@@ -51,37 +51,49 @@
     <hr>
     <h4>By category:</h4>
     <ng-template #recursiveList let-list>
-      <div *ngFor="let category of list" class="checkbox">
-        <label><input #checkboxes *ngIf="category.parent_id" type="checkbox" class="icheck"
+      @for (category of list; track category) {
+  <div class="checkbox">
+        <label>@if (category.parent_id) {
+<input #checkboxes type="checkbox" class="icheck"
                       attr.data-test="category-{{category.id}}" name="category_id"
                       value="{{category.id}}" (change)="filterByCategory($event)"/>
+}
           {{category.name}}</label>
-        <ul *ngIf="category.sub_categories.length > 0">
+        @if (category.sub_categories.length > 0) {
+<ul>
           <ng-container
             *ngTemplateOutlet="recursiveList; context:{ $implicit: category.sub_categories }"></ng-container>
         </ul>
+}
       </div>
+}
     </ng-template>
     <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: categories }"></ng-container>
 
     <div class="py-2"></div>
 
     <h4>By brand:</h4>
-    <div *ngFor="let brand of brands" class="checkbox">
-      <label><input #checkboxes type="checkbox" class="icheck" name="brand_id" attr.data-test="brand-{{brand.id}}"
+    @for (brand of brands; track brand.id) {
+    <div class="checkbox">
+         <label><input #checkboxes type="checkbox" class="icheck" name="brand_id" attr.data-test="brand-{{brand.id}}"
                     value="{{brand.id}}"
                     (change)="filterByBrand($event)"/>
-        {{brand.name}}
-      </label>
+      {{brand.name}}</label>
     </div>
+    }
 
   </div>
   <div class="col-md-9">
-    <h3 *ngIf="searchQuery">Searched for: {{searchQuery}}</h3>
-    <div class="container" attr.data-test="{{resultState}}" *ngIf="results">
-      <div *ngIf="!results.data.length" data-test="no-results">No results found.</div>
+    @if (searchQuery) {
+<h3>Searched for: {{searchQuery}}</h3>
+}
+    @if (results) {
+<div class="container" attr.data-test="{{resultState}}">
+      @if (!results.data.length) {
+<div data-test="no-results">No results found.</div>
+}
+      @for (item of results.data; track item.id) {
       <a attr.data-test="product-{{item.id}}" routerLink="/product/{{item.id}}"
-         *ngFor="let item of results.data | paginate: { itemsPerPage: results.per_page, currentPage: p, totalItems: results.total }"
          class="card" style="text-decoration: none; color: black;">
         <div class="card-img-wrapper">
           <img class="card-img-top"
@@ -93,19 +105,24 @@
           </h5>
         </div>
         <div class="card-footer">
-          <span *ngIf="item.stock <= 0" class="float-start text-danger" data-test="out-of-stock">Out of stock</span>
+          @if (item.stock <= 0) {
+<span class="float-start text-danger" data-test="out-of-stock">Out of stock</span>
+}
           <span class="float-end text-muted">
                    <span data-test="product-price"
-                         [ngClass]="{'discounted' : item.discount_price}">${{item.price.toFixed(2)}}</span> <span
-            data-test="product-discount-price" *ngIf="item.discount_price"> ${{item.discount_price.toFixed(2)}}</span>
+                         [ngClass]="{'discounted' : item.discount_price}">${{item.price.toFixed(2)}}</span> @if (item.discount_price) {
+<span
+            data-test="product-discount-price"> ${{item.discount_price.toFixed(2)}}</span>
+}
         </span>
         </div>
 
       </a>
+      }
     </div>
+}
     <div class="mt-3">
-      <pagination-controls [autoHide]="true" [responsive]="true"
-                           (pageChange)="handlePageChange($event)"></pagination-controls>
+      <app-pagination [currentPage]="currentPage" [lastPage]="results?.last_page" (pageChange)="onPageChange($event)"></app-pagination>
     </div>
-  </div>
+  </div>x
 </div>

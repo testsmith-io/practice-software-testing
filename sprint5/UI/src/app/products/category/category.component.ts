@@ -18,7 +18,7 @@ import {BrowserDetectorService} from "../../_services/browser-detector.service";
 export class CategoryComponent implements OnInit {
   search: FormGroup | any;
   resultState: string = '';
-  p: number = 1;
+  currentPage: number = 1;
   results: Pagination<Product>;
   brands: Brand[];
   categories: any;
@@ -57,7 +57,7 @@ export class CategoryComponent implements OnInit {
   }
 
   getProductsByCategory(slug: string) {
-    this.productService.getProductsByCategory(slug, this.p).subscribe(res => {
+    this.productService.getProductsByCategory(slug, this.currentPage).subscribe(res => {
       this.results = res;
       this.results.data.map((item: Product) => {
         if(item.is_location_offer) {
@@ -103,8 +103,9 @@ export class CategoryComponent implements OnInit {
     });
   }
 
-  handlePageChange(event: number): void {
-    this.p = event;
+  onPageChange(page: number) {
+    // Handle page change here (e.g., fetch data for the selected page)
+    this.currentPage = page;
     this.getProductsByCategory(this.slug);
   }
 

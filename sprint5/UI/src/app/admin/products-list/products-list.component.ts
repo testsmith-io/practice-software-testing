@@ -13,7 +13,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 })
 export class ProductsListComponent implements OnInit {
 
-  p: number = 1;
+  currentPage: number = 1;
   products!: Pagination<Product>;
   searchForm: FormGroup | any;
 
@@ -39,7 +39,7 @@ export class ProductsListComponent implements OnInit {
   }
 
   reset() {
-    this.p  = 0;
+    this.currentPage  = 0;
     this.getProducts();
   }
 
@@ -57,13 +57,15 @@ export class ProductsListComponent implements OnInit {
   }
 
   getProducts() {
-    this.productService.getProducts(this.p)
+    this.productService.getProducts(this.currentPage)
       .pipe(first())
       .subscribe((products) => this.products = products);
   }
 
-  handlePageChange(event: number): void {
-    this.p = event;
+  onPageChange(page: number) {
+    // Handle page change here (e.g., fetch data for the selected page)
+    this.currentPage = page;
     this.getProducts();
   }
+
 }

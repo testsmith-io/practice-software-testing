@@ -20,7 +20,8 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let category of categories">
+  @for (category of categories; track category) {
+  <tr>
     <td>{{category.id}}</td>
     <td>{{category.parent_id}}</td>
     <td>{{category.name}}</td>
@@ -34,5 +35,6 @@
       </button>
     </td>
   </tr>
+}
   </tbody>
 </table>

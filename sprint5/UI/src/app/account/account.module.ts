@@ -11,7 +11,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {TruncatePipe} from "../_helpers/truncate.pipe";
 import {MessagesComponent} from './messages/messages.component';
 import {MessageDetailComponent} from './messages/message-detail/message-detail.component';
-import {NgxPaginationModule} from "ngx-pagination";
+import {PaginationComponent} from "../pagination/pagination.component";
 
 const routes: Routes = [
   {path: '', component: OverviewComponent, canActivate: [UserAuthGuard]},
@@ -34,12 +34,12 @@ const routes: Routes = [
     MessagesComponent,
     MessageDetailComponent
   ],
-    imports: [
-        ReactiveFormsModule,
-        CommonModule,
-        RouterModule.forChild(routes),
-        NgxPaginationModule
-    ],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    RouterModule.forChild(routes),
+    PaginationComponent
+  ],
   exports: [RouterModule]
 })
 export class AccountModule {

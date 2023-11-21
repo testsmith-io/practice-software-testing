@@ -12,7 +12,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 })
 export class OrdersListComponent implements OnInit {
 
-  p: number = 1;
+  currentPage: number = 1;
   results: Pagination<Invoice>;
   searchForm: FormGroup | any;
 
@@ -37,18 +37,19 @@ export class OrdersListComponent implements OnInit {
   }
 
   reset() {
-    this.p  = 0;
+    this.currentPage  = 0;
     this.getInvoices();
   }
 
   getInvoices() {
-    this.invoiceService.getInvoices(this.p)
+    this.invoiceService.getInvoices(this.currentPage)
       .pipe(first())
       .subscribe((invoices) => this.results = invoices);
   }
 
-  handlePageChange(event: number): void {
-    this.p = event;
+  onPageChange(page: number) {
+    // Handle page change here (e.g., fetch data for the selected page)
+    this.currentPage = page;
     this.getInvoices();
   }
 

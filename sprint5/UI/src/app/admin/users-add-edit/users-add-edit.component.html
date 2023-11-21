@@ -1,34 +1,48 @@
 <div class="container mt-5">
   <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
     <div class="row">
-      <h2 data-test="page-title" *ngIf="isAddMode">Add User</h2>
-      <h2 data-test="page-title" *ngIf="!isAddMode">Edit User</h2>
+      @if (isAddMode) {
+<h2 data-test="page-title">Add User</h2>
+}
+      @if (!isAddMode) {
+<h2 data-test="page-title">Edit User</h2>
+}
     </div>
     <div class="row">
       <div class="col-lg-6">
-        <div *ngIf="!isAddMode" class="row mb-3">
+        @if (!isAddMode) {
+<div class="row mb-3">
           <label for="id" class="col-sm-3 col-form-label">Id</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" formControlName="id" data-test="id" id="id" readonly>
           </div>
         </div>
+}
         <div class="row mb-3">
           <label for="firstname" class="col-sm-3 col-form-label">First Name</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" formControlName="first_name" data-test="first-name" id="firstname">
           </div>
-          <div *ngIf="submitted && f['first_name'].errors" class="alert alert-danger mt-3 p-2" role="alert">
-            <div *ngIf="f['first_name'].errors['required']">First Name is required</div>
+          @if (submitted && f['first_name'].errors) {
+<div class="alert alert-danger mt-3 p-2" role="alert">
+            @if (f['first_name'].errors['required']) {
+<div>First Name is required</div>
+}
           </div>
+}
         </div>
         <div class="row mb-3">
           <label for="lastname" class="col-sm-3 col-form-label">Last Name</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" formControlName="last_name" data-test="last-name" id="lastname">
           </div>
-          <div *ngIf="submitted && f['last_name'].errors" class="alert alert-danger mt-3 p-2" role="alert">
-            <div *ngIf="f['last_name'].errors['required']">Last Name is required</div>
+          @if (submitted && f['last_name'].errors) {
+<div class="alert alert-danger mt-3 p-2" role="alert">
+            @if (f['last_name'].errors['required']) {
+<div>Last Name is required</div>
+}
           </div>
+}
         </div>
         <div class="row mb-3">
           <label for="dob" class="col-sm-3 col-form-label">Date of birth</label>
@@ -42,45 +56,65 @@
                    placeholder="Your Date of birth *"
                    value=""/>
           </div>
-          <div *ngIf="submitted && f['dob'].errors" class="alert alert-danger mt-3 p-2" role="alert">
-            <div *ngIf="f['dob'].errors['required']">Date of birth is required</div>
+          @if (submitted && f['dob'].errors) {
+<div class="alert alert-danger mt-3 p-2" role="alert">
+            @if (f['dob'].errors['required']) {
+<div>Date of birth is required</div>
+}
           </div>
+}
         </div>
         <div class="row mb-3">
           <label for="address" class="col-sm-3 col-form-label">Address</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" formControlName="address" data-test="address" id="address">
           </div>
-          <div *ngIf="submitted && f['address'].errors" class="alert alert-danger mt-3 p-2" role="alert">
-            <div *ngIf="f['address'].errors['required']">Address is required</div>
+          @if (submitted && f['address'].errors) {
+<div class="alert alert-danger mt-3 p-2" role="alert">
+            @if (f['address'].errors['required']) {
+<div>Address is required</div>
+}
           </div>
+}
         </div>
         <div class="row mb-3">
           <label for="postcode" class="col-sm-3 col-form-label">Postal code</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" formControlName="postcode" data-test="postcode" id="postcode">
           </div>
-          <div *ngIf="submitted && f['postcode'].errors" class="alert alert-danger mt-3 p-2" role="alert">
-            <div *ngIf="f['postcode'].errors['required']">Postcode is required</div>
+          @if (submitted && f['postcode'].errors) {
+<div class="alert alert-danger mt-3 p-2" role="alert">
+            @if (f['postcode'].errors['required']) {
+<div>Postcode is required</div>
+}
           </div>
+}
         </div>
         <div class="row mb-3">
           <label for="city" class="col-sm-3 col-form-label">City</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" formControlName="city" data-test="city" id="city">
           </div>
-          <div *ngIf="submitted && f['city'].errors" class="alert alert-danger mt-3 p-2" role="alert">
-            <div *ngIf="f['city'].errors['required']">City is required</div>
+          @if (submitted && f['city'].errors) {
+<div class="alert alert-danger mt-3 p-2" role="alert">
+            @if (f['city'].errors['required']) {
+<div>City is required</div>
+}
           </div>
+}
         </div>
         <div class="row mb-3">
           <label for="state" class="col-sm-3 col-form-label">State</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" formControlName="state" data-test="state" id="state">
           </div>
-          <div *ngIf="submitted && f['state'].errors" class="alert alert-danger mt-3 p-2" role="alert">
-            <div *ngIf="f['state'].errors['required']">State is required</div>
+          @if (submitted && f['state'].errors) {
+<div class="alert alert-danger mt-3 p-2" role="alert">
+            @if (f['state'].errors['required']) {
+<div>State is required</div>
+}
           </div>
+}
         </div>
         <div class="row mb-3">
           <label for="country" class="col-sm-3 col-form-label">Country</label>
@@ -88,12 +122,18 @@
             <select id="country" data-test="country" formControlName="country"
                     [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" class="form-select">
               <option value="" disabled selected hidden>Select your country *</option>
-              <option *ngFor="let country of countries" value="{{country.code}}">{{country.name}}</option>
+              @for (country of countries; track country) {
+  <option value="{{country.code}}">{{country.name}}</option>
+}
             </select>
           </div>
-          <div *ngIf="submitted && f['country'].errors" class="alert alert-danger mt-3 p-2" role="alert">
-            <div *ngIf="f['country'].errors['required']">Country is required</div>
+          @if (submitted && f['country'].errors) {
+<div class="alert alert-danger mt-3 p-2" role="alert">
+            @if (f['country'].errors['required']) {
+<div>Country is required</div>
+}
           </div>
+}
         </div>
 
         <div class="row mb-3">
@@ -101,18 +141,26 @@
           <div class="col-sm-9">
             <input type="text" class="form-control" formControlName="phone" data-test="phone" id="phone">
           </div>
-          <div *ngIf="submitted && f['phone'].errors" class="alert alert-danger mt-3 p-2" role="alert">
-            <div *ngIf="f['phone'].errors['required']">Phone is required</div>
+          @if (submitted && f['phone'].errors) {
+<div class="alert alert-danger mt-3 p-2" role="alert">
+            @if (f['phone'].errors['required']) {
+<div>Phone is required</div>
+}
           </div>
+}
         </div>
         <div class="row mb-3">
           <label for="email" class="col-sm-3 col-form-label">Email</label>
           <div class="col-sm-9">
             <input type="email" class="form-control" formControlName="email" data-test="email" id="email">
           </div>
-          <div *ngIf="submitted && f['email'].errors" class="alert alert-danger mt-3 p-2" role="alert">
-            <div *ngIf="f['email'].errors['required']">Email is required</div>
+          @if (submitted && f['email'].errors) {
+<div class="alert alert-danger mt-3 p-2" role="alert">
+            @if (f['email'].errors['required']) {
+<div>Email is required</div>
+}
           </div>
+}
         </div>
         <div class="row mb-3">
           <label for="failed_login_attempts" class="col-sm-3 col-form-label">Failed login attempts</label>
@@ -120,29 +168,39 @@
             <input type="text" class="form-control" formControlName="failed_login_attempts" data-test="failed_login_attempts" id="failed_login_attempts">
           </div>
         </div>
-        <div *ngIf="isAddMode" class="row mb-3">
+        @if (isAddMode) {
+<div class="row mb-3">
           <label for="password" class="col-sm-3 col-form-label">Password</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" formControlName="password" data-test="password" id="password">
           </div>
-          <div *ngIf="submitted && f['password'].errors" class="alert alert-danger mt-3 p-2" role="alert">
-            <div *ngIf="f['password'].errors['required']">Password is required</div>
+          @if (submitted && f['password'].errors) {
+<div class="alert alert-danger mt-3 p-2" role="alert">
+            @if (f['password'].errors['required']) {
+<div>Password is required</div>
+}
           </div>
+}
         </div>
+}
       </div>
     </div>
     <div class="row">
       <div class="col-12">
         <button type="submit" class="btn btn-primary" data-test="user-submit">Save</button>
         <a href="#" routerLink="/admin/users" class="mx-3 link-secondary" data-test="back">Back</a>
-        <div *ngIf="isUpdated && !hideAlert" [ngClass]="fadeOutMessage()" class="alert alert-success mt-3"
+        @if (isUpdated && !hideAlert) {
+<div [ngClass]="fadeOutMessage()" class="alert alert-success mt-3"
              role="alert">
           User saved!
         </div>
-        <div *ngIf="error && !hideAlert" [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
+}
+        @if (error && !hideAlert) {
+<div [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
              role="alert">
           {{error}}
         </div>
+}
       </div>
     </div>
   </form>

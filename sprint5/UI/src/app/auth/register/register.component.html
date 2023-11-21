@@ -16,12 +16,16 @@
                      placeholder="Your first name *"
                      value=""/>
             </div>
-            <div data-test="first-name-error" *ngIf="f['first_name'].invalid && submitted"
+            @if (f['first_name'].invalid && submitted) {
+<div data-test="first-name-error"
                  class="alert alert-danger">
-              <div *ngIf="f['first_name'].errors?.['required']">
+              @if (f['first_name'].errors?.['required']) {
+<div>
                 First name is required.
               </div>
+}
             </div>
+}
           </div>
           <div class="col-md-6">
             <div class="form-group mb-3">
@@ -34,12 +38,16 @@
                      placeholder="Your last name *"
                      value=""/>
             </div>
-            <div data-test="last-name-error" *ngIf="f['last_name'].invalid && submitted"
+            @if (f['last_name'].invalid && submitted) {
+<div data-test="last-name-error"
                  class="alert alert-danger">
-              <div *ngIf="f['last_name'].errors?.['required']">
+              @if (f['last_name'].errors?.['required']) {
+<div>
                 Last name is required.
               </div>
+}
             </div>
+}
           </div>
 
           <div class="form-group mb-3">
@@ -52,12 +60,16 @@
                    [ngClass]="{ 'is-invalid': submitted && f['dob'].errors }"
                    placeholder="Your Date of birth *"
                    value=""/>
-            <div data-test="dob-error" *ngIf="f['dob'].invalid && submitted"
+            @if (f['dob'].invalid && submitted) {
+<div data-test="dob-error"
                  class="alert alert-danger mt-3">
-              <div *ngIf="f['dob'].errors?.['required']">
+              @if (f['dob'].errors?.['required']) {
+<div>
                 Date of Birth is required.
               </div>
+}
             </div>
+}
           </div>
 
           <div class="form-group mb-3">
@@ -69,12 +81,16 @@
                    [ngClass]="{ 'is-invalid': submitted && f['address'].errors }" type="text"
                    placeholder="Your address *"
                    value=""/>
-            <div data-test="address-error" *ngIf="f['address'].invalid && submitted"
+            @if (f['address'].invalid && submitted) {
+<div data-test="address-error"
                  class="alert alert-danger mt-3">
-              <div *ngIf="f['address'].errors?.['required']">
+              @if (f['address'].errors?.['required']) {
+<div>
                 Address is required.
               </div>
+}
             </div>
+}
           </div>
 
           <div class="col-md-4">
@@ -88,15 +104,21 @@
                      placeholder="Your postcode *"
                      value=""/>
             </div>
-            <div data-test="postcode-error" *ngIf="f['postcode'].invalid && submitted"
+            @if (f['postcode'].invalid && submitted) {
+<div data-test="postcode-error"
                  class="alert alert-danger">
-              <div *ngIf="f['postcode'].errors?.['required']">
+              @if (f['postcode'].errors?.['required']) {
+<div>
                 Postcode is required.
               </div>
-              <div *ngIf="f['postcode'].errors?.['pattern']">
+}
+              @if (f['postcode'].errors?.['pattern']) {
+<div>
                 Only 5 numbers are allowed.
               </div>
+}
             </div>
+}
           </div>
           <div class="col-md-8">
             <div class="form-group mb-3">
@@ -109,12 +131,16 @@
                      placeholder="Your city *"
                      value=""/>
             </div>
-            <div data-test="city-error" *ngIf="f['city'].invalid && submitted"
+            @if (f['city'].invalid && submitted) {
+<div data-test="city-error"
                  class="alert alert-danger">
-              <div *ngIf="f['city'].errors?.['required']">
+              @if (f['city'].errors?.['required']) {
+<div>
                 City is required.
               </div>
+}
             </div>
+}
           </div>
           <div class="col-md-6">
             <div class="form-group mb-3">
@@ -127,12 +153,16 @@
                      placeholder="Your state *"
                      value=""/>
             </div>
-            <div data-test="state-error" *ngIf="f['state'].invalid && submitted"
+            @if (f['state'].invalid && submitted) {
+<div data-test="state-error"
                  class="alert alert-danger">
-              <div *ngIf="f['state'].errors?.['required']">
+              @if (f['state'].errors?.['required']) {
+<div>
                 State is required.
               </div>
+}
             </div>
+}
           </div>
           <div class="col-md-6">
             <div class="form-group mb-3">
@@ -142,15 +172,21 @@
                       formControlName="country"
                       [ngClass]="{ 'is-invalid': submitted && f['country'].errors }" class="form-select">
                 <option value="" disabled selected hidden>Select your country *</option>
-                <option *ngFor="let country of countries" value="{{country.code}}">{{country.name}}</option>
+                @for (country of countries; track country) {
+  <option value="{{country.code}}">{{country.name}}</option>
+}
               </select>
             </div>
-            <div data-test="country-error" *ngIf="f['country'].invalid && submitted"
+            @if (f['country'].invalid && submitted) {
+<div data-test="country-error"
                  class="alert alert-danger">
-              <div *ngIf="f['country'].errors?.['required']">
+              @if (f['country'].errors?.['required']) {
+<div>
                 Country is required.
               </div>
+}
             </div>
+}
           </div>
           <div class="form-group mb-3">
             <label for="phone" class="form-label">Phone</label>
@@ -161,15 +197,21 @@
                    [ngClass]="{ 'is-invalid': submitted && f['phone'].errors }" type="text"
                    placeholder="Your phone *"
                    value=""/>
-            <div data-test="phone-error" *ngIf="f['phone'].invalid && submitted"
+            @if (f['phone'].invalid && submitted) {
+<div data-test="phone-error"
                  class="alert alert-danger mt-3">
-              <div *ngIf="f['phone'].errors?.['required']">
+              @if (f['phone'].errors?.['required']) {
+<div>
                 Phone is required.
               </div>
-              <div *ngIf="f['phone'].errors?.['pattern']">
+}
+              @if (f['phone'].errors?.['pattern']) {
+<div>
                 Only numbers are allowed.
               </div>
+}
             </div>
+}
           </div>
           <div class="form-group mb-3">
             <label for="email" class="form-label">E-mail address</label>
@@ -180,15 +222,21 @@
                    [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" type="text"
                    placeholder="Your e-mail *"
                    value=""/>
-            <div data-test="email-error" *ngIf="f['email'].invalid && submitted"
+            @if (f['email'].invalid && submitted) {
+<div data-test="email-error"
                  class="alert alert-danger mt-3">
-              <div *ngIf="f['email'].errors?.['required']">
+              @if (f['email'].errors?.['required']) {
+<div>
                 E-mail is required.
               </div>
-              <div *ngIf="f['email'].errors?.['pattern']">
+}
+              @if (f['email'].errors?.['pattern']) {
+<div>
                 E-mail format is invalid.
               </div>
+}
             </div>
+}
           </div>
           <div class="form-group mb-3">
             <label for="password" class="form-label">Password</label>
@@ -199,25 +247,35 @@
                    [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" type="password"
                    placeholder="Your password *"
                    value=""/>
-            <div data-test="password-error" *ngIf="f['password'].invalid && submitted"
+            @if (f['password'].invalid && submitted) {
+<div data-test="password-error"
                  class="alert alert-danger mt-3">
-              <div *ngIf="f['password'].errors?.['required']">
+              @if (f['password'].errors?.['required']) {
+<div>
                 Password is required.
               </div>
-              <div *ngIf="f['password'].errors?.['minlength']">
+}
+              @if (f['password'].errors?.['minlength']) {
+<div>
                 Password must be minimal 6 characters long.
               </div>
-              <div *ngIf="f['password'].errors?.['maxlength']">
+}
+              @if (f['password'].errors?.['maxlength']) {
+<div>
                 Password can not be more than 40 characters long.
               </div>
+}
             </div>
+}
           </div>
           <button type="submit" data-test="register-submit" class="btnSubmit mb-3">Register</button>
-          <div data-test="register-error" *ngIf="error" class="alert alert-danger">
+          @if (error) {
+<div data-test="register-error" class="alert alert-danger">
             <div>
               <div class="help-block">{{error}}</div>
             </div>
           </div>
+}
         </div>
       </form>
     </div>

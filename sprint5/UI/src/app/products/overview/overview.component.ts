@@ -21,7 +21,7 @@ export class OverviewComponent implements OnInit {
 
   search: FormGroup | any;
   resultState: string = '';
-  p: number = 1;
+  currentPage: number = 1;
   results: Pagination<Product>;
   brands: Brand[];
   categories: any;
@@ -62,8 +62,14 @@ export class OverviewComponent implements OnInit {
       });
   }
 
+  onPageChange(page: number) {
+    // Handle page change here (e.g., fetch data for the selected page)
+    this.currentPage = page;
+    this.getProducts();
+  }
+
   getProducts() {
-    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), this.p).subscribe(res => {
+    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), this.currentPage).subscribe(res => {
       this.results = res;
       this.results.data.map((item: Product) => {
         if (item.is_location_offer) {
@@ -82,7 +88,7 @@ export class OverviewComponent implements OnInit {
     }
     this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0).subscribe(res => {
       this.resultState = 'filter_completed';
-      this.p = 1;
+      this.currentPage = 1;
       this.results = res;
       this.results.data.map((item: Product) => {
         if (item.is_location_offer) {
@@ -101,7 +107,7 @@ export class OverviewComponent implements OnInit {
     }
     this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0).subscribe(res => {
       this.resultState = 'filter_completed';
-      this.p = 1;
+      this.currentPage = 1;
       this.results = res;
       this.results.data.map((item: Product) => {
         if (item.is_location_offer) {
@@ -109,11 +115,6 @@ export class OverviewComponent implements OnInit {
         }
       })
     });
-  }
-
-  handlePageChange(event: number): void {
-    this.p = event;
-    this.getProducts();
   }
 
   onSearchSubmit() {

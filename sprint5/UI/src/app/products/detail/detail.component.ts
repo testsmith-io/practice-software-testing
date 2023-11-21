@@ -6,7 +6,7 @@ import {ToastService} from "../../_services/toast.service";
 import {Product} from "../../models/product";
 import DiscountUtil from "../../_helpers/discount.util";
 import {ProductService} from "../../_services/product.service";
-import {Options} from "@angular-slider/ngx-slider";
+import { Options } from 'ngx-slider-v2';
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
 
 @Component({

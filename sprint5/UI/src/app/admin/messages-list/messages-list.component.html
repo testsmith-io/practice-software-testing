@@ -1,6 +1,7 @@
 <h1 data-test="page-title">Messages</h1>
 
-<table class="table table-hover" *ngIf="results?.data">
+@if (results?.data) {
+<table class="table table-hover">
   <thead>
   <tr>
     <th scope="col">Name</th>
@@ -10,8 +11,9 @@
   </tr>
   </thead>
   <tbody>
+  @for (item of results.data; track item) {
   <tr
-    *ngFor="let item of results.data | paginate: { itemsPerPage: results.per_page, currentPage: p, totalItems: results.total }">
+   >
     <td>{{(item.user) ? item.user.first_name + ' ' + item.user.last_name : item.name}}</td>
     <td>{{item.subject}}</td>
     <td><span class="badge rounded-pill"
@@ -22,9 +24,10 @@
       <a routerLink="{{item.id}}" attr.data-test="message-details-{{item.id}}" class="btn btn-sm btn-primary mr-1">Details</a>
     </td>
   </tr>
+}
   </tbody>
   <tfoot>
-  <pagination-controls [autoHide]="true" [responsive]="true"
-                       (pageChange)="handlePageChange($event)"></pagination-controls>
+  <app-pagination [currentPage]="currentPage" [lastPage]="results.last_page" (pageChange)="onPageChange($event)"></app-pagination>
   </tfoot>
 </table>
+}

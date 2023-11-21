@@ -1,6 +1,7 @@
 <h1 data-test="page-title">Invoices</h1>
 
-<table class="table table-hover" *ngIf="results">
+@if (results) {
+<table class="table table-hover">
   <thead>
   <tr>
     <th scope="col">Invoice Number</th>
@@ -10,7 +11,8 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let item of results.data | paginate: { itemsPerPage: results.per_page, currentPage: p, totalItems: results.total }">
+  @for (item of results.data; track item) {
+  <tr>
     <td>{{item.invoice_number}}</td>
     <td>{{item.billing_address}}</td>
     <td>{{item.invoice_date}}</td>
@@ -19,8 +21,10 @@
       <a routerLink="{{item.id}}" class="btn btn-sm btn-primary mr-1">Details</a>
     </td>
   </tr>
+}
   </tbody>
   <tfoot>
 
   </tfoot>
 </table>
+}

@@ -11,5 +11,15 @@
   ],
   "include": [
     "src/**/*.d.ts"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true,
+    "_enabledBlockTypes": [
+      "if", "switch", "for"
+    ],
+    "enableIvy": false
+  }
 }

@@ -20,8 +20,10 @@
   </tr>
   </thead>
 
-  <tbody *ngIf="products">
-  <tr *ngFor="let product of products.data | paginate: { itemsPerPage: products.per_page, currentPage: p, totalItems: products.total }">
+  @if (products) {
+<tbody>
+  @for (product of products.data; track product) {
+  <tr>
     <td>{{product.id}}</td>
     <td>{{product.name}}</td>
     <td>{{product.stock}}</td>
@@ -33,8 +35,10 @@
       </button>
     </td>
   </tr>
+}
   </tbody>
+}
   <tfoot>
-    <pagination-controls [autoHide]="true" [responsive]="true" (pageChange)="handlePageChange($event)"></pagination-controls>
+    <app-pagination [currentPage]="currentPage" [lastPage]="products.last_page" (pageChange)="onPageChange($event)"></app-pagination>
   </tfoot>
 </table>

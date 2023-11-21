@@ -3,16 +3,22 @@
     <div class="col-md-8 auth-form">
       <h3>Contact</h3>
 
-      <div *ngIf="showConfirmation" class="alert alert-success mt-3"
+      @if (showConfirmation) {
+<div class="alert alert-success mt-3"
            role="alert">
         Thanks for your message! We will contact you shortly.
       </div>
-      <form *ngIf="!showConfirmation" [formGroup]="contact" (ngSubmit)="onSubmit()">
+}
+      @if (!showConfirmation) {
+<form [formGroup]="contact" (ngSubmit)="onSubmit()">
         <div class="row">
-          <div class="row mb-3" *ngIf="name">
+          @if (name) {
+<div class="row mb-3">
             Hello {{name}}, please fill out this form to submit your message.
           </div>
-          <div class="row" *ngIf="!name">
+}
+          @if (!name) {
+<div class="row">
             <div class="col-md-6">
               <div class="form-group mb-3">
                 <label for="first_name" class="form-label">First name</label>
@@ -25,11 +31,15 @@
                        placeholder="Your first name *"
                        value=""/>
               </div>
-              <div *ngIf="submitted && f['first_name'].errors" id="first_name_alert" data-test="first-name-error"
+              @if (submitted && f['first_name'].errors) {
+<div id="first_name_alert" data-test="first-name-error"
                    class="alert alert-danger mt-3 p-2"
                    role="alert">
-                <div *ngIf="f['first_name'].errors['required']">First name is required</div>
+                @if (f['first_name'].errors['required']) {
+<div>First name is required</div>
+}
               </div>
+}
             </div>
             <div class="col-md-6">
               <div class="form-group mb-3">
@@ -43,11 +53,15 @@
                        placeholder="Your last name *"
                        value=""/>
               </div>
-              <div *ngIf="submitted && f['last_name'].errors" id="last_name_alert" data-test="last-name-error"
+              @if (submitted && f['last_name'].errors) {
+<div id="last_name_alert" data-test="last-name-error"
                    class="alert alert-danger mt-3 p-2"
                    role="alert">
-                <div *ngIf="f['last_name'].errors['required']">Last name is required</div>
+                @if (f['last_name'].errors['required']) {
+<div>Last name is required</div>
+}
               </div>
+}
             </div>
             <div class="form-group mb-3">
               <label for="email" class="form-label">Email address</label>
@@ -59,14 +73,21 @@
                      type="email"
                      placeholder="Your email *"
                      value=""/>
-              <div *ngIf="submitted && f['email'].errors" id="email_alert" data-test="email-error"
+              @if (submitted && f['email'].errors) {
+<div id="email_alert" data-test="email-error"
                    class="alert alert-danger mt-3 p-2"
                    role="alert">
-                <div *ngIf="f['email'].errors['required']">Email is required</div>
-                <div *ngIf="f['email'].errors['email']">Email format is invalid</div>
+                @if (f['email'].errors['required']) {
+<div>Email is required</div>
+}
+                @if (f['email'].errors['email']) {
+<div>Email format is invalid</div>
+}
               </div>
+}
             </div>
           </div>
+}
           <div class="row">
             <div class="col-md-12">
               <div class="form-group mb-3">
@@ -83,11 +104,15 @@
                   <option value="status-of-order">Status of my order</option>
                 </select>
               </div>
-              <div *ngIf="submitted && f['subject'].errors" id="subject_alert" data-test="subject-error"
+              @if (submitted && f['subject'].errors) {
+<div id="subject_alert" data-test="subject-error"
                    class="alert alert-danger mt-3 p-2"
                    role="alert">
-                <div *ngIf="f['subject'].errors['required']">Subject is required</div>
+                @if (f['subject'].errors['required']) {
+<div>Subject is required</div>
+}
               </div>
+}
             </div>
 
             <div class="form-group mb-3">
@@ -101,12 +126,18 @@
                         rows="5">
               </textarea>
               </div>
-              <div *ngIf="submitted && f['message'].errors" id="message_alert" data-test="message-error"
+              @if (submitted && f['message'].errors) {
+<div id="message_alert" data-test="message-error"
                    class="alert alert-danger mt-3 p-2"
                    role="alert">
-                <div *ngIf="f['message'].errors['required']">Message is required</div>
-                <div *ngIf="f['message'].errors['minlength']">Message must be minimal 50 characters</div>
+                @if (f['message'].errors['required']) {
+<div>Message is required</div>
+}
+                @if (f['message'].errors['minlength']) {
+<div>Message must be minimal 50 characters</div>
+}
               </div>
+}
             </div>
 
             <div class="form-group mb-3">
@@ -123,25 +154,34 @@
                 <small id="attachmentHelp" class="form-text text-muted">Only files with the <strong>txt</strong>
                   extension are allowed, and files must be 0kb.</small>
               </div>
-              <div *ngIf="submitted && f['attachment'].errors" id="attachment_alert" data-test="attachment-error"
+              @if (submitted && f['attachment'].errors) {
+<div id="attachment_alert" data-test="attachment-error"
                    class="alert alert-danger mt-3 p-2"
                    role="alert">
-                <div *ngIf="f['attachment'].errors['incorrectType']">File should have a txt extension.</div>
-                <div *ngIf="f['attachment'].errors['incorrectSize']">File should be empty.</div>
+                @if (f['attachment'].errors['incorrectType']) {
+<div>File should have a txt extension.</div>
+}
+                @if (f['attachment'].errors['incorrectSize']) {
+<div>File should be empty.</div>
+}
               </div>
+}
             </div>
 
             <div class="input-group mb-3">
               <input type="submit" class="btnSubmit" data-test="contact-submit" value="Send"/>
             </div>
-            <div *ngIf="error" class="alert alert-danger">
+            @if (error) {
+<div class="alert alert-danger">
               <div>
                 <div class="help-block">{{error}}</div>
               </div>
             </div>
+}
           </div>
         </div>
       </form>
+}
     </div>
   </div>
 </div>

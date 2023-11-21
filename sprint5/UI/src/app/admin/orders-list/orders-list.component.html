@@ -8,7 +8,8 @@
   </div>
 </form>
 
-<table class="table table-hover" *ngIf="results?.data">
+@if (results?.data) {
+<table class="table table-hover">
   <thead>
   <tr>
     <th scope="col">Invoice Number</th>
@@ -20,7 +21,8 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let item of results.data | paginate: { itemsPerPage: results.per_page, currentPage: p, totalItems: results.total }">
+  @for (item of results.data; track item) {
+  <tr>
     <td>{{item.invoice_number}}</td>
     <td>{{item.billing_address}}</td>
     <td>{{item.invoice_date}}</td>
@@ -30,8 +32,10 @@
       <a routerLink="edit/{{item.id}}" attr.data-test="order-edit-{{item.id}}" class="btn btn-sm btn-primary mx-2">Edit</a>
     </td>
   </tr>
+}
   </tbody>
   <tfoot>
-    <pagination-controls [autoHide]="true" [responsive]="true" (pageChange)="handlePageChange($event)"></pagination-controls>
+  <app-pagination [currentPage]="currentPage" [lastPage]="results.last_page" (pageChange)="onPageChange($event)"></app-pagination>
   </tfoot>
 </table>
+}

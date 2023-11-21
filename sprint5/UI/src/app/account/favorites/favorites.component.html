@@ -1,10 +1,13 @@
 <div class="col">
   <h1 data-test="page-title">Favorites</h1>
-  <div *ngIf="!favorites?.length">
+  @if (!favorites?.length) {
+<div>
     There are no favorites yet. In order to add favorites, please go to the product listing and mark some products as
     your favorite.
   </div>
-  <div attr.data-test="favorite-{{favorite.product.id}}" *ngFor="let favorite of favorites" class="card mb-3">
+}
+  @for (favorite of favorites; track favorite) {
+  <div attr.data-test="favorite-{{favorite.product.id}}" class="card mb-3">
     <div class="row no-gutters">
       <div class="col-md-3 text-center">
         <img src="assets/img/products/{{favorite.product.product_image.file_name}}" class="card-img"
@@ -21,4 +24,5 @@
       </div>
     </div>
   </div>
+}
 </div>
