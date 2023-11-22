@@ -126,7 +126,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '20.9.0'
       - name: Make envfile sprint 5
         uses: danielr1996/envsubst-action@1.0.0
         env:
