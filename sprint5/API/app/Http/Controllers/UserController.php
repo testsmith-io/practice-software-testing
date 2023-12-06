@@ -160,8 +160,9 @@ class UserController extends Controller {
                 }
             }
             return response()->json(['error' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
+        } else {
+            return $this->respondWithToken($token);
         }
-        return $this->respondWithToken($token);
     }
 
     /**
