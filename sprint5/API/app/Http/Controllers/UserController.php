@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class UserController extends Controller {
+    const MAX_LOGIN_ATTEMPTS = 3;
 
     public function __construct() {
         $this->middleware('auth:users', ['except' => ['login', 'store', 'forgotPassword', 'refresh']]);
@@ -147,22 +148,68 @@ class UserController extends Controller {
      *     )
      * )
      */
-    public function login(Request $request) {
-        $credentials = $request->all(['email', 'password']);
+    public function login(Request $request)
+    {
+        $credentials = $request->only(['email', 'password']);
 
-        if (!$token = app('auth')->attempt($credentials)) {
-            $user = User::where('email', '=', $credentials['email'])->first();
-            if ($user && $user->role != "admin") {
-                if ($user['failed_login_attempts'] >= 3) {
-                    return response()->json(['error' => 'Account locked, too many failed attempts. Please contact the administrator.'], ResponseAlias::HTTP_LOCKED);
-                } else {
-                    User::where('email', '=', $credentials['email'])->increment('failed_login_attempts', 1);
-                }
-            }
-            return response()->json(['error' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
-        } else {
-            return $this->respondWithToken($token);
+        // Validate input
+        $this->validateLogin($request);
+
+        // Attempt to get the user
+        $user = User::where('email', $credentials['email'])->first();
+
+        // Check if user exists and failed login attempts
+        if (!$user || $user->failed_login_attempts >= self::MAX_LOGIN_ATTEMPTS) {
+            return $this->lockedAccountResponse();
         }
+
+        // Attempt login
+        if (!auth()->attempt($credentials)) {
+            $this->incrementLoginAttempts($user);
+            return $this->failedLoginResponse();
+        }
+
+        // Reset failed login attempts on successful login
+        $this->resetLoginAttempts($user);
+
+        // Proceed with successful login response
+        $token = auth()->attempt($credentials);
+        return $this->successfulLoginResponse($token);
+    }
+
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+    }
+
+    protected function incrementLoginAttempts($user)
+    {
+        if ($user->failed_login_attempts < self::MAX_LOGIN_ATTEMPTS) {
+            $user->increment('failed_login_attempts');
+        }
+    }
+
+    protected function resetLoginAttempts($user)
+    {
+        $user->update(['failed_login_attempts' => 0]);
+    }
+
+    protected function lockedAccountResponse()
+    {
+        return response()->json(['error' => 'Account locked, too many failed attempts. Please contact the administrator.'], ResponseAlias::HTTP_LOCKED);
+    }
+
+    protected function failedLoginResponse()
+    {
+        return response()->json(['error' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
+    }
+
+    protected function successfulLoginResponse($token)
+    {
+        return $this->respondWithToken($token);
     }
 
     /**
