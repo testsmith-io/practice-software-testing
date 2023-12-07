@@ -158,14 +158,19 @@ class UserController extends Controller {
         // Attempt to get the user
         $user = User::where('email', $credentials['email'])->first();
 
-        // Check if user exists and failed login attempts
-        if (!$user || $user->failed_login_attempts >= self::MAX_LOGIN_ATTEMPTS) {
-            return $this->lockedAccountResponse();
+        // Check if user exists and if role is not admin
+        if ($user && $user->role != "admin") {
+            // Check failed login attempts for non-admin users
+            if ($user->failed_login_attempts >= self::MAX_LOGIN_ATTEMPTS) {
+                return $this->lockedAccountResponse();
+            }
         }
 
         // Attempt login
         if (!auth()->attempt($credentials)) {
-            $this->incrementLoginAttempts($user);
+            if ($user && $user->role != "admin") {
+                $this->incrementLoginAttempts($user);
+            }
             return $this->failedLoginResponse();
         }
 
