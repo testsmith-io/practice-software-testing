@@ -8,7 +8,7 @@ concurrency: production_environment
 
 jobs:
   deploy-sprint1:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - name: Setup PHP
@@ -35,7 +35,7 @@ jobs:
           dep: upload-sprint1 production
           deployer-version: "6.9.0"
   deploy-sprint2:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - name: Setup PHP
@@ -62,7 +62,7 @@ jobs:
           dep: upload-sprint2 production
           deployer-version: "6.9.0"
   deploy-sprint3:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - name: Setup PHP
@@ -89,7 +89,7 @@ jobs:
           dep: upload-sprint3 production
           deployer-version: "6.9.0"
   deploy-sprint4:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - name: Setup PHP
@@ -116,7 +116,7 @@ jobs:
           dep: upload-sprint4 production
           deployer-version: "6.9.0"
   deploy-sprint5:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - name: Setup PHP
@@ -147,7 +147,7 @@ jobs:
           dep: upload-sprint5 production
           deployer-version: "6.9.0"
   deploy-sprint5-with-bugs:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - name: Setup PHP
