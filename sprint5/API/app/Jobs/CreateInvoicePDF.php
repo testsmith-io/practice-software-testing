@@ -6,6 +6,7 @@ use App\Models\Download;
 use App\Models\Invoice;
 use App\Models\JobsInformation;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -34,10 +35,9 @@ class CreateInvoicePDF implements ShouldQueue {
         $jobInfo->start_time = now();
         $jobInfo->save();
 
-        Download::where('name', $this->id)
-        ->update(['status' => 'IN_PROGRESS']);
+        Download::where('name', $this->id)->update(['status' => 'IN_PROGRESS']);
 
-        $invoice = Invoice::with('invoicelines', 'invoicelines.product')->where('invoice_number', $this->id)->first();
+        $invoice = Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->where('invoice_number', $this->id)->first();
 
         $pdf = PDF::loadView('invoice', ['invoice' => $invoice])->setPaper('legal', 'portrait');
         $fileName = sprintf('%s.pdf',

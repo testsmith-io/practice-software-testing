@@ -20,21 +20,21 @@
   </tr>
   </thead>
   <tbody>
-  @for (category of categories; track category) {
-  <tr>
-    <td>{{category.id}}</td>
-    <td>{{category.parent_id}}</td>
-    <td>{{category.name}}</td>
-    <td>{{category.slug}}</td>
-    <td style="white-space: nowrap">
-      <a routerLink="edit/{{category.id}}" attr.data-test="category-edit-{{category.id}}"
-         class="btn btn-sm btn-primary mx-2">Edit</a>
-      <button (click)="deleteCategory(category.id)" attr.data-test="category-delete-{{category.id}}"
-              class="btn btn-sm btn-danger">
-        <span>Delete</span>
-      </button>
-    </td>
-  </tr>
-}
+    @for (category of categories;track category) {
+      <tr>
+        <td>{{ category.id }}</td>
+        <td>{{ category.parent_id }}</td>
+        <td>{{ category.name }}</td>
+        <td>{{ category.slug }}</td>
+        <td style="white-space: nowrap">
+          <a routerLink="edit/{{category.id}}" attr.data-test="category-edit-{{category.id}}"
+             class="btn btn-sm btn-primary mx-2">Edit</a>
+          <button (click)="deleteCategory(category.id)" attr.data-test="category-delete-{{category.id}}"
+                  class="btn btn-sm btn-danger">
+            <span>Delete</span>
+          </button>
+        </td>
+      </tr>
+    }
   </tbody>
 </table>

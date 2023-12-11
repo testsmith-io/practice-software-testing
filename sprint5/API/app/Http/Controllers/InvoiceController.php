@@ -7,9 +7,15 @@ use App\Http\Requests\Invoice\StoreInvoice;
 use App\Jobs\SendCheckoutEmail;
 use App\Jobs\UpdateProductInventory;
 use App\Mail\Checkout;
+use App\Models\PaymentBankTransferDetails;
 use App\Models\Cart;
 use App\Models\Download;
 use App\Models\Invoice;
+use App\Models\Payment;
+use App\Models\PaymentBnplDetails;
+use App\Models\PaymentCashOnDeliveryDetails;
+use App\Models\PaymentCreditCardDetails;
+use App\Models\PaymentGiftCardDetails;
 use App\Models\Product;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\QueryException;
@@ -78,9 +84,9 @@ class InvoiceController extends Controller {
      */
     public function index() {
         if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->orderBy('invoice_date', 'DESC')->filter()->paginate());
+            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->orderBy('invoice_date', 'DESC')->filter()->paginate());
         } else {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('user_id', Auth::user()->id)->orderBy('invoice_date', 'DESC')->filter()->paginate());
+            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->where('user_id', Auth::user()->id)->orderBy('invoice_date', 'DESC')->filter()->paginate());
         }
     }
 
@@ -169,6 +175,81 @@ class InvoiceController extends Controller {
 
         $invoice->update(['total' => $totalPrice]);
 
+        // After creating the invoice
+        $paymentMethod = $request->input('payment_method');
+
+        // Create a payment record
+        $payment = new Payment([
+            'invoice_id' => $invoice->id,
+            'payment_method' => $paymentMethod
+        ]);
+
+        // Check payment method and create corresponding payment details
+        if ($paymentMethod === 'Bank Transfer') {
+               $request->validate([
+                            'payment_details.bank_name' => 'required|string|max:255|regex:/^[a-zA-Z ]+$/',
+                            'payment_details.account_name' => 'required|string|max:255|regex:/^[a-zA-Z0-9 .\'-]+$/',
+                            'payment_details.account_number' => 'required|string|max:255|regex:/^\d+$/',
+                        ]);
+            $bankTransferDetailsData = $request->input('payment_details');
+            $bankTransferDetails = new PaymentBankTransferDetails($bankTransferDetailsData);
+            $bankTransferDetails->save();
+
+            $payment->payment_details_id = $bankTransferDetails->id;
+            $payment->payment_details_type = PaymentBankTransferDetails::class;
+        }
+
+        if ($paymentMethod === 'Cash on Delivery') {
+            $cashOnDeliveryDetails = new PaymentCashOnDeliveryDetails();
+            $cashOnDeliveryDetails->save();
+
+            $payment->payment_details_id = $cashOnDeliveryDetails->id;
+            $payment->payment_details_type = PaymentCashOnDeliveryDetails::class;
+        }
+
+        if ($paymentMethod === 'Credit Card') {
+                        $request->validate([
+                            'payment_details.credit_card_number' => 'required|string|regex:/^\d{4}-\d{4}-\d{4}-\d{4}$/',
+                            'payment_details.expiration_date' => 'required|date_format:m/Y|after:today',
+                            'payment_details.cvv' => 'required|string|regex:/^\d{3,4}$/',
+                            'payment_details.card_holder_name' => 'required|string|max:255|regex:/^[a-zA-Z ]+$/',
+                        ]);
+            $creditCardDetailsData = $request->input('payment_details');
+            $creditCardDetails = new PaymentCreditCardDetails($creditCardDetailsData);
+            $creditCardDetails->save();
+
+            $payment->payment_details_id = $creditCardDetails->id;
+            $payment->payment_details_type = PaymentCreditCardDetails::class;
+        }
+
+        if ($paymentMethod === 'Buy Now Pay Later') {
+                        $request->validate([
+                            'payment_details.monthly_installments' => 'required|numeric',
+                        ]);
+            $bnplDetailsData = $request->input('payment_details');
+            $bnplDetails = new PaymentBnplDetails($bnplDetailsData);
+            $bnplDetails->save();
+
+            $payment->payment_details_id = $bnplDetails->id;
+            $payment->payment_details_type = PaymentBnplDetails::class;
+        }
+
+        if ($paymentMethod === 'Gift Card') {
+                        $request->validate([
+                            'payment_details.gift_card_number' => 'required|string|max:255|regex:/^[a-zA-Z0-9]+$/',
+                            'payment_details.validation_code' => 'required|string|max:255|regex:/^[a-zA-Z0-9]+$/',
+                        ]);
+            $giftCardDetailsData = $request->input('payment_details');
+            $giftCardDetails = new PaymentGiftCardDetails($giftCardDetailsData);
+            $giftCardDetails->save();
+
+            $payment->payment_details_id = $giftCardDetails->id;
+            $payment->payment_details_type = PaymentGiftCardDetails::class;
+        }
+
+        // Save the payment record
+        $payment->save();
+
         if (App::environment('local')) {
             SendCheckoutEmail::dispatch($invoice->id, Auth::user());
         }
@@ -222,9 +303,9 @@ class InvoiceController extends Controller {
      */
     public function show($id) {
         if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('id', $id)->first());
+            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->where('id', $id)->first());
         } else {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('id', $id)->where('user_id', Auth::user()->id)->first());
+            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->where('id', $id)->where('user_id', Auth::user()->id)->first());
         }
     }
 
@@ -455,9 +536,9 @@ class InvoiceController extends Controller {
         $q = $request->get('q');
 
         if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('invoice_number', 'like', "%$q%")->orWhere('billing_address', 'like', "%$q%")->orWhere('status', 'like', "%$q%")->orderBy('invoice_date', 'DESC')->paginate());
+            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->where('invoice_number', 'like', "%$q%")->orWhere('billing_address', 'like', "%$q%")->orWhere('status', 'like', "%$q%")->orderBy('invoice_date', 'DESC')->paginate());
         } else {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('user_id', Auth::user()->id)->orWhere('invoice_number', 'like', "%$q%")->orWhere('billing_address', 'like', "%$q%")->orWhere('status', 'like', "%$q%")->orderBy('invoice_date', 'DESC')->paginate());
+            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->where('user_id', Auth::user()->id)->orWhere('invoice_number', 'like', "%$q%")->orWhere('billing_address', 'like', "%$q%")->orWhere('status', 'like', "%$q%")->orderBy('invoice_date', 'DESC')->paginate());
         }
     }
 

@@ -1,0 +1,85 @@
+<div class="container login-container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3 login-form-1">
+      @if (!isLoggedIn) {
+        <div><h3>Customer login</h3>
+          <form [formGroup]="cusForm" (ngSubmit)="onCusSubmit()">
+            <div class="input-group mb-3">
+              <input formControlName="email"
+                     data-test="email"
+                     class="form-control"
+                     id="email"
+                     [ngClass]="{ 'is-invalid': cusSubmitted && cf['email'].errors }" type="text"
+                     placeholder="Your Email *"
+                     value=""/>
+            </div>
+            @if (cus_email.invalid && cusSubmitted) {
+              <div
+                class="alert alert-danger">
+
+                @if (cus_email.errors?.required) {
+                  <div>
+                    Email is required.
+                  </div>
+                }
+                @if (cus_email.errors?.['pattern']) {
+                  <div>
+                    Email format is invalid.
+                  </div>
+                }
+              </div>
+            }
+            <div class="input-group mb-3">
+              <input formControlName="password"
+                     data-test="password"
+                     class="form-control"
+                     id="password"
+                     [ngClass]="{ 'is-invalid': cusSubmitted && cf['password'].errors }" type="password"
+                     placeholder="Your Password *" value=""/>
+            </div>
+            @if (cus_password.invalid && cusSubmitted) {
+              <div
+                class="alert alert-danger">
+
+                @if (cus_password.errors?.required) {
+                  <div>
+                    Password is required.
+                  </div>
+                }
+                @if (cus_password.errors?.minlength || cus_password.errors?.maxlength) {
+                  <div>
+                    Password length is invalid
+                  </div>
+                }
+              </div>
+            }
+            <div class="input-group mb-3">
+              <input type="submit" class="btnSubmit" data-test="login-submit" value="Login"/>
+            </div>
+            @if (customerError) {
+              <div class="alert alert-danger">
+                <div class="help-block">{{ customerError }}</div>
+              </div>
+            }
+            <div class="input-group mb-3">
+              <p>Not yet an account? <a data-test="register-link" routerLink="/auth/register">Register your
+                account</a><br/>
+                <a data-test="forgot-password-link" routerLink="/auth/forgot-password" class="ForgetPwd">Forgot your
+                  Password?</a></p>
+            </div>
+          </form>
+        </div>
+      } @else {
+        <p>Hello {{ customer.first_name }} {{ customer.last_name }}, you are already logged in. You
+          can proceed to checkout.</p>
+        <div class="float-end">
+          <button data-test="proceed-2" [disabled]="!canExitStep2" type="button" class="btn btn-success" awNextStep>
+            Proceed to checkout
+          </button>
+        </div>
+
+      }
+
+    </div>
+  </div>
+</div>

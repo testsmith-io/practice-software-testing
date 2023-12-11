@@ -1,164 +1,162 @@
 @if (!invoice?.invoice_date) {
-<div class="container mt-5">
-  <p>This invoice doesn't exist.</p>
-</div>
+  <div class="container mt-5">
+    <p>This invoice doesn't exist.</p>
+  </div>
 }
 @if (invoice?.invoice_date) {
-<div class="container mt-5">
-  <div class="row mb-3">
-    <div class="input-group">
-      <button class="btn btn-warning" [disabled]="!isDownloadReady" (click)="downloadPDF()" type="submit" data-test="download-invoice">Download
-        PDF
-      </button>
+  <div class="container mt-5">
+    <div class="row mb-3">
+      <div class="input-group">
+        <button class="btn btn-warning" [disabled]="!isDownloadReady" (click)="downloadPDF()" type="submit"
+                data-test="download-invoice">Download
+          PDF
+        </button>
+      </div>
+      @if (error && !hideAlert) {
+        <div [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
+             role="alert">
+          {{ error }}
+        </div>
+      }
     </div>
-    @if (error && !hideAlert) {
-<div [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
-         role="alert">
-      {{error}}
-    </div>
-}
-  </div>
-  <div class="row">
-    <div class="col">
-      <h3>General Information</h3>
-      <form>
-        <div class="form-group row">
-          <label for="invoice_date" class="col-sm-3 col-form-label">Invoice Number</label>
-          <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext" data-test="invoice-number" id="invoice_number"
-                   value="{{invoice.invoice_number}}">
+    <div class="row">
+      <div class="col">
+        <h3>General Information</h3>
+        <form>
+          <div class="form-group row">
+            <label for="invoice_date" class="col-sm-3 col-form-label">Invoice Number</label>
+            <div class="col-sm-9">
+              <input type="text" readonly class="form-control-plaintext" data-test="invoice-number" id="invoice_number"
+                     value="{{invoice.invoice_number}}">
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="invoice_date" class="col-sm-3 col-form-label">Invoice Date</label>
-          <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext" data-test="invoice-date" id="invoice_date"
-                   value="{{invoice.invoice_date}}">
+          <div class="form-group row">
+            <label for="invoice_date" class="col-sm-3 col-form-label">Invoice Date</label>
+            <div class="col-sm-9">
+              <input type="text" readonly class="form-control-plaintext" data-test="invoice-date" id="invoice_date"
+                     value="{{invoice.invoice_date}}">
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="total" class="col-sm-3 col-form-label">Total</label>
-          <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext" data-test="total" id="total"
-                   value="$ {{invoice.total.toFixed(2)}}">
+          <div class="form-group row">
+            <label for="total" class="col-sm-3 col-form-label">Total</label>
+            <div class="col-sm-9">
+              <input type="text" readonly class="form-control-plaintext" data-test="total" id="total"
+                     value="$ {{invoice.total.toFixed(2)}}">
+            </div>
           </div>
-        </div>
-      </form>
-      <div class="mb-3"></div>
+        </form>
+        <div class="mb-3"></div>
 
-      <h3>Billing Address</h3>
-      <form>
-        <div class="form-group row">
-          <label for="address" class="col-sm-3 col-form-label">Address</label>
-          <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext" data-test="address" id="address"
-                   value="{{invoice.billing_address}}">
+        <h3>Billing Address</h3>
+        <form>
+          <div class="form-group row">
+            <label for="address" class="col-sm-3 col-form-label">Address</label>
+            <div class="col-sm-9">
+              <input type="text" readonly class="form-control-plaintext" data-test="address" id="address"
+                     value="{{invoice.billing_address}}">
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="postcode" class="col-sm-3 col-form-label">Postcode</label>
-          <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext" data-test="postcode" id="postcode"
-                   value="{{invoice.billing_postcode}}">
+          <div class="form-group row">
+            <label for="postcode" class="col-sm-3 col-form-label">Postcode</label>
+            <div class="col-sm-9">
+              <input type="text" readonly class="form-control-plaintext" data-test="postcode" id="postcode"
+                     value="{{invoice.billing_postcode}}">
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="city" class="col-sm-3 col-form-label">City</label>
-          <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext" data-test="city" id="city"
-                   value="{{invoice.billing_city}}">
+          <div class="form-group row">
+            <label for="city" class="col-sm-3 col-form-label">City</label>
+            <div class="col-sm-9">
+              <input type="text" readonly class="form-control-plaintext" data-test="city" id="city"
+                     value="{{invoice.billing_city}}">
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="state" class="col-sm-3 col-form-label">State</label>
-          <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext" data-test="state" id="state"
-                   value="{{invoice.billing_state}}">
+          <div class="form-group row">
+            <label for="state" class="col-sm-3 col-form-label">State</label>
+            <div class="col-sm-9">
+              <input type="text" readonly class="form-control-plaintext" data-test="state" id="state"
+                     value="{{invoice.billing_state}}">
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="country" class="col-sm-3 col-form-label">Country</label>
-          <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext" data-test="country" id="country"
-                   value="{{invoice.billing_country}}">
+          <div class="form-group row">
+            <label for="country" class="col-sm-3 col-form-label">Country</label>
+            <div class="col-sm-9">
+              <input type="text" readonly class="form-control-plaintext" data-test="country" id="country"
+                     value="{{invoice.billing_country}}">
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
+      <div class="col">
+        <h3>Payment Information</h3>
+        <form>
+          <div class="form-group row">
+            <label for="payment_method" class="col-sm-3 col-form-label">Payment Method</label>
+            <div class="col-sm-9">
+              <input type="text" readonly class="form-control-plaintext" data-test="payment-method" id="payment_method"
+                     value="{{invoice.payment.payment_method}}">
+            </div>
+          </div>
+          <div *ngFor="let detail of invoice.payment.payment_details | keyvalue">
+            <div class="form-group row">
+              <label for="{{detail.key}}"
+                     class="col-sm-3 col-form-label">{{ detail.key | replaceUnderscores | titleCase }}</label>
+              <div class="col-sm-9">
+                <input type="text" readonly class="form-control-plaintext" [id]="detail.key" value="{{detail.value}}">
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
-    <div class="col">
-      <h3>Payment Information</h3>
-      <form>
-        <div class="form-group row">
-          <label for="payment_method" class="col-sm-3 col-form-label">Payment Method</label>
-          <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext" data-test="payment-method" id="payment_method"
-                   value="{{invoice.payment_method}}">
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="account_name" class="col-sm-3 col-form-label">Account Name</label>
-          <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext" data-test="account-name" id="account_name"
-                   value="{{invoice.payment_account_name}}">
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="account_number" class="col-sm-3 col-form-label">Account Number</label>
-          <div class="col-sm-9">
-            <input type="text" readonly class="form-control-plaintext" data-test="account-number" id="account_number"
-                   value="{{invoice.payment_account_number}}">
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-  <div class="row mt-3">
-    <div class="col">
-      <h3>Products</h3>
-      <table class="table table-hover">
-        <thead>
-        <tr>
-          <th scope="col">Quantity</th>
-          <th scope="col">Product</th>
-          <th class="text-end" scope="col">Price</th>
-          <th class="text-end" scope="col">Total</th>
-        </tr>
-        </thead>
-        <tbody>
-        @for (invoiceline of invoice.invoicelines; track invoiceline) {
-  <tr>
-          <td>{{invoiceline.quantity}}</td>
-          <td>{{invoiceline.product.name}}&nbsp;@if (invoiceline.discount_percentage) {
-<span
-           
-            class="badge rounded-pill bg-warning me-1">-{{invoiceline.discount_percentage}}%</span>
-}<br/>@if (invoiceline.product.is_rental) {
-<small> (Item for rent, price per
-            hour)</small>
-}</td>
-          <td class="col-md-2 text-end"><span
-            [ngClass]="{'discounted' : invoiceline.discount_percentage}">${{invoiceline.product.price | number: '1.2-2'}}</span>@if (invoiceline.discounted_price) {
-<br
-           />
-}@if (invoiceline.discount_percentage) {
-<span
-            data-test="offer-price">$<span
-            id="discount-price">{{invoiceline.discounted_price}}</span></span>
-}</td>
-          <td class="col-md-2 text-end"><span
-            [ngClass]="{'discounted' : invoiceline.discount_percentage}">${{invoiceline.quantity * invoiceline.product.price | number: '1.2-2'}}</span>@if (invoiceline.discounted_price) {
-<br
-           />
-}@if (invoiceline.discount_percentage) {
-<span
-            data-test="offer-price">$<span
-            id="discount-total-price">{{invoiceline.quantity * invoiceline.discounted_price | number: '1.2-2'}}</span></span>
-}</td>
-        </tr>
-}
-        </tbody>
-      </table>
+    <div class="row mt-3">
+      <div class="col">
+        <h3>Products</h3>
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th scope="col">Quantity</th>
+            <th scope="col">Product</th>
+            <th class="text-end" scope="col">Price</th>
+            <th class="text-end" scope="col">Total</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (invoiceline of invoice.invoicelines;track invoiceline) {
+              <tr>
+                <td>{{ invoiceline.quantity }}</td>
+                <td>{{ invoiceline.product.name }}&nbsp;@if (invoiceline.discount_percentage) {
+                  <span
+
+                    class="badge rounded-pill bg-warning me-1">-{{ invoiceline.discount_percentage }}%</span>
+                }<br/>@if (invoiceline.product.is_rental) {
+                  <small> (Item for rent, price per
+                    hour)</small>
+                }</td>
+                <td class="col-md-2 text-end"><span
+                  [ngClass]="{'discounted' : invoiceline.discount_percentage}">${{ invoiceline.product.price | number: '1.2-2' }}</span>@if (invoiceline.discounted_price) {
+                  <br
+                  />
+                }
+                  @if (invoiceline.discount_percentage) {
+                    <span
+                      data-test="offer-price">$<span
+                      id="discount-price">{{ invoiceline.discounted_price }}</span></span>
+                  }</td>
+                <td class="col-md-2 text-end"><span
+                  [ngClass]="{'discounted' : invoiceline.discount_percentage}">${{ invoiceline.quantity * invoiceline.product.price | number: '1.2-2' }}</span>@if (invoiceline.discounted_price) {
+                  <br
+                  />
+                }
+                  @if (invoiceline.discount_percentage) {
+                    <span
+                      data-test="offer-price">$<span
+                      id="discount-total-price">{{ invoiceline.quantity * invoiceline.discounted_price | number: '1.2-2' }}</span></span>
+                  }</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-</div>
 }

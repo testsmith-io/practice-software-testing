@@ -39,6 +39,10 @@ All images together are less than 1,5 GB.
 
 Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belongs to the sprint.
 
+## Roll Back - Run Migrations - Seed Database
+
+`docker-compose exec laravel-api php artisan migrate:refresh --seed`
+
 ## Migrate database schema
 
 `docker-compose exec laravel-api php artisan migrate`
@@ -54,6 +58,14 @@ Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belong
 ## Update order status
 
 `docker-compose exec laravel-api php artisan order:update`
+
+## Remove PDF documents
+
+`docker-compose exec laravel-api php artisan invoice:remove`
+
+## Generate PDF documents
+
+`docker-compose exec laravel-api php artisan invoice:generate`
 
 ## Execute unit tests
 

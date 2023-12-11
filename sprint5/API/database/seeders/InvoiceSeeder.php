@@ -24,10 +24,7 @@ class InvoiceSeeder extends Seeder
             'billing_state' => 'Utrecht',
             'billing_country' => 'The Netherlands',
             'billing_postcode' => '1122AB',
-            'total' => '74.04',
-            'payment_method' => 'Cash on Delivery',
-            'payment_account_name' => 'Tester',
-            'payment_account_number' => '09876543ABC'
+            'total' => '74.04'
         ], [
             'id' => Str::ulid()->toBase32(),
             'user_id' => DB::table('users')->where('email', '=', 'customer@practicesoftwaretesting.com')->first()->id,
@@ -38,10 +35,7 @@ class InvoiceSeeder extends Seeder
             'billing_state' => 'Utrecht',
             'billing_country' => 'The Netherlands',
             'billing_postcode' => '1122AB',
-            'total' => '34.47',
-            'payment_method' => 'Cash on Delivery',
-            'payment_account_name' => 'Tester',
-            'payment_account_number' => '09876543ABC'
+            'total' => '34.47'
         ], [
             'id' => Str::ulid()->toBase32(),
             'user_id' => DB::table('users')->where('email', '=', 'customer@practicesoftwaretesting.com')->first()->id,
@@ -52,10 +46,7 @@ class InvoiceSeeder extends Seeder
             'billing_state' => 'Utrecht',
             'billing_country' => 'The Netherlands',
             'billing_postcode' => '1122AB',
-            'total' => '26.14',
-            'payment_method' => 'Cash on Delivery',
-            'payment_account_name' => 'Tester',
-            'payment_account_number' => '09876543ABC'
+            'total' => '26.14'
         ], [
             'id' => Str::ulid()->toBase32(),
             'user_id' => DB::table('users')->where('email', '=', 'customer@practicesoftwaretesting.com')->first()->id,
@@ -66,10 +57,7 @@ class InvoiceSeeder extends Seeder
             'billing_state' => 'Brussels',
             'billing_country' => 'Belgium',
             'billing_postcode' => '1122AB',
-            'total' => '119.24',
-            'payment_method' => 'Bank Transfer',
-            'payment_account_name' => 'Tester',
-            'payment_account_number' => '09876543ABC'
+            'total' => '119.24'
         ], [
             'id' => Str::ulid()->toBase32(),
             'user_id' => DB::table('users')->where('email', '=', 'customer@practicesoftwaretesting.com')->first()->id,
@@ -80,10 +68,7 @@ class InvoiceSeeder extends Seeder
             'billing_state' => 'Brussels',
             'billing_country' => 'Belgium',
             'billing_postcode' => '1122AB',
-            'total' => '107.11',
-            'payment_method' => 'Cash on Delivery',
-            'payment_account_name' => 'Tester',
-            'payment_account_number' => '09876543ABC'
+            'total' => '107.11'
         ], [
             'id' => Str::ulid()->toBase32(),
             'user_id' => DB::table('users')->where('email', '=', 'customer@practicesoftwaretesting.com')->first()->id,
@@ -94,10 +79,7 @@ class InvoiceSeeder extends Seeder
             'billing_state' => 'Utrecht',
             'billing_country' => 'The Netherlands',
             'billing_postcode' => '1122AB',
-            'total' => '20.14',
-            'payment_method' => 'Cash on Delivery',
-            'payment_account_name' => 'Tester',
-            'payment_account_number' => '09876543ABC'
+            'total' => '20.14'
         ], [
             'id' => Str::ulid()->toBase32(),
             'user_id' => DB::table('users')->where('email', '=', 'customer@practicesoftwaretesting.com')->first()->id,
@@ -108,10 +90,7 @@ class InvoiceSeeder extends Seeder
             'billing_state' => 'Utrecht',
             'billing_country' => 'The Netherlands',
             'billing_postcode' => '1122AB',
-            'total' => '52.66',
-            'payment_method' => 'Cash on Delivery',
-            'payment_account_name' => 'Tester',
-            'payment_account_number' => '09876543ABC'
+            'total' => '52.66'
         ]]);
     }
 

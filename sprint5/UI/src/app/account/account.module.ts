@@ -12,6 +12,7 @@ import {TruncatePipe} from "../_helpers/truncate.pipe";
 import {MessagesComponent} from './messages/messages.component';
 import {MessageDetailComponent} from './messages/message-detail/message-detail.component';
 import {PaginationComponent} from "../pagination/pagination.component";
+import {SharedModule} from "../shared.module";
 
 const routes: Routes = [
   {path: '', component: OverviewComponent, canActivate: [UserAuthGuard]},
@@ -38,7 +39,8 @@ const routes: Routes = [
     ReactiveFormsModule,
     CommonModule,
     RouterModule.forChild(routes),
-    PaginationComponent
+    PaginationComponent,
+    SharedModule
   ],
   exports: [RouterModule]
 })

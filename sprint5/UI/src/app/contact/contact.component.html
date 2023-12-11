@@ -4,120 +4,120 @@
       <h3>Contact</h3>
 
       @if (showConfirmation) {
-<div class="alert alert-success mt-3"
-           role="alert">
-        Thanks for your message! We will contact you shortly.
-      </div>
-}
+        <div class="alert alert-success mt-3"
+             role="alert">
+          Thanks for your message! We will contact you shortly.
+        </div>
+      }
       @if (!showConfirmation) {
-<form [formGroup]="contact" (ngSubmit)="onSubmit()">
-        <div class="row">
-          @if (name) {
-<div class="row mb-3">
-            Hello {{name}}, please fill out this form to submit your message.
-          </div>
-}
-          @if (!name) {
-<div class="row">
-            <div class="col-md-6">
-              <div class="form-group mb-3">
-                <label for="first_name" class="form-label">First name</label>
-                <input formControlName="first_name"
-                       id="first_name"
-                       data-test="first-name"
-                       class="form-control"
-                       [ngClass]="{ 'is-invalid': submitted && f['first_name'].errors }"
-                       type="text"
-                       placeholder="Your first name *"
-                       value=""/>
-              </div>
-              @if (submitted && f['first_name'].errors) {
-<div id="first_name_alert" data-test="first-name-error"
-                   class="alert alert-danger mt-3 p-2"
-                   role="alert">
-                @if (f['first_name'].errors['required']) {
-<div>First name is required</div>
-}
-              </div>
-}
-            </div>
-            <div class="col-md-6">
-              <div class="form-group mb-3">
-                <label for="last_name" class="form-label">Last name</label>
-                <input formControlName="last_name"
-                       id="last_name"
-                       data-test="last-name"
-                       class="form-control"
-                       [ngClass]="{ 'is-invalid': submitted && f['last_name'].errors}"
-                       type="text"
-                       placeholder="Your last name *"
-                       value=""/>
-              </div>
-              @if (submitted && f['last_name'].errors) {
-<div id="last_name_alert" data-test="last-name-error"
-                   class="alert alert-danger mt-3 p-2"
-                   role="alert">
-                @if (f['last_name'].errors['required']) {
-<div>Last name is required</div>
-}
-              </div>
-}
-            </div>
-            <div class="form-group mb-3">
-              <label for="email" class="form-label">Email address</label>
-              <input formControlName="email"
-                     data-test="email"
-                     id="email"
-                     class="form-control"
-                     [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
-                     type="email"
-                     placeholder="Your email *"
-                     value=""/>
-              @if (submitted && f['email'].errors) {
-<div id="email_alert" data-test="email-error"
-                   class="alert alert-danger mt-3 p-2"
-                   role="alert">
-                @if (f['email'].errors['required']) {
-<div>Email is required</div>
-}
-                @if (f['email'].errors['email']) {
-<div>Email format is invalid</div>
-}
-              </div>
-}
-            </div>
-          </div>
-}
+        <form [formGroup]="contact" (ngSubmit)="onSubmit()">
           <div class="row">
-            <div class="col-md-12">
-              <div class="form-group mb-3">
-                <label for="subject" class="form-label">Subject</label>
-                <select data-test="subject" id="subject" formControlName="subject"
-                        [ngClass]="{ 'is-invalid': submitted && f['subject'].errors}"
-                        class="form-select">
-                  <option value="" disabled selected hidden>Select a subject</option>
-                  <option value="customer-service">Customer service</option>
-                  <option value="webmaster">Webmaster</option>
-                  <option value="return">Return</option>
-                  <option value="payments">Payments</option>
-                  <option value="warranty">Warranty</option>
-                  <option value="status-of-order">Status of my order</option>
-                </select>
+            @if (name) {
+              <div class="row mb-3">
+                Hello {{ name }}, please fill out this form to submit your message.
               </div>
-              @if (submitted && f['subject'].errors) {
-<div id="subject_alert" data-test="subject-error"
-                   class="alert alert-danger mt-3 p-2"
-                   role="alert">
-                @if (f['subject'].errors['required']) {
-<div>Subject is required</div>
-}
+            }
+            @if (!name) {
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group mb-3">
+                    <label for="first_name" class="form-label">First name</label>
+                    <input formControlName="first_name"
+                           id="first_name"
+                           data-test="first-name"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && f['first_name'].errors }"
+                           type="text"
+                           placeholder="Your first name *"
+                           value=""/>
+                  </div>
+                  @if (submitted && f['first_name'].errors) {
+                    <div id="first_name_alert" data-test="first-name-error"
+                         class="alert alert-danger mt-3 p-2"
+                         role="alert">
+                      @if (f['first_name'].errors['required']) {
+                        <div>First name is required</div>
+                      }
+                    </div>
+                  }
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group mb-3">
+                    <label for="last_name" class="form-label">Last name</label>
+                    <input formControlName="last_name"
+                           id="last_name"
+                           data-test="last-name"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && f['last_name'].errors}"
+                           type="text"
+                           placeholder="Your last name *"
+                           value=""/>
+                  </div>
+                  @if (submitted && f['last_name'].errors) {
+                    <div id="last_name_alert" data-test="last-name-error"
+                         class="alert alert-danger mt-3 p-2"
+                         role="alert">
+                      @if (f['last_name'].errors['required']) {
+                        <div>Last name is required</div>
+                      }
+                    </div>
+                  }
+                </div>
+                <div class="form-group mb-3">
+                  <label for="email" class="form-label">Email address</label>
+                  <input formControlName="email"
+                         data-test="email"
+                         id="email"
+                         class="form-control"
+                         [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
+                         type="email"
+                         placeholder="Your email *"
+                         value=""/>
+                  @if (submitted && f['email'].errors) {
+                    <div id="email_alert" data-test="email-error"
+                         class="alert alert-danger mt-3 p-2"
+                         role="alert">
+                      @if (f['email'].errors['required']) {
+                        <div>Email is required</div>
+                      }
+                      @if (f['email'].errors['email']) {
+                        <div>Email format is invalid</div>
+                      }
+                    </div>
+                  }
+                </div>
               </div>
-}
-            </div>
+            }
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group mb-3">
+                  <label for="subject" class="form-label">Subject</label>
+                  <select data-test="subject" id="subject" formControlName="subject"
+                          [ngClass]="{ 'is-invalid': submitted && f['subject'].errors}"
+                          class="form-select">
+                    <option value="" disabled selected hidden>Select a subject</option>
+                    <option value="customer-service">Customer service</option>
+                    <option value="webmaster">Webmaster</option>
+                    <option value="return">Return</option>
+                    <option value="payments">Payments</option>
+                    <option value="warranty">Warranty</option>
+                    <option value="status-of-order">Status of my order</option>
+                  </select>
+                </div>
+                @if (submitted && f['subject'].errors) {
+                  <div id="subject_alert" data-test="subject-error"
+                       class="alert alert-danger mt-3 p-2"
+                       role="alert">
+                    @if (f['subject'].errors['required']) {
+                      <div>Subject is required</div>
+                    }
+                  </div>
+                }
+              </div>
 
-            <div class="form-group mb-3">
-              <label for="message" class="form-label">Message</label>
-              <div class="col-sm-12">
+              <div class="form-group mb-3">
+                <label for="message" class="form-label">Message</label>
+                <div class="col-sm-12">
               <textarea class="form-control"
                         [ngClass]="{ 'is-invalid': submitted && f['message'].errors }"
                         formControlName="message"
@@ -125,63 +125,63 @@
                         data-test="message"
                         rows="5">
               </textarea>
+                </div>
+                @if (submitted && f['message'].errors) {
+                  <div id="message_alert" data-test="message-error"
+                       class="alert alert-danger mt-3 p-2"
+                       role="alert">
+                    @if (f['message'].errors['required']) {
+                      <div>Message is required</div>
+                    }
+                    @if (f['message'].errors['minlength']) {
+                      <div>Message must be minimal 50 characters</div>
+                    }
+                  </div>
+                }
               </div>
-              @if (submitted && f['message'].errors) {
-<div id="message_alert" data-test="message-error"
-                   class="alert alert-danger mt-3 p-2"
-                   role="alert">
-                @if (f['message'].errors['required']) {
-<div>Message is required</div>
-}
-                @if (f['message'].errors['minlength']) {
-<div>Message must be minimal 50 characters</div>
-}
-              </div>
-}
-            </div>
 
-            <div class="form-group mb-3">
-              <label for="attachment" class="form-label">Attachment</label>
-              <div class="col-sm-12">
-                <input class="form-control"
-                       [ngClass]="{ 'is-invalid': submitted && f['attachment'].errors }"
-                       formControlName="attachment"
-                       id="attachment"
-                       data-test="attachment"
-                       (change)="changeFile($event)"
-                       accept=".txt"
-                       type="file">
-                <small id="attachmentHelp" class="form-text text-muted">Only files with the <strong>txt</strong>
-                  extension are allowed, and files must be 0kb.</small>
+              <div class="form-group mb-3">
+                <label for="attachment" class="form-label">Attachment</label>
+                <div class="col-sm-12">
+                  <input class="form-control"
+                         [ngClass]="{ 'is-invalid': submitted && f['attachment'].errors }"
+                         formControlName="attachment"
+                         id="attachment"
+                         data-test="attachment"
+                         (change)="changeFile($event)"
+                         accept=".txt"
+                         type="file">
+                  <small id="attachmentHelp" class="form-text text-muted">Only files with the <strong>txt</strong>
+                    extension are allowed, and files must be 0kb.</small>
+                </div>
+                @if (submitted && f['attachment'].errors) {
+                  <div id="attachment_alert" data-test="attachment-error"
+                       class="alert alert-danger mt-3 p-2"
+                       role="alert">
+                    @if (f['attachment'].errors['incorrectType']) {
+                      <div>File should have a txt extension.</div>
+                    }
+                    @if (f['attachment'].errors['incorrectSize']) {
+                      <div>File should be empty.</div>
+                    }
+                  </div>
+                }
               </div>
-              @if (submitted && f['attachment'].errors) {
-<div id="attachment_alert" data-test="attachment-error"
-                   class="alert alert-danger mt-3 p-2"
-                   role="alert">
-                @if (f['attachment'].errors['incorrectType']) {
-<div>File should have a txt extension.</div>
-}
-                @if (f['attachment'].errors['incorrectSize']) {
-<div>File should be empty.</div>
-}
-              </div>
-}
-            </div>
 
-            <div class="input-group mb-3">
-              <input type="submit" class="btnSubmit" data-test="contact-submit" value="Send"/>
-            </div>
-            @if (error) {
-<div class="alert alert-danger">
-              <div>
-                <div class="help-block">{{error}}</div>
+              <div class="input-group mb-3">
+                <input type="submit" class="btnSubmit" data-test="contact-submit" value="Send"/>
               </div>
+              @if (error) {
+                <div class="alert alert-danger">
+                  <div>
+                    <div class="help-block">{{ error }}</div>
+                  </div>
+                </div>
+              }
             </div>
-}
           </div>
-        </div>
-      </form>
-}
+        </form>
+      }
     </div>
   </div>
 </div>

@@ -25,6 +25,10 @@ import {NgHttpLoaderModule} from "ng-http-loader";
 import {NgxSliderModule} from "ngx-slider-v2";
 import { PrivacyComponent } from './privacy/privacy.component';
 import {PaginationComponent} from "./pagination/pagination.component";
+import {CartComponent} from "./checkout/cart/cart.component";
+import {LoginComponent} from "./checkout/login/login.component";
+import {AddressComponent} from "./checkout/address/address.component";
+import {PaymentComponent} from "./checkout/payment/payment.component";
 
 @NgModule({
   declarations: [
@@ -38,7 +42,11 @@ import {PaginationComponent} from "./pagination/pagination.component";
     CategoryComponent,
     OverviewComponent,
     ProductOverviewComponent,
-    PrivacyComponent
+    PrivacyComponent,
+    CartComponent,
+    LoginComponent,
+    AddressComponent,
+    PaymentComponent
   ],
   imports: [
     BrowserModule,

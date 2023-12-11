@@ -17,9 +17,6 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="billing_country", type="string"),
  *         @OA\Property(property="billing_state", type="string"),
  *         @OA\Property(property="billing_postcode", type="string"),
- *         @OA\Property(property="payment_method", type="string", example="Cash on Delivery"),
- *         @OA\Property(property="payment_account_name", type="string", example="Jogn Doe"),
- *         @OA\Property(property="payment_account_number", type="string", example="0987654345"),
  *         @OA\Property(property="cart_id", type="string", example="Cash on Delivery")
  *     }
  * )
@@ -38,9 +35,6 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="billing_state", type="string"),
  *         @OA\Property(property="billing_postcode", type="string"),
  *         @OA\Property(property="total", type="number"),
- *         @OA\Property(property="payment_method", type="string", example="Cash on Delivery"),
- *         @OA\Property(property="payment_account_name", type="string", example="Jogn Doe"),
- *         @OA\Property(property="payment_account_number", type="string", example="0987654345"),
  *         @OA\Property(property="status", type="string", example="COMPLETED"),
  *         @OA\Property(property="status_message", type="string", example=""),
  *         @OA\Property(property="invoice_items", type="array", @OA\Items(ref="#/components/schemas/InvoiceLineResponse"))
@@ -53,7 +47,7 @@ class Invoice extends BaseModel
 
     protected $filters = ['in', 'sort', 'starts_with'];
     protected $table = 'invoices';
-    protected $fillable = ['user_id', 'invoice_date', 'invoice_number', 'billing_address', 'billing_city', 'billing_state', 'billing_country', 'billing_postcode', 'total', 'payment_method', 'payment_account_name', 'payment_account_number'];
+    protected $fillable = ['user_id', 'invoice_date', 'invoice_number', 'billing_address', 'billing_city', 'billing_state', 'billing_country', 'billing_postcode', 'total'];
     protected $hidden = ['updated_at', 'document'];
 
     protected $casts = array(
@@ -69,4 +63,10 @@ class Invoice extends BaseModel
     {
         return $this->hasMany(Invoiceline::class);
     }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
+
 }

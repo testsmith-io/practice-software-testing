@@ -24,9 +24,6 @@ class CreateInvoicesTable extends Migration
             $table->string('billing_country', 40);
             $table->string('billing_postcode', 10)->nullable();
             $table->decimal('total', 10, 2)->nullable();
-            $table->string('payment_method', 40)->nullable();
-            $table->string('payment_account_name', 40)->nullable();
-            $table->string('payment_account_number', 40)->nullable();
             $table->enum('status', ['AWAITING_FULFILLMENT', 'ON_HOLD', 'AWAITING_SHIPMENT', 'SHIPPED', 'COMPLETED'])->default('AWAITING_FULFILLMENT');
             $table->string('status_message', 255)->nullable();
             $table->timestamp('created_at')->useCurrent();
