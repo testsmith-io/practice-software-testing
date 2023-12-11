@@ -5333,9 +5333,6 @@
             "InvoiceRequest": {
                 "title": "InvoiceRequest",
                 "properties": {
-                    "user_id": {
-                        "type": "string"
-                    },
                     "billing_address": {
                         "type": "string"
                     },
@@ -5351,27 +5348,9 @@
                     "billing_postcode": {
                         "type": "string"
                     },
-                    "payment_method": {
+                    "cart_id": {
                         "type": "string",
                         "example": "Cash on Delivery"
-                    },
-                    "payment_account_name": {
-                        "type": "string",
-                        "example": "Jogn Doe"
-                    },
-                    "payment_account_number": {
-                        "type": "string",
-                        "example": "0987654345"
-                    },
-                    "invoicelines": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "example": {
-                                "product_id": 9,
-                                "quantity": 1
-                            }
-                        }
                     }
                 },
                 "type": "object"
@@ -5409,18 +5388,6 @@
                     "total": {
                         "type": "number"
                     },
-                    "payment_method": {
-                        "type": "string",
-                        "example": "Cash on Delivery"
-                    },
-                    "payment_account_name": {
-                        "type": "string",
-                        "example": "Jogn Doe"
-                    },
-                    "payment_account_number": {
-                        "type": "string",
-                        "example": "0987654345"
-                    },
                     "status": {
                         "type": "string",
                         "example": "COMPLETED"
@@ -5429,7 +5396,7 @@
                         "type": "string",
                         "example": ""
                     },
-                    "invoicelines": {
+                    "invoice_items": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/InvoiceLineResponse"
