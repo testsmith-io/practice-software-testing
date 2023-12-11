@@ -87,7 +87,7 @@ function deploy($source, $webDestination, $apiDestination) {
     run("/usr/bin/php /var/www/api{$apiDestination}.practicesoftwaretesting.com/artisan route:cache");
     run("/usr/bin/php /var/www/api{$apiDestination}.practicesoftwaretesting.com/artisan config:clear");
 //        run("/usr/bin/php /var/www/api{$app['api_destination']}.practicesoftwaretesting.com/artisan vendor:publish --provider \"L5Swagger\L5SwaggerServiceProvider\"");
-    run("/usr/bin/php /var/www/api{$apiDestination}.practicesoftwaretesting.com/artisan l5-swagger:generate");
+//    run("/usr/bin/php /var/www/api{$apiDestination}.practicesoftwaretesting.com/artisan l5-swagger:generate");
     run("sudo chmod -R 777 /var/www/api{$apiDestination}.practicesoftwaretesting.com/storage");
     run("sudo chown -R www-data:www-data /var/www/api{$apiDestination}.practicesoftwaretesting.com/storage/framework");
 
