@@ -15,7 +15,7 @@ use Spatie\ArrayToXml\ArrayToXml;
  *     email="info@testsmith.io",
  *     name="Testsmith"
  *   )
- * )
+ * ),
  * @OA\Server(
  *     description="Deployed environment",
  *     url="https://api.practicesoftwaretesting.com"
