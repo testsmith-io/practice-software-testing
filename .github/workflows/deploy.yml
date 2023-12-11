@@ -172,4 +172,4 @@ jobs:
         with:
           private-key: ${{ secrets.PRIVATE_KEY }}
           dep: upload-sprint5-with-bugs production
-          deployer-version: "6.9.0"
+          deployer-version: "7.3.0"
