@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
     <a title="Practice Software Testing - Toolshop" class="navbar-brand" href="/">
-      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
            x="0px" y="0px"
            viewBox="55 35 808.6 160" style="width:280px" xml:space="preserve">
         <g transform="translate(-100 -390)">
@@ -61,14 +61,18 @@
           <a class="nav-link active" data-test="nav-home" aria-current="page" href="#">Home</a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" data-test="nav-categories" role="button" data-bs-toggle="dropdown"
+          <a class="nav-link dropdown-toggle" href="#" data-test="nav-categories" role="button"
+             data-bs-toggle="dropdown"
              aria-expanded="false">
             Categories
           </a>
           <ul class="dropdown-menu" aria-labelledby="nav-categories">
-            <li><a class="dropdown-item" data-test="nav-hand-tools" routerLink="/category/hand-tools">Hand Tools</a></li>
-            <li><a class="dropdown-item" data-test="nav-power-tools" routerLink="/category/power-tools">Power Tools</a></li>
-            <li><a class="dropdown-item" data-test="nav-special-tools" routerLink="/category/special-tools">Special Tools</a></li>
+            <li><a class="dropdown-item" data-test="nav-hand-tools" routerLink="/category/hand-tools">Hand Tools</a>
+            </li>
+            <li><a class="dropdown-item" data-test="nav-power-tools" routerLink="/category/power-tools">Power Tools</a>
+            </li>
+            <li><a class="dropdown-item" data-test="nav-special-tools" routerLink="/category/special-tools">Special
+              Tools</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
@@ -80,84 +84,92 @@
         </li>
         <!--        <li class="nav-item" *ngIf="!isLoggedIn">-->
         @if (!name && role !== 'user') {
-<li class="nav-item">
-          <a class="nav-link" data-test="nav-sign-in" routerLink="/auth/login">Sign in</a>
-        </li>
-}
+          <li class="nav-item">
+            <a class="nav-link" data-test="nav-sign-in" routerLink="/auth/login">Sign in</a>
+          </li>
+        }
         @if (name && role === 'user') {
-<li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" data-test="nav-user-menu" id="user-menu" role="button" data-bs-toggle="dropdown"
-             aria-expanded="false">
-            {{name}}
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="user-menu">
-            <li><a class="dropdown-item" data-test="nav-my-account" routerLink="/account">My account</a></li>
-            <li><a class="dropdown-item" data-test="nav-my-favorites" routerLink="/account/favorites">My favorites</a></li>
-            <li><a class="dropdown-item" data-test="nav-my-profile" routerLink="/account/profile">My profile</a></li>
-            <li><a class="dropdown-item" data-test="nav-my-invoices" routerLink="/account/invoices">My invoices</a></li>
-            <li><a class="dropdown-item" data-test="nav-my-messages" routerLink="/account/messages">My messages</a></li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li><a class="dropdown-item" data-test="nav-sign-out" (click)="logout()">Sign out</a></li>
-          </ul>
-        </li>
-}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-test="nav-user-menu" id="user-menu" role="button"
+               data-bs-toggle="dropdown"
+               aria-expanded="false">
+              {{ name }}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="user-menu">
+              <li><a class="dropdown-item" data-test="nav-my-account" routerLink="/account">My account</a></li>
+              <li><a class="dropdown-item" data-test="nav-my-favorites" routerLink="/account/favorites">My favorites</a>
+              </li>
+              <li><a class="dropdown-item" data-test="nav-my-profile" routerLink="/account/profile">My profile</a></li>
+              <li><a class="dropdown-item" data-test="nav-my-invoices" routerLink="/account/invoices">My invoices</a>
+              </li>
+              <li><a class="dropdown-item" data-test="nav-my-messages" routerLink="/account/messages">My messages</a>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" data-test="nav-sign-out" (click)="logout()">Sign out</a></li>
+            </ul>
+          </li>
+        }
         @if (name && role === 'admin') {
-<li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" data-test="nav-admin-menu" id="admin-menu" role="button" data-bs-toggle="dropdown"
-             aria-expanded="false">
-            {{name}}
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="admin-menu">
-            <li><a class="dropdown-item" data-test="nav-admin-dashboard" routerLink="/admin/dashboard">Dashboard</a></li>
-            <li><a class="dropdown-item" data-test="nav-admin-brands" routerLink="/admin/brands">Brands</a></li>
-            <li><a class="dropdown-item" data-test="nav-admin-categories" routerLink="/admin/categories">Categories</a></li>
-            <li><a class="dropdown-item" data-test="nav-admin-products" routerLink="/admin/products">Products</a></li>
-            <li><a class="dropdown-item" data-test="nav-admin-orders" routerLink="/admin/orders">Orders</a></li>
-            <li><a class="dropdown-item" data-test="nav-admin-users" routerLink="/admin/users">Users</a></li>
-            <li><a class="dropdown-item" data-test="nav-admin-messages" routerLink="/admin/messages">Messages</a></li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li><a class="dropdown-item" data-test="nav-admin-settings" routerLink="/admin/settings">Settings</a></li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li>
-              <div class="accordion accordion-flush" id="accordionFlushExample">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-test="nav-admin-menu" id="admin-menu" role="button"
+               data-bs-toggle="dropdown"
+               aria-expanded="false">
+              {{ name }}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="admin-menu">
+              <li><a class="dropdown-item" data-test="nav-admin-dashboard" routerLink="/admin/dashboard">Dashboard</a>
+              </li>
+              <li><a class="dropdown-item" data-test="nav-admin-brands" routerLink="/admin/brands">Brands</a></li>
+              <li><a class="dropdown-item" data-test="nav-admin-categories"
+                     routerLink="/admin/categories">Categories</a></li>
+              <li><a class="dropdown-item" data-test="nav-admin-products" routerLink="/admin/products">Products</a></li>
+              <li><a class="dropdown-item" data-test="nav-admin-orders" routerLink="/admin/orders">Orders</a></li>
+              <li><a class="dropdown-item" data-test="nav-admin-users" routerLink="/admin/users">Users</a></li>
+              <li><a class="dropdown-item" data-test="nav-admin-messages" routerLink="/admin/messages">Messages</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" data-test="nav-admin-settings" routerLink="/admin/settings">Settings</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <div class="accordion accordion-flush" id="accordionFlushExample">
                 <span class="dropdown-item" data-test="nav-admin-reports">
                   Reports
                 </span>
-                <ul class="accordion-body nav flex-column">
-                  <li class="nav-item">
-                    <a class="nav-link" data-test="nav-admin-statistics"
-                       routerLink="/admin/reports/statistics">Statistics</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link"  data-test="nav-average-month-sales"
-                       routerLink="/admin/reports/average-sales-per-month">Average sales per month</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link"  data-test="nav-average-week-sales"
-                       routerLink="/admin/reports/average-sales-per-week">Average sales per week</a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li><a class="dropdown-item" data-test="nav-sign-out" (click)="logout()">Sign out</a></li>
-          </ul>
-        </li>
-}
+                  <ul class="accordion-body nav flex-column">
+                    <li class="nav-item">
+                      <a class="nav-link" data-test="nav-admin-statistics"
+                         routerLink="/admin/reports/statistics">Statistics</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-test="nav-average-month-sales"
+                         routerLink="/admin/reports/average-sales-per-month">Average sales per month</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-test="nav-average-week-sales"
+                         routerLink="/admin/reports/average-sales-per-week">Average sales per week</a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" data-test="nav-sign-out" (click)="logout()">Sign out</a></li>
+            </ul>
+          </li>
+        }
         @if (items && items !== 0) {
-<li class="nav-item">
-          <a class="nav-link" data-test="nav-cart" routerLink="/checkout"> <i class="fa fa-shopping-cart px-1"></i><span
-            class='badge rounded-pill bg-danger' data-test="cart-quantity" id='lblCartCount'>{{items}}</span></a>
-        </li>
-}
+          <li class="nav-item">
+            <a class="nav-link" data-test="nav-cart" routerLink="/checkout"> <i
+              class="fa fa-shopping-cart px-1"></i><span
+              class='badge rounded-pill bg-danger' data-test="cart-quantity" id='lblCartCount'>{{ items }}</span></a>
+          </li>
+        }
       </ul>
     </div>
   </div>

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Observable, of, map} from "rxjs";
 import {CartService} from "../_services/cart.service";
@@ -8,227 +8,27 @@ import {InvoiceService} from "../_services/invoice.service";
 import {PaymentService} from "../_services/payment.service";
 import {environment} from "../../environments/environment";
 import {Product} from "../models/product";
+import {AddressComponent} from "./address/address.component";
 
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css']
 })
-export class CheckoutComponent implements OnInit {
+export class CheckoutComponent {
 
-  PaymentMethods: any = ['Bank Transfer', 'Cash on Delivery', 'Credit Card', 'Buy Now Pay Later', 'Gift Card'];
-  cusAddress: FormGroup | any;
-  cusPayment: FormGroup | any;
-  cusForm: FormGroup | any;
-  cusSubmitted = false;
-  customerError: string | undefined;
-  isLoginFailed = false;
-  roles: string[] = [];
+  @ViewChild(AddressComponent) addressComponent: AddressComponent;
 
-  canExitStep2 = true;
-  items: any;
-  isLoggedIn: boolean = false;
-  customer: any;
+  canExitStep3 = true;
+  addressData: FormGroup;
 
-  paymentError: any
-  state: any;
-  paymentMessage: string;
-
-  paid: boolean = false;
-  total: number;
-  invoice_number: number;
-
-  constructor(private paymentService: PaymentService,
-              private invoiceService: InvoiceService,
-              private formBuilder: FormBuilder,
-              private cartService: CartService,
-              private customerAccountService: CustomerAccountService,
-              private tokenStorage: TokenStorageService) {
+  handleCusAddressChange(cusAddress: FormGroup) {
+    this.addressData = cusAddress;
+    this.canExitStep3 = cusAddress.valid;
   }
 
-  ngOnInit(): void {
-    this.cartService.getItems().subscribe(items => {
-      this.items = items;
-      this.total = this.getTotal(items);
-    });
-    this.setAddress();
-    this.isLoggedIn = this.customerAccountService.isLoggedIn();
-
-    this.cusForm = this.formBuilder.group(
-      {
-        email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
-        password: ['', [Validators.required,
-          Validators.minLength(6),
-          Validators.maxLength(40)]],
-      }
-    );
-
-    this.cusAddress = this.formBuilder.group(
-      {
-        address: ['', [Validators.required]],
-        city: ['', [Validators.required,
-          Validators.minLength(6),
-          Validators.maxLength(40)]],
-        state: ['', [Validators.required]],
-        country: ['', [Validators.required]],
-        postcode: ['', [Validators.required]],
-      }
-    );
-
-    this.cusPayment = this.formBuilder.group(
-      {
-        payment_method: ['', [Validators.required]],
-        account_name: ['', [Validators.required]],
-        account_number: ['', [Validators.required]],
-      }
-    );
-  }
-
-  private setAddress() {
-    this.customer = this.customerAccountService.getDetails().subscribe(res => {
-      this.customer = res;
-      this.cusAddress.get('address').setValue(this.customer.address);
-      this.cusAddress.get('city').setValue(this.customer.city);
-      this.cusAddress.get('state').setValue(this.customer.state);
-      this.cusAddress.get('country').setValue(this.customer.country);
-      this.cusAddress.get('postcode').setValue(this.customer.postcode);
-    });
-  }
-
-  get f(): { [key: string]: AbstractControl } {
-    return this.cusAddress.controls;
-  }
-
-  get p(): { [key: string]: AbstractControl } {
-    return this.cusPayment.controls;
-  }
-
-  get cus_email() {
-    return this.cusForm.get('email');
-  }
-
-  get cus_password() {
-    return this.cusForm.get('password');
-  }
-
-  get cf(): { [key: string]: AbstractControl } {
-    return this.cusForm.controls;
-  }
-
-  delete(id: number) {
-    this.cartService.deleteItem(id).subscribe(() => {
-      this.cartService.getItems().subscribe(items => {
-        this.items = items;
-        this.total = this.getTotal(items);
-      });
-    });
-  }
-
-  private getTotal(items: any) {
-    if (items?.length) {
-      // Calculate the total by iterating through cart_items
-      const total = items.reduce((sum: any, cartItem: any) => {
-        const quantity = cartItem.quantity || 0;
-        const price = cartItem.product?.price || 0;
-        return cartItem.discount_percentage ? sum + quantity * cartItem.discounted_price : sum + quantity * price;
-      }, 0);
-      // Round the total to 2 decimal places
-      return Math.round(total * 100) / 100;
-    } else {
-      return 0;
-    }
-  }
-
-  onCusSubmit(): void {
-    this.cusSubmitted = true;
-
-    if (this.cusForm.invalid) {
-      return;
-    }
-
-    const payload = {
-      'email': this.cusForm.value.email,
-      'password': this.cusForm.value.password
-    };
-
-    this.customerAccountService.login(payload).pipe().subscribe(res => {
-      this.tokenStorage.saveToken(res.access_token);
-
-      this.setAddress();
-      this.isLoginFailed = false;
-      this.isLoggedIn = true;
-      this.customerAccountService.authSub.next('changed');
-      this.roles = this.customerAccountService.getRole();
-    }, err => {
-      if (err.error === 'Unauthorized') {
-        this.customerError = 'Invalid email or password';
-        this.isLoginFailed = true;
-      }
-    });
-
-  }
-
-  finishFunction() {
-    let cartId = sessionStorage.getItem('cart_id');
-
-    const payload = {
-      'billing_address': this.cusAddress.value.address,
-      'billing_city': this.cusAddress.value.city,
-      'billing_state': this.cusAddress.value.state,
-      'billing_country': this.cusAddress.value.country,
-      'billing_postcode': this.cusAddress.value.postcode,
-      'payment_method': this.cusPayment.value.payment_method,
-      'payment_account_name': this.cusPayment.value.account_name,
-      'payment_account_number': this.cusPayment.value.account_number,
-      'cart_id': cartId
-    };
-
-    this.checkPayment(this.cusPayment.value.payment_method, this.cusPayment.value.account_name, this.cusPayment.value.account_number).subscribe(result => {
-      if (result === true) {
-        this.invoiceService.createInvoice(payload).subscribe(res => {
-          this.paid = true;
-          this.invoice_number = res['invoice_number'];
-          this.cartService.emptyCart();
-        }, () => {
-        });
-      }
-    })
-  }
-
-  /*
-  Check payment method, only if mock endpoint is stored in sessionStorage
-   */
-  checkPayment(payment_method: string, account_name: string, account_number: string): Observable<boolean> {
-    if (!this.state) {
-      const payload = {
-        'method': this.cusPayment.value.payment_method,
-        'account_name': this.cusPayment.value.account_name,
-        'account_number': this.cusPayment.value.account_number
-      }
-      const endpoint = (window.localStorage.getItem('PAYMENT_ENDPOINT')) ? window.localStorage.getItem('PAYMENT_ENDPOINT') : environment.apiUrl + '/payment/check';
-      this.paymentService.validate(endpoint, payload).subscribe(res => {
-        this.paymentError = null;
-        this.paymentMessage = res.message;
-        this.state = true;
-      }, err => {
-        this.state = null;
-        this.paymentError = err.error.error;
-        this.state = false;
-      });
-    }
-    return of(this.state);
-  }
-
-  updateQuantity($event: Event, item: any) {
-    if ((($event as any)?.target?.value >= 1)) {
-      const quantity = (($event as any)?.target?.value >= 1) ? ($event as any)?.target?.value : 1;
-      this.cartService.replaceQuantity(item.product.id, parseInt(quantity)).subscribe(() => {
-        this.cartService.getItems().subscribe((items) => {
-          this.items = items;
-          this.total = this.getTotal(items);
-        });
-      });
-    }
+  enterAddressStep($event: any) {
+    this.addressComponent.setAddress();
   }
 
 }

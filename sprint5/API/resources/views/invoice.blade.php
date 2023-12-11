@@ -10244,16 +10244,16 @@
             <table style="border: 0px">
                 <tr>
                     <td style="width: 100px">Payment Method</td>
-                    <td>{{$invoice['payment_method']}}</td>
+                    <td>{{$invoice['payment']['payment_method']}}</td>
                 </tr>
-                <tr>
-                    <td>Account Name</td>
-                    <td>{{$invoice['payment_account_name']}}</td>
-                </tr>
-                <tr>
-                    <td>Account Number</td>
-                    <td>{{$invoice['payment_account_number']}}</td>
-                </tr>
+                @if(isset($invoice->payment->toArray()['payment_details']))
+                    @foreach($invoice->payment->toArray()['payment_details'] as $key => $value)
+                        <tr>
+                            <td>{{ ucwords(str_replace('_', ' ', $key)) }}</td>
+                            <td>{{ $value }}</td>
+                        </tr>
+                    @endforeach
+                @endif
             </table>
         </div>
     </div>

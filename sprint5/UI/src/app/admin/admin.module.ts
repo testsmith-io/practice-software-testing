@@ -16,12 +16,13 @@ import {MessageDetailComponent} from './message-detail/message-detail.component'
 import {UsersAddEditComponent} from './users-add-edit/users-add-edit.component';
 import {ProductsAddEditComponent} from './products-add-edit/products-add-edit.component';
 import {OrdersAddEditComponent} from './orders-add-edit/orders-add-edit.component';
-import { NgChartsModule } from 'ng2-charts';
+import {NgChartsModule} from 'ng2-charts';
 import {SettingsComponent} from './settings/settings.component';
 import {AverageSalesMonthComponent} from './reports/average-sales-month/average-sales-month.component';
 import {AverageSalesWeekComponent} from './reports/average-sales-week/average-sales-week.component';
 import {StatisticsComponent} from './reports/statistics/statistics.component';
 import {PaginationComponent} from "../pagination/pagination.component";
+import {SharedModule} from "../shared.module";
 
 const routes: Routes = [
   {path: 'dashboard', component: DashboardComponent, canActivate: [AdminAuthGuard]},
@@ -73,7 +74,8 @@ const routes: Routes = [
     CommonModule,
     NgChartsModule,
     RouterModule.forChild(routes),
-    PaginationComponent
+    PaginationComponent,
+    SharedModule
   ]
 })
 export class AdminModule {

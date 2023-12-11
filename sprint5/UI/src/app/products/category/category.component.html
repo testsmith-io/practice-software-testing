@@ -1,5 +1,5 @@
 <div class="row">
-  <h2 data-test="page-title">Category: {{slug.replace('-', ' ') | titlecase}}</h2>
+  <h2 data-test="page-title">Category: {{ slug.replace('-', ' ') | titlecase }}</h2>
 </div>
 <div class="row my-4">
   <a class="btn btn-secondary d-block d-md-none btn-block mb-3" data-bs-toggle="collapse" data-test="filters"
@@ -26,78 +26,79 @@
     <hr>
     <h4>By category:</h4>
     <ng-template #recursiveList let-list>
-      @for (category of list; track category) {
-  <div class="checkbox">
-        <label>@if (category.parent_id) {
-<input type="checkbox" class="icheck"
-                      attr.data-test="category-{{category.id}}" name="category_id"
-                      value="{{category.id}}" (change)="filterByCategory($event)"/>
-}
-          {{category.name}}</label>
-        @if (category.sub_categories.length > 0) {
-<ul>
-          <ng-container
-            *ngTemplateOutlet="recursiveList; context:{ $implicit: category.sub_categories }"></ng-container>
-        </ul>
-}
-      </div>
-}
+      @for (category of list;track category) {
+        <div class="checkbox">
+          <label>@if (category.parent_id) {
+            <input type="checkbox" class="icheck"
+                   attr.data-test="category-{{category.id}}" name="category_id"
+                   value="{{category.id}}" (change)="filterByCategory($event)"/>
+          }
+            {{ category.name }}</label>
+          @if (category.sub_categories.length > 0) {
+            <ul>
+              <ng-container
+                *ngTemplateOutlet="recursiveList; context:{ $implicit: category.sub_categories }"></ng-container>
+            </ul>
+          }
+        </div>
+      }
     </ng-template>
     <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: categories }"></ng-container>
 
     <div class="py-2"></div>
 
     <h4>By brand:</h4>
-    @for (brand of brands; track brand) {
-  <div class="checkbox">
-      <label><input type="checkbox" class="icheck" attr.data-test="brand-{{brand.id}}" name="brand_id"
-                    value="{{brand.id}}"
-                    (change)="filterByBrand($event)"/> <!--(change)="filterByMediatype($event)"-->
-        {{brand.name}}</label>
-    </div>
-}
+    @for (brand of brands;track brand) {
+      <div class="checkbox">
+        <label><input type="checkbox" class="icheck" attr.data-test="brand-{{brand.id}}" name="brand_id"
+                      value="{{brand.id}}"
+                      (change)="filterByBrand($event)"/> <!--(change)="filterByMediatype($event)"-->
+          {{ brand.name }}</label>
+      </div>
+    }
 
   </div>
   <div class="col-md-9">
     @if (!results?.data.length) {
-<div data-test="category-empty">
-      There are no products available yet.
-    </div>
-}
+      <div data-test="category-empty">
+        There are no products available yet.
+      </div>
+    }
     @if (results) {
-<div class="container" attr.data-test="{{resultState}}">
-      @for (item of results.data; track item) {
-  <a attr.data-test="product-{{item.id}}" routerLink="/product/{{item.id}}"
+      <div class="container" attr.data-test="{{resultState}}">
+        @for (item of results.data;track item) {
+          <a attr.data-test="product-{{item.id}}" routerLink="/product/{{item.id}}"
 
-         class="card" style="text-decoration: none; color: black;">
-        <div class="card-img-wrapper">
-          <img class="card-img-top"
-               src="assets/img/products/{{item.product_image.file_name}}">
-        </div>
-        <div class="card-body">
-          <h5 data-test="product-name" class="card-title">
-            {{item.name}}
-          </h5>
-        </div>
-        <div class="card-footer">
-          @if (item.stock <= 0) {
-<span class="float-start text-danger" data-test="out-of-stock">Out of stock</span>
-}
-          <span class="float-end text-muted">
+             class="card" style="text-decoration: none; color: black;">
+            <div class="card-img-wrapper">
+              <img class="card-img-top"
+                   src="assets/img/products/{{item.product_image.file_name}}">
+            </div>
+            <div class="card-body">
+              <h5 data-test="product-name" class="card-title">
+                {{ item.name }}
+              </h5>
+            </div>
+            <div class="card-footer">
+              @if (item.stock <= 0) {
+                <span class="float-start text-danger" data-test="out-of-stock">Out of stock</span>
+              }
+              <span class="float-end text-muted">
                    <span data-test="product-price"
-                         [ngClass]="{'discounted' : item.discount_price}">${{item.price}}</span> @if (item.discount_price) {
-<span
-            data-test="product-discount-price"> ${{item.discount_price}}</span>
-}
+                         [ngClass]="{'discounted' : item.discount_price}">${{ item.price }}</span> @if (item.discount_price) {
+                <span
+                  data-test="product-discount-price"> ${{ item.discount_price }}</span>
+              }
         </span>
-        </div>
+            </div>
 
-      </a>
-}
-    </div>
-}
+          </a>
+        }
+      </div>
+    }
     <div class="mt-3">
-      <app-pagination [currentPage]="currentPage" [lastPage]="results?.last_page" (pageChange)="onPageChange($event)"></app-pagination>
+      <app-pagination [currentPage]="currentPage" [lastPage]="results?.last_page"
+                      (pageChange)="onPageChange($event)"></app-pagination>
     </div>
   </div>
 </div>

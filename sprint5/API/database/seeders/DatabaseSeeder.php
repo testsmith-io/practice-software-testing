@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             FavoriteSeeder::class,
             InvoiceSeeder::class,
-            InvoiceItemSeeder::class
+            InvoiceItemSeeder::class,
+            PaymentSeeder::class
         ]);
     }
 }

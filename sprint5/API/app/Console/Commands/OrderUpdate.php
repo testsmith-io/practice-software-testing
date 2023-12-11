@@ -5,8 +5,7 @@ namespace app\Console\Commands;
 use App\Models\Invoice;
 use Illuminate\Console\Command;
 
-class OrderUpdate extends Command
-{
+class OrderUpdate extends Command {
     /**
      * The name and signature of the console command.
      *
@@ -25,8 +24,7 @@ class OrderUpdate extends Command
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
     }
 
@@ -35,14 +33,23 @@ class OrderUpdate extends Command
      *
      * @return mixed
      */
-    public function handle()
-    {
+    public function handle() {
         Invoice::where('status', '=', 'SHIPPED')->update(array('status' => 'COMPLETED'));
 
         Invoice::where('status', '=', 'AWAITING_SHIPMENT')->update(array('status' => 'SHIPPED'));
 
-        Invoice::where('status', '=', 'AWAITING_FULFILLMENT')->where('payment_method', '!=', 'Bank Transfer')->update(array('status' => 'AWAITING_SHIPMENT'));
+        Invoice::with('payment', 'payment.payment_details')
+            ->where('status', '=', 'AWAITING_FULFILLMENT')
+            ->whereHas('payment', function($query) {
+                $query->where('payment_method', '!=', 'Bank Transfer');
+            })
+            ->update(array('status' => 'AWAITING_SHIPMENT'));
 
-        Invoice::where('status', '=', 'AWAITING_FULFILLMENT')->where('payment_method', '=', 'Bank Transfer')->update(array('status' => 'ON_HOLD'));
+        Invoice::with('payment', 'payment.payment_details')
+            ->where('status', '=', 'AWAITING_FULFILLMENT')
+            ->whereHas('payment', function($query) {
+                $query->where('payment_method', '=', 'Bank Transfer');
+            })
+            ->update(array('status' => 'ON_HOLD'));
     }
 }

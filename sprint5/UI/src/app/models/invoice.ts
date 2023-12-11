@@ -11,6 +11,7 @@ export class Invoice {
   invoice_date!: string;
   invoice_number!: string;
   invoicelines!: Invoiceline[];
+  payment!: any;
   payment_account_name!: string;
   payment_account_number!: string;
   payment_method!: string;

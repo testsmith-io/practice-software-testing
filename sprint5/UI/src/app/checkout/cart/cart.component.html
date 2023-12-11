@@ -1,0 +1,76 @@
+@if (items) {
+  <div>
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th class="col-md-3" scope="col">Item</th>
+        <th class="col-md-2" scope="col"></th>
+        <th class="col-md-2" scope="col">Quantity</th>
+        <th class="col-md-2 text-end" scope="col">Price</th>
+        <th class="col-md-2 text-end" scope="col">Total</th>
+        <th class="col-md-1" scope="col"></th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (item of items;track item) {
+          <tr>
+            <td class="col-md-4"><span
+              class="product-title">{{ item.product.name }}&nbsp;@if (item.discount_percentage) {
+              <span
+
+                class="badge rounded-pill bg-warning me-1">-{{ item.discount_percentage }}%</span>
+            }</span><br>@if (item.product.is_rental) {
+              <small
+              >Item for rent, price per hour</small>
+            }</td>
+            <td class="col-md-2"></td>
+            <td class="col-md-2 align-middle">
+              <input type="number" min="1" max="99" class="form-control quantity"
+                     (change)="updateQuantity($event, item)"
+                     value="{{item.quantity}}">
+            </td>
+            <td class="col-md-2 text-end"><span
+              [ngClass]="{'discounted' : item.discounted_price}">${{ item.product.price | number: '1.2-2' }}</span>@if (item.discounted_price) {
+              <br
+              />
+            }
+              @if (item.discounted_price) {
+                <span
+                  data-test="offer-price">$<span
+                  id="discount-price">{{ item.discounted_price }}</span></span>
+              }</td>
+            <td class="col-md-2 text-end"><span
+              [ngClass]="{'discounted' : item.discounted_price}">${{ item.quantity * item.product.price | number: '1.2-2' }}</span>@if (item.discounted_price) {
+              <br
+              />
+            }
+              @if (item.discounted_price) {
+                <span
+                  data-test="offer-price">$<span
+                  id="discount-total-price">{{ item.quantity * item.discounted_price | number: '1.2-2' }}</span></span>
+              }</td>
+            <td class="col-md-1 align-middle"><a class="btn btn-danger" (click)="delete(item.product_id)"><i
+              class="fa fa-remove"></i></a></td>
+          </tr>
+        }
+      </tbody>
+      <tfoot>
+      <tr>
+        <td class="col-md-3"></td>
+        <td class="col-md-2"></td>
+        <td class="col-md-2"></td>
+        <td class="col-md-2 text-end"><strong>Total</strong></td>
+        <td class="col-md-2 text-end">${{ total | number: '1.2-2' }}</td>
+        <td class="col-md-1"></td>
+      </tr>
+      </tfoot>
+    </table>
+    @if (items.length) {
+      <div class="float-end">
+        <button data-test="proceed-1" type="button" class="btn btn-success" awNextStep>Proceed to checkout</button>
+      </div>
+    }
+  </div>
+} @else {
+  <p>The cart is empty. Nothing to display.</p>
+}

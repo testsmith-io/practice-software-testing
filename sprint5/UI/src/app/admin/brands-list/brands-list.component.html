@@ -19,19 +19,20 @@
   </tr>
   </thead>
   <tbody>
-  @for (brand of brands; track brand) {
-  <tr>
-    <td>{{brand.id}}</td>
-    <td>{{brand.name}}</td>
-    <td>{{brand.slug}}</td>
-    <td style="white-space: nowrap">
-      <a routerLink="edit/{{brand.id}}" attr.data-test="brand-{{brand.id}}-edit" class="btn btn-sm btn-primary mx-2">Edit</a>
-      <button (click)="deleteBrand(brand.id)" attr.data-test="brand-{{brand.id}}-delete"
-              class="btn btn-sm btn-danger">
-        <span>Delete</span>
-      </button>
-    </td>
-  </tr>
-}
+    @for (brand of brands;track brand) {
+      <tr>
+        <td>{{ brand.id }}</td>
+        <td>{{ brand.name }}</td>
+        <td>{{ brand.slug }}</td>
+        <td style="white-space: nowrap">
+          <a routerLink="edit/{{brand.id}}" attr.data-test="brand-{{brand.id}}-edit"
+             class="btn btn-sm btn-primary mx-2">Edit</a>
+          <button (click)="deleteBrand(brand.id)" attr.data-test="brand-{{brand.id}}-delete"
+                  class="btn btn-sm btn-danger">
+            <span>Delete</span>
+          </button>
+        </td>
+      </tr>
+    }
   </tbody>
 </table>
