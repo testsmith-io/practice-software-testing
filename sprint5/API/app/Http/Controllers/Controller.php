@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Spatie\ArrayToXml\ArrayToXml;
+
 /**
  * @OA\Info(
  *   title="Toolshop API",
@@ -15,11 +16,11 @@ use Spatie\ArrayToXml\ArrayToXml;
  *     email="info@testsmith.io",
  *     name="Testsmith"
  *   )
- * ),
+ * )
  * @OA\Server(
  *     description="Deployed environment",
  *     url="https://api.practicesoftwaretesting.com"
- * ),
+ * )
  * @OA\Server(
  *     description="Local environment",
  *     url="http://localhost:8091"

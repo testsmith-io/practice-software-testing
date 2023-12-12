@@ -11,7 +11,8 @@
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
-        "tymon/jwt-auth": "^2.0"
+        "tymon/jwt-auth": "^2.0",
+        "zircote/swagger-php": "3.3.7"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
