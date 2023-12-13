@@ -7,7 +7,62 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Mehradsadeghi\FilterQueryString\FilterQueryString;
 
-/** @OA\Schema(
+/**
+ * @OA\Schema(
+ *      schema="BaseInvoiceRequest",
+ *      type="object",
+ *      required={"billing_address", "billing_city", "billing_state", "billing_country", "billing_postcode", "payment_method", "payment_details", "cart_id"},
+ *      @OA\Property(property="billing_address", type="string"),
+ *      @OA\Property(property="billing_city", type="string"),
+ *      @OA\Property(property="billing_state", type="string"),
+ *      @OA\Property(property="billing_country", type="string"),
+ *      @OA\Property(property="billing_postcode", type="string"),
+ *      @OA\Property(property="payment_method", type="string"),
+ *      @OA\Property(property="cart_id", type="string"),
+ *      @OA\Property(
+ *          property="payment_details",
+ *          type="object",
+ *          oneOf={
+ *              @OA\Schema(ref="#/components/schemas/BankTransferDetails"),
+ *              @OA\Schema(ref="#/components/schemas/CreditCardDetails"),
+ *              @OA\Schema(ref="#/components/schemas/GiftCardDetails"),
+ *              @OA\Schema(ref="#/components/schemas/BuyNowPayLaterDetails"),
+ *              @OA\Schema(type="object", title="CashOnDeliveryDetails")
+ *          }
+ *      )
+ * )
+ *
+ * @OA\Schema(
+ *      schema="BankTransferDetails",
+ *      type="object",
+ *      @OA\Property(property="bank_name", type="string"),
+ *      @OA\Property(property="account_name", type="string"),
+ *      @OA\Property(property="account_number", type="string")
+ * )
+ *
+ * @OA\Schema(
+ *      schema="CreditCardDetails",
+ *      type="object",
+ *      @OA\Property(property="credit_card_number", type="string"),
+ *      @OA\Property(property="expiration_date", type="string"),
+ *      @OA\Property(property="cvv", type="string"),
+ *      @OA\Property(property="card_holder_name", type="string")
+ * )
+ *
+ * @OA\Schema(
+ *      schema="GiftCardDetails",
+ *      type="object",
+ *      @OA\Property(property="gift_card_number", type="string"),
+ *      @OA\Property(property="validation_code", type="string")
+ * )
+ *
+ * @OA\Schema(
+ *      schema="BuyNowPayLaterDetails",
+ *      type="object",
+ *      @OA\Property(property="monthly_installments", type="string")
+ * )
+ *
+ * @OA\Schema(
  *     schema="InvoiceRequest",
  *     type="object",
  *     title="InvoiceRequest",

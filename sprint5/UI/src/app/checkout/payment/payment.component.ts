@@ -123,23 +123,23 @@ export class PaymentComponent implements OnInit {
     let cartId = sessionStorage.getItem('cart_id');
     let paymentData = this.cusPayment.value;
 
-    let paymentPayload: any;
+    let payment: any;
     switch (paymentData.payment_method) {
       case 'Bank Transfer':
-        paymentPayload = {
+        payment = {
           'bank_name': paymentData.bank_name,
           'account_name': paymentData.account_name,
           'account_number': paymentData.account_number
         }
         break;
       case 'Gift Card':
-        paymentPayload = {
+        payment = {
           'gift_card_number': paymentData.gift_card_number,
           'validation_code': paymentData.validation_code
         }
         break;
       case 'Credit Card':
-        paymentPayload = {
+        payment = {
           'credit_card_number': paymentData.credit_card_number,
           'expiration_date': paymentData.expiration_date,
           'cvv': paymentData.cvv,
@@ -147,7 +147,7 @@ export class PaymentComponent implements OnInit {
         }
         break;
       case 'Buy Now Pay Later':
-        paymentPayload = {
+        payment = {
           'monthly_installments': paymentData.monthly_installments
         }
         break;
@@ -160,11 +160,16 @@ export class PaymentComponent implements OnInit {
       'billing_country': this.address.value.country,
       'billing_postcode': this.address.value.postcode,
       'payment_method': paymentData.payment_method,
-      'payment_details': paymentPayload,
+      'payment_details': payment,
       'cart_id': cartId
     };
 
-    this.checkPayment(paymentPayload).subscribe(result => {
+    const payloadPayload = {
+      'payment_method': paymentData.payment_method,
+      'payment_details': payment,
+    };
+
+    this.checkPayment(payloadPayload).subscribe(result => {
       if (result === true) {
         this.invoiceService.createInvoice(payload).subscribe(res => {
           this.paid = true;

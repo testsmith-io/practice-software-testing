@@ -518,17 +518,53 @@
                 "summary": "Add item to cart",
                 "description": "Add item to cart",
                 "operationId": "addItem",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Cart ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Payload to add item to cart",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "product_id",
+                                    "quantity"
+                                ],
+                                "properties": {
+                                    "product_id": {
+                                        "type": "string",
+                                        "example": "01HHJC7RERZ0M3VDGS6X9HM33A"
+                                    },
+                                    "quantity": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
-                    "201": {
-                        "description": "Create cartId",
+                    "200": {
+                        "description": "Item added",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "cart_id": {
+                                        "result": {
                                             "description": "",
                                             "type": "string",
-                                            "example": "1234"
+                                            "example": "item added or updated"
                                         }
                                     },
                                     "type": "object"
@@ -648,30 +684,43 @@
                 "operationId": "updateCartQuantity",
                 "parameters": [
                     {
-                        "name": "cartId",
+                        "name": "id",
                         "in": "path",
-                        "description": "The cartId parameter in path",
+                        "description": "Cart ID",
                         "required": true,
                         "schema": {
                             "type": "string"
-                        },
-                        "example": 1
+                        }
                     }
                 ],
                 "requestBody": {
-                    "description": "Brand request object",
+                    "description": "Payload to add item to cart",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/BrandRequest"
+                                "required": [
+                                    "product_id",
+                                    "quantity"
+                                ],
+                                "properties": {
+                                    "product_id": {
+                                        "type": "string",
+                                        "example": "01HHJC7RERZ0M3VDGS6X9HM33A"
+                                    },
+                                    "quantity": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
-                        "description": "Result of the update",
+                        "description": "Item added",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -679,7 +728,7 @@
                                         "success": {
                                             "description": "",
                                             "type": "boolean",
-                                            "example": true
+                                            "example": "true"
                                         }
                                     },
                                     "type": "object"
@@ -2478,7 +2527,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/InvoiceRequest"
+                                "$ref": "#/components/schemas/BaseInvoiceRequest"
                             }
                         }
                     }
@@ -3219,21 +3268,41 @@
                 "description": "Check payment",
                 "operationId": "checkPayment",
                 "requestBody": {
+                    "description": "Invoice request object",
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
+                                "schema": "CreditCardPaymentRequest",
+                                "required": [
+                                    "payment_method",
+                                    "payment_details"
+                                ],
                                 "properties": {
-                                    "method": {
+                                    "payment_method": {
                                         "type": "string",
                                         "example": "Credit Card"
                                     },
-                                    "account_name": {
-                                        "type": "string",
-                                        "example": "John Doe"
-                                    },
-                                    "account_number": {
-                                        "type": "string",
-                                        "example": "9876543XX"
+                                    "payment_details": {
+                                        "type": "object",
+                                        "oneOf": [
+                                            {
+                                                "$ref": "#/components/schemas/BankTransferDetails"
+                                            },
+                                            {
+                                                "$ref": "#/components/schemas/CreditCardDetails"
+                                            },
+                                            {
+                                                "$ref": "#/components/schemas/BuyNowPayLaterDetails"
+                                            },
+                                            {
+                                                "$ref": "#/components/schemas/GiftCardDetails"
+                                            },
+                                            {
+                                                "title": "CashOnDeliveryDetails",
+                                                "type": "object"
+                                            }
+                                        ]
                                     }
                                 },
                                 "type": "object"
@@ -5326,6 +5395,113 @@
                     },
                     "id": {
                         "$ref": "#/components/schemas/ProductResponse"
+                    }
+                },
+                "type": "object"
+            },
+            "BaseInvoiceRequest": {
+                "required": [
+                    "billing_address",
+                    "billing_city",
+                    "billing_state",
+                    "billing_country",
+                    "billing_postcode",
+                    "payment_method",
+                    "payment_details",
+                    "cart_id"
+                ],
+                "properties": {
+                    "billing_address": {
+                        "type": "string"
+                    },
+                    "billing_city": {
+                        "type": "string"
+                    },
+                    "billing_state": {
+                        "type": "string"
+                    },
+                    "billing_country": {
+                        "type": "string"
+                    },
+                    "billing_postcode": {
+                        "type": "string"
+                    },
+                    "payment_method": {
+                        "type": "string"
+                    },
+                    "cart_id": {
+                        "type": "string"
+                    },
+                    "payment_details": {
+                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/BankTransferDetails"
+                            },
+                            {
+                                "$ref": "#/components/schemas/CreditCardDetails"
+                            },
+                            {
+                                "$ref": "#/components/schemas/GiftCardDetails"
+                            },
+                            {
+                                "$ref": "#/components/schemas/BuyNowPayLaterDetails"
+                            },
+                            {
+                                "title": "CashOnDeliveryDetails",
+                                "type": "object"
+                            }
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "BankTransferDetails": {
+                "properties": {
+                    "bank_name": {
+                        "type": "string"
+                    },
+                    "account_name": {
+                        "type": "string"
+                    },
+                    "account_number": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "CreditCardDetails": {
+                "properties": {
+                    "credit_card_number": {
+                        "type": "string"
+                    },
+                    "expiration_date": {
+                        "type": "string"
+                    },
+                    "cvv": {
+                        "type": "string"
+                    },
+                    "card_holder_name": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "GiftCardDetails": {
+                "properties": {
+                    "gift_card_number": {
+                        "type": "string"
+                    },
+                    "validation_code": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "BuyNowPayLaterDetails": {
+                "properties": {
+                    "monthly_installments": {
+                        "type": "string"
                     }
                 },
                 "type": "object"

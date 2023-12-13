@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PaymentBankTransferDetails;
+use App\Models\PaymentBnplDetails;
+use App\Models\PaymentCashOnDeliveryDetails;
+use App\Models\PaymentCreditCardDetails;
+use App\Models\PaymentGiftCardDetails;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -14,25 +19,34 @@ class PaymentController extends Controller
      *      tags={"Payment"},
      *      summary="Check payment",
      *      description="Check payment",
-     *     @OA\RequestBody(
-     *        @OA\MediaType(
-     *                mediaType="application/json",
-     *           @OA\Schema(
-     *               @OA\Property(property="method",
-     *                        type="string",
-     *                        example="Credit Card"
-     *               ),
-     *               @OA\Property(property="account_name",
-     *                        type="string",
-     *                        example="John Doe"
-     *               ),
-     *               @OA\Property(property="account_number",
-     *                        type="string",
-     *                        example="9876543XX"
-     *               )
-     *             )
-     *         )
-     *     ),
+     *      @OA\RequestBody(
+     *           required=true,
+     *           description="Invoice request object",
+     *           @OA\MediaType(
+     *               mediaType="application/json",
+     *               @OA\Schema(
+     *                  schema="CreditCardPaymentRequest",
+     *                  type="object",
+     *                  required={"payment_method", "payment_details"},
+     *                  @OA\Property(
+     *                      property="payment_method",
+     *                      type="string",
+     *                      example="Credit Card"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="payment_details",
+     *                      type="object",
+     *                      oneOf={
+     *                          @OA\Schema(ref="#/components/schemas/BankTransferDetails"),
+     *                          @OA\Schema(ref="#/components/schemas/CreditCardDetails"),
+     *                          @OA\Schema(ref="#/components/schemas/BuyNowPayLaterDetails"),
+     *                          @OA\Schema(ref="#/components/schemas/GiftCardDetails"),
+     *                          @OA\Schema(type="object", title="CashOnDeliveryDetails")
+     *                      }
+     *                  )
+     *              )
+     *           )
+     *       ),
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
@@ -44,6 +58,55 @@ class PaymentController extends Controller
      */
     public function check(Request $request)
     {
+        $paymentMethod = $request->input('payment_method');
+        if ($paymentMethod === 'Bank Transfer') {
+            $request->validate([
+                'payment_details.bank_name' => 'required|string|max:255|regex:/^[a-zA-Z ]+$/',
+                'payment_details.account_name' => 'required|string|max:255|regex:/^[a-zA-Z0-9 .\'-]+$/',
+                'payment_details.account_number' => 'required|string|max:255|regex:/^\d+$/',
+            ]);
+        }
+
+        if ($paymentMethod === 'Cash on Delivery') {
+            $cashOnDeliveryDetails = new PaymentCashOnDeliveryDetails();
+            $cashOnDeliveryDetails->save();
+
+            $payment->payment_details_id = $cashOnDeliveryDetails->id;
+            $payment->payment_details_type = PaymentCashOnDeliveryDetails::class;
+        }
+
+        if ($paymentMethod === 'Credit Card') {
+            $request->validate([
+                'payment_details.credit_card_number' => 'required|string|regex:/^\d{4}-\d{4}-\d{4}-\d{4}$/',
+                'payment_details.expiration_date' => 'required|date_format:m/Y|after:today',
+                'payment_details.cvv' => 'required|string|regex:/^\d{3,4}$/',
+                'payment_details.card_holder_name' => 'required|string|max:255|regex:/^[a-zA-Z ]+$/',
+            ]);
+            $creditCardDetailsData = $request->input('payment_details');
+            $creditCardDetails = new PaymentCreditCardDetails($creditCardDetailsData);
+            $creditCardDetails->save();
+
+            $payment->payment_details_id = $creditCardDetails->id;
+            $payment->payment_details_type = PaymentCreditCardDetails::class;
+        }
+
+        if ($paymentMethod === 'Buy Now Pay Later') {
+            $request->validate([
+                'payment_details.monthly_installments' => 'required|numeric',
+            ]);
+            $bnplDetailsData = $request->input('payment_details');
+            $bnplDetails = new PaymentBnplDetails($bnplDetailsData);
+            $bnplDetails->save();
+
+            $payment->payment_details_id = $bnplDetails->id;
+            $payment->payment_details_type = PaymentBnplDetails::class;
+        }
+        if ($paymentMethod === 'Gift Card') {
+            $request->validate([
+                'payment_details.gift_card_number' => 'required|string|max:255|regex:/^[a-zA-Z0-9]+$/',
+                'payment_details.validation_code' => 'required|string|max:255|regex:/^[a-zA-Z0-9]+$/',
+            ]);
+        }
         return $this->preferredFormat(['message' => 'Payment was successful'], ResponseAlias::HTTP_OK);
     }
 
