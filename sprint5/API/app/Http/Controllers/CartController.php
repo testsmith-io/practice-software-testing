@@ -76,35 +76,59 @@ class CartController extends Controller {
      *      tags={"Cart"},
      *      summary="Add item to cart",
      *      description="Add item to cart",
-     * @OA\Response(
-     *          response=201,
-     *          description="Create cartId",
+     *      @OA\Parameter(
+     *           name="id",
+     *           in="path",
+     *           required=true,
+     *           @OA\Schema(type="string"),
+     *           description="Cart ID"
+     *       ),
+     *       @OA\RequestBody(
+     *           required=true,
+     *           description="Payload to add item to cart",
+     *           @OA\JsonContent(
+     *               required={"product_id", "quantity"},
+     *               @OA\Property(
+     *                   property="product_id",
+     *                   type="string",
+     *                   example="01HHJC7RERZ0M3VDGS6X9HM33A"
+     *               ),
+     *               @OA\Property(
+     *                   property="quantity",
+     *                   type="integer",
+     *                   example=1
+     *               )
+     *           )
+     *       ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Item added",
      *         @OA\MediaType(
      *                 mediaType="application/json",
      *            @OA\Schema(
-     *                @OA\Property(property="cart_id",
+     *                @OA\Property(property="result",
      *                         type="string",
-     *                         example="1234",
+     *                         example="item added or updated",
      *                         description=""
      *                     )
      *              )
      *          )
      *      ),
-     * @OA\Response(
+     *      @OA\Response(
      *          response=404,
      *          description="Returns when requested item is not found",
      *          @OA\JsonContent(
      *              @OA\Property(property="message", type="string", example="Requested item not found"),
      *          )
      *      ),
-     * @OA\Response(
+     *      @OA\Response(
      *          response=405,
      *          description="Returns when the method is not allowed for the requested route",
      *          @OA\JsonContent(
      *              @OA\Property(property="message", type="string", example="Method is not allowed for the requested route"),
      *          )
      *      ),
-     * @OA\Response(
+     *      @OA\Response(
      *          response=422,
      *          description="Returns when the server was not able to process the content",
      *      ),
@@ -218,33 +242,44 @@ class CartController extends Controller {
      *      tags={"Cart"},
      *      summary="Update quantity of item in cart",
      *      description="Update quantity of item in cart",
-     *      @OA\Parameter(
-     *          name="cartId",
-     *          in="path",
-     *          description="The cartId parameter in path",
-     *          required=true,
-     *          example=1,
-     *          @OA\Schema(type="string")
-     *      ),
+    *       @OA\Parameter(
+     *            name="id",
+     *            in="path",
+     *            required=true,
+     *            @OA\Schema(type="string"),
+     *            description="Cart ID"
+     *        ),
      *      @OA\RequestBody(
-     *          required=true,
-     *          description="Brand request object",
-     *          @OA\JsonContent(ref="#/components/schemas/BrandRequest")
-     *      ),
+     *            required=true,
+     *            description="Payload to add item to cart",
+     *            @OA\JsonContent(
+     *                required={"product_id", "quantity"},
+     *                @OA\Property(
+     *                    property="product_id",
+     *                    type="string",
+     *                    example="01HHJC7RERZ0M3VDGS6X9HM33A"
+     *                ),
+     *                @OA\Property(
+     *                    property="quantity",
+     *                    type="integer",
+     *                    example=1
+     *                )
+     *            )
+     *        ),
      *      @OA\Response(
-     *          response=200,
-     *          description="Result of the update",
+     *           response=200,
+     *           description="Item added",
      *          @OA\MediaType(
-     *              mediaType="application/json",
-     *              @OA\Schema(
-     *                  @OA\Property(property="success",
-     *                       type="boolean",
-     *                       example=true,
-     *                       description=""
-     *                  ),
-     *              )
-     *          )
-     *      ),
+     *                  mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(property="success",
+     *                          type="boolean",
+     *                          example="true",
+     *                          description=""
+     *                      )
+     *               )
+     *           )
+     *       ),
      *      @OA\Response(
      *          response=404,
      *          description="Returns when the resource is not found",

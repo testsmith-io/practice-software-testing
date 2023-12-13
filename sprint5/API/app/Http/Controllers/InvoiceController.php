@@ -98,10 +98,10 @@ class InvoiceController extends Controller {
      *      summary="Store new invoice",
      *      description="Store new invoice",
      *      @OA\RequestBody(
-     *          required=true,
-     *          description="Invoice request object",
-     *          @OA\JsonContent(ref="#/components/schemas/InvoiceRequest")
-     *      ),
+     *           required=true,
+     *           description="Invoice request object",
+     *           @OA\JsonContent(ref="#/components/schemas/BaseInvoiceRequest")
+     *       ),
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
@@ -186,11 +186,11 @@ class InvoiceController extends Controller {
 
         // Check payment method and create corresponding payment details
         if ($paymentMethod === 'Bank Transfer') {
-               $request->validate([
-                            'payment_details.bank_name' => 'required|string|max:255|regex:/^[a-zA-Z ]+$/',
-                            'payment_details.account_name' => 'required|string|max:255|regex:/^[a-zA-Z0-9 .\'-]+$/',
-                            'payment_details.account_number' => 'required|string|max:255|regex:/^\d+$/',
-                        ]);
+            $request->validate([
+                'payment_details.bank_name' => 'required|string|max:255|regex:/^[a-zA-Z ]+$/',
+                'payment_details.account_name' => 'required|string|max:255|regex:/^[a-zA-Z0-9 .\'-]+$/',
+                'payment_details.account_number' => 'required|string|max:255|regex:/^\d+$/',
+            ]);
             $bankTransferDetailsData = $request->input('payment_details');
             $bankTransferDetails = new PaymentBankTransferDetails($bankTransferDetailsData);
             $bankTransferDetails->save();
@@ -208,12 +208,12 @@ class InvoiceController extends Controller {
         }
 
         if ($paymentMethod === 'Credit Card') {
-                        $request->validate([
-                            'payment_details.credit_card_number' => 'required|string|regex:/^\d{4}-\d{4}-\d{4}-\d{4}$/',
-                            'payment_details.expiration_date' => 'required|date_format:m/Y|after:today',
-                            'payment_details.cvv' => 'required|string|regex:/^\d{3,4}$/',
-                            'payment_details.card_holder_name' => 'required|string|max:255|regex:/^[a-zA-Z ]+$/',
-                        ]);
+            $request->validate([
+                'payment_details.credit_card_number' => 'required|string|regex:/^\d{4}-\d{4}-\d{4}-\d{4}$/',
+                'payment_details.expiration_date' => 'required|date_format:m/Y|after:today',
+                'payment_details.cvv' => 'required|string|regex:/^\d{3,4}$/',
+                'payment_details.card_holder_name' => 'required|string|max:255|regex:/^[a-zA-Z ]+$/',
+            ]);
             $creditCardDetailsData = $request->input('payment_details');
             $creditCardDetails = new PaymentCreditCardDetails($creditCardDetailsData);
             $creditCardDetails->save();
@@ -223,9 +223,9 @@ class InvoiceController extends Controller {
         }
 
         if ($paymentMethod === 'Buy Now Pay Later') {
-                        $request->validate([
-                            'payment_details.monthly_installments' => 'required|numeric',
-                        ]);
+            $request->validate([
+                'payment_details.monthly_installments' => 'required|numeric',
+            ]);
             $bnplDetailsData = $request->input('payment_details');
             $bnplDetails = new PaymentBnplDetails($bnplDetailsData);
             $bnplDetails->save();
@@ -235,10 +235,10 @@ class InvoiceController extends Controller {
         }
 
         if ($paymentMethod === 'Gift Card') {
-                        $request->validate([
-                            'payment_details.gift_card_number' => 'required|string|max:255|regex:/^[a-zA-Z0-9]+$/',
-                            'payment_details.validation_code' => 'required|string|max:255|regex:/^[a-zA-Z0-9]+$/',
-                        ]);
+            $request->validate([
+                'payment_details.gift_card_number' => 'required|string|max:255|regex:/^[a-zA-Z0-9]+$/',
+                'payment_details.validation_code' => 'required|string|max:255|regex:/^[a-zA-Z0-9]+$/',
+            ]);
             $giftCardDetailsData = $request->input('payment_details');
             $giftCardDetails = new PaymentGiftCardDetails($giftCardDetailsData);
             $giftCardDetails->save();
