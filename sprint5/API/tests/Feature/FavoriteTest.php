@@ -8,12 +8,13 @@ use App\Models\Favorite;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tests\TestCase;
 
 class FavoriteTest extends TestCase {
-    use RefreshDatabase;
+    use DatabaseMigrations;
 
     public function testRetrieveFavorites() {
         $user = User::factory()->create();

@@ -3,11 +3,13 @@
 namespace tests\Feature;
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tests\TestCase;
 
 class ContactTest extends TestCase {
+    use DatabaseMigrations;
 
     public function testSendMessageAsGuest() {
         $response = $this->addMessage();
@@ -59,7 +61,7 @@ class ContactTest extends TestCase {
                 'created_at'
             ]);
 
-        $response = $this->post('/messages/' . $response->json('id') . '/attach-file', [
+        $response = $this->postJson('/messages/' . $response->json('id') . '/attach-file', [
             'file' => UploadedFile::fake()->create('log.txt', 500)
         ]);
         $response->assertJson([
@@ -80,7 +82,7 @@ class ContactTest extends TestCase {
                 'created_at'
             ]);
 
-        $response = $this->post('/messages/' . $response->json('id') . '/attach-file', [
+        $response = $this->postJson('/messages/' . $response->json('id') . '/attach-file', [
             'file' => UploadedFile::fake()->create('log.txt', 0)
         ]);
         $response->assertJson([
@@ -101,7 +103,7 @@ class ContactTest extends TestCase {
                 'created_at'
             ]);
 
-        $response = $this->post('/messages/' . $response->json('id') . '/attach-file', [
+        $response = $this->postJson('/messages/' . $response->json('id') . '/attach-file', [
         ]);
         $response->assertJson([
             'errors' => ['No file attached.']
@@ -247,7 +249,7 @@ class ContactTest extends TestCase {
             'message' => $this->faker->text(55)
         ];
 
-        $response = $this->post('/messages', $payload);
+        $response = $this->postJson('/messages', $payload);
         return $response;
     }
 
