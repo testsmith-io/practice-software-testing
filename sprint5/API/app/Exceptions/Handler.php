@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Throwable;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
@@ -83,6 +84,11 @@ class Handler extends ExceptionHandler
             return response()->json([
                 'message' => 'Requested item not found'
             ], ResponseAlias::HTTP_NOT_FOUND);
+        }
+        if ($e instanceof TooManyRequestsHttpException) {
+            return response()->json([
+                'message' => 'Too many requests'
+            ], ResponseAlias::HTTP_TOO_MANY_REQUESTS);
         }
         if ($e instanceof QueryException) {
             $errorCode = $e->errorInfo[1];
