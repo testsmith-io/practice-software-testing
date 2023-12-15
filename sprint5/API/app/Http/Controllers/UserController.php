@@ -150,35 +150,39 @@ class UserController extends Controller {
      */
     public function login(Request $request)
     {
-        $credentials = $request->only(['email', 'password']);
-
         // Validate input
         $this->validateLogin($request);
 
-        // Attempt to get the user
-        $user = User::where('email', $credentials['email'])->first();
+        $credentials = $request->only(['email', 'password']);
 
-        // Check if user exists and if role is not admin
-        if ($user && $user->role != "admin") {
-            // Check failed login attempts for non-admin users
-            if ($user->failed_login_attempts >= self::MAX_LOGIN_ATTEMPTS) {
-                return $this->lockedAccountResponse();
-            }
-        }
+        // Attempt login and get token
+        $token = app('auth')->attempt($credentials);
 
-        // Attempt login
-        if (!auth()->attempt($credentials)) {
+        // Check if login was successful
+        if (!$token) {
+            // Login failed
+            $user = User::where('email', $credentials['email'])->first();
             if ($user && $user->role != "admin") {
                 $this->incrementLoginAttempts($user);
             }
             return $this->failedLoginResponse();
         }
 
+        // At this point, login is successful
+        $user = auth()->user();
+
+        // Check if user exists and if role is not admin
+        if ($user->role != "admin") {
+            // Check if account is locked
+            if ($user->failed_login_attempts >= self::MAX_LOGIN_ATTEMPTS) {
+                return $this->lockedAccountResponse();
+            }
+        }
+
         // Reset failed login attempts on successful login
         $this->resetLoginAttempts($user);
 
-        // Proceed with successful login response
-        $token = auth()->attempt($credentials);
+        // Return the successful login response
         return $this->successfulLoginResponse($token);
     }
 
