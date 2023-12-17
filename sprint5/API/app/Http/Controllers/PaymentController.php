@@ -68,11 +68,7 @@ class PaymentController extends Controller
         }
 
         if ($paymentMethod === 'Cash on Delivery') {
-            $cashOnDeliveryDetails = new PaymentCashOnDeliveryDetails();
-            $cashOnDeliveryDetails->save();
 
-            $payment->payment_details_id = $cashOnDeliveryDetails->id;
-            $payment->payment_details_type = PaymentCashOnDeliveryDetails::class;
         }
 
         if ($paymentMethod === 'Credit Card') {
@@ -82,24 +78,12 @@ class PaymentController extends Controller
                 'payment_details.cvv' => 'required|string|regex:/^\d{3,4}$/',
                 'payment_details.card_holder_name' => 'required|string|max:255|regex:/^[a-zA-Z ]+$/',
             ]);
-            $creditCardDetailsData = $request->input('payment_details');
-            $creditCardDetails = new PaymentCreditCardDetails($creditCardDetailsData);
-            $creditCardDetails->save();
-
-            $payment->payment_details_id = $creditCardDetails->id;
-            $payment->payment_details_type = PaymentCreditCardDetails::class;
         }
 
         if ($paymentMethod === 'Buy Now Pay Later') {
             $request->validate([
                 'payment_details.monthly_installments' => 'required|numeric',
             ]);
-            $bnplDetailsData = $request->input('payment_details');
-            $bnplDetails = new PaymentBnplDetails($bnplDetailsData);
-            $bnplDetails->save();
-
-            $payment->payment_details_id = $bnplDetails->id;
-            $payment->payment_details_type = PaymentBnplDetails::class;
         }
         if ($paymentMethod === 'Gift Card') {
             $request->validate([
