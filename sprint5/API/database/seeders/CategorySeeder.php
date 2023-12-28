@@ -29,6 +29,7 @@ class CategorySeeder extends Seeder {
 
         $handToolsId = DB::table('categories')->where('name', '=', 'Hand Tools')->first()->id;
         $powerToolsId = DB::table('categories')->where('name', '=', 'Power Tools')->first()->id;
+        $otherId = DB::table('categories')->where('name', '=', 'Other')->first()->id;
 
         DB::table('categories')->insert([
             [
@@ -58,6 +59,16 @@ class CategorySeeder extends Seeder {
                 'slug' => 'pliers'],
             [
                 'id' => Str::ulid()->toBase32(),
+                'parent_id' => $handToolsId,
+                'name' => 'Chisels',
+                'slug' => 'chisels'],
+            [
+                'id' => Str::ulid()->toBase32(),
+                'parent_id' => $handToolsId,
+                'name' => 'Measures',
+                'slug' => 'measures'],
+            [
+                'id' => Str::ulid()->toBase32(),
                 'parent_id' => $powerToolsId,
                 'name' => 'Grinder',
                 'slug' => 'grinder'],
@@ -73,9 +84,33 @@ class CategorySeeder extends Seeder {
                 'slug' => 'saw'],
             [
                 'id' => Str::ulid()->toBase32(),
-                'parent_id' => $handToolsId,
+                'parent_id' => $powerToolsId,
                 'name' => 'Drill',
-                'slug' => 'drill']]);
-
+                'slug' => 'drill'],
+            [
+                'id' => Str::ulid()->toBase32(),
+                'parent_id' => $otherId,
+                'name' => 'Tool Belts',
+                'slug' => 'tool-belts'],
+            [
+                'id' => Str::ulid()->toBase32(),
+                'parent_id' => $otherId,
+                'name' => 'Storage Solutions',
+                'slug' => 'storage solutions'],
+            [
+                'id' => Str::ulid()->toBase32(),
+                'parent_id' => $otherId,
+                'name' => 'Workbench',
+                'slug' => 'workbench'],
+            [
+                'id' => Str::ulid()->toBase32(),
+                'parent_id' => $otherId,
+                'name' => 'Safety Gear',
+                'slug' => 'safety-gear'],
+            [
+                'id' => Str::ulid()->toBase32(),
+                'parent_id' => $otherId,
+                'name' => 'Fasteners',
+                'slug' => 'fasteners']]);
     }
 }
