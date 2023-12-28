@@ -14,11 +14,10 @@ class BrandSeeder extends Seeder {
     public function run(): void {
         DB::table('brands')->insert([[
             'id' => Str::ulid()->toBase32(),
-            'name' => 'Brand name 1',
-            'slug' => 'brand-name-1'
+            'name' => 'ForgeFlex Tools',
+            'slug' => 'forgeflex-tools'
         ], ['id' => Str::ulid()->toBase32(),
-            'name' => 'Brand name 2',
-            'slug' => 'brand-name-2']]);
-
+            'name' => 'MightyCraft Hardware',
+            'slug' => 'mightycraft-hardware']]);
     }
 }
