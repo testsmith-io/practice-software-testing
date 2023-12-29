@@ -9,6 +9,7 @@ import {Pagination} from "../../models/pagination";
 import {ProductService} from "../../_services/product.service";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
 import {Options} from "@angular-slider/ngx-slider";
+import {Category} from "../../models/category";
 
 @Component({
   selector: 'app-overview',
@@ -95,6 +96,51 @@ export class OverviewComponent implements OnInit {
           item.discount_price = DiscountUtil.calculateDiscount(item.price);
         }
       })
+    });
+  }
+
+  selectParentWithSubcategories(parentCategory: any, event: any) {
+    const isChecked = event.target.checked;
+
+    this.updateCategoryFilter(parentCategory.id, isChecked);
+    this.updateSubcategories(parentCategory, isChecked);
+
+    this.filterProducts();
+  }
+
+  updateSubcategories(category: Category, isChecked: boolean) {
+    category.sub_categories.forEach((subCat: Category) => {
+      this.updateCategoryFilter(subCat.id, isChecked);
+      if (subCat.sub_categories && subCat.sub_categories.length > 0) {
+        this.updateSubcategories(subCat, isChecked);
+      }
+    });
+  }
+
+  updateCategoryFilter(categoryId: number, addCategory: boolean) {
+    if (addCategory) {
+      if (!this.categoriesFilter.includes(categoryId)) {
+        this.categoriesFilter.push(categoryId);
+      }
+    } else {
+      this.categoriesFilter = this.categoriesFilter.filter(item => item !== categoryId);
+    }
+  }
+
+  isCategorySelected(category: Category): boolean {
+    return this.categoriesFilter.includes(category.id);
+  }
+
+  filterProducts() {
+    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0).subscribe(res => {
+      this.resultState = 'filter_completed';
+      this.currentPage = 1;
+      this.results = res;
+      this.results.data.map((item: Product) => {
+        if (item.is_location_offer) {
+          item.discount_price = DiscountUtil.calculateDiscount(item.price);
+        }
+      });
     });
   }
 

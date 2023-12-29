@@ -3,4 +3,5 @@ export class Category {
   parent_id!: number;
   name!: string;
   slug!: string;
+  sub_categories!: Category[];
 }
