@@ -52,20 +52,31 @@
     <h4>By category:</h4>
     <ng-template #recursiveList let-list>
       @for (category of list;track category) {
-        <div class="checkbox">
-          <label>@if (category.parent_id) {
-            <input #checkboxes type="checkbox" class="icheck"
+      <div class="checkbox">
+        <label>
+          <!-- Parent category checkbox -->
+          @if (!category.parent_id) {
+            <input type="checkbox" class="icheck"
                    attr.data-test="category-{{category.id}}" name="category_id"
-                   value="{{category.id}}" (change)="filterByCategory($event)"/>
+                   value="{{category.id}}"
+                   [checked]="isCategorySelected(category)"
+                   (change)="selectParentWithSubcategories(category, $event)"/>
+          } @else {
+          <input type="checkbox" class="icheck"
+                 attr.data-test="category-{{category.id}}" name="category_id"
+                 value="{{category.id}}"
+                 [checked]="isCategorySelected(category)"
+                 (change)="filterByCategory($event)"/>
           }
-            {{ category.name }}</label>
-          @if (category.sub_categories.length > 0) {
-            <ul>
-              <ng-container
-                *ngTemplateOutlet="recursiveList; context:{ $implicit: category.sub_categories }"></ng-container>
-            </ul>
-          }
-        </div>
+        {{ category.name }}
+      </label>
+        <!-- Subcategories -->
+        @if (category.sub_categories.length > 0) {
+        <ul>
+          <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: category.sub_categories }"></ng-container>
+        </ul>
+        }
+      </div>
       }
     </ng-template>
     <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: categories }"></ng-container>
