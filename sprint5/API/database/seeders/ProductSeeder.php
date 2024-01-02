@@ -509,17 +509,6 @@ class ProductSeeder extends Seeder {
             'is_rental' => false
         ], [
             'id' => Str::ulid()->toBase32(),
-            'name' => 'Circular Saw',
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ut fermentum tortor. Donec dolor urna, cursus sed scelerisque a, pulvinar eu metus. Vestibulum consectetur neque at diam laoreet, quis pharetra lacus auctor. Vestibulum volutpat porttitor lectus et hendrerit. Sed aliquet ultricies lobortis. Integer quis felis vel orci porta vehicula. Suspendisse potenti. Nullam nec ligula sed urna fermentum efficitur ac quis turpis. Aliquam ac molestie dui. Integer eleifend mattis metus id tristique. Donec aliquet erat vehicula dolor faucibus porta. Vestibulum est leo, bibendum in luctus non, tristique pellentesque lectus. Nam sit amet convallis est. Nam molestie finibus eros vitae facilisis.',
-            'stock' => 11,
-            'price' => 80.19,
-            'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
-            'category_id' => DB::table('categories')->where('name', '=', 'Saw')->first()->id,
-            'product_image_id' => DB::table('product_images')->where('file_name', '=', 'saw02.jpeg')->first()->id,
-            'is_location_offer' => false,
-            'is_rental' => false
-        ], [
-            'id' => Str::ulid()->toBase32(),
             'name' => 'Random Orbit Sander',
             'description' => 'Sed nec luctus sem. Nunc et nibh massa. Curabitur laoreet, ligula ut aliquam blandit, turpis nibh scelerisque tortor, sit amet scelerisque ligula odio at neque. Nulla facilisi. Etiam ac dui sit amet est dapibus lacinia in quis odio. Cras pharetra tempor tincidunt. Donec dignissim dignissim urna a euismod. Integer non eros non turpis pharetra laoreet sed non mi.',
             'stock' => 11,
