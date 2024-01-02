@@ -32,7 +32,7 @@
 
           <!-- Bank Transfer Fields -->
           <div *ngIf="cusPayment.get('payment_method').value === 'Bank Transfer'">
-            <input class="form-control mb-3" formControlName="bank_name" placeholder="Bank Name">
+            <input class="form-control mb-3" formControlName="bank_name" data-test="bank_name" placeholder="Bank Name">
             @if (p['bank_name'].invalid && (p['bank_name'].dirty || p['bank_name'].touched)) {
               <div class="alert alert-danger">
                 @if (p['bank_name'].errors?.['pattern'] || p['bank_name'].errors?.['required']) {
@@ -42,7 +42,7 @@
                 }
               </div>
             }
-            <input class="form-control mb-3" formControlName="account_name" placeholder="Account Name">
+            <input class="form-control mb-3" formControlName="account_name" data-test="account_name" placeholder="Account Name">
             @if (p['account_name'].invalid && (p['account_name'].dirty || p['account_name'].touched)) {
               <div class="alert alert-danger">
                 @if (p['account_name'].errors?.['pattern'] || p['account_name'].errors?.['required']) {
@@ -52,7 +52,7 @@
                 }
               </div>
             }
-            <input class="form-control" formControlName="account_number" aria-describedby="account_number_help"
+            <input class="form-control" formControlName="account_number" data-test="account_number" aria-describedby="account_number_help"
                    placeholder="Account Number">
             <small id="account_number_help" class="form-text text-muted d-block mb-3">Please enter your bank account
               number as it appears on your bank statement. It's a unique series of numbers used to identify your
@@ -70,7 +70,7 @@
 
           <!-- Gift Card Fields -->
           <div *ngIf="selectedPaymentMethod === 'Gift Card'">
-            <input class="form-control" formControlName="gift_card_number" aria-describedby="gift_card_number_help"
+            <input class="form-control" formControlName="gift_card_number" data-test="gift_card_number" aria-describedby="gift_card_number_help"
                    placeholder="Gift Card Number">
             <small id="gift_card_number_help" class="form-text text-muted d-block mb-3">Enter the unique number found on
               your gift card. This number is usually located on the back of the card and may consist of digits and/or
@@ -84,7 +84,7 @@
                 }
               </div>
             }
-            <input class="form-control" formControlName="validation_code" aria-describedby="validation_code_help"
+            <input class="form-control" formControlName="validation_code" data-test="validation_code" aria-describedby="validation_code_help"
                    placeholder="Validation Code">
             <small id="validation_code_help" class="form-text text-muted d-block mb-3">The validation code is a security
               feature found on your gift card, often located near the gift card number. Enter this code exactly as it
@@ -102,7 +102,7 @@
 
           <!-- Credit Card Fields -->
           <div *ngIf="selectedPaymentMethod === 'Credit Card'">
-            <input class="form-control" formControlName="credit_card_number" aria-describedby="credit_card_number_help"
+            <input class="form-control" formControlName="credit_card_number" data-test="credit_card_number" aria-describedby="credit_card_number_help"
                    placeholder="Credit Card Number">
             <small id="credit_card_number_help" class="form-text text-muted d-block mb-3">Enter your 16-digit credit
               card number as it appears on the card, in the format 0000-0000-0000-0000. Ensure that you include the
@@ -117,7 +117,7 @@
               </div>
             }
 
-            <input class="form-control mb-3" formControlName="expiration_date" placeholder="Expiration Date">
+            <input class="form-control mb-3" formControlName="expiration_date" data-test="expiration_date" placeholder="Expiration Date">
             @if (p['expiration_date'].invalid && (p['expiration_date'].dirty || p['expiration_date'].touched)) {
               <div class="alert alert-danger">
                 @if (p['expiration_date'].errors?.['dateFormat'] || p['expiration_date'].errors?.['required']) {
@@ -132,7 +132,7 @@
                 }
               </div>
             }
-            <input class="form-control" formControlName="cvv" aria-describedby="cvv_help" placeholder="CVV">
+            <input class="form-control" formControlName="cvv" data-test="cvv" aria-describedby="cvv_help" placeholder="CVV">
             <small id="cvv_help" class="form-text text-muted d-block mb-3">The CVV is a 3-digit or 4-digit number. It's
               used for added security during card-not-present transactions.</small>
             @if (p['cvv'].invalid && (p['cvv'].dirty || p['cvv'].touched)) {
@@ -144,7 +144,7 @@
                 }
               </div>
             }
-            <input class="form-control mb-3" formControlName="card_holder_name" placeholder="Card Holder Name">
+            <input class="form-control mb-3" formControlName="card_holder_name" data-test="card_holder_name" placeholder="Card Holder Name">
             @if (p['card_holder_name'].invalid && (p['card_holder_name'].dirty || p['card_holder_name'].touched)) {
               <div class="alert alert-danger">
                 @if (p['card_holder_name'].errors?.['required']) {
