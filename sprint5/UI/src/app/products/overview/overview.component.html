@@ -39,7 +39,7 @@
     <hr>
     <form [formGroup]="search" (ngSubmit)="onSearchSubmit()" autocomplete=off>
       <div class="input-group mb-3">
-        <input formControlName="query" data-test="search-query" type="text" class="form-control">
+        <input formControlName="query" data-test="search-query" type="text" placeholder="Search" class="form-control">
         <button data-test="search-submit" (click)="reset()" class="btn btn-warning" type="reset"
                 data-test="search-reset">X
         </button>
