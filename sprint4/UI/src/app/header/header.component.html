@@ -99,7 +99,7 @@
           </ul>
         </li>
         <li *ngIf="items && items !== 0" class="nav-item">
-          <a class="nav-link" data-test="nav-cart" routerLink="/checkout"> <i class="fa fa-shopping-cart px-1"></i><span
+          <a class="nav-link" data-test="nav-cart" aria-label="cart" routerLink="/checkout"> <i class="fa fa-shopping-cart px-1"></i><span
             class='badge rounded-pill bg-danger' data-test="cart-quantity" id='lblCartCount'>{{items}}</span></a>
         </li>
       </ul>

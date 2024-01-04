@@ -16,7 +16,7 @@ import {AdminAuthGuard} from "./AdminAuthGuard";
 import {ContentTypeInterceptor} from "./_helpers/contenttype.interceptor";
 import {ToastsComponent} from "./_services/toasts.component";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
-import {RouterModule} from "@angular/router";
+import {RouterLink, RouterModule} from "@angular/router";
 import {NgxPaginationModule} from "ngx-pagination";
 import {CategoryComponent} from './products/category/category.component';
 import {OverviewComponent} from './products/rentals/overview/overview.component';
@@ -40,19 +40,20 @@ import {PagenotfoundComponent} from './shared/pagenotfound/pagenotfound.componen
     ProductOverviewComponent,
     PagenotfoundComponent
   ],
-  imports: [
-    BrowserModule,
-    NgbModule,
-    HttpClientModule,
-    NgHttpLoaderModule.forRoot(),
-    RouterModule,
-    AppRoutingModule,
-    FormsModule,
-    ArchwizardModule,
-    ReactiveFormsModule,
-    NgxPaginationModule,
-    NgxSliderModule
-  ],
+    imports: [
+        BrowserModule,
+        NgbModule,
+        HttpClientModule,
+        NgHttpLoaderModule.forRoot(),
+        RouterModule,
+        AppRoutingModule,
+        FormsModule,
+        ArchwizardModule,
+        ReactiveFormsModule,
+        NgxPaginationModule,
+        NgxSliderModule,
+        RouterLink
+    ],
   providers: [UserAuthGuard, AdminAuthGuard, {
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptor,
