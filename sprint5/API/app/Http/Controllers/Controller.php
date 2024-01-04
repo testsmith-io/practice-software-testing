@@ -53,7 +53,7 @@ class Controller extends BaseController
         return response($xml, $status)->withHeaders($headers);
     }
 
-    protected function preferredFormat($data, $status = 200, array $headers = [], $xmlRoot = 'response')
+    protected function preferredFormat($data, $status = 200, array $headers = [], $xmlRoot = 'response'): \Illuminate\Foundation\Application|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
         if (str_contains(app('request')->headers->get('Accept'), 'xml')) {
             return $this->makeXML($data, $status, array_merge($headers, ['Content-Type' => app('request')->headers->get('Accept')]), $xmlRoot);
@@ -68,7 +68,7 @@ class Controller extends BaseController
      *
      * @param string $token
      *
-     * @return JsonResponse
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
      */
     protected function respondWithToken(string $token)
     {

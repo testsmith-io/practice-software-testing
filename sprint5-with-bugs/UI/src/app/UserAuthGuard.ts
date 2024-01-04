@@ -20,7 +20,7 @@ export class UserAuthGuard implements CanActivate {
             return true;
           }
         }),
-        catchError((error, caught) => {
+        catchError(() => {
           return of(false);
         })
       );

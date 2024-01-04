@@ -1,5 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {Component, Input, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from "@angular/forms";
 import {CartService} from "../../_services/cart.service";
 import {TokenStorageService} from "../../_services/token-storage.service";
@@ -8,7 +7,6 @@ import {Observable, of} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {PaymentService} from "../../_services/payment.service";
 import {InvoiceService} from "../../_services/invoice.service";
-import {AddressComponent} from "../address/address.component";
 
 @Component({
   selector: 'app-payment',
@@ -34,9 +32,7 @@ export class PaymentComponent implements OnInit {
   constructor(private cartService: CartService,
               private paymentService: PaymentService,
               private invoiceService: InvoiceService,
-              private formBuilder: FormBuilder,
-              private tokenStorage: TokenStorageService,
-              private customerAccountService: CustomerAccountService) {
+              private formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {

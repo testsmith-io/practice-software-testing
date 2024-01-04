@@ -43,7 +43,7 @@ export class ContactComponent implements OnInit {
     this.auth.getDetails().subscribe(res => {
       this.role = this.auth.getRole();
       this.name = res.first_name + ' ' + res.last_name;
-    }, (err) => {
+    }, () => {
       this.contact.get('first_name').setValidators(Validators.required);
       this.contact.get('last_name').setValidators(Validators.required);
       this.contact.get('email').setValidators(Validators.required);

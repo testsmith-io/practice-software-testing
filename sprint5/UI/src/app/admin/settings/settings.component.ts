@@ -47,7 +47,7 @@ export class SettingsComponent implements OnInit {
       window.localStorage.setItem('PAYMENT_ENDPOINT', endpoint);
     }
 
-    if (geolocation && geolocation !== null) {
+    if (geolocation) {
       window.localStorage.setItem('RETRIEVE_GEOLOCATION', geolocation);
     }
 

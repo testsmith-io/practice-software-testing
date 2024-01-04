@@ -1,13 +1,5 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Observable, of, map} from "rxjs";
-import {CartService} from "../_services/cart.service";
-import {CustomerAccountService} from "../shared/customer-account.service";
-import {TokenStorageService} from "../_services/token-storage.service";
-import {InvoiceService} from "../_services/invoice.service";
-import {PaymentService} from "../_services/payment.service";
-import {environment} from "../../environments/environment";
-import {Product} from "../models/product";
+import {Component, ViewChild} from '@angular/core';
+import {FormGroup } from "@angular/forms";
 import {AddressComponent} from "./address/address.component";
 
 @Component({

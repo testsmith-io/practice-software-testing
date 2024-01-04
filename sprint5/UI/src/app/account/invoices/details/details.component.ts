@@ -65,7 +65,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
           document.body.appendChild(a);
           a.click();
         },
-        (error) => {
+        () => {
           this.hideAlert = false;
           this.error = 'Document not created. Try again later.';
         });

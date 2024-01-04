@@ -6,12 +6,9 @@ import {Spinkit} from "ng-http-loader";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
   public spinkit = Spinkit;
   title = 'Toolshop';
-
-  ngOnInit(): void {
-  }
 
 }
