@@ -8,7 +8,6 @@ import DiscountUtil from "../../_helpers/discount.util";
 import {Pagination} from "../../models/pagination";
 import {ProductService} from "../../_services/product.service";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
-import {Options} from "@angular-slider/ngx-slider";
 import {Category} from "../../models/category";
 
 @Component({
@@ -32,7 +31,7 @@ export class OverviewComponent implements OnInit {
   searchQuery: string;
   minPrice: number = 1;
   maxPrice: number = 100;
-  options: Options = {
+  sliderOptions: any = {
     floor: 0,
     ceil: 200
   };

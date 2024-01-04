@@ -43,14 +43,6 @@ export class ContactComponent implements OnInit {
       return;
     }
 
-    const payload: ContactMessage = {
-      name: this.contact.value.first_name + ' ' + this.contact.value.last_name,
-      email: this.contact.value.email,
-      subject: this.contact.value.subject,
-      message: this.contact.value.message,
-      status: 'NEW'
-    };
-
     this.showConfirmation = true;
   }
 }

@@ -1,6 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {CartService} from "../../_services/cart.service";
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {TokenStorageService} from "../../_services/token-storage.service";

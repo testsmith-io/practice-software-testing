@@ -124,7 +124,7 @@ export class CustomerAccountService {
           map(response => {
             return !!response;
           }),
-          catchError((error, caught) => {
+          catchError(() => {
             return of(false);
           })
         );

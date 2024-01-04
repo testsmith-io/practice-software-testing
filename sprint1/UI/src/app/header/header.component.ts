@@ -6,7 +6,7 @@ import {Subscription} from "rxjs";
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnDestroy, OnInit {
+export class HeaderComponent implements OnDestroy {
 
 
   items: any;
@@ -15,15 +15,12 @@ export class HeaderComponent implements OnDestroy, OnInit {
   isLoggedIn: boolean;
   subscription: Subscription;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) {
+  constructor() {
 
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-  }
-
-  ngOnInit(): void {
   }
 
 }

@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {map, Observable, Subject, switchMap, of} from "rxjs";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
-import {Brand} from "../models/brand";
 import {catchError} from "rxjs/operators";
 
 @Injectable({
@@ -124,8 +123,5 @@ export class CartService {
       this.storageSub.next('changed');
     });
   }
-
-
-  private extractData = (res: any) => res;
 
 }

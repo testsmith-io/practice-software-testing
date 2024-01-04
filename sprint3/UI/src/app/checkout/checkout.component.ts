@@ -125,7 +125,7 @@ export class CheckoutComponent implements OnInit {
       'invoice_items': invoiceItems
     };
 
-    this.checkPayment(this.cusPayment.value.payment_method, this.cusPayment.value.account_name, this.cusPayment.value.account_number).subscribe(result => {
+    this.checkPayment().subscribe(result => {
       if (result === true) {
         this.invoiceService.createInvoice(payload).subscribe(res => {
           this.paid = true;
@@ -141,7 +141,7 @@ export class CheckoutComponent implements OnInit {
   /*
   Check payment method, only if mock endpoint is stored in sessionStorage
    */
-  checkPayment(payment_method: string, account_name: string, account_number: string): Observable<boolean> {
+  checkPayment(): Observable<boolean> {
     if (!this.state) {
       const payload = {
         'method': this.cusPayment.value.payment_method,
