@@ -14,11 +14,11 @@
   </div>
   <div class="col-md-6">
     <h1 data-test="product-name">{{product.name}}</h1>
-    <p><span class="badge rounded-pill bg-secondary me-1">{{product.category.name}}</span><span
-      class="badge rounded-pill bg-secondary me-1">{{product.brand.name}}
+    <p><span aria-label="category" class="badge rounded-pill bg-secondary me-1">{{product.category.name}}</span><span
+      aria-label="brand" class="badge rounded-pill bg-secondary me-1">{{product.brand.name}}
     </span></p>
     <span>$<span
-      data-test="unit-price">{{product.price.toFixed(2)}}</span></span>
+      aria-label="unit-price" data-test="unit-price">{{product.price.toFixed(2)}}</span></span>
     <span
       *ngIf="product.is_rental" class="ms-1">per hour</span> <small *ngIf="product.is_rental"
                                                                     class="ms-1"> / (total $<span
