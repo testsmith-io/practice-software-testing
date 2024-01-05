@@ -243,7 +243,7 @@ class CartController extends Controller {
      *      summary="Update quantity of item in cart",
      *      description="Update quantity of item in cart",
     *       @OA\Parameter(
-     *            name="id",
+     *            name="cartId",
      *            in="path",
      *            required=true,
      *            @OA\Schema(type="string"),

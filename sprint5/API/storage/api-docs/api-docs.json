@@ -684,7 +684,7 @@
                 "operationId": "updateCartQuantity",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "cartId",
                         "in": "path",
                         "description": "Cart ID",
                         "required": true,
@@ -3273,7 +3273,6 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "schema": "CreditCardPaymentRequest",
                                 "required": [
                                     "payment_method",
                                     "payment_details"

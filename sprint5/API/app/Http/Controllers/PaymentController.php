@@ -23,9 +23,8 @@ class PaymentController extends Controller
      *           required=true,
      *           description="Invoice request object",
      *           @OA\MediaType(
-     *               mediaType="application/json",
-     *               @OA\Schema(
-     *                  schema="CreditCardPaymentRequest",
+     *              mediaType="application/json",
+     *              @OA\Schema(
      *                  type="object",
      *                  required={"payment_method", "payment_details"},
      *                  @OA\Property(
