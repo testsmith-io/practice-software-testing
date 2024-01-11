@@ -28,8 +28,6 @@ testsmith-io/practice-software-testing is built on the following main stack:
 - [Alpine Linux](https://www.alpinelinux.org/) – Operating Systems
 - [Serverless AppSync](https://github.com/serverless-components/aws-app-sync) – GraphQL Tools
 - [GitHub Actions](https://github.com/features/actions) – Continuous Integration
-- [LangChain](https://github.com/hwchase17/langchain) – Large Language Model Tools
-- [pgvector](https://github.com/pgvector/pgvector/) – Database Tools
 - [Docker](https://www.docker.com/) – Virtual Machine Platforms & Containers
 
 Full tech stack [here](/techstack.md)
@@ -65,8 +63,6 @@ testsmith-io/practice-software-testing is built on the following main stack:
 - <img width='25' height='25' src='https://img.stackshare.io/service/6429/alpine_linux.png' alt='Alpine Linux'/> [Alpine Linux](https://www.alpinelinux.org/) – Operating Systems
 - <img width='25' height='25' src='https://img.stackshare.io/service/11394/appsync.png' alt='Serverless AppSync'/> [Serverless AppSync](https://github.com/serverless-components/aws-app-sync) – GraphQL Tools
 - <img width='25' height='25' src='https://img.stackshare.io/service/11563/actions.png' alt='GitHub Actions'/> [GitHub Actions](https://github.com/features/actions) – Continuous Integration
-- <img width='25' height='25' src='https://img.stackshare.io/service/48790/default_5b6c6b73f1ff3775c85d2a1ba954cb87e30cbf13.jpg' alt='LangChain'/> [LangChain](https://github.com/hwchase17/langchain) – Large Language Model Tools
-- <img width='25' height='25' src='https://img.stackshare.io/service/109221/default_b888cdf5617d936aa6aacf130911906955508639.png' alt='pgvector'/> [pgvector](https://github.com/pgvector/pgvector/) – Database Tools
 - <img width='25' height='25' src='https://img.stackshare.io/service/586/n4u37v9t_400x400.png' alt='Docker'/> [Docker](https://www.docker.com/) – Virtual Machine Platforms & Containers
 
 Full tech stack [here](/techstack.md)
@@ -78,7 +74,7 @@ Full tech stack [here](/techstack.md)
 # Tech Stack File
 ![](https://img.stackshare.io/repo.svg "repo") [testsmith-io/practice-software-testing](https://github.com/testsmith-io/practice-software-testing)![](https://img.stackshare.io/public_badge.svg "public")
 <br/><br/>
-|66<br/>Tools used|01/05/24 <br/>Report generated|
+|64<br/>Tools used|01/11/24 <br/>Report generated|
 |------|------|
 </div>
 
@@ -206,20 +202,12 @@ Full tech stack [here](/techstack.md)
 </tr>
 </table>
 
-## <img src='https://img.stackshare.io/databases.svg'/> Data (2)
+## <img src='https://img.stackshare.io/databases.svg'/> Data (1)
 <table><tr>
   <td align='center'>
   <img width='36' height='36' src='https://img.stackshare.io/service/11394/appsync.png' alt='Serverless AppSync'>
   <br>
   <sub><a href="https://github.com/serverless-components/aws-app-sync">Serverless AppSync</a></sub>
-  <br>
-  <sub></sub>
-</td>
-
-<td align='center'>
-  <img width='36' height='36' src='https://img.stackshare.io/service/109221/default_b888cdf5617d936aa6aacf130911906955508639.png' alt='pgvector'>
-  <br>
-  <sub><a href="https://github.com/pgvector/pgvector/">pgvector</a></sub>
   <br>
   <sub></sub>
 </td>
@@ -343,28 +331,12 @@ Full tech stack [here](/techstack.md)
 </tr>
 </table>
 
-## Other (4)
+## Other (2)
 <table><tr>
   <td align='center'>
   <img width='36' height='36' src='https://img.stackshare.io/service/6429/alpine_linux.png' alt='Alpine Linux'>
   <br>
   <sub><a href="https://www.alpinelinux.org/">Alpine Linux</a></sub>
-  <br>
-  <sub></sub>
-</td>
-
-<td align='center'>
-  <img width='36' height='36' src='https://img.stackshare.io/service/2270/no-img-open-source.png' alt='HTML'>
-  <br>
-  <sub><a href="http://">HTML</a></sub>
-  <br>
-  <sub></sub>
-</td>
-
-<td align='center'>
-  <img width='36' height='36' src='https://img.stackshare.io/service/48790/default_5b6c6b73f1ff3775c85d2a1ba954cb87e30cbf13.jpg' alt='LangChain'>
-  <br>
-  <sub><a href="https://github.com/hwchase17/langchain">LangChain</a></sub>
   <br>
   <sub></sub>
 </td>
@@ -381,7 +353,7 @@ Full tech stack [here](/techstack.md)
 </table>
 
 
-## <img src='https://img.stackshare.io/group.svg' /> Open source packages (33)</h2>
+## <img src='https://img.stackshare.io/group.svg' /> Open source packages (34)</h2>
 
 ## <img width='24' height='24' src='https://img.stackshare.io/service/1120/lejvzrnlpb308aftn31u.png'/> npm (22)
 
@@ -411,7 +383,7 @@ Full tech stack [here](/techstack.md)
 |[zone.js](https://www.npmjs.com/zone.js)|v0.12.0|02/27/23|Roy de Kleijn |MIT|N/A|
 
 
-## <img width='24' height='24' src='https://img.stackshare.io/package_manager/1778/default_90cb8b66e85ae5b95928b10bb076ab6a27c7e151.png'/> Packagist (11)
+## <img width='24' height='24' src='https://img.stackshare.io/package_manager/1778/default_90cb8b66e85ae5b95928b10bb076ab6a27c7e151.png'/> Packagist (12)
 
 |NAME|VERSION|LAST UPDATED|LAST UPDATED BY|LICENSE|VULNERABILITIES|
 |:------|:------|:------|:------|:------|:------|
@@ -422,6 +394,7 @@ Full tech stack [here](/techstack.md)
 |[laravel/tinker](https://packagist.org/laravel/tinker)|v2.8.2|05/29/23|Roy de Kleijn |N/A|N/A|
 |[mockery/mockery](https://packagist.org/mockery/mockery)|v1.6.7|05/29/23|Roy de Kleijn |N/A|N/A|
 |[nunomaduro/collision](https://packagist.org/nunomaduro/collision)|v7.10.0|05/29/23|Roy de Kleijn |N/A|N/A|
+|[phpunit/php-code-coverage](https://packagist.org/phpunit/php-code-coverage)|v10.1.10|12/14/23|Roy de Kleijn |N/A|N/A|
 |[phpunit/phpunit](https://packagist.org/phpunit/phpunit)|v10.5.2|05/29/23|Roy de Kleijn |N/A|N/A|
 |[spatie/array-to-xml](https://packagist.org/spatie/array-to-xml)|v3.2.2|10/03/23|Roy de Kleijn |N/A|N/A|
 |[tymon/jwt-auth](https://packagist.org/tymon/jwt-auth)|v2.0.0|12/12/23|Roy de Kleijn |N/A|N/A|
