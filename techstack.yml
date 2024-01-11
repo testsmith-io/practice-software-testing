@@ -2,11 +2,11 @@ repo_name: testsmith-io/practice-software-testing
 report_id: 20b324a1bf7b71cd0170989f9f92db88
 version: 0.1
 repo_type: Public
-timestamp: '2024-01-05T09:20:44+00:00'
+timestamp: '2024-01-11T12:24:12+00:00'
 requested_by: testsmith-io
 provider: github
 branch: main
-detected_tools_count: 66
+detected_tools_count: 64
 tools:
 - name: CSS 3
   description: The latest evolution of the Cascading Style Sheets language
@@ -198,18 +198,6 @@ tools:
   detection_source: docker-compose.yml
   last_updated_by: Roy de Kleijn
   last_updated_on: 2023-05-29 11:36:06.000000000 Z
-- name: pgvector
-  description: Open-source vector similarity search for Postgres
-  website_url: https://github.com/pgvector/pgvector/
-  open_source: false
-  hosted_saas: false
-  category: Data Stores
-  sub_category: Database Tools
-  image_url: https://img.stackshare.io/service/109221/default_b888cdf5617d936aa6aacf130911906955508639.png
-  detection_source_url: https://github.com/testsmith-io/practice-software-testing/blob/main/sprint1/API/public/robots.txt
-  detection_source: sprint1/API/public/robots.txt
-  last_updated_by: Roy de Kleijn
-  last_updated_on: 2023-05-29 11:36:06.000000000 Z
 - name: Composer
   description: Dependency Manager for PHP
   website_url: https://getcomposer.org/
@@ -384,28 +372,6 @@ tools:
   detection_source: docker-compose.yml
   last_updated_by: Roy de Kleijn
   last_updated_on: 2023-02-08 20:30:06.000000000 Z
-- name: HTML
-  description: Hypertext Markup Language for creating web pages.
-  website_url: http://
-  open_source: false
-  hosted_saas: false
-  image_url: https://img.stackshare.io/service/2270/no-img-open-source.png
-  detection_source_url: https://github.com/testsmith-io/practice-software-testing/blob/main/sprint1/UI/src/app/app.component.html
-  detection_source: sprint1/UI/src/app/app.component.html
-  last_updated_by: Roy de Kleijn
-  last_updated_on: 2023-01-16 13:39:06.000000000 Z
-- name: LangChain
-  description: Build AI apps with LLMs through composability
-  website_url: https://github.com/hwchase17/langchain
-  open_source: true
-  hosted_saas: false
-  category: Communications
-  sub_category: Large Language Model Tools
-  image_url: https://img.stackshare.io/service/48790/default_5b6c6b73f1ff3775c85d2a1ba954cb87e30cbf13.jpg
-  detection_source_url: https://github.com/testsmith-io/practice-software-testing/blob/main/sprint1/API/public/robots.txt
-  detection_source: sprint1/API/public/robots.txt
-  last_updated_by: Roy de Kleijn
-  last_updated_on: 2023-05-29 11:36:06.000000000 Z
 - name: Shell
   description: A shell is a text-based terminal, used for manipulating programs and
     files. Shell scripts typically manage program execution.
@@ -816,6 +782,19 @@ tools:
   detection_source: sprint1/API/composer.json
   last_updated_by: Roy de Kleijn
   last_updated_on: 2023-05-29 11:36:06.000000000 Z
+- name: phpunit/php-code-coverage
+  description: Library that provides collection
+  package_url: https://packagist.org/phpunit/php-code-coverage
+  version: 10.1.10
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Package Managers
+  image_url: https://img.stackshare.io/package/packagist/image.png
+  detection_source_url: https://github.com/testsmith-io/practice-software-testing/blob/main/sprint1/API/composer.lock
+  detection_source: sprint5/API/composer.json
+  last_updated_by: Roy de Kleijn
+  last_updated_on: 2023-12-14 22:53:05.000000000 Z
 - name: phpunit/phpunit
   description: The PHP Unit Testing framework
   package_url: https://packagist.org/phpunit/phpunit
