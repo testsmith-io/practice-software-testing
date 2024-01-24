@@ -1,6 +1,6 @@
 <div class="jumbotron my-4">
   <p class="lead">
-    <img class="img-fluid" src="../assets/img/barn-2400x1600.jpg"/>
+    <img class="img-fluid" alt="Banner" src="../assets/img/barn-2400x1600.jpg"/>
   </p>
   <hr class="my-4">
 </div>
@@ -18,7 +18,7 @@
     <hr>
     <form autocomplete=off>
       <div class="input-group mb-3">
-        <select data-test="sort" (change)="changeSorting($event)" class="form-select">
+        <select aria-label="sort" data-test="sort" (change)="changeSorting($event)" class="form-select">
           <option value=""></option>
           <option value="name,asc">Name (A - Z)</option>
           <option value="name,desc">Name (Z - A)</option>
@@ -107,7 +107,7 @@
           <a attr.data-test="product-{{item.id}}" routerLink="/product/{{item.id}}"
              class="card" style="text-decoration: none; color: black;">
             <div class="card-img-wrapper">
-              <img class="card-img-top"
+              <img class="card-img-top" alt="{{ item.name }}"
                    src="assets/img/products/{{item.product_image.file_name}}">
             </div>
             <div class="card-body">
