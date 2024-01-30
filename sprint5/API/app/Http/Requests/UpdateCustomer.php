@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\SubscriptSuperscriptRule;
+
 class UpdateCustomer extends BaseFormRequest
 {
     /**
@@ -22,15 +24,15 @@ class UpdateCustomer extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'required|string|max:40',
-            'last_name' => 'required|string|max:20',
-            'address' => 'required|string|max:70',
-            'city' => 'required|string|max:40',
-            'state' => 'nullable|string|max:40',
-            'country' => 'required|string|max:40',
-            'postcode' => 'nullable|string|max:10',
-            'phone' => 'nullable|string|max:24',
-            'email' => 'required|string|max:60'
+            'first_name' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule()],
+            'last_name' => ['required', 'string', 'max:20', new SubscriptSuperscriptRule()],
+            'address' => ['required', 'string', 'max:70', new SubscriptSuperscriptRule()],
+            'city' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule()],
+            'state' => ['nullable', 'string', 'max:40', new SubscriptSuperscriptRule()],
+            'country' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule()],
+            'postcode' => ['nullable', 'string', 'max:10', new SubscriptSuperscriptRule()],
+            'phone' => ['nullable', 'string', 'max:24', new SubscriptSuperscriptRule()],
+            'email' => ['required', 'string', 'max:60', new SubscriptSuperscriptRule()]
         ];
     }
 }
