@@ -62,8 +62,9 @@ export class ProfileComponent implements OnInit {
           this.hideProfileAlert = false;
         }
       }, error: (err) => {
+        console.log(1);
         this.hideProfileAlert = false;
-        console.log(err);
+        console.log(err.message);
         this.profileError = Object.values(err).join('\r\n');
       }
     });
