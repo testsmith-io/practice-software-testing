@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Category;
 
 use App\Http\Requests\BaseFormRequest;
+use App\Rules\SubscriptSuperscriptRule;
 
 class UpdateCategory extends BaseFormRequest
 {
@@ -24,8 +25,8 @@ class UpdateCategory extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'name' => 'string|max:120',
-            'slug' => 'string|max:120',
+            'name' => ['string', 'max:120', new SubscriptSuperscriptRule()],
+            'slug' => ['string', 'max:120', new SubscriptSuperscriptRule()],
             'parent_id' => 'string|nullable'
         ];
     }

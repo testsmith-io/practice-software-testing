@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Product;
 
 use App\Http\Requests\BaseFormRequest;
+use App\Rules\SubscriptSuperscriptRule;
 
 class UpdateProduct extends BaseFormRequest
 {
@@ -24,8 +25,8 @@ class UpdateProduct extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'name' => 'string|max:120',
-            'description' => 'string|max:1250',
+            'name' => ['string', 'max:120', new SubscriptSuperscriptRule()],
+            'description' => ['string', 'max:1250', new SubscriptSuperscriptRule()],
             'price' => '',
             'category_id' => '',
             'brand_id' => '',

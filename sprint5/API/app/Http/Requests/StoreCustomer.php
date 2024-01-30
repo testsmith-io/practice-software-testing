@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\SubscriptSuperscriptRule;
 use Carbon\Carbon;
 
 class StoreCustomer extends BaseFormRequest
@@ -38,17 +39,17 @@ class StoreCustomer extends BaseFormRequest
         $before = $dt->subYears(18)->format('Y-m-d');
 
         return [
-            'first_name' => 'required|string|max:40',
-            'last_name' => 'required|string|max:20',
-            'address' => 'string|max:70',
-            'city' => 'string|max:40',
-            'state' => 'string|max:40',
-            'country' => 'string|max:40',
-            'postcode' => 'string|max:10',
-            'phone' => 'string|max:24',
-            'dob' => 'date|before:' . $before,
-            'email' => 'required|unique:users,email|string|max:60',
-            'password' => 'required|string|max:255'
+            'first_name' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule()],
+            'last_name' => ['required', 'string', 'max:20', new SubscriptSuperscriptRule()],
+            'address' => ['string', 'max:70', new SubscriptSuperscriptRule()],
+            'city' => ['string', 'max:40', new SubscriptSuperscriptRule()],
+            'state' => ['string', 'max:40', new SubscriptSuperscriptRule()],
+            'country' => ['string', 'max:40', new SubscriptSuperscriptRule()],
+            'postcode' => ['string', 'max:10', new SubscriptSuperscriptRule()],
+            'phone' => ['string', 'max:24', new SubscriptSuperscriptRule()],
+            'dob' => ['date','before:' . $before],
+            'email' => ['required', 'unique:users,email', 'string', 'max:60', new SubscriptSuperscriptRule()],
+            'password' => ['required', 'string', 'max:255', new SubscriptSuperscriptRule()]
         ];
     }
 }

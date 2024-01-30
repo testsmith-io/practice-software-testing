@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Contact;
 
 use App\Http\Requests\BaseFormRequest;
+use App\Rules\SubscriptSuperscriptRule;
 
 
 class StoreContactReply extends BaseFormRequest
@@ -25,7 +26,7 @@ class StoreContactReply extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'message' => 'string|max:250'
+            'message' => ['string', 'max:250', new SubscriptSuperscriptRule()]
         ];
     }
 }

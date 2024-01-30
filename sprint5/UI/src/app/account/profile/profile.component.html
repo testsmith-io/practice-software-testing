@@ -74,9 +74,7 @@
         }
         @if (profileError && !hideProfileAlert) {
           <div [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
-               role="alert">
-            {{ profileError }}
-          </div>
+               role="alert" style="white-space:pre-wrap">{{ profileError }}</div>
         }
       </div>
     </div>

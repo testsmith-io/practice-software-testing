@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Brand;
 
 use App\Http\Requests\BaseFormRequest;
+use App\Rules\SubscriptSuperscriptRule;
 
 class StoreBrand extends BaseFormRequest
 {
@@ -35,8 +36,8 @@ class StoreBrand extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:120',
-            'slug' => 'required|unique:brands,slug|string|max:120'
+            'name' => ['required', 'string', 'max:120', new SubscriptSuperscriptRule()],
+            'slug' => ['required', 'unique:brands,slug', 'string', 'max:120', new SubscriptSuperscriptRule()]
         ];
     }
 }

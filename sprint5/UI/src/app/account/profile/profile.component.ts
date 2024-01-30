@@ -63,14 +63,14 @@ export class ProfileComponent implements OnInit {
         }
       }, error: (err) => {
         this.hideProfileAlert = false;
-        if (err.error && typeof err.error === 'object') {
+        if (err && typeof err === 'object') {
           const errorMessages = [];
-          for (const field in err.error) {
-            if (err.error.hasOwnProperty(field)) {
-              errorMessages.push(...err.error[field]);
+          for (const field in err) {
+            if (err.hasOwnProperty(field)) {
+              errorMessages.push(...err[field]);
             }
           }
-          this.profileError = errorMessages.join('\n');
+          this.profileError = errorMessages.join('\n\r');
         }
       }
     });
