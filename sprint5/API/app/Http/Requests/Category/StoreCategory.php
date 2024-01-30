@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Category;
 
 use App\Http\Requests\BaseFormRequest;
+use App\Rules\SubscriptSuperscriptRule;
 
 class StoreCategory extends BaseFormRequest
 {
@@ -35,8 +36,8 @@ class StoreCategory extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:120',
-            'slug' => 'required|unique:categories,slug|string|max:120',
+            'name' => ['required', 'string', 'max:120', new SubscriptSuperscriptRule()],
+            'slug' => ['required', 'unique:categories,slug', 'string', 'max:120', new SubscriptSuperscriptRule()],
             'parent_id' => 'string|nullable'
         ];
     }

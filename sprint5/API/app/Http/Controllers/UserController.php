@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateCustomer;
 use App\Mail\ForgetPassword;
 use App\Mail\Register;
 use App\Models\User;
+use App\Rules\SubscriptSuperscriptRule;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -348,7 +349,7 @@ class UserController extends Controller {
 
         $request->validate([
             'current_password' => 'required',
-            'new_password' => 'required|string|min:8|confirmed',
+            'new_password' => ['required', 'string', 'min:8', 'confirmed', new SubscriptSuperscriptRule()],
         ]);
 
         $user = Auth::user();

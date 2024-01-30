@@ -17,6 +17,7 @@ use App\Models\PaymentCashOnDeliveryDetails;
 use App\Models\PaymentCreditCardDetails;
 use App\Models\PaymentGiftCardDetails;
 use App\Models\Product;
+use App\Rules\SubscriptSuperscriptRule;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -478,7 +479,7 @@ class InvoiceController extends Controller {
     public function updateStatus($id, Request $request) {
         $request->validate([
             'status' => Rule::in("AWAITING_FULFILLMENT", "ON_HOLD", "AWAITING_SHIPMENT", "SHIPPED", "COMPLETED"),
-            'status_message' => 'string|between:5,50|nullable'
+            'status_message' => ['string', 'between:5,50', 'nullable', new SubscriptSuperscriptRule()]
         ]);
 
         return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->update(array('status' => $request['status'], 'status_message' => $request['status_message']))]);
