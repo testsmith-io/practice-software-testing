@@ -31,7 +31,7 @@ All images together are less than 1,5 GB.
 |------------------------------------------------------------------------------------|-----------------------|
 | [http://localhost:8091](http://localhost:8091)                                     | (REST) API            |
 | [http://localhost:8091/api/documentation](http://localhost:8091/api/documentation) | Swagger               |
-| [http://localhost:8025](http://localhost:8025)                                     | MailHog               |
+| [http://localhost:1080](http://localhost:1080)                                     | MailCatcher           |
 | [http://localhost:4200](http://localhost:4200)                                     | (Angular) Application |
 | [http://localhost:8000](http://localhost:8000) (`root`/`root`)                     | PHPMyAdmin            |
 

@@ -48,6 +48,7 @@ services:
       dockerfile: Dockerfile
     working_dir: /var/www
     container_name: cron
+    restart: always
     command: crond -f -l 8
     volumes_from:
       - laravel-api
@@ -87,13 +88,11 @@ services:
     volumes:
       - phpmyadmindata:/var/www/html
 
-  mailhog:
-    image: mailhog/mailhog:v1.0.1
-    logging:
-      driver: 'none'  # disable saving logs
+  mailcatcher:
+    image: dockage/mailcatcher:0.9.0
     ports:
       - 1025:1025 # smtp server
-      - 8025:8025 # web ui
+      - 1080:1080 # web ui
 
 volumes:
   db:
