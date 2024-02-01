@@ -10,11 +10,11 @@ class Checkout extends Mailable
     protected $contactSubject;
     protected $contactMessage;
 
-    public function __construct($name, $items, $total)
+    public function __construct($name, $items, $invoice)
     {
         $this->name = $name;
         $this->items = $items;
-        $this->total = $total;
+        $this->invoice = $invoice;
     }
 
     /**
@@ -29,7 +29,10 @@ class Checkout extends Mailable
                 'items' => $this->items,
                 'contactSubject' => $this->contactSubject,
                 'contactMessage' => $this->contactMessage,
-                'total' => $this->total])
+                'additional_discount_percentage' => $this->invoice->additional_discount_percentage,
+                'additional_discount_amount' => $this->invoice->additional_discount_amount,
+                'subtotal' => $this->invoice->subtotal,
+                'total' => $this->invoice->total])
             ->markdown('emails.Checkout')
             ->text('emails.Checkout_plain');
     }

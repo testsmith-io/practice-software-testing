@@ -176,6 +176,8 @@ class CartController extends Controller {
             $cart->cartItems()->save($item);
         }
 
+        $this->updateCartDiscounts($cart);
+
         // Return a response indicating success or any additional data you need
         return $this->preferredFormat(['result' => 'item added or updated'], ResponseAlias::HTTP_CREATED);
     }
@@ -459,6 +461,7 @@ class CartController extends Controller {
 
         try {
             CartItem::where('cart_id', '=', $cart->id)->where('product_id', '=', $productId)->delete();
+            $this->updateCartDiscounts($cart);
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {
@@ -467,6 +470,20 @@ class CartController extends Controller {
                     'message' => 'Seems like this cart is used elsewhere.',
                 ], ResponseAlias::HTTP_CONFLICT);
             }
+        }
+    }
+
+    private function updateCartDiscounts($cart) {
+        $cart->load('cartItems.product');
+        $hasProduct = $cart->cartItems->contains(fn($item) => !$item->product->is_rental);
+        $hasRental = $cart->cartItems->contains(fn($item) => $item->product->is_rental);
+
+        if ($hasProduct && $hasRental) {
+            $cart->additional_discount_percentage = 20;
+            $cart->save();
+        } else {
+            $cart->additional_discount_percentage = null;
+            $cart->save();
         }
     }
 

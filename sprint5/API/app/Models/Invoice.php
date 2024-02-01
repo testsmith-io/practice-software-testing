@@ -89,6 +89,9 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="billing_country", type="string"),
  *         @OA\Property(property="billing_state", type="string"),
  *         @OA\Property(property="billing_postcode", type="string"),
+ *         @OA\Property(property="additional_discount_percentage", type="number"),
+ *         @OA\Property(property="additional_discount_amount", type="number"),
+ *         @OA\Property(property="subtotal", type="number"),
  *         @OA\Property(property="total", type="number"),
  *         @OA\Property(property="status", type="string", example="COMPLETED"),
  *         @OA\Property(property="status_message", type="string", example=""),
@@ -102,11 +105,14 @@ class Invoice extends BaseModel
 
     protected $filters = ['in', 'sort', 'starts_with'];
     protected $table = 'invoices';
-    protected $fillable = ['user_id', 'invoice_date', 'invoice_number', 'billing_address', 'billing_city', 'billing_state', 'billing_country', 'billing_postcode', 'total'];
+    protected $fillable = ['user_id', 'invoice_date', 'invoice_number', 'additional_discount_percentage', 'additional_discount_amount', 'billing_address', 'billing_city', 'billing_state', 'billing_country', 'billing_postcode', 'subtotal', 'total'];
     protected $hidden = ['updated_at', 'document'];
 
     protected $casts = array(
-        "total" => "double"
+        "total" => "double",
+        "subtotal" => "double",
+        "additional_discount_amount" => "double",
+        "additional_discount_percentage" => "double"
     );
 
     public function user(): BelongsTo

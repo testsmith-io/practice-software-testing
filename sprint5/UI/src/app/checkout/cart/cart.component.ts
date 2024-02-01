@@ -9,9 +9,11 @@ import { CustomerAccountService } from "../../shared/customer-account.service";
 })
 export class CartComponent implements OnInit {
 
-  items: any;
+  cart: any;
   isLoggedIn: boolean = false;
+  discount: number = 0;
   total: number = 0;
+  subtotal: number = 0;
 
   constructor(
     private cartService: CartService,
@@ -24,9 +26,11 @@ export class CartComponent implements OnInit {
   }
 
   fetchCartItems(): void {
-    this.cartService.getItems().subscribe(items => {
-      this.items = items;
-      this.total = this.calculateTotal(items);
+    this.cartService.getCart().subscribe(cart => {
+      this.cart = cart;
+      this.total = this.calculateTotal(cart.cart_items);
+      this.subtotal = this.total;
+      this.discount = this.calculateDiscount(cart.additional_discount_percentage)
     });
   }
 
@@ -53,5 +57,15 @@ export class CartComponent implements OnInit {
       const price = cartItem.discount_percentage ? cartItem.discounted_price : cartItem.product?.price || 0;
       return sum + (quantity * price);
     }, 0);
+  }
+
+  private calculateDiscount(percentage: number): number {
+    // Calculate the discount amount
+    const discountAmount = this.total * (percentage / 100);
+
+    // Calculate the discounted price
+    this.total = this.total - discountAmount;
+
+    return discountAmount;
   }
 }
