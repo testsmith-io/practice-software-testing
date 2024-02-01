@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
 
   getLocation(): void {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {sss
+      navigator.geolocation.getCurrentPosition((position) => {
         window.localStorage.setItem("GEO_LOCATION", JSON.stringify({
           lng: position.coords.longitude,
           lat: position.coords.latitude
