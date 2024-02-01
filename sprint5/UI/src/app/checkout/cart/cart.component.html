@@ -1,4 +1,4 @@
-@if (items) {
+@if (cart) {
   <div>
     <table class="table table-hover">
       <thead>
@@ -12,7 +12,7 @@
       </tr>
       </thead>
       <tbody>
-        @for (item of items;track item) {
+        @for (item of cart.cart_items; track item) {
           <tr>
             <td class="col-md-4"><span
               class="product-title">{{ item.product.name }}&nbsp;@if (item.discount_percentage) {
@@ -53,6 +53,24 @@
               class="fa fa-remove"></i></a></td>
           </tr>
         }
+        @if (cart.additional_discount_percentage) {
+          <tr>
+            <td class="col-md-3"></td>
+            <td class="col-md-2"></td>
+            <td class="col-md-2"></td>
+            <td class="col-md-2 text-end"><strong>Subtotal</strong></td>
+            <td class="col-md-2 text-end">${{ subtotal | number: '1.2-2' }}</td>
+            <td class="col-md-1"></td>
+          </tr>
+          <tr>
+            <td class="col-md-3"></td>
+            <td class="col-md-2"></td>
+            <td class="col-md-2"></td>
+            <td class="col-md-2 text-end"><strong>Discount ({{cart.additional_discount_percentage}}%)</strong></td>
+            <td class="col-md-2 text-end">- ${{ discount | number: '1.2-2' }}</td>
+            <td class="col-md-1"></td>
+          </tr>
+        }
       </tbody>
       <tfoot>
       <tr>
@@ -65,7 +83,7 @@
       </tr>
       </tfoot>
     </table>
-    @if (items.length) {
+    @if (cart.cart_items.length) {
       <div class="float-end">
         <button data-test="proceed-1" type="button" class="btn btn-success" awNextStep>Proceed to checkout</button>
       </div>

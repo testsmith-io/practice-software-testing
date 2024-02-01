@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->ulid('id')->primary();
+            $table->ulid('additional_discount_percentage')->nullable();
             $table->decimal('lat')->nullable();
             $table->decimal('lng')->nullable();
             $table->timestamp('created_at')->useCurrent();

@@ -69,7 +69,7 @@ export class CartService {
     return cartItems.reduce((totalQuantity, cartItem) => totalQuantity + cartItem.quantity, 0);
   }
 
-  getItems(): Observable<any> {
+  getCart(): Observable<any> {
     let cartId = sessionStorage.getItem('cart_id');
 
     return this.httpClient.get<any[]>(`${this.apiURL}/carts/${cartId}`).pipe(
@@ -81,7 +81,7 @@ export class CartService {
         sessionStorage.setItem('cart_quantity', JSON.stringify(cartQuantity));
         this.storageSub.next('changed');
 
-        return cartData.cart_items;
+        return cartData;
       })
     );
   }

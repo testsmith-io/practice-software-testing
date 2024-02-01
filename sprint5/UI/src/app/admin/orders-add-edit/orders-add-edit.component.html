@@ -27,6 +27,22 @@
                      value="{{invoice.invoice_date}}">
             </div>
           </div>
+          @if(invoice.additional_discount_percentage) {
+            <div class="form-group row">
+              <label for="total" class="col-sm-3 col-form-label">Subtotal</label>
+              <div class="col-sm-9">
+                <input type="text" readonly class="form-control-plaintext" data-test="total" id="subtotal"
+                       value="$ {{invoice.subtotal.toFixed(2)}}">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="total" class="col-sm-3 col-form-label">Discount ({{invoice.additional_discount_percentage}}%)</label>
+              <div class="col-sm-9">
+                <input type="text" readonly class="form-control-plaintext" data-test="total" id="additional_discount_percentage"
+                       value="$ {{invoice.additional_discount_amount.toFixed(2)}}">
+              </div>
+            </div>
+          }
           <div class="form-group row">
             <label for="total" class="col-sm-3 col-form-label">Total</label>
             <div class="col-sm-9">

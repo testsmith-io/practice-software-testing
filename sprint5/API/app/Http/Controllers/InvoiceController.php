@@ -28,9 +28,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class InvoiceController extends Controller {
+class InvoiceController extends Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth:users');
     }
 
@@ -83,7 +85,8 @@ class InvoiceController extends Controller {
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function index() {
+    public function index()
+    {
         if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
             return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->orderBy('invoice_date', 'DESC')->filter()->paginate());
         } else {
@@ -136,7 +139,8 @@ class InvoiceController extends Controller {
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function store(StoreInvoice $request) {
+    public function store(StoreInvoice $request)
+    {
         $input = $request->except(['cart_id']);
         $input['user_id'] = Auth::user()->id;
         $input['invoice_date'] = now();
@@ -144,7 +148,7 @@ class InvoiceController extends Controller {
 
         $invoice = Invoice::create($input);
 
-        $totalPrice = 0;
+        $subTotalPrice = 0;
 
         $cart = Cart::with('cartItems', 'cartItems.product')->findOrFail($request->input('cart_id'));
         // Iterate through cart items to calculate discounted prices
@@ -171,10 +175,15 @@ class InvoiceController extends Controller {
                 'discounted_price' => $discountedPrice
             ]);
 
-            $totalPrice += $cartItem->discount_percentage ? $quantity * ($cartItem->product->price * (1 - ($cartItem->discount_percentage / 100))) : $quantity * $unitPrice;
+            $subTotalPrice += $cartItem->discount_percentage ? $quantity * ($cartItem->product->price * (1 - ($cartItem->discount_percentage / 100))) : $quantity * $unitPrice;
         }
 
-        $invoice->update(['total' => $totalPrice]);
+        $discountAmount = $subTotalPrice * ($cart->additional_discount_percentage / 100);
+        $totalPrice = ($cart->additional_discount_percentage) ? $subTotalPrice - $discountAmount : $subTotalPrice;
+        $invoice->update(['subtotal' => $subTotalPrice,
+            'total' => $totalPrice,
+            'additional_discount_percentage' => $cart->additional_discount_percentage,
+            'additional_discount_amount' => $discountAmount]);
 
         // After creating the invoice
         $paymentMethod = $request->input('payment_method');
@@ -302,7 +311,8 @@ class InvoiceController extends Controller {
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function show($id) {
+    public function show($id)
+    {
         if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
             return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->where('id', $id)->first());
         } else {
@@ -354,7 +364,8 @@ class InvoiceController extends Controller {
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function downloadPDF($invoice_number) {
+    public function downloadPDF($invoice_number)
+    {
         if (Storage::exists('invoices/' . $invoice_number . '.pdf')) {
             return Storage::download('invoices/' . $invoice_number . '.pdf', $invoice_number . '.pdf');
         } else {
@@ -406,7 +417,8 @@ class InvoiceController extends Controller {
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function downloadPDFStatus($invoice_number) {
+    public function downloadPDFStatus($invoice_number)
+    {
         $status = Download::where('name', $invoice_number)->first(['status']);
         if (empty($status)) {
             return $this->preferredFormat(['status' => 'NOT_INITIATED'], ResponseAlias::HTTP_BAD_REQUEST);
@@ -476,7 +488,8 @@ class InvoiceController extends Controller {
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function updateStatus($id, Request $request) {
+    public function updateStatus($id, Request $request)
+    {
         $request->validate([
             'status' => Rule::in("AWAITING_FULFILLMENT", "ON_HOLD", "AWAITING_SHIPMENT", "SHIPPED", "COMPLETED"),
             'status_message' => ['string', 'between:5,50', 'nullable', new SubscriptSuperscriptRule()]
@@ -533,7 +546,8 @@ class InvoiceController extends Controller {
      *      ),
      * )
      */
-    public function search(Request $request) {
+    public function search(Request $request)
+    {
         $q = $request->get('q');
 
         if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
@@ -604,7 +618,8 @@ class InvoiceController extends Controller {
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function update(StoreInvoice $request, $id) {
+    public function update(StoreInvoice $request, $id)
+    {
         return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->where('customer_id', Auth::user()->id)->update($request->all())], ResponseAlias::HTTP_OK);
     }
 
@@ -658,7 +673,8 @@ class InvoiceController extends Controller {
      *     security={{ "apiAuth": {} }}
      * ),
      */
-    public function destroy(DestroyInvoice $request, $id) {
+    public function destroy(DestroyInvoice $request, $id)
+    {
         try {
             Invoice::find($id)->where('customer_id', Auth::user()->id)->delete();
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
