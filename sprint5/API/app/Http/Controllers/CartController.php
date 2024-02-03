@@ -479,7 +479,7 @@ class CartController extends Controller {
         $hasRental = $cart->cartItems->contains(fn($item) => $item->product->is_rental);
 
         if ($hasProduct && $hasRental) {
-            $cart->additional_discount_percentage = 20;
+            $cart->additional_discount_percentage = 15;
             $cart->save();
         } else {
             $cart->additional_discount_percentage = null;
@@ -488,7 +488,6 @@ class CartController extends Controller {
     }
 
     private function calculateDiscountPercentage($lat, $lng) {
-        // Your predefined coordinates and discount rules
         $coordinates = [
             "new york" => ["lat" => 41, "lng" => 74, "discount_percentage" => 5],
             "mumbai" => ["lat" => 19, "lng" => 73, "discount_percentage" => 10],
