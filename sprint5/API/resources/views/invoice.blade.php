@@ -10306,7 +10306,7 @@
                     <td></td>
                     <td></td>
                     <td><strong>Discount ({{$invoice['additional_discount_percentage']}}%)</strong></td>
-                    <td>- ${{ number_format($invoice['$additional_discount_amount'], 2) }}</td>
+                    <td>- ${{ number_format($invoice['additional_discount_amount'], 2) }}</td>
                 </tr>
                 @endif
                 </tbody>
