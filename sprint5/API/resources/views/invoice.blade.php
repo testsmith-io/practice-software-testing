@@ -10295,6 +10295,20 @@
                         </td>
                     </tr>
                 @endforeach
+                @if ($invoice['additional_discount_percentage'])
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><strong>Subtotal</strong></td>
+                    <td>${{ number_format($invoice['subtotal'], 2) }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><strong>Discount ({{$invoice['additional_discount_percentage']}}%)</strong></td>
+                    <td>- ${{ number_format($invoice['discount'], 2) }}</td>
+                </tr>
+                @endif
                 </tbody>
                 <tfoot>
                 <tr>
