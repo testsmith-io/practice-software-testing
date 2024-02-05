@@ -106,6 +106,15 @@
           </div>
         </div>
         <div class="row mb-3">
+          <label for="enabled" class="col-sm-3 col-form-label">Enabled</label>
+          <div class="col-sm-9">
+            <input class="form-check-input d-block" formControlName="enabled" type="checkbox"
+                   [checked]="false"
+                   data-test="enabled"
+                   id="enabled">
+          </div>
+        </div>
+        <div class="row mb-3">
           <label for="email" class="col-sm-3 col-form-label">Email</label>
           <div class="col-sm-9">
             <input type="email" class="form-control" formControlName="email" data-test="email" id="email">

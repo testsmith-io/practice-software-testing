@@ -23,7 +23,17 @@ export class InvoicesComponent implements OnInit {
   getInvoices() {
     this.invoiceService.getInvoices(this.currentPage)
       .pipe(first())
-      .subscribe((invoices) => this.results = invoices);
+      .subscribe(
+        (invoices) => {
+          this.results = invoices;
+        },
+        (error) => {
+          if (error.status === 401 || error.status === 403) {
+            window.localStorage.removeItem('TOKEN_KEY');
+            window.location.href = '/#/auth/login';
+          }
+        }
+      );
   }
 
   onPageChange(page: number) {

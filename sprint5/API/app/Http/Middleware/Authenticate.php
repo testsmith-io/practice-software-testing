@@ -53,7 +53,15 @@ class Authenticate
                 'message' => 'Unauthorized'
             ], ResponseAlias::HTTP_UNAUTHORIZED);
         }
+        // Get the authenticated user
+        $user = $this->auth->guard($guard)->user();
 
+        // Check if the user is enabled
+        if (!$user->enabled) {
+            return response()->json([
+                'message' => 'Account disabled.'
+            ], ResponseAlias::HTTP_FORBIDDEN);
+        }
         return $next($request);
     }
 }
