@@ -27,9 +27,15 @@ export class ProfileComponent implements OnInit {
     this.customerAccountService.getDetails()
       .pipe(first())
       .subscribe((profile) => {
-        this.id = profile.id;
-        this.profileForm.patchValue(profile);
-      });
+          this.id = profile.id;
+          this.profileForm.patchValue(profile);
+        },
+        (error) => {
+          if (error.status === 401 || error.status === 403) {
+            window.localStorage.removeItem('TOKEN_KEY');
+            window.location.href = '/#/auth/login';
+          }
+        });
 
     this.profileForm = new FormGroup({
       first_name: new FormControl('', [Validators.required]),

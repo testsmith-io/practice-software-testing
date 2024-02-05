@@ -68,13 +68,14 @@ const routes: Routes = [
     MessageDetailComponent,
     StatisticsComponent
   ],
-  imports: [
-    ReactiveFormsModule,
-    CommonModule,
-    ChartModule,
-    RouterModule.forChild(routes),
-    NgxPaginationModule
-  ]
+    imports: [
+        ReactiveFormsModule,
+        CommonModule,
+        ChartModule,
+        RouterModule.forChild(routes),
+        NgxPaginationModule,
+        ReactiveFormsModule
+    ]
 })
 export class AdminModule {
 }

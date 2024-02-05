@@ -47,6 +47,7 @@ export class UsersAddEditComponent implements OnInit {
       phone: ['', []],
       email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
       failed_login_attempts: ['', []],
+      enabled: ['', []],
       password: ['', [Validators.minLength(6), Validators.maxLength(40)]],
     });
 

@@ -158,7 +158,12 @@ class UserController extends Controller
         if (!$token = app('auth')->attempt($credentials)) {
             $user = User::where('email', '=', $credentials['email'])->first();
             if ($user->role != "admin") {
-                if ($user['failed_login_attempts'] >= 1) {
+                // Check if the user is enabled
+                if (!$user->enabled) {
+                    return response()->json([
+                        'error' => 'Account disabled.'
+                    ], ResponseAlias::HTTP_FORBIDDEN);
+                } else if ($user['failed_login_attempts'] >= 1) {
                     return response()->json(['error' => 'Account locked.'], ResponseAlias::HTTP_BAD_REQUEST);
                 } else {
                     User::where('email', '=', $credentials['email'])->increment('failed_login_attempts', 1);
@@ -569,7 +574,7 @@ class UserController extends Controller
     public function update(UpdateCustomer $request, $id)
     {
         if ((app('auth')->id() == $id) || (app('auth')->parseToken()->getPayload()->get('role') == "admin")) {
-            //$request['password'] = app('hash')->make($request['password']);
+            unset($request['enabled']);
             return $this->preferredFormat(['success' => (bool)User::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
         } else {
             return response()->json(['error' => 'You can only update your own data.'], ResponseAlias::HTTP_FORBIDDEN);

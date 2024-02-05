@@ -41,12 +41,13 @@ export class UsersAddEditComponent implements OnInit {
       dob: ['', [Validators.required]],
       address: ['', [Validators.required]],
       city: ['', [Validators.required]],
-      state: ['', [Validators.required]],
+      state: ['', []],
       country: ['', [Validators.required]],
-      postcode: ['', [Validators.required]],
-      phone: ['', [Validators.required]],
+      postcode: ['', []],
+      phone: ['', []],
+      enabled: ['', []],
       email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
-      password: ['', [Validators.minLength(6), Validators.maxLength(40)]],
+      password: ['', []],
     });
 
     if (!this.isAddMode) {
@@ -95,7 +96,10 @@ export class UsersAddEditComponent implements OnInit {
   }
 
   private updateUser() {
-    this.userService.update(this.id, this.form.value)
+    const formValue = { ...this.form.value }; // Create a copy of the form value
+    delete formValue.password; // Remove the password field from the form value object
+
+    this.userService.update(this.id, formValue)
       .pipe(first())
       .subscribe({
         next: () => {

@@ -172,6 +172,13 @@ class UserController extends Controller {
         // At this point, login is successful
         $user = auth()->user();
 
+        // Check if the user is enabled
+        if (!$user->enabled) {
+            return response()->json([
+                'error' => 'Account disabled.'
+            ], ResponseAlias::HTTP_FORBIDDEN);
+        }
+
         // Check if user exists and if role is not admin
         if ($user->role != "admin") {
             // Check if account is locked
@@ -622,7 +629,6 @@ class UserController extends Controller {
      */
     public function update(UpdateCustomer $request, $id) {
         if ((app('auth')->id() == $id) || (app('auth')->parseToken()->getPayload()->get('role') == "admin")) {
-            //$request['password'] = app('hash')->make($request['password']);
             return $this->preferredFormat(['success' => (bool)User::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
         } else {
             return response()->json(['error' => 'You can only update your own data.'], ResponseAlias::HTTP_FORBIDDEN);
