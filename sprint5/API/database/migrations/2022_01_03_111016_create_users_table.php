@@ -27,7 +27,7 @@ class CreateUsersTable extends Migration
             $table->string('postcode', 10)->nullable();
             $table->string('phone', 24)->nullable();
             $table->date('dob')->nullable();
-            $table->string('email', 60)->unique();
+            $table->string('email', 256)->unique();
             $table->string('password')->nullable();
             $table->string('role');
             $table->boolean('enabled')->default(true);

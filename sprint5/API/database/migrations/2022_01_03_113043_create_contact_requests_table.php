@@ -18,7 +18,7 @@ class CreateContactRequestsTable extends Migration
             $table->ulid('id')->primary();
             $table->ulid('user_id')->nullable();
             $table->string('name', 60)->nullable();
-            $table->string('email', 60)->nullable();
+            $table->string('email', 256)->nullable();
             $table->string('subject', 120);
             $table->string('message', 250);
             $table->enum('status', ['NEW', 'IN_PROGRESS', 'RESOLVED'])->default('NEW');
