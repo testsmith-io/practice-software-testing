@@ -34,8 +34,7 @@ jobs:
       - name: Run Laravel Unit Tests
         run: |
           cd sprint${{ matrix.sprint }}/API
-          ./vendor/bin/phpunit
-          rm -rf vendor
+          ./vendor/bin/phpunit && rm -rf vendor
       - name: Make envfile
         uses: danielr1996/envsubst-action@1.0.0
         env:
