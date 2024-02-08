@@ -27,7 +27,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20.9.0'
-      - name: Install Dependencies
+      - name: Install (dev) Dependencies
         run: |
           cd sprint${{ matrix.sprint }}/API
           composer update --no-progress --prefer-dist
@@ -35,6 +35,10 @@ jobs:
         run: |
           cd sprint${{ matrix.sprint }}/API
           ./vendor/bin/phpunit
+      - name: Install (dev) Dependencies
+        run: |
+          cd sprint${{ matrix.sprint }}/API
+          composer update --no-dev --prefer-dist --optimize-autoloader
       - name: Make envfile
         uses: danielr1996/envsubst-action@1.0.0
         env:
