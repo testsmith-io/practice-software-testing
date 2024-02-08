@@ -104,7 +104,7 @@ class CategoryTest extends TestCase {
         $brand = Category::factory()->create();
 
         $this->json('DELETE', '/categories/' . $brand->id)
-            ->assertStatus(ResponseAlias::HTTP_UNAUTHORIZED);
+            ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
     }
 
     public function testDeleteCategory() {

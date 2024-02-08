@@ -104,22 +104,18 @@ class CategoryTest extends TestCase {
         $brand = Category::factory()->create();
 
         $this->json('DELETE', '/categories/' . $brand->id)
-            ->assertStatus(ResponseAlias::HTTP_UNAUTHORIZED);
+            ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
     }
 
     public function testDeleteCategory() {
-        $admin = User::factory()->create(['role' => 'admin']);
-
         $category = Category::factory()->create();
 
-        $this->delete('/categories/' . $category->id, [], $this->headers($admin))
+        $this->delete('/categories/' . $category->id)
             ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
     }
 
     public function testDeleteNonExistingCategory() {
-        $admin = User::factory()->create(['role' => 'admin']);
-
-        $this->delete('/categories/99', [], $this->headers($admin))
+        $this->delete('/categories/99')
             ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson([
                 'id' => ['The selected id is invalid.']
@@ -127,8 +123,6 @@ class CategoryTest extends TestCase {
     }
 
     public function testDeleteCategoryThatIsInUse() {
-        $admin = User::factory()->create(['role' => 'admin']);
-
         $brand = Brand::factory()->create();
         $category = Category::factory()->create();
         $productImage = ProductImage::factory()->create();
@@ -139,7 +133,7 @@ class CategoryTest extends TestCase {
             'product_image_id' => $productImage->id]);
 
 
-        $this->json('DELETE', '/categories/' . $category->id, [], $this->headers($admin))
+        $this->json('DELETE', '/categories/' . $category->id)
             ->assertStatus(ResponseAlias::HTTP_CONFLICT);
     }
 

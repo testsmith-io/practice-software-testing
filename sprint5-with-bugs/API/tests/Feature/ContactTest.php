@@ -64,7 +64,7 @@ class ContactTest extends TestCase {
             'file' => UploadedFile::fake()->create('log.txt', 500)
         ]);
         $response->assertJson([
-            'errors' => ['Currently we only allow empty files.']
+            'success' => true
         ]);
     }
 

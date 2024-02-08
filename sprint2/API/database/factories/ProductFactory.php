@@ -27,8 +27,6 @@ class ProductFactory extends Factory
             'brand_id' => $this->faker->numberBetween(0,3),
             'category_id' => $this->faker->numberBetween(0,3),
             'price' => $this->faker->numberBetween(0,9),
-            'is_location_offer' => false,
-            'is_rental' => false,
             'product_image_id' => $this->faker->numberBetween(0,3)
         ];
     }

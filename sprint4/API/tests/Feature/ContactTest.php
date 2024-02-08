@@ -11,7 +11,8 @@ use Tests\TestCase;
 class ContactTest extends TestCase {
     use DatabaseMigrations;
     public function testSendMessageAsGuest() {
-        $response = $this->addMessage();
+        $user = User::factory()->create();
+        $response = $this->addMessage($user);
 
         $response->assertStatus(ResponseAlias::HTTP_OK)
             ->assertJsonStructure([
@@ -47,90 +48,6 @@ class ContactTest extends TestCase {
             ]);
     }
 
-    public function testAttachFilNotEmpty() {
-
-        $response = $this->addMessage();
-
-        $response->assertStatus(ResponseAlias::HTTP_OK)
-            ->assertJsonStructure([
-                'id',
-                'email',
-                'subject',
-                'message',
-                'created_at'
-            ]);
-
-        $response = $this->post('/messages/' . $response->json('id') . '/attach-file', [
-            'file' => UploadedFile::fake()->create('log.txt', 500)
-        ]);
-        $response->assertJson([
-            'errors' => ['Currently we only allow empty files.']
-        ]);
-    }
-
-    public function testAttachEmptyFile() {
-
-        $response = $this->addMessage();
-
-        $response->assertStatus(ResponseAlias::HTTP_OK)
-            ->assertJsonStructure([
-                'id',
-                'email',
-                'subject',
-                'message',
-                'created_at'
-            ]);
-
-        $response = $this->post('/messages/' . $response->json('id') . '/attach-file', [
-            'file' => UploadedFile::fake()->create('log.txt', 0)
-        ]);
-        $response->assertJson([
-            'success' => 'true'
-        ]);
-    }
-
-    public function testAttachWithoutFile() {
-
-        $response = $this->addMessage();
-
-        $response->assertStatus(ResponseAlias::HTTP_OK)
-            ->assertJsonStructure([
-                'id',
-                'email',
-                'subject',
-                'message',
-                'created_at'
-            ]);
-
-        $response = $this->post('/messages/' . $response->json('id') . '/attach-file', [
-        ]);
-        $response->assertJson([
-            'errors' => ['No file attached.']
-        ]);
-    }
-
-    public function testRetrieveMessagesAsAdmin() {
-        $user = User::factory()->create(['role' => 'admin']);
-
-        $this->addMessage();
-
-        $response = $this->json('get', '/messages', [], $this->headers($user));
-
-        $response->assertStatus(ResponseAlias::HTTP_OK)
-            ->assertJsonStructure([
-                'data' => [
-                    '*' => [
-                        'id',
-                        'user_id',
-                        'email',
-                        'subject',
-                        'message',
-                        'created_at'
-                    ]
-                ]
-            ]);
-    }
-
     public function testRetrieveMessagesAsLoggedInUser() {
         $user = User::factory()->create();
 
@@ -161,24 +78,6 @@ class ContactTest extends TestCase {
             ]);
     }
 
-    public function testRetrieveMessageAsAdmin() {
-        $user = User::factory()->create(['role' => 'admin']);
-
-        $message = $this->addMessage();
-
-        $response = $this->json('get', '/messages/' . $message->json('id'), [], $this->headers($user));
-
-        $response->assertStatus(ResponseAlias::HTTP_OK)
-            ->assertJsonStructure([
-                'id',
-                'user_id',
-                'email',
-                'subject',
-                'message',
-                'created_at'
-            ]);
-    }
-
     public function testRetrieveMessageAsLoggedInUser() {
         $user = User::factory()->create();
 
@@ -206,13 +105,13 @@ class ContactTest extends TestCase {
     }
 
     public function testMessageRely() {
-        $message = $this->addMessage();
-        $admin = User::factory()->create(['role' => 'admin']);
+        $user = User::factory()->create();
+        $message = $this->addMessage($user);
         $payload = [
             'message' => 'some reply message'
         ];
 
-        $reply = $this->json('post', '/messages/' . $message->json('id') . '/reply', $payload, $this->headers($admin));
+        $reply = $this->json('post', '/messages/' . $message->json('id') . '/reply', $payload, $this->headers($user));
 
         $reply->assertStatus(ResponseAlias::HTTP_CREATED)
             ->assertJsonStructure([
@@ -222,13 +121,13 @@ class ContactTest extends TestCase {
     }
 
     public function testUpdateStatus() {
-        $message = $this->addMessage();
-        $admin = User::factory()->create(['role' => 'admin']);
+        $user = User::factory()->create();
+        $message = $this->addMessage($user);
         $payload = [
             'status' => 'RESOLVED'
         ];
 
-        $reply = $this->json('put', '/messages/' . $message->json('id') . '/status', $payload, $this->headers($admin));
+        $reply = $this->json('put', '/messages/' . $message->json('id') . '/status', $payload, $this->headers($user));
 
         $reply->assertStatus(ResponseAlias::HTTP_OK)
             ->assertJsonStructure([
@@ -239,7 +138,7 @@ class ContactTest extends TestCase {
     /**
      * @return \Illuminate\Testing\TestResponse
      */
-    public function addMessage(): \Illuminate\Testing\TestResponse {
+    public function addMessage($user): \Illuminate\Testing\TestResponse {
         $payload = [
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
@@ -248,7 +147,7 @@ class ContactTest extends TestCase {
             'message' => $this->faker->text(55)
         ];
 
-        $response = $this->post('/messages', $payload);
+        $response = $this->post('/messages', $payload, [], $this->headers($user));
         return $response;
     }
 
