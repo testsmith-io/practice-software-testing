@@ -133,8 +133,6 @@ class ProductTest extends TestCase {
             'brand_id' => $brand->id,
             'category_id' => $category->id,
             'price' => 4.99,
-            'is_location_offer' => false,
-            'is_rental' => false,
             'product_image_id' => $productImage->id];
 
         $response = $this->post('/products', $payload);

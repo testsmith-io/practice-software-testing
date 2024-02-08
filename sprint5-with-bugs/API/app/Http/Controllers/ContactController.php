@@ -154,9 +154,9 @@ class ContactController extends Controller
             $result['errors'][] = "No file attached.";
         }
         if(!empty($result['errors'])) {
-            return $this->jsonResponse($result, ResponseAlias::HTTP_BAD_REQUEST);
+            return $this->preferredFormat($result, ResponseAlias::HTTP_BAD_REQUEST);
         } else {
-            return $this->jsonResponse(['success' => 'true'], ResponseAlias::HTTP_OK);
+            return $this->preferredFormat(['success' => 'true'], ResponseAlias::HTTP_OK);
         }
     }
 
@@ -396,7 +396,7 @@ class ContactController extends Controller
      */
     public function updateStatus($id, Request $request)
     {
-        $this->validate($request, [
+        $request->validate([
             'status' => Rule::in("NEW", "IN_PROGRESS", "RESOLVED")
         ]);
 
