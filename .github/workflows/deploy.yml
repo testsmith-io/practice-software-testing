@@ -12,6 +12,12 @@ jobs:
     strategy:
       matrix:
         sprint: [1, 2, 3, 4, 5, '5-with-bugs']
+    env:
+      NODE_VERSION: ${{ matrix.sprint == '5' && '20.9.0' || '16' }}
+      SECRET_GOOGLE_ID: ${{ matrix.sprint == '5' && secrets.SECRET_GOOGLE_ID || '' }}
+      SECRET_GOOGLE_SECRET: ${{ matrix.sprint == '5' && secrets.SECRET_GOOGLE_SECRET || '' } }
+      SECRET_GITHUB_ID: ${{ matrix.sprint == '5' && secrets.SECRET_GITHUB_ID || '' } }
+      SECRET_GITHUB_SECRET: ${{ matrix.sprint == '5' && secrets.SECRET_GITHUB_SECRET || '' } }
     steps:
       - uses: actions/checkout@v3
       - name: Setup PHP
@@ -21,17 +27,17 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.sprint == '5' ? '20.9.0' : '16' }}
+          node-version: ${{ env.NODE_VERSION }}
       - name: Make envfile
         uses: danielr1996/envsubst-action@1.0.0
         env:
           SECRET_DB: ${{ secrets.SECRET_DB }}
           SECRET_DB_USER: ${{ secrets.SECRET_DB_USER }}
           SECRET_DB_PASS: ${{ secrets.SECRET_DB_PASS }}
-          SECRET_GOOGLE_ID: ${{ matrix.sprint == '5' ? secrets.SECRET_GOOGLE_ID : '' }}
-          SECRET_GOOGLE_SECRET: ${{ matrix.sprint == '5' ? secrets.SECRET_GOOGLE_SECRET : '' }}
-          SECRET_GITHUB_ID: ${{ matrix.sprint == '5' ? secrets.SECRET_GITHUB_ID : '' }}
-          SECRET_GITHUB_SECRET: ${{ matrix.sprint == '5' ? secrets.SECRET_GITHUB_SECRET : '' }}
+          SECRET_GOOGLE_ID: ${{ env.SECRET_GOOGLE_ID }}
+          SECRET_GOOGLE_SECRET: ${{ env.SECRET_GOOGLE_SECRET }}
+          SECRET_GITHUB_ID: ${{ env.SECRET_GITHUB_ID }}
+          SECRET_GITHUB_SECRET: ${{ env.SECRET_GITHUB_SECRET }}
         with:
           input: sprint${{ matrix.sprint }}/API/.env_template
           output: sprint${{ matrix.sprint }}/API/.env
@@ -40,4 +46,4 @@ jobs:
         with:
           private-key: ${{ secrets.PRIVATE_KEY }}
           dep: upload-sprint${{ matrix.sprint }} production
-          deployer-version: ${{ matrix.sprint == '5-with-bugs' ? '6.8.0' : '6.9.0' }}
+          deployer-version: '6.9.0'
