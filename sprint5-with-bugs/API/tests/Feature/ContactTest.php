@@ -3,12 +3,13 @@
 namespace tests\Feature;
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tests\TestCase;
 
 class ContactTest extends TestCase {
-
+    use DatabaseMigrations;
     public function testSendMessageAsGuest() {
         $response = $this->addMessage();
 
