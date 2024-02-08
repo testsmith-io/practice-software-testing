@@ -15,9 +15,9 @@ jobs:
     env:
       NODE_VERSION: ${{ matrix.sprint == '5' && '20.9.0' || '16' }}
       SECRET_GOOGLE_ID: ${{ matrix.sprint == '5' && secrets.SECRET_GOOGLE_ID || '' }}
-      SECRET_GOOGLE_SECRET: ${{ matrix.sprint == '5' && secrets.SECRET_GOOGLE_SECRET || '' } }
-      SECRET_GITHUB_ID: ${{ matrix.sprint == '5' && secrets.SECRET_GITHUB_ID || '' } }
-      SECRET_GITHUB_SECRET: ${{ matrix.sprint == '5' && secrets.SECRET_GITHUB_SECRET || '' } }
+      SECRET_GOOGLE_SECRET: ${{ matrix.sprint == '5' && secrets.SECRET_GOOGLE_SECRET || '' }}
+      SECRET_GITHUB_ID: ${{ matrix.sprint == '5' && secrets.SECRET_GITHUB_ID || '' }}
+      SECRET_GITHUB_SECRET: ${{ matrix.sprint == '5' && secrets.SECRET_GITHUB_SECRET || '' }}
     steps:
       - uses: actions/checkout@v3
       - name: Setup PHP
