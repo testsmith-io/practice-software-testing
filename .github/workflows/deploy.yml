@@ -30,7 +30,7 @@ jobs:
       - name: Install Dependencies
         run: |
           cd sprint${{ matrix.sprint }}/API
-          composer install --no-progress --prefer-dist
+          composer update --no-progress --prefer-dist
       - name: Run Laravel Unit Tests
         run: |
           cd sprint${{ matrix.sprint }}/API
