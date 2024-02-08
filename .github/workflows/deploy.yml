@@ -35,6 +35,10 @@ jobs:
         run: |
           cd sprint${{ matrix.sprint }}/API
           ./vendor/bin/phpunit
+      - name: Remove Vendor Folder
+        run: |
+          cd sprint${{ matrix.sprint }}/API
+          rm -R vendor
       - name: Make envfile
         uses: danielr1996/envsubst-action@1.0.0
         env:
