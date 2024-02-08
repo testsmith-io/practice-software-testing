@@ -35,7 +35,7 @@ jobs:
         run: |
           cd sprint${{ matrix.sprint }}/API
           ./vendor/bin/phpunit
-      - name: Install (dev) Dependencies
+      - name: Install Dependencies
         run: |
           cd sprint${{ matrix.sprint }}/API
           composer update --no-dev --prefer-dist --optimize-autoloader
@@ -58,3 +58,4 @@ jobs:
           private-key: ${{ secrets.PRIVATE_KEY }}
           dep: upload-sprint${{ matrix.sprint }} production
           deployer-version: '6.9.0'
+          verbosity: -vvv
