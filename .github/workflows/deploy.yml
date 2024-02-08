@@ -7,8 +7,11 @@ on:
 concurrency: production_environment
 
 jobs:
-  deploy-sprint1:
+  deploy:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        sprint: [1, 2, 3, 4, 5, '5-with-bugs']
     steps:
       - uses: actions/checkout@v3
       - name: Setup PHP
@@ -18,158 +21,23 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
-      - name: Make envfile sprint 1
+          node-version: ${{ matrix.sprint == '5' ? '20.9.0' : '16' }}
+      - name: Make envfile
         uses: danielr1996/envsubst-action@1.0.0
         env:
           SECRET_DB: ${{ secrets.SECRET_DB }}
           SECRET_DB_USER: ${{ secrets.SECRET_DB_USER }}
           SECRET_DB_PASS: ${{ secrets.SECRET_DB_PASS }}
+          SECRET_GOOGLE_ID: ${{ matrix.sprint == '5' ? secrets.SECRET_GOOGLE_ID : '' }}
+          SECRET_GOOGLE_SECRET: ${{ matrix.sprint == '5' ? secrets.SECRET_GOOGLE_SECRET : '' }}
+          SECRET_GITHUB_ID: ${{ matrix.sprint == '5' ? secrets.SECRET_GITHUB_ID : '' }}
+          SECRET_GITHUB_SECRET: ${{ matrix.sprint == '5' ? secrets.SECRET_GITHUB_SECRET : '' }}
         with:
-          input: sprint1/API/.env_template
-          output: sprint1/API/.env
+          input: sprint${{ matrix.sprint }}/API/.env_template
+          output: sprint${{ matrix.sprint }}/API/.env
       - name: Deploy
         uses: deployphp/action@v1.0.22
         with:
           private-key: ${{ secrets.PRIVATE_KEY }}
-          dep: upload-sprint1 production
-          deployer-version: "6.9.0"
-  deploy-sprint2:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-      - name: Make envfile sprint 2
-        uses: danielr1996/envsubst-action@1.0.0
-        env:
-          SECRET_DB: ${{ secrets.SECRET_DB }}
-          SECRET_DB_USER: ${{ secrets.SECRET_DB_USER }}
-          SECRET_DB_PASS: ${{ secrets.SECRET_DB_PASS }}
-        with:
-          input: sprint2/API/.env_template
-          output: sprint2/API/.env
-      - name: Deploy
-        uses: deployphp/action@v1.0.22
-        with:
-          private-key: ${{ secrets.PRIVATE_KEY }}
-          dep: upload-sprint2 production
-          deployer-version: "6.9.0"
-  deploy-sprint3:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-      - name: Make envfile sprint 3
-        uses: danielr1996/envsubst-action@1.0.0
-        env:
-          SECRET_DB: ${{ secrets.SECRET_DB }}
-          SECRET_DB_USER: ${{ secrets.SECRET_DB_USER }}
-          SECRET_DB_PASS: ${{ secrets.SECRET_DB_PASS }}
-        with:
-          input: sprint3/API/.env_template
-          output: sprint3/API/.env
-      - name: Deploy
-        uses: deployphp/action@v1.0.22
-        with:
-          private-key: ${{ secrets.PRIVATE_KEY }}
-          dep: upload-sprint3 production
-          deployer-version: "6.9.0"
-  deploy-sprint4:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-      - name: Make envfile sprint 4
-        uses: danielr1996/envsubst-action@1.0.0
-        env:
-          SECRET_DB: ${{ secrets.SECRET_DB }}
-          SECRET_DB_USER: ${{ secrets.SECRET_DB_USER }}
-          SECRET_DB_PASS: ${{ secrets.SECRET_DB_PASS }}
-        with:
-          input: sprint4/API/.env_template
-          output: sprint4/API/.env
-      - name: Deploy
-        uses: deployphp/action@v1.0.22
-        with:
-          private-key: ${{ secrets.PRIVATE_KEY }}
-          dep: upload-sprint4 production
-          deployer-version: "6.9.0"
-  deploy-sprint5:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20.9.0'
-      - name: Make envfile sprint 5
-        uses: danielr1996/envsubst-action@1.0.0
-        env:
-          SECRET_DB: ${{ secrets.SECRET_DB }}
-          SECRET_DB_USER: ${{ secrets.SECRET_DB_USER }}
-          SECRET_DB_PASS: ${{ secrets.SECRET_DB_PASS }}
-          SECRET_GOOGLE_ID: ${{ secrets.SECRET_GOOGLE_ID }}
-          SECRET_GOOGLE_SECRET: ${{ secrets.SECRET_GOOGLE_SECRET }}
-          SECRET_GITHUB_ID: ${{ secrets.SECRET_GITHUB_ID }}
-          SECRET_GITHUB_SECRET: ${{ secrets.SECRET_GITHUB_SECRET }}
-        with:
-          input: sprint5/API/.env_template
-          output: sprint5/API/.env
-      - name: Deploy
-        uses: deployphp/action@v1.0.22
-        with:
-          private-key: ${{ secrets.PRIVATE_KEY }}
-          dep: upload-sprint5 production
-          deployer-version: "6.9.0"
-  deploy-sprint5-with-bugs:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-      - name: Make envfile sprint 5 with bugs
-        uses: danielr1996/envsubst-action@1.0.0
-        env:
-          SECRET_DB: ${{ secrets.SECRET_DB }}
-          SECRET_DB_USER: ${{ secrets.SECRET_DB_USER }}
-          SECRET_DB_PASS: ${{ secrets.SECRET_DB_PASS }}
-        with:
-          input: sprint5-with-bugs/API/.env_template
-          output: sprint5-with-bugs/API/.env
-      - name: Deploy
-        uses: deployphp/action@v1.0.22
-        with:
-          private-key: ${{ secrets.PRIVATE_KEY }}
-          dep: upload-sprint5-with-bugs production
-          deployer-version: "6.8.0"
+          dep: upload-sprint${{ matrix.sprint }} production
+          deployer-version: ${{ matrix.sprint == '5-with-bugs' ? '6.8.0' : '6.9.0' }}
