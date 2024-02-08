@@ -34,7 +34,11 @@ jobs:
       - name: Run Laravel Unit Tests
         run: |
           cd sprint${{ matrix.sprint }}/API
-          ./vendor/bin/phpunit && rm -rf vendor
+          ./vendor/bin/phpunit
+      - name: Remove Vendor Folder
+        uses: JesseTG/rm@v1.0.3
+        with:
+          path: sprint${{ matrix.sprint }}/API/vendor
       - name: Make envfile
         uses: danielr1996/envsubst-action@1.0.0
         env:
