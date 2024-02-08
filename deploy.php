@@ -74,7 +74,7 @@ task('upload-sprint5-with-bugs', function () {
 });
 
 function deploy($source, $webDestination, $apiDestination) {
-    runLocally("cd {$source}/API/ && composer update --no-dev --prefer-dist --optimize-autoloader");
+    //runLocally("cd {$source}/API/ && composer update --no-dev --prefer-dist --optimize-autoloader");
     run("cd /var/www/ && mkdir -p api{$apiDestination}.practicesoftwaretesting.com_tmp");
     upload(__DIR__ . "/{$source}/API/", "/var/www/api{$apiDestination}.practicesoftwaretesting.com_tmp");
     run("sudo mv /var/www/api{$apiDestination}.practicesoftwaretesting.com /var/www/api{$apiDestination}.practicesoftwaretesting.com_bak");
