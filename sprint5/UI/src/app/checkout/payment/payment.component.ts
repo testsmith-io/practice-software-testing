@@ -16,7 +16,7 @@ import {InvoiceService} from "../../_services/invoice.service";
 export class PaymentComponent implements OnInit {
 
   PaymentMethods: any = ['Bank Transfer', 'Cash on Delivery', 'Credit Card', 'Buy Now Pay Later', 'Gift Card'];
-  selectedPaymentMethod: string = ''; // Declare the variable here
+  selectedPaymentMethod: string = '';
 
   @Input() address: any;
 
