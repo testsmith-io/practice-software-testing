@@ -13,6 +13,7 @@ jobs:
       matrix:
         sprint: [1, 2, 3, 4, 5, '5-with-bugs']
     env:
+      NODE_VERSION: ${{ matrix.sprint == '5' && '20.9.0' || '16' }}
       SECRET_GOOGLE_ID: ${{ matrix.sprint == '5' && secrets.SECRET_GOOGLE_ID || '' }}
       SECRET_GOOGLE_SECRET: ${{ matrix.sprint == '5' && secrets.SECRET_GOOGLE_SECRET || '' }}
       SECRET_GITHUB_ID: ${{ matrix.sprint == '5' && secrets.SECRET_GITHUB_ID || '' }}
@@ -26,7 +27,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '20.9.0'
+          node-version: ${{ env.NODE_VERSION }}
       - name: Install (dev) Dependencies
         run: |
           cd sprint${{ matrix.sprint }}/API
