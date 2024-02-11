@@ -7,7 +7,7 @@ on:
 concurrency: production_environment
 
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout ⚙️
