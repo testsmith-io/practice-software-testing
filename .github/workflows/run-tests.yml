@@ -17,8 +17,8 @@ jobs:
         run: |
           docker-compose -f docker-compose.yml up -d
 
-      - name: Sleep for 5 seconds
-        run: sleep 5s
+      - name: Sleep for 30 seconds
+        run: sleep 30s
         shell: bash
 
       - name: Create & Seed database 🌱
@@ -40,4 +40,4 @@ jobs:
         with:
           name: playwright-report 📊
           path: playwright-report/
-          retention-days: 30
+          retention-days: 10
