@@ -30,7 +30,7 @@ class ContactTest extends TestCase {
         $payload = [
             'first_name' => '',
             'last_name' => '',
-            'email' => '',
+            'email' => 'test@example.com',
             'subject' => 'Return',
             'message' => $this->faker->text(55)
         ];
@@ -186,7 +186,7 @@ class ContactTest extends TestCase {
         $payload = [
             'first_name' => '',
             'last_name' => '',
-            'email' => '',
+            'email' => 'test@example.com',
             'subject' => 'Return',
             'message' => $this->faker->text(55)
         ];
