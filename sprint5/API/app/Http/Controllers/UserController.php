@@ -156,35 +156,34 @@ class UserController extends Controller {
 
         $credentials = $request->only(['email', 'password']);
 
+        // Check if the user exists
+        $user = User::where('email', $credentials['email'])->first();
+
+        // Check if user exists and if role is not admin
+        if ($user && $user->role != "admin") {
+            // Check if account is locked
+            if ($user->failed_login_attempts >= self::MAX_LOGIN_ATTEMPTS) {
+                return $this->lockedAccountResponse();
+            }
+        }
+
         // Attempt login and get token
         $token = app('auth')->attempt($credentials);
 
         // Check if login was successful
         if (!$token) {
             // Login failed
-            $user = User::where('email', $credentials['email'])->first();
             if ($user && $user->role != "admin") {
                 $this->incrementLoginAttempts($user);
             }
             return $this->failedLoginResponse();
         }
 
-        // At this point, login is successful
-        $user = auth()->user();
-
         // Check if the user is enabled
         if (!$user->enabled) {
             return response()->json([
                 'error' => 'Account disabled.'
             ], ResponseAlias::HTTP_FORBIDDEN);
-        }
-
-        // Check if user exists and if role is not admin
-        if ($user->role != "admin") {
-            // Check if account is locked
-            if ($user->failed_login_attempts >= self::MAX_LOGIN_ATTEMPTS) {
-                return $this->lockedAccountResponse();
-            }
         }
 
         // Reset failed login attempts on successful login
