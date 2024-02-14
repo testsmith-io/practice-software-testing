@@ -19,4 +19,4 @@ jobs:
             ls -a
           host: ${{ secrets.HOST }}
           user: githubte
-          pass: test123
+          key: ${{ secrets.PRIVATE_KEY}}
