@@ -1,8 +1,7 @@
 name: Run Playwright Tests 🎭
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
 
 concurrency: production_environment
 
