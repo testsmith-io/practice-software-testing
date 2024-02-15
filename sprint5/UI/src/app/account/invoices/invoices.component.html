@@ -8,6 +8,7 @@
       <th scope="col">Billing Address</th>
       <th scope="col">Invoice Date</th>
       <th scope="col">Total</th>
+      <th></th>
     </tr>
     </thead>
     <tbody>
@@ -24,7 +25,8 @@
       }
     </tbody>
     <tfoot>
-
+    <app-pagination [currentPage]="currentPage" [lastPage]="results.last_page"
+                    (pageChange)="onPageChange($event)"></app-pagination>
     </tfoot>
   </table>
 }
