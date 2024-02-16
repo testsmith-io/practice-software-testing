@@ -1,0 +1,32 @@
+name: Delpoy to ahdev
+
+on:
+  push:
+
+concurrency: production_environment
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: ls -a via ssh
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            sudo su
+            apt install git-all -y
+            apt install docker-compose -y
+            apt update -y && apt upgrade -y
+            cd /root
+            mkdir toolshop
+            cd toolshop
+            git clone https://github.com/rgroetz2/practice-software-testing.git
+            ls -la
+            cd practice-software-testing
+            docker-compose up -d
+            docker ps -a
+            docker images
+          host: ${{ secrets.HOST }}
+          user: ahprodte
+          key: ${{ secrets.PRIVATE_KEY}}
