@@ -21,7 +21,7 @@ jobs:
             cd /root
             mkdir toolshop
             cd toolshop
-            git clone https://github.com/rgroetz2/practice-software-testing.git
+            git pull https://github.com/rgroetz2/practice-software-testing.git
             ls -la
             cd practice-software-testing
             docker-compose up -d
