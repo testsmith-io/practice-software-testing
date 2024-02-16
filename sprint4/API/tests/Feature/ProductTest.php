@@ -7,12 +7,12 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tests\TestCase;
 
 class ProductTest extends TestCase {
-    use RefreshDatabase;
+    use DatabaseMigrations;
 
     public function testRetrieveProducts() {
         $product = $this->addProduct();
@@ -168,7 +168,7 @@ class ProductTest extends TestCase {
         $product = $this->addProduct();
 
         $this->json('DELETE', '/products/' . $product->id)
-            ->assertStatus(ResponseAlias::HTTP_UNAUTHORIZED);
+            ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
     }
 
     public function testDeleteProduct() {

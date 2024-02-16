@@ -95,7 +95,7 @@
                   <select data-test="subject" id="subject" formControlName="subject"
                           [ngClass]="{ 'is-invalid': submitted && f['subject'].errors}"
                           class="form-select">
-                    <option value="" disabled selected hidden>Select a subject</option>
+                    <option value="" disabled selected hidden>Select a subject *</option>
                     <option value="customer-service">Customer service</option>
                     <option value="webmaster">Webmaster</option>
                     <option value="return">Return</option>
@@ -116,7 +116,7 @@
               </div>
 
               <div class="form-group mb-3">
-                <label for="message" class="form-label">Message</label>
+                <label for="message" class="form-label">Message *</label>
                 <div class="col-sm-12">
               <textarea class="form-control"
                         [ngClass]="{ 'is-invalid': submitted && f['message'].errors }"

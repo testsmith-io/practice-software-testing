@@ -10278,14 +10278,14 @@
                                 <small> (Item for rent, price per hour)</small>
                             @endif</td>
 
-                        <td class="text-end">@if ($invoiceline['discount_percentage'])
+                        <td class="text-end">@if (isset($invoiceline['discount_percentage']))
                                 <span
                                     class="discounted">${{ number_format($invoiceline['product']['price'],2) }}</span><br/><span
                                     data-test="offer-price">$<span id="discount-price">{{$invoiceline['discounted_price']}}</span></span>
                             @else
                                 <span>${{ number_format($invoiceline['product']['price'],2) }}</span><br/></span>
                         @endif</td>
-                        <td class="text-end">@if ($invoiceline['discount_percentage'])
+                        <td class="text-end">@if (isset($invoiceline['discount_percentage']))
                                 <span
                                     class="discounted">${{ number_format($invoiceline['quantity'] * $invoiceline['product']['price'],2) }}</span><br/><span
                                     data-test="offer-price">$<span id="discount-price">{{ number_format($invoiceline['quantity'] * $invoiceline['discounted_price'],2) }}</span></span>

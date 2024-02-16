@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
 
     this.cusForm = this.formBuilder.group(
       {
-        email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+        email: ['', [Validators.required, Validators.pattern("^(?=.{1,256}$)[a-zA-Z0-9._%+-]{1,64}@[a-zA-Z0-9.-]{1,255}$")]],
         password: ['', [Validators.required,
           Validators.minLength(6),
           Validators.maxLength(40)]],

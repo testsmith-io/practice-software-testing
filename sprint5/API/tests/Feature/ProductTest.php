@@ -141,7 +141,7 @@ class ProductTest extends TestCase {
 
         $response = $this->postJson('/products', $payload);
 
-        $response->dump();
+//        $response->dump();
 
         $response
             ->assertStatus(ResponseAlias::HTTP_CREATED)

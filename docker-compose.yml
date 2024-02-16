@@ -60,7 +60,7 @@ services:
 
   composer:
     image: composer:2.5.0
-    command: install --no-dev --optimize-autoloader && chown -R www-data /var/www && chmod 777 /var/www
+    command: install --no-dev --optimize-autoloader
     volumes_from:
       - laravel-api
     working_dir: /var/www

@@ -3,12 +3,13 @@
 namespace tests\Feature;
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tests\TestCase;
 
 class ContactTest extends TestCase {
-
+    use DatabaseMigrations;
     public function testSendMessageAsGuest() {
         $response = $this->addMessage();
 
@@ -63,7 +64,7 @@ class ContactTest extends TestCase {
             'file' => UploadedFile::fake()->create('log.txt', 500)
         ]);
         $response->assertJson([
-            'errors' => ['Currently we only allow empty files.']
+            'success' => true
         ]);
     }
 

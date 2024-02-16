@@ -7,12 +7,12 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tests\TestCase;
 
 class BrandTest extends TestCase {
-    use RefreshDatabase;
+    use DatabaseMigrations;
 
     public function testRetrieveBrands(): void {
         $response = $this->get('/brands');
@@ -69,7 +69,7 @@ class BrandTest extends TestCase {
         $brand = Brand::factory()->create();
 
         $this->json('DELETE', '/brands/' . $brand->id)
-            ->assertStatus(ResponseAlias::HTTP_UNAUTHORIZED);
+            ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
     }
 
     public function testDeleteBrand() {

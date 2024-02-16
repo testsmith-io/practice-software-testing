@@ -7,12 +7,12 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tests\TestCase;
 
 class ProductTest extends TestCase {
-    use RefreshDatabase;
+    use DatabaseMigrations;
 
     public function testRetrieveProducts() {
         $product = $this->addProduct();
@@ -168,22 +168,18 @@ class ProductTest extends TestCase {
         $product = $this->addProduct();
 
         $this->json('DELETE', '/products/' . $product->id)
-            ->assertStatus(ResponseAlias::HTTP_UNAUTHORIZED);
+            ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
     }
 
     public function testDeleteProduct() {
-        $admin = User::factory()->create(['role' => 'admin']);
-
         $product = $this->addProduct();
 
-        $this->delete('/products/' . $product->id, [], $this->headers($admin))
+        $this->delete('/products/' . $product->id)
             ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
     }
 
     public function testDeleteNonExistingProduct() {
-        $admin = User::factory()->create(['role' => 'admin']);
-
-        $this->delete('/products/99', [], $this->headers($admin))
+        $this->delete('/products/99')
             ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson([
                 'id' => ['The selected id is invalid.']

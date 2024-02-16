@@ -48,7 +48,7 @@ class StoreCustomer extends BaseFormRequest
             'postcode' => ['string', 'max:10', new SubscriptSuperscriptRule()],
             'phone' => ['string', 'max:24', new SubscriptSuperscriptRule()],
             'dob' => ['date','before:' . $before],
-            'email' => ['required', 'unique:users,email', 'string', 'max:60', new SubscriptSuperscriptRule()],
+            'email' => ['required', 'unique:users,email', 'string', 'max:256', new SubscriptSuperscriptRule()],
             'password' => ['required', 'string', 'max:255', new SubscriptSuperscriptRule()]
         ];
     }
