@@ -6,6 +6,7 @@ concurrency: production_environment
 
 jobs:
   deploy2ahdev:
+    name: deploy2ahdev
     runs-on: ubuntu-latest
     
     steps:
@@ -21,6 +22,7 @@ jobs:
           user: ${{ secrets.ahdev_user }}
           key: ${{ secrets.PRIVATE_KEY}}
   deploy2ahtest:
+    name: deploy2ahtest
     runs-on: ubuntu-latest
     
     steps:
@@ -36,6 +38,7 @@ jobs:
           user: ${{ secrets.ahtest_user }}
           key: ${{ secrets.PRIVATE_KEY}}
   PlaywrightTests:
+    needs: [deploy2ahdev, deploy2ahtest]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout ⚙️
