@@ -17,7 +17,7 @@ jobs:
           command: |
             sudo su
             apt install git-all -y
-            apt install docker-compose
+            apt install docker-compose -y
             apt update -y && apt upgrade -y
             cd /root
             mkdir toolshop
