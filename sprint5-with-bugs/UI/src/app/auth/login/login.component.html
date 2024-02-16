@@ -10,6 +10,8 @@
                  data-test="email"
                  [ngClass]="{ 'is-invalid': submitted && cf['email'].errors }" type="text"
                  placeholder="Your E-mail *"
+                 [attr.tabindex]="browserDetect.isFirefox() ? '2' : '1'"
+                 [ngStyle]="(browserDetect.isChrome()) ? {'padding-left': '0px'}: {}"
                  value=""/>
         </div>
         <div data-test="email-error" *ngIf="email.invalid && submitted"
@@ -27,7 +29,9 @@
                  id="password"
                  data-test="password"
                  [ngClass]="{ 'is-invalid': submitted && cf['password'].errors }" type="password"
-                 placeholder="Your Password *" value=""/>
+                 placeholder="Your Password *"
+                 [attr.tabindex]="browserDetect.isFirefox() ? '3' : '2'"
+                 value=""/>
         </div>
         <div data-test="password-error" *ngIf="password.invalid && submitted"
              class="alert alert-danger">
@@ -39,7 +43,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="submit" data-test="login-submit" class="btnSubmit" value="Login"/>
+          <input type="submit" data-test="login-submit" [attr.tabindex]="browserDetect.isFirefox() ? '2' : '3'" [ngStyle]="(browserDetect.isFirefox()) ? {'width': 'unset'}: {}" class="btnSubmit" value="Login"/>
         </div>
         <div data-test="login-error" *ngIf="error" class="alert alert-danger">
           <div class="help-block">{{error}}</div>

@@ -14,6 +14,7 @@
                      [ngClass]="{ 'is-invalid': submitted && f['first_name'].errors }"
                      type="text"
                      placeholder="Your first name *"
+                     [attr.tabindex]="browserDetect.isChrome() ? '1' : '1'"
                      value=""/>
             </div>
             <div data-test="first-name-error" *ngIf="f['first_name'].invalid && submitted"
@@ -35,6 +36,7 @@
                      class="form-control"
                      [ngClass]="{ 'is-invalid': submitted && f['last_name'].errors }" type="text"
                      placeholder="Your last name *"
+                     [attr.tabindex]="browserDetect.isChrome() ? '2' : '2'"
                      value=""/>
             </div>
             <div data-test="last-name-error" *ngIf="f['last_name'].invalid && submitted"
@@ -57,6 +59,7 @@
                    type="date"
                    [ngClass]="{ 'is-invalid': submitted && f['dob'].errors }"
                    placeholder="Your Date of birth *"
+                   [attr.tabindex]="browserDetect.isChrome() ? '3' : '3'"
                    value=""/>
             <div data-test="dob-error" *ngIf="f['dob'].invalid && submitted"
                  class="alert alert-danger mt-3">
@@ -74,6 +77,7 @@
                    class="form-control"
                    [ngClass]="{ 'is-invalid': submitted && f['address'].errors }" type="text"
                    placeholder="Your address *"
+                   [attr.tabindex]="browserDetect.isChrome() ? '5' : '4'"
                    value=""/>
             <div data-test="address-error" *ngIf="f['address'].invalid && submitted"
                  class="alert alert-danger mt-3">
@@ -92,6 +96,7 @@
                      class="form-control"
                      [ngClass]="{ 'is-invalid': submitted && f['postcode'].errors }" type="text"
                      placeholder="Your postcode *"
+                     [attr.tabindex]="browserDetect.isChrome() ? '6' : '5'"
                      value=""/>
             </div>
             <div data-test="postcode-error" *ngIf="f['postcode'].invalid && submitted"
@@ -106,13 +111,14 @@
           </div>
           <div class="col-md-8">
             <div class="form-group mb-3">
-              <label for="city" class="form-label">City</label>
+              <label for="city" [ngStyle]="(browserDetect.isFirefox()) ? {'position': 'absolute'}: {}" class="form-label">City</label>
               <input formControlName="city"
                      id="city"
                      data-test="city"
                      class="form-control"
                      [ngClass]="{ 'is-invalid': submitted && f['city'].errors }" type="text"
                      placeholder="Your city *"
+                     [attr.tabindex]="browserDetect.isChrome() ? '7' : '6'"
                      value=""/>
             </div>
             <div data-test="city-error" *ngIf="f['city'].invalid && submitted"
@@ -131,6 +137,7 @@
                      class="form-control"
                      [ngClass]="{ 'is-invalid': submitted && f['state'].errors }" type="text"
                      placeholder="Your state *"
+                     [attr.tabindex]="browserDetect.isChrome() ? '8' : '7'"
                      value=""/>
             </div>
             <div data-test="state-error" *ngIf="f['state'].invalid && submitted"
@@ -146,9 +153,10 @@
               <select id="country"
                       data-test="country"
                       formControlName="country"
-                      [ngClass]="{ 'is-invalid': submitted && f['country'].errors }" class="form-select">
+                      [ngClass]="{ 'is-invalid': submitted && f['country'].errors }"
+                      [attr.tabindex]="browserDetect.isChrome() ? '9' : '8'"class="form-select">
                 <option value="" disabled selected hidden>Select your country *</option>
-                <option *ngFor="let country of countries" value="{{country.code}}">{{country.name}}</option>
+                <option *ngFor="let country of countries" [ngStyle]="(country.code === 'AT' || country.code === 'NL') ? {'font-size': 'smaller'} : {}" value="{{country.code}}">{{country.name}}</option>
               </select>
             </div>
             <div data-test="country-error" *ngIf="f['country'].invalid && submitted"
@@ -165,6 +173,8 @@
                    data-test="phone"
                    class="form-control"
                    [ngClass]="{ 'is-invalid': submitted && f['phone'].errors }" type="text"
+                   [ngStyle]="(browserDetect.isFirefox()) ? {'padding-left': '0px'}: {}"
+                   [attr.tabindex]="browserDetect.isChrome() ? '10' : '9'"
                    placeholder="Your phone *"
                    value=""/>
             <div data-test="phone-error" *ngIf="f['phone'].invalid && submitted"
@@ -185,6 +195,7 @@
                    class="form-control"
                    [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" type="text"
                    placeholder="Your e-mail *"
+                   [attr.tabindex]="browserDetect.isChrome() ? '11' : '10'"
                    value=""/>
             <div data-test="email-error" *ngIf="f['email'].invalid && submitted"
                  class="alert alert-danger mt-3">
@@ -204,6 +215,7 @@
                    class="form-control"
                    [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" type="password"
                    placeholder="Your password *"
+                   [attr.tabindex]="browserDetect.isChrome() ? '4' : '11'"
                    value=""/>
             <div data-test="password-error" *ngIf="f['password'].invalid && submitted"
                  class="alert alert-danger mt-3">
@@ -218,10 +230,13 @@
               </div>
             </div>
           </div>
-          <button type="submit" data-test="register-submit" class="btnSubmit mb-3">Register</button>
+          <button type="submit" data-test="register-submit"
+                  [ngStyle]="(browserDetect.isChrome()) ? {'width': 'unset'}: {}"
+                  [attr.tabindex]="browserDetect.isChrome() ? '12' : '12'"
+                  class="btnSubmit mb-3">Register</button>
           <div data-test="register-error" *ngIf="error" class="alert alert-danger">
             <div>
-              <div class="help-block">{{error}}</div>
+              <div class="help-block" [ngStyle]="(browserDetect.isEdge() || browserDetect.isChrome()) ? {'font-family': 'Comic Sans'} : {}">{{error}}</div>
             </div>
           </div>
         </div>
