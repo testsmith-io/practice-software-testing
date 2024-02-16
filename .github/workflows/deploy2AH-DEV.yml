@@ -19,8 +19,11 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            cd /tmp
-            ls -a
+            cd /root
+            mkdir toolshop
+            cd toolshop
+            git clone https://github.com/rgroetz2/practice-software-testing.git
+            ls -la
           host: ${{ secrets.HOST }}
           user: githubte
           key: ${{ secrets.PRIVATE_KEY}}
