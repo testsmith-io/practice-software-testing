@@ -1,5 +1,5 @@
 
-name: Delpoy to AH-Dev
+name: Delpoy to ahdev
 
 on:
   workflow_dispatch:
@@ -27,5 +27,5 @@ jobs:
             cd practice-software-testing
             docker-compose up -d
           host: ${{ secrets.HOST }}
-          user: githubte
+          user: ahprodte
           key: ${{ secrets.PRIVATE_KEY}}
