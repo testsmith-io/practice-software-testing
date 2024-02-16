@@ -20,8 +20,8 @@ jobs:
             apt update -y && apt upgrade -y
             cd /root
             mkdir toolshop
-            cd toolshop
-            git pull https://github.com/rgroetz2/practice-software-testing.git
+            cd toolshop/practice-software-testing
+            git pull 
             ls -la
             cd practice-software-testing
             docker-compose up -d
