@@ -16,7 +16,7 @@ jobs:
         with:
           command: |
             sudo su
-            apt install git-all
+            apt install git-all -y
             cd /root
             mkdir toolshop
             cd toolshop
