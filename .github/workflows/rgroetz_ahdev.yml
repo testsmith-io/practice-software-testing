@@ -21,24 +21,9 @@ jobs:
           host: ${{ secrets.ahdev_ip }}
           user: ${{ secrets.ahdev_user }}
           key: ${{ secrets.PRIVATE_KEY}}
-  deploy2ahtest:
-    name: deploy2ahtest
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: ls -a via ssh
-        uses: fifsky/ssh-action@master
-        with:
-          command: |
-            sudo su
-            ls -la
-            docker ps -a
-            docker images
-          host: ${{ secrets.ahtest_ip }}
-          user: ${{ secrets.ahtest_user }}
-          key: ${{ secrets.PRIVATE_KEY}}
-  PlaywrightTests:
-    needs: [deploy2ahdev, deploy2ahtest]
+  playwrightTests:
+    name: playwrightTests
+    needs: [deploy2ahdev]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout ⚙️
@@ -64,3 +49,20 @@ jobs:
           name: playwright-report 📊
           path: playwright-report/
           retention-days: 10
+  deploy2ahtest:
+    name: deploy2ahtest
+    needs: [playwrightTests]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: ls -a via ssh
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            sudo su
+            ls -la
+            docker ps -a
+            docker images
+          host: ${{ secrets.ahtest_ip }}
+          user: ${{ secrets.ahtest_user }}
+          key: ${{ secrets.PRIVATE_KEY}}
