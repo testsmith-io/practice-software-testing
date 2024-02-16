@@ -62,7 +62,7 @@
         </div>
         <div class="card-body">
           <h5 data-test="product-name" class="card-title"
-              [ngClass]="{'nowrap': browserDetect.isFirefox(), 'text-end': Math.floor(Math.random() * 100) % 2}">
+              [ngClass]="{'text-nowrap': browserDetect.isFirefox(), 'text-end': Math.floor(Math.random() * 100) % 2}">
             {{item.name}}
           </h5>
         </div>
