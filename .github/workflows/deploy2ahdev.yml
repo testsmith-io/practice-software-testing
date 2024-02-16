@@ -26,6 +26,8 @@ jobs:
             ls -la
             cd practice-software-testing
             docker-compose up -d
+            docker ps -a
+            docker images
           host: ${{ secrets.HOST }}
           user: ahprodte
           key: ${{ secrets.PRIVATE_KEY}}
