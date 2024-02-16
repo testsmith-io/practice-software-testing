@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup} from "@angular/forms";
 import {CustomerAccountService} from "../../shared/customer-account.service";
+import {BrowserDetectorService} from "../../_services/browser-detector.service";
 
 @Component({
   selector: 'app-forgot-password',
@@ -15,7 +16,8 @@ export class ForgotPasswordComponent implements OnInit {
   error: string | undefined;
 
   constructor(private formBuilder: FormBuilder,
-              private accountService: CustomerAccountService) {
+              private accountService: CustomerAccountService,
+              public browserDetect: BrowserDetectorService) {
   }
 
   ngOnInit(): void {

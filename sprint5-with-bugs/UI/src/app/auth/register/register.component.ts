@@ -3,6 +3,7 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/form
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import countriesList from '../../../assets/countries.json';
 import {User} from "../../models/user.model";
+import {BrowserDetectorService} from "../../_services/browser-detector.service";
 
 @Component({
   selector: 'app-register',
@@ -16,7 +17,9 @@ export class RegisterComponent implements OnInit {
   countries = countriesList;
   error: string;
 
-  constructor(private formBuilder: FormBuilder, private accountService: CustomerAccountService) {
+  constructor(private formBuilder: FormBuilder,
+              private accountService: CustomerAccountService,
+              public browserDetect: BrowserDetectorService) {
   }
 
   ngOnInit(): void {

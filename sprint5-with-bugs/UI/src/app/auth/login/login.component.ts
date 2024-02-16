@@ -3,6 +3,7 @@ import {AbstractControl, FormBuilder, FormGroup} from "@angular/forms";
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import {TokenStorageService} from "../../_services/token-storage.service";
 import {User} from "../../models/user.model";
+import {BrowserDetectorService} from "../../_services/browser-detector.service";
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,8 @@ export class LoginComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private accountService: CustomerAccountService,
-              private tokenStorage: TokenStorageService) {
+              private tokenStorage: TokenStorageService,
+              public browserDetect: BrowserDetectorService) {
   }
 
   ngOnInit(): void {

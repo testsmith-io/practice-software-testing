@@ -10,7 +10,7 @@
       <form *ngIf="!showConfirmation" [formGroup]="contact" (ngSubmit)="onSubmit()">
         <div class="row">
           <div class="row mb-3" *ngIf="name">
-            Hello {{name}}, please fill out this form to submit your message.
+            Hello {{ name }}, please fill out this form to submit your message.
           </div>
           <div class="row" *ngIf="!name">
             <div class="col-md-6">
@@ -21,8 +21,10 @@
                        data-test="first-name"
                        class="form-control"
                        [ngClass]="{ 'is-invalid': submitted && f['first_name'].errors }"
+                       [ngStyle]="(browserDetect.isFirefox()) ? {'padding-left': '0px'}: {}"
                        type="text"
                        placeholder="Your first name *"
+                       [attr.tabindex]="browserDetect.isFirefox() ? '1' : '1'"
                        value=""/>
               </div>
               <div *ngIf="submitted && f['first_name'].errors" id="first_name_alert" data-test="first-name-error"
@@ -41,6 +43,7 @@
                        [ngClass]="{ 'is-invalid': submitted && f['last_name'].errors}"
                        type="text"
                        placeholder="Your last name *"
+                       [attr.tabindex]="browserDetect.isFirefox() ? '2' : '2'"
                        value=""/>
               </div>
               <div *ngIf="submitted && f['last_name'].errors" id="last_name_alert" data-test="last-name-error"
@@ -50,7 +53,8 @@
               </div>
             </div>
             <div class="form-group mb-3">
-              <label for="email" class="form-label">Email address</label>
+              <label for="email" class="form-label"
+                     [ngStyle]="(browserDetect.isFirefox()) ? {'position': 'absolute'}: {}">Email address</label>
               <input formControlName="email"
                      data-test="email"
                      id="email"
@@ -58,6 +62,7 @@
                      [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
                      type="email"
                      placeholder="Your email *"
+                     [attr.tabindex]="browserDetect.isFirefox() ? '3' : '3'"
                      value=""/>
               <div *ngIf="submitted && f['email'].errors" id="email_alert" data-test="email-error"
                    class="alert alert-danger mt-3 p-2"
@@ -73,11 +78,12 @@
                 <label for="subject" class="form-label">Subject</label>
                 <select data-test="subject" id="subject" formControlName="subject"
                         [ngClass]="{ 'is-invalid': submitted && f['subject'].errors}"
-                        class="form-select">
+                        class="form-select"
+                        [attr.tabindex]="browserDetect.isFirefox() ? '6' : '4'">
                   <option value="" disabled selected hidden>Select a subject</option>
                   <option value="customer-service">Customer service</option>
                   <option value="webmaster">Webmaster</option>
-                  <option value="return">Return</option>
+                  <option value="return" style="font-size: smaller">Return</option>
                   <option value="not-found">Error 101: Subject not found</option>
                   <option value="payments">Payments</option>
                   <option value="warranty">Warranty</option>
@@ -100,6 +106,8 @@
                         formControlName="message"
                         id="message"
                         data-test="message"
+                        placeholder="Massage"
+                        [attr.tabindex]="browserDetect.isFirefox() ? '5' : '5'"
                         rows="5">
               </textarea>
               </div>
@@ -112,7 +120,8 @@
             </div>
 
             <div class="form-group mb-3">
-              <label for="attachment" class="form-label">Attachment</label>
+              <label for="attachment" class="form-label"
+                     [ngStyle]="(browserDetect.isEdge() || browserDetect.isChrome()) ? {'font-family': 'Comic Sans'} : {}">Attachment</label>
               <div class="col-sm-12">
                 <input class="form-control"
                        [ngClass]="{ 'is-invalid': submitted && f['attachment'].errors }"
@@ -120,8 +129,10 @@
                        id="attachment"
                        data-test="attachment"
                        (change)="changeFile($event)"
+                       [attr.tabindex]="browserDetect.isFirefox() ? '4' : '6'"
                        type="file">
-                <small id="attachmentHelp" class="form-text text-muted">Only files with the <strong>txt, pdf or jpg</strong>
+                <small id="attachmentHelp" class="form-text text-muted">Only files with the <strong>txt, pdf or
+                  jpg</strong>
                   extension are allowed, and files must be smaller than 500KB.</small>
               </div>
               <div *ngIf="submitted && f['attachment'].errors" id="attachment_alert" data-test="attachment-error"
@@ -132,11 +143,11 @@
             </div>
 
             <div class="input-group mb-3">
-              <input type="submit" class="btnSubmit" data-test="contact-submit" value="Send"/>
+              <input type="submit" [attr.tabindex]="browserDetect.isFirefox() ? '7' : '7'" class="btnSubmit" [ngStyle]="(browserDetect.isEdge() || browserDetect.isChrome()) ? {'width': 'unset'}: {}" data-test="contact-submit" value="Send"/>
             </div>
             <div *ngIf="error" class="alert alert-danger">
               <div>
-                <div class="help-block">{{error}}</div>
+                <div class="help-block">{{ error }}</div>
               </div>
             </div>
           </div>
