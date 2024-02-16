@@ -10,16 +10,24 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: ls -a via ssh
+      - name: Docker 
         uses: fifsky/ssh-action@master
         with:
           command: |
             sudo su
+            apt install git-all -y
+            apt install docker-compose -y
+            apt update -y && apt upgrade -y
+            cd /root
+            cd toolshop/practice-software-testing
+            git pull 
             ls -la
+            cd practice-software-testing
+            docker-compose up -d
             docker ps -a
             docker images
-          host: ${{ secrets.ahdev_ip }}
-          user: ${{ secrets.ahdev_user }}
+          host: ${{ secrets.HOST }}
+          user: ahprodte
           key: ${{ secrets.PRIVATE_KEY}}
   playwrightTests:
     name: playwrightTests
