@@ -1,3 +1,4 @@
+
 name: Delpoy to AH-Dev
 
 on:
@@ -10,15 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
       - name: ls -a via ssh
         uses: fifsky/ssh-action@master
         with:
           command: |
+            sudo su
             cd /root
             mkdir toolshop
             cd toolshop
