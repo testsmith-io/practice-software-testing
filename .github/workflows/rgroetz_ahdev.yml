@@ -35,7 +35,7 @@ jobs:
           host: ${{ secrets.ahtest_ip }}
           user: ${{ secrets.ahtest_user }}
           key: ${{ secrets.PRIVATE_KEY}}
-  Playwright Tests:
+  PlaywrightTests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout ⚙️
