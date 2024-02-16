@@ -19,13 +19,13 @@ jobs:
       SECRET_GITHUB_ID: ${{ matrix.sprint == '5' && secrets.SECRET_GITHUB_ID || '' }}
       SECRET_GITHUB_SECRET: ${{ matrix.sprint == '5' && secrets.SECRET_GITHUB_SECRET || '' }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Install (dev) Dependencies
@@ -59,4 +59,3 @@ jobs:
           private-key: ${{ secrets.PRIVATE_KEY }}
           dep: upload-sprint${{ matrix.sprint }} production
           deployer-version: '6.9.0'
-          verbosity: -vvv
