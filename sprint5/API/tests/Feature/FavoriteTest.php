@@ -2,14 +2,9 @@
 
 namespace tests\Feature;
 
-use App\Models\Brand;
-use App\Models\Category;
 use App\Models\Favorite;
-use App\Models\Product;
-use App\Models\ProductImage;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tests\TestCase;
 
@@ -94,21 +89,6 @@ class FavoriteTest extends TestCase {
             'product_id' => $product->id
         ]);
         return $favorite;
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
-     */
-    public function addProduct(): \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model {
-        $brand = Brand::factory()->create();
-        $category = Category::factory()->create();
-        $productImage = ProductImage::factory()->create();
-
-        $product = Product::factory()->create([
-            'brand_id' => $brand->id,
-            'category_id' => $category->id,
-            'product_image_id' => $productImage->id]);
-        return $product;
     }
 
 }
