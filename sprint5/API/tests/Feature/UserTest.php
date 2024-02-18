@@ -3,9 +3,11 @@
 namespace tests\Feature;
 
 use App\Http\Controllers\UserController;
+use App\Mail\ForgetPassword;
 use App\Models\User;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tests\TestCase;
 
@@ -21,6 +23,8 @@ class UserTest extends TestCase {
         $this->user = User::factory()->create([
             'password' => bcrypt($password = 'welcome01'),
         ]);
+
+        Mail::fake();
     }
 
     public function test_successful_login()
@@ -69,6 +73,101 @@ class UserTest extends TestCase {
         ]);
 
         $response->assertStatus(ResponseAlias::HTTP_FORBIDDEN);
+    }
+
+    public function testCurrentPasswordIncorrect()
+    {
+        $response = $this->postJson('/users/change-password', [
+            'current_password' => 'wrongpassword',
+            'new_password' => 'newpassword',
+            'new_password_confirmation' => 'newpassword'
+        ], $this->headers($this->user));
+
+        $response->assertStatus(400)
+            ->assertJson([
+                'success' => false,
+                'message' => 'Your current password does not matches with the password.',
+            ]);
+    }
+
+    public function testNewPasswordSameAsCurrent()
+    {
+        $response = $this->postJson('/users/change-password', [
+            'current_password' => 'welcome01',
+            'new_password' => 'welcome01',
+            'new_password_confirmation' => 'welcome01'
+        ], $this->headers($this->user));
+
+        $response->assertStatus(400)
+            ->assertJson([
+                'success' => false,
+                'message' => 'New Password cannot be same as your current password.'
+            ]);
+    }
+
+    public function testNewPasswordValidationFailure()
+    {
+        // Test with a new password that is too short
+        $response = $this->postJson('/users/change-password', [
+            'current_password' => 'welcome01',
+            'new_password' => 'short',
+            'new_password_confirmation' => 'short'
+        ], $this->headers($this->user));
+
+        $response->assertStatus(422) // HTTP 422 Unprocessable Entity
+        ->assertJsonValidationErrors(['new_password']);
+    }
+
+    public function testPasswordChangeSuccess()
+    {
+        $response = $this->postJson('/users/change-password', [
+            'current_password' => 'welcome01',
+            'new_password' => 'newstrongpassword',
+            'new_password_confirmation' => 'newstrongpassword'
+        ], $this->headers($this->user));
+
+        $response->assertOk()
+            ->assertJson(['success' => true]);
+    }
+
+    public function testPasswordResetInLocalEnvironment()
+    {
+        $this->app['env'] = 'local';
+
+        $response = $this->postJson('/users/forgot-password', [
+            'email' => $this->user->email,
+        ]);
+
+        $response->assertOk()
+            ->assertJson(['success' => true]);
+
+        Mail::assertSent(ForgetPassword::class, function ($mail) {
+            return $mail->hasTo($this->user->email);
+        });
+    }
+
+    public function testPasswordResetInNonLocalEnvironment()
+    {
+        $this->app['env'] = 'testing';
+
+        $response = $this->postJson('/users/forgot-password', [
+            'email' => $this->user->email,
+        ]);
+
+        $response->assertOk()
+            ->assertJson(['success' => true]);
+
+        Mail::assertNotSent(ForgetPassword::class);
+    }
+
+    public function testEmailDoesNotExist()
+    {
+        $response = $this->postJson('/users/forgot-password', [
+            'email' => 'nonexistent@example.com',
+        ]);
+
+        $response->assertStatus(422) // HTTP 422 Unprocessable Entity
+        ->assertJsonValidationErrors(['email']);
     }
 
     public function testRetrieveUsers() {
