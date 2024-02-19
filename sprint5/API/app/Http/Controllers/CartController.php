@@ -9,9 +9,11 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class CartController extends Controller {
+class CartController extends Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('role:admin', ['only' => ['destroy']]);
     }
 
@@ -56,7 +58,8 @@ class CartController extends Controller {
      *      ),
      * )
      */
-    public function createCart(Request $request) {
+    public function createCart(Request $request)
+    {
         $lat = $request->input('lat');
         $lng = $request->input('lng');
 
@@ -134,12 +137,13 @@ class CartController extends Controller {
      *      ),
      * )
      */
-    public function addItem(Request $request, $id) {
+    public function addItem(Request $request, $id)
+    {
         // Find the cart
         $cart = Cart::with('cartItems')->find($id);
 
         if (!isset($cart)) {
-            return $this->preferredFormat(['message' => 'Cart doesnt exists'], ResponseAlias::HTTP_CREATED);
+            return $this->preferredFormat(['message' => 'Cart doesnt exists'], ResponseAlias::HTTP_NOT_FOUND);
         }
 
         $product_id = $request->input('product_id');
@@ -159,7 +163,7 @@ class CartController extends Controller {
             if ($cart->lat !== null && $cart->lng !== null) {
                 // Calculate the discount percentage based on lat and lng
                 $product = Product::find($product_id);
-                if($product->is_location_offer) {
+                if ($product->is_location_offer) {
                     $lat = $cart->lat;
                     $lng = $cart->lng;
                     $discountPercentage = $this->calculateDiscountPercentage($lat, $lng);
@@ -178,8 +182,7 @@ class CartController extends Controller {
 
         $this->updateCartDiscounts($cart);
 
-        // Return a response indicating success or any additional data you need
-        return $this->preferredFormat(['result' => 'item added or updated'], ResponseAlias::HTTP_CREATED);
+        return $this->preferredFormat(['result' => 'item added or updated'], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -218,7 +221,8 @@ class CartController extends Controller {
      *      ),
      * )
      */
-    public function getCart($id) {
+    public function getCart($id)
+    {
         // Find the cart
         $cart = Cart::with('cartItems', 'cartItems.product')->findOrFail($id);
         // Iterate through cart items to calculate discounted prices
@@ -239,12 +243,12 @@ class CartController extends Controller {
 
     /**
      * @OA\Put(
-     *      path="/carts/{cartId}",
+     *      path="/carts/{cartId}/product/quantity",
      *      operationId="updateCartQuantity",
      *      tags={"Cart"},
      *      summary="Update quantity of item in cart",
      *      description="Update quantity of item in cart",
-    *       @OA\Parameter(
+     *       @OA\Parameter(
      *            name="cartId",
      *            in="path",
      *            required=true,
@@ -302,12 +306,13 @@ class CartController extends Controller {
      *      ),
      * )
      */
-    public function updateQuantity(Request $request, $cartId) {
+    public function updateQuantity(Request $request, $cartId)
+    {
         // Find the cart
         $cart = Cart::with('cartItems')->find($cartId);
 
         if (!isset($cart)) {
-            return $this->preferredFormat(['message' => 'Cart doesnt exists'], ResponseAlias::HTTP_CREATED);
+            return $this->preferredFormat(['message' => 'Cart doesnt exists'], ResponseAlias::HTTP_NOT_FOUND);
         }
 
         return $this->preferredFormat(['success' => (bool)CartItem::where('cart_id', '=', $cart->id)->where('product_id', '=', $request->input('product_id'))->update(['quantity' => $request->input('quantity')])], ResponseAlias::HTTP_OK);
@@ -371,26 +376,18 @@ class CartController extends Controller {
      *      )
      * ),
      */
-    public function deleteCart($cartId) {
+    public function deleteCart($cartId)
+    {
         // Find the cart
         $cart = Cart::with('cartItems')->find($cartId);
 
         if (!isset($cart)) {
-            return $this->preferredFormat(['message' => 'Cart doesnt exists'], ResponseAlias::HTTP_CREATED);
+            return $this->preferredFormat(['message' => 'Cart doesnt exists'], ResponseAlias::HTTP_NOT_FOUND);
         }
 
-        try {
-            CartItem::where('cart_id', '=', $cartId)->delete();
-            Cart::destroy($cartId);
-            return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
-        } catch (QueryException $e) {
-            if ($e->getCode() === '23000') {
-                return $this->preferredFormat([
-                    'success' => false,
-                    'message' => 'Seems like this cart is used elsewhere.',
-                ], ResponseAlias::HTTP_CONFLICT);
-            }
-        }
+        CartItem::where('cart_id', '=', $cartId)->delete();
+        Cart::destroy($cartId);
+        return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
     }
 
     /**
@@ -451,29 +448,22 @@ class CartController extends Controller {
      *      )
      * ),
      */
-    public function removeProductFromCart($cartId, $productId) {
+    public function removeProductFromCart($cartId, $productId)
+    {
         // Find the cart
         $cart = Cart::with('cartItems')->find($cartId);
 
         if (!isset($cart)) {
-            return $this->preferredFormat(['message' => 'Cart doesnt exists'], ResponseAlias::HTTP_CREATED);
+            return $this->preferredFormat(['message' => 'Cart doesnt exists'], ResponseAlias::HTTP_NOT_FOUND);
         }
 
-        try {
-            CartItem::where('cart_id', '=', $cart->id)->where('product_id', '=', $productId)->delete();
-            $this->updateCartDiscounts($cart);
-            return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
-        } catch (QueryException $e) {
-            if ($e->getCode() === '23000') {
-                return $this->preferredFormat([
-                    'success' => false,
-                    'message' => 'Seems like this cart is used elsewhere.',
-                ], ResponseAlias::HTTP_CONFLICT);
-            }
-        }
+        CartItem::where('cart_id', '=', $cart->id)->where('product_id', '=', $productId)->delete();
+        $this->updateCartDiscounts($cart);
+        return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
     }
 
-    private function updateCartDiscounts($cart) {
+    private function updateCartDiscounts($cart)
+    {
         $cart->load('cartItems.product');
         $hasProduct = $cart->cartItems->contains(fn($item) => !$item->product->is_rental);
         $hasRental = $cart->cartItems->contains(fn($item) => $item->product->is_rental);
@@ -487,7 +477,8 @@ class CartController extends Controller {
         }
     }
 
-    private function calculateDiscountPercentage($lat, $lng) {
+    private function calculateDiscountPercentage($lat, $lng)
+    {
         $coordinates = [
             "new york" => ["lat" => 41, "lng" => 74, "discount_percentage" => 5],
             "mumbai" => ["lat" => 19, "lng" => 73, "discount_percentage" => 10],
