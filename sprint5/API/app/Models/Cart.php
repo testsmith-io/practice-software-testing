@@ -19,6 +19,7 @@ class Cart extends BaseModel
 {
     use HasFactory, HasUlids;
     protected $table = 'carts';
+    protected $fillable = ['lat'];
 
     protected $casts = array(
         "additional_discount_percentage" => "double"

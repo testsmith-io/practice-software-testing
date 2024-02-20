@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('cart_items', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->integer('quantity');
+            $table->integer('quantity')->default(0);
             $table->decimal('discount_percentage')->nullable();
             $table->foreignUlid('cart_id')->references('id')->on('carts');
             $table->foreignUlid('product_id')->references('id')->on('products');

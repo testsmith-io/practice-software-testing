@@ -60,15 +60,9 @@ class CartController extends Controller
      */
     public function createCart(Request $request)
     {
-        $lat = $request->input('lat');
-        $lng = $request->input('lng');
-
-        $cart = new Cart();
-        if (isset($lat) && isset($lng)) {
-            $cart->lat = $lat;
-            $cart->lng = $lng;
-        }
+        $cart = new Cart($request->only(['lat', 'lng']));
         $cart->save();
+
         return $this->preferredFormat(['id' => $cart->id], ResponseAlias::HTTP_CREATED);
     }
 
@@ -139,45 +133,17 @@ class CartController extends Controller
      */
     public function addItem(Request $request, $id)
     {
-        // Find the cart
-        $cart = Cart::with('cartItems')->find($id);
-
-        if (!isset($cart)) {
-            return $this->preferredFormat(['message' => 'Cart doesnt exists'], ResponseAlias::HTTP_NOT_FOUND);
-        }
+        $cart = Cart::with('cartItems')->findOrFail($id);
 
         $product_id = $request->input('product_id');
         $quantity = $request->input('quantity');
 
-        // Check if the item with the same product_id already exists in the cart
-        $existingItem = $cart->cartItems->where('product_id', $product_id)->first();
+        $existingItem = $cart->cartItems()->firstOrCreate(['product_id' => $product_id]);
+        $existingItem->increment('quantity', $quantity);
 
-        if ($existingItem) {
-            // If the item exists, update its quantity
-            $existingItem->quantity += $quantity;
+        if ($cart->lat && $cart->lng && $existingItem->product->is_location_offer) {
+            $existingItem->discount_percentage = $this->calculateDiscountPercentage($cart->lat, $cart->lng);
             $existingItem->save();
-        } else {
-            // If the item does not exist, create a new CartItem and add it to the cart
-            $item = new CartItem();
-            // Check if lat and lng are set
-            if ($cart->lat !== null && $cart->lng !== null) {
-                // Calculate the discount percentage based on lat and lng
-                $product = Product::find($product_id);
-                if ($product->is_location_offer) {
-                    $lat = $cart->lat;
-                    $lng = $cart->lng;
-                    $discountPercentage = $this->calculateDiscountPercentage($lat, $lng);
-
-                    // Store the discount percentage in the database
-                    $item->discount_percentage = $discountPercentage;
-
-                }
-            }
-
-            $item->product_id = $product_id;
-            $item->quantity = $quantity;
-
-            $cart->cartItems()->save($item);
         }
 
         $this->updateCartDiscounts($cart);
@@ -223,21 +189,14 @@ class CartController extends Controller
      */
     public function getCart($id)
     {
-        // Find the cart
-        $cart = Cart::with('cartItems', 'cartItems.product')->findOrFail($id);
-        // Iterate through cart items to calculate discounted prices
+        $cart = Cart::with(['cartItems', 'cartItems.product'])->findOrFail($id);
+
         foreach ($cart->cartItems as $cartItem) {
-            if ($cartItem->product && $cartItem->discount_percentage !== null) {
-                // Calculate discounted price
-                $discountedPrice = $cartItem->product->price * (1 - ($cartItem->discount_percentage / 100));
-                // Round the discounted price to two decimal places
-                $discountedPrice = round($discountedPrice, 2);
-                // Add the discounted price to the cartItem object
-                $cartItem->discounted_price = $discountedPrice;
+            if ($cartItem->product && $cartItem->discount_percentage) {
+                $cartItem->discounted_price = round($cartItem->product->price * (1 - ($cartItem->discount_percentage / 100)), 2);
             }
         }
 
-        // Return the cart with discounted prices
         return $this->preferredFormat($cart);
     }
 
@@ -308,14 +267,16 @@ class CartController extends Controller
      */
     public function updateQuantity(Request $request, $cartId)
     {
-        // Find the cart
         $cart = Cart::with('cartItems')->find($cartId);
 
         if (!isset($cart)) {
             return $this->preferredFormat(['message' => 'Cart doesnt exists'], ResponseAlias::HTTP_NOT_FOUND);
         }
+        $updateStatus = $cart->cartItems()
+            ->where('product_id', $request->input('product_id'))
+            ->update(['quantity' => $request->input('quantity')]);
 
-        return $this->preferredFormat(['success' => (bool)CartItem::where('cart_id', '=', $cart->id)->where('product_id', '=', $request->input('product_id'))->update(['quantity' => $request->input('quantity')])], ResponseAlias::HTTP_OK);
+        return $this->preferredFormat(['success' => (bool)$updateStatus], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -378,15 +339,14 @@ class CartController extends Controller
      */
     public function deleteCart($cartId)
     {
-        // Find the cart
         $cart = Cart::with('cartItems')->find($cartId);
 
         if (!isset($cart)) {
             return $this->preferredFormat(['message' => 'Cart doesnt exists'], ResponseAlias::HTTP_NOT_FOUND);
         }
 
-        CartItem::where('cart_id', '=', $cartId)->delete();
-        Cart::destroy($cartId);
+        $cart->cartItems()->delete();
+        $cart->delete();
         return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
     }
 
@@ -457,7 +417,7 @@ class CartController extends Controller
             return $this->preferredFormat(['message' => 'Cart doesnt exists'], ResponseAlias::HTTP_NOT_FOUND);
         }
 
-        CartItem::where('cart_id', '=', $cart->id)->where('product_id', '=', $productId)->delete();
+        $cart->cartItems()->where('product_id', $productId)->delete();
         $this->updateCartDiscounts($cart);
         return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
     }
@@ -468,13 +428,8 @@ class CartController extends Controller
         $hasProduct = $cart->cartItems->contains(fn($item) => !$item->product->is_rental);
         $hasRental = $cart->cartItems->contains(fn($item) => $item->product->is_rental);
 
-        if ($hasProduct && $hasRental) {
-            $cart->additional_discount_percentage = 15;
-            $cart->save();
-        } else {
-            $cart->additional_discount_percentage = null;
-            $cart->save();
-        }
+        $cart->additional_discount_percentage = $hasProduct && $hasRental ? 15 : null;
+        $cart->save();
     }
 
     private function calculateDiscountPercentage($lat, $lng)
@@ -491,7 +446,7 @@ class CartController extends Controller
         $defaultDiscountPercentage = 0;
 
         // Check if the provided coordinates match any of the predefined coordinates
-        foreach ($coordinates as $city => $data) {
+        foreach ($coordinates as $data) {
             $cityLat = $data["lat"];
             $cityLng = $data["lng"];
             $discount = $data["discount_percentage"];
