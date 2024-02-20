@@ -106,17 +106,21 @@ class ProductController extends Controller {
                     });
                 $query->whereIn('category_id', $ids);
             }
-            if ($request->get('by_category')) {
-                $query->whereIn('category_id', explode(',', $request->get('by_category')));
+            if ($byCategory = $request->get('by_category')) {
+                $query->whereIn('category_id', explode(',', $byCategory));
             }
-            if ($request->get('by_brand')) {
-                $query->whereIn('brand_id', explode(',', $request->get('by_brand')));
+
+            if ($byBrand = $request->get('by_brand')) {
+                $query->whereIn('brand_id', explode(',', $byBrand));
             }
-            $query->where('is_rental', '=', $request->get('is_rental') ? 1 : 0);
-            if ($request->get('q')) {
-                $q = $request->get('q');
+
+            if ($q = $request->get('q')) {
                 $query->where('name', 'like', "%$q%");
             }
+
+            $isRental = $request->get('is_rental') ? 1 : 0;
+            $query->where('is_rental', '=', $isRental);
+
             $results = $query->filter()->paginate(9);
 
             return $this->preferredFormat($results);

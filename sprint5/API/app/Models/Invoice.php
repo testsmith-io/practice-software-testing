@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Mehradsadeghi\FilterQueryString\FilterQueryString;
@@ -101,7 +102,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  */
 class Invoice extends BaseModel
 {
-    use FilterQueryString, HasUlids;
+    use HasFactory, FilterQueryString, HasUlids;
 
     protected $filters = ['in', 'sort', 'starts_with'];
     protected $table = 'invoices';

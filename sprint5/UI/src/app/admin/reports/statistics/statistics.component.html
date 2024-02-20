@@ -29,7 +29,7 @@
       <table class="table table-hover">
         <thead>
         <tr>
-          <th scope="col">Category Name</th>
+          <th scope="col">Product Name</th>
           <th scope="col">Total Earned</th>
         </tr>
         </thead>
@@ -53,15 +53,15 @@
       <table class="table table-hover">
         <thead>
         <tr>
-          <th scope="col">Category Name</th>
-          <th scope="col">Total Earned</th>
+          <th scope="col">Country</th>
+          <th scope="col">Amount</th>
         </tr>
         </thead>
         <tbody>
           @for (item of customerByCountry;track item) {
             <tr>
-              <td>{{ item.customer }}</td>
               <td>{{ item.country }}</td>
+              <td>{{ item.amount }}</td>
             </tr>
           }
         </tbody>
@@ -75,7 +75,7 @@
       <table class="table table-hover">
         <thead>
         <tr>
-          <th scope="col">Category Name</th>
+          <th scope="col">Country</th>
           <th scope="col">Total Earned</th>
         </tr>
         </thead>
