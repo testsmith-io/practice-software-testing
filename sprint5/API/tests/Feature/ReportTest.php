@@ -2,9 +2,7 @@
 
 namespace tests\Feature;
 
-use App\Models\Category;
 use App\Models\Invoice;
-use App\Models\Product;
 use App\Models\User;
 use Tests\TestCase;
 

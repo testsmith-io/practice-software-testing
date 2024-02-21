@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
-class InvoiceLineFactory extends Factory
+class InvoicelineFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
