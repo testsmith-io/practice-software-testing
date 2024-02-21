@@ -4,6 +4,7 @@ namespace tests\Feature;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\User;
@@ -75,6 +76,25 @@ class ProductTest extends TestCase {
         $this->addProduct();
 
         $response = $this->getJson('/products?by_brand=brand-name');
+
+        $response
+            ->assertStatus(ResponseAlias::HTTP_OK)
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => [
+                        'name',
+                        'description',
+                        'price',
+                        'name',
+                    ]
+                ]
+            ]);
+    }
+
+    public function testRetrieveProductsByQuery() {
+        $this->addProduct();
+
+        $response = $this->getJson('/products?q=test-product');
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
@@ -190,6 +210,18 @@ class ProductTest extends TestCase {
             ->assertJson([
                 'id' => ['The selected id is invalid.']
             ]);
+    }
+
+    public function testDeleteProductInUse() {
+        $invoice = Invoice::factory()->create([
+            'total' => 150.00,
+            'billing_country' => 'The Netherlands'
+        ]);
+
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->deleteJson('/products/' . $invoice->invoicelines[0]['product_id'], [], $this->headers($admin))
+            ->assertStatus(ResponseAlias::HTTP_CONFLICT);
     }
 
     public function testUpdateProduct() {

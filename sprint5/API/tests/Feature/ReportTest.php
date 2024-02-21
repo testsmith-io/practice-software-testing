@@ -4,6 +4,7 @@ namespace tests\Feature;
 
 use App\Models\Invoice;
 use App\Models\User;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tests\TestCase;
 
 class ReportTest extends TestCase
@@ -40,7 +41,7 @@ class ReportTest extends TestCase
         $response = $this->getJson('/reports/total-sales-per-country', $this->headers($this->admin));
 
         // Assert: Check if the response is as expected
-        $response->assertStatus(200);
+        $response->assertStatus(ResponseAlias::HTTP_OK);
         $response->assertJsonFragment(
             ['billing_country' => 'The Netherlands', 'total_sales' => 250.00]
         );
@@ -52,7 +53,7 @@ class ReportTest extends TestCase
     public function testTotalSalesPerCountry()
     {
         $response = $this->get('/reports/total-sales-per-country', $this->headers($this->admin));
-        $response->assertStatus(200);
+        $response->assertStatus(ResponseAlias::HTTP_OK);
         $response->assertJsonStructure([
             '*' => ['billing_country', 'total_sales']
         ]);
@@ -61,7 +62,7 @@ class ReportTest extends TestCase
     public function testTop10PurchasedProducts()
     {
         $response = $this->get('/reports/top10-purchased-products', $this->headers($this->admin));
-        $response->assertStatus(200);
+        $response->assertStatus(ResponseAlias::HTTP_OK);
         $response->assertJsonStructure([
             '*' => ['name', 'count']
         ]);
@@ -70,7 +71,7 @@ class ReportTest extends TestCase
     public function testTop10BestSellingCategories()
     {
         $response = $this->get('/reports/top10-best-selling-categories', $this->headers($this->admin));
-        $response->assertStatus(200);
+        $response->assertStatus(ResponseAlias::HTTP_OK);
         $response->assertJsonStructure([
             '*' => ['category_name', 'total_earned']
         ]);
@@ -79,7 +80,7 @@ class ReportTest extends TestCase
     public function testTotalSalesOfYears()
     {
         $response = $this->get('/reports/total-sales-of-years', $this->headers($this->admin));
-        $response->assertStatus(200);
+        $response->assertStatus(ResponseAlias::HTTP_OK);
         $response->assertJsonStructure([
             '*' => ['year', 'total']
         ]);
@@ -88,7 +89,7 @@ class ReportTest extends TestCase
     public function testAverageSalesPerMonth()
     {
         $response = $this->get('/reports/average-sales-per-month', $this->headers($this->admin));
-        $response->assertStatus(200);
+        $response->assertStatus(ResponseAlias::HTTP_OK);
         $response->assertJsonStructure([
             '*' => ['month', 'average', 'amount']
         ]);
@@ -97,7 +98,7 @@ class ReportTest extends TestCase
     public function testAverageSalesPerWeek()
     {
         $response = $this->get('/reports/average-sales-per-week', $this->headers($this->admin));
-        $response->assertStatus(200);
+        $response->assertStatus(ResponseAlias::HTTP_OK);
         $response->assertJsonStructure([
             '*' => ['week', 'average', 'amount']
         ]);
@@ -106,7 +107,7 @@ class ReportTest extends TestCase
     public function testCustomersByCountry()
     {
         $response = $this->get('/reports/customers-by-country', $this->headers($this->admin));
-        $response->assertStatus(200);
+        $response->assertStatus(ResponseAlias::HTTP_OK);
         $response->assertJsonStructure([
             '*' => ['amount', 'country']
         ]);
