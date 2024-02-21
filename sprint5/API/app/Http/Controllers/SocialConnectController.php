@@ -14,7 +14,6 @@ class SocialConnectController extends Controller
     public function __construct()
     {
         $configureProviders = [
-//            'redirectUri' => 'https://api.practicesoftwaretesting.com/auth/cb',
             'redirectUri' => 'https://api.practicesoftwaretesting.com/auth/cb/${provider}/',
             'provider' => [
                 'google' => [
@@ -39,44 +38,17 @@ class SocialConnectController extends Controller
         $httpClient = new \SocialConnect\HttpClient\Curl();
 
         $httpStack = new \SocialConnect\Common\HttpStack(
-        // HTTP-client `Psr\Http\Client\ClientInterface`
             $httpClient,
-            // RequestFactory that implements Psr\Http\Message\RequestFactoryInterface
             new \SocialConnect\HttpClient\RequestFactory(),
-            // StreamFactoryInterface that implements Psr\Http\Message\StreamFactoryInterface
             new \SocialConnect\HttpClient\StreamFactory()
         );
 
-
-
         $this->service = new \SocialConnect\Auth\Service(
-        $httpStack,
-        new \SocialConnect\Provider\Session\Session(),
-        $configureProviders,
-        $collectionFactory
-    );
-
-
-//
-//        $this->service = new \SocialConnect\Auth\Service(
-//            $httpClient,
-//            new \SocialConnect\Provider\Session\Session(),
-//            $configureProviders
-//        );
-//
-//        /**
-//         * By default collection factory is null, in this case Auth\Service will create
-//         * a new instance of \SocialConnect\Auth\CollectionFactory
-//         * you can use custom or register another providers by CollectionFactory instance
-//         */
-//        $collectionFactory = null;
-//
-//        $this->service = new \SocialConnect\Auth\Service(
-//            $httpClient,
-//            new \SocialConnect\Provider\Session\Session(),
-//            $configureProviders,
-//            $collectionFactory
-//        );
+            $httpStack,
+            new \SocialConnect\Provider\Session\Session(),
+            $configureProviders,
+            $collectionFactory
+        );
     }
 
     public function callbackGoogle()
