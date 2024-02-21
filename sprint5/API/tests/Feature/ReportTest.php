@@ -2,7 +2,9 @@
 
 namespace tests\Feature;
 
+use App\Models\Category;
 use App\Models\Invoice;
+use App\Models\Product;
 use App\Models\User;
 use Tests\TestCase;
 
@@ -17,9 +19,7 @@ class ReportTest extends TestCase
             'password' => bcrypt($password = 'welcome01'),
             'role' => 'admin'
         ]);
-    }
-    public function testItReturnsTotalSalesPerCountry()
-    {
+
         // Arrange: Create test invoices
         Invoice::factory()->create([
             'total' => 100.00,
@@ -35,7 +35,9 @@ class ReportTest extends TestCase
             'total' => 200.00,
             'billing_country' => 'USA'
         ]);
-
+    }
+    public function testItReturnsTotalSalesPerCountry()
+    {
         // Act: Call the totalSalesPerCountry method
         $response = $this->getJson('/reports/total-sales-per-country', $this->headers($this->admin));
 
@@ -47,6 +49,69 @@ class ReportTest extends TestCase
         $response->assertJsonFragment(
             ['billing_country' => 'USA', 'total_sales' => 200.00]
         );
+    }
+
+    public function testTotalSalesPerCountry()
+    {
+        $response = $this->get('/reports/total-sales-per-country', $this->headers($this->admin));
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            '*' => ['billing_country', 'total_sales']
+        ]);
+    }
+
+    public function testTop10PurchasedProducts()
+    {
+        $response = $this->get('/reports/top10-purchased-products', $this->headers($this->admin));
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            '*' => ['name', 'count']
+        ]);
+    }
+
+    public function testTop10BestSellingCategories()
+    {
+        $response = $this->get('/reports/top10-best-selling-categories', $this->headers($this->admin));
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            '*' => ['category_name', 'total_earned']
+        ]);
+    }
+
+    public function testTotalSalesOfYears()
+    {
+        $response = $this->get('/reports/total-sales-of-years', $this->headers($this->admin));
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            '*' => ['year', 'total']
+        ]);
+    }
+
+    public function testAverageSalesPerMonth()
+    {
+        $response = $this->get('/reports/average-sales-per-month', $this->headers($this->admin));
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            '*' => ['month', 'average', 'amount']
+        ]);
+    }
+
+    public function testAverageSalesPerWeek()
+    {
+        $response = $this->get('/reports/average-sales-per-week', $this->headers($this->admin));
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            '*' => ['week', 'average', 'amount']
+        ]);
+    }
+
+    public function testCustomersByCountry()
+    {
+        $response = $this->get('/reports/customers-by-country', $this->headers($this->admin));
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            '*' => ['amount', 'country']
+        ]);
     }
 
 }

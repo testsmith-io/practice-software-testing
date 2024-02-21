@@ -217,9 +217,9 @@ class ReportController extends Controller
         $startYear = $endYear - $numberOfYears;
 
         $results = DB::table('invoices')
-            ->selectRaw('SUM(total) AS total, YEAR(invoice_date) AS year')
+            ->selectRaw("SUM(total) AS total, strftime('%Y', invoice_date) AS year")
             ->whereYear('invoice_date', '>=', $startYear)
-            ->groupBy(DB::raw('YEAR(invoice_date)'))
+            ->groupBy(DB::raw("strftime('%Y', invoice_date)"))
             ->get();
 
         $formattedResults = $this->formatYearlySalesData($results, $startYear, $endYear);
@@ -279,9 +279,9 @@ class ReportController extends Controller
         $year = $request->get('year', now()->year);
 
         $results = DB::table('invoices')
-            ->selectRaw('MONTH(invoice_date) AS month, AVG(total) AS average, COUNT(*) AS amount')
+            ->selectRaw("CAST(strftime('%m', invoice_date) AS INTEGER) AS month, AVG(total) AS average, COUNT(*) AS amount")
             ->whereYear('invoice_date', '=', $year)
-            ->groupBy(DB::raw('MONTH(invoice_date)'))
+            ->groupBy(DB::raw("strftime('%m', invoice_date)"))
             ->get();
 
         $formattedResults = $this->formatMonthlySalesData($results);
@@ -341,9 +341,9 @@ class ReportController extends Controller
         $year = $request->get('year', now()->year);
 
         $results = DB::table('invoices')
-            ->selectRaw('WEEK(invoice_date) AS week, AVG(total) AS average, COUNT(*) AS amount')
+            ->selectRaw("CAST(strftime('%W', invoice_date) AS INTEGER) AS week, AVG(total) AS average, COUNT(*) AS amount")
             ->whereYear('invoice_date', '=', $year)
-            ->groupBy(DB::raw('WEEK(invoice_date)'))
+            ->groupBy(DB::raw("strftime('%W', invoice_date)"))
             ->get();
 
         $formattedResults = $this->formatWeeklySalesData($results);

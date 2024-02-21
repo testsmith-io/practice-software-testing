@@ -3,6 +3,7 @@
 namespace database\factories;
 
 use App\Models\Invoice;
+use App\Models\Invoiceline;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -25,7 +26,7 @@ class InvoiceFactory extends Factory
     {
         return [
             'user_id' => User::factory(), // Assuming User model has its own factory
-            'invoice_date' => $this->faker->date(),
+            'invoice_date' => now(),
             'invoice_number' => Str::random(10),
             'additional_discount_percentage' => $this->faker->randomFloat(2, 0, 100),
             'additional_discount_amount' => $this->faker->randomFloat(2, 0, 1000),
@@ -37,5 +38,17 @@ class InvoiceFactory extends Factory
             'subtotal' => $this->faker->randomFloat(2, 100, 1000),
             'total' => $this->faker->randomFloat(2, 100, 1000)
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Invoice $invoice) {
+            $numberOfLines = rand(1, 5);
+            for ($i = 0; $i < $numberOfLines; $i++) {
+                Invoiceline::factory()->create([
+                    'invoice_id' => $invoice->id
+                ]);
+            }
+        });
     }
 }
