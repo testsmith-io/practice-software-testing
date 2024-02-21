@@ -216,10 +216,19 @@ class ReportController extends Controller
         $endYear = now()->year;
         $startYear = $endYear - $numberOfYears;
 
+        $driver = config('database.default');
+        if ($driver == 'sqlite') {
+            $yearQuery = "strftime('%Y', invoice_date) AS year";
+            $yearGroup = "strftime('%Y', invoice_date)";
+        } elseif ($driver == 'mysql') {
+            $yearQuery = 'YEAR(invoice_date) AS year';
+            $yearGroup = 'YEAR(invoice_date)';
+        }
+
         $results = DB::table('invoices')
-            ->selectRaw("SUM(total) AS total, strftime('%Y', invoice_date) AS year")
+            ->selectRaw("SUM(total) AS total, $yearQuery")
             ->whereYear('invoice_date', '>=', $startYear)
-            ->groupBy(DB::raw("strftime('%Y', invoice_date)"))
+            ->groupBy(DB::raw($yearGroup))
             ->get();
 
         $formattedResults = $this->formatYearlySalesData($results, $startYear, $endYear);
@@ -278,10 +287,19 @@ class ReportController extends Controller
     {
         $year = $request->get('year', now()->year);
 
+        $driver = config('database.default');
+        if ($driver == 'sqlite') {
+            $monthQuery = 'CAST(strftime("%m", invoice_date) AS INTEGER) AS month';
+            $monthGroup = 'strftime("%m", invoice_date)';
+        } elseif ($driver == 'mysql') {
+            $monthQuery = 'MONTH(invoice_date) AS month';
+            $monthGroup = 'MONTH(invoice_date)';
+        }
+
         $results = DB::table('invoices')
-            ->selectRaw("CAST(strftime('%m', invoice_date) AS INTEGER) AS month, AVG(total) AS average, COUNT(*) AS amount")
+            ->selectRaw("$monthQuery, AVG(total) AS average, COUNT(*) AS amount")
             ->whereYear('invoice_date', '=', $year)
-            ->groupBy(DB::raw("strftime('%m', invoice_date)"))
+            ->groupBy(DB::raw($monthGroup))
             ->get();
 
         $formattedResults = $this->formatMonthlySalesData($results);
@@ -340,10 +358,19 @@ class ReportController extends Controller
     {
         $year = $request->get('year', now()->year);
 
+        $driver = config('database.default');
+        if ($driver == 'sqlite') {
+            $weekQuery = 'CAST(strftime("%W", invoice_date) AS INTEGER) AS week';
+            $weekGroup = 'strftime("%W", invoice_date)';
+        } elseif ($driver == 'mysql') {
+            $weekQuery = 'WEEK(invoice_date) AS week';
+            $weekGroup = 'WEEK(invoice_date)';
+        }
+
         $results = DB::table('invoices')
-            ->selectRaw("CAST(strftime('%W', invoice_date) AS INTEGER) AS week, AVG(total) AS average, COUNT(*) AS amount")
+            ->selectRaw("$weekQuery, AVG(total) AS average, COUNT(*) AS amount")
             ->whereYear('invoice_date', '=', $year)
-            ->groupBy(DB::raw("strftime('%W', invoice_date)"))
+            ->groupBy(DB::raw($weekGroup))
             ->get();
 
         $formattedResults = $this->formatWeeklySalesData($results);
