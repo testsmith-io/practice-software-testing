@@ -65,7 +65,7 @@ class CategoryTest extends TestCase {
     public function testRetrieveCategory() {
         $category = Category::factory()->create();
 
-        $response = $this->getJson('/categories/' . $category->id);
+        $response = $this->getJson("/categories/{$category->id}");
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
@@ -104,7 +104,7 @@ class CategoryTest extends TestCase {
     public function testDeleteCategoryUnauthorized() {
         $brand = Category::factory()->create();
 
-        $this->json('DELETE', '/categories/' . $brand->id)
+        $this->json('DELETE', "/categories/{$brand->id}")
             ->assertStatus(ResponseAlias::HTTP_UNAUTHORIZED);
     }
 
@@ -113,7 +113,7 @@ class CategoryTest extends TestCase {
 
         $category = Category::factory()->create();
 
-        $this->deleteJson('/categories/' . $category->id, [], $this->headers($admin))
+        $this->deleteJson("/categories/{$category->id}", [], $this->headers($admin))
             ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
     }
 
@@ -140,7 +140,7 @@ class CategoryTest extends TestCase {
             'product_image_id' => $productImage->id]);
 
 
-        $this->json('DELETE', '/categories/' . $category->id, [], $this->headers($admin))
+        $this->json('DELETE', "/categories/{$category->id}", [], $this->headers($admin))
             ->assertStatus(ResponseAlias::HTTP_CONFLICT);
     }
 
@@ -149,7 +149,7 @@ class CategoryTest extends TestCase {
 
         $payload = ['name' => 'new name'];
 
-        $response = $this->putJson('/categories/' . $category->id, $payload);
+        $response = $this->putJson("/categories/{$category->id}", $payload);
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)

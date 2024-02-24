@@ -76,7 +76,7 @@ Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belong
 
 ## Execute unit tests with coverage
 
-` XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html tests/coverage`
+`XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html tests/coverage`
 
 
 # Sprints

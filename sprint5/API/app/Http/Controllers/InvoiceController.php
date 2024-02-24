@@ -6,7 +6,6 @@ use App\Http\Requests\Invoice\DestroyInvoice;
 use App\Http\Requests\Invoice\StoreInvoice;
 use App\Jobs\SendCheckoutEmail;
 use App\Jobs\UpdateProductInventory;
-use App\Mail\Checkout;
 use App\Models\PaymentBankTransferDetails;
 use App\Models\Cart;
 use App\Models\Download;
@@ -16,14 +15,12 @@ use App\Models\PaymentBnplDetails;
 use App\Models\PaymentCashOnDeliveryDetails;
 use App\Models\PaymentCreditCardDetails;
 use App\Models\PaymentGiftCardDetails;
-use App\Models\Product;
 use App\Rules\SubscriptSuperscriptRule;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
+use App\Services\InvoiceNumberGenerator;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -31,8 +28,11 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class InvoiceController extends Controller
 {
 
-    public function __construct()
+    protected $invoiceNumberGenerator;
+
+    public function __construct(InvoiceNumberGenerator $invoiceNumberGenerator)
     {
+        $this->invoiceNumberGenerator = $invoiceNumberGenerator;
         $this->middleware('auth:users');
     }
 
@@ -144,7 +144,12 @@ class InvoiceController extends Controller
         $input = $request->except(['cart_id']);
         $input['user_id'] = Auth::user()->id;
         $input['invoice_date'] = now();
-        $input['invoice_number'] = IdGenerator::generate(['table' => 'invoices', 'field' => 'invoice_number', 'length' => 14, 'prefix' => 'INV-' . now()->year]);
+        $input['invoice_number'] = $this->invoiceNumberGenerator->generate([
+            'table' => 'invoices',
+            'field' => 'invoice_number',
+            'length' => 14,
+            'prefix' => 'INV-' . now()->year
+        ]);
 
         $invoice = Invoice::create($input);
 
@@ -314,9 +319,9 @@ class InvoiceController extends Controller
     public function show($id)
     {
         if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->where('id', $id)->first());
+            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->findOrFail($id));
         } else {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->where('id', $id)->where('user_id', Auth::user()->id)->first());
+            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->where('user_id', Auth::user()->id)->findOrFail($id));
         }
     }
 
@@ -366,8 +371,8 @@ class InvoiceController extends Controller
      */
     public function downloadPDF($invoice_number)
     {
-        if (Storage::exists('invoices/' . $invoice_number . '.pdf')) {
-            return Storage::download('invoices/' . $invoice_number . '.pdf', $invoice_number . '.pdf');
+        if (Storage::exists("invoices/{$invoice_number}.pdf")) {
+            return Storage::download("invoices/{$invoice_number}.pdf", "{$invoice_number}.pdf");
         } else {
             return $this->preferredFormat(['message' => 'Document not created. Try again later.'], ResponseAlias::HTTP_NOT_FOUND);
         }
@@ -495,7 +500,16 @@ class InvoiceController extends Controller
             'status_message' => ['string', 'between:5,50', 'nullable', new SubscriptSuperscriptRule()]
         ]);
 
-        return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->update(array('status' => $request['status'], 'status_message' => $request['status_message']))]);
+        $affectedRows = Invoice::where('id', $id)->update([
+            'status' => $request['status'],
+            'status_message' => $request['status_message']
+        ]);
+
+        if ($affectedRows === 0) {
+            return $this->preferredFormat(['message' => 'Invoice not found'], ResponseAlias::HTTP_NOT_FOUND);
+        }
+
+        return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -544,6 +558,7 @@ class InvoiceController extends Controller
      *              @OA\Property(property="message", type="string", example="Method is not allowed for the requested route"),
      *          )
      *      ),
+     *      security={{ "apiAuth": {} }}
      * )
      */
     public function search(Request $request)

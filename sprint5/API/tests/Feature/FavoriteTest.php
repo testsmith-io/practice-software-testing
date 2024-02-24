@@ -35,7 +35,7 @@ class FavoriteTest extends TestCase {
 
         $favorite = $this->addFavorite($user);
 
-        $response = $this->json('get', '/favorites/' . $favorite->id, [], $this->headers($user));
+        $response = $this->json('get', "/favorites/{$favorite->id}", [], $this->headers($user));
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
@@ -51,7 +51,7 @@ class FavoriteTest extends TestCase {
 
         $favorite = $this->addFavorite($user);
 
-        $response = $this->json('delete', '/favorites/' . $favorite->id, [], $this->headers($user));
+        $response = $this->json('delete', "/favorites/{$favorite->id}", [], $this->headers($user));
 
         $response
             ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);

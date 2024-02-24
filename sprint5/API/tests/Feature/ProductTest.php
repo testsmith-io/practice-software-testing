@@ -132,7 +132,7 @@ class ProductTest extends TestCase {
     public function testRetrieveProduct() {
         $product = $this->addProduct();
 
-        $response = $this->getJson('/products/' . $product->id);
+        $response = $this->getJson("/products/{$product->id}");
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
@@ -189,7 +189,7 @@ class ProductTest extends TestCase {
     public function testDeleteProductUnauthorized() {
         $product = $this->addProduct();
 
-        $this->json('DELETE', '/products/' . $product->id)
+        $this->json('DELETE', "/products/{$product->id}")
             ->assertStatus(ResponseAlias::HTTP_UNAUTHORIZED);
     }
 
@@ -198,7 +198,7 @@ class ProductTest extends TestCase {
 
         $product = $this->addProduct();
 
-        $this->deleteJson('/products/' . $product->id, [], $this->headers($admin))
+        $this->deleteJson("/products/{$product->id}", [], $this->headers($admin))
             ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
     }
 
@@ -220,7 +220,7 @@ class ProductTest extends TestCase {
 
         $admin = User::factory()->create(['role' => 'admin']);
 
-        $this->deleteJson('/products/' . $invoice->invoicelines[0]['product_id'], [], $this->headers($admin))
+        $this->deleteJson("/products/{$invoice->invoicelines[0]['product_id']}", [], $this->headers($admin))
             ->assertStatus(ResponseAlias::HTTP_CONFLICT);
     }
 
@@ -229,7 +229,7 @@ class ProductTest extends TestCase {
 
         $payload = ['name' => 'new name'];
 
-        $this->putJson('/products/' . $product->id, $payload)
+        $this->putJson("/products/{$product->id}", $payload)
             ->assertStatus(ResponseAlias::HTTP_OK)
             ->assertJson([
                 'success' => true
@@ -239,7 +239,7 @@ class ProductTest extends TestCase {
     public function testRetrieveRelatedProducts() {
         $product = $this->addProduct();
 
-        $response = $this->getJson('/products/' . $product->id . '/related');
+        $response = $this->getJson("/products/{$product->id}/related");
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)

@@ -20,7 +20,7 @@ class SubscriptSuperscriptRule implements ValidationRule
         $pattern = '/[\x{2070}-\x{209F}\x{2080}-\x{209F}]/u';
 
         if (preg_match($pattern, $value)) {
-            $fail('The ' . $attribute . ' must not contain subscript/superscript characters.');
+            $fail("The {$attribute} must not contain subscript/superscript characters.");
         }
     }
 }
