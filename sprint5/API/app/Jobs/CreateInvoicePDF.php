@@ -44,7 +44,7 @@ class CreateInvoicePDF implements ShouldQueue {
             $invoice['invoice_number']
         );
 
-        $pdfFilePath = '/invoices/' . $fileName;
+        $pdfFilePath = "/invoices/{$fileName}";
         Storage::disk('local')->put($pdfFilePath, $pdf->output());
 
         Download::where('name', $this->id)

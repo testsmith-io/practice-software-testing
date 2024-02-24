@@ -99,7 +99,7 @@ class UserController extends Controller
         $input['role'] = 'user';
 
         if (App::environment('local')) {
-            Mail::to([$input['email']])->send(new Register($input['first_name'] . ' ' . $input['last_name'], $input['email'], $input['password']));
+            Mail::to([$input['email']])->send(new Register("{$input['first_name']} {$input['last_name']}", $input['email'], $input['password']));
         }
         // Hash the password
         $input['password'] = app('hash')->make($input['password']);
@@ -284,7 +284,7 @@ class UserController extends Controller
 
         if (App::environment('local')) {
             $user = User::where('email', $request['email'])->first();
-            Mail::to([$request['email']])->send(new ForgetPassword($user->first_name . ' ' . $user->last_name, "welcome02"));
+            Mail::to([$request['email']])->send(new ForgetPassword("{$user->first_name} {$user->last_name}", "welcome02"));
         }
         return $this->preferredFormat(['success' => (bool)User::where('email', $request['email'])->update(['password' => $request['password']])], ResponseAlias::HTTP_OK);
     }

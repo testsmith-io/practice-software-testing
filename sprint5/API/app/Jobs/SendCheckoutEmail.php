@@ -32,6 +32,6 @@ class SendCheckoutEmail implements ShouldQueue {
     public function handle(): void {
         $invoice = Invoice::with('invoicelines', 'invoicelines.product')->where('id', $this->id)->first();
 
-        Mail::to([$this->user->email])->send(new Checkout($this->user->first_name . ' ' . $this->user->last_name, $invoice->invoicelines, $invoice));
+        Mail::to([$this->user->email])->send(new Checkout("{$this->user->first_name} {$this->user->last_name}", $invoice->invoicelines, $invoice));
     }
 }

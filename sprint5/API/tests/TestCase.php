@@ -41,7 +41,7 @@ abstract class TestCase extends BaseTestCase
 
         if (!is_null($user)) {
             $token = app('auth')->fromUser($user);
-            $headers['Authorization'] = 'Bearer ' . $token;
+            $headers['Authorization'] = "Bearer $token";
         }
 
         return $headers;

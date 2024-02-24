@@ -30,7 +30,7 @@ class BrandTest extends TestCase {
     public function testRetrieveBrand(): void {
         $brand = Brand::factory()->create();
 
-        $response = $this->getJson('/brands/' . $brand->id);
+        $response = $this->getJson("/brands/{$brand->id}");
 
         $response->assertStatus(ResponseAlias::HTTP_OK)
             ->assertJsonStructure([
@@ -69,7 +69,7 @@ class BrandTest extends TestCase {
     public function testDeleteBrandUnauthorized() {
         $brand = Brand::factory()->create();
 
-        $this->json('DELETE', '/brands/' . $brand->id)
+        $this->json('DELETE', "/brands/{$brand->id}")
             ->assertStatus(ResponseAlias::HTTP_UNAUTHORIZED);
     }
 
@@ -78,7 +78,7 @@ class BrandTest extends TestCase {
 
         $brand = Brand::factory()->create();
 
-        $this->json('DELETE', '/brands/' . $brand->id, [], $this->headers($admin))
+        $this->json('DELETE', "/brands/{$brand->id}", [], $this->headers($admin))
             ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
     }
 
@@ -105,7 +105,7 @@ class BrandTest extends TestCase {
             'product_image_id' => $productImage->id]);
 
 
-        $this->json('DELETE', '/brands/' . $brand->id, [], $this->headers($admin))
+        $this->json('DELETE', "/brands/{$brand->id}", [], $this->headers($admin))
             ->assertStatus(ResponseAlias::HTTP_CONFLICT);
     }
 
@@ -114,7 +114,7 @@ class BrandTest extends TestCase {
 
         $payload = ['name' => 'new name'];
 
-        $this->putJson('/brands/' . $brand->id, $payload)
+        $this->putJson("/brands/{$brand->id}", $payload)
             ->assertStatus(ResponseAlias::HTTP_OK)
             ->assertJson([
                 'success' => true

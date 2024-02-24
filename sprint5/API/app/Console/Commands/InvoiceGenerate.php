@@ -42,7 +42,7 @@ class InvoiceGenerate extends Command
     {
         $invoices = Invoice::all();
         foreach ($invoices as $invoice) {
-            if(!Storage::exists('invoices/' . $invoice['invoice_number'] . '.pdf')) {
+            if(!Storage::exists("invoices/{$invoice['invoice_number']}.pdf")) {
                 Download::create([
                     'name' => $invoice['invoice_number'],
                     'type' => 'INVOICE',

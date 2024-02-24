@@ -158,7 +158,7 @@ class UserTest extends TestCase
         // Generate a token for the user
         $token = JWTAuth::fromUser($user);
 
-        $this->withHeader('Authorization', 'Bearer ' . $token);
+        $this->withHeader('Authorization', "Bearer {$token}");
         $response = $this->getJson('/users/refresh');
 
         $response->assertStatus(ResponseAlias::HTTP_OK);
@@ -318,7 +318,7 @@ class UserTest extends TestCase
         $adminUser = User::factory()->create(['role' => 'admin']);
 
         // Make a DELETE request to delete the user
-        $response = $this->json('DELETE', '/users/' . $this->user->id, [], $this->headers($adminUser));
+        $response = $this->json('DELETE', "/users/{$this->user->id}", [], $this->headers($adminUser));
 
         $response->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
 
@@ -332,7 +332,7 @@ class UserTest extends TestCase
         $otherUser = User::factory()->create();
 
         // Make a DELETE request to attempt to delete the other user
-        $response = $this->json('DELETE', '/users/' . $otherUser->id, [], $this->headers($this->user));
+        $response = $this->json('DELETE', "/users/{$otherUser->id}", [], $this->headers($this->user));
 
         // Assert the response status is 403 Forbidden
         $response->assertStatus(ResponseAlias::HTTP_FORBIDDEN)
@@ -354,7 +354,7 @@ class UserTest extends TestCase
         ]);
 
         // Simulate QueryException by catching and handling it
-        $response = $this->json('DELETE', '/users/' . $this->user->id, [], $this->headers($adminUser));
+        $response = $this->json('DELETE', "/users/{$this->user->id}", [], $this->headers($adminUser));
 
         $response->assertStatus(ResponseAlias::HTTP_CONFLICT)
             ->assertJson([
