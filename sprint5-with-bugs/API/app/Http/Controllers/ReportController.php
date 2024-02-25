@@ -458,13 +458,10 @@ class ReportController extends Controller
      */
     public function customersByCountry(Request $request)
     {
-        $country = $request->get('country', 'The Netherlands');
-
         $results = DB::table('users AS u')
-            ->select(DB::raw('CONCAT(u.first_name, " ", u.last_name) AS customer, u.country AS country'))
-            ->where('u.country', '=', $country)
+            ->selectRaw('COUNT(*) AS amount, u.country')
             ->where('u.role', '=', 'user')
-            ->groupByRaw('u.first_name, u.last_name, u.country')
+            ->groupBy('u.country')
             ->get();
 
         return $this->preferredFormat($results);
