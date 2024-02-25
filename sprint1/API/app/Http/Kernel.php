@@ -3,6 +3,12 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
+use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
+use Illuminate\Http\Middleware\HandleCors;
+use Illuminate\Http\Middleware\SetCacheHeaders;
+use Illuminate\Routing\Middleware\ThrottleRequests;
+use Illuminate\Session\Middleware\StartSession;
 
 class Kernel extends HttpKernel {
     /**
@@ -13,9 +19,9 @@ class Kernel extends HttpKernel {
      * @var array<int, class-string|string>
      */
     protected $middleware = [
-        \Illuminate\Http\Middleware\HandleCors::class,
-        \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        HandleCors::class,
+        ValidatePostSize::class,
+        ConvertEmptyStringsToNull::class,
     ];
 
     /**
@@ -25,7 +31,7 @@ class Kernel extends HttpKernel {
      */
     protected $middlewareGroups = [
         'web' => [
-            \Illuminate\Session\Middleware\StartSession::class,
+            StartSession::class,
         ],
         'api' => [
         ],
@@ -39,7 +45,7 @@ class Kernel extends HttpKernel {
      * @var array<string, class-string|string>
      */
     protected $middlewareAliases = [
-        'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'cache.headers' => SetCacheHeaders::class,
+        'throttle' => ThrottleRequests::class,
     ];
 }

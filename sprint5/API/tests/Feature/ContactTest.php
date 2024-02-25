@@ -51,7 +51,7 @@ class ContactTest extends TestCase {
             ]);
     }
 
-    public function testAttachFilNotEmpty() {
+    public function testAttachFileNotEmpty() {
 
         $response = $this->addMessage();
 

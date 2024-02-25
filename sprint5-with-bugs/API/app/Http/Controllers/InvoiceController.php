@@ -7,6 +7,8 @@ use App\Http\Requests\Invoice\StoreInvoice;
 use App\Mail\Checkout;
 use App\Models\Invoice;
 use App\Models\Product;
+use App\Rules\SubscriptSuperscriptRule;
+use App\Services\InvoiceNumberGenerator;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -18,8 +20,11 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class InvoiceController extends Controller
 {
 
-    public function __construct()
+    protected $invoiceNumberGenerator;
+
+    public function __construct(InvoiceNumberGenerator $invoiceNumberGenerator)
     {
+        $this->invoiceNumberGenerator = $invoiceNumberGenerator;
         $this->middleware('auth:users', ['except' => ['index']]);
     }
 
@@ -73,11 +78,7 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-//        if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
             return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->orderBy('invoice_date', 'DESC')->paginate());
-//        } else {
-//            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('user_id', app('auth')->user()->id)->orderBy('invoice_date', 'DESC')->paginate());
-//        }
     }
 
     /**
@@ -129,7 +130,12 @@ class InvoiceController extends Controller
     {
         $input = $request->except(['invoice_items']);
         $input['invoice_date'] = date('Y-m-d H-i-s');
-        $input['invoice_number'] = IdGenerator::generate(['table' => 'invoices', 'field' => 'invoice_number', 'length' => 14, 'prefix' => 'INV-' . date('Y')]);
+        $input['invoice_number'] = $this->invoiceNumberGenerator->generate([
+            'table' => 'invoices',
+            'field' => 'invoice_number',
+            'length' => 14,
+            'prefix' => 'INV-' . now()->year
+        ]);
         $invoice = Invoice::create($input);
 
         $invoice->invoicelines()->createMany($request->only(['invoice_items'])['invoice_items']);
@@ -206,9 +212,9 @@ class InvoiceController extends Controller
     public function show($id)
     {
         if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('id', $id)->first());
+            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->findOrFail($id));
         } else {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('id', $id)->where('user_id', app('auth')->user()->id)->first());
+            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('user_id', app('auth')->user()->id)->findOrFail($id));
         }
     }
 
@@ -275,9 +281,9 @@ class InvoiceController extends Controller
      */
     public function updateStatus($id, Request $request)
     {
-        $this->validate($request, [
+        $request->validate([
             'status' => Rule::in("AWAITING_FULFILLMENT", "ON_HOLD", "AWAITING_SHIPMENT", "SHIPPED", "COMPLETED"),
-            'status_message' => 'string|between:5,50|nullable'
+            'status_message' => ['string', 'between:5,50', 'nullable']
         ]);
 
         return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->update(array('status' => $request['status'], 'status_message' => $request['status_message']))]);

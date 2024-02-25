@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tests\TestCase;
 
@@ -15,7 +16,7 @@ class BrandTest extends TestCase {
     use DatabaseMigrations;
 
     public function testRetrieveBrands(): void {
-        $response = $this->get('/brands');
+        $response = $this->getJson('/brands');
 
         $response->assertStatus(ResponseAlias::HTTP_OK)
             ->assertJsonStructure([
@@ -27,9 +28,9 @@ class BrandTest extends TestCase {
     }
 
     public function testRetrieveBrand(): void {
-        Brand::factory()->create();
+        $brand = Brand::factory()->create();
 
-        $response = $this->get('/brands/1');
+        $response = $this->getJson("/brands/{$brand->id}");
 
         $response->assertStatus(ResponseAlias::HTTP_OK)
             ->assertJsonStructure([
@@ -44,7 +45,7 @@ class BrandTest extends TestCase {
             'slug' => $this->faker->slug
         ];
 
-        $response = $this->post('/brands', $payload);
+        $response = $this->postJson('/brands', $payload);
 
         $response->assertStatus(ResponseAlias::HTTP_CREATED)
             ->assertJsonStructure([
@@ -55,7 +56,7 @@ class BrandTest extends TestCase {
     }
 
     public function testAddBrandRequiredFields(): void {
-        $response = $this->post('/brands');
+        $response = $this->postJson('/brands');
 
         $response
             ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
@@ -68,7 +69,7 @@ class BrandTest extends TestCase {
     public function testDeleteBrandUnauthorized() {
         $brand = Brand::factory()->create();
 
-        $this->json('DELETE', '/brands/' . $brand->id)
+        $this->json('DELETE', "/brands/{$brand->id}")
             ->assertStatus(ResponseAlias::HTTP_UNAUTHORIZED);
     }
 
@@ -77,14 +78,14 @@ class BrandTest extends TestCase {
 
         $brand = Brand::factory()->create();
 
-        $this->json('DELETE', '/brands/' . $brand->id, [], $this->headers($admin))
+        $this->json('DELETE', "/brands/{$brand->id}", [], $this->headers($admin))
             ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
     }
 
     public function testDeleteNonExistingBrand() {
         $admin = User::factory()->create(['role' => 'admin']);
 
-        $this->delete('/brands/99', [], $this->headers($admin))
+        $this->deleteJson('/brands/99', [], $this->headers($admin))
             ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson([
                 'id' => ['The selected id is invalid.']
@@ -104,7 +105,7 @@ class BrandTest extends TestCase {
             'product_image_id' => $productImage->id]);
 
 
-        $this->json('DELETE', '/brands/' . $brand->id, [], $this->headers($admin))
+        $this->json('DELETE', "/brands/{$brand->id}", [], $this->headers($admin))
             ->assertStatus(ResponseAlias::HTTP_CONFLICT);
     }
 
@@ -113,7 +114,7 @@ class BrandTest extends TestCase {
 
         $payload = ['name' => 'new name'];
 
-        $this->put('/brands/' . $brand->id, $payload)
+        $this->putJson("/brands/{$brand->id}", $payload)
             ->assertStatus(ResponseAlias::HTTP_OK)
             ->assertJson([
                 'success' => true
@@ -123,7 +124,7 @@ class BrandTest extends TestCase {
     public function testSearchBrand() {
         Brand::factory()->create(['name' => 'brandname']);
 
-        $this->get('/brands/search?q=brandname')
+        $this->getJson('/brands/search?q=brandname')
             ->assertStatus(ResponseAlias::HTTP_OK)
             ->assertJsonStructure([
                 '*' => [

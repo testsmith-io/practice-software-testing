@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DestroyCustomer;
-use App\Http\Requests\StoreCustomer;
-use App\Http\Requests\UpdateCustomer;
+use App\Http\Requests\Customer\DestroyCustomer;
+use App\Http\Requests\Customer\StoreCustomer;
+use App\Http\Requests\Customer\UpdateCustomer;
 use App\Mail\ForgetPassword;
 use App\Mail\Register;
 use App\Models\User;

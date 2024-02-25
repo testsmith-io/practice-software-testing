@@ -4,6 +4,7 @@ namespace tests\Feature;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\User;
@@ -17,7 +18,7 @@ class ProductTest extends TestCase {
     public function testRetrieveProducts() {
         $product = $this->addProduct();
 
-        $response = $this->get('/products');
+        $response = $this->getJson('/products');
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
@@ -36,7 +37,7 @@ class ProductTest extends TestCase {
     public function testRetrieveProductsByCategory() {
         $this->addProduct();
 
-        $response = $this->get('/products?by_category=category-name');
+        $response = $this->getJson('/products?by_category=category-name');
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
@@ -55,7 +56,7 @@ class ProductTest extends TestCase {
     public function testRetrieveProductsByCategorySlug() {
         $this->addProduct();
 
-        $response = $this->get('/products?by_category_slug=category-slug');
+        $response = $this->getJson('/products?by_category_slug=category-slug');
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
@@ -74,7 +75,26 @@ class ProductTest extends TestCase {
     public function testRetrieveProductsByBrand() {
         $this->addProduct();
 
-        $response = $this->get('/products?by_brand=brand-name');
+        $response = $this->getJson('/products?by_brand=brand-name');
+
+        $response
+            ->assertStatus(ResponseAlias::HTTP_OK)
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => [
+                        'name',
+                        'description',
+                        'price',
+                        'name',
+                    ]
+                ]
+            ]);
+    }
+
+    public function testRetrieveProductsByQuery() {
+        $this->addProduct();
+
+        $response = $this->getJson('/products?q=test-product');
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
@@ -93,7 +113,7 @@ class ProductTest extends TestCase {
     public function testRetrieveRentals() {
         $this->addProduct();
 
-        $response = $this->get('/products?by_category_slug=category-slug&is_rental=true');
+        $response = $this->getJson('/products?by_category_slug=category-slug&is_rental=true');
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
@@ -112,7 +132,7 @@ class ProductTest extends TestCase {
     public function testRetrieveProduct() {
         $product = $this->addProduct();
 
-        $response = $this->get('/products/' . $product->id);
+        $response = $this->getJson("/products/{$product->id}");
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
@@ -138,7 +158,9 @@ class ProductTest extends TestCase {
             'is_rental' => false,
             'product_image_id' => $productImage->id];
 
-        $response = $this->post('/products', $payload);
+        $response = $this->postJson('/products', $payload);
+
+//        $response->dump();
 
         $response
             ->assertStatus(ResponseAlias::HTTP_CREATED)
@@ -152,7 +174,7 @@ class ProductTest extends TestCase {
     }
 
     public function testAddProductRequiredFields() {
-        $response = $this->post('/products');
+        $response = $this->postJson('/products');
 
         $response
             ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
@@ -167,7 +189,7 @@ class ProductTest extends TestCase {
     public function testDeleteProductUnauthorized() {
         $product = $this->addProduct();
 
-        $this->json('DELETE', '/products/' . $product->id)
+        $this->json('DELETE', "/products/{$product->id}")
             ->assertStatus(ResponseAlias::HTTP_UNAUTHORIZED);
     }
 
@@ -176,18 +198,30 @@ class ProductTest extends TestCase {
 
         $product = $this->addProduct();
 
-        $this->delete('/products/' . $product->id, [], $this->headers($admin))
+        $this->deleteJson("/products/{$product->id}", [], $this->headers($admin))
             ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
     }
 
     public function testDeleteNonExistingProduct() {
         $admin = User::factory()->create(['role' => 'admin']);
 
-        $this->delete('/products/99', [], $this->headers($admin))
+        $this->deleteJson('/products/99', [], $this->headers($admin))
             ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson([
                 'id' => ['The selected id is invalid.']
             ]);
+    }
+
+    public function testDeleteProductInUse() {
+        $invoice = Invoice::factory()->create([
+            'total' => 150.00,
+            'billing_country' => 'The Netherlands'
+        ]);
+
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->deleteJson("/products/{$invoice->invoicelines[0]['product_id']}", [], $this->headers($admin))
+            ->assertStatus(ResponseAlias::HTTP_CONFLICT);
     }
 
     public function testUpdateProduct() {
@@ -195,7 +229,7 @@ class ProductTest extends TestCase {
 
         $payload = ['name' => 'new name'];
 
-        $this->put('/products/' . $product->id, $payload)
+        $this->putJson("/products/{$product->id}", $payload)
             ->assertStatus(ResponseAlias::HTTP_OK)
             ->assertJson([
                 'success' => true
@@ -205,7 +239,7 @@ class ProductTest extends TestCase {
     public function testRetrieveRelatedProducts() {
         $product = $this->addProduct();
 
-        $response = $this->get('/products/' . $product->id . '/related');
+        $response = $this->getJson("/products/{$product->id}/related");
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
@@ -222,7 +256,7 @@ class ProductTest extends TestCase {
     public function testSearchProduct() {
         $this->addProduct();
 
-        $response = $this->get('/products/search?q=test-product');
+        $response = $this->getJson('/products/search?q=test-product');
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
