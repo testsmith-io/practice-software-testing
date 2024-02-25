@@ -62,7 +62,6 @@ Route::controller(FavoriteController::class)->prefix('favorites')->group(functio
     Route::post('', 'store');
     Route::get('/{id}', 'show');
     Route::delete('/{id}', 'destroy');
-    Route::put('/{id}', 'update');
 });
 
 Route::controller(ImageController::class)->prefix('images')->group(function () {

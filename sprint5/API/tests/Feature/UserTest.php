@@ -115,7 +115,7 @@ class UserTest extends TestCase
         $response->assertStatus(ResponseAlias::HTTP_LOCKED);
     }
 
-    public function test_disabled_account()
+    public function testDisabledAccount()
     {
         // Disable the account
         $this->user->enabled = false;

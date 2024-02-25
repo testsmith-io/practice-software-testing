@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DestroyCustomer;
-use App\Http\Requests\StoreCustomer;
-use App\Http\Requests\UpdateCustomer;
+use App\Http\Requests\Customer\DestroyCustomer;
+use App\Http\Requests\Customer\StoreCustomer;
+use App\Http\Requests\Customer\UpdateCustomer;
 use App\Mail\ForgetPassword;
 use App\Mail\Register;
 use App\Models\User;
@@ -153,26 +153,104 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
-        $credentials = $request->all(['email', 'password']);
+        // Validate input
+        $this->validateLogin($request);
 
-        if (!$token = app('auth')->attempt($credentials)) {
-            $user = User::where('email', '=', $credentials['email'])->first();
-            if ($user->role != "admin") {
-                // Check if the user is enabled
-                if (!$user->enabled) {
-                    return response()->json([
-                        'error' => 'Account disabled.'
-                    ], ResponseAlias::HTTP_FORBIDDEN);
-                } else if ($user['failed_login_attempts'] >= 1) {
-                    return response()->json(['error' => 'Account locked.'], ResponseAlias::HTTP_BAD_REQUEST);
-                } else {
-                    User::where('email', '=', $credentials['email'])->increment('failed_login_attempts', 1);
-                }
+        $credentials = $request->only(['email', 'password']);
+
+        // Check if the user exists
+        $user = User::where('email', $credentials['email'])->first();
+
+        // Check if user exists and if role is not admin
+        if ($user && $user->role != "admin") {
+            // Check if account is locked
+            if ($user->failed_login_attempts >= 1) {
+                return $this->lockedAccountResponse();
             }
-            return response()->json(['error' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
         }
+
+        // Attempt login and get token
+        $token = app('auth')->attempt($credentials);
+
+        // Check if login was successful
+        if (!$token) {
+            // Login failed
+            if ($user && $user->role != "admin") {
+                $this->incrementLoginAttempts($user);
+            }
+            return $this->failedLoginResponse();
+        }
+
+        // Check if the user is enabled
+        if (!$user->enabled) {
+            return response()->json([
+                'error' => 'Account disabled.'
+            ], ResponseAlias::HTTP_FORBIDDEN);
+        }
+
+        // Reset failed login attempts on successful login
+        $this->resetLoginAttempts($user);
+
+        // Return the successful login response
+        return $this->successfulLoginResponse($token);
+    }
+
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+    }
+
+    protected function incrementLoginAttempts($user)
+    {
+        if ($user->failed_login_attempts < 1) {
+            $user->increment('failed_login_attempts');
+        }
+    }
+
+    protected function resetLoginAttempts($user)
+    {
+        $user->update(['failed_login_attempts' => 0]);
+    }
+
+    protected function lockedAccountResponse()
+    {
+        return response()->json(['error' => 'Account locked.'], ResponseAlias::HTTP_BAD_REQUEST);
+    }
+
+    protected function failedLoginResponse()
+    {
+        return response()->json(['error' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
+    }
+
+    protected function successfulLoginResponse($token)
+    {
         return $this->respondWithToken($token);
     }
+//    public function login(Request $request)
+//    {
+//        $credentials = $request->all(['email', 'password']);
+//
+//        if (!$token = app('auth')->attempt($credentials)) {
+//            $user = User::where('email', '=', $credentials['email'])->first();
+//            if ($user->role != "admin") {
+//                // Check if the user is enabled
+//                if (!$user->enabled) {
+//                    return response()->json([
+//                        'error' => 'Account disabled.'
+//                    ], ResponseAlias::HTTP_FORBIDDEN);
+//                } else if ($user['failed_login_attempts'] >= 1) {
+//                    return response()->json(['error' => 'Account locked.'], ResponseAlias::HTTP_BAD_REQUEST);
+//                } else {
+//                    User::where('email', '=', $credentials['email'])->increment('failed_login_attempts', 1);
+//                }
+//            }
+//            return response()->json(['error' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
+//        }
+//        return $this->respondWithToken($token);
+//    }
 
     /**
      * @OA\Post(
@@ -297,9 +375,9 @@ class UserController extends Controller
             ], ResponseAlias::HTTP_BAD_REQUEST);
         }
 
-        $this->validate($request, [
+        $request->validate([
             'current_password' => 'required',
-            'new_password' => 'required|string|min:8|confirmed',
+            'new_password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
         $user = Auth::user();

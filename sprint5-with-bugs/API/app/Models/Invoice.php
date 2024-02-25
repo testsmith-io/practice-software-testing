@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Mehradsadeghi\FilterQueryString\FilterQueryString;
@@ -50,7 +51,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  */
 class Invoice extends BaseModel
 {
-    use FilterQueryString;
+    use hasFactory, FilterQueryString;
 
     protected $filters = ['in', 'sort', 'starts_with'];
     protected $table = 'invoices';

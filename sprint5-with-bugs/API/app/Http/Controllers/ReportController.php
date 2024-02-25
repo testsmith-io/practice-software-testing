@@ -220,10 +220,19 @@ class ReportController extends Controller
         $endYear = intval(date("Y"));
         $startYear = date("Y") - $numberOfYears;
 
+        $driver = config('database.default');
+        if ($driver == 'sqlite') {
+            $yearQuery = "strftime('%Y', invoice_date) AS year";
+            $yearGroup = "strftime('%Y', invoice_date)";
+        } elseif ($driver == 'mysql') {
+            $yearQuery = 'YEAR(invoice_date) AS year';
+            $yearGroup = 'YEAR(invoice_date)';
+        }
+
         $results = DB::table('invoices')
-            ->select(DB::raw('SUM(total) AS total, year(invoice_date) AS year'))
-            ->whereBetween('invoice_date', [$startYear . '-01-01', $endYear . '-12-31'])
-            ->groupBy('year')
+            ->selectRaw("SUM(total) AS total, $yearQuery")
+            ->whereYear('invoice_date', '>=', $startYear)
+            ->groupBy(DB::raw($yearGroup))
             ->get();
 
         $dates = [];
@@ -290,10 +299,19 @@ class ReportController extends Controller
     {
         $year = $request->get('year', date('Y'));
 
+        $driver = config('database.default');
+        if ($driver == 'sqlite') {
+            $monthQuery = 'CAST(strftime("%m", invoice_date) AS INTEGER) AS month';
+            $monthGroup = 'strftime("%m", invoice_date)';
+        } elseif ($driver == 'mysql') {
+            $monthQuery = 'MONTH(invoice_date) AS month';
+            $monthGroup = 'MONTH(invoice_date)';
+        }
+
         $results = DB::table('invoices')
-            ->select(DB::raw('month(invoice_date) AS month,avg(total) AS average, count(*) AS amount'))
-            ->whereBetween('invoice_date', [$year . '-01-01', $year . '-12-31'])
-            ->groupByRaw('month(invoice_date)')
+            ->selectRaw("$monthQuery, AVG(total) AS average, COUNT(*) AS amount")
+            ->whereYear('invoice_date', '=', $year)
+            ->groupBy(DB::raw($monthGroup))
             ->get();
 
         $dates = [];
@@ -362,10 +380,19 @@ class ReportController extends Controller
     {
         $year = $request->get('year', date('Y'));
 
+        $driver = config('database.default');
+        if ($driver == 'sqlite') {
+            $weekQuery = 'CAST(strftime("%W", invoice_date) AS INTEGER) AS week';
+            $weekGroup = 'strftime("%W", invoice_date)';
+        } elseif ($driver == 'mysql') {
+            $weekQuery = 'WEEK(invoice_date) AS week';
+            $weekGroup = 'WEEK(invoice_date)';
+        }
+
         $results = DB::table('invoices')
-            ->select(DB::raw('week(invoice_date) AS week,avg(total) AS average, count(*) AS amount'))
-            ->whereBetween('invoice_date', [$year . '-01-01', $year . '-12-31'])
-            ->groupByRaw('week(invoice_date)')
+            ->selectRaw("$weekQuery, AVG(total) AS average, COUNT(*) AS amount")
+            ->whereYear('invoice_date', '=', $year)
+            ->groupBy(DB::raw($weekGroup))
             ->get();
 
         $dates = [];

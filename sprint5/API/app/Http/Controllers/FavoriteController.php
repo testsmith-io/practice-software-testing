@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Favorite\DestroyFavorite;
 use App\Http\Requests\Favorite\StoreFavorite;
 use App\Models\Favorite;
-use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 

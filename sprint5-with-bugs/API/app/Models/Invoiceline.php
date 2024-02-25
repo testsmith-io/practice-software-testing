@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -19,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Invoiceline extends BaseModel
 {
+    use hasFactory;
+
     protected $table = 'invoice_items';
     protected $fillable = ['invoice_id', 'product_id', 'unit_price', 'quantity'];
 
