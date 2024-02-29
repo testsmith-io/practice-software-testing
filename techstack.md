@@ -3,32 +3,32 @@
 ## Tech Stack
 testsmith-io/practice-software-testing is built on the following main stack:
 
-- [Google App Engine](https://developers.google.com/appengine) – Platform as a Service
-- [Jasmine](http://jasmine.github.io/) – Javascript Testing Framework
+- [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) – Languages
 - [PHP](http://www.php.net/) – Languages
+- [SQL](https://en.wikipedia.org/wiki/SQL) – Languages
+- [TypeScript](http://www.typescriptlang.org) – Languages
+- [.NET](http://www.microsoft.com/net/) – Frameworks (Full Stack)
+- [Angular](https://angular.io) – Javascript MVC Frameworks
+- [Bootstrap](http://getbootstrap.com/) – Front-End Frameworks
+- [Chart.js](http://www.chartjs.org/) – Charting Libraries
+- [Guzzle](http://guzzlephp.org/) – Microframeworks (Backend)
 - [Laravel](http://laravel.com/) – Frameworks (Full Stack)
 - [Node.js](http://nodejs.org/) – Frameworks (Full Stack)
-- [.NET](http://www.microsoft.com/net/) – Frameworks (Full Stack)
-- [jQuery](http://jquery.com/) – Javascript UI Libraries
-- [Bootstrap](http://getbootstrap.com/) – Front-End Frameworks
-- [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) – Languages
-- [Karma](http://karma-runner.github.io/) – Browser Testing
-- [TypeScript](http://www.typescriptlang.org) – Languages
-- [PHPUnit](https://phpunit.de/) – Testing Frameworks
-- [Composer](https://getcomposer.org/) – Package Managers
 - [RxJS](http://reactivex.io/rxjs/) – Concurrency Frameworks
-- [phpMyAdmin](https://www.phpmyadmin.net/) – Performance Monitoring
-- [SQL](https://en.wikipedia.org/wiki/SQL) – Languages
-- [Guzzle](http://guzzlephp.org/) – Microframeworks (Backend)
-- [ESLint](http://eslint.org/) – Code Review
-- [PhpSpec](http://www.phpspec.net/en/latest/) – Testing Frameworks
-- [Angular](https://angular.io) – Javascript MVC Frameworks
-- [Chart.js](http://www.chartjs.org/) – Charting Libraries
-- [Shell](https://en.wikipedia.org/wiki/Shell_script) – Shells
-- [Alpine Linux](https://www.alpinelinux.org/) – Operating Systems
+- [jQuery](http://jquery.com/) – Javascript UI Libraries
 - [Serverless AppSync](https://github.com/serverless-components/aws-app-sync) – GraphQL Tools
-- [GitHub Actions](https://github.com/features/actions) – Continuous Integration
+- [Composer](https://getcomposer.org/) – Package Managers
 - [Docker](https://www.docker.com/) – Virtual Machine Platforms & Containers
+- [ESLint](http://eslint.org/) – Code Review
+- [GitHub Actions](https://github.com/features/actions) – Continuous Integration
+- [Jasmine](http://jasmine.github.io/) – Javascript Testing Framework
+- [Karma](http://karma-runner.github.io/) – Browser Testing
+- [PHPUnit](https://phpunit.de/) – Testing Frameworks
+- [PhpSpec](http://www.phpspec.net/en/latest/) – Testing Frameworks
+- [phpMyAdmin](https://www.phpmyadmin.net/) – Performance Monitoring
+- [Google App Engine](https://developers.google.com/appengine) – Platform as a Service
+- [Alpine Linux](https://www.alpinelinux.org/) – Operating Systems
+- [Shell](https://en.wikipedia.org/wiki/Shell_script) – Shells
 
 Full tech stack [here](/techstack.md)
 
@@ -38,32 +38,32 @@ Full tech stack [here](/techstack.md)
 ## Tech Stack
 testsmith-io/practice-software-testing is built on the following main stack:
 
-- <img width='25' height='25' src='https://img.stackshare.io/service/139/s01TMTGn.png' alt='Google App Engine'/> [Google App Engine](https://developers.google.com/appengine) – Platform as a Service
-- <img width='25' height='25' src='https://img.stackshare.io/service/831/7c0b595409af531b9cdeb07f8c513e8b.png' alt='Jasmine'/> [Jasmine](http://jasmine.github.io/) – Javascript Testing Framework
+- <img width='25' height='25' src='https://img.stackshare.io/service/1209/javascript.jpeg' alt='JavaScript'/> [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) – Languages
 - <img width='25' height='25' src='https://img.stackshare.io/service/991/hwUcGZ41_400x400.jpg' alt='PHP'/> [PHP](http://www.php.net/) – Languages
+- <img width='25' height='25' src='https://img.stackshare.io/service/2271/default_068d33483bba6b81ee13fbd4dc7aab9780896a54.png' alt='SQL'/> [SQL](https://en.wikipedia.org/wiki/SQL) – Languages
+- <img width='25' height='25' src='https://img.stackshare.io/service/1612/bynNY5dJ.jpg' alt='TypeScript'/> [TypeScript](http://www.typescriptlang.org) – Languages
+- <img width='25' height='25' src='https://img.stackshare.io/service/1014/IoPy1dce_400x400.png' alt='.NET'/> [.NET](http://www.microsoft.com/net/) – Frameworks (Full Stack)
+- <img width='25' height='25' src='https://img.stackshare.io/service/3745/cb8U-gL6_400x400.jpg' alt='Angular'/> [Angular](https://angular.io) – Javascript MVC Frameworks
+- <img width='25' height='25' src='https://img.stackshare.io/service/1101/C9QJ7V3X.png' alt='Bootstrap'/> [Bootstrap](http://getbootstrap.com/) – Front-End Frameworks
+- <img width='25' height='25' src='https://img.stackshare.io/service/3866/_GD1-XrU_400x400.jpg' alt='Chart.js'/> [Chart.js](http://www.chartjs.org/) – Charting Libraries
+- <img width='25' height='25' src='https://img.stackshare.io/service/2350/638632.png' alt='Guzzle'/> [Guzzle](http://guzzlephp.org/) – Microframeworks (Backend)
 - <img width='25' height='25' src='https://img.stackshare.io/service/992/AcA2LnWL_400x400.jpg' alt='Laravel'/> [Laravel](http://laravel.com/) – Frameworks (Full Stack)
 - <img width='25' height='25' src='https://img.stackshare.io/service/1011/n1JRsFeB_400x400.png' alt='Node.js'/> [Node.js](http://nodejs.org/) – Frameworks (Full Stack)
-- <img width='25' height='25' src='https://img.stackshare.io/service/1014/IoPy1dce_400x400.png' alt='.NET'/> [.NET](http://www.microsoft.com/net/) – Frameworks (Full Stack)
-- <img width='25' height='25' src='https://img.stackshare.io/service/1021/lxEKmMnB_400x400.jpg' alt='jQuery'/> [jQuery](http://jquery.com/) – Javascript UI Libraries
-- <img width='25' height='25' src='https://img.stackshare.io/service/1101/C9QJ7V3X.png' alt='Bootstrap'/> [Bootstrap](http://getbootstrap.com/) – Front-End Frameworks
-- <img width='25' height='25' src='https://img.stackshare.io/service/1209/javascript.jpeg' alt='JavaScript'/> [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) – Languages
-- <img width='25' height='25' src='https://img.stackshare.io/service/1420/TidYGd6a.png' alt='Karma'/> [Karma](http://karma-runner.github.io/) – Browser Testing
-- <img width='25' height='25' src='https://img.stackshare.io/service/1612/bynNY5dJ.jpg' alt='TypeScript'/> [TypeScript](http://www.typescriptlang.org) – Languages
-- <img width='25' height='25' src='https://img.stackshare.io/service/1616/1_WsEnddd5Y4EgEHsT054kUQ.jpeg' alt='PHPUnit'/> [PHPUnit](https://phpunit.de/) – Testing Frameworks
-- <img width='25' height='25' src='https://img.stackshare.io/service/1688/New_Project__65_.png' alt='Composer'/> [Composer](https://getcomposer.org/) – Package Managers
 - <img width='25' height='25' src='https://img.stackshare.io/service/1796/984368.png' alt='RxJS'/> [RxJS](http://reactivex.io/rxjs/) – Concurrency Frameworks
-- <img width='25' height='25' src='https://img.stackshare.io/service/2102/3pl3dljQ_400x400.png' alt='phpMyAdmin'/> [phpMyAdmin](https://www.phpmyadmin.net/) – Performance Monitoring
-- <img width='25' height='25' src='https://img.stackshare.io/service/2271/default_068d33483bba6b81ee13fbd4dc7aab9780896a54.png' alt='SQL'/> [SQL](https://en.wikipedia.org/wiki/SQL) – Languages
-- <img width='25' height='25' src='https://img.stackshare.io/service/2350/638632.png' alt='Guzzle'/> [Guzzle](http://guzzlephp.org/) – Microframeworks (Backend)
-- <img width='25' height='25' src='https://img.stackshare.io/service/3337/Q4L7Jncy.jpg' alt='ESLint'/> [ESLint](http://eslint.org/) – Code Review
-- <img width='25' height='25' src='https://img.stackshare.io/service/3502/6b9dfb07681dee602dbdf75d9393f07c_400x400.png' alt='PhpSpec'/> [PhpSpec](http://www.phpspec.net/en/latest/) – Testing Frameworks
-- <img width='25' height='25' src='https://img.stackshare.io/service/3745/cb8U-gL6_400x400.jpg' alt='Angular'/> [Angular](https://angular.io) – Javascript MVC Frameworks
-- <img width='25' height='25' src='https://img.stackshare.io/service/3866/_GD1-XrU_400x400.jpg' alt='Chart.js'/> [Chart.js](http://www.chartjs.org/) – Charting Libraries
-- <img width='25' height='25' src='https://img.stackshare.io/service/4631/default_c2062d40130562bdc836c13dbca02d318205a962.png' alt='Shell'/> [Shell](https://en.wikipedia.org/wiki/Shell_script) – Shells
-- <img width='25' height='25' src='https://img.stackshare.io/service/6429/alpine_linux.png' alt='Alpine Linux'/> [Alpine Linux](https://www.alpinelinux.org/) – Operating Systems
+- <img width='25' height='25' src='https://img.stackshare.io/service/1021/lxEKmMnB_400x400.jpg' alt='jQuery'/> [jQuery](http://jquery.com/) – Javascript UI Libraries
 - <img width='25' height='25' src='https://img.stackshare.io/service/11394/appsync.png' alt='Serverless AppSync'/> [Serverless AppSync](https://github.com/serverless-components/aws-app-sync) – GraphQL Tools
-- <img width='25' height='25' src='https://img.stackshare.io/service/11563/actions.png' alt='GitHub Actions'/> [GitHub Actions](https://github.com/features/actions) – Continuous Integration
+- <img width='25' height='25' src='https://img.stackshare.io/service/1688/New_Project__65_.png' alt='Composer'/> [Composer](https://getcomposer.org/) – Package Managers
 - <img width='25' height='25' src='https://img.stackshare.io/service/586/n4u37v9t_400x400.png' alt='Docker'/> [Docker](https://www.docker.com/) – Virtual Machine Platforms & Containers
+- <img width='25' height='25' src='https://img.stackshare.io/service/3337/Q4L7Jncy.jpg' alt='ESLint'/> [ESLint](http://eslint.org/) – Code Review
+- <img width='25' height='25' src='https://img.stackshare.io/service/11563/actions.png' alt='GitHub Actions'/> [GitHub Actions](https://github.com/features/actions) – Continuous Integration
+- <img width='25' height='25' src='https://img.stackshare.io/service/831/7c0b595409af531b9cdeb07f8c513e8b.png' alt='Jasmine'/> [Jasmine](http://jasmine.github.io/) – Javascript Testing Framework
+- <img width='25' height='25' src='https://img.stackshare.io/service/1420/TidYGd6a.png' alt='Karma'/> [Karma](http://karma-runner.github.io/) – Browser Testing
+- <img width='25' height='25' src='https://img.stackshare.io/service/1616/1_WsEnddd5Y4EgEHsT054kUQ.jpeg' alt='PHPUnit'/> [PHPUnit](https://phpunit.de/) – Testing Frameworks
+- <img width='25' height='25' src='https://img.stackshare.io/service/3502/6b9dfb07681dee602dbdf75d9393f07c_400x400.png' alt='PhpSpec'/> [PhpSpec](http://www.phpspec.net/en/latest/) – Testing Frameworks
+- <img width='25' height='25' src='https://img.stackshare.io/service/2102/3pl3dljQ_400x400.png' alt='phpMyAdmin'/> [phpMyAdmin](https://www.phpmyadmin.net/) – Performance Monitoring
+- <img width='25' height='25' src='https://img.stackshare.io/service/139/s01TMTGn.png' alt='Google App Engine'/> [Google App Engine](https://developers.google.com/appengine) – Platform as a Service
+- <img width='25' height='25' src='https://img.stackshare.io/service/6429/alpine_linux.png' alt='Alpine Linux'/> [Alpine Linux](https://www.alpinelinux.org/) – Operating Systems
+- <img width='25' height='25' src='https://img.stackshare.io/service/4631/default_c2062d40130562bdc836c13dbca02d318205a962.png' alt='Shell'/> [Shell](https://en.wikipedia.org/wiki/Shell_script) – Shells
 
 Full tech stack [here](/techstack.md)
 
@@ -74,7 +74,7 @@ Full tech stack [here](/techstack.md)
 # Tech Stack File
 ![](https://img.stackshare.io/repo.svg "repo") [testsmith-io/practice-software-testing](https://github.com/testsmith-io/practice-software-testing)![](https://img.stackshare.io/public_badge.svg "public")
 <br/><br/>
-|64<br/>Tools used|01/11/24 <br/>Report generated|
+|64<br/>Tools used|02/29/24 <br/>Report generated|
 |------|------|
 </div>
 
