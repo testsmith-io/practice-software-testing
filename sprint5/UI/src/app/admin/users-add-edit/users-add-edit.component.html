@@ -120,7 +120,7 @@
           <label for="country" class="col-sm-3 col-form-label">Country</label>
           <div class="col-sm-9">
             <select id="country" data-test="country" formControlName="country"
-                    [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" class="form-select">
+                    [ngClass]="{ 'is-invalid': submitted && f['country'].errors }" class="form-select">
               <option value="" disabled selected hidden>Select your country *</option>
               @for (country of countries;track country) {
                 <option value="{{country.code}}">{{ country.name }}</option>

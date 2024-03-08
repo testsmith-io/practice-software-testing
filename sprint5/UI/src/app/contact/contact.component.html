@@ -80,7 +80,7 @@
                       @if (f['email'].errors['required']) {
                         <div>Email is required</div>
                       }
-                      @if (f['email'].errors['pattern']) {
+                      @if (f['email'].errors['email']) {
                         <div>Email format is invalid</div>
                       }
                     </div>
