@@ -17,7 +17,7 @@ export class ContactComponent implements OnInit {
   showConfirmation: boolean = false;
   role: string = '';
   name: string = '';
-  private file: File= null;
+  private file: File = null;
 
   constructor(private formBuilder: FormBuilder,
               private contactService: ContactService,
@@ -30,7 +30,7 @@ export class ContactComponent implements OnInit {
       {
         first_name: ['', []],
         last_name: ['', []],
-        email: ['', [Validators.pattern("^(?=.{1,256}$)[a-zA-Z0-9._%+-]{1,64}@[a-zA-Z0-9.-]{1,255}$")]],
+        email: ['', [Validators.email]],
         attachment: ['', []],
         subject: ['', [Validators.required]],
         message: ['', [Validators.required, Validators.minLength(50)]]
@@ -46,7 +46,7 @@ export class ContactComponent implements OnInit {
     }, () => {
       this.contact.get('first_name').setValidators(Validators.required);
       this.contact.get('last_name').setValidators(Validators.required);
-      this.contact.get('email').setValidators([Validators.required, Validators.pattern("^(?=.{1,256}$)[a-zA-Z0-9._%+-]{1,64}@[a-zA-Z0-9.-]{1,255}$")]);
+      this.contact.get('email').setValidators([Validators.required, Validators.email]);
       this.contact.controls['first_name'].updateValueAndValidity();
       this.contact.controls['last_name'].updateValueAndValidity();
       this.contact.controls['email'].updateValueAndValidity();
@@ -59,10 +59,10 @@ export class ContactComponent implements OnInit {
 
   changeFile(fileEvent: any) {
     const file: File = fileEvent.target.files[0];
-    if(file.type !== 'text/plain') {
+    if (file.type !== 'text/plain') {
       this.contact.controls['attachment'].setErrors({'incorrectType': true});
     }
-    if(file.size !== 0) {
+    if (file.size !== 0) {
       this.contact.controls['attachment'].setErrors({'incorrectSize': true});
     }
     this.file = file;
