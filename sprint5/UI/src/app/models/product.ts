@@ -7,7 +7,7 @@ export class Product {
   name!: string;
   description!: string;
   price!: number;
-  stock!: number;
+  in_stock!: number;
   is_location_offer!: boolean;
   is_rental!: boolean;
   discount_price!: number;

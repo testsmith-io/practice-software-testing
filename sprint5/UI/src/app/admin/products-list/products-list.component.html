@@ -26,7 +26,7 @@
         <tr>
           <td>{{ product.id }}</td>
           <td>{{ product.name }}</td>
-          <td>{{ product.stock }}</td>
+          <td>{{ product.in_stock }}</td>
           <td>${{ product.price | number: '1.2-2' }}</td>
           <td style="white-space: nowrap">
             <a routerLink="edit/{{product.id}}" attr.data-test="product-edit-{{product.id}}"

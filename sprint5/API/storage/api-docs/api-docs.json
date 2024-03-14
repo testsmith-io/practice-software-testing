@@ -675,6 +675,97 @@
                     }
                 }
             },
+            "delete": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Delete Cart",
+                "description": "Delete Cart",
+                "operationId": "deleteCart",
+                "parameters": [
+                    {
+                        "name": "cartId",
+                        "in": "path",
+                        "description": "The cartId parameter in path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": 1
+                    },
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "description": "The cartId parameter in path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Returns when user is not authenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Returns when the resource is not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Resource not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Returns when the entity is used elsewhere"
+                    },
+                    "405": {
+                        "description": "Returns when the method is not allowed for the requested route",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Method is not allowed for the requested route"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Returns when the server was not able to process the content"
+                    }
+                }
+            }
+        },
+        "/carts/{cartId}/product/quantity": {
             "put": {
                 "tags": [
                     "Cart"
@@ -751,95 +842,6 @@
                                 }
                             }
                         }
-                    },
-                    "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Returns when the server was not able to process the content"
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "Cart"
-                ],
-                "summary": "Delete Cart",
-                "description": "Delete Cart",
-                "operationId": "deleteCart",
-                "parameters": [
-                    {
-                        "name": "cartId",
-                        "in": "path",
-                        "description": "The cartId parameter in path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "example": 1
-                    },
-                    {
-                        "name": "productId",
-                        "in": "path",
-                        "description": "The cartId parameter in path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "example": 1
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "Successful operation"
-                    },
-                    "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "409": {
-                        "description": "Returns when the entity is used elsewhere"
                     },
                     "405": {
                         "description": "Returns when the method is not allowed for the requested route",
@@ -3256,7 +3258,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
             }
         },
         "/payment/check": {
@@ -3621,7 +3628,12 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
             },
             "put": {
                 "tags": [
@@ -4406,19 +4418,6 @@
                 "summary": "Get customers by country",
                 "description": "`Admin` role is required to get customers by country",
                 "operationId": "getCustomersByCountry",
-                "parameters": [
-                    {
-                        "name": "country",
-                        "in": "query",
-                        "description": "Specific year",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "default": "The Netherlands"
-                        },
-                        "example": 2021
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -5559,6 +5558,15 @@
                     },
                     "billing_postcode": {
                         "type": "string"
+                    },
+                    "additional_discount_percentage": {
+                        "type": "number"
+                    },
+                    "additional_discount_amount": {
+                        "type": "number"
+                    },
+                    "subtotal": {
+                        "type": "number"
                     },
                     "total": {
                         "type": "number"
