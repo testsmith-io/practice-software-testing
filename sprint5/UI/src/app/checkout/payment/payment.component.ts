@@ -1,8 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from "@angular/forms";
 import {CartService} from "../../_services/cart.service";
-import {TokenStorageService} from "../../_services/token-storage.service";
-import {CustomerAccountService} from "../../shared/customer-account.service";
 import {Observable, of} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {PaymentService} from "../../_services/payment.service";

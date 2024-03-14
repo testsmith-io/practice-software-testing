@@ -46,12 +46,12 @@
         {{ product.description }}</p>
       @if (!product.is_rental) {
         <div class="input-group quantity">
-          <button [disabled]="product.stock <= 0" class="btn btn-secondary" data-test="decrease-quantity"
+          <button [disabled]="!product.in_stock" class="btn btn-secondary" data-test="decrease-quantity"
                   id="btn-decrease-quantity" (click)="minus()"><i class="fa fa-minus"></i>
           </button>
-          <input [disabled]="product.stock <= 0" type="number" min="1" class="form-control" data-test="quantity"
+          <input [disabled]="!product.in_stock" type="number" min="1" class="form-control" data-test="quantity"
                  [(ngModel)]="quantity">
-          <button [disabled]="product.stock <= 0" class="btn btn-secondary" data-test="increase-quantity"
+          <button [disabled]="!product.in_stock" class="btn btn-secondary" data-test="increase-quantity"
                   id="btn-increase-quantity" (click)="plus()"><i class="fa fa-plus"></i></button>
         </div>
       }
@@ -61,11 +61,11 @@
           <ngx-slider [(value)]="quantity" [options]="sliderOptions"></ngx-slider>
         </div>
       }
-      @if (product.stock <= 0 && !product.is_rental) {
+      @if (!product.in_stock && !product.is_rental) {
         <p class="text-danger mt-3" data-test="out-of-stock">Out of stock</p>
       }
       <div class="btn-group mt-2">
-        <button class="btn-success btn" [disabled]="product.stock <= 0 && !product.is_rental" data-test="add-to-cart"
+        <button class="btn-success btn" [disabled]="!product.in_stock && !product.is_rental" data-test="add-to-cart"
                 id="btn-add-to-cart" (click)="addToCart(product)">
           <i
             class="fa fa-shopping-cart px-1"></i>Add to cart

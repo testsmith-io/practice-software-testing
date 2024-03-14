@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -46,12 +45,15 @@ class Product extends BaseModel
     use HasFactory, FilterQueryString, HasUlids;
 
     protected $table = 'products';
-    protected $fillable = ['name', 'description', 'category_id', 'brand_id', 'price', 'product_image_id', 'is_location_offer', 'is_rental'];
-    protected $hidden = ['created_at', 'updated_at'];
+    protected $fillable = ['name', 'description', 'category_id', 'brand_id', 'price', 'product_image_id', 'is_location_offer', 'is_rental', 'stock'];
+    protected $hidden = ['stock', 'created_at', 'updated_at'];
+    protected $appends = ['in_stock'];
     protected $filters = ['between', 'sort'];
 
     protected $casts = array(
-        "price" => "double"
+        "price" => "double",
+        'is_location_offer' => 'boolean',
+        'is_rental' => 'boolean',
     );
 
     public function product_image(): BelongsTo
@@ -68,4 +70,17 @@ class Product extends BaseModel
     {
         return $this->belongsTo('App\Models\Brand');
     }
+
+    public function getInStockAttribute()
+    {
+        try {
+            $role = app('auth')->parseToken()->getPayload()->get('role');
+            if ($role == "admin") {
+                return $this->stock;
+            }
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+        }
+        return $this->stock > 0;
+    }
+
 }
