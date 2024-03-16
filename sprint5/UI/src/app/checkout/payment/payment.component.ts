@@ -49,7 +49,6 @@ export class PaymentComponent implements OnInit {
     });
 
     this.cusPayment.get('payment_method').valueChanges.subscribe((value: string) => {
-      console.log(value);
       this.selectedPaymentMethod = value;
       this.updateValidation(value);
     });
@@ -179,9 +178,6 @@ export class PaymentComponent implements OnInit {
   Check payment method, only if mock endpoint is stored in sessionStorage
    */
   checkPayment(paymentPayload: any): Observable<boolean> {
-    console.log("st");
-    console.log(this.address);
-    console.log("ed");
     if (!this.state) {
       const endpoint = (window.localStorage.getItem('PAYMENT_ENDPOINT')) ? window.localStorage.getItem('PAYMENT_ENDPOINT') : environment.apiUrl + '/payment/check';
       this.paymentService.validate(endpoint, paymentPayload).subscribe(res => {

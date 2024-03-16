@@ -54,7 +54,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
         (response: HttpResponse<Blob>) => {
           const file = new Blob([response.body], {type: 'application/pdf'});
           const fileURL = URL.createObjectURL(file);
-          console.log(response);
           const contentDisposition = response.headers.get('Content-Disposition');
           const filename = contentDisposition.split(';')[1].split('filename')[1].split('=')[1].trim();
 

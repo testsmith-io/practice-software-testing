@@ -31,8 +31,7 @@ class StoreInvoice extends BaseFormRequest
             'billing_state' => ['string', 'max:40', new SubscriptSuperscriptRule()],
             'billing_country' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'billing_postcode' => ['string', 'max:10', new SubscriptSuperscriptRule()],
-            'cart_id' => 'required',
-            'total' => 'numeric'
+            'cart_id' => 'required'
         ];
     }
 }
