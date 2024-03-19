@@ -92,12 +92,12 @@
         }
         @if (name && role === 'user') {
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" data-test="nav-user-menu" id="user-menu" role="button"
+            <a class="nav-link dropdown-toggle" href="#" data-test="nav-menu" id="menu" role="button"
                data-bs-toggle="dropdown"
                aria-expanded="false">
               {{ name }}
             </a>
-            <ul class="dropdown-menu" aria-labelledby="user-menu">
+            <ul class="dropdown-menu" aria-labelledby="menu">
               <li><a class="dropdown-item" data-test="nav-my-account" routerLink="/account">My account</a></li>
               <li><a class="dropdown-item" data-test="nav-my-favorites" routerLink="/account/favorites">My favorites</a>
               </li>
@@ -115,12 +115,12 @@
         }
         @if (name && role === 'admin') {
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" data-test="nav-admin-menu" id="admin-menu" role="button"
+            <a class="nav-link dropdown-toggle" href="#" data-test="nav-menu" id="menu" role="button"
                data-bs-toggle="dropdown"
                aria-expanded="false">
               {{ name }}
             </a>
-            <ul class="dropdown-menu" aria-labelledby="admin-menu">
+            <ul class="dropdown-menu" aria-labelledby="menu">
               <li><a class="dropdown-item" data-test="nav-admin-dashboard" routerLink="/admin/dashboard">Dashboard</a>
               </li>
               <li><a class="dropdown-item" data-test="nav-admin-brands" routerLink="/admin/brands">Brands</a></li>
