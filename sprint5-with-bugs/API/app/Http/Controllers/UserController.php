@@ -693,7 +693,7 @@ class UserController extends Controller
      *          description="Forbidden"
      *      ),
      *     security={{ "apiAuth": {} }}
-     * ),
+     * )
      */
     public function destroy(DestroyCustomer $request, $id)
     {

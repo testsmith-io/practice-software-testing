@@ -285,7 +285,7 @@ class BrandController extends Controller
      *          description="Returns when the server was not able to process the content",
      *      ),
      *     security={{ "apiAuth": {} }}
-     * ),
+     * )
      */
     public function destroy(DestroyBrand $request, $id)
     {
