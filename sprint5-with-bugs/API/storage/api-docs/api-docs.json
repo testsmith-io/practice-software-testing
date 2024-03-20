@@ -11,7 +11,7 @@
     },
     "servers": [
         {
-            "url": "https://api.practicesoftwaretesting.com",
+            "url": "https://api-with-bugs.practicesoftwaretesting.com",
             "description": "Deployed environment"
         },
         {
@@ -1755,111 +1755,6 @@
                     }
                 ]
             },
-            "put": {
-                "tags": [
-                    "Favorite"
-                ],
-                "summary": "Update specific favorite",
-                "description": "User role is required to update specific favorite",
-                "operationId": "updateFavorite",
-                "parameters": [
-                    {
-                        "name": "favoriteId",
-                        "in": "path",
-                        "description": "The favoriteId parameter in path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "description": "Brand request object",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/FavoriteRequest"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "A token",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "description": "",
-                                            "type": "boolean",
-                                            "example": true
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Returns when the server was not able to process the content"
-                    }
-                },
-                "security": [
-                    {
-                        "apiAuth": []
-                    }
-                ]
-            },
             "delete": {
                 "tags": [
                     "Favorite"
@@ -2104,12 +1999,7 @@
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "apiAuth": []
-                    }
-                ]
+                }
             },
             "post": {
                 "tags": [
@@ -4799,7 +4689,7 @@
                         "type": "string",
                         "example": "0987654345"
                     },
-                    "invoicelines": {
+                    "invoice_items": {
                         "type": "array",
                         "items": {
                             "type": "object",
@@ -4866,7 +4756,7 @@
                         "type": "string",
                         "example": ""
                     },
-                    "invoicelines": {
+                    "invoice_items": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/InvoiceLineResponse"
