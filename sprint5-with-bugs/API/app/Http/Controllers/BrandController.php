@@ -13,11 +13,6 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class BrandController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('role:admin', ['only' => ['destroy']]);
-    }
-
     /**
      * @OA\Get(
      *      path="/brands",

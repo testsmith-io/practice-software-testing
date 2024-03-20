@@ -14,11 +14,6 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class ProductController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('role:admin', ['only' => ['destroy']]);
-    }
-
     /**
      * @OA\Get(
      *      path="/products",
