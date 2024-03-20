@@ -70,7 +70,7 @@ class BrandTest extends TestCase {
         $brand = Brand::factory()->create();
 
         $this->json('DELETE', "/brands/{$brand->id}")
-            ->assertStatus(ResponseAlias::HTTP_UNAUTHORIZED);
+            ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
     }
 
     public function testDeleteBrand() {
