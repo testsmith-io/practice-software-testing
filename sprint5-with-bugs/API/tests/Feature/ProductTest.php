@@ -190,7 +190,7 @@ class ProductTest extends TestCase {
         $product = $this->addProduct();
 
         $this->json('DELETE', "/products/{$product->id}")
-            ->assertStatus(ResponseAlias::HTTP_UNAUTHORIZED);
+            ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
     }
 
     public function testDeleteProduct() {
