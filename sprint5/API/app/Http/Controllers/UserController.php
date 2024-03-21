@@ -639,8 +639,27 @@ class UserController extends Controller
      */
     public function update(UpdateCustomer $request, $id)
     {
+        $user = User::findOrFail($id);
+
+        // Check if the current user is the same as the one being updated or is an admin
         if ((app('auth')->id() == $id) || (app('auth')->parseToken()->getPayload()->get('role') == "admin")) {
-            return $this->preferredFormat(['success' => (bool)User::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
+            // If the 'role' field is present in the request, ensure the authenticated user is an admin
+            if ($request->has('role')) {
+                if (app('auth')->parseToken()->getPayload()->get('role') !== "admin") {
+                    return response()->json(['error' => 'Only admins can update the role.'], ResponseAlias::HTTP_FORBIDDEN);
+                }
+            }
+
+            // Update the user with the request data
+            $updateData = $request->all();
+
+            // For non-admin users, remove the 'role' field from the update data if present
+            if (app('auth')->parseToken()->getPayload()->get('role') !== "admin") {
+                unset($updateData['role']);
+            }
+
+            $success = $user->update($updateData);
+            return $this->preferredFormat(['success' => (bool)$success], ResponseAlias::HTTP_OK);
         } else {
             return response()->json(['error' => 'You can only update your own data.'], ResponseAlias::HTTP_FORBIDDEN);
         }
