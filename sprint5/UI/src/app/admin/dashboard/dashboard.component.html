@@ -14,8 +14,7 @@
   <div>
     No recent invoices.
   </div>
-}
-@if (results?.data) {
+} @else {
   <table class="table table-hover">
     <thead>
     <tr>
@@ -28,7 +27,7 @@
     </tr>
     </thead>
     <tbody>
-      @for (item of results.data;track item) {
+      @for (item of results.data; track item) {
         <tr>
           <td>{{ item.invoice_number }}</td>
           <td>{{ item.billing_address }}</td>
