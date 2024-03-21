@@ -32,7 +32,8 @@ class UpdateCustomer extends BaseFormRequest
             'country' => 'required|string|max:40',
             'postcode' => 'nullable|string|max:10',
             'phone' => 'nullable|string|max:24',
-            'email' => 'required|string|max:60'
+            'email' => 'required|string|max:60',
+            'role'  => 'in:user,admin'
         ];
     }
 }
