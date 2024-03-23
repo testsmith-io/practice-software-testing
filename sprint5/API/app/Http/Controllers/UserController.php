@@ -651,7 +651,7 @@ class UserController extends Controller
             }
 
             // Update the user with the request data
-            $updateData = $request->all();
+            $updateData = $request->except('password');
 
             // For non-admin users, remove the 'role' field from the update data if present
             if (app('auth')->parseToken()->getPayload()->get('role') !== "admin") {
