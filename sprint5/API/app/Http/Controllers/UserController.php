@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rules\Password;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class UserController extends Controller
@@ -361,7 +362,7 @@ class UserController extends Controller
 
         $request->validate([
             'current_password' => 'required',
-            'new_password' => ['required', 'string', 'min:8', 'confirmed', new SubscriptSuperscriptRule()],
+            'new_password' => ['required', Password::min(8)->mixedCase()->numbers()->symbols()->uncompromised(), 'confirmed', new SubscriptSuperscriptRule()],
         ]);
 
         $user = Auth::user();

@@ -5,6 +5,7 @@ namespace app\Http\Requests\Customer;
 use App\Http\Requests\BaseFormRequest;
 use App\Rules\SubscriptSuperscriptRule;
 use Carbon\Carbon;
+use Illuminate\Validation\Rules\Password;
 
 class StoreCustomer extends BaseFormRequest
 {
@@ -50,7 +51,7 @@ class StoreCustomer extends BaseFormRequest
             'phone' => ['string', 'max:24', new SubscriptSuperscriptRule()],
             'dob' => ['date',"before:{$before}"],
             'email' => ['required', 'unique:users,email', 'string', 'max:256', new SubscriptSuperscriptRule()],
-            'password' => ['required', 'string', 'max:255', new SubscriptSuperscriptRule()]
+            'password' => ['required', Password::min(8)->mixedCase()->numbers()->symbols()->uncompromised(), new SubscriptSuperscriptRule()]
         ];
     }
 }
