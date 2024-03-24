@@ -239,7 +239,7 @@ class UserController extends Controller
      *      operationId="forgotPassword",
      *      tags={"User"},
      *      summary="Request a new password",
-     *      description="Request a new password, it actually sets the password to `welcome01`",
+     *      description="Request a new password, it actually sets the password to `welcome02`",
      *     @OA\RequestBody(
      *        @OA\MediaType(
      *                mediaType="application/json",
