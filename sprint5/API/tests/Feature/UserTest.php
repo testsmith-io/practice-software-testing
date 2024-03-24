@@ -44,7 +44,7 @@ class UserTest extends TestCase
             'phone' => '0987654321',
             'dob' => '1970-01-01',
             'email' => 'john@doe.example',
-            'password' => 'super-secret'
+            'password' => 'Test3r01!'
         ];
 
         $response = $this->postJson('/users/register', $userData);
@@ -71,7 +71,7 @@ class UserTest extends TestCase
             'phone' => '0987654321',
             'dob' => '1970-01-01',
             'email' => 'john@doe.example',
-            'password' => 'super-secret'
+            'password' => 'Test3r01!'
         ];
 
         $this->postJson('/users/register', $userData);
@@ -410,8 +410,8 @@ class UserTest extends TestCase
     {
         $response = $this->postJson('/users/change-password', [
             'current_password' => 'welcome01',
-            'new_password' => 'newstrongpassword',
-            'new_password_confirmation' => 'newstrongpassword'
+            'new_password' => 'Test3r01!',
+            'new_password_confirmation' => 'Test3r01!'
         ], $this->headers($this->user));
 
         $response->assertOk()
