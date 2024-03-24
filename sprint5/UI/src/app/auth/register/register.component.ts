@@ -73,7 +73,9 @@ export class RegisterComponent implements OnInit {
         if (err.error === 'Duplicate Entry') {
           this.error = 'Email is already in use.';
         } else {
-          this.error = Object.values(err).join('\r\n');
+          this.error = Object.values(err)
+            .map((fieldErrors: any) => fieldErrors.join('\n'))
+            .join('\n');
         }
       }
     });
