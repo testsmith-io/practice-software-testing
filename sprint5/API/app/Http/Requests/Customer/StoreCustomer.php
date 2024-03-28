@@ -49,7 +49,7 @@ class StoreCustomer extends BaseFormRequest
             'country' => ['string', 'max:40', new SubscriptSuperscriptRule()],
             'postcode' => ['string', 'max:10', new SubscriptSuperscriptRule()],
             'phone' => ['string', 'max:24', new SubscriptSuperscriptRule()],
-            'dob' => ['date', 'date_format:d/m/Y',"before:{$before}"],
+            'dob' => ['date', 'date_format:Y-m-d',"before:{$before}"],
             'email' => ['required', 'unique:users,email', 'string', 'max:256', new SubscriptSuperscriptRule()],
             'password' => ['required', Password::min(8)->mixedCase()->numbers()->symbols()->uncompromised(), new SubscriptSuperscriptRule()]
         ];
