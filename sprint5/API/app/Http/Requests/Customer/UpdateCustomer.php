@@ -4,6 +4,7 @@ namespace app\Http\Requests\Customer;
 
 use App\Http\Requests\BaseFormRequest;
 use App\Rules\SubscriptSuperscriptRule;
+use Carbon\Carbon;
 
 class UpdateCustomer extends BaseFormRequest
 {
@@ -18,12 +19,26 @@ class UpdateCustomer extends BaseFormRequest
     }
 
     /**
+     * Get custom validation messages.
+     *
+     * @return array
+     */
+    public function messages(): array
+    {
+        return ['dob.before' => 'Customer must be 18 years old.',
+            'email.unique' => 'A customer with this email address already exists.'];
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
     public function rules(): array
     {
+        $dt = new Carbon();
+        $before = $dt->subYears(18)->format('Y-m-d');
+
         return [
             'first_name' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'last_name' => ['required', 'string', 'max:20', new SubscriptSuperscriptRule()],
@@ -33,7 +48,7 @@ class UpdateCustomer extends BaseFormRequest
             'country' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'postcode' => ['nullable', 'string', 'max:10', new SubscriptSuperscriptRule()],
             'phone' => ['nullable', 'string', 'max:24', new SubscriptSuperscriptRule()],
-            'dob' => ['date', 'date_format:d/m/Y',"before:{$before}"],
+            'dob' => ['date', 'date_format:Y-m-d',"before:{$before}"],
             'email' => ['required', 'string', 'max:256', new SubscriptSuperscriptRule()]
         ];
     }
