@@ -33,6 +33,7 @@ class UpdateCustomer extends BaseFormRequest
             'country' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'postcode' => ['nullable', 'string', 'max:10', new SubscriptSuperscriptRule()],
             'phone' => ['nullable', 'string', 'max:24', new SubscriptSuperscriptRule()],
+            'dob' => ['date', 'date_format:d/m/Y',"before:{$before}"],
             'email' => ['required', 'string', 'max:256', new SubscriptSuperscriptRule()]
         ];
     }
