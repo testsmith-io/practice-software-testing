@@ -147,7 +147,8 @@ class UserTest extends TestCase
         $response->assertStatus(ResponseAlias::HTTP_OK);
 
         $response->assertJson(['message' => 'Successfully logged out']);
-        $this->assertFalse(Auth::check());
+        JWTAuth::fromUser($this->user);
+        $this->assertFalse(JWTAuth::check());
     }
 
     public function testUserCanRefreshToken()

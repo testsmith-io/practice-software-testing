@@ -10,24 +10,24 @@
         "darkaonline/l5-swagger": "^8.5",
         "guzzlehttp/guzzle": "^7.2",
         "haruncpi/laravel-id-generator": "^1.1",
-        "laravel/framework": "^10.0",
-        "laravel/sanctum": "^3.2",
+        "laravel/framework": "^11.0",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.8",
         "mehradsadeghi/laravel-filter-querystring": "^1.1",
         "socialconnect/auth": "3.3.5",
         "socialconnect/http-client": "^1.0",
         "spatie/array-to-xml": "^3.2",
-        "tymon/jwt-auth": "^2.0",
-        "zircote/swagger-php": "3.3.7"
+        "tymon/jwt-auth": "2.1.1",
+        "zircote/swagger-php": "4.8.7"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^7.0",
-        "phpunit/php-code-coverage": "^10.1",
-        "phpunit/phpunit": "^10.0",
+        "nunomaduro/collision": "^8.1",
+        "phpunit/php-code-coverage": "^11.0.3",
+        "phpunit/phpunit": "^11.1.1",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
