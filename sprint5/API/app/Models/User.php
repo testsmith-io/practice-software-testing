@@ -23,6 +23,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  *         @OA\Property(property="postcode", type="string", example="1234AA"),
  *         @OA\Property(property="phone", type="string", example="0987654321"),
  *         @OA\Property(property="dob", type="string", example="1970-01-01"),
+ *         @OA\Property(property="password", type="string", example="super-secret"),
  *         @OA\Property(property="email", type="string", example="john@doe.example")
  *     }
  * )
