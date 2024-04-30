@@ -3,8 +3,7 @@
     <table class="table table-hover">
       <thead>
       <tr>
-        <th class="col-md-3" scope="col">Item</th>
-        <th class="col-md-2" scope="col"></th>
+        <th class="col-md-5" scope="col">Item</th>
         <th class="col-md-2" scope="col">Quantity</th>
         <th class="col-md-2 text-end" scope="col">Price</th>
         <th class="col-md-2 text-end" scope="col">Total</th>
@@ -23,12 +22,13 @@
               <small
               >Item for rent, price per hour</small>
             }</td>
-            <td class="col-md-2"></td>
             <td class="col-md-2 align-middle">
-              <input type="number" min="1" max="99" class="form-control quantity"
+              <label for="quantity-{{item.id}}" class="visually-hidden">Quantity for {{item.product.name}}</label>
+              <input type="number" id="quantity-{{item.id}}" min="1" max="99" class="form-control quantity"
                      (change)="updateQuantity($event, item)"
-                     value="{{item.quantity}}">
+                     [value]="item.quantity">
             </td>
+
             <td class="col-md-2 text-end"><span
               [ngClass]="{'discounted' : item.discounted_price}">${{ item.product.price | number: '1.2-2' }}</span>@if (item.discounted_price) {
               <br
@@ -55,16 +55,14 @@
         }
         @if (cart.additional_discount_percentage) {
           <tr>
-            <td class="col-md-3"></td>
-            <td class="col-md-2"></td>
+            <td class="col-md-5"></td>
             <td class="col-md-2"></td>
             <td class="col-md-2 text-end"><strong>Subtotal</strong></td>
             <td class="col-md-2 text-end">${{ subtotal | number: '1.2-2' }}</td>
             <td class="col-md-1"></td>
           </tr>
           <tr>
-            <td class="col-md-3"></td>
-            <td class="col-md-2"></td>
+            <td class="col-md-5"></td>
             <td class="col-md-2"></td>
             <td class="col-md-2 text-end"><strong>Discount ({{cart.additional_discount_percentage}}%)</strong></td>
             <td class="col-md-2 text-end">- ${{ discount | number: '1.2-2' }}</td>
@@ -74,8 +72,7 @@
       </tbody>
       <tfoot>
       <tr>
-        <td class="col-md-3"></td>
-        <td class="col-md-2"></td>
+        <td class="col-md-5"></td>
         <td class="col-md-2"></td>
         <td class="col-md-2 text-end"><strong>Total</strong></td>
         <td class="col-md-2 text-end">${{ total | number: '1.2-2' }}</td>

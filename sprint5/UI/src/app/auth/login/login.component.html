@@ -4,76 +4,75 @@
       <h3>Login</h3>
       @if (environment.production) {
         <div class="text-center my-4">
-          <button (click)="socialLogin('google')" type="button" class="google-sign-in-button">
+          <button (click)="socialLogin('google')" type="button" aria-label="Sign in with Google"
+                  class="google-sign-in-button">
             Sign in with Google
           </button>
         </div>
       }
 
       @if (environment.production) {
-        <div class="separator">or use</div>
+        <div role="separator" aria-label="Alternative login methods">or use</div>
       }
 
-      <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete=off data-test="login-form">
-        <div class="input-group mb-3">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off" data-test="login-form">
+        <div class="mb-3">
+          <label for="email" class="form-label">Your E-mail *</label>
           <input formControlName="email"
                  class="form-control"
                  id="email"
                  data-test="email"
-                 [ngClass]="{ 'is-invalid': submitted && cf['email'].errors }" type="text"
-                 placeholder="Your E-mail *"
-                 value=""/>
+                 [ngClass]="{ 'is-invalid': submitted && cf['email'].errors }" type="email"
+                 placeholder="Enter your E-mail"
+                 aria-required="true"
+                 [attr.aria-describedby]="(email.invalid && submitted) ? 'email-error' : null"
+                 [attr.aria-invalid]="email.invalid && submitted ? 'true' : 'false'"/>
         </div>
         @if (email.invalid && submitted) {
-          <div data-test="email-error"
-               class="alert alert-danger">
+          <div id="email-error" data-test="email-error" class="alert alert-danger">
             @if (email.errors?.required) {
-              <div>
-                E-mail is required.
-              </div>
+              <div>E-mail is required.</div>
             }
             @if (email.errors?.['email']) {
-              <div>
-                E-mail format is invalid.
-              </div>
+              <div>E-mail format is invalid.</div>
             }
           </div>
         }
-        <div class="input-group mb-3">
+        <div class="mb-3">
+          <label for="password">Your Password *</label>
           <input formControlName="password"
                  class="form-control"
                  id="password"
                  data-test="password"
                  [ngClass]="{ 'is-invalid': submitted && cf['password'].errors }" type="password"
-                 placeholder="Your Password *" value=""/>
+                 placeholder="Enter your Password"
+                 aria-required="true"
+                 [attr.aria-describedby]="(password.invalid && submitted) ? 'password-error' : null"
+                 [attr.aria-invalid]="password.invalid && submitted ? 'true' : 'false'"/>
         </div>
         @if (password.invalid && submitted) {
-          <div data-test="password-error"
-               class="alert alert-danger">
+          <div id="password-error" data-test="password-error" class="alert alert-danger">
             @if (password.errors?.required) {
-              <div>
-                Password is required.
-              </div>
+              <div>Password is required.</div>
             }
             @if (password.errors?.['minlength'] || password.errors?.['maxlength']) {
-              <div>
-                Password length is invalid
-              </div>
+              <div>Password length is invalid</div>
             }
           </div>
         }
         <div class="input-group mb-3">
-          <input type="submit" data-test="login-submit" class="btnSubmit" value="Login"/>
+          <input type="submit" data-test="login-submit" class="btnSubmit" value="Login" aria-label="Login"/>
         </div>
         @if (error) {
-          <div data-test="login-error" class="alert alert-danger">
+          <div data-test="login-error" class="alert alert-danger" aria-live="assertive">
             <div class="help-block">{{ error }}</div>
           </div>
         }
         <div class="input-group mb-3">
-          <p>Not yet an account? <a data-test="register-link" routerLink="/auth/register">Register your account</a><br/>
-            <a data-test="forgot-password-link" routerLink="/auth/forgot-password" class="ForgetPwd">Forgot your
-              Password?</a></p>
+          <p>Not yet an account? <a data-test="register-link" routerLink="/auth/register"
+                                    aria-label="Register your account">Register your account</a><br/>
+            <a data-test="forgot-password-link" routerLink="/auth/forgot-password" class="ForgetPwd"
+               aria-label="Forgot your Password?">Forgot your Password?</a></p>
         </div>
       </form>
     </div>

@@ -15,7 +15,8 @@
     </div>
     <div class="col-md-6">
       <h1 data-test="product-name">{{ product.name }}</h1>
-      <p><span aria-label="category" class="badge rounded-pill bg-secondary me-1">{{ product.category.name }}</span><span
+      <p><span aria-label="category"
+               class="badge rounded-pill bg-secondary me-1">{{ product.category.name }}</span><span
         aria-label="brand" class="badge rounded-pill bg-secondary me-1">{{ product.brand.name }}
     </span>@if (product.discount_price) {
         <span
@@ -46,13 +47,19 @@
         {{ product.description }}</p>
       @if (!product.is_rental) {
         <div class="input-group quantity">
+          <!-- Button to decrease quantity -->
           <button [disabled]="!product.in_stock" class="btn btn-secondary" data-test="decrease-quantity"
-                  id="btn-decrease-quantity" (click)="minus()"><i class="fa fa-minus"></i>
+                  id="btn-decrease-quantity" (click)="minus()" aria-label="Decrease quantity"><i class="fa fa-minus"></i>
           </button>
+          <!-- Quantity input field with associated label -->
+          <!-- Label for the input, visually hidden but accessible to screen readers -->
+          <label for="quantity-input" class="visually-hidden">Quantity</label>
           <input [disabled]="!product.in_stock" type="number" min="1" class="form-control" data-test="quantity"
-                 [(ngModel)]="quantity">
+                 [(ngModel)]="quantity" id="quantity-input" aria-labelledby="quantity-input">
+          <!-- Button to increase quantity -->
           <button [disabled]="!product.in_stock" class="btn btn-secondary" data-test="increase-quantity"
-                  id="btn-increase-quantity" (click)="plus()"><i class="fa fa-plus"></i></button>
+                  id="btn-increase-quantity" (click)="plus()" aria-label="Increase quantity"><i class="fa fa-plus"></i>
+          </button>
         </div>
       }
       @if (product.is_rental) {
@@ -85,11 +92,11 @@
   <h1>Related products</h1>
   <div class="col">
     <div class="container">
-      @for (item of relatedProducts;track item) {
+      @for (item of relatedProducts; track item) {
         <a routerLink="/product/{{item.id}}" class="card"
            style="text-decoration: none; color: black;">
           <div class="card-img-wrapper">
-            <img class="card-img-top" src="assets/img/products/{{item.product_image.file_name}}">
+            <img class="card-img-top" alt="{{item.name}}" src="assets/img/products/{{item.product_image.file_name}}">
           </div>
           <div class="card-body">
             <h5 class="card-title">

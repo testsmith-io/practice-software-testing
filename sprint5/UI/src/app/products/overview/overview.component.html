@@ -39,8 +39,9 @@
     <hr>
     <form [formGroup]="search" (ngSubmit)="onSearchSubmit()" autocomplete=off>
       <div class="input-group mb-3">
-        <input formControlName="query" data-test="search-query" type="text" placeholder="Search" class="form-control">
-        <button data-test="search-submit" (click)="reset()" class="btn btn-warning" type="reset"
+        <label for="search-query" class="visually-hidden">Search</label>
+        <input formControlName="query" id="search-query" data-test="search-query" type="text" placeholder="Search" class="form-control">
+        <button (click)="reset()" class="btn btn-warning" type="reset"
                 data-test="search-reset">X
         </button>
         <button class="btn btn-secondary" type="submit" data-test="search-submit">Search</button>
@@ -51,47 +52,53 @@
     <hr>
     <h4>By category:</h4>
     <ng-template #recursiveList let-list>
-      @for (category of list;track category) {
-      <div class="checkbox">
-        <label>
-          <!-- Parent category checkbox -->
-          @if (!category.parent_id) {
-            <input type="checkbox" class="icheck"
-                   attr.data-test="category-{{category.id}}" name="category_id"
-                   value="{{category.id}}"
-                   [checked]="isCategorySelected(category)"
-                   (change)="selectParentWithSubcategories(category, $event)"/>
-          } @else {
-          <input type="checkbox" class="icheck"
-                 attr.data-test="category-{{category.id}}" name="category_id"
-                 value="{{category.id}}"
-                 [checked]="isCategorySelected(category)"
-                 (change)="filterByCategory($event)"/>
-          }
-        {{ category.name }}
-      </label>
-        <!-- Subcategories -->
-        @if (category.sub_categories.length > 0) {
-        <ul>
-          <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: category.sub_categories }"></ng-container>
-        </ul>
+      <fieldset>
+        <legend class="visually-hidden">Categories</legend>
+        @for (category of list; track category) {
+          <div class="checkbox">
+            <label>
+              <!-- Parent category checkbox -->
+              @if (!category.parent_id) {
+                <input type="checkbox" class="icheck"
+                       attr.data-test="category-{{category.id}}" name="category_id"
+                       value="{{category.id}}"
+                       [checked]="isCategorySelected(category)"
+                       (change)="selectParentWithSubcategories(category, $event)"/>
+              } @else {
+                <input type="checkbox" class="icheck"
+                       attr.data-test="category-{{category.id}}" name="category_id"
+                       value="{{category.id}}"
+                       [checked]="isCategorySelected(category)"
+                       (change)="filterByCategory($event)"/>
+              }
+              {{ category.name }}
+            </label>
+            <!-- Subcategories -->
+            @if (category.sub_categories.length > 0) {
+              <ul>
+                <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: category.sub_categories }"></ng-container>
+              </ul>
+            }
+          </div>
         }
-      </div>
-      }
+      </fieldset>
     </ng-template>
     <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: categories }"></ng-container>
 
     <div class="py-2"></div>
 
     <h4>By brand:</h4>
-    @for (brand of brands;track brand.id) {
-      <div class="checkbox">
-        <label><input #checkboxes type="checkbox" class="icheck" name="brand_id" attr.data-test="brand-{{brand.id}}"
-                      value="{{brand.id}}"
-                      (change)="filterByBrand($event)"/>
-          {{ brand.name }}</label>
-      </div>
-    }
+    <fieldset>
+      <legend class="visually-hidden">Brands</legend>
+      @for (brand of brands; track brand.id) {
+        <div class="checkbox">
+          <label><input #checkboxes type="checkbox" class="icheck" name="brand_id" attr.data-test="brand-{{brand.id}}"
+                        value="{{brand.id}}"
+                        (change)="filterByBrand($event)"/>
+            {{ brand.name }}</label>
+        </div>
+      }
+    </fieldset>
 
   </div>
   <div class="col-md-9">

@@ -4,102 +4,56 @@
       <h3>Billing Address</h3>
       <form [formGroup]="cusAddress">
         <div class="input-group mb-3">
+          <label for="address" class="visually-hidden">Address</label>
           <input formControlName="address"
                  data-test="address"
                  class="form-control"
                  id="address"
                  [ngClass]="{ 'is-invalid': cusAddress && cusAddress.address?.errors }" type="text"
-                 placeholder="Your Address *"
-                 value=""/>
+                 placeholder="Your Address *"/>
         </div>
-        @if (f['address'].invalid && (f['address'].dirty || f['address'].touched)) {
-          <div
-            class="alert alert-danger">
-            @if (f['address'].errors?.['required']) {
-              <div>
-                Address is required.
-              </div>
-            }
-          </div>
-        }
+
         <div class="input-group mb-3">
+          <label for="city" class="visually-hidden">City</label>
           <input formControlName="city"
                  data-test="city"
                  class="form-control"
                  id="city"
                  [ngClass]="{ 'is-invalid': cusAddress && cusAddress.city?.errors }" type="text"
-                 placeholder="Your City *"
-                 value=""/>
+                 placeholder="Your City *"/>
         </div>
-        @if (f['city'].invalid && (f['city'].dirty || f['city'].touched)) {
-          <div
-            class="alert alert-danger">
-            @if (f['city'].errors?.['required']) {
-              <div>
-                City is required.
-              </div>
-            }
-          </div>
-        }
+
         <div class="input-group mb-3">
+          <label for="state" class="visually-hidden">State</label>
           <input formControlName="state"
                  data-test="state"
                  class="form-control"
                  id="state"
                  [ngClass]="{ 'is-invalid': cusAddress && cusAddress.state?.errors }" type="text"
-                 placeholder="Your State *"
-                 value=""/>
+                 placeholder="Your State *"/>
         </div>
-        @if (f['state'].invalid && (f['state'].dirty || f['state'].touched)) {
-          <div
-            class="alert alert-danger">
-            @if (f['state'].errors?.['required']) {
-              <div>
-                State is required.
-              </div>
-            }
-          </div>
-        }
+
         <div class="input-group mb-3">
+          <label for="country" class="visually-hidden">Country</label>
           <input formControlName="country"
                  data-test="country"
                  class="form-control"
                  id="country"
                  [ngClass]="{ 'is-invalid': cusAddress && cusAddress.country?.errors }" type="text"
-                 placeholder="Your Country *"
-                 value=""/>
+                 placeholder="Your Country *"/>
         </div>
-        @if (f['country'].invalid && (f['country'].dirty || f['country'].touched)) {
-          <div
-            class="alert alert-danger">
-            @if (f['country'].errors?.['required']) {
-              <div>
-                Country is required.
-              </div>
-            }
-          </div>
-        }
+
         <div class="input-group mb-3">
+          <label for="postcode" class="visually-hidden">Postcode</label>
           <input formControlName="postcode"
                  data-test="postcode"
                  class="form-control"
                  id="postcode"
                  [ngClass]="{ 'is-invalid': cusAddress && cusAddress.postcode?.errors }" type="text"
-                 placeholder="Your Postcode *"
-                 value=""/>
+                 placeholder="Your Postcode *"/>
         </div>
-        @if (f['postcode'].invalid && (f['postcode'].dirty || f['postcode'].touched)) {
-          <div
-            class="alert alert-danger">
-
-            @if (f['postcode'].errors?.['maxlength'] || f['postcode'].errors?.['required']) {
-              <div>
-                Postalcode is required.
-              </div>
-            }
-          </div>
-        }
       </form>
+
       <div class="float-end">
         <button data-test="proceed-3" [disabled]="!cusAddress.valid" type="button" class="btn btn-success"
                 awNextStep>Proceed to checkout
