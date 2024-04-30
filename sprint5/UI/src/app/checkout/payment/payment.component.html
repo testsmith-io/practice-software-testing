@@ -10,10 +10,10 @@
         <h3>Payment</h3>
         <form [formGroup]="cusPayment">
           <div class="input-group mb-3">
-            <select data-test="payment-method" id="payment-method" class="form-select"
-                    formControlName="payment_method">
+            <label for="payment-method" class="visually-hidden">Payment Method</label>
+            <select data-test="payment-method" id="payment-method" class="form-select" formControlName="payment_method">
               <option value="" disabled>Choose your payment method</option>
-              @for (method of PaymentMethods;track method) {
+              @for (method of PaymentMethods; track method) {
                 <option [ngValue]="method">{{ method }}</option>
               }
             </select>
@@ -32,7 +32,8 @@
 
           <!-- Bank Transfer Fields -->
           <div *ngIf="cusPayment.get('payment_method').value === 'Bank Transfer'">
-            <input class="form-control mb-3" formControlName="bank_name" data-test="bank_name" placeholder="Bank Name">
+            <label for="bank_name" class="visually-hidden">Bank Name</label>
+            <input class="form-control mb-3" id="bank_name" formControlName="bank_name" data-test="bank_name" placeholder="Bank Name">
             @if (p['bank_name'].invalid && (p['bank_name'].dirty || p['bank_name'].touched)) {
               <div class="alert alert-danger">
                 @if (p['bank_name'].errors?.['pattern'] || p['bank_name'].errors?.['required']) {
@@ -42,7 +43,9 @@
                 }
               </div>
             }
-            <input class="form-control mb-3" formControlName="account_name" data-test="account_name" placeholder="Account Name">
+            <label for="account_name" class="visually-hidden">Account Name</label>
+            <input class="form-control mb-3" id="account_name" formControlName="account_name" data-test="account_name"
+                   placeholder="Account Name">
             @if (p['account_name'].invalid && (p['account_name'].dirty || p['account_name'].touched)) {
               <div class="alert alert-danger">
                 @if (p['account_name'].errors?.['pattern'] || p['account_name'].errors?.['required']) {
@@ -52,7 +55,9 @@
                 }
               </div>
             }
-            <input class="form-control" formControlName="account_number" data-test="account_number" aria-describedby="account_number_help"
+            <label for="account_number" class="visually-hidden">Account Number</label>
+            <input class="form-control" id="account_number" formControlName="account_number" data-test="account_number"
+                   aria-describedby="account_number_help"
                    placeholder="Account Number">
             <small id="account_number_help" class="form-text text-muted d-block mb-3">Please enter your bank account
               number as it appears on your bank statement. It's a unique series of numbers used to identify your
@@ -70,7 +75,9 @@
 
           <!-- Gift Card Fields -->
           <div *ngIf="selectedPaymentMethod === 'Gift Card'">
-            <input class="form-control" formControlName="gift_card_number" data-test="gift_card_number" aria-describedby="gift_card_number_help"
+            <label for="gift_card_number" class="visually-hidden">Gift Card Number</label>
+            <input class="form-control" id="gift_card_number" formControlName="gift_card_number" data-test="gift_card_number"
+                   aria-describedby="gift_card_number_help"
                    placeholder="Gift Card Number">
             <small id="gift_card_number_help" class="form-text text-muted d-block mb-3">Enter the unique number found on
               your gift card. This number is usually located on the back of the card and may consist of digits and/or
@@ -84,7 +91,9 @@
                 }
               </div>
             }
-            <input class="form-control" formControlName="validation_code" data-test="validation_code" aria-describedby="validation_code_help"
+            <label for="validation_code" class="visually-hidden">Validation Code</label>
+            <input class="form-control" id="validation_code" formControlName="validation_code" data-test="validation_code"
+                   aria-describedby="validation_code_help"
                    placeholder="Validation Code">
             <small id="validation_code_help" class="form-text text-muted d-block mb-3">The validation code is a security
               feature found on your gift card, often located near the gift card number. Enter this code exactly as it
@@ -102,7 +111,9 @@
 
           <!-- Credit Card Fields -->
           <div *ngIf="selectedPaymentMethod === 'Credit Card'">
-            <input class="form-control" formControlName="credit_card_number" data-test="credit_card_number" aria-describedby="credit_card_number_help"
+            <label for="credit_card_number" class="visually-hidden">Credit Card Number</label>
+            <input class="form-control" id="credit_card_number" formControlName="credit_card_number" data-test="credit_card_number"
+                   aria-describedby="credit_card_number_help"
                    placeholder="Credit Card Number">
             <small id="credit_card_number_help" class="form-text text-muted d-block mb-3">Enter your 16-digit credit
               card number as it appears on the card, in the format 0000-0000-0000-0000. Ensure that you include the
@@ -110,14 +121,15 @@
             @if (p['credit_card_number'].invalid && (p['credit_card_number'].dirty || p['credit_card_number'].touched)) {
               <div class="alert alert-danger">
                 @if (p['credit_card_number'].errors?.['pattern']) {
-                <div>
-                  Invalid card number format.
-                </div>
+                  <div>
+                    Invalid card number format.
+                  </div>
                 }
               </div>
             }
-
-            <input class="form-control mb-3" formControlName="expiration_date" data-test="expiration_date" placeholder="Expiration Date">
+            <label for="expiration_date" class="visually-hidden">Expiration Date</label>
+            <input class="form-control mb-3" id="expiration_date" formControlName="expiration_date" data-test="expiration_date"
+                   placeholder="Expiration Date">
             @if (p['expiration_date'].invalid && (p['expiration_date'].dirty || p['expiration_date'].touched)) {
               <div class="alert alert-danger">
                 @if (p['expiration_date'].errors?.['dateFormat'] || p['expiration_date'].errors?.['required']) {
@@ -132,7 +144,9 @@
                 }
               </div>
             }
-            <input class="form-control" formControlName="cvv" data-test="cvv" aria-describedby="cvv_help" placeholder="CVV">
+            <label for="cvv" class="visually-hidden">CVV</label>
+            <input class="form-control" id="cvv" formControlName="cvv" data-test="cvv" aria-describedby="cvv_help"
+                   placeholder="CVV">
             <small id="cvv_help" class="form-text text-muted d-block mb-3">The CVV is a 3-digit or 4-digit number. It's
               used for added security during card-not-present transactions.</small>
             @if (p['cvv'].invalid && (p['cvv'].dirty || p['cvv'].touched)) {
@@ -144,7 +158,9 @@
                 }
               </div>
             }
-            <input class="form-control mb-3" formControlName="card_holder_name" data-test="card_holder_name" placeholder="Card Holder Name">
+            <label for="card_holder_name" class="visually-hidden">Card Holder Name</label>
+            <input class="form-control mb-3" id="card_holder_name" formControlName="card_holder_name" data-test="card_holder_name"
+                   placeholder="Card Holder Name">
             @if (p['card_holder_name'].invalid && (p['card_holder_name'].dirty || p['card_holder_name'].touched)) {
               <div class="alert alert-danger">
                 @if (p['card_holder_name'].errors?.['required']) {
@@ -158,6 +174,7 @@
 
           <!-- Buy Now Pay Later Fields -->
           <div *ngIf="selectedPaymentMethod === 'Buy Now Pay Later'">
+            <label for="monthly_installments" class="visually-hidden">Monthly Installments</label>
             <select data-test="monthly_installments" id="monthly_installments"
                     aria-describedby="monthly_installments_help" class="form-select"
                     formControlName="monthly_installments">
