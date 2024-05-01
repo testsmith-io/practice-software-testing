@@ -12,7 +12,7 @@
       }
 
       @if (environment.production) {
-        <div role="separator" aria-label="Alternative login methods">or use</div>
+        <div class="separator" aria-label="Alternative login methods">or use</div>
       }
 
       <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off" data-test="login-form">
