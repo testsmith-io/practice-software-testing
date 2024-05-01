@@ -72,3 +72,6 @@ a {
 ul.steps-indicator li a div.label{
   color: #595959;
 }
+.text-danger {
+  color: #CA0B00 !important;
+}
