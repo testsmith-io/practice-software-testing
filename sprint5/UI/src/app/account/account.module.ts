@@ -15,13 +15,13 @@ import {PaginationComponent} from "../pagination/pagination.component";
 import {SharedModule} from "../shared.module";
 
 const routes: Routes = [
-  {path: '', component: OverviewComponent, canActivate: [UserAuthGuard]},
-  {path: 'profile', component: ProfileComponent, canActivate: [UserAuthGuard]},
-  {path: 'favorites', component: FavoritesComponent, canActivate: [UserAuthGuard]},
-  {path: 'messages', component: MessagesComponent, canActivate: [UserAuthGuard]},
-  {path: 'messages/:id', component: MessageDetailComponent, canActivate: [UserAuthGuard]},
-  {path: 'invoices', component: InvoicesComponent, canActivate: [UserAuthGuard]},
-  {path: 'invoices/:id', component: InvoiceDetails, canActivate: [UserAuthGuard]},
+  { path: '', component: OverviewComponent, canActivate: [UserAuthGuard], data: { title: 'Overview' } },
+  { path: 'profile', component: ProfileComponent, canActivate: [UserAuthGuard], data: { title: 'Profile' } },
+  { path: 'favorites', component: FavoritesComponent, canActivate: [UserAuthGuard], data: { title: 'Favorites' } },
+  { path: 'messages', component: MessagesComponent, canActivate: [UserAuthGuard], data: { title: 'Messages' } },
+  { path: 'messages/:id', component: MessageDetailComponent, canActivate: [UserAuthGuard], data: { title: '' } },
+  { path: 'invoices', component: InvoicesComponent, canActivate: [UserAuthGuard], data: { title: 'Invoices' } },
+  { path: 'invoices/:id', component: InvoiceDetails, canActivate: [UserAuthGuard], data: { title: '' } },
 ];
 
 @NgModule({

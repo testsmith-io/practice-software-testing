@@ -6,6 +6,7 @@ import {ActivatedRoute} from "@angular/router";
 import {HttpResponse} from "@angular/common/http";
 import {interval, of, Subscription} from 'rxjs';
 import {switchMap, takeWhile} from 'rxjs/operators';
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-details',
@@ -20,14 +21,18 @@ export class DetailsComponent implements OnInit, OnDestroy {
   private pollingSubscription?: Subscription;
 
   constructor(private invoiceService: InvoiceService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private titleService: Title) {
   }
 
   ngOnInit(): void {
     this.invoiceService.getInvoice(this.route.snapshot.params["id"])
       .pipe(
         first(),
-        tap((invoice) => this.invoice = invoice),
+        tap((invoice) => {
+          this.invoice = invoice;
+          this.updateTitle(this.invoice.invoice_number);
+        }),
         concatMap(() => interval(20000).pipe(
           startWith(0),
           switchMap(() => this.invoiceService.getInvoicePdfStatus(this.invoice.invoice_number)
@@ -81,5 +86,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
     if (this.pollingSubscription) {
       this.pollingSubscription.unsubscribe();
     }
+  }
+
+  private updateTitle(invoiceNumber: string) {
+    this.titleService.setTitle(`Invoice: ${invoiceNumber} - Practice Software Testing - Toolshop - v5.0`);
   }
 }
