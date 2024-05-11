@@ -29,6 +29,7 @@ import {CartComponent} from "./checkout/cart/cart.component";
 import {LoginComponent} from "./checkout/login/login.component";
 import {AddressComponent} from "./checkout/address/address.component";
 import {PaymentComponent} from "./checkout/payment/payment.component";
+import {GaService} from "./_services/ga.service";
 
 @NgModule({
   declarations: [
@@ -62,7 +63,7 @@ import {PaymentComponent} from "./checkout/payment/payment.component";
         PaginationComponent,
         RouterLink
     ],
-  providers: [UserAuthGuard, AdminAuthGuard, {
+  providers: [GaService, UserAuthGuard, AdminAuthGuard, {
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptor,
     multi: true

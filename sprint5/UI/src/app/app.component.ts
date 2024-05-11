@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Spinkit} from "ng-http-loader";
+import {GaService} from "./_services/ga.service";
 
 @Component({
   selector: 'app-root',
@@ -11,6 +12,8 @@ export class AppComponent implements OnInit {
   public spinkit = Spinkit;
   title = 'Toolshop';
 
+  constructor(private gaService: GaService) {
+  }
   ngOnInit(): void {
     if (!window.localStorage.getItem('GEO_LOCATION') &&
       window.localStorage.getItem('RETRIEVE_GEOLOCATION')) {
