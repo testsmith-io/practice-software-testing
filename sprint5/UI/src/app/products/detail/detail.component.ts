@@ -8,6 +8,7 @@ import DiscountUtil from "../../_helpers/discount.util";
 import {ProductService} from "../../_services/product.service";
 import { Options } from 'ngx-slider-v2';
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-detail',
@@ -31,8 +32,8 @@ export class DetailComponent implements OnInit {
               private route: ActivatedRoute,
               private toastService: ToastService,
               private productService: ProductService,
-              public browserDetect: BrowserDetectorService) {
-
+              public browserDetect: BrowserDetectorService,
+              private titleService: Title) {
   }
 
   ngOnInit(): void {
@@ -57,6 +58,7 @@ export class DetailComponent implements OnInit {
   getProduct(id: string) {
     this.productService.getProduct(id).subscribe(response => {
       this.product = response;
+      this.updateTitle(this.product.name);
       if (this.product.is_location_offer) {
         this.product.discount_price = DiscountUtil.calculateDiscount(this.product.price);
       }
@@ -96,6 +98,10 @@ export class DetailComponent implements OnInit {
         this.toastService.show('Product added to shopping cart.', {classname: 'bg-success text-light'});
       });
     }
+  }
+
+  private updateTitle(productName: string) {
+    this.titleService.setTitle(`${productName} - Practice Software Testing - Toolshop - v5.0`);
   }
 
 }

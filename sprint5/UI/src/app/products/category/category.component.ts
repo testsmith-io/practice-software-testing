@@ -9,6 +9,7 @@ import DiscountUtil from "../../_helpers/discount.util";
 import {ProductService} from "../../_services/product.service";
 import {Pagination} from "../../models/pagination";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-category',
@@ -32,12 +33,14 @@ export class CategoryComponent implements OnInit {
               private route: ActivatedRoute,
               private brandService: BrandService,
               private categoryService: CategoryService,
-              public browserDetect: BrowserDetectorService) {
+              public browserDetect: BrowserDetectorService,
+              private titleService: Title) {
   }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.slug = params['name'];
+
       this.getProductsByCategory(this.slug);
       this.brandService.getBrands().subscribe(response => {
         this.brands = response;
@@ -45,6 +48,7 @@ export class CategoryComponent implements OnInit {
 
       this.categoryService.getSubCategoriesTreeBySlug(this.slug).subscribe(response => {
         this.categories = response;
+        this.updateTitle(this.categories[0].name);
       });
     });
 
@@ -124,5 +128,8 @@ export class CategoryComponent implements OnInit {
     });
   }
 
+  private updateTitle(categoryName: string) {
+    this.titleService.setTitle(`${categoryName} - Practice Software Testing - Toolshop - v5.0`);
+  }
 
 }

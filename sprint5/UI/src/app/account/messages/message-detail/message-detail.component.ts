@@ -4,6 +4,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {ContactService} from "../../../_services/contact.service";
 import {ActivatedRoute} from "@angular/router";
 import {first} from "rxjs/operators";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-message-detail',
@@ -23,7 +24,8 @@ export class MessageDetailComponent implements OnInit {
 
   constructor(private messageService: ContactService,
               private route: ActivatedRoute,
-              private formBuilder: FormBuilder) { }
+              private formBuilder: FormBuilder,
+              private titleService: Title) { }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -39,6 +41,7 @@ export class MessageDetailComponent implements OnInit {
       .pipe(first())
       .subscribe((message)=> {
         this.message = message;
+        this.updateTitle(this.message.id.toString());
       });
   }
 
@@ -83,6 +86,10 @@ export class MessageDetailComponent implements OnInit {
       this.form.controls[name].setValue('');
       this.form.controls[name].setErrors(null);
     }
+  }
+
+  private updateTitle(messageId: string) {
+    this.titleService.setTitle(`Message: ${messageId} - Practice Software Testing - Toolshop - v5.0`);
   }
 
 }

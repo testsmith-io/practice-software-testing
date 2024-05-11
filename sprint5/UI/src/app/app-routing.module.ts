@@ -9,16 +9,16 @@ import {DetailComponent as ProductDetailComponent} from './products/detail/detai
 import {PrivacyComponent} from "./privacy/privacy.component";
 
 const routes: Routes = [
-  {path: "", component: ProductOverviewComponent},
-  {path: 'product/:id', component: ProductDetailComponent},
-  {path: 'category/:name', component: ProductCategoryComponent},
-  {path: 'rentals', component: ProductRentalsOverviewComponent},
-  {path: 'checkout', component: CheckoutComponent},
-  {path: 'contact', component: ContactComponent},
-  {path: 'privacy', component: PrivacyComponent},
-  {path: 'auth', loadChildren: () => import(`./auth/auth.module`).then(m => m.AuthModule)},
-  {path: 'account', loadChildren: () => import(`./account/account.module`).then(m => m.AccountModule)},
-  {path: 'admin', loadChildren: () => import(`./admin/admin.module`).then(m => m.AdminModule)},
+  { path: "", component: ProductOverviewComponent, data: { title: '' } },
+  { path: 'product/:id', component: ProductDetailComponent, data: { title: '' } },
+  { path: 'category/:name', component: ProductCategoryComponent, data: { title: '' } },
+  { path: 'rentals', component: ProductRentalsOverviewComponent, data: { title: 'Rentals Overview' } },
+  { path: 'checkout', component: CheckoutComponent, data: { title: 'Checkout' } },
+  { path: 'contact', component: ContactComponent, data: { title: 'Contact Us' } },
+  { path: 'privacy', component: PrivacyComponent, data: { title: 'Privacy Policy' } },
+  { path: 'auth', loadChildren: () => import(`./auth/auth.module`).then(m => m.AuthModule), data: { title: 'Authentication' } },
+  { path: 'account', loadChildren: () => import(`./account/account.module`).then(m => m.AccountModule), data: { title: 'Account' } },
+  { path: 'admin', loadChildren: () => import(`./admin/admin.module`).then(m => m.AdminModule), data: { title: 'Admin' } },
 ];
 
 @NgModule({
