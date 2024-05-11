@@ -23,7 +23,7 @@ export class GaService {
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', '${gaCode}');
+      gtag('config', '${gaCode}', {'page_path': location.pathname + location.hash});
     `;
     document.head.appendChild(scriptText);
   }
