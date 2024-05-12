@@ -30,7 +30,7 @@ export class InvoicesComponent implements OnInit {
         (error) => {
           if (error.status === 401 || error.status === 403) {
             window.localStorage.removeItem('TOKEN_KEY');
-            window.location.href = '/#/auth/login';
+            window.location.href = '/auth/login';
           }
         }
       );
