@@ -35,9 +35,8 @@ export class AppComponent implements OnInit {
       filter(route => route.outlet === 'primary'),
       map(route => route.snapshot.data)
     ).subscribe(data => {
-      const baseTitle = 'Practice Software Testing - Toolshop - v5.0';
-      const title = data['title'] ? `${data['title']} - ${baseTitle}` : baseTitle;
-      this.titleService.setTitle(title);
+      const title = data['title'];
+      this.titleService.setTitle(title + ' - Practice Software Testing - Toolshop - v5.0');
     });
   }
 
