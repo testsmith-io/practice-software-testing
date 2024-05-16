@@ -283,6 +283,7 @@ class ContactTest extends TestCase {
         $user = User::factory()->create();
 
         $data = [
+            'name' => $user->first_name . ' ' . $user->last_name,
             'subject' => $this->faker->sentence,
             'message' => $this->faker->paragraph
         ];
