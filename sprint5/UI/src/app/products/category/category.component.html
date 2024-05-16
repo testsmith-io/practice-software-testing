@@ -1,5 +1,5 @@
-<div class="row">
-  <h2 data-test="page-title">Category: {{ slug.replace('-', ' ') | titlecase }}</h2>
+<div class="row" *transloco="let t">
+  <h2 data-test="page-title">{{ t('pages.overview.category') }}: {{ slug.replace('-', ' ') | titlecase }}</h2>
 </div>
 <div class="row my-4" *transloco="let t">
   <a class="btn btn-secondary d-block d-md-none btn-block mb-3" data-bs-toggle="collapse" data-test="filters"
