@@ -91,7 +91,7 @@ function deploy($source, $webDestination, $apiDestination) {
     run("sudo chmod -R 777 /var/www/api{$apiDestination}.practicesoftwaretesting.com/storage");
     run("sudo chown -R www-data:www-data /var/www/api{$apiDestination}.practicesoftwaretesting.com/storage/framework");
 
-    runLocally("cd {$source}/UI/ && npm install --legacy-peer-deps && npm run build");
+    runLocally("cd {$source}/UI/ && npm cache clean --force && npm install --legacy-peer-deps && npm run build");
     run("cd /var/www/ && mkdir -p {$webDestination}practicesoftwaretesting.com_tmp/public_html");
     upload(__DIR__ . "/{$source}/UI/dist/toolshop/", "/var/www/{$webDestination}practicesoftwaretesting.com_tmp/public_html");
     run("sudo mv /var/www/{$webDestination}practicesoftwaretesting.com /var/www/{$webDestination}practicesoftwaretesting.com_bak");
