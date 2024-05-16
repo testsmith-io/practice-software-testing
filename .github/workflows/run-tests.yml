@@ -17,8 +17,8 @@ jobs:
         run: |
           docker-compose -f docker-compose.yml up -d
 
-      - name: Sleep for 30 seconds
-        run: sleep 30s
+      - name: Sleep for 60 seconds
+        run: sleep 60s
         shell: bash
 
       - name: Create & Seed database 🌱
