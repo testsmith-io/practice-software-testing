@@ -200,7 +200,7 @@ class InvoiceController extends Controller
         ]);
 
         // Check payment method and create corresponding payment details
-        if ($paymentMethod === 'Bank Transfer') {
+        if ($paymentMethod === 'bank-transfer') {
             $request->validate([
                 'payment_details.bank_name' => 'required|string|max:255|regex:/^[a-zA-Z ]+$/',
                 'payment_details.account_name' => 'required|string|max:255|regex:/^[a-zA-Z0-9 .\'-]+$/',
@@ -214,7 +214,7 @@ class InvoiceController extends Controller
             $payment->payment_details_type = PaymentBankTransferDetails::class;
         }
 
-        if ($paymentMethod === 'Cash on Delivery') {
+        if ($paymentMethod === 'cash-on-delivery') {
             $cashOnDeliveryDetails = new PaymentCashOnDeliveryDetails();
             $cashOnDeliveryDetails->save();
 
@@ -222,7 +222,7 @@ class InvoiceController extends Controller
             $payment->payment_details_type = PaymentCashOnDeliveryDetails::class;
         }
 
-        if ($paymentMethod === 'Credit Card') {
+        if ($paymentMethod === 'credit-card') {
             $request->validate([
                 'payment_details.credit_card_number' => 'required|string|regex:/^\d{4}-\d{4}-\d{4}-\d{4}$/',
                 'payment_details.expiration_date' => 'required|date_format:m/Y|after:today',
@@ -237,7 +237,7 @@ class InvoiceController extends Controller
             $payment->payment_details_type = PaymentCreditCardDetails::class;
         }
 
-        if ($paymentMethod === 'Buy Now Pay Later') {
+        if ($paymentMethod === 'buy-now-pay-later') {
             $request->validate([
                 'payment_details.monthly_installments' => 'required|numeric',
             ]);
@@ -249,7 +249,7 @@ class InvoiceController extends Controller
             $payment->payment_details_type = PaymentBnplDetails::class;
         }
 
-        if ($paymentMethod === 'Gift Card') {
+        if ($paymentMethod === 'gift-card') {
             $request->validate([
                 'payment_details.gift_card_number' => 'required|string|max:255|regex:/^[a-zA-Z0-9]+$/',
                 'payment_details.validation_code' => 'required|string|max:255|regex:/^[a-zA-Z0-9]+$/',

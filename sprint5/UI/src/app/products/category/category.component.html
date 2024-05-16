@@ -1,30 +1,30 @@
 <div class="row">
   <h2 data-test="page-title">Category: {{ slug.replace('-', ' ') | titlecase }}</h2>
 </div>
-<div class="row my-4">
+<div class="row my-4" *transloco="let t">
   <a class="btn btn-secondary d-block d-md-none btn-block mb-3" data-bs-toggle="collapse" data-test="filters"
      href="#filters"
      role="button" aria-expanded="false" aria-controls="collapseExample">
-    <i class="fa fa-filter"></i> Filters
+    <i class="fa fa-filter"></i> {{ t('pages.overview.filters') }}
   </a>
   <div data-test="filters" id="filters" class="collapse d-md-block col-md-3 mb-3">
-    <h4 class="grid-title"><i class="fa fa-arrows-up-down"></i> Sort</h4>
+    <h4 class="grid-title"><i class="fa fa-arrows-up-down"></i> {{ t('pages.overview.sort') }}</h4>
     <hr>
     <form autocomplete=off>
       <div class="input-group mb-3">
         <select data-test="sort" (change)="changeSorting($event)" class="form-select">
           <option value=""></option>
-          <option value="name,asc">Name (A - Z)</option>
-          <option value="name,desc">Name (Z - A)</option>
-          <option value="price,desc">Price (High - Low)</option>
-          <option value="price,asc">Price (Low - High)</option>
+          <option value="name,asc">{{ t('pages.overview.sort-options.name-asc') }}</option>
+          <option value="name,desc">{{ t('pages.overview.sort-options.name-desc') }}</option>
+          <option value="price,desc">{{ t('pages.overview.sort-options.price-desc') }}</option>
+          <option value="price,asc">{{ t('pages.overview.sort-options.price-asc') }}</option>
         </select>
       </div>
     </form>
 
-    <h4 class="grid-title"><i class="fa fa-filter"></i> Filters</h4>
+    <h4 class="grid-title"><i class="fa fa-filter"></i> {{ t('pages.overview.filters') }}</h4>
     <hr>
-    <h4>By category:</h4>
+    <h4>{{ t('pages.overview.by-category') }}:</h4>
     <ng-template #recursiveList let-list>
       @for (category of list;track category) {
         <div class="checkbox">
@@ -47,7 +47,7 @@
 
     <div class="py-2"></div>
 
-    <h4>By brand:</h4>
+    <h4>{{ t('pages.overview.by-brand') }}:</h4>
     @for (brand of brands;track brand) {
       <div class="checkbox">
         <label><input type="checkbox" class="icheck" attr.data-test="brand-{{brand.id}}" name="brand_id"
@@ -61,7 +61,7 @@
   <div class="col-md-9">
     @if (!results?.data.length) {
       <div data-test="category-empty">
-        There are no products available yet.
+        {{ t('pages.overview.no-results') }}
       </div>
     }
     @if (results) {
@@ -81,7 +81,7 @@
             </div>
             <div class="card-footer">
               @if (!item.in_stock) {
-                <span class="float-start text-danger" data-test="out-of-stock">Out of stock</span>
+                <span class="float-start text-danger" data-test="out-of-stock">{{ t('pages.overview.no-stock') }}</span>
               }
               <span class="float-end text-muted">
                    <span data-test="product-price"

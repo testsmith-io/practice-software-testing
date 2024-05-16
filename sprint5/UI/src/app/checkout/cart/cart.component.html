@@ -1,12 +1,12 @@
 @if (cart) {
-  <div>
+  <div *transloco="let t">
     <table class="table table-hover">
       <thead>
       <tr>
-        <th class="col-md-5" scope="col">Item</th>
-        <th class="col-md-2" scope="col">Quantity</th>
-        <th class="col-md-2 text-end" scope="col">Price</th>
-        <th class="col-md-2 text-end" scope="col">Total</th>
+        <th class="col-md-5" scope="col">{{t('pages.checkout.cart.item-header')}}</th>
+        <th class="col-md-2" scope="col">{{t('pages.checkout.cart.quantity-header')}}</th>
+        <th class="col-md-2 text-end" scope="col">{{t('pages.checkout.cart.price-header')}}</th>
+        <th class="col-md-2 text-end" scope="col">{{t('pages.checkout.cart.total')}}</th>
         <th class="col-md-1" scope="col"></th>
       </tr>
       </thead>
@@ -20,7 +20,7 @@
                 class="badge rounded-pill bg-warning me-1">-{{ item.discount_percentage }}%</span>
             }</span><br>@if (item.product.is_rental) {
               <small
-              >Item for rent, price per hour</small>
+              >{{t('pages.checkout.cart.rental-explainer')}}</small>
             }</td>
             <td class="col-md-2 align-middle">
               <label for="quantity-{{item.id}}" class="visually-hidden">Quantity for {{item.product.name}}</label>
@@ -57,14 +57,14 @@
           <tr>
             <td class="col-md-5"></td>
             <td class="col-md-2"></td>
-            <td class="col-md-2 text-end"><strong>Subtotal</strong></td>
+            <td class="col-md-2 text-end"><strong>{{t('pages.checkout.cart.subtotal')}}</strong></td>
             <td class="col-md-2 text-end">${{ subtotal | number: '1.2-2' }}</td>
             <td class="col-md-1"></td>
           </tr>
           <tr>
             <td class="col-md-5"></td>
             <td class="col-md-2"></td>
-            <td class="col-md-2 text-end"><strong>Discount ({{cart.additional_discount_percentage}}%)</strong></td>
+            <td class="col-md-2 text-end"><strong>{{t('pages.checkout.cart.discount')}} ({{cart.additional_discount_percentage}}%)</strong></td>
             <td class="col-md-2 text-end">- ${{ discount | number: '1.2-2' }}</td>
             <td class="col-md-1"></td>
           </tr>
@@ -74,7 +74,7 @@
       <tr>
         <td class="col-md-5"></td>
         <td class="col-md-2"></td>
-        <td class="col-md-2 text-end"><strong>Total</strong></td>
+        <td class="col-md-2 text-end"><strong>{{t('pages.checkout.cart.total')}}</strong></td>
         <td class="col-md-2 text-end">${{ total | number: '1.2-2' }}</td>
         <td class="col-md-1"></td>
       </tr>
@@ -82,10 +82,10 @@
     </table>
     @if (cart.cart_items.length) {
       <div class="float-end">
-        <button data-test="proceed-1" type="button" class="btn btn-success" awNextStep>Proceed to checkout</button>
+        <button data-test="proceed-1" type="button" class="btn btn-success" awNextStep>{{t('pages.checkout.btn')}}</button>
       </div>
     }
   </div>
 } @else {
-  <p>The cart is empty. Nothing to display.</p>
+  <p *transloco="let t">{{t('pages.checkout.cart.empty')}}</p>
 }

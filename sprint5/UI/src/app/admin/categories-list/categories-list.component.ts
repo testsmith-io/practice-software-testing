@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {first} from "rxjs/operators";
 import {CategoryService} from "../../_services/category.service";
 import {Category} from "../../models/category";
-import {ToastService} from "../../_services/toast.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-list',
@@ -15,7 +15,7 @@ export class CategoriesListComponent implements OnInit {
   searchForm: FormGroup | any;
 
   constructor(private categoryService: CategoryService,
-              private toastService: ToastService,
+              private toastr: ToastrService,
               private formBuilder: FormBuilder) {
   }
 
@@ -44,10 +44,10 @@ export class CategoriesListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: () => {
-          this.toastService.show('Category deleted.', {classname: 'bg-success text-light'});
+          this.toastr.success('Category deleted.', null, {progressBar: true});
           this.getCategories();
         }, error: (err) => {
-          this.toastService.show(err.message, {classname: 'bg-warning text-dark'})
+          this.toastr.error(err.message, null, {progressBar: true})
         }
       });
   }

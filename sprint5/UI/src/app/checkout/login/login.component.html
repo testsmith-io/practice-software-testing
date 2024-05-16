@@ -1,17 +1,17 @@
-<div class="container login-container">
+<div class="container login-container" *transloco="let t">
   <div class="row">
     <div class="col-md-6 offset-md-3 login-form-1">
       @if (!isLoggedIn) {
-        <div><h3>Customer login</h3>
+        <div><h3>{{t('pages.login.title')}}</h3>
           <form [formGroup]="cusForm" (ngSubmit)="onCusSubmit()">
             <div class="mb-3">
-              <label for="email" class="form-label">Your E-mail *</label>
+              <label for="email" class="form-label">{{t('fields.email.label')}} *</label>
               <input formControlName="email"
                      class="form-control"
                      id="email"
                      data-test="email"
                      [ngClass]="{ 'is-invalid': cusSubmitted && cf['email'].errors }" type="email"
-                     placeholder="Enter your E-mail"
+                     placeholder="{{t('fields.email.placeholder')}}"
                      aria-required="true"
                      [attr.aria-describedby]="(cus_email.invalid && cusSubmitted) ? 'email-error' : null"
                      [attr.aria-invalid]="cus_email.invalid && cusSubmitted ? 'true' : 'false'"/>
@@ -19,21 +19,21 @@
             @if (cus_email.invalid && cusSubmitted) {
               <div id="email-error" data-test="email-error" class="alert alert-danger">
                 @if (cus_email.errors?.required) {
-                  <div>E-mail is required.</div>
+                  <div>{{t('fields.email.errors.required')}}</div>
                 }
                 @if (cus_email.errors?.['email']) {
-                  <div>E-mail format is invalid.</div>
+                  <div>{{t('fields.email.errors.format')}}</div>
                 }
               </div>
             }
             <div class="mb-3">
-              <label for="password">Your Password *</label>
+              <label for="password">{{t('fields.password.label')}} *</label>
               <input formControlName="password"
                      class="form-control"
                      id="password"
                      data-test="password"
                      [ngClass]="{ 'is-invalid': cusSubmitted && cf['password'].errors }" type="password"
-                     placeholder="Enter your Password"
+                     placeholder="{{t('fields.password.placeholder')}}"
                      aria-required="true"
                      [attr.aria-describedby]="(cus_password.invalid && cusSubmitted) ? 'password-error' : null"
                      [attr.aria-invalid]="cus_password.invalid && cusSubmitted ? 'true' : 'false'"/>
@@ -41,15 +41,15 @@
             @if (cus_password.invalid && cusSubmitted) {
               <div id="password-error" data-test="password-error" class="alert alert-danger">
                 @if (cus_password.errors?.required) {
-                  <div>Password is required.</div>
+                  <div>{{t('fields.password.errors.required')}}</div>
                 }
                 @if (cus_password.errors?.['minlength'] || cus_password.errors?.['maxlength']) {
-                  <div>Password length is invalid</div>
+                  <div>{{t('fields.password.errors.length')}}</div>
                 }
               </div>
             }
             <div class="input-group mb-3">
-              <input type="submit" class="btnSubmit" data-test="login-submit" value="Login"/>
+              <input type="submit" class="btnSubmit" data-test="login-submit" value="{{t('pages.login.btn')}}"/>
             </div>
             @if (customerError) {
               <div class="alert alert-danger">
@@ -57,19 +57,16 @@
               </div>
             }
             <div class="input-group mb-3">
-              <p>Not yet an account? <a data-test="register-link" routerLink="/auth/register">Register your
-                account</a><br/>
-                <a data-test="forgot-password-link" routerLink="/auth/forgot-password" class="ForgetPwd">Forgot your
-                  Password?</a></p>
+              <p>{{t('pages.login.no-account')}} <a data-test="register-link" routerLink="/auth/register">{{t('pages.login.register')}}</a><br/>
+                <a data-test="forgot-password-link" routerLink="/auth/forgot-password" class="ForgetPwd">{{t('pages.login.forgot-password')}}</a></p>
             </div>
           </form>
         </div>
       } @else {
-        <p>Hello {{ customer.first_name }} {{ customer.last_name }}, you are already logged in. You
-          can proceed to checkout.</p>
+        <p>{{t('pages.checkout.sign-in.already', {first_name: customer.first_name, last_name: customer.last_name})}}</p>
         <div class="float-end">
           <button data-test="proceed-2" [disabled]="!canExitStep2" type="button" class="btn btn-success" awNextStep>
-            Proceed to checkout
+            {{t('pages.checkout.btn')}}
           </button>
         </div>
 

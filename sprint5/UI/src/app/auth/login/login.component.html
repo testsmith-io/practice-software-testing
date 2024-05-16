@@ -1,7 +1,7 @@
-<div class="container auth-container">
+<div class="container auth-container" *transloco="let t">
   <div class="row justify-content-md-center">
     <div class="col-lg-6 auth-form">
-      <h3>Login</h3>
+      <h3>{{ t('pages.login.title') }}</h3>
       @if (environment.production) {
         <div class="text-center my-4">
           <button (click)="socialLogin('google')" type="button" aria-label="Sign in with Google"
@@ -12,18 +12,18 @@
       }
 
       @if (environment.production) {
-        <div class="separator" aria-label="Alternative login methods">or use</div>
+        <div class="separator" aria-label="Alternative login methods">{{ t('pages.login.alternative') }}</div>
       }
 
       <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off" data-test="login-form">
         <div class="mb-3">
-          <label for="email" class="form-label">Your E-mail *</label>
+          <label for="email" class="form-label">{{ t('fields.email.label') }} *</label>
           <input formControlName="email"
                  class="form-control"
                  id="email"
                  data-test="email"
                  [ngClass]="{ 'is-invalid': submitted && cf['email'].errors }" type="email"
-                 placeholder="Enter your E-mail"
+                 placeholder="{{ t('fields.email.placeholder') }}"
                  aria-required="true"
                  [attr.aria-describedby]="(email.invalid && submitted) ? 'email-error' : null"
                  [attr.aria-invalid]="email.invalid && submitted ? 'true' : 'false'"/>
@@ -31,21 +31,21 @@
         @if (email.invalid && submitted) {
           <div id="email-error" data-test="email-error" class="alert alert-danger">
             @if (email.errors?.required) {
-              <div>E-mail is required.</div>
+              <div>{{ t('fields.email.errors.required') }}</div>
             }
             @if (email.errors?.['email']) {
-              <div>E-mail format is invalid.</div>
+              <div>{{ t('fields.email.errors.format') }}</div>
             }
           </div>
         }
         <div class="mb-3">
-          <label for="password">Your Password *</label>
+          <label for="password">{{ t('fields.password.label') }} *</label>
           <input formControlName="password"
                  class="form-control"
                  id="password"
                  data-test="password"
                  [ngClass]="{ 'is-invalid': submitted && cf['password'].errors }" type="password"
-                 placeholder="Enter your Password"
+                 placeholder="{{ t('fields.password.placeholder') }}"
                  aria-required="true"
                  [attr.aria-describedby]="(password.invalid && submitted) ? 'password-error' : null"
                  [attr.aria-invalid]="password.invalid && submitted ? 'true' : 'false'"/>
@@ -53,15 +53,15 @@
         @if (password.invalid && submitted) {
           <div id="password-error" data-test="password-error" class="alert alert-danger">
             @if (password.errors?.required) {
-              <div>Password is required.</div>
+              <div>{{ t('fields.password.errors.required') }}</div>
             }
             @if (password.errors?.['minlength'] || password.errors?.['maxlength']) {
-              <div>Password length is invalid</div>
+              <div>{{ t('fields.password.errors.length') }}</div>
             }
           </div>
         }
         <div class="input-group mb-3">
-          <input type="submit" data-test="login-submit" class="btnSubmit" value="Login" aria-label="Login"/>
+          <input type="submit" data-test="login-submit" class="btnSubmit" value="{{ t('pages.login.btn') }}" aria-label="Login"/>
         </div>
         @if (error) {
           <div data-test="login-error" class="alert alert-danger" aria-live="assertive">
@@ -69,10 +69,10 @@
           </div>
         }
         <div class="input-group mb-3">
-          <p>Not yet an account? <a data-test="register-link" routerLink="/auth/register"
-                                    aria-label="Register your account">Register your account</a><br/>
+          <p>{{ t('pages.login.no-account') }} <a data-test="register-link" routerLink="/auth/register"
+                                    aria-label="Register your account">{{ t('pages.login.register') }}</a><br/>
             <a data-test="forgot-password-link" routerLink="/auth/forgot-password" class="ForgetPwd"
-               aria-label="Forgot your Password?">Forgot your Password?</a></p>
+               aria-label="Forgot your Password?">{{ t('pages.login.forgot-password') }}</a></p>
         </div>
       </form>
     </div>

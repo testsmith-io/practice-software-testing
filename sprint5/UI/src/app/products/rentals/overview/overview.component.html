@@ -1,6 +1,6 @@
 @if (results) {
-  <div class="col">
-    <h1 data-test="page-title">Rentals</h1>
+  <div class="col" *transloco="let t">
+    <h1 data-test="page-title">{{ t('pages.rentals.title') }}</h1>
     @for (result of results.data;track result;let i = $index) {
       <div class="card mb-3">
         <div attr.data-test="product-{{result.id}}" routerLink="/product/{{result.id}}" class="row no-gutters">

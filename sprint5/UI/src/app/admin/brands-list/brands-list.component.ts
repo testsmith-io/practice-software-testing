@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Brand} from "../../models/brand";
 import {BrandService} from "../../_services/brand.service";
 import {first} from 'rxjs/operators';
-import {ToastService} from "../../_services/toast.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-list',
@@ -15,8 +15,8 @@ export class BrandsListComponent implements OnInit {
   searchForm: FormGroup | any;
 
   constructor(private brandService: BrandService,
-              private toastService: ToastService,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private toastr: ToastrService) {
   }
 
   ngOnInit(): void {
@@ -44,10 +44,10 @@ export class BrandsListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: () => {
-          this.toastService.show('Brand deleted.', {classname: 'bg-success text-light'});
+          this.toastr.success('Brand deleted.', null, {progressBar: true});
           this.getBrands();
         }, error: (err) => {
-          this.toastService.show(err.message, {classname: 'bg-warning text-dark'})
+          this.toastr.error(err.message, null, {progressBar: true})
         }
       });
   }

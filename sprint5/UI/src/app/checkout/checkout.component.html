@@ -1,14 +1,14 @@
-<aw-wizard [navBarLayout]="'large-filled-symbols'">
-  <aw-wizard-step stepTitle="Cart" [navigationSymbol]="{ symbol: '1' }">
+<aw-wizard [navBarLayout]="'large-filled-symbols'" *transloco="let t">
+  <aw-wizard-step stepTitle="{{t('pages.checkout.cart.title')}}" [navigationSymbol]="{ symbol: '1' }">
     <app-cart/>
   </aw-wizard-step>
-  <aw-wizard-step stepTitle="Sign in" [navigationSymbol]="{ symbol: '2' }" >
+  <aw-wizard-step stepTitle="{{t('pages.checkout.sign-in.title')}}" [navigationSymbol]="{ symbol: '2' }" >
     <app-login/>
   </aw-wizard-step>
-  <aw-wizard-step stepTitle="Address" (stepEnter)="enterAddressStep($event)" [navigationSymbol]="{ symbol: '3' }">
+  <aw-wizard-step stepTitle="{{t('pages.checkout.address.title')}}" (stepEnter)="enterAddressStep($event)" [navigationSymbol]="{ symbol: '3' }">
     <app-address [address]="addressData" (cusAddressChange)="handleCusAddressChange($event)"/>
   </aw-wizard-step>
-  <aw-wizard-completion-step stepTitle="Payment" [navigationSymbol]="{ symbol: '4' }">
+  <aw-wizard-completion-step stepTitle="{{t('pages.checkout.payment.title')}}" [navigationSymbol]="{ symbol: '4' }">
     <app-payment [address]="addressData"/>
   </aw-wizard-completion-step>
 </aw-wizard>

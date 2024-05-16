@@ -13,7 +13,6 @@ import {InvoiceService} from "../../_services/invoice.service";
 })
 export class PaymentComponent implements OnInit {
 
-  PaymentMethods: any = ['Bank Transfer', 'Cash on Delivery', 'Credit Card', 'Buy Now Pay Later', 'Gift Card'];
   selectedPaymentMethod: string = '';
 
   @Input() address: any;
@@ -64,22 +63,22 @@ export class PaymentComponent implements OnInit {
     });
 
     switch (paymentMethod) {
-      case 'Bank Transfer':
+      case 'bank-transfer':
         controls['bank_name'].setValidators([Validators.required, Validators.pattern(/^[a-zA-Z ]+$/)]);
         controls['account_name'].setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9 .'-]+$/)]);
         controls['account_number'].setValidators([Validators.required, Validators.pattern(/^\d+$/)]);
         break;
-      case 'Gift Card':
+      case 'gift-card':
         controls['gift_card_number'].setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9]+$/)]);
         controls['validation_code'].setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9]+$/)]);
         break;
-      case 'Credit Card':
+      case 'credit-card':
         controls['credit_card_number'].setValidators([Validators.pattern(/^\d{4}-\d{4}-\d{4}-\d{4}$/)]);
         controls['expiration_date'].setValidators([this.expirationDateValidator]);
         controls['cvv'].setValidators([Validators.pattern(/^\d{3,4}$/)]);
         controls['card_holder_name'].setValidators([Validators.pattern(/^[a-zA-Z ]+$/)]);
         break;
-      case 'Buy Now Pay Later':
+      case 'buy-now-pay-later':
         controls['monthly_installments'].setValidators([Validators.required]);
         break;
     }
@@ -93,7 +92,7 @@ export class PaymentComponent implements OnInit {
 
     // Match MM/YYYY format
     if (!/^(0[1-9]|1[0-2])\/\d{4}$/.test(value)) {
-      return { 'dateFormat': 'Invalid date format. Use MM/YYYY.' };
+      return {'dateFormat': 'Invalid date format. Use MM/YYYY.'};
     }
 
     const [month, year] = value.split('/').map(Number);
@@ -103,11 +102,12 @@ export class PaymentComponent implements OnInit {
 
     // Check if the date is in the future
     if (year < currentYear || (year === currentYear && month < currentMonth)) {
-      return { 'datePast': 'Expiration date must be in the future.' };
+      return {'datePast': 'Expiration date must be in the future.'};
     }
 
     return null;
   }
+
   get p(): { [key: string]: AbstractControl } {
     return this.cusPayment.controls;
   }
@@ -118,20 +118,20 @@ export class PaymentComponent implements OnInit {
 
     let payment: any;
     switch (paymentData.payment_method) {
-      case 'Bank Transfer':
+      case 'bank-transfer':
         payment = {
           'bank_name': paymentData.bank_name,
           'account_name': paymentData.account_name,
           'account_number': paymentData.account_number
         }
         break;
-      case 'Gift Card':
+      case 'gift-card':
         payment = {
           'gift_card_number': paymentData.gift_card_number,
           'validation_code': paymentData.validation_code
         }
         break;
-      case 'Credit Card':
+      case 'credit-card':
         payment = {
           'credit_card_number': paymentData.credit_card_number,
           'expiration_date': paymentData.expiration_date,
@@ -139,7 +139,7 @@ export class PaymentComponent implements OnInit {
           'card_holder_name': paymentData.card_holder_name
         }
         break;
-      case 'Buy Now Pay Later':
+      case 'buy-now-pay-later':
         payment = {
           'monthly_installments': paymentData.monthly_installments
         }
