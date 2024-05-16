@@ -76,12 +76,15 @@ export class ContactComponent implements OnInit {
     }
 
     const payload: ContactMessage = {
-      name: this.contact.value.first_name + ' ' + this.contact.value.last_name,
-      email: this.contact.value.email,
+      name: this.name,
       subject: this.contact.value.subject,
       message: this.contact.value.message,
       status: 'NEW'
     };
+
+    if (this.contact.value.email) {
+      payload.email = this.contact.value.email;
+    }
 
     this.contactService.sendMessage(this.file, payload).subscribe({
       next: () => {

@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {ToastService} from "../../_services/toast.service";
 import {first} from "rxjs/operators";
 import {ProductService} from "../../_services/product.service";
 import {Product} from "../../models/product";
 import {Pagination} from "../../models/pagination";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-products-list',
@@ -18,7 +18,7 @@ export class ProductsListComponent implements OnInit {
   searchForm: FormGroup | any;
 
   constructor(private productService: ProductService,
-              private toastService: ToastService,
+              private toastr: ToastrService,
               private formBuilder: FormBuilder) {
   }
 
@@ -48,10 +48,10 @@ export class ProductsListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: () => {
-          this.toastService.show('Product deleted.', {classname: 'bg-success text-light'});
+          this.toastr.success('Product deleted.', null, {progressBar: true});
           this.getProducts();
         }, error: (err) => {
-          this.toastService.show(err.message, {classname: 'bg-warning text-dark'})
+          this.toastr.error(err.message, null, {progressBar: true})
         }
       });
   }

@@ -38,8 +38,9 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/@achimha/angular-archwizard/styles/archwizard.css",
+              "node_modules/@y3krulez/angular-archwizard/styles/archwizard.scss",
               "node_modules/bootstrap/dist/css/bootstrap.css",
+              "node_modules/ngx-toastr/toastr.css",
               "src/styles.css"
             ],
             "scripts": [
@@ -110,8 +111,9 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/@achimha/angular-archwizard/styles/archwizard.css",
-              "src/styles.css"
+              "node_modules/@y3krulez/angular-archwizard/styles/archwizard.scss",
+              "src/styles.css",
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": []
           }

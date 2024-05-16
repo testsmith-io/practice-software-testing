@@ -2,6 +2,7 @@ import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {CartService} from "../_services/cart.service";
 import {CustomerAccountService} from "../shared/customer-account.service";
 import {Subscription} from "rxjs";
+import {TranslocoService} from "@jsverse/transloco";
 
 @Component({
   selector: 'app-header',
@@ -10,7 +11,7 @@ import {Subscription} from "rxjs";
 })
 export class HeaderComponent implements OnDestroy, OnInit {
 
-
+  activeLanguage: string;
   items: any;
   role: string = '';
   name: string = '';
@@ -19,7 +20,8 @@ export class HeaderComponent implements OnDestroy, OnInit {
 
   constructor(private auth: CustomerAccountService,
               private cartService: CartService,
-              private changeDetectorRef: ChangeDetectorRef) {
+              private changeDetectorRef: ChangeDetectorRef,
+              private translocoService: TranslocoService) {
     this.cartService.storageSub.subscribe(() => {
       this.items = this.getCartItems();
       this.changeDetectorRef.detectChanges();
@@ -38,6 +40,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
   ngOnInit(): void {
     this.items = this.getCartItems();
     this.role = this.auth.getRole();
+    this.activeLanguage = this.translocoService.getActiveLang();
     this.getSignedInUser();
   }
 
@@ -59,6 +62,12 @@ export class HeaderComponent implements OnDestroy, OnInit {
   logout() {
     this.auth.logout();
     window.location.reload();
+  }
+
+  changeSiteLanguage(language: string): void {
+    this.translocoService.setActiveLang(language);
+    localStorage.setItem('language', language);
+    this.activeLanguage = language;
   }
 
 }

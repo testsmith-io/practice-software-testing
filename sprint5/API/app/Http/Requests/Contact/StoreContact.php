@@ -26,7 +26,7 @@ class StoreContact extends BaseFormRequest
     {
         return [
             'name' => ['max:120', new SubscriptSuperscriptRule()],
-            'email' => ['email', 'max:256', new SubscriptSuperscriptRule()],
+            'email' => ['sometimes', 'email', 'max:256', new SubscriptSuperscriptRule()],
             'subject' => ['required', 'string', 'max:120', new SubscriptSuperscriptRule()],
             'message' => ['required', 'string', 'max:250', new SubscriptSuperscriptRule()],
         ];

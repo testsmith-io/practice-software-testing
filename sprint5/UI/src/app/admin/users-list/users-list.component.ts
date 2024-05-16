@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {ToastService} from "../../_services/toast.service";
 import {first} from "rxjs/operators";
 import {UserService} from "../../_services/user.service";
 import {User} from "../../models/user.model";
 import {Pagination} from "../../models/pagination";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-users-list',
@@ -17,7 +17,7 @@ export class UsersListComponent implements OnInit {
   searchForm: FormGroup | any;
 
   constructor(private userService: UserService,
-              private toastService: ToastService,
+              private toastr: ToastrService,
               private formBuilder: FormBuilder) {
   }
 
@@ -47,10 +47,10 @@ export class UsersListComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: () => {
-          this.toastService.show('User deleted.', {classname: 'bg-success text-light'});
+          this.toastr.success('User deleted.', null, {progressBar: true});
           this.getUsers();
         }, error: (err) => {
-          this.toastService.show(err.message, {classname: 'bg-warning text-dark'})
+          this.toastr.error(err.message, null, {progressBar: true})
         }
       });
   }

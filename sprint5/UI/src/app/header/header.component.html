@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light" *transloco="let t">
   <div class="container">
     <a title="Practice Software Testing - Toolshop" class="navbar-brand" href="/">
       <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
@@ -58,36 +58,35 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" data-test="nav-home" aria-current="page" href="#">Home</a>
+          <a class="nav-link active" data-test="nav-home" aria-current="page" href="#">{{ t('header.menu.home') }}</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" data-test="nav-categories" role="button"
              data-bs-toggle="dropdown"
              aria-expanded="false">
-            Categories
+            {{ t('header.menu.categories') }}
           </a>
           <ul class="dropdown-menu" aria-label="nav-categories">
-            <li><a class="dropdown-item" data-test="nav-hand-tools" routerLink="/category/hand-tools">Hand Tools</a>
+            <li><a class="dropdown-item" data-test="nav-hand-tools" routerLink="/category/hand-tools">{{ t('header.menu.hand-tools') }}</a>
             </li>
-            <li><a class="dropdown-item" data-test="nav-power-tools" routerLink="/category/power-tools">Power Tools</a>
+            <li><a class="dropdown-item" data-test="nav-power-tools" routerLink="/category/power-tools">{{ t('header.menu.power-tools') }}</a>
             </li>
-            <li><a class="dropdown-item" data-test="nav-other" routerLink="/category/other">Other</a>
+            <li><a class="dropdown-item" data-test="nav-other" routerLink="/category/other">{{ t('header.menu.other') }}</a>
             </li>
-            <li><a class="dropdown-item" data-test="nav-special-tools" routerLink="/category/special-tools">Special
-              Tools</a></li>
+            <li><a class="dropdown-item" data-test="nav-special-tools" routerLink="/category/special-tools">{{ t('header.menu.special-tools') }}</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" data-test="nav-rentals" routerLink="/rentals">Rentals</a></li>
+            <li><a class="dropdown-item" data-test="nav-rentals" routerLink="/rentals">{{ t('header.menu.rentals') }}</a></li>
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link" data-test="nav-contact" routerLink="/contact">Contact</a>
+          <a class="nav-link" data-test="nav-contact" routerLink="/contact">{{ t('header.menu.contact') }}</a>
         </li>
         <!--        <li class="nav-item" *ngIf="!isLoggedIn">-->
         @if (!name && role !== 'user') {
           <li class="nav-item">
-            <a class="nav-link" data-test="nav-sign-in" routerLink="/auth/login">Sign in</a>
+            <a class="nav-link" data-test="nav-sign-in" routerLink="/auth/login">{{ t('header.menu.sign-in') }}</a>
           </li>
         }
         @if (name && role === 'user') {
@@ -98,18 +97,18 @@
               {{ name }}
             </a>
             <ul class="dropdown-menu" aria-labelledby="menu">
-              <li><a class="dropdown-item" data-test="nav-my-account" routerLink="/account">My account</a></li>
-              <li><a class="dropdown-item" data-test="nav-my-favorites" routerLink="/account/favorites">My favorites</a>
+              <li><a class="dropdown-item" data-test="nav-my-account" routerLink="/account">{{ t('header.menu.my-account') }}</a></li>
+              <li><a class="dropdown-item" data-test="nav-my-favorites" routerLink="/account/favorites">{{ t('header.menu.my-favorites') }}</a>
               </li>
-              <li><a class="dropdown-item" data-test="nav-my-profile" routerLink="/account/profile">My profile</a></li>
-              <li><a class="dropdown-item" data-test="nav-my-invoices" routerLink="/account/invoices">My invoices</a>
+              <li><a class="dropdown-item" data-test="nav-my-profile" routerLink="/account/profile">{{ t('header.menu.my-profile') }}</a></li>
+              <li><a class="dropdown-item" data-test="nav-my-invoices" routerLink="/account/invoices">{{ t('header.menu.my-invoices') }}</a>
               </li>
-              <li><a class="dropdown-item" data-test="nav-my-messages" routerLink="/account/messages">My messages</a>
+              <li><a class="dropdown-item" data-test="nav-my-messages" routerLink="/account/messages">{{ t('header.menu.my-messages') }}</a>
               </li>
               <li>
                 <hr class="dropdown-divider">
               </li>
-              <li><a class="dropdown-item" data-test="nav-sign-out" (click)="logout()">Sign out</a></li>
+              <li><a class="dropdown-item" data-test="nav-sign-out" (click)="logout()">{{ t('header.menu.sign-out') }}</a></li>
             </ul>
           </li>
         }
@@ -173,6 +172,21 @@
           </li>
         }
       </ul>
+      <div class="btn-group dropdown" >
+        <button id="language" type="button" class="btn nav-link dropdown-toggle"
+                data-test="language" aria-hidden="true" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-globe"></i>
+          {{ activeLanguage | uppercase }}
+          <span class="caret"></span>
+        </button>
+        <ul id="dropdown-animated" class="dropdown-menu dropdown-menu-right" role="menu"
+            aria-labelledby="language">
+          <li role="menuitem"><a class="dropdown-item" (click)="changeSiteLanguage('de')">DE</a></li>
+          <li role="menuitem"><a class="dropdown-item" (click)="changeSiteLanguage('en')">EN</a></li>
+          <li role="menuitem"><a class="dropdown-item" (click)="changeSiteLanguage('es')">ES</a></li>
+          <li role="menuitem"><a class="dropdown-item" (click)="changeSiteLanguage('de')">FR</a></li>
+          <li role="menuitem"><a class="dropdown-item" (click)="changeSiteLanguage('nl')">NL</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 </nav>
