@@ -13,6 +13,7 @@ import {MessagesComponent} from './messages/messages.component';
 import {MessageDetailComponent} from './messages/message-detail/message-detail.component';
 import {PaginationComponent} from "../pagination/pagination.component";
 import {SharedModule} from "../shared.module";
+import {TranslocoDirective} from "@jsverse/transloco";
 
 const routes: Routes = [
   { path: '', component: OverviewComponent, canActivate: [UserAuthGuard], data: { title: 'Overview' } },
@@ -35,13 +36,14 @@ const routes: Routes = [
     MessagesComponent,
     MessageDetailComponent
   ],
-  imports: [
-    ReactiveFormsModule,
-    CommonModule,
-    RouterModule.forChild(routes),
-    PaginationComponent,
-    SharedModule
-  ],
+    imports: [
+        ReactiveFormsModule,
+        CommonModule,
+        RouterModule.forChild(routes),
+        PaginationComponent,
+        SharedModule,
+        TranslocoDirective
+    ],
   exports: [RouterModule]
 })
 export class AccountModule {

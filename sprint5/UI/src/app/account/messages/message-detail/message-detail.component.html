@@ -1,13 +1,13 @@
-<div class="row">
+<div class="row" *transloco="let t">
   <a href="#" routerLink="/account/messages" class="mx-3 mt-3 link-secondary" data-test="back">Back</a>
 </div>
-<div class="row mt-3">
+<div class="row mt-3" *transloco="let t">
   <div class="col-sm-12">
 
     <div class="card bg-secondary text-white mb-3">
       <div
         class="card-header">{{ (message?.user) ? message?.user?.first_name + ' ' + message?.user?.last_name : message?.name }}
-        | Subject: {{ message?.subject }} | <span class="badge rounded-pill"
+        | {{ t('pages.my-account.messages.subject') }}: {{ message?.subject }} | <span class="badge rounded-pill"
                                                   [ngClass]="{'bg-info': message?.status === 'NEW', 'bg-warning': message?.status === 'IN_PROGRESS', 'bg-success': message?.status === 'RESOLVED'}">{{ message?.status }}</span>
       </div>
       <div class="card-body">
@@ -21,7 +21,7 @@
 
     </div>
 
-    <h2>Replies</h2>
+    <h2>{{ t('pages.my-account.messages.replies') }}</h2>
     @for (reply of message?.replies;track reply) {
       <div class="card bg-light text-black mb-3">
         <div class="card-header">{{ reply.user.first_name }} {{ reply.user.last_name }} | {{ reply.created_at }}</div>
@@ -32,11 +32,11 @@
     }
 
     <div class="card bg-light text-black mb-3">
-      <div class="card-header">Add Reply</div>
+      <div class="card-header">{{ t('pages.my-account.messages.add-reply') }}</div>
       <div class="card-body">
         <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
           <textarea class="form-control" formControlName="message" data-test="message" id="message" rows="5"></textarea>
-          <button type="submit" class="btn btn-primary mt-2" data-test="reply-submit">Reply</button>
+          <button type="submit" class="btn btn-primary mt-2" data-test="reply-submit">{{ t('pages.my-account.messages.reply-btn') }}</button>
         </form>
       </div>
     </div>
