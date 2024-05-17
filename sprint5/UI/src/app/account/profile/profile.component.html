@@ -1,30 +1,30 @@
-<div class="container mt-5">
+<div class="container mt-5" *transloco="let t">
   <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" autocomplete="off">
     <div class="row">
-      <h2>Profile</h2>
+      <h2>{{ t('pages.my-account.profile.title') }}</h2>
     </div>
     <div class="row">
       <div class="col-lg-6">
         <div class="row mb-3">
-          <label for="first_name" class="col-sm-3 col-form-label">First Name</label>
+          <label for="first_name" class="col-sm-3 col-form-label">{{ t('fields.first-name.label') }}</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" formControlName="first_name" data-test="first-name" id="first_name">
           </div>
         </div>
         <div class="row mb-3">
-          <label for="last_name" class="col-sm-3 col-form-label">Last Name</label>
+          <label for="last_name" class="col-sm-3 col-form-label">{{ t('fields.last-name.label') }}</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" formControlName="last_name" data-test="last-name" id="last_name">
           </div>
         </div>
         <div class="row mb-3">
-          <label for="email" class="col-sm-3 col-form-label">Email</label>
+          <label for="email" class="col-sm-3 col-form-label">{{ t('fields.email.label') }}</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" formControlName="email" data-test="email" id="email" readonly>
           </div>
         </div>
         <div class="row mb-3">
-          <label for="phone" class="col-sm-3 col-form-label">Phone</label>
+          <label for="phone" class="col-sm-3 col-form-label">{{ t('fields.phone.label') }}</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" data-test="phone" id="phone" formControlName="phone">
           </div>
@@ -32,31 +32,31 @@
       </div>
       <div class="col-lg-6">
         <div class="row mb-3">
-          <label for="address" class="col-sm-3 col-form-label">Address</label>
+          <label for="address" class="col-sm-3 col-form-label">{{ t('fields.address.label') }}</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" data-test="address" id="address" formControlName="address">
           </div>
         </div>
         <div class="row mb-3">
-          <label for="postcode" class="col-sm-3 col-form-label">Postcode</label>
+          <label for="postcode" class="col-sm-3 col-form-label">{{ t('fields.postcode.label') }}</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" data-test="postcode" id="postcode" formControlName="postcode">
           </div>
         </div>
         <div class="row mb-3">
-          <label for="city" class="col-sm-3 col-form-label">City</label>
+          <label for="city" class="col-sm-3 col-form-label">{{ t('fields.city.label') }}</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" data-test="city" id="city" formControlName="city">
           </div>
         </div>
         <div class="row mb-3">
-          <label for="state" class="col-sm-3 col-form-label">State</label>
+          <label for="state" class="col-sm-3 col-form-label">{{ t('fields.state.label') }}</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" data-test="state" id="state" formControlName="state">
           </div>
         </div>
         <div class="row mb-3">
-          <label for="country" class="col-sm-3 col-form-label">Country</label>
+          <label for="country" class="col-sm-3 col-form-label">{{ t('fields.country.label') }}</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" data-test="country" id="country" formControlName="country">
           </div>
@@ -65,11 +65,10 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <button type="submit" class="btn btn-primary" data-test="update-profile-submit">Update Profile</button>
+        <button type="submit" class="btn btn-primary" data-test="update-profile-submit">{{ t('pages.my-account.profile.update-profile-btn') }}</button>
         @if (isProfileUpdated && !hideProfileAlert) {
           <div [ngClass]="fadeOutMessage()" class="alert alert-success mt-3"
-               role="alert">
-            Your profile is <strong>successfully</strong> updated!
+               role="alert" [innerHTML]="t('pages.my-account.profile.update-profile-success')">
           </div>
         }
         @if (profileError && !hideProfileAlert) {
@@ -86,21 +85,21 @@
     <div class="row">
       <div class="col-lg-6">
         <div class="row mb-3">
-          <label for="current-password" class="col-sm-3 col-form-label">Current Password</label>
+          <label for="current-password" class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.current-password') }}</label>
           <div class="col-sm-9">
             <input type="password" class="form-control" formControlName="current_password" data-test="current-password"
                    id="current-password">
           </div>
         </div>
         <div class="row mb-3">
-          <label for="new-password" class="col-sm-3 col-form-label">New Password</label>
+          <label for="new-password" class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.new-password') }}</label>
           <div class="col-sm-9">
             <input type="password" class="form-control" formControlName="new_password" data-test="new-password"
                    id="new-password">
           </div>
         </div>
         <div class="row mb-3">
-          <label for="new-password-confirm" class="col-sm-3 col-form-label">Confirm New Password</label>
+          <label for="new-password-confirm" class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.confirm-new-password') }}</label>
           <div class="col-sm-9">
             <input type="password" class="form-control" formControlName="new_password_confirmation"
                    data-test="new-password-confirm" id="new-password-confirm">
@@ -110,11 +109,10 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <button type="submit" class="btn btn-primary" data-test="change-password-submit">Change Password</button>
+        <button type="submit" class="btn btn-primary" data-test="change-password-submit">{{ t('pages.my-account.profile.change-password-btn') }}</button>
         @if (isPasswordUpdated && !hidePasswordAlert) {
           <div [ngClass]="fadeOutMessage()"
-               class="alert alert-success mt-3" role="alert">
-            Your password is <strong>successfully</strong> updated!
+               class="alert alert-success mt-3" role="alert" [innerHTML]="t('pages.my-account.profile.change-password-success')">
           </div>
         }
         @if (passwordError && !hidePasswordAlert) {

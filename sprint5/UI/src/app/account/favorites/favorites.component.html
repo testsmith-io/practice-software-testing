@@ -1,9 +1,8 @@
-<div class="col">
-  <h1 data-test="page-title">Favorites</h1>
+<div class="col" *transloco="let t">
+  <h1 data-test="page-title">{{ t('pages.my-account.favorites.title') }}</h1>
   @if (!favorites?.length) {
     <div>
-      There are no favorites yet. In order to add favorites, please go to the product listing and mark some products as
-      your favorite.
+      {{ t('pages.my-account.favorites.no-favorites') }}
     </div>
   }
   @for (favorite of favorites;track favorite) {

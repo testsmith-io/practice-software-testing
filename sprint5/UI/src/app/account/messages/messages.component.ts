@@ -3,6 +3,9 @@ import {first} from "rxjs/operators";
 import {ContactMessage} from "../../models/contact-message";
 import {ContactService} from "../../_services/contact.service";
 import {Pagination} from "../../models/pagination";
+import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
+import {TranslocoService} from "@jsverse/transloco";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-messages',
@@ -13,11 +16,18 @@ export class MessagesComponent implements OnInit {
 
   currentPage: number = 1;
   results: Pagination<ContactMessage>;
+  noMessagesHtml: SafeHtml;
 
-  constructor(private messageService: ContactService) {
+  constructor(private messageService: ContactService,
+              private translocoService: TranslocoService,
+              private sanitizer: DomSanitizer,
+              private router: Router) {
   }
 
   ngOnInit(): void {
+    this.translocoService.selectTranslate('pages.my-account.messages.no-messages').subscribe((translation: string) => {
+      this.noMessagesHtml = this.sanitizer.bypassSecurityTrustHtml(translation);
+    });
     this.getMessages();
   }
 
@@ -43,4 +53,10 @@ export class MessagesComponent implements OnInit {
     this.getMessages();
   }
 
+  handleLinkClick(event: Event) {
+    const target = event.target as HTMLElement;
+    if (target && target.id === 'contact-link') {
+      this.router.navigate(['/contact']);
+    }
+  }
 }

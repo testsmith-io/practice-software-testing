@@ -1,16 +1,16 @@
-<h1 data-test="page-title">My account</h1>
+<h1 data-test="page-title" *transloco="let t">{{ t('pages.my-account.overview.title') }}</h1>
 
-<p>Here you can manage your profile, favorites and orders.</p>
+<p *transloco="let t">{{ t('pages.my-account.overview.description') }}</p>
 
-<div class="btn-group-vertical">
+<div class="btn-group-vertical" *transloco="let t">
   <a routerLink="favorites" data-test="nav-favorites" role="button"
-     class="btn btn-outline-secondary d-flex justify-content-start align-items-center"><i class="fa fa-star"></i>&nbsp;Favorites</a>
+     class="btn btn-outline-secondary d-flex justify-content-start align-items-center"><i class="fa fa-star"></i>&nbsp;{{ t('pages.my-account.overview.favorites') }}</a>
   <a routerLink="profile" data-test="nav-profile" role="button"
      class="btn btn-outline-secondary d-flex justify-content-start align-items-center"><i
-    class="fa fa-address-card"></i>&nbsp;Profile</a>
+    class="fa fa-address-card"></i>&nbsp;{{ t('pages.my-account.overview.profile') }}</a>
   <a routerLink="invoices" data-test="nav-invoices" role="button"
-     class="btn btn-outline-secondary d-flex justify-content-start align-items-center"><i class="fa fa-list"></i>&nbsp;Invoices</a>
+     class="btn btn-outline-secondary d-flex justify-content-start align-items-center"><i class="fa fa-list"></i>&nbsp;{{ t('pages.my-account.overview.invoices') }}</a>
   <a routerLink="messages" data-test="nav-messages" role="button"
      class="btn btn-outline-secondary d-flex justify-content-start align-items-center"><i
-    class="fa fa-comment-dots"></i>&nbsp;Messages</a>
+    class="fa fa-comment-dots"></i>&nbsp;{{ t('pages.my-account.overview.messages') }}</a>
 </div>

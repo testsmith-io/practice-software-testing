@@ -1,15 +1,14 @@
 @if (!invoice?.invoice_date) {
-  <div class="container mt-5">
-    <p>This invoice doesn't exist.</p>
+  <div class="container mt-5" *transloco="let t">
+    <p>{{ t('pages.my-account.invoices.not-exist') }}</p>
   </div>
 }
 @if (invoice?.invoice_date) {
-  <div class="container mt-5">
+  <div class="container mt-5" *transloco="let t">
     <div class="row mb-3">
       <div class="input-group">
         <button class="btn btn-warning" [disabled]="!isDownloadReady" (click)="downloadPDF()" type="submit"
-                data-test="download-invoice">Download
-          PDF
+                data-test="download-invoice">{{ t('pages.my-account.invoices.download-pdf') }}
         </button>
       </div>
       @if (error && !hideAlert) {
@@ -21,17 +20,17 @@
     </div>
     <div class="row">
       <div class="col">
-        <h3>General Information</h3>
+        <h3>{{ t('pages.my-account.invoices.general-information') }}</h3>
         <form>
           <div class="form-group row">
-            <label for="invoice_date" class="col-sm-3 col-form-label">Invoice Number</label>
+            <label for="invoice_date" class="col-sm-3 col-form-label">{{ t('pages.my-account.invoices.invoice-number') }}</label>
             <div class="col-sm-9">
               <input type="text" readonly class="form-control-plaintext" data-test="invoice-number" id="invoice_number"
                      value="{{invoice.invoice_number}}">
             </div>
           </div>
           <div class="form-group row">
-            <label for="invoice_date" class="col-sm-3 col-form-label">Invoice Date</label>
+            <label for="invoice_date" class="col-sm-3 col-form-label">{{ t('pages.my-account.invoices.invoice-date') }}</label>
             <div class="col-sm-9">
               <input type="text" readonly class="form-control-plaintext" data-test="invoice-date" id="invoice_date"
                      value="{{invoice.invoice_date}}">
@@ -39,14 +38,14 @@
           </div>
           @if(invoice.additional_discount_percentage) {
             <div class="form-group row">
-              <label for="total" class="col-sm-3 col-form-label">Subtotal</label>
+              <label for="total" class="col-sm-3 col-form-label">{{ t('pages.checkout.cart.subtotal') }}</label>
               <div class="col-sm-9">
                 <input type="text" readonly class="form-control-plaintext" data-test="total" id="subtotal"
                        value="$ {{invoice.subtotal.toFixed(2)}}">
               </div>
             </div>
             <div class="form-group row">
-              <label for="total" class="col-sm-3 col-form-label">Discount ({{invoice.additional_discount_percentage}}%)</label>
+              <label for="total" class="col-sm-3 col-form-label">{{ t('pages.checkout.cart.discount') }} ({{invoice.additional_discount_percentage}}%)</label>
               <div class="col-sm-9">
                 <input type="text" readonly class="form-control-plaintext" data-test="total" id="additional_discount_percentage"
                        value="$ {{invoice.additional_discount_amount.toFixed(2)}}">
@@ -54,7 +53,7 @@
             </div>
           }
           <div class="form-group row">
-            <label for="total" class="col-sm-3 col-form-label">Total</label>
+            <label for="total" class="col-sm-3 col-form-label">{{ t('pages.checkout.cart.total') }}</label>
             <div class="col-sm-9">
               <input type="text" readonly class="form-control-plaintext" data-test="total" id="total"
                      value="$ {{invoice.total.toFixed(2)}}">
@@ -63,38 +62,38 @@
         </form>
         <div class="mb-3"></div>
 
-        <h3>Billing Address</h3>
+        <h3>{{ t('pages.my-account.invoices.billing-address') }}</h3>
         <form>
           <div class="form-group row">
-            <label for="address" class="col-sm-3 col-form-label">Address</label>
+            <label for="address" class="col-sm-3 col-form-label">{{ t('fields.address.label') }}</label>
             <div class="col-sm-9">
               <input type="text" readonly class="form-control-plaintext" data-test="address" id="address"
                      value="{{invoice.billing_address}}">
             </div>
           </div>
           <div class="form-group row">
-            <label for="postcode" class="col-sm-3 col-form-label">Postcode</label>
+            <label for="postcode" class="col-sm-3 col-form-label">{{ t('fields.postcode.label') }}</label>
             <div class="col-sm-9">
               <input type="text" readonly class="form-control-plaintext" data-test="postcode" id="postcode"
                      value="{{invoice.billing_postcode}}">
             </div>
           </div>
           <div class="form-group row">
-            <label for="city" class="col-sm-3 col-form-label">City</label>
+            <label for="city" class="col-sm-3 col-form-label">{{ t('fields.city.label') }}</label>
             <div class="col-sm-9">
               <input type="text" readonly class="form-control-plaintext" data-test="city" id="city"
                      value="{{invoice.billing_city}}">
             </div>
           </div>
           <div class="form-group row">
-            <label for="state" class="col-sm-3 col-form-label">State</label>
+            <label for="state" class="col-sm-3 col-form-label">{{ t('fields.state.label') }}</label>
             <div class="col-sm-9">
               <input type="text" readonly class="form-control-plaintext" data-test="state" id="state"
                      value="{{invoice.billing_state}}">
             </div>
           </div>
           <div class="form-group row">
-            <label for="country" class="col-sm-3 col-form-label">Country</label>
+            <label for="country" class="col-sm-3 col-form-label">{{ t('fields.country.label') }}</label>
             <div class="col-sm-9">
               <input type="text" readonly class="form-control-plaintext" data-test="country" id="country"
                      value="{{invoice.billing_country}}">
@@ -103,10 +102,10 @@
         </form>
       </div>
       <div class="col">
-        <h3>Payment Information</h3>
+        <h3>{{ t('pages.my-account.invoices.payment-information') }}</h3>
         <form>
           <div class="form-group row">
-            <label for="payment_method" class="col-sm-3 col-form-label">Payment Method</label>
+            <label for="payment_method" class="col-sm-3 col-form-label">{{ t('pages.checkout.payment.method-label') }}</label>
             <div class="col-sm-9">
               <input type="text" readonly class="form-control-plaintext" data-test="payment-method" id="payment_method"
                      value="{{invoice.payment.payment_method}}">
@@ -126,14 +125,14 @@
     </div>
     <div class="row mt-3">
       <div class="col">
-        <h3>Products</h3>
+        <h3>{{ t('pages.my-account.invoices.products') }}</h3>
         <table class="table table-hover">
           <thead>
           <tr>
-            <th scope="col">Quantity</th>
-            <th scope="col">Product</th>
-            <th class="text-end" scope="col">Price</th>
-            <th class="text-end" scope="col">Total</th>
+            <th scope="col">{{ t('pages.checkout.cart.quantity-header') }}</th>
+            <th scope="col">{{ t('pages.my-account.invoices.product') }}</th>
+            <th class="text-end" scope="col">{{ t('pages.checkout.cart.price-header') }}</th>
+            <th class="text-end" scope="col">{{ t('pages.checkout.cart.total') }}</th>
           </tr>
           </thead>
           <tbody>
@@ -145,8 +144,7 @@
 
                     class="badge rounded-pill bg-warning me-1">-{{ invoiceline.discount_percentage }}%</span>
                 }<br/>@if (invoiceline.product.is_rental) {
-                  <small> (Item for rent, price per
-                    hour)</small>
+                  <small> ({{ t('pages.checkout.cart.rental-explainer') }})</small>
                 }</td>
                 <td class="col-md-2 text-end"><span
                   [ngClass]="{'discounted' : invoiceline.discount_percentage}">${{ invoiceline.product.price | number: '1.2-2' }}</span>@if (invoiceline.discounted_price) {

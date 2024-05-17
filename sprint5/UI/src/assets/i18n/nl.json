@@ -70,6 +70,21 @@
       "errors": {
         "required": "Land is vereist"
       }
+    },
+    "dob": {
+      "label": "Geboortedatum",
+      "placeholder": "Uw geboortedatum",
+      "errors": {
+        "required": "Geboortedatum is vereist"
+      }
+    },
+    "phone": {
+      "label": "Telefoon",
+      "placeholder": "Uw telefoon",
+      "errors": {
+        "required": "Telefoon is vereist.",
+        "format": "Alleen nummers zijn toegestaan."
+      }
     }
   },
   "header": {
@@ -145,22 +160,7 @@
     "register": {
       "title": "Klantregistratie",
       "email-in-use": "E-mail is al in gebruik.",
-      "btn": "Registreren",
-      "dob": {
-        "label": "Geboortedatum",
-        "placeholder": "Uw geboortedatum",
-        "errors": {
-          "required": "Geboortedatum is vereist"
-        }
-      },
-      "phone": {
-        "label": "Telefoon",
-        "placeholder": "Uw telefoon",
-        "errors": {
-          "required": "Telefoon is vereist.",
-          "format": "Alleen nummers zijn toegestaan."
-        }
-      }
+      "btn": "Registreren"
     },
     "forgot-password": {
       "title": "Wachtwoord vergeten",
@@ -273,6 +273,58 @@
           "validation-code-help": "De validatiecode is een beveiligingskenmerk op uw cadeaukaart, vaak gelegen bij het cadeaukaartnummer. Voer deze code exact in zoals deze op uw kaart verschijnt.",
           "validation-code-error-format": "Validatiecode moet alfanumeriek zijn."
         }
+      }
+    },
+    "my-account": {
+      "overview": {
+        "title": "Mijn account",
+        "description": "Hier kunt u uw profiel, favorieten en bestellingen beheren.",
+        "favorites": "Favorieten",
+        "profile": "Profiel",
+        "invoices": "Facturen",
+        "messages": "Berichten"
+      },
+      "profile": {
+        "title": "Profiel",
+        "update-profile-btn": "Profiel bijwerken",
+        "update-profile-success": "Uw profiel is <strong>succesvol</strong> bijgewerkt!",
+        "password-section": "Wachtwoord",
+        "current-password": "Huidig wachtwoord",
+        "new-password": "Nieuw wachtwoord",
+        "confirm-new-password": "Bevestig nieuw wachtwoord",
+        "change-password-btn": "Wachtwoord wijzigen",
+        "change-password-success": "Uw wachtwoord is <strong>succesvol</strong> bijgewerkt!"
+      },
+      "messages": {
+        "title": "Berichten",
+        "no-messages": "Er zijn nog geen berichten. Navigeer naar het <a class=\"link-primary\" id=\"contact-link\">contactformulier</a> en vul het formulier in.",
+        "subject": "Onderwerp",
+        "message": "Bericht",
+        "status": "Status",
+        "date": "Datum",
+        "details": "Details",
+        "back-btn": "Terug",
+        "replies": "Reacties",
+        "reply-btn": "Beantwoorden",
+        "add-reply": "Reactie toevoegen"
+      },
+      "favorites": {
+        "title": "Favorieten",
+        "no-favorites": "Er zijn nog geen favorieten. Om favorieten toe te voegen, ga naar de productlijst en markeer enkele producten als uw favoriet."
+      },
+      "invoices": {
+        "title": "Facturen",
+        "invoice-number": "Factuurnummer",
+        "billing-address": "Factuuradres",
+        "invoice-date": "Factuurdatum",
+        "total": "Totaal",
+        "details": "Details",
+        "not-exist": "Deze factuur bestaat niet.",
+        "download-pdf": "PDF downloaden",
+        "general-information": "Algemene informatie",
+        "payment-information": "Betalingsinformatie",
+        "products": "Producten",
+        "product": "Product"
       }
     }
   }

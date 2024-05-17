@@ -70,6 +70,21 @@
       "errors": {
         "required": "Country is required"
       }
+    },
+    "dob": {
+      "label": "Date of Birth",
+      "placeholder": "Your Date of birth",
+      "errors": {
+        "required": "Date of Birth is required"
+      }
+    },
+    "phone": {
+      "label": "Phone",
+      "placeholder": "Your phone",
+      "errors": {
+        "required": "Phone is required.",
+        "format": "Only numbers are allowed."
+      }
     }
   },
   "header": {
@@ -145,22 +160,7 @@
     "register": {
       "title": "Customer registration",
       "email-in-use": "Email is already in use.",
-      "btn": "Register",
-      "dob": {
-        "label": "Date of Birth",
-        "placeholder": "Your Date of birth",
-        "errors": {
-          "required": "Date of Birth is required"
-        }
-      },
-      "phone": {
-        "label": "Phone",
-        "placeholder": "Your phone",
-        "errors": {
-          "required": "Phone is required.",
-          "format": "Only numbers are allowed."
-        }
-      }
+      "btn": "Register"
     },
     "forgot-password": {
       "title": "Forgot Password",
@@ -273,6 +273,58 @@
           "validation-code-help": "The validation code is a security feature found on your gift card, often located near the gift card number. Enter this code exactly as it appears on your card.",
           "validation-code-error-format": "Validation code must be alphanumeric."
         }
+      }
+    },
+    "my-account": {
+      "overview": {
+        "title": "My account",
+        "description": "Here you can manage your profile, favorites and orders.",
+        "favorites": "Favorites",
+        "profile": "Profile",
+        "invoices": "Invoices",
+        "messages": "Messages"
+      },
+      "profile": {
+        "title": "Profile",
+        "update-profile-btn": "Update Profile",
+        "update-profile-success": "Your profile is <strong>successfully</strong> updated!",
+        "password-section": "Password",
+        "current-password": "Current Password",
+        "new-password": "New Password",
+        "confirm-new-password": "Confirm New Password",
+        "change-password-btn": "Change Password",
+        "change-password-success": "Your password is <strong>successfully</strong> updated!"
+      },
+      "messages": {
+        "title": "Messages",
+        "no-messages": "There are no messages yet. Navigate to the <a class=\"link-primary\" id=\"contact-link\">contact form</a> and fill out the form.",
+        "subject": "Subject",
+        "message": "Message",
+        "status": "Status",
+        "date": "Date",
+        "details": "Details",
+        "back-btn": "Back",
+        "replies": "Replies",
+        "reply-btn": "Reply",
+        "add-reply": "Add Reply"
+      },
+      "favorites": {
+        "title": "Favorites",
+        "no-favorites": "There are no favorites yet. In order to add favorites, please go to the product listing and mark some products as your favorite."
+      },
+      "invoices": {
+        "title": "Invoices",
+        "invoice-number": "Invoice Number",
+        "billing-address": "Billing Address",
+        "invoice-date": "Invoice Date",
+        "total": "Total",
+        "details": "Details",
+        "not-exist": "This invoice doesn't exist.",
+        "download-pdf": "Download PDF",
+        "general-information": "General Information",
+        "payment-information": "Payment Information",
+        "products": "Products",
+        "product": "Product"
       }
     }
   }
