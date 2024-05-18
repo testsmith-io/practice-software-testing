@@ -42,6 +42,13 @@ class ProductController extends Controller
      *          required=false,
      *          @OA\Schema(type="string")
      *      ),
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          description="pagenumber",
+     *          required=false,
+     *          @OA\Schema(type="integer")
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
@@ -255,6 +262,13 @@ class ProductController extends Controller
      *          description="A query phrase",
      *          required=true,
      *          @OA\Schema(type="string")
+     *      ),
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          description="pagenumber",
+     *          required=false,
+     *          @OA\Schema(type="integer")
      *      ),
      *      @OA\Response(
      *          response=200,

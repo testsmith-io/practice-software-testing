@@ -29,14 +29,14 @@ class ProductController extends Controller {
      *          in="query",
      *          description="Id of brand",
      *          required=false,
-     *          @OA\Schema(type="integer")
+     *          @OA\Schema(type="string")
      *      ),
      *      @OA\Parameter(
      *          name="by_category",
      *          in="query",
      *          description="Id of category",
      *          required=false,
-     *          @OA\Schema(type="integer")
+     *          @OA\Schema(type="string")
      *      ),
      *      @OA\Parameter(
      *          name="is_rental",
@@ -58,6 +58,13 @@ class ProductController extends Controller {
      *          description="Can be used to sort based on specific column value, like: name,asc OR name,desc OR price,asc OR price,desc",
      *          required=false,
      *          @OA\Schema(type="string")
+     *      ),
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          description="pagenumber",
+     *          required=false,
+     *          @OA\Schema(type="integer")
      *      ),
      *      @OA\Response(
      *          response=200,
@@ -275,6 +282,13 @@ class ProductController extends Controller {
      *          description="A query phrase",
      *          required=true,
      *          @OA\Schema(type="string")
+     *      ),
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          description="pagenumber",
+     *          required=false,
+     *          @OA\Schema(type="integer")
      *      ),
      *      @OA\Response(
      *          response=200,

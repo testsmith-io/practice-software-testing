@@ -36,6 +36,13 @@ class UserController extends Controller
      *      tags={"User"},
      *      summary="Retrieve all users",
      *      description="Retrieve all users",
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          description="pagenumber",
+     *          required=false,
+     *          @OA\Schema(type="integer")
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
@@ -411,7 +418,7 @@ class UserController extends Controller
      *              mediaType="application/json",
      *              @OA\Schema(
      *                  @OA\Property(property="message",
-     *                       type="String",
+     *                       type="string",
      *                       example="Successfully logged out",
      *                       description=""
      *                  ),
@@ -549,6 +556,13 @@ class UserController extends Controller
      *          description="A query phrase",
      *          required=true,
      *          @OA\Schema(type="string")
+     *      ),
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          description="pagenumber",
+     *          required=false,
+     *          @OA\Schema(type="integer")
      *      ),
      *      @OA\Response(
      *          response=200,
