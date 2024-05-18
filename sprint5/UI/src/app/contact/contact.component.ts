@@ -78,8 +78,7 @@ export class ContactComponent implements OnInit {
     const payload: ContactMessage = {
       name: this.name ? this.name : `${this.contact.value.first_name} ${this.contact.value.last_name}`,
       subject: this.contact.value.subject,
-      message: this.contact.value.message,
-      status: 'NEW'
+      message: this.contact.value.message
     };
 
     if (this.contact.value.email) {

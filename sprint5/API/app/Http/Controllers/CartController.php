@@ -294,14 +294,6 @@ class CartController extends Controller
      *          example=1,
      *          @OA\Schema(type="string")
      *      ),
-     *    @OA\Parameter(
-     *           name="productId",
-     *           in="path",
-     *           description="The cartId parameter in path",
-     *           required=true,
-     *           example=1,
-     *           @OA\Schema(type="string")
-     *       ),
      *      @OA\Response(
      *          response=204,
      *          description="Successful operation"

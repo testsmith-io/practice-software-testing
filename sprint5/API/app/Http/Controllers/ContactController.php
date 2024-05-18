@@ -70,11 +70,11 @@ class ContactController extends Controller
         if (Auth::check()) {
             $input = $request->all();
             $input['user_id'] = Auth::user()->id;
-            $result = ContactRequests::create($input);
         } else {
             $input = $request->all();
-            $result = ContactRequests::create($input);
         }
+        $input['status'] = 'NEW';
+        $result = ContactRequests::create($input);
 
         if (App::environment('local')) {
             $email = ($request->input('email')) ? $request->input('email') : Auth::user()->email;
@@ -168,6 +168,13 @@ class ContactController extends Controller
      *      tags={"Contact"},
      *      summary="Retrieve messages",
      *      description="`admin` retrieves all messages, `user` retrieves only related messages",
+     *      @OA\Parameter(
+     *          name="page",
+     *          in="query",
+     *          description="pagenumber",
+     *          required=false,
+     *          @OA\Schema(type="integer")
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
