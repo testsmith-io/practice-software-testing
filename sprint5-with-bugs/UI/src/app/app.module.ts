@@ -52,6 +52,7 @@ import {PagenotfoundComponent} from './shared/pagenotfound/pagenotfound.componen
         ReactiveFormsModule,
         NgxPaginationModule,
         NgxSliderModule,
+        RouterLink,
         RouterLink
     ],
   providers: [UserAuthGuard, AdminAuthGuard, {
