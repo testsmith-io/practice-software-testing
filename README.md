@@ -1,7 +1,5 @@
 [![Run Playwright Tests 🎭](https://github.com/testsmith-io/practice-software-testing/actions/workflows/run-tests.yml/badge.svg)](https://github.com/testsmith-io/practice-software-testing/actions/workflows/run-tests.yml) [![StackShare](http://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/testsmith-io/practice-software-testing)
 
-<a href="https://www.buymeacoffee.com/roydekleijn"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=roydekleijn&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
-
 
 # Default accounts
 
@@ -85,11 +83,17 @@ Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belong
 
 ## Sprint 0
 
-During this initial sprint we took some architectural decisions. We decided to implement a
-super-fast [Laravel](https://laravel.com/) API, as wel as an [Angular](https://angular.io/) frontend.
+During this initial sprint, we took some architectural decisions. We decided to implement a
+super-fast [Laravel](https://laravel.com/) API, as well as an [Angular](https://angular.io/) frontend.
 
-Every developer or tester is able to spin up the environment on its own machine. This makes testing easier, and it
+Every developer or tester can spin up the environment on its own machine. This makes testing easier, and it
 allows you to manipulate data.
 
-The deliverable of Sprint0 is a Dockerized environment as wel as database seeding scripts. Basically, the end-result is
+The deliverable of Sprint0 is a Dockerized environment, just like database seeding scripts. Basically, the result is
 an empty environment.
+
+# Support This Project
+
+If you find this project useful and want to support its ongoing development, please consider [supporting](https://testwithroy.com/b/support) it!
+
+I appreciate your support!
