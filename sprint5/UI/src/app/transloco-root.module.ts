@@ -11,7 +11,7 @@ import { environment } from '../environments/environment';
   providers: [
       provideTransloco({
         config: {
-          availableLangs: ['de', 'en', 'fr', 'es', 'nl'],
+          availableLangs: ['de', 'en', 'fr', 'es', 'nl', 'tr'],
           fallbackLang: 'en',
           defaultLang: localStorage.getItem('language') || 'en',
           // Remove this option if your application doesn't support changing language in runtime.
