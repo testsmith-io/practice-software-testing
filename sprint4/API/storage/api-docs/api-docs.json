@@ -452,7 +452,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/CategoryResponse"
+                                        "$ref": "#/components/schemas/CategoryTreeResponse"
                                     }
                                 }
                             }
@@ -642,7 +642,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/CategoryResponse"
+                                    "$ref": "#/components/schemas/CategoryTreeResponse"
                                 }
                             }
                         }
@@ -906,6 +906,17 @@
                 "summary": "Retrieve messages",
                 "description": "`user` retrieves only related messages",
                 "operationId": "getMessages",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "pagenumber",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -923,19 +934,15 @@
                                                 "$ref": "#/components/schemas/ContactResponse"
                                             }
                                         },
-                                        "next_page_url": {
+                                        "from": {
                                             "type": "integer",
                                             "example": 1
                                         },
-                                        "path": {
+                                        "last_page": {
                                             "type": "integer",
                                             "example": 1
                                         },
                                         "per_page": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "prev_page_url": {
                                             "type": "integer",
                                             "example": 1
                                         },
@@ -1773,6 +1780,17 @@
                 "summary": "Retrieve all invoices",
                 "description": "`user` retrieves only related invoices",
                 "operationId": "getInvoices",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "pagenumber",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -1790,19 +1808,15 @@
                                                 "$ref": "#/components/schemas/InvoiceResponse"
                                             }
                                         },
-                                        "next_page_url": {
+                                        "from": {
                                             "type": "integer",
                                             "example": 1
                                         },
-                                        "path": {
+                                        "last_page": {
                                             "type": "integer",
                                             "example": 1
                                         },
                                         "per_page": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "prev_page_url": {
                                             "type": "integer",
                                             "example": 1
                                         },
@@ -2258,12 +2272,30 @@
                     }
                 ],
                 "requestBody": {
-                    "description": "Invoice request object",
-                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/InvoiceRequest"
+                                "properties": {
+                                    "status": {
+                                        "description": "The status of the order",
+                                        "type": "string",
+                                        "enum": [
+                                            "AWAITING_FULFILLMENT",
+                                            "ON_HOLD",
+                                            "AWAITING_SHIPMENT",
+                                            "SHIPPED",
+                                            "COMPLETED"
+                                        ]
+                                    },
+                                    "status_message": {
+                                        "description": "A message describing the status",
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "minLength": 5,
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
                             }
                         }
                     }
@@ -2362,6 +2394,15 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "pagenumber",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -2381,19 +2422,15 @@
                                                 "$ref": "#/components/schemas/InvoiceResponse"
                                             }
                                         },
-                                        "next_page_url": {
+                                        "from": {
                                             "type": "integer",
                                             "example": 1
                                         },
-                                        "path": {
+                                        "last_page": {
                                             "type": "integer",
                                             "example": 1
                                         },
                                         "per_page": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "prev_page_url": {
                                             "type": "integer",
                                             "example": 1
                                         },
@@ -2541,6 +2578,15 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "pagenumber",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -2560,19 +2606,15 @@
                                                 "$ref": "#/components/schemas/ProductResponse"
                                             }
                                         },
-                                        "next_page_url": {
+                                        "from": {
                                             "type": "integer",
                                             "example": 1
                                         },
-                                        "path": {
+                                        "last_page": {
                                             "type": "integer",
                                             "example": 1
                                         },
                                         "per_page": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "prev_page_url": {
                                             "type": "integer",
                                             "example": 1
                                         },
@@ -2743,7 +2785,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/BrandResponse"
+                                    "$ref": "#/components/schemas/ProductResponse"
                                 }
                             }
                         }
@@ -3015,6 +3057,15 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "pagenumber",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -3034,19 +3085,15 @@
                                                 "$ref": "#/components/schemas/ProductResponse"
                                             }
                                         },
-                                        "next_page_url": {
+                                        "from": {
                                             "type": "integer",
                                             "example": 1
                                         },
-                                        "path": {
+                                        "last_page": {
                                             "type": "integer",
                                             "example": 1
                                         },
                                         "per_page": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "prev_page_url": {
                                             "type": "integer",
                                             "example": 1
                                         },
@@ -3107,6 +3154,17 @@
                 "summary": "Retrieve all users",
                 "description": "Retrieve all users",
                 "operationId": "getUsers",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "pagenumber",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -3733,6 +3791,15 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "pagenumber",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -3837,6 +3904,32 @@
                         "description": "URL part, words separated by hyphen",
                         "type": "string",
                         "example": "new-category"
+                    }
+                },
+                "type": "object"
+            },
+            "CategoryTreeResponse": {
+                "title": "CategoryTreeResponse",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "parent_id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "new category"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "new-category"
+                    },
+                    "sub_categories": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CategoryResponse"
+                        }
                     }
                 },
                 "type": "object"
@@ -4017,7 +4110,7 @@
                         "type": "string",
                         "example": "0987654345"
                     },
-                    "invoicelines": {
+                    "invoice_items": {
                         "type": "array",
                         "items": {
                             "type": "object",
@@ -4084,7 +4177,7 @@
                         "type": "string",
                         "example": ""
                     },
-                    "invoicelines": {
+                    "invoice_items": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/InvoiceLineResponse"
@@ -4322,8 +4415,6 @@
             "apiAuth": {
                 "type": "http",
                 "description": "Login with email and password to get the authentication token",
-                "name": "Token based Based",
-                "in": "header",
                 "bearerFormat": "JWT",
                 "scheme": "bearer"
             }

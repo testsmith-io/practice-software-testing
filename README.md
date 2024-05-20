@@ -44,7 +44,7 @@ Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belong
 
 ## Roll Back - Run Migrations - Seed Database
 
-`docker-compose exec laravel-api php artisan migrate:refresh --seed`
+`docker-compose exec laravel-api php artisan migrate:fresh --seed`
 
 ## Migrate database schema
 

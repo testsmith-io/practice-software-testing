@@ -452,7 +452,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/CategoryResponse"
+                                        "$ref": "#/components/schemas/CategoryTreeResponse"
                                     }
                                 }
                             }
@@ -642,7 +642,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/CategoryResponse"
+                                    "$ref": "#/components/schemas/CategoryTreeResponse"
                                 }
                             }
                         }
@@ -990,6 +990,15 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "pagenumber",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -1009,19 +1018,15 @@
                                                 "$ref": "#/components/schemas/ProductResponse"
                                             }
                                         },
-                                        "next_page_url": {
+                                        "from": {
                                             "type": "integer",
                                             "example": 1
                                         },
-                                        "path": {
+                                        "last_page": {
                                             "type": "integer",
                                             "example": 1
                                         },
                                         "per_page": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "prev_page_url": {
                                             "type": "integer",
                                             "example": 1
                                         },
@@ -1456,6 +1461,15 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "pagenumber",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -1475,19 +1489,15 @@
                                                 "$ref": "#/components/schemas/ProductResponse"
                                             }
                                         },
-                                        "next_page_url": {
+                                        "from": {
                                             "type": "integer",
                                             "example": 1
                                         },
-                                        "path": {
+                                        "last_page": {
                                             "type": "integer",
                                             "example": 1
                                         },
                                         "per_page": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "prev_page_url": {
                                             "type": "integer",
                                             "example": 1
                                         },
@@ -1592,6 +1602,32 @@
                 },
                 "type": "object"
             },
+            "CategoryTreeResponse": {
+                "title": "CategoryTreeResponse",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "parent_id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "new category"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "new-category"
+                    },
+                    "sub_categories": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CategoryResponse"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "CategoryResponse": {
                 "title": "CategoryResponse",
                 "properties": {
@@ -1691,10 +1727,6 @@
                     },
                     "title": {
                         "type": "string"
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "example": "2022-08-01 08:24:56"
                     },
                     "id": {
                         "type": "integer"

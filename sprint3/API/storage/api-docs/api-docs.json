@@ -452,7 +452,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/CategoryResponse"
+                                        "$ref": "#/components/schemas/CategoryTreeResponse"
                                     }
                                 }
                             }
@@ -642,7 +642,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/CategoryResponse"
+                                    "$ref": "#/components/schemas/CategoryTreeResponse"
                                 }
                             }
                         }
@@ -961,8 +961,19 @@
                     "Invoice"
                 ],
                 "summary": "Retrieve all invoices",
-                "description": "`user` retrieves only related invoices",
+                "description": "Retrieves invoices",
                 "operationId": "getInvoices",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "pagenumber",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -980,19 +991,15 @@
                                                 "$ref": "#/components/schemas/InvoiceResponse"
                                             }
                                         },
-                                        "next_page_url": {
+                                        "from": {
                                             "type": "integer",
                                             "example": 1
                                         },
-                                        "path": {
+                                        "last_page": {
                                             "type": "integer",
                                             "example": 1
                                         },
                                         "per_page": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "prev_page_url": {
                                             "type": "integer",
                                             "example": 1
                                         },
@@ -1176,90 +1183,6 @@
                     }
                 }
             },
-            "put": {
-                "tags": [
-                    "Invoice"
-                ],
-                "summary": "Update specific invoice",
-                "description": "Update specific invoice",
-                "operationId": "updateInvoice",
-                "parameters": [
-                    {
-                        "name": "invoiceId",
-                        "in": "path",
-                        "description": "The invoiceId parameter in path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "description": "Invoice request object",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/InvoiceRequest"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Result of the update",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "description": "",
-                                            "type": "boolean",
-                                            "example": true
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Returns when the server was not able to process the content"
-                    }
-                }
-            },
             "delete": {
                 "tags": [
                     "Invoice"
@@ -1343,12 +1266,30 @@
                     }
                 ],
                 "requestBody": {
-                    "description": "Invoice request object",
-                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/InvoiceRequest"
+                                "properties": {
+                                    "status": {
+                                        "description": "The status of the order",
+                                        "type": "string",
+                                        "enum": [
+                                            "AWAITING_FULFILLMENT",
+                                            "ON_HOLD",
+                                            "AWAITING_SHIPMENT",
+                                            "SHIPPED",
+                                            "COMPLETED"
+                                        ]
+                                    },
+                                    "status_message": {
+                                        "description": "A message describing the status",
+                                        "type": "string",
+                                        "maxLength": 50,
+                                        "minLength": 5,
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
                             }
                         }
                     }
@@ -1426,6 +1367,15 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "pagenumber",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -1445,19 +1395,15 @@
                                                 "$ref": "#/components/schemas/InvoiceResponse"
                                             }
                                         },
-                                        "next_page_url": {
+                                        "from": {
                                             "type": "integer",
                                             "example": 1
                                         },
-                                        "path": {
+                                        "last_page": {
                                             "type": "integer",
                                             "example": 1
                                         },
                                         "per_page": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "prev_page_url": {
                                             "type": "integer",
                                             "example": 1
                                         },
@@ -1605,6 +1551,15 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "pagenumber",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -1624,19 +1579,15 @@
                                                 "$ref": "#/components/schemas/ProductResponse"
                                             }
                                         },
-                                        "next_page_url": {
+                                        "from": {
                                             "type": "integer",
                                             "example": 1
                                         },
-                                        "path": {
+                                        "last_page": {
                                             "type": "integer",
                                             "example": 1
                                         },
                                         "per_page": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "prev_page_url": {
                                             "type": "integer",
                                             "example": 1
                                         },
@@ -2079,6 +2030,15 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "pagenumber",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -2098,19 +2058,15 @@
                                                 "$ref": "#/components/schemas/ProductResponse"
                                             }
                                         },
-                                        "next_page_url": {
+                                        "from": {
                                             "type": "integer",
                                             "example": 1
                                         },
-                                        "path": {
+                                        "last_page": {
                                             "type": "integer",
                                             "example": 1
                                         },
                                         "per_page": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "prev_page_url": {
                                             "type": "integer",
                                             "example": 1
                                         },
@@ -2215,6 +2171,32 @@
                 },
                 "type": "object"
             },
+            "CategoryTreeResponse": {
+                "title": "CategoryTreeResponse",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "parent_id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "new category"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "new-category"
+                    },
+                    "sub_categories": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CategoryResponse"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "CategoryResponse": {
                 "title": "CategoryResponse",
                 "properties": {
@@ -2239,13 +2221,16 @@
                 "title": "InvoiceRequest",
                 "properties": {
                     "first_name": {
-                        "type": "string"
+                        "type": "string",
+                        "example": "John"
                     },
                     "last_name": {
-                        "type": "string"
+                        "type": "string",
+                        "example": "Doe"
                     },
                     "email": {
-                        "type": "string"
+                        "type": "string",
+                        "example": "john.doe@example.com"
                     },
                     "billing_address": {
                         "type": "string"
@@ -2271,13 +2256,13 @@
                     },
                     "payment_account_name": {
                         "type": "string",
-                        "example": "Jogn Doe"
+                        "example": "John Doe"
                     },
                     "payment_account_number": {
                         "type": "string",
                         "example": "0987654345"
                     },
-                    "invoicelines": {
+                    "invoice_items": {
                         "type": "array",
                         "items": {
                             "type": "object",
@@ -2353,7 +2338,7 @@
                         "type": "string",
                         "example": ""
                     },
-                    "invoicelines": {
+                    "invoice_items": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/InvoiceLineResponse"
@@ -2476,10 +2461,6 @@
                     },
                     "title": {
                         "type": "string"
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "example": "2022-08-01 08:24:56"
                     },
                     "id": {
                         "type": "integer"
