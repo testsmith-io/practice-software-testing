@@ -1,0 +1,331 @@
+{
+  "title": "Yazılım Testini Uygulayın",
+  "buttons": {
+  },
+  "fields": {
+    "email": {
+      "label": "E-posta adresi",
+      "placeholder": "E-posta adresiniz",
+      "errors": {
+        "required": "E-posta gereklidir",
+        "format": "E-posta formatı geçersiz"
+      }
+    },
+    "password": {
+      "label": "Şifre",
+      "placeholder": "Şifreniz",
+      "errors": {
+        "required": "Şifre gereklidir",
+        "length": "Şifre uzunluğu geçersiz",
+        "minlength": "Şifre en az 6 karakter olmalıdır.",
+        "maxlength": "Şifre 40 karakterden fazla olamaz."
+      }
+    },
+    "first-name": {
+      "label": "Ad",
+      "placeholder": "Adınız",
+      "errors": {
+        "required": "Ad gereklidir"
+      }
+    },
+    "last-name": {
+      "label": "Soyad",
+      "placeholder": "Soyadınız",
+      "errors": {
+        "required": "Soyad gereklidir"
+      }
+    },
+    "address": {
+      "label": "Adres",
+      "placeholder": "Adresiniz",
+      "errors": {
+        "required": "Adres gereklidir"
+      }
+    },
+    "postcode": {
+      "label": "Posta Kodu",
+      "placeholder": "Posta Kodunuz",
+      "errors": {
+        "required": "Posta kodu gereklidir",
+        "format": "Sadece 5 rakam girilebilir."
+      }
+    },
+    "city": {
+      "label": "Şehir",
+      "placeholder": "Şehriniz",
+      "errors": {
+        "required": "Şehir gereklidir"
+      }
+    },
+    "state": {
+      "label": "Eyalet",
+      "placeholder": "Eyaletiniz",
+      "errors": {
+        "required": "Eyalet gereklidir"
+      }
+    },
+    "country": {
+      "label": "Ülke",
+      "placeholder": "Ülkeniz",
+      "errors": {
+        "required": "Ülke gereklidir"
+      }
+    },
+    "dob": {
+      "label": "Doğum Tarihi",
+      "placeholder": "Doğum tarihiniz",
+      "errors": {
+        "required": "Doğum tarihi gereklidir"
+      }
+    },
+    "phone": {
+      "label": "Telefon",
+      "placeholder": "Telefonunuz",
+      "errors": {
+        "required": "Telefon gereklidir.",
+        "format": "Sadece rakamlar girilebilir."
+      }
+    }
+  },
+  "header": {
+    "menu": {
+      "home": "Anasayfa",
+      "categories": "Kategoriler",
+      "hand-tools": "El Aletleri",
+      "power-tools": "Elektrikli Aletler",
+      "other": "Diğer",
+      "special-tools": "Özel Aletler",
+      "rentals": "Kiralama",
+      "contact": "İletişim",
+      "sign-in": "Giriş Yap",
+      "my-account": "Hesabım",
+      "my-favorites": "Favorilerim",
+      "my-profile": "Profilim",
+      "my-invoices": "Faturalarım",
+      "my-messages": "Mesajlarım",
+      "sign-out": "Çıkış Yap"
+    }
+  },
+  "footer": {
+    "demo-app": "Bu bir DEMO uygulamasıdır",
+    "demo-purpose": "yazılım testi eğitimi amacıyla kullanılır."
+  },
+  "pages": {
+    "overview": {
+      "filters": "Filtreler",
+      "sort": "Sırala",
+      "sort-options": {
+        "name-asc": "İsim (A - Z)",
+        "name-desc": "İsim (Z - A)",
+        "price-desc": "Fiyat (Yüksek - Düşük)",
+        "price-asc": "Fiyat (Düşük - Yüksek)"
+      },
+      "price-range": "Fiyat Aralığı",
+      "search": "Ara",
+      "categories": "Kategoriler",
+      "by-category": "Kategoriye göre",
+      "category": "Kategori",
+      "brands": "Markalar",
+      "by-brand": "Markaya göre",
+      "no-results": "Ürün bulunamadı.",
+      "no-stock": "Stokta yok"
+    },
+    "product-detail": {
+      "photo-by": "Fotoğraf",
+      "on": "tarihinde",
+      "add-to-cart-btn": "Sepete ekle",
+      "add-to-favorites-btn": "Favorilere ekle",
+      "per-hour": "saat başı",
+      "increase-quantity": "Miktarı artır",
+      "decrease-quantity": "Miktarı azalt",
+      "quantity": "Miktar",
+      "total": "Toplam",
+      "duration": "Süre",
+      "hours": "saat(ler)",
+      "related-products": "İlgili ürünler",
+      "more-information": "Daha fazla bilgi"
+    },
+    "rentals": {
+      "title": "Kiralama"
+    },
+    "login": {
+      "title": "Giriş",
+      "alternative": "ya da kullanın",
+      "btn": "Giriş Yap",
+      "generic-error": "Geçersiz e-posta veya şifre",
+      "no-account": "Henüz hesabınız yok mu?",
+      "register": "Hesap oluşturun",
+      "forgot-password": "Şifrenizi mi unuttunuz?"
+    },
+    "register": {
+      "title": "Müşteri Kaydı",
+      "email-in-use": "E-posta zaten kullanımda.",
+      "btn": "Kaydol"
+    },
+    "forgot-password": {
+      "title": "Şifremi Unuttum",
+      "btn": "Yeni Şifre Belirle",
+      "confirm": "Şifreniz <strong>başarıyla</strong> güncellendi!"
+    },
+    "contact": {
+      "title": "İletişim",
+      "btn": "Gönder",
+      "subject": {
+        "label": "Konu",
+        "options": {
+          "select": "Bir konu seçin *",
+          "customer-service": "Müşteri hizmetleri",
+          "webmaster": "Web Yöneticisi",
+          "return": "İade",
+          "payments": "Ödemeler",
+          "warranty": "Garanti",
+          "status-of-order": "Sipariş durumu"
+        },
+        "errors": {
+          "required": "Konu gereklidir"
+        }
+      },
+      "message": {
+        "label": "Mesaj",
+        "errors": {
+          "required": "Mesaj gereklidir",
+          "minlength": "Mesaj en az 50 karakter olmalıdır"
+        }
+      },
+      "attachment": {
+        "label": "Ek",
+        "help": "Sadece <strong>txt</strong> uzantılı dosyalara izin verilir ve dosyalar 0kb olmalıdır.",
+        "errors": {
+          "incorrect-type": "Dosya txt uzantılı olmalıdır.",
+          "incorrect-size": "Dosya boş olmalıdır."
+        }
+      },
+      "known-user": "Merhaba {{ name }}, mesajınızı iletmek için lütfen bu formu doldurun.",
+      "confirm": "Mesajınız için teşekkürler! Kısa süre içinde sizinle iletişime geçeceğiz."
+    },
+    "checkout": {
+      "btn": "Ödemeye geç",
+      "cart": {
+        "title": "Sepet",
+        "empty": "Sepet boş. Görüntülenecek bir şey yok.",
+        "rental-explainer": "Kiralık ürün, saatlik fiyat",
+        "item-header": "Ürün",
+        "quantity-header": "Miktar",
+        "price-header": "Fiyat",
+        "subtotal": "Ara Toplam",
+        "discount": "İndirim",
+        "total": "Toplam"
+      },
+      "sign-in": {
+        "title": "Giriş Yap",
+        "already": "Merhaba {{ first_name }} {{ last_name }}, zaten giriş yaptınız. Ödemeye geçebilirsiniz."
+      },
+      "address": {
+        "title": "Fatura Adresi"
+      },
+      "payment": {
+        "title": "Ödeme",
+        "confirm-btn": "Onayla",
+        "confirm": "Siparişiniz için teşekkürler! Fatura numaranız <span id=\"invoice-number\">{{ invoice_number }}</span>.",
+        "method-label": "Ödeme Yöntemi",
+        "method-required": "Ödeme yöntemi gereklidir.",
+        "options": {
+          "select": "Ödeme yönteminizi seçin",
+          "bank-transfer": "Banka Havalesi",
+          "cash-on-delivery": "Kapıda Ödeme",
+          "credit-card": "Kredi Kartı",
+          "buy-now-pay-later": "Şimdi Al Sonra Öde",
+          "gift-card": "Hediye Kartı"
+        },
+        "bank-transfer": {
+          "bank-name": "Banka Adı",
+          "bank-name-error-format": "Banka adı sadece harf ve boşluk içerebilir.",
+          "account-name": "Hesap Adı",
+          "account-name-error-format": "Hesap adı harfler, sayılar, boşluklar, noktalar, apostroflar ve tireler içerebilir.",
+          "account-number": "Hesap Numarası",
+          "account-number-help": "Lütfen banka ekstresinde göründüğü gibi banka hesap numaranızı girin. Bireysel hesabınızı tanımlamak için kullanılan benzersiz bir sayı dizisidir. Boşluk veya tire eklemeyin.",
+          "account-number-error-format": "Hesap numarası sayısal olmalıdır."
+        },
+        "credit-card": {
+          "number": "Kredi Kartı Numarası",
+          "number-help": "Kart üzerinde göründüğü gibi 16 haneli kredi kartı numaranızı 0000-0000-0000-0000 formatında girin. Doğru format için tireleri eklediğinizden emin olun.",
+          "number-error-format": "Geçersiz kart numarası formatı.",
+          "expiration-date": "Son Kullanma Tarihi",
+          "date-error-format": "Geçersiz tarih formatı. AA/YYYY kullanın.",
+          "date-error-past": "Son kullanma tarihi gelecekte olmalıdır.",
+          "cvv": "CVV",
+          "cvv-help": "CVV 3 veya 4 haneli bir sayıdır. Kartın fiziksel olarak bulunmadığı işlemler sırasında ek güvenlik sağlar.",
+          "cvv-error-format": "CVV 3 veya 4 haneli olmalıdır.",
+          "name": "Kart Sahibinin Adı",
+          "name-required": "Sadece harfler ve boşluklar izinlidir."
+        },
+        "bnpl": {
+          "monthly-installments": "Aylık Taksitler",
+          "monthly-installments-choose": "Aylık taksitlerinizi seçin",
+          "monthly-installments-help": "Bu seçenek, satın alımınızın maliyetini birkaç ay boyunca yaymanıza olanak tanır.",
+          "monthly-installments-error-required": "Lütfen aylık taksit sayısını seçin."
+        },
+        "gift-card": {
+          "number": "Hediye Kartı Numarası",
+          "number-help": "Hediye kartınızın üzerindeki benzersiz numarayı girin. Bu numara genellikle kartın arkasında bulunur ve rakam ve/veya harflerden oluşabilir.",
+          "number-error-format": "Hediye kartı numarası alfanümerik olmalıdır.",
+          "validation-code": "Doğrulama Kodu",
+          "validation-code-help": "Doğrulama kodu, genellikle hediye kartı numarasının yakınında bulunan bir güvenlik özelliğidir. Bu kodu kartınızda göründüğü gibi girin.",
+          "validation-code-error-format": "Doğrulama kodu alfanümerik olmalıdır."
+        }
+      }
+    },
+    "my-account": {
+      "overview": {
+        "title": "Hesabım",
+        "description": "Burada profilinizi, favorilerinizi ve siparişlerinizi yönetebilirsiniz.",
+        "favorites": "Favoriler",
+        "profile": "Profil",
+        "invoices": "Faturalar",
+        "messages": "Mesajlar"
+      },
+      "profile": {
+        "title": "Profil",
+        "update-profile-btn": "Profili Güncelle",
+        "update-profile-success": "Profiliniz <strong>başarıyla</strong> güncellendi!",
+        "password-section": "Şifre",
+        "current-password": "Mevcut Şifre",
+        "new-password": "Yeni Şifre",
+        "confirm-new-password": "Yeni Şifreyi Onaylayın",
+        "change-password-btn": "Şifreyi Değiştir",
+        "change-password-success": "Şifreniz <strong>başarıyla</strong> güncellendi!"
+      },
+      "messages": {
+        "title": "Mesajlar",
+        "no-messages": "Henüz mesaj yok. <a class=\"link-primary\" id=\"contact-link\">iletişim formuna</a> gidin ve formu doldurun.",
+        "subject": "Konu",
+        "message": "Mesaj",
+        "status": "Durum",
+        "date": "Tarih",
+        "details": "Detaylar",
+        "back-btn": "Geri",
+        "replies": "Cevaplar",
+        "reply-btn": "Cevap Ver",
+        "add-reply": "Cevap Ekle"
+      },
+      "favorites": {
+        "title": "Favoriler",
+        "no-favorites": "Henüz favori yok. Favori eklemek için ürün listesine gidin ve bazı ürünleri favori olarak işaretleyin."
+      },
+      "invoices": {
+        "title": "Faturalar",
+        "invoice-number": "Fatura Numarası",
+        "billing-address": "Fatura Adresi",
+        "invoice-date": "Fatura Tarihi",
+        "total": "Toplam",
+        "details": "Detaylar",
+        "not-exist": "Bu fatura mevcut değil.",
+        "download-pdf": "PDF İndir",
+        "general-information": "Genel Bilgi",
+        "payment-information": "Ödeme Bilgisi",
+        "products": "Ürünler",
+        "product": "Ürün"
+      }
+    }
+  }
+}

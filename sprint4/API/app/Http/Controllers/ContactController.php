@@ -106,10 +106,9 @@ class ContactController extends Controller {
      *                  type="array",
      *                  @OA\Items(ref="#/components/schemas/ContactResponse")
      *              ),
-     *              @OA\Property(property="next_page_url", type="integer", example=1),
-     *              @OA\Property(property="path", type="integer", example=1),
+     *              @OA\Property(property="from", type="integer", example=1),
+     *              @OA\Property(property="last_page", type="integer", example=1),
      *              @OA\Property(property="per_page", type="integer", example=1),
-     *              @OA\Property(property="prev_page_url", type="integer", example=1),
      *              @OA\Property(property="to", type="integer", example=1),
      *              @OA\Property(property="total", type="integer", example=1),
      *          )
