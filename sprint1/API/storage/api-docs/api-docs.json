@@ -384,7 +384,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/CategoryResponse"
+                                        "$ref": "#/components/schemas/CategoryTreeResponse"
                                     }
                                 }
                             }
@@ -574,7 +574,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/CategoryResponse"
+                                    "$ref": "#/components/schemas/CategoryTreeResponse"
                                 }
                             }
                         }
@@ -1322,6 +1322,32 @@
                 },
                 "type": "object"
             },
+            "CategoryTreeResponse": {
+                "title": "CategoryTreeResponse",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "parent_id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "new category"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "new-category"
+                    },
+                    "sub_categories": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CategoryResponse"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "CategoryResponse": {
                 "title": "CategoryResponse",
                 "properties": {
@@ -1421,10 +1447,6 @@
                     },
                     "title": {
                         "type": "string"
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "example": "2022-08-01 08:24:56"
                     },
                     "id": {
                         "type": "integer"

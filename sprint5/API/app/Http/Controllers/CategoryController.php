@@ -37,7 +37,7 @@ class CategoryController extends Controller
      *          description="Successful operation",
      *          @OA\JsonContent(
      *              type="array",
-     *              @OA\Items(ref="#/components/schemas/CategoryResponse")
+     *              @OA\Items(ref="#/components/schemas/CategoryTreeResponse")
      *          )
      *       ),
      *      @OA\Response(
@@ -161,7 +161,7 @@ class CategoryController extends Controller
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
-     *          @OA\JsonContent(ref="#/components/schemas/CategoryResponse")
+     *          @OA\JsonContent(ref="#/components/schemas/CategoryTreeResponse")
      *       ),
      *      @OA\Response(
      *          response=404,

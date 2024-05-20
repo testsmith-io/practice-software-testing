@@ -24,7 +24,7 @@ class InvoiceController extends Controller
      *      operationId="getInvoices",
      *      tags={"Invoice"},
      *      summary="Retrieve all invoices",
-     *      description="`user` retrieves only related invoices",
+     *      description="Retrieves invoices",
      *      @OA\Parameter(
      *          name="page",
      *          in="query",
@@ -67,7 +67,7 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('user_id', app('auth')->user()->id)->orderBy('invoice_date', 'DESC')->paginate());
+        return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->orderBy('invoice_date', 'DESC')->paginate());
     }
 
     /**
@@ -193,9 +193,25 @@ class InvoiceController extends Controller
      *          @OA\Schema(type="integer")
      *      ),
      *      @OA\RequestBody(
-     *          required=true,
-     *          description="Invoice request object",
-     *          @OA\JsonContent(ref="#/components/schemas/InvoiceRequest")
+     *         @OA\MediaType(
+     *                 mediaType="application/json",
+     *            @OA\Schema(
+     *                @OA\Property(
+     *                   property="status",
+     *                   type="string",
+     *                   enum={"AWAITING_FULFILLMENT", "ON_HOLD", "AWAITING_SHIPMENT", "SHIPPED", "COMPLETED"},
+     *                   description="The status of the order"
+     *                ),
+     *                @OA\Property(
+     *                   property="status_message",
+     *                   type="string",
+     *                   description="A message describing the status",
+     *                   nullable=true,
+     *                   minLength=5,
+     *                   maxLength=50
+     *                ),
+     *              )
+     *          )
      *      ),
      *      @OA\Response(
      *          response=200,
@@ -233,7 +249,7 @@ class InvoiceController extends Controller
      */
     public function updateStatus($id, Request $request)
     {
-        $this->validate($request, [
+        $request->validate([
             'status' => Rule::in("AWAITING_FULFILLMENT", "ON_HOLD", "AWAITING_SHIPMENT", "SHIPPED", "COMPLETED"),
             'status_message' => 'string|between:5,50|nullable'
         ]);
@@ -300,64 +316,6 @@ class InvoiceController extends Controller
         $q = $request->get('q');
 
         return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('invoice_number', 'like', "%$q%")->orWhere('billing_address', 'like', "%$q%")->orWhere('status', 'like', "%$q%")->orderBy('invoice_date', 'DESC')->paginate());
-    }
-
-    /**
-     * @OA\Put(
-     *      path="/invoices/{invoiceId}",
-     *      operationId="updateInvoice",
-     *      tags={"Invoice"},
-     *      summary="Update specific invoice",
-     *      description="Update specific invoice",
-     *      @OA\Parameter(
-     *          name="invoiceId",
-     *          in="path",
-     *          description="The invoiceId parameter in path",
-     *          required=true,
-     *          @OA\Schema(type="integer")
-     *      ),
-     *      @OA\RequestBody(
-     *          required=true,
-     *          description="Invoice request object",
-     *          @OA\JsonContent(ref="#/components/schemas/InvoiceRequest")
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Result of the update",
-     *          @OA\MediaType(
-     *              mediaType="application/json",
-     *              @OA\Schema(
-     *                  @OA\Property(property="success",
-     *                       type="boolean",
-     *                       example=true,
-     *                       description=""
-     *                  ),
-     *              )
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Returns when the resource is not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Resource not found"),
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=405,
-     *          description="Returns when the method is not allowed for the requested route",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Method is not allowed for the requested route"),
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=422,
-     *          description="Returns when the server was not able to process the content",
-     *      )
-     * )
-     */
-    public function update(StoreInvoice $request, $id)
-    {
-        return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
     }
 
     /**

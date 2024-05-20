@@ -453,10 +453,26 @@ class InvoiceController extends Controller
      *          @OA\Schema(type="string")
      *      ),
      *      @OA\RequestBody(
-     *          required=true,
-     *          description="Invoice request object",
-     *          @OA\JsonContent(ref="#/components/schemas/InvoiceRequest")
-     *      ),
+     *          @OA\MediaType(
+     *                  mediaType="application/json",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                    property="status",
+     *                    type="string",
+     *                    enum={"AWAITING_FULFILLMENT", "ON_HOLD", "AWAITING_SHIPMENT", "SHIPPED", "COMPLETED"},
+     *                    description="The status of the order"
+     *                 ),
+     *                 @OA\Property(
+     *                    property="status_message",
+     *                    type="string",
+     *                    description="A message describing the status",
+     *                    nullable=true,
+     *                    minLength=5,
+     *                    maxLength=50
+     *                 ),
+     *               )
+     *           )
+     *       ),
      *      @OA\Response(
      *          response=200,
      *          description="Result of the update",

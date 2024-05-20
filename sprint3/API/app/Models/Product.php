@@ -46,7 +46,7 @@ class Product extends BaseModel
 
     protected $table = 'products';
     protected $fillable = ['name', 'description', 'category_id', 'brand_id', 'price', 'product_image_id', 'is_location_offer', 'is_rental'];
-    protected $hidden = ['created_at', 'updated_at'];
+    protected $hidden = ['brand_id', 'category_id', 'product_image_id', 'created_at', 'updated_at'];
     protected $filters = ['sort'];
 
     protected $casts = array(

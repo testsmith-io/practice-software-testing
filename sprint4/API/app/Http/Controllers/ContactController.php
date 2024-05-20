@@ -64,18 +64,12 @@ class ContactController extends Controller {
      * )
      */
     public function send(StoreContact $request) {
-        if (Auth::check()) {
-            $input = $request->all();
-            $input['user_id'] = Auth::user()->id;
-            $result = ContactRequests::create($input);
-        } else {
             $input = $request->all();
             $result = ContactRequests::create($input);
-        }
 
         if (App::environment('local')) {
-            $email = ($request->input('email')) ? $request->input('email') : Auth::user()->email;
-            $name = ($request->input('name')) ? $request->input('name') : Auth::user()->first_name . ' ' . Auth::user()->last_name;
+            $email = $request->input('email');
+            $name = $request->input('first_name') . ' ' . $request->input('last_name');
             Mail::to([$email])->send(new Contact($name, $request->input('subject'), $request->input('message')));
         }
 
@@ -186,137 +180,7 @@ class ContactController extends Controller {
      * )
      */
     public function show($id) {
-        return $this->preferredFormat(ContactRequests::with(['user', 'replies', 'replies.user'])->where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->first());
-    }
-
-    /**
-     * @OA\Post(
-     *      path="/messages/{messageId}/reply",
-     *      operationId="replyToMessage",
-     *      tags={"Contact"},
-     *      summary="Send new contact message",
-     *      description="Send new contact message by mail",
-     *      @OA\Parameter(
-     *          name="messageId",
-     *          in="path",
-     *          example=1,
-     *          description="The messageId parameter in path",
-     *          required=true,
-     *          @OA\Schema(type="integer")
-     *      ),
-     *      @OA\RequestBody(
-     *          required=true,
-     *          description="Contact request object",
-     *          @OA\JsonContent(ref="#/components/schemas/ContactRequest")
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent(ref="#/components/schemas/ContactReplyResponse")
-     *       ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Returns when user is not authenticated",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Unauthorized"),
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Returns when the requested item is not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Requested item not found"),
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=405,
-     *          description="Returns when the method is not allowed for the requested route",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Method is not allowed for the requested route"),
-     *          )
-     *      ),
-     *     security={{ "apiAuth": {} }}
-     * )
-     */
-    public function storeReply(StoreContactReply $request, $id) {
-        $input = $request->all(['message']);
-        $input['message_id'] = $id;
-        $input['user_id'] = Auth::user()->id;
-
-        ContactRequests::where('id', $id)->update(['status' => 'IN_PROGRESS']);
-        return $this->preferredFormat(ContactRequestReply::create($input), ResponseAlias::HTTP_CREATED);
-    }
-
-    /**
-     * @OA\Put(
-     *      path="/messages/{messageId}/status",
-     *      operationId="updateMessageStatus",
-     *      tags={"Contact"},
-     *      summary="Set a new message status",
-     *      description="Set a new message status. Possible values: `NEW`, `IN_PROGRESS`, `RESOLVED`",
-     *      @OA\Parameter(
-     *          name="messageId",
-     *          in="path",
-     *          example=1,
-     *          description="The messageId parameter in path",
-     *          required=true,
-     *          @OA\Schema(type="integer")
-     *      ),
-     *     @OA\RequestBody(
-     *        @OA\MediaType(
-     *                mediaType="application/json",
-     *           @OA\Schema(
-     *               @OA\Property(property="status",
-     *                        type="string",
-     *                        example="IN_PROGRESS"
-     *                    )
-     *             )
-     *         )
-     *     ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Result of the update",
-     *          @OA\MediaType(
-     *              mediaType="application/json",
-     *              @OA\Schema(
-     *                  @OA\Property(property="success",
-     *                       type="boolean",
-     *                       example=true,
-     *                       description=""
-     *                  ),
-     *              )
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Returns when user is not authenticated",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Unauthorized"),
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Returns when the requested item is not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Requested item not found"),
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=405,
-     *          description="Returns when the method is not allowed for the requested route",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Method is not allowed for the requested route"),
-     *          )
-     *      ),
-     *     security={{ "apiAuth": {} }}
-     * )
-     */
-    public function updateStatus($id, Request $request) {
-        $request->validate([
-            'status' => Rule::in("NEW", "IN_PROGRESS", "RESOLVED")
-        ]);
-
-        return $this->preferredFormat(['success' => (bool)ContactRequests::where('id', $id)->update(array('status' => $request['status']))]);
+        return $this->preferredFormat(ContactRequests::with(['user', 'replies', 'replies.user'])->where('id', $id)->orderBy('created_at', 'DESC')->first());
     }
 
 }
