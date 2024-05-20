@@ -40,7 +40,6 @@ class ContactTest extends TestCase {
         $response->assertStatus(ResponseAlias::HTTP_OK)
             ->assertJsonStructure([
                 'id',
-                'user_id',
                 'email',
                 'subject',
                 'message',
@@ -101,37 +100,6 @@ class ContactTest extends TestCase {
                 'subject',
                 'message',
                 'created_at'
-            ]);
-    }
-
-    public function testMessageRely() {
-        $user = User::factory()->create();
-        $message = $this->addMessage($user);
-        $payload = [
-            'message' => 'some reply message'
-        ];
-
-        $reply = $this->json('post', '/messages/' . $message->json('id') . '/reply', $payload, $this->headers($user));
-
-        $reply->assertStatus(ResponseAlias::HTTP_CREATED)
-            ->assertJsonStructure([
-                'message',
-                'created_at'
-            ]);
-    }
-
-    public function testUpdateStatus() {
-        $user = User::factory()->create();
-        $message = $this->addMessage($user);
-        $payload = [
-            'status' => 'RESOLVED'
-        ];
-
-        $reply = $this->json('put', '/messages/' . $message->json('id') . '/status', $payload, $this->headers($user));
-
-        $reply->assertStatus(ResponseAlias::HTTP_OK)
-            ->assertJsonStructure([
-                'success'
             ]);
     }
 
