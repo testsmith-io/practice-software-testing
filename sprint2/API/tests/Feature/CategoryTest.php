@@ -63,7 +63,7 @@ class CategoryTest extends TestCase {
     public function testRetrieveCategory() {
         $category = Category::factory()->create();
 
-        $response = $this->get('/categories/' . $category->id);
+        $response = $this->get('/categories/tree/' . $category->id);
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
