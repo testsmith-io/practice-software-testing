@@ -42,7 +42,7 @@ Route::controller(CategoryController::class)->prefix('categories')->group(functi
     Route::get('/tree', 'indexTree');
     Route::get('', 'index');
     Route::get('/search', 'search');
-    Route::get('/{id}', 'show');
+    Route::get('/tree/{id}', 'show');
     Route::post('', 'store');
     Route::put('/{id}', 'update');
     Route::delete('/{id}', 'destroy');
