@@ -33,7 +33,7 @@ Route::controller(BrandController::class)->prefix('brands')->group(function () {
 Route::controller(CategoryController::class)->prefix('categories')->group(function () {
     Route::get('/tree', 'indexTree');
     Route::get('', 'index');
-    Route::get('/{id}', 'show');
+    Route::get('/tree/{id}', 'show');
     Route::post('', 'store');
     Route::put('/{id}', 'update');
     Route::delete('/{id}', 'destroy');

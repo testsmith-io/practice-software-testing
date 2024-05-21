@@ -145,11 +145,11 @@ class CategoryController extends Controller
 
     /**
      * @OA\Get(
-     *      path="/categories/{categoryId}",
+     *      path="/categories/tree/{categoryId}",
      *      operationId="getCategory",
      *      tags={"Category"},
-     *      summary="Retrieve specific category",
-     *      description="Retrieve specific category",
+     *      summary="Retrieve specific category (including subcategories)",
+     *      description="Retrieve specific category (including subcategories)",
      *      @OA\Parameter(
      *          name="categoryId",
      *          in="path",

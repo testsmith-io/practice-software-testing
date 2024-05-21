@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *       type="object",
  *       title="CategoryTreeResponse",
  *       properties={
- *           @OA\Property(property="id", type="integer"),
+ *           @OA\Property(property="id", type="string"),
  *           @OA\Property(property="parent_id", type="integer"),
  *           @OA\Property(property="name", type="string", example="new category"),
  *           @OA\Property(property="slug", type="string", example="new-category"),

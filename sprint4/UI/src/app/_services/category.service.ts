@@ -38,7 +38,7 @@ export class CategoryService {
   }
 
   getById(id: string): Observable<Category> {
-    return this.httpClient.get<Category>(this.apiURL + `/categories/${id}`);
+    return this.httpClient.get<Category>(this.apiURL + `/categories/tree/${id}`);
   }
 
   create(category: Category): Observable<any> {
