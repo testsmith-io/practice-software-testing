@@ -65,7 +65,7 @@ class CategoryTest extends TestCase {
     public function testRetrieveCategory() {
         $category = Category::factory()->create();
 
-        $response = $this->getJson("/categories/{$category->id}");
+        $response = $this->getJson("/categories/tree/{$category->id}");
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
