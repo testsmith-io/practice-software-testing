@@ -337,7 +337,7 @@ class UserController extends Controller {
      *              mediaType="application/json",
      *              @OA\Schema(
      *                  @OA\Property(property="message",
-     *                       type="String",
+     *                       type="string",
      *                       example="Successfully logged out",
      *                       description=""
      *                  ),
