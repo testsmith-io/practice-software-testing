@@ -50,19 +50,13 @@ class UserController extends Controller
      *              type="array",
      *              @OA\Items(ref="#/components/schemas/UserResponse")
      *          )
-     *       ),
+     *      ),
      *      @OA\Response(
      *          response=400,
      *          description="Bad Request"
      *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Returns when user is not authenticated",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Unauthorized"),
-     *          )
-     *      ),
-     *     security={{ "apiAuth": {} }}
+     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
+     *      security={{ "apiAuth": {} }}
      * )
      */
     public function index()
@@ -91,10 +85,7 @@ class UserController extends Controller
      *          response=400,
      *          description="Bad Request"
      *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated",
-     *      ),
+     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
      *      @OA\Response(
      *          response=403,
      *          description="Forbidden"
@@ -141,6 +132,7 @@ class UserController extends Controller
      *        @OA\MediaType(
      *                mediaType="application/json",
      *           @OA\Schema(
+     *               title="TokenResponse",
      *               @OA\Property(property="access_token",
      *                        type="string",
      *                        example="super-secret-token",
@@ -247,31 +239,19 @@ class UserController extends Controller
      *      tags={"User"},
      *      summary="Request a new password",
      *      description="Request a new password, it actually sets the password to `welcome02`",
-     *     @OA\RequestBody(
-     *        @OA\MediaType(
-     *                mediaType="application/json",
-     *           @OA\Schema(
-     *               @OA\Property(property="email",
-     *                        type="string",
-     *                        example="customer@practicesoftwaretesting.com"
-     *               )
-     *             )
+     *      @OA\RequestBody(
+     *         @OA\MediaType(
+     *                 mediaType="application/json",
+     *            @OA\Schema(
+     *                @OA\Property(property="email",
+     *                         type="string",
+     *                         example="customer@practicesoftwaretesting.com"
+     *                )
+     *            )
      *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Result of the update",
-     *        @OA\MediaType(
-     *                mediaType="application/json",
-     *           @OA\Schema(
-     *               @OA\Property(property="success",
-     *                        type="boolean",
-     *                        example=true,
-     *                        description=""
-     *                ),
-     *             )
-     *         )
-     *     ),
+     *      ),
+     *      @OA\Response(response="200", ref="#/components/responses/UpdateResponse"),
+     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
      *      @OA\Response(
      *          response=400,
      *          description="Bad Request"
@@ -304,47 +284,28 @@ class UserController extends Controller
      *      tags={"User"},
      *      summary="Change password",
      *      description="Change the existing password to a new one",
-     *     @OA\RequestBody(
-     *        @OA\MediaType(
-     *                mediaType="application/json",
-     *           @OA\Schema(
-     *               @OA\Property(property="current_password",
-     *                        type="string",
-     *                        example="welcome01"
-     *               ),
-     *               @OA\Property(property="new_password",
-     *                        type="string",
-     *                        example="welcome02"
-     *               ),
-     *               @OA\Property(property="new_password_confirmation",
-     *                        type="string",
-     *                        example="welcome02"
-     *               )
-     *             )
-     *         )
-     *     ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Result of the update",
-     *          @OA\MediaType(
-     *              mediaType="application/json",
-     *              @OA\Schema(
-     *                  @OA\Property(property="success",
-     *                       type="boolean",
-     *                       example=true,
-     *                       description=""
-     *                  ),
+     *      @OA\RequestBody(
+     *         @OA\MediaType(
+     *                 mediaType="application/json",
+     *            @OA\Schema(
+     *                @OA\Property(property="current_password",
+     *                         type="string",
+     *                         example="welcome01"
+     *                ),
+     *                @OA\Property(property="new_password",
+     *                         type="string",
+     *                         example="welcome02"
+     *                ),
+     *                @OA\Property(property="new_password_confirmation",
+     *                         type="string",
+     *                         example="welcome02"
+     *                )
      *              )
      *          )
      *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Returns when user is not authenticated",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Unauthorized"),
-     *          )
-     *      ),
-     *     security={{ "apiAuth": {} }}
+     *      @OA\Response(response="200", ref="#/components/responses/UpdateResponse"),
+     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
+     *      security={{ "apiAuth": {} }}
      * )
      */
     public function changePassword(Request $request)
@@ -389,13 +350,7 @@ class UserController extends Controller
      *         description="A customer",
      *         @OA\JsonContent(ref="#/components/schemas/UserResponse"),
      *     ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Returns when user is not authenticated",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Unauthorized"),
-     *          )
-     *      ),
+     *     @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
      *     security={{ "apiAuth": {} }}
      * )
      */
@@ -417,6 +372,7 @@ class UserController extends Controller
      *          @OA\MediaType(
      *              mediaType="application/json",
      *              @OA\Schema(
+     *                  title="LogoutResponse",
      *                  @OA\Property(property="message",
      *                       type="string",
      *                       example="Successfully logged out",
@@ -429,14 +385,8 @@ class UserController extends Controller
      *          response=400,
      *          description="Bad Request"
      *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Returns when user is not authenticated",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Unauthorized"),
-     *          )
-     *      ),
-     *     security={{ "apiAuth": {} }}
+     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
+     *      security={{ "apiAuth": {} }}
      * )
      */
     public function logout()
@@ -459,6 +409,7 @@ class UserController extends Controller
      *        @OA\MediaType(
      *                mediaType="application/json",
      *           @OA\Schema(
+     *               title="TokenResponse",
      *               @OA\Property(property="access_token",
      *                        type="string",
      *                        example="super-secret-token",
@@ -476,19 +427,13 @@ class UserController extends Controller
      *                    )
      *             )
      *         )
-     *     ),
+     *      ),
      *      @OA\Response(
      *          response=400,
      *          description="Bad Request"
      *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Returns when user is not authenticated",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Unauthorized"),
-     *          )
-     *      ),
-     *     security={{ "apiAuth": {} }}
+     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
+     *      security={{ "apiAuth": {} }}
      * )
      */
     public function refresh()
@@ -515,23 +460,11 @@ class UserController extends Controller
      *          response=200,
      *          description="Successful operation",
      *          @OA\JsonContent(ref="#/components/schemas/UserResponse")
-     *       ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Returns when user is not authenticated",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Unauthorized"),
-     *          )
      *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Requested item not found"
-     *      ),
-     *      @OA\Response(
-     *          response=405,
-     *          description="Method not allowed for requested route"
-     *      ),
-     *     security={{ "apiAuth": {} }}
+     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
+     *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
+     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      security={{ "apiAuth": {} }}
      * )
      */
     public function show($id)
@@ -571,22 +504,10 @@ class UserController extends Controller
      *              type="array",
      *              @OA\Items(ref="#/components/schemas/UserResponse")
      *          )
-     *       ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Returns when user is not authenticated",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Unauthorized"),
-     *          )
      *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Returns when the resource is not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Resource not found"),
-     *          )
-     *      ),
-     *     security={{ "apiAuth": {} }}
+     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
+     *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
+     *      security={{ "apiAuth": {} }}
      * )
      */
     public function search(Request $request)
@@ -620,36 +541,15 @@ class UserController extends Controller
      *          description="User request object",
      *          @OA\JsonContent(ref="#/components/schemas/UserRequest")
      *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Result of the update",
-     *          @OA\MediaType(
-     *              mediaType="application/json",
-     *              @OA\Schema(
-     *                  @OA\Property(property="success",
-     *                       type="boolean",
-     *                       example=true,
-     *                       description=""
-     *                  ),
-     *              )
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=400,
-     *          description="Bad Request"
-     *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Returns when user is not authenticated",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Unauthorized"),
-     *          )
-     *      ),
+     *      @OA\Response(response="200", ref="#/components/responses/UpdateResponse"),
+     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
+     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
      *      @OA\Response(
      *          response=403,
      *          description="Forbidden"
      *      ),
-     *     security={{ "apiAuth": {} }}
+     *      security={{ "apiAuth": {} }}
      * )
      */
     public function update(UpdateCustomer $request, $id)
@@ -694,21 +594,11 @@ class UserController extends Controller
      *          required=true,
      *          @OA\Schema(type="string")
      *      ),
-     *      @OA\Response(
-     *          response=204,
-     *          description="Successful operation"
-     *       ),
-     *      @OA\Response(
-     *          response=400,
-     *          description="Bad Request"
-     *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Returns when user is not authenticated",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Unauthorized"),
-     *          )
-     *      ),
+     *      @OA\Response(response=204, description="Successful operation"),
+     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
+     *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
+     *      @OA\Response(response="409", ref="#/components/responses/ConflictResponse"),
+     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
      *      @OA\Response(
      *          response=403,
      *          description="Forbidden"

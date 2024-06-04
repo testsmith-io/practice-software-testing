@@ -25,7 +25,59 @@ use Spatie\ArrayToXml\ArrayToXml;
  *     description="Local environment",
  *     url="http://localhost:8091"
  * )
+ *
+ * @OA\Components(
+ *     @OA\Response(
+ *         response="UpdateResponse",
+ *         description="Result of the update",
+ *         @OA\JsonContent(
+ *             title="UpdateResponse",
+ *             @OA\Property(property="success", type="boolean", example=true)
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response="UnauthorizedResponse",
+ *         description="Returns when user is not authenticated",
+ *         @OA\JsonContent(
+ *             title="UnauthorizedResponse",
+ *             @OA\Property(property="message", type="string", example="Unauthorized")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response="ItemNotFoundResponse",
+ *         description="Returns when the resource is not found",
+ *         @OA\JsonContent(
+ *             title="ItemNotFoundResponse",
+ *             @OA\Property(property="message", type="string", example="Requested item not found")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response="ResourceNotFoundResponse",
+ *         description="Returns when the resource is not found",
+ *         @OA\JsonContent(
+ *             title="ResourceNotFoundResponse",
+ *             @OA\Property(property="message", type="string", example="Resource not found"),
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response="ConflictResponse",
+ *         description="Returns when the entity is used elsewhere"
+ *     ),
+ *     @OA\Response(
+ *         response="MethodNotAllowedResponse",
+ *         description="Returns when the method is not allowed for the requested route",
+ *         @OA\JsonContent(
+ *             title="MethodNotAllowedResponse",
+ *             @OA\Property(property="message", type="string", example="Method is not allowed for the requested route")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response="UnprocessableEntityResponse",
+ *         description="Returns when the server was not able to process the content"
+ *     )
+ * )
  */
+
 class Controller extends BaseController
 {
 //    use AuthorizesRequests, ValidatesRequests;

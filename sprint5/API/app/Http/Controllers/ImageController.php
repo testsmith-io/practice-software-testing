@@ -21,20 +21,8 @@ class ImageController extends Controller
      *              @OA\Items(ref="#/components/schemas/ImageResponse")
      *          )
      *       ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Returns when the resource is not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Resource not found"),
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=405,
-     *          description="Returns when the method is not allowed for the requested route",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Method is not allowed for the requested route"),
-     *          )
-     *      ),
+     *       @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
+     *       @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
      * )
      */
     public function index()

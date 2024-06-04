@@ -30,6 +30,7 @@ class CartController extends Controller
      *         @OA\MediaType(
      *                 mediaType="application/json",
      *            @OA\Schema(
+     *                title="CartCreatedResponse",
      *                @OA\Property(property="cart_id",
      *                         type="string",
      *                         example="1234",
@@ -38,24 +39,9 @@ class CartController extends Controller
      *              )
      *          )
      *      ),
-     * @OA\Response(
-     *          response=404,
-     *          description="Returns when requested item is not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Requested item not found"),
-     *          )
-     *      ),
-     * @OA\Response(
-     *          response=405,
-     *          description="Returns when the method is not allowed for the requested route",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Method is not allowed for the requested route"),
-     *          )
-     *      ),
-     * @OA\Response(
-     *          response=422,
-     *          description="Returns when the server was not able to process the content",
-     *      ),
+     *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
+     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
      * )
      */
     public function createCart(Request $request)
@@ -103,6 +89,7 @@ class CartController extends Controller
      *         @OA\MediaType(
      *                 mediaType="application/json",
      *            @OA\Schema(
+     *                title="CartItemAddedResponse",
      *                @OA\Property(property="result",
      *                         type="string",
      *                         example="item added or updated",
@@ -111,24 +98,9 @@ class CartController extends Controller
      *              )
      *          )
      *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Returns when requested item is not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Requested item not found"),
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=405,
-     *          description="Returns when the method is not allowed for the requested route",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Method is not allowed for the requested route"),
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=422,
-     *          description="Returns when the server was not able to process the content",
-     *      ),
+     *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
+     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
      * )
      */
     public function addItem(Request $request, $id)
@@ -170,21 +142,9 @@ class CartController extends Controller
      *          response=200,
      *          description="Successful operation",
      *          @OA\JsonContent(ref="#/components/schemas/CartResponse")
-     *       ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Returns when the requested item is not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Requested item not found"),
-     *          )
      *      ),
-     *      @OA\Response(
-     *          response=405,
-     *          description="Returns when the method is not allowed for the requested route",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Method is not allowed for the requested route"),
-     *          )
-     *      ),
+     *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
+     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
      * )
      */
     public function getCart($id)
@@ -207,13 +167,13 @@ class CartController extends Controller
      *      tags={"Cart"},
      *      summary="Update quantity of item in cart",
      *      description="Update quantity of item in cart",
-     *       @OA\Parameter(
-     *            name="cartId",
-     *            in="path",
-     *            required=true,
-     *            @OA\Schema(type="string"),
-     *            description="Cart ID"
-     *        ),
+     *      @OA\Parameter(
+     *           name="cartId",
+     *           in="path",
+     *           required=true,
+     *           @OA\Schema(type="string"),
+     *           description="Cart ID"
+     *      ),
      *      @OA\RequestBody(
      *            required=true,
      *            description="Payload to add item to cart",
@@ -230,39 +190,11 @@ class CartController extends Controller
      *                    example=1
      *                )
      *            )
-     *        ),
-     *      @OA\Response(
-     *           response=200,
-     *           description="Item added",
-     *          @OA\MediaType(
-     *                  mediaType="application/json",
-     *             @OA\Schema(
-     *                 @OA\Property(property="success",
-     *                          type="boolean",
-     *                          example="true",
-     *                          description=""
-     *                      )
-     *               )
-     *           )
      *       ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Returns when the resource is not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Resource not found"),
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=405,
-     *          description="Returns when the method is not allowed for the requested route",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Method is not allowed for the requested route"),
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=422,
-     *          description="Returns when the server was not able to process the content",
-     *      ),
+     *       @OA\Response(response="200", ref="#/components/responses/UpdateResponse"),
+     *       @OA\Response(response="404", ref="#/components/responses/ResourceNotFoundResponse"),
+     *       @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *       @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
      * )
      */
     public function updateQuantity(Request $request, $cartId)
@@ -294,39 +226,12 @@ class CartController extends Controller
      *          example=1,
      *          @OA\Schema(type="string")
      *      ),
-     *      @OA\Response(
-     *          response=204,
-     *          description="Successful operation"
-     *       ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Returns when user is not authenticated",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Unauthorized"),
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Returns when the resource is not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Resource not found"),
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=409,
-     *          description="Returns when the entity is used elsewhere",
-     *      ),
-     *      @OA\Response(
-     *          response=405,
-     *          description="Returns when the method is not allowed for the requested route",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Method is not allowed for the requested route"),
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=422,
-     *          description="Returns when the server was not able to process the content",
-     *      )
+     *      @OA\Response(response=204, description="Successful operation"),
+     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
+     *      @OA\Response(response="404", ref="#/components/responses/ResourceNotFoundResponse"),
+     *      @OA\Response(response="409", ref="#/components/responses/ConflictResponse"),
+     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
      * ),
      */
     public function deleteCart($cartId)
@@ -357,47 +262,20 @@ class CartController extends Controller
      *          example=1,
      *          @OA\Schema(type="string")
      *      ),
-     *    @OA\Parameter(
+     *      @OA\Parameter(
      *           name="productId",
      *           in="path",
      *           description="The cartId parameter in path",
      *           required=true,
      *           example=1,
      *           @OA\Schema(type="string")
-     *       ),
-     *      @OA\Response(
-     *          response=204,
-     *          description="Successful operation"
-     *       ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Returns when user is not authenticated",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Unauthorized"),
-     *          )
      *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Returns when the resource is not found",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Resource not found"),
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=409,
-     *          description="Returns when the entity is used elsewhere",
-     *      ),
-     *      @OA\Response(
-     *          response=405,
-     *          description="Returns when the method is not allowed for the requested route",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Method is not allowed for the requested route"),
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=422,
-     *          description="Returns when the server was not able to process the content",
-     *      )
+     *      @OA\Response(response=204, description="Successful operation"),
+     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
+     *      @OA\Response(response="404", ref="#/components/responses/ResourceNotFoundResponse"),
+     *      @OA\Response(response="409", ref="#/components/responses/ConflictResponse"),
+     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
      * ),
      */
     public function removeProductFromCart($cartId, $productId)
