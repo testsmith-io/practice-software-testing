@@ -43,36 +43,10 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ResourceNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 }
             },
@@ -106,39 +80,13 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 }
             }
@@ -175,36 +123,10 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when the requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 }
             },
@@ -240,56 +162,16 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Result of the update",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "description": "",
-                                            "type": "boolean",
-                                            "example": true
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UpdateResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 }
             },
@@ -317,58 +199,19 @@
                         "description": "Successful operation"
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "409": {
-                        "description": "Returns when the entity is used elsewhere"
+                        "$ref": "#/components/responses/ConflictResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 },
                 "security": [
@@ -412,36 +255,10 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ResourceNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 }
             }
@@ -460,6 +277,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "title": "CartCreatedResponse",
                                     "properties": {
                                         "cart_id": {
                                             "description": "",
@@ -473,39 +291,13 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 }
             }
@@ -560,6 +352,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "title": "CartItemAddedResponse",
                                     "properties": {
                                         "result": {
                                             "description": "",
@@ -573,39 +366,13 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 }
             }
@@ -642,36 +409,10 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when the requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 }
             },
@@ -699,58 +440,19 @@
                         "description": "Successful operation"
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ResourceNotFoundResponse"
                     },
                     "409": {
-                        "description": "Returns when the entity is used elsewhere"
+                        "$ref": "#/components/responses/ConflictResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 }
             }
@@ -801,56 +503,16 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Item added",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "description": "",
-                                            "type": "boolean",
-                                            "example": "true"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UpdateResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ResourceNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 }
             }
@@ -890,58 +552,19 @@
                         "description": "Successful operation"
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ResourceNotFoundResponse"
                     },
                     "409": {
-                        "description": "Returns when the entity is used elsewhere"
+                        "$ref": "#/components/responses/ConflictResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 }
             }
@@ -980,36 +603,10 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ResourceNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 }
             }
@@ -1037,36 +634,10 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ResourceNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 }
             },
@@ -1100,39 +671,13 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 }
             }
@@ -1169,36 +714,10 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when the requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 }
             }
@@ -1237,36 +756,10 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ResourceNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 }
             }
@@ -1304,56 +797,16 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Result of the update",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "description": "",
-                                            "type": "boolean",
-                                            "example": true
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UpdateResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ResourceNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 }
             },
@@ -1381,58 +834,19 @@
                         "description": "Successful operation"
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "409": {
-                        "description": "Returns when the entity is used elsewhere"
+                        "$ref": "#/components/responses/ConflictResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 },
                 "security": [
@@ -1467,6 +881,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "title": "PaginatedContactMessageResponse",
                                     "properties": {
                                         "current_page": {
                                             "type": "integer",
@@ -1505,52 +920,13 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ResourceNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 },
                 "security": [
@@ -1583,6 +959,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "title": "AddContactMessageResponse",
                                     "properties": {
                                         "success": {
                                             "description": "",
@@ -1596,36 +973,10 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ResourceNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 }
             }
@@ -1654,6 +1005,7 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
+                                "title": "AttachFileRequest",
                                 "properties": {
                                     "file": {
                                         "description": "File",
@@ -1672,6 +1024,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "title": "FileUploadResponse",
                                     "properties": {
                                         "success": {
                                             "description": "",
@@ -1685,36 +1038,10 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ResourceNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 }
             }
@@ -1751,52 +1078,13 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 },
                 "security": [
@@ -1849,52 +1137,13 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 },
                 "security": [
@@ -1928,6 +1177,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "title": "ContactStatusRequest",
                                 "properties": {
                                     "status": {
                                         "type": "string",
@@ -1941,69 +1191,16 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Result of the update",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "description": "",
-                                            "type": "boolean",
-                                            "example": true
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UpdateResponse"
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 },
                 "security": [
@@ -2036,52 +1233,13 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 },
                 "security": [
@@ -2120,55 +1278,16 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 },
                 "security": [
@@ -2210,52 +1329,13 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 },
                 "security": [
@@ -2287,58 +1367,19 @@
                         "description": "Successful operation"
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "409": {
-                        "description": "Returns when the entity is used elsewhere"
+                        "$ref": "#/components/responses/ConflictResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 },
                 "security": [
@@ -2371,36 +1412,10 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 }
             }
@@ -2430,6 +1445,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "title": "PaginatedInvoiceResponse",
                                     "properties": {
                                         "current_page": {
                                             "type": "integer",
@@ -2468,52 +1484,13 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 },
                 "security": [
@@ -2552,55 +1529,16 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 },
                 "security": [
@@ -2642,52 +1580,13 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 },
                 "security": [
@@ -2727,72 +1626,19 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Result of the update",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "description": "",
-                                            "type": "boolean",
-                                            "example": true
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UpdateResponse"
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 },
                 "security": [
@@ -2824,58 +1670,19 @@
                         "description": "Successful operation"
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "409": {
-                        "description": "Returns when the entity is used elsewhere"
+                        "$ref": "#/components/responses/ConflictResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 },
                 "security": [
@@ -2917,52 +1724,13 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 },
                 "security": [
@@ -3004,52 +1772,13 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 },
                 "security": [
@@ -3082,6 +1811,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "title": "InvoiceStatusRequest",
                                 "properties": {
                                     "status": {
                                         "description": "The status of the order",
@@ -3109,72 +1839,19 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Result of the update",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "description": "",
-                                            "type": "boolean",
-                                            "example": true
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UpdateResponse"
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 },
                 "security": [
@@ -3218,6 +1895,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "title": "PaginatedInvoiceResponse",
                                     "properties": {
                                         "current_page": {
                                             "type": "integer",
@@ -3255,37 +1933,14 @@
                             }
                         }
                     },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
                     "404": {
-                        "description": "Returns when the requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 },
                 "security": [
@@ -3351,6 +2006,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "title": "PaymentResponse",
                                     "properties": {
                                         "success": {
                                             "type": "boolean",
@@ -3435,6 +2091,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "title": "PaginatedProductResponse",
                                     "properties": {
                                         "current_page": {
                                             "type": "integer",
@@ -3473,36 +2130,10 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 }
             },
@@ -3530,6 +2161,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "title": "StoreProductResponse",
                                     "properties": {
                                         "id": {
                                             "type": "integer",
@@ -3554,6 +2186,10 @@
                                         "is_rental": {
                                             "type": "boolean",
                                             "example": 0
+                                        },
+                                        "is_stock": {
+                                            "type": "boolean",
+                                            "example": 0
                                         }
                                     },
                                     "type": "object"
@@ -3562,39 +2198,13 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 }
             }
@@ -3631,36 +2241,10 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when the requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 }
             },
@@ -3695,56 +2279,16 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Result of the update",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "description": "",
-                                            "type": "boolean",
-                                            "example": true
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UpdateResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 }
             },
@@ -3771,58 +2315,19 @@
                         "description": "Successful operation"
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "409": {
-                        "description": "Returns when the entity is used elsewhere"
+                        "$ref": "#/components/responses/ConflictResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "422": {
-                        "description": "Returns when the server was not able to process the content"
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 },
                 "security": [
@@ -3867,36 +2372,10 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when the requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 }
             }
@@ -3935,6 +2414,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "title": "PaginatedProductResponse",
                                     "properties": {
                                         "current_page": {
                                             "type": "integer",
@@ -3973,36 +2453,10 @@
                         }
                     },
                     "404": {
-                        "description": "Returns when the requested item is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Requested item not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Returns when the method is not allowed for the requested route",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Method is not allowed for the requested route"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 }
             }
@@ -4034,36 +2488,10 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     }
                 },
                 "security": [
@@ -4100,36 +2528,10 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     }
                 },
                 "security": [
@@ -4166,36 +2568,10 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     }
                 },
                 "security": [
@@ -4245,36 +2621,10 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     }
                 },
                 "security": [
@@ -4325,36 +2675,10 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     }
                 },
                 "security": [
@@ -4405,36 +2729,10 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     }
                 },
                 "security": [
@@ -4471,36 +2769,10 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     }
                 },
                 "security": [
@@ -4547,20 +2819,7 @@
                         "description": "Bad Request"
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     }
                 },
                 "security": [
@@ -4604,7 +2863,7 @@
                         "description": "Bad Request"
                     },
                     "401": {
-                        "description": "Unauthenticated"
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "403": {
                         "description": "Forbidden"
@@ -4644,6 +2903,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "title": "TokenResponse",
                                     "properties": {
                                         "access_token": {
                                             "description": "",
@@ -4693,22 +2953,8 @@
                     }
                 },
                 "responses": {
-                    "200": {
-                        "description": "Result of the update",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "description": "",
-                                            "type": "boolean",
-                                            "example": true
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "400": {
                         "description": "Bad Request"
@@ -4752,37 +2998,10 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Result of the update",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "description": "",
-                                            "type": "boolean",
-                                            "example": true
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UpdateResponse"
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     }
                 },
                 "security": [
@@ -4811,20 +3030,7 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     }
                 },
                 "security": [
@@ -4848,6 +3054,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "title": "LogoutResponse",
                                     "properties": {
                                         "message": {
                                             "description": "",
@@ -4864,20 +3071,7 @@
                         "description": "Bad Request"
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     }
                 },
                 "security": [
@@ -4901,6 +3095,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "title": "TokenResponse",
                                     "properties": {
                                         "access_token": {
                                             "description": "",
@@ -4927,20 +3122,7 @@
                         "description": "Bad Request"
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     }
                 },
                 "security": [
@@ -4982,26 +3164,13 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Requested item not found"
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     },
                     "405": {
-                        "description": "Method not allowed for requested route"
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 },
                 "security": [
@@ -5041,40 +3210,16 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Result of the update",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "description": "",
-                                            "type": "boolean",
-                                            "example": true
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request"
+                        "$ref": "#/components/responses/UpdateResponse"
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "405": {
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     },
                     "403": {
                         "description": "Forbidden"
@@ -5108,24 +3253,17 @@
                     "204": {
                         "description": "Successful operation"
                     },
-                    "400": {
-                        "description": "Bad Request"
-                    },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/ConflictResponse"
+                    },
+                    "405": {
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "403": {
                         "description": "Forbidden"
@@ -5181,36 +3319,10 @@
                         }
                     },
                     "401": {
-                        "description": "Returns when user is not authenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/UnauthorizedResponse"
                     },
                     "404": {
-                        "description": "Returns when the resource is not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Resource not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
                     }
                 },
                 "security": [
@@ -5887,6 +3999,99 @@
                     }
                 },
                 "type": "object"
+            }
+        },
+        "responses": {
+            "UpdateResponse": {
+                "description": "Result of the update",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "title": "UpdateResponse",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean",
+                                    "example": true
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "UnauthorizedResponse": {
+                "description": "Returns when user is not authenticated",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "title": "UnauthorizedResponse",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Unauthorized"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "ItemNotFoundResponse": {
+                "description": "Returns when the resource is not found",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "title": "ItemNotFoundResponse",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Requested item not found"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "ResourceNotFoundResponse": {
+                "description": "Returns when the resource is not found",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "title": "ResourceNotFoundResponse",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Resource not found"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "ConflictResponse": {
+                "description": "Returns when the entity is used elsewhere"
+            },
+            "MethodNotAllowedResponse": {
+                "description": "Returns when the method is not allowed for the requested route",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "title": "MethodNotAllowedResponse",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "Method is not allowed for the requested route"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "UnprocessableEntityResponse": {
+                "description": "Returns when the server was not able to process the content"
             }
         },
         "securitySchemes": {
