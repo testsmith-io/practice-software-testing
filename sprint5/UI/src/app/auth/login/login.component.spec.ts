@@ -53,7 +53,7 @@ describe('LoginComponent', () => {
     // Set email to something incorrect
     email.setValue("test");
     errors = email.errors || {};
-    expect(errors['pattern']).toBeTruthy();
+    expect(errors['email']).toBeTruthy();
 
     // Set email to something correct
     email.setValue("test@example.com");
