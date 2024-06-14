@@ -58,4 +58,4 @@ jobs:
         with:
           private-key: ${{ secrets.PRIVATE_KEY }}
           dep: upload-sprint${{ matrix.sprint }} production
-          deployer-version: '6.9.0'
+          deployer-version: '7.4.0'
