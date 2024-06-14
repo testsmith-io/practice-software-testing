@@ -93,7 +93,7 @@ function deploy($source, $webDestination, $apiDestination) {
 
     runLocally("rm -rf {$source}/UI/node_modules/esbuild/");
     runLocally("rm -rf {$source}/UI/node_modules");
-    runLocally("cd {$source}/UI/ && npm cache clean --force && npm install --legacy-peer-deps && npm run build");
+    runLocally("cd {$source}/UI/ && npm cache clean && npm cache verify && npm install --legacy-peer-deps && npm run build");
     run("cd /var/www/ && mkdir -p {$webDestination}practicesoftwaretesting.com_tmp/public_html");
     upload(__DIR__ . "/{$source}/UI/dist/toolshop/", "/var/www/{$webDestination}practicesoftwaretesting.com_tmp/public_html");
     run("sudo mv /var/www/{$webDestination}practicesoftwaretesting.com /var/www/{$webDestination}practicesoftwaretesting.com_bak");
