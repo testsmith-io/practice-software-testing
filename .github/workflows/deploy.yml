@@ -13,7 +13,7 @@ jobs:
       matrix:
         sprint: [1, 2, 3, 4, 5, '5-with-bugs']
     env:
-      NODE_VERSION: ${{ matrix.sprint == '5' && '21.7.2' || '16' }}
+      NODE_VERSION: ${{ matrix.sprint == '5' && '22.2.0' || '16' }}
       SECRET_GOOGLE_ID: ${{ matrix.sprint == '5' && secrets.SECRET_GOOGLE_ID || '' }}
       SECRET_GOOGLE_SECRET: ${{ matrix.sprint == '5' && secrets.SECRET_GOOGLE_SECRET || '' }}
       SECRET_GITHUB_ID: ${{ matrix.sprint == '5' && secrets.SECRET_GITHUB_ID || '' }}
