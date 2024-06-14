@@ -93,6 +93,7 @@ function deploy($source, $webDestination, $apiDestination) {
 
     runLocally("rm -rf {$source}/UI/node_modules/esbuild/");
     runLocally("rm -rf {$source}/UI/node_modules");
+    runLocally("rm -f {$source}/UI/package-lock.json");
     runLocally("npm cache clean --force");
     runLocally("cd {$source}/UI/ && npm cache verify && npm install --legacy-peer-deps && npm run build");
     run("cd /var/www/ && mkdir -p {$webDestination}practicesoftwaretesting.com_tmp/public_html");
