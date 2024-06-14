@@ -15,10 +15,10 @@ jobs:
 
       - name: Start containers 🐳
         run: |
-          docker-compose -f docker-compose.yml up
+          docker-compose -f docker-compose.yml up -d
 
-      - name: Sleep for 90 seconds
-        run: sleep 90s
+      - name: Sleep for 60 seconds
+        run: sleep 60s
         shell: bash
 
       - name: Create & Seed database 🌱
