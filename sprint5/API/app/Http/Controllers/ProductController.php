@@ -89,39 +89,46 @@ class ProductController extends Controller {
      * )
      */
     public function index(Request $request) {
-        if ($request->get('by_category') || $request->get('by_brand') || $request->get('by_category_slug') || $request->get('q')) {
-            $query = Product::with('product_image', 'category', 'brand');
-            if ($request->get('by_category_slug')) {
-                $ids = DB::table('categories')->select('id')
-                    ->from('categories')
-                    ->whereIn('parent_id', function ($query) use ($request) {
-                        $query->select('id')
-                            ->from('categories')
-                            ->where('slug', '=', $request->get('by_category_slug'));
-                    });
-                $query->whereIn('category_id', $ids);
-            }
-            if ($byCategory = $request->get('by_category')) {
-                $query->whereIn('category_id', explode(',', $byCategory));
-            }
+        // Initialize the query with eager loading
+        $query = Product::with('product_image', 'category', 'brand');
 
-            if ($byBrand = $request->get('by_brand')) {
-                $query->whereIn('brand_id', explode(',', $byBrand));
-            }
-
-            if ($q = $request->get('q')) {
-                $query->where('name', 'like', "%$q%");
-            }
-
-            $isRental = $request->get('is_rental') ? 1 : 0;
-            $query->where('is_rental', '=', $isRental);
-
-            $results = $query->filter()->paginate(9);
-
-            return $this->preferredFormat($results);
-        } else {
-            return $this->preferredFormat(Product::where('is_rental', $request->get('is_rental') ? 1 : 0)->with('product_image', 'category', 'brand')->filter()->paginate(9));
+        // Apply category slug filter if present
+        if ($categorySlug = $request->get('by_category_slug')) {
+            $categoryIds = DB::table('categories')
+                ->where('slug', $categorySlug)
+                ->orWhereIn('parent_id', function ($query) use ($categorySlug) {
+                    $query->select('id')
+                        ->from('categories')
+                        ->where('slug', $categorySlug);
+                })
+                ->pluck('id');
+            $query->whereIn('category_id', $categoryIds);
         }
+
+        // Apply category filter if present
+        if ($byCategory = $request->get('by_category')) {
+            $query->whereIn('category_id', explode(',', $byCategory));
+        }
+
+        // Apply brand filter if present
+        if ($byBrand = $request->get('by_brand')) {
+            $query->whereIn('brand_id', explode(',', $byBrand));
+        }
+
+        // Apply search query if present
+        if ($q = $request->get('q')) {
+            $query->where('name', 'like', "%$q%");
+        }
+
+        // Apply rental filter
+        $isRental = $request->get('is_rental') ? 1 : 0;
+        $query->where('is_rental', $isRental);
+
+        // Fetch and paginate results
+        $results = $query->filter()->paginate(9);
+
+        // Return results in preferred format
+        return $this->preferredFormat($results);
     }
 
     /**
