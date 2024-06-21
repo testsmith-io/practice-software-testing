@@ -27,6 +27,12 @@ class CreateProductsTable extends Migration
             $table->foreignUlid('brand_id')->references('id')->on('brands');
             $table->foreignUlid('category_id')->references('id')->on('categories');
             $table->foreignUlid('product_image_id')->nullable()->references('id')->on('product_images');
+
+            // Indexes for optimization
+            $table->index('category_id');
+            $table->index('brand_id');
+            $table->index('is_rental');
+            $table->index('name');
         });
     }
 
