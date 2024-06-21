@@ -95,7 +95,6 @@ function deploy($source, $webDestination, $apiDestination) {
     runLocally("rm -rf {$source}/UI/node_modules");
     runLocally("rm -f {$source}/UI/package-lock.json");
     runLocally("npm cache clean --force");
-    runLocally("npm i -g @nx/nx-linux-x64-gnu");
     runLocally("cd {$source}/UI/ && npm cache verify && npm install --include=optional --legacy-peer-deps && npm run build");
     run("cd /var/www/ && mkdir -p {$webDestination}practicesoftwaretesting.com_tmp/public_html");
     upload(__DIR__ . "/{$source}/UI/dist/toolshop/", "/var/www/{$webDestination}practicesoftwaretesting.com_tmp/public_html");
