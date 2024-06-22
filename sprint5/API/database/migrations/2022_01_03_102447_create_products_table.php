@@ -33,6 +33,7 @@ class CreateProductsTable extends Migration
             $table->index('brand_id');
             $table->index('is_rental');
             $table->index('name');
+            $table->index('price');
         });
     }
 
