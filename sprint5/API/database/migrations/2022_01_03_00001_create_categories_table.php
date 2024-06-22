@@ -25,6 +25,7 @@ class CreateCategoriesTable extends Migration
         Schema::table('categories', function (Blueprint $table)
         {
             $table->foreignUlid('parent_id')->nullable()->references('id')->on('categories');
+            $table->index('parent_id');
         });
     }
 
