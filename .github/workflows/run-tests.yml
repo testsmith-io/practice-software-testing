@@ -31,8 +31,29 @@ jobs:
           node-version: 22
       - name: Install dependencies ⚙️
         run: npm ci
-      - name: Install Playwright Browsers 🎭
-        run: npx playwright install --with-deps
+      # Cache browser binaries, cache key is based on Playwright version and OS
+      - name: 🧰 Cache Playwright browser binaries
+        uses: actions/cache@v3
+        id: playwright-cache
+        with:
+          path: "~/.cache/ms-playwright"
+          key: "${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}"
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      # Install browser binaries & OS dependencies if cache missed
+      - name: 🏗 Install Playwright browser binaries & OS dependencies
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        working-directory: ./path/to/tests
+        run: |
+          npx playwright install --with-deps
+
+      # Install only the OS dependencies if cache hit
+      - name: 🏗 Install Playwright OS dependencies
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        working-directory: ./path/to/tests
+        run: |
+          npx playwright install-deps
       - name: Run Playwright tests 🧪
         run: npx playwright test
       - uses: actions/upload-artifact@v4
