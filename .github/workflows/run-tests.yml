@@ -13,6 +13,26 @@ jobs:
       - name: Checkout ⚙️
         uses: actions/checkout@v4
 
+      - name: Set up Docker Buildx 🛠️
+        uses: docker/setup-buildx-action@v2
+
+      - name: Cache Docker layers 🐳
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Build and Push Docker image 🚀
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: user/app:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+
       - name: Start containers 🐳
         run: |
           docker-compose -f docker-compose.yml up -d
@@ -30,7 +50,10 @@ jobs:
         with:
           node-version: 22
       - name: Install dependencies ⚙️
-        run: npm ci
+        run: |
+          npm ci
+          PLAYWRIGHT_VERSION=$(npm ls --json @playwright/test | jq --raw-output '.dependencies["@playwright/test"].version')
+          echo "PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION" >> $GITHUB_ENV 
       # Cache browser binaries, cache key is based on Playwright version and OS
       - name: 🧰 Cache Playwright browser binaries
         uses: actions/cache@v3
