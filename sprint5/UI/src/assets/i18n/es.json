@@ -1,330 +1,330 @@
 {
-  "title": "Practice Software Testing",
+  "title": "Practicar Pruebas de Software",
   "buttons": {
   },
   "fields": {
     "email": {
-      "label": "Email address",
-      "placeholder": "Your email",
+      "label": "Dirección de correo electrónico",
+      "placeholder": "Tu correo electrónico",
       "errors": {
-        "required": "Email is required",
-        "format": "Email format is invalid"
+        "required": "El correo electrónico es obligatorio",
+        "format": "El formato del correo electrónico no es válido"
       }
     },
     "password": {
-      "label": "Password",
-      "placeholder": "Your password",
+      "label": "Contraseña",
+      "placeholder": "Tu contraseña",
       "errors": {
-        "required": "Password is required",
-        "length": "Password length is invalid",
-        "minlength": "Password must be minimal 6 characters long.",
-        "maxlength": "Password can not be more than 40 characters long."
+        "required": "La contraseña es obligatoria",
+        "length": "La longitud de la contraseña no es válida",
+        "minlength": "La contraseña debe tener al menos 6 caracteres.",
+        "maxlength": "La contraseña no puede tener más de 40 caracteres."
       }
     },
     "first-name": {
-      "label": "First name",
-      "placeholder": "Your first name",
+      "label": "Nombre",
+      "placeholder": "Tu nombre",
       "errors": {
-        "required": "First name is required"
+        "required": "El nombre es obligatorio"
       }
     },
     "last-name": {
-      "label": "Last name",
-      "placeholder": "Your last name",
+      "label": "Apellido",
+      "placeholder": "Tu apellido",
       "errors": {
-        "required": "Last name is required"
+        "required": "El apellido es obligatorio"
       }
     },
     "address": {
-      "label": "Address",
-      "placeholder": "Your Address",
+      "label": "Dirección",
+      "placeholder": "Tu dirección",
       "errors": {
-        "required": "Address is required"
+        "required": "La dirección es obligatoria"
       }
     },
     "postcode": {
-      "label": "Postcode",
-      "placeholder": "Your Postcode",
+      "label": "Código postal",
+      "placeholder": "Tu código postal",
       "errors": {
-        "required": "Postcode is required",
-        "format": "Only 5 numbers are allowed."
+        "required": "El código postal es obligatorio",
+        "format": "Solo se permiten 5 números."
       }
     },
     "city": {
-      "label": "City",
-      "placeholder": "Your City",
+      "label": "Ciudad",
+      "placeholder": "Tu ciudad",
       "errors": {
-        "required": "City is required"
+        "required": "La ciudad es obligatoria"
       }
     },
     "state": {
-      "label": "State",
-      "placeholder": "Your State",
+      "label": "Estado",
+      "placeholder": "Tu estado",
       "errors": {
-        "required": "State is required"
+        "required": "El estado es obligatorio"
       }
     },
     "country": {
-      "label": "Country",
-      "placeholder": "Your country",
+      "label": "País",
+      "placeholder": "Tu país",
       "errors": {
-        "required": "Country is required"
+        "required": "El país es obligatorio"
       }
     },
     "dob": {
-      "label": "Date of Birth",
-      "placeholder": "Your Date of birth",
+      "label": "Fecha de nacimiento",
+      "placeholder": "Tu fecha de nacimiento",
       "errors": {
-        "required": "Date of Birth is required"
+        "required": "La fecha de nacimiento es obligatoria"
       }
     },
     "phone": {
-      "label": "Phone",
-      "placeholder": "Your phone",
+      "label": "Teléfono",
+      "placeholder": "Tu teléfono",
       "errors": {
-        "required": "Phone is required.",
-        "format": "Only numbers are allowed."
+        "required": "El teléfono es obligatorio.",
+        "format": "Solo se permiten números."
       }
     }
   },
   "header": {
     "menu": {
-      "home": "Home",
-      "categories": "Categories",
-      "hand-tools": "Hand Tools",
-      "power-tools": "Power Tools",
-      "other": "Other",
-      "special-tools": "Special Tools",
-      "rentals": "Rentals",
-      "contact": "Contact",
-      "sign-in": "Sign in",
-      "my-account": "My account",
-      "my-favorites": "My favorites",
-      "my-profile": "My profile",
-      "my-invoices": "My invoices",
-      "my-messages": "My messages",
-      "sign-out": "Sign out"
+      "home": "Inicio",
+      "categories": "Categorías",
+      "hand-tools": "Herramientas manuales",
+      "power-tools": "Herramientas eléctricas",
+      "other": "Otros",
+      "special-tools": "Herramientas especiales",
+      "rentals": "Alquileres",
+      "contact": "Contacto",
+      "sign-in": "Iniciar sesión",
+      "my-account": "Mi cuenta",
+      "my-favorites": "Mis favoritos",
+      "my-profile": "Mi perfil",
+      "my-invoices": "Mis facturas",
+      "my-messages": "Mis mensajes",
+      "sign-out": "Cerrar sesión"
     }
   },
   "footer": {
-    "demo-app": "This is a DEMO application",
-    "demo-purpose": "used for software testing training purpose."
+    "demo-app": "Esta es una aplicación DEMO",
+    "demo-purpose": "utilizada para propósitos de formación en pruebas de software."
   },
   "pages": {
     "overview": {
-      "filters": "Filters",
-      "sort": "Sort",
+      "filters": "Filtros",
+      "sort": "Ordenar",
       "sort-options": {
-        "name-asc": "Name (A - Z)",
-        "name-desc": "Name (Z - A)",
-        "price-desc": "Price (High - Low)",
-        "price-asc": "Price (Low - High)"
+        "name-asc": "Nombre (A - Z)",
+        "name-desc": "Nombre (Z - A)",
+        "price-desc": "Precio (Alto - Bajo)",
+        "price-asc": "Precio (Bajo - Alto)"
       },
-      "price-range": "Price Range",
-      "search": "Search",
-      "categories": "Categories",
-      "by-category": "By category",
-      "category": "Category",
-      "brands": "Brands",
-      "by-brand": "By brand",
-      "no-results": "There are no products found.",
-      "no-stock": "Out of stock"
+      "price-range": "Rango de precios",
+      "search": "Buscar",
+      "categories": "Categorías",
+      "by-category": "Por categoría",
+      "category": "Categoría",
+      "brands": "Marcas",
+      "by-brand": "Por marca",
+      "no-results": "No se encontraron productos.",
+      "no-stock": "Agotado"
     },
     "product-detail": {
-      "photo-by": "Photo by",
-      "on": "on",
-      "add-to-cart-btn": "Add to cart",
-      "add-to-favorites-btn": "Add to favourites",
-      "per-hour": "per hour",
-      "increase-quantity": "Increase quantity",
-      "decrease-quantity": "Decrease quantity",
-      "quantity": "Quantity",
+      "photo-by": "Foto por",
+      "on": "en",
+      "add-to-cart-btn": "Añadir al carrito",
+      "add-to-favorites-btn": "Añadir a favoritos",
+      "per-hour": "por hora",
+      "increase-quantity": "Aumentar cantidad",
+      "decrease-quantity": "Disminuir cantidad",
+      "quantity": "Cantidad",
       "total": "Total",
-      "duration": "Duration",
-      "hours": "hour(s)",
-      "related-products": "Related products",
-      "more-information": "More information"
+      "duration": "Duración",
+      "hours": "hora(s)",
+      "related-products": "Productos relacionados",
+      "more-information": "Más información"
     },
     "rentals": {
-      "title": "Rentals"
+      "title": "Alquileres"
     },
     "login": {
-      "title": "Login",
-      "alternative": "or use",
-      "btn": "Login",
-      "generic-error": "Invalid email or password",
-      "no-account": "Not yet an account?",
-      "register": "Register your account",
-      "forgot-password": "Forgot your Password?"
+      "title": "Iniciar sesión",
+      "alternative": "o usar",
+      "btn": "Iniciar sesión",
+      "generic-error": "Correo electrónico o contraseña no válidos",
+      "no-account": "¿Aún no tienes una cuenta?",
+      "register": "Registra tu cuenta",
+      "forgot-password": "¿Olvidaste tu contraseña?"
     },
     "register": {
-      "title": "Customer registration",
-      "email-in-use": "Email is already in use.",
-      "btn": "Register"
+      "title": "Registro de cliente",
+      "email-in-use": "El correo electrónico ya está en uso.",
+      "btn": "Registrar"
     },
     "forgot-password": {
-      "title": "Forgot Password",
-      "btn": "Set New Password",
-      "confirm": "Your password is <strong>successfully</strong> updated!"
+      "title": "Olvidé mi contraseña",
+      "btn": "Establecer nueva contraseña",
+      "confirm": "¡Tu contraseña se ha actualizado <strong>exitosamente</strong>!"
     },
     "contact": {
-      "title": "Contact",
-      "btn": "Send",
+      "title": "Contacto",
+      "btn": "Enviar",
       "subject": {
-        "label": "Subject",
+        "label": "Asunto",
         "options": {
-          "select": "Select a subject *",
-          "customer-service": "Customer service",
+          "select": "Selecciona un asunto *",
+          "customer-service": "Atención al cliente",
           "webmaster": "Webmaster",
-          "return": "Return",
-          "payments": "Payments",
-          "warranty": "Warranty",
-          "status-of-order": "Status of my order"
+          "return": "Devolución",
+          "payments": "Pagos",
+          "warranty": "Garantía",
+          "status-of-order": "Estado de mi pedido"
         },
         "errors": {
-          "required": "Subject is required"
+          "required": "El asunto es obligatorio"
         }
       },
       "message": {
-        "label": "Message",
+        "label": "Mensaje",
         "errors": {
-          "required": "Message is required",
-          "minlength": "Message must be minimal 50 characters"
+          "required": "El mensaje es obligatorio",
+          "minlength": "El mensaje debe tener al menos 50 caracteres"
         }
       },
       "attachment": {
-        "label": "Attachment",
-        "help": "Only files with the <strong>txt</strong> extension are allowed, and files must be 0kb.",
+        "label": "Adjunto",
+        "help": "Solo se permiten archivos con la extensión <strong>txt</strong>, y los archivos deben estar vacíos.",
         "errors": {
-          "incorrect-type": "File should have a txt extension.",
-          "incorrect-size": "File should be empty."
+          "incorrect-type": "El archivo debe tener una extensión txt.",
+          "incorrect-size": "El archivo debe estar vacío."
         }
       },
-      "known-user": "Hello {{ name }}, please fill out this form to submit your message.",
-      "confirm": "Thanks for your message! We will contact you shortly."
+      "known-user": "Hola {{ name }}, por favor completa este formulario para enviar tu mensaje.",
+      "confirm": "¡Gracias por tu mensaje! Nos pondremos en contacto contigo pronto."
     },
     "checkout": {
-      "btn": "Proceed to checkout",
+      "btn": "Proceder al pago",
       "cart": {
-        "title": "Cart",
-        "empty": "The cart is empty. Nothing to display.",
-        "rental-explainer": "Item for rent, price per hour",
-        "item-header": "Item",
-        "quantity-header": "Quantity",
-        "price-header": "Price",
+        "title": "Carrito",
+        "empty": "El carrito está vacío. Nada que mostrar.",
+        "rental-explainer": "Artículo en alquiler, precio por hora",
+        "item-header": "Artículo",
+        "quantity-header": "Cantidad",
+        "price-header": "Precio",
         "subtotal": "Subtotal",
-        "discount": "Discount",
+        "discount": "Descuento",
         "total": "Total"
       },
       "sign-in": {
-        "title": "Sign in",
-        "already": "Hello {{ first_name }} {{ last_name }}, you are already logged in. You can proceed to checkout."
+        "title": "Iniciar sesión",
+        "already": "Hola {{ first_name }} {{ last_name }}, ya has iniciado sesión. Puedes proceder al pago."
       },
       "address": {
-        "title": "Billing Address"
+        "title": "Dirección de facturación"
       },
       "payment": {
-        "title": "Payment",
-        "confirm-btn": "Confirm",
-        "confirm": "Thanks for your order! Your invoice number is <span id=\"invoice-number\">{{ invoice_number }}</span>.",
-        "method-label": "Payment Method",
-        "method-required": "Payment method is required.",
+        "title": "Pago",
+        "confirm-btn": "Confirmar",
+        "confirm": "¡Gracias por tu pedido! Tu número de factura es <span id=\"invoice-number\">{{ invoice_number }}</span>.",
+        "method-label": "Método de pago",
+        "method-required": "El método de pago es obligatorio.",
         "options": {
-          "select": "Choose your payment method",
-          "bank-transfer": "Bank Transfer",
-          "cash-on-delivery": "Cash on Delivery",
-          "credit-card": "Credit Card",
-          "buy-now-pay-later": "Buy Now Pay Later",
-          "gift-card": "Gift Card"
+          "select": "Elige tu método de pago",
+          "bank-transfer": "Transferencia bancaria",
+          "cash-on-delivery": "Contra reembolso",
+          "credit-card": "Tarjeta de crédito",
+          "buy-now-pay-later": "Compra ahora, paga después",
+          "gift-card": "Tarjeta de regalo"
         },
         "bank-transfer": {
-          "bank-name": "Bank Name",
-          "bank-name-error-format": "Bank name can only contain letters and spaces.",
-          "account-name": "Account Name",
-          "account-name-error-format": "Account name can contain letters, numbers, spaces, periods, apostrophes, and hyphens.",
-          "account-number": "Account Number",
-          "account-number-help": "Please enter your bank account number as it appears on your bank statement. It's a unique series of numbers used to identify your individual account. Avoid including any spaces or hyphens.",
-          "account-number-error-format": "Account number must be numeric."
+          "bank-name": "Nombre del banco",
+          "bank-name-error-format": "El nombre del banco solo puede contener letras y espacios.",
+          "account-name": "Nombre de la cuenta",
+          "account-name-error-format": "El nombre de la cuenta puede contener letras, números, espacios, puntos, apóstrofes y guiones.",
+          "account-number": "Número de cuenta",
+          "account-number-help": "Por favor, introduce tu número de cuenta bancaria tal como aparece en tu extracto bancario. Es una serie única de números utilizados para identificar tu cuenta individual. Evita incluir espacios o guiones.",
+          "account-number-error-format": "El número de cuenta debe ser numérico."
         },
         "credit-card": {
-          "number": "Credit Card Number",
-          "number-help": "Enter your 16-digit credit card number as it appears on the card, in the format 0000-0000-0000-0000. Ensure that you include the hyphens for proper formatting.",
-          "number-error-format": "Invalid card number format.",
-          "expiration-date": "Expiration Date",
-          "date-error-format": "Invalid date format. Use MM/YYYY.",
-          "date-error-past": "Expiration date must be in the future.",
+          "number": "Número de tarjeta de crédito",
+          "number-help": "Introduce tu número de tarjeta de crédito de 16 dígitos tal como aparece en la tarjeta, en el formato 0000-0000-0000-0000. Asegúrate de incluir los guiones para el formato correcto.",
+          "number-error-format": "Formato de número de tarjeta no válido.",
+          "expiration-date": "Fecha de vencimiento",
+          "date-error-format": "Formato de fecha no válido. Usa MM/AAAA.",
+          "date-error-past": "La fecha de vencimiento debe estar en el futuro.",
           "cvv": "CVV",
-          "cvv-help": "The CVV is a 3-digit or 4-digit number. It's used for added security during card-not-present transactions.",
-          "cvv-error-format": "CVV must be 3 or 4 digits.",
-          "name": "Card Holder Name",
-          "name-required": "Only letters and spaces are allowed."
+          "cvv-help": "El CVV es un número de 3 o 4 dígitos. Se utiliza para mayor seguridad en transacciones donde la tarjeta no está presente.",
+          "cvv-error-format": "El CVV debe tener 3 o 4 dígitos.",
+          "name": "Nombre del titular de la tarjeta",
+          "name-required": "Solo se permiten letras y espacios."
         },
         "bnpl": {
-          "monthly-installments": "Monthly Installments",
-          "monthly-installments-choose": "Choose your monthly installments",
-          "monthly-installments-help": "This option allows you to spread the cost of your purchase over several months.",
-          "monthly-installments-error-required": "Please select the number of monthly installments."
+          "monthly-installments": "Cuotas mensuales",
+          "monthly-installments-choose": "Elige tus cuotas mensuales",
+          "monthly-installments-help": "Esta opción te permite distribuir el costo de tu compra en varios meses.",
+          "monthly-installments-error-required": "Por favor, selecciona el número de cuotas mensuales."
         },
         "gift-card": {
-          "number": "Gift Card Number",
-          "number-help": "Enter the unique number found on your gift card. This number is usually located on the back of the card and may consist of digits and/or letters.",
-          "number-error-format": "Gift card number must be alphanumeric.",
-          "validation-code": "Validation Code",
-          "validation-code-help": "The validation code is a security feature found on your gift card, often located near the gift card number. Enter this code exactly as it appears on your card.",
-          "validation-code-error-format": "Validation code must be alphanumeric."
+          "number": "Número de tarjeta de regalo",
+          "number-help": "Introduce el número único que se encuentra en tu tarjeta de regalo. Este número suele estar ubicado en la parte posterior de la tarjeta y puede consistir en dígitos y/o letras.",
+          "number-error-format": "El número de la tarjeta de regalo debe ser alfanumérico.",
+          "validation-code": "Código de validación",
+          "validation-code-help": "El código de validación es una característica de seguridad que se encuentra en tu tarjeta de regalo, a menudo ubicado cerca del número de la tarjeta de regalo. Introduce este código exactamente como aparece en tu tarjeta.",
+          "validation-code-error-format": "El código de validación debe ser alfanumérico."
         }
       }
     },
     "my-account": {
       "overview": {
-        "title": "My account",
-        "description": "Here you can manage your profile, favorites and orders.",
-        "favorites": "Favorites",
-        "profile": "Profile",
-        "invoices": "Invoices",
-        "messages": "Messages"
+        "title": "Mi cuenta",
+        "description": "Aquí puedes gestionar tu perfil, favoritos y pedidos.",
+        "favorites": "Favoritos",
+        "profile": "Perfil",
+        "invoices": "Facturas",
+        "messages": "Mensajes"
       },
       "profile": {
-        "title": "Profile",
-        "update-profile-btn": "Update Profile",
-        "update-profile-success": "Your profile is <strong>successfully</strong> updated!",
-        "password-section": "Password",
-        "current-password": "Current Password",
-        "new-password": "New Password",
-        "confirm-new-password": "Confirm New Password",
-        "change-password-btn": "Change Password",
-        "change-password-success": "Your password is <strong>successfully</strong> updated!"
+        "title": "Perfil",
+        "update-profile-btn": "Actualizar perfil",
+        "update-profile-success": "¡Tu perfil se ha actualizado <strong>exitosamente</strong>!",
+        "password-section": "Contraseña",
+        "current-password": "Contraseña actual",
+        "new-password": "Nueva contraseña",
+        "confirm-new-password": "Confirmar nueva contraseña",
+        "change-password-btn": "Cambiar contraseña",
+        "change-password-success": "¡Tu contraseña se ha actualizado <strong>exitosamente</strong>!"
       },
       "messages": {
-        "title": "Messages",
-        "no-messages": "There are no messages yet. Navigate to the <a class=\"link-primary\" id=\"contact-link\">contact form</a> and fill out the form.",
-        "subject": "Subject",
-        "message": "Message",
-        "status": "Status",
-        "date": "Date",
-        "details": "Details",
-        "back-btn": "Back",
-        "replies": "Replies",
-        "reply-btn": "Reply",
-        "add-reply": "Add Reply"
+        "title": "Mensajes",
+        "no-messages": "Aún no hay mensajes. Navega al <a class=\"link-primary\" id=\"contact-link\">formulario de contacto</a> y completa el formulario.",
+        "subject": "Asunto",
+        "message": "Mensaje",
+        "status": "Estado",
+        "date": "Fecha",
+        "details": "Detalles",
+        "back-btn": "Volver",
+        "replies": "Respuestas",
+        "reply-btn": "Responder",
+        "add-reply": "Añadir respuesta"
       },
       "favorites": {
-        "title": "Favorites",
-        "no-favorites": "There are no favorites yet. In order to add favorites, please go to the product listing and mark some products as your favorite."
+        "title": "Favoritos",
+        "no-favorites": "Aún no hay favoritos. Para agregar favoritos, dirígete a la lista de productos y marca algunos productos como tus favoritos."
       },
       "invoices": {
-        "title": "Invoices",
-        "invoice-number": "Invoice Number",
-        "billing-address": "Billing Address",
-        "invoice-date": "Invoice Date",
+        "title": "Facturas",
+        "invoice-number": "Número de factura",
+        "billing-address": "Dirección de facturación",
+        "invoice-date": "Fecha de la factura",
         "total": "Total",
-        "details": "Details",
-        "not-exist": "This invoice doesn't exist.",
-        "download-pdf": "Download PDF",
-        "general-information": "General Information",
-        "payment-information": "Payment Information",
-        "products": "Products",
-        "product": "Product"
+        "details": "Detalles",
+        "not-exist": "Esta factura no existe.",
+        "download-pdf": "Descargar PDF",
+        "general-information": "Información general",
+        "payment-information": "Información de pago",
+        "products": "Productos",
+        "product": "Producto"
       }
     }
   }
