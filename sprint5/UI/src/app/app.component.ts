@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Spinkit} from "ng-http-loader";
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { Title } from '@angular/platform-browser';
-import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
+import {Router, NavigationEnd, ActivatedRoute} from '@angular/router';
+import {Title} from '@angular/platform-browser';
+import {filter, map, mergeMap, switchMap} from 'rxjs/operators';
 import {TranslocoService} from "@jsverse/transloco";
 
 @Component({
@@ -14,13 +14,19 @@ export class AppComponent implements OnInit {
 
   public spinkit = Spinkit;
   title = 'Toolshop';
+  baseTitle: string;
 
   constructor(private titleService: Title,
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private translocoService: TranslocoService) {
   }
+
   ngOnInit(): void {
+    this.translocoService.selectTranslate('title').subscribe(translatedTitle => {
+      this.baseTitle = `${translatedTitle} - Toolshop - v5.0`;
+    });
+
     if (!window.localStorage.getItem('GEO_LOCATION') &&
       window.localStorage.getItem('RETRIEVE_GEOLOCATION')) {
       this.getLocation();
@@ -35,7 +41,7 @@ export class AppComponent implements OnInit {
       filter(route => route.outlet === 'primary'),
       map(route => route.snapshot.data)
     ).subscribe(data => {
-      const baseTitle = `${this.translocoService.translate('title')} - Toolshop - v5.0`;
+      const baseTitle = this.baseTitle;
       const title = data['title'] ? `${data['title']} - ${baseTitle}` : baseTitle;
       this.titleService.setTitle(title);
     });
