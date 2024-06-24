@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
       filter(route => route.outlet === 'primary'),
       map(route => route.snapshot.data)
     ).subscribe(data => {
-      const baseTitle = `${this.translocoService.translate('title')} - Toolshop - v5.0';
+      const baseTitle = `${this.translocoService.translate('title')} - Toolshop - v5.0`;
       const title = data['title'] ? `${data['title']} - ${baseTitle}` : baseTitle;
       this.titleService.setTitle(title);
     });
