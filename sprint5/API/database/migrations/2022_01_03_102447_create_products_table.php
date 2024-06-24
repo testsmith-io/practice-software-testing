@@ -29,6 +29,7 @@ class CreateProductsTable extends Migration
             $table->foreignUlid('product_image_id')->nullable()->references('id')->on('product_images');
 
             // Indexes for optimization
+            $table->index('id');
             $table->index('category_id');
             $table->index('brand_id');
             $table->index('is_rental');
