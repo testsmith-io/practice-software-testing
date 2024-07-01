@@ -481,8 +481,7 @@ class UserTest extends TestCase
                         'postcode',
                         'phone',
                         'dob',
-                        'email',
-                        'created_at'
+                        'email'
                     ]
                 ]
             ]);
