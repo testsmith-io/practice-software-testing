@@ -1,10 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {Spinkit} from "ng-http-loader";
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { Title } from '@angular/platform-browser';
-import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
+import {Router, NavigationEnd, ActivatedRoute} from '@angular/router';
+import {Title} from '@angular/platform-browser';
+import {filter, map, mergeMap, switchMap} from 'rxjs/operators';
 import {GaService} from "./_services/ga.service";
-import {Angulartics2GoogleAnalytics, Angulartics2GoogleTagManager} from "angulartics2";
+import {environment} from "../environments/environment";
+
+declare const gtag: Function;
 
 @Component({
   selector: 'app-root',
@@ -19,10 +21,16 @@ export class AppComponent implements OnInit {
   constructor(private gaService: GaService,
               private titleService: Title,
               private router: Router,
-              private activatedRoute: ActivatedRoute,
-              angulartics2GoogleTagManager: Angulartics2GoogleTagManager){
-    angulartics2GoogleTagManager.startTracking();
+              private activatedRoute: ActivatedRoute) {
+    if (environment.gaCode) {
+      this.router.events.subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          gtag('config', environment.gaCode, {'page_path': event.urlAfterRedirects});
+        }
+      })
+    }
   }
+
   ngOnInit(): void {
     if (!window.localStorage.getItem('GEO_LOCATION') &&
       window.localStorage.getItem('RETRIEVE_GEOLOCATION')) {
