@@ -33,6 +33,7 @@ import {RouterLink, RouterModule} from "@angular/router";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { TranslocoRootModule } from './transloco-root.module';
 import {TranslocoModule} from "@jsverse/transloco";
+import {Angulartics2Module} from "angulartics2";
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import {TranslocoModule} from "@jsverse/transloco";
     PaginationComponent,
     RouterLink,
     ToastrModule.forRoot(),
-    TranslocoRootModule
+    TranslocoRootModule,
+    Angulartics2Module.forRoot()
   ],
   providers: [GaService, UserAuthGuard, AdminAuthGuard, {
     provide: HTTP_INTERCEPTORS,
