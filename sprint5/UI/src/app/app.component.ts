@@ -3,6 +3,7 @@ import {Spinkit} from "ng-http-loader";
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
+import {GaService} from "./_services/ga.service";
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,8 @@ export class AppComponent implements OnInit {
   public spinkit = Spinkit;
   title = 'Toolshop';
 
-  constructor(private titleService: Title,
+  constructor(private gaService: GaService,
+              private titleService: Title,
               private router: Router,
               private activatedRoute: ActivatedRoute) {
   }
