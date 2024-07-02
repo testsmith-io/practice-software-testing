@@ -4,6 +4,7 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { filter, map, mergeMap, switchMap } from 'rxjs/operators';
 import {GaService} from "./_services/ga.service";
+import {Angulartics2GoogleAnalytics, Angulartics2GoogleTagManager} from "angulartics2";
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,9 @@ export class AppComponent implements OnInit {
   constructor(private gaService: GaService,
               private titleService: Title,
               private router: Router,
-              private activatedRoute: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute,
+              angulartics2GoogleTagManager: Angulartics2GoogleTagManager){
+    angulartics2GoogleTagManager.startTracking();
   }
   ngOnInit(): void {
     if (!window.localStorage.getItem('GEO_LOCATION') &&
