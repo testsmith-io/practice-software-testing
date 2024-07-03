@@ -35,7 +35,8 @@
               "src/favicon-32x32.png",
               "src/mstile-150x150.png",
               "src/safari-pinned-tab.svg",
-              "src/assets"
+              "src/assets",
+              "src/.htaccess"
             ],
             "styles": [
               "node_modules/@y3krulez/angular-archwizard/styles/archwizard.scss",
