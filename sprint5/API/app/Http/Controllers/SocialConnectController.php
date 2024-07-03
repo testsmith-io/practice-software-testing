@@ -97,7 +97,7 @@ class SocialConnectController extends Controller
                 ?>
                 <script language="javascript">
                     if (window.opener) {
-                        window.opener.parent.location.href = "https://practicesoftwaretesting.com/#/auth/login;socialid=<?php echo urlencode($token); ?>";
+                        window.opener.parent.location.href = "https://practicesoftwaretesting.com/auth/login;socialid=<?php echo urlencode($token); ?>";
                     }
                     window.self.close();
                 </script>
@@ -107,7 +107,7 @@ class SocialConnectController extends Controller
             ?>
             <script language="javascript">
                 if (window.opener) {
-                    window.opener.parent.location.href = "https://practicesoftwaretesting.com/#/auth/login";
+                    window.opener.parent.location.href = "https://practicesoftwaretesting.com/auth/login";
                 }
                 window.self.close();
             </script>
