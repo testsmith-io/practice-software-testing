@@ -86,17 +86,17 @@ export class CustomerAccountService {
   }
 
   redirectToAccount() {
-    window.location.href = '/#/account';
+    window.location.href = '/account';
     return true;
   }
 
   redirectToDashboard() {
-    window.location.href = '/#/admin/dashboard';
+    window.location.href = '/admin/dashboard';
     return true;
   }
 
   redirectToLogin() {
-    window.location.href = '/#/auth/login';
+    window.location.href = '/auth/login';
     return true;
   }
 
