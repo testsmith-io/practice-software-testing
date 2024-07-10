@@ -107,8 +107,8 @@
         <tr *ngFor="let invoiceline of invoice.invoicelines">
           <td>{{invoiceline.quantity}}</td>
           <td>{{invoiceline.product.name}}<small *ngIf="invoiceline.product.is_rental"> (Item for rent, price per hour)</small></td>
-          <td class="text-end">${{invoiceline.product.price | number: '1.2-2'}}</td>
-          <td class="text-end">${{invoiceline.quantity * invoiceline.product.price | number: '1.2-2'}}</td>
+          <td class="text-end">${{invoiceline.unit_price | number: '1.2-2'}}</td>
+          <td class="text-end">${{invoiceline.quantity * invoiceline.unit_price | number: '1.2-2'}}</td>
         </tr>
         </tbody>
       </table>
