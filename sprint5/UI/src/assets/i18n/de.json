@@ -4,11 +4,11 @@
   },
   "fields": {
     "email": {
-      "label": "Email address",
-      "placeholder": "Your email",
+      "label": "Email Adresse",
+      "placeholder": "Ihre EMail",
       "errors": {
-        "required": "Email is required",
-        "format": "Email format is invalid"
+        "required": "Email ist verpflichtend",
+        "format": "Email Format ist ungültig"
       }
     },
     "password": {
