@@ -12,27 +12,27 @@
       }
     },
     "password": {
-      "label": "Password",
-      "placeholder": "Your password",
+      "label": "Passwort",
+      "placeholder": "Ihr Passwort",
       "errors": {
-        "required": "Password is required",
-        "length": "Password length is invalid",
-        "minlength": "Password must be minimal 6 characters long.",
-        "maxlength": "Password can not be more than 40 characters long."
+        "required": "Passwort ist verpflichtend",
+        "length": "Passwordlänge ist ungültig",
+        "minlength": "Passwort muss mindestens 6 Zeichen lang sein.",
+        "maxlength": "Password darf nicht länger als 40 Zeichen lang sein."
       }
     },
     "first-name": {
-      "label": "First name",
-      "placeholder": "Your first name",
+      "label": "Vornamee",
+      "placeholder": "Ihr Vorname",
       "errors": {
-        "required": "First name is required"
+        "required": "Vorname ist verpflichtend"
       }
     },
     "last-name": {
-      "label": "Last name",
-      "placeholder": "Your last name",
+      "label": "Nachname",
+      "placeholder": "Ihr Nachname",
       "errors": {
-        "required": "Last name is required"
+        "required": "Nachname ist verpflichtend"
       }
     },
     "address": {
