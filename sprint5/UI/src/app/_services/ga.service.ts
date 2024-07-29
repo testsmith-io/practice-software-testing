@@ -16,7 +16,7 @@ export class GaService {
 
   private injectGaScript(gaCode: string): void {
     const script = document.createElement('script');
-    script.async = true;
+    script.defer = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${gaCode}`;
     document.head.appendChild(script);
 
@@ -33,6 +33,7 @@ export class GaService {
 
   private injectGtmScript(gtmId: string): void {
     const script = document.createElement('script');
+    script.defer = true;
     script.innerHTML = `
       (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
       new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
