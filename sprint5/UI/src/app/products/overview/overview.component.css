@@ -35,7 +35,9 @@
 
 .card-img-wrapper {
   overflow: hidden;
-  height: 15em;
+  /*height: 15em;*/
+  width: auto;
+  height: 240px;
 }
 
 .card:hover {
