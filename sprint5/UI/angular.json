@@ -40,7 +40,7 @@
             ],
             "styles": [
               "node_modules/@y3krulez/angular-archwizard/styles/archwizard.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/ngx-toastr/toastr.css",
               "src/styles.css"
             ],
