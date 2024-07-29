@@ -8,7 +8,7 @@
       </li>
       @for (page of pageNumbers(); track page) {
         <li class="page-item" [class.active]="currentPage === page">
-          <a class="page-link" aria-label="Page-{{page}}" role="button" (click)="changePage(page)">{{ page }}</a>
+          <a class="page-link" [attr.aria-label]="'Page-' + page" role="button" (click)="changePage(page)">{{ page }}</a>
         </li>
       }
       <li class="page-item" [class.disabled]="currentPage === lastPage">
