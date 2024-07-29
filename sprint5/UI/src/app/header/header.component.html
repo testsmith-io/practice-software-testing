@@ -166,15 +166,14 @@
         }
         @if (items && items !== 0) {
           <li class="nav-item">
-            <a class="nav-link" data-test="nav-cart" aria-label="cart" routerLink="/checkout"> <i
-              class="fa fa-shopping-cart px-1"></i><span
+            <a class="nav-link" data-test="nav-cart" aria-label="cart" routerLink="/checkout"> <fa-icon [icon]="['fas', 'shopping-cart']" class="px-1"></fa-icon><span
               class='badge rounded-pill bg-danger' data-test="cart-quantity" id='lblCartCount'>{{ items }}</span></a>
           </li>
         }
       </ul>
       <div class="btn-group dropdown" >
         <button id="language" type="button" class="btn nav-link dropdown-toggle"
-                data-test="language" aria-hidden="true" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-globe"></i>
+                data-test="language" aria-hidden="true" data-bs-toggle="dropdown" aria-expanded="false"><fa-icon [icon]="['fas', 'globe']"></fa-icon>
           {{ activeLanguage | uppercase }}
           <span class="caret"></span>
         </button>

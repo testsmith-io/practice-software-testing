@@ -14,15 +14,17 @@ import {MessageDetailComponent} from './messages/message-detail/message-detail.c
 import {PaginationComponent} from "../pagination/pagination.component";
 import {SharedModule} from "../shared.module";
 import {TranslocoDirective} from "@jsverse/transloco";
+import {FaIconComponent, FaIconLibrary, FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {faAddressCard, faCommentDots, faList, faRemove, faStar} from "@fortawesome/free-solid-svg-icons";
 
 const routes: Routes = [
-  { path: '', component: OverviewComponent, canActivate: [UserAuthGuard], data: { title: 'Overview' } },
-  { path: 'profile', component: ProfileComponent, canActivate: [UserAuthGuard], data: { title: 'Profile' } },
-  { path: 'favorites', component: FavoritesComponent, canActivate: [UserAuthGuard], data: { title: 'Favorites' } },
-  { path: 'messages', component: MessagesComponent, canActivate: [UserAuthGuard], data: { title: 'Messages' } },
-  { path: 'messages/:id', component: MessageDetailComponent, canActivate: [UserAuthGuard], data: { title: '' } },
-  { path: 'invoices', component: InvoicesComponent, canActivate: [UserAuthGuard], data: { title: 'Invoices' } },
-  { path: 'invoices/:id', component: InvoiceDetails, canActivate: [UserAuthGuard], data: { title: '' } },
+  {path: '', component: OverviewComponent, canActivate: [UserAuthGuard], data: {title: 'Overview'}},
+  {path: 'profile', component: ProfileComponent, canActivate: [UserAuthGuard], data: {title: 'Profile'}},
+  {path: 'favorites', component: FavoritesComponent, canActivate: [UserAuthGuard], data: {title: 'Favorites'}},
+  {path: 'messages', component: MessagesComponent, canActivate: [UserAuthGuard], data: {title: 'Messages'}},
+  {path: 'messages/:id', component: MessageDetailComponent, canActivate: [UserAuthGuard], data: {title: ''}},
+  {path: 'invoices', component: InvoicesComponent, canActivate: [UserAuthGuard], data: {title: 'Invoices'}},
+  {path: 'invoices/:id', component: InvoiceDetails, canActivate: [UserAuthGuard], data: {title: ''}},
 ];
 
 @NgModule({
@@ -36,15 +38,20 @@ const routes: Routes = [
     MessagesComponent,
     MessageDetailComponent
   ],
-    imports: [
-        ReactiveFormsModule,
-        CommonModule,
-        RouterModule.forChild(routes),
-        PaginationComponent,
-        SharedModule,
-        TranslocoDirective
-    ],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    RouterModule.forChild(routes),
+    PaginationComponent,
+    SharedModule,
+    TranslocoDirective,
+    FaIconComponent,
+    FontAwesomeModule
+  ],
   exports: [RouterModule]
 })
 export class AccountModule {
+  constructor(library: FaIconLibrary) {
+    library.addIcons(faRemove, faStar, faAddressCard, faList, faCommentDots);
+  }
 }

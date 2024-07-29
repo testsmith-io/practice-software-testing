@@ -13,9 +13,11 @@ import {ContentTypeInterceptor} from "./_helpers/contenttype.interceptor";
 import {GaService} from "./_services/ga.service";
 import {CommonModule} from "@angular/common";
 import {RouterLink, RouterModule} from "@angular/router";
-import { TranslocoRootModule } from './transloco-root.module';
+import {TranslocoRootModule} from './transloco-root.module';
 import {ToastrModule} from "ngx-toastr";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {FaIconComponent, FaIconLibrary, FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {faGlobe, faShoppingCart} from "@fortawesome/free-solid-svg-icons";
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     TranslocoRootModule,
+    FaIconComponent,
+    FontAwesomeModule
   ],
   providers: [GaService, UserAuthGuard, AdminAuthGuard, {
     provide: HTTP_INTERCEPTORS,
@@ -46,4 +50,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
   bootstrap: [AppComponent]
 })
 export class AppModule {
+  constructor(library: FaIconLibrary) {
+    library.addIcons(faGlobe, faShoppingCart);
+  }
 }

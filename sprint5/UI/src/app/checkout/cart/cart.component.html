@@ -49,8 +49,7 @@
                   data-test="offer-price">$<span
                   id="discount-total-price">{{ item.quantity * item.discounted_price | number: '1.2-2' }}</span></span>
               }</td>
-            <td class="col-md-1 align-middle"><a class="btn btn-danger" (click)="delete(item.product_id)"><i
-              class="fa fa-remove"></i></a></td>
+            <td class="col-md-1 align-middle"><a class="btn btn-danger" (click)="delete(item.product_id)"><fa-icon [icon]="['fas', 'remove']"></fa-icon></a></td>
           </tr>
         }
         @if (cart.additional_discount_percentage) {
