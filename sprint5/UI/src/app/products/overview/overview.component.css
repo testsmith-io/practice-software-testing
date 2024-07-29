@@ -81,3 +81,38 @@
     height: 268px !important;
   }
 }
+
+.skeleton .card-img-wrapper {
+  background: linear-gradient(-45deg, #eee 40%, #fafafa 50%, #eee 60%);
+  background-size: 300%;
+  background-position-x: 100%;
+  animation: shimmer 1s infinite linear;
+}
+
+.skeleton h5 {
+  width: 80%;
+  height: 22px;
+  background: #eee;
+  margin: 5px 0;
+  border-radius: 4px;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton .card-footer span {
+  width: 20%;
+  height: 22px;
+  background: #eee;
+  border-radius: 4px;
+  margin: 1px;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
