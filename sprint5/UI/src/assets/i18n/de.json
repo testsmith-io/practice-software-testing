@@ -16,13 +16,13 @@
       "placeholder": "Ihr Passwort",
       "errors": {
         "required": "Passwort ist verpflichtend",
-        "length": "Passwordlänge ist ungültig",
+        "length": "Passwortlänge ist ungültig",
         "minlength": "Passwort muss mindestens 6 Zeichen lang sein.",
-        "maxlength": "Password darf nicht länger als 40 Zeichen lang sein."
+        "maxlength": "Passwort darf nicht länger als 40 Zeichen lang sein."
       }
     },
     "first-name": {
-      "label": "Vornamee",
+      "label": "Vorname",
       "placeholder": "Ihr Vorname",
       "errors": {
         "required": "Vorname ist verpflichtend"
@@ -127,7 +127,7 @@
       "category": "Kategorie",
       "brands": "Marken",
       "by-brand": "Nach Marken",
-      "no-results": "Es wurden keine passenen Proukte gefunden.",
+      "no-results": "Es wurden keine passenden Produkte gefunden.",
       "no-stock": "Nicht auf Lager"
     },
     "product-detail": {
@@ -137,7 +137,7 @@
       "add-to-favorites-btn": "Zu Favoriten hinzufügen",
       "per-hour": "pro Stunde",
       "increase-quantity": "Menge erhöhen",
-      "decrease-quantity": "Menge verringeren",
+      "decrease-quantity": "Menge verringern",
       "quantity": "Menge",
       "total": "Total",
       "duration": "Dauer",
@@ -169,12 +169,12 @@
     },
     "contact": {
       "title": "Kontakt",
-      "btn": "Senen",
+      "btn": "Senden",
       "subject": {
         "label": "Betreff",
         "options": {
           "select": "Betreff auswählen *",
-          "customer-service": "Kunenservice",
+          "customer-service": "Kundenservice",
           "webmaster": "Webmaster",
           "return": "Zurück",
           "payments": "Zahlungen",
@@ -189,7 +189,7 @@
         "label": "Nachricht",
         "errors": {
           "required": "Nachrichttext ist verpflichtend",
-          "minlength": "Nachrichttext muss mindestend 50 Zeichen lang sein"
+          "minlength": "Nachrichttext muss mindestens 50 Zeichen lang sein"
         }
       },
       "attachment": {
@@ -218,7 +218,7 @@
       },
       "sign-in": {
         "title": "Anmelden",
-        "already": "Hallo {{ first_name }} {{ last_name }}, Sie sind bereits angemeldet. Sie können weiter zur Kassa."
+        "already": "Hallo {{ first_name }} {{ last_name }}, Sie sind bereits angemeldet. Sie können weiter zur Kasse."
       },
       "address": {
         "title": "Rechnungsadresse"
@@ -249,9 +249,9 @@
         "credit-card": {
           "number": "Credit Card Number",
           "number-help": "Enter your 16-digit credit card number as it appears on the card, in the format 0000-0000-0000-0000. Ensure that you include the hyphens for proper formatting.",
-          "number-error-format": "Ungültige card number format.",
+          "number-error-format": "Ungültiges Kreditkartennummer-Format.",
           "expiration-date": "Expiration Date",
-          "date-error-format": "Ungültige date format. Use MM/YYYY.",
+          "date-error-format": "Ungültiges Datumsformat. Use MM/YYYY.",
           "date-error-past": "Expiration date must be in the future.",
           "cvv": "CVV",
           "cvv-help": "The CVV is a 3-digit or 4-digit number. It's used for added security during card-not-present transactions.",
@@ -287,17 +287,17 @@
       "profile": {
         "title": "Profil",
         "update-profile-btn": "Profil ändern",
-        "update-profile-success": "Ihr Profile wurde <strong>erfolgreich</strong> geändert!",
+        "update-profile-success": "Ihr Profil wurde <strong>erfolgreich</strong> geändert!",
         "password-section": "Passwort",
         "current-password": "Aktuelles Passwort",
         "new-password": "Neues Passwort",
         "confirm-new-password": "Bestätigen Sie das neue Passwort",
         "change-password-btn": "Passwort ändern",
-        "change-password-success": "Ihr Passwort wurde  <strong>erfolgreich</strong> geändert!"
+        "change-password-success": "Ihr Passwort wurde <strong>erfolgreich</strong> geändert!"
       },
       "messages": {
         "title": "Nachrichten",
-        "no-messages": "There are no messages yet. Navigate to the <a class=\"link-primary\" id=\"contact-link\">contact form</a> and fill out the form.",
+        "no-messages": "Es gibt noch keine Nachrichten. Navigieren Sie zum <a class=\"link-primary\" id=\"contact-link\">Kontaktformular</a> und füllen Sie das Formular aus.",
         "subject": "Betreff",
         "message": "Nachricht",
         "status": "Status",
@@ -320,7 +320,7 @@
         "total": "Gesamt",
         "details": "Details",
         "not-exist": "Die Rechnung existiert nicht.",
-        "download-pdf": "PDF herunterlaen",
+        "download-pdf": "PDF herunterladen",
         "general-information": "Allgemeine Information",
         "payment-information": "Zahlungs Information",
         "products": "Produkte",
