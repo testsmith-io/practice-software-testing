@@ -23,6 +23,7 @@ export class OverviewComponent implements OnInit {
   resultState: string = '';
   currentPage: number = 1;
   results: Pagination<Product>;
+  itemsToLoad = new Array(9);
   brands: Brand[];
   categories: any;
   private brandsFilter: Array<number> = [];
@@ -63,7 +64,6 @@ export class OverviewComponent implements OnInit {
   }
 
   onPageChange(page: number) {
-    // Handle page change here (e.g., fetch data for the selected page)
     this.currentPage = page;
     this.getProducts();
   }

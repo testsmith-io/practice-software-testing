@@ -139,6 +139,21 @@
           </a>
         }
       </div>
+    } @else {
+    <div class="container">
+      <div class="card skeleton" *ngFor="let loader of itemsToLoad">
+        <div class="card-img-wrapper">
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">
+          </h5>
+        </div>
+        <div class="card-footer">
+          <span class="float-end text-muted">
+        </span>
+        </div>
+      </div>
+    </div>
     }
     <div class="mt-3">
       <app-pagination [currentPage]="currentPage" [lastPage]="results?.last_page"
