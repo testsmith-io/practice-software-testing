@@ -9,6 +9,7 @@ import {Pagination} from "../../models/pagination";
 import {ProductService} from "../../_services/product.service";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
 import {Category} from "../../models/category";
+import {faArrowsLeftRight} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-overview',
@@ -222,4 +223,5 @@ export class OverviewComponent implements OnInit {
       element.nativeElement.checked = false;
     });
   }
+
 }

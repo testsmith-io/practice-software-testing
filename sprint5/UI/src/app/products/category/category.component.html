@@ -5,10 +5,10 @@
   <a class="btn btn-secondary d-block d-md-none btn-block mb-3" data-bs-toggle="collapse" data-test="filters"
      href="#filters"
      role="button" aria-expanded="false" aria-controls="collapseExample">
-    <i class="fa fa-filter"></i> {{ t('pages.overview.filters') }}
+    <fa-icon [icon]="['fas', 'filter']"></fa-icon> {{ t('pages.overview.filters') }}
   </a>
   <div data-test="filters" id="filters" class="collapse d-md-block col-md-3 mb-3">
-    <h4 class="grid-title"><i class="fa fa-arrows-up-down"></i> {{ t('pages.overview.sort') }}</h4>
+    <h4 class="grid-title"><fa-icon [icon]="['fas', 'arrows-up-down']"></fa-icon> {{ t('pages.overview.sort') }}</h4>
     <hr>
     <form autocomplete=off>
       <div class="input-group mb-3">
@@ -22,7 +22,7 @@
       </div>
     </form>
 
-    <h4 class="grid-title"><i class="fa fa-filter"></i> {{ t('pages.overview.filters') }}</h4>
+    <h4 class="grid-title"><fa-icon [icon]="['fas', 'filter']"></fa-icon> {{ t('pages.overview.filters') }}</h4>
     <hr>
     <h4>{{ t('pages.overview.by-category') }}:</h4>
     <ng-template #recursiveList let-list>

@@ -11,10 +11,10 @@
   <a class="btn btn-secondary d-block d-md-none btn-block mb-3" data-bs-toggle="collapse" data-test="filters"
      href="#filters"
      role="button" aria-expanded="false" aria-controls="collapseExample">
-    <i class="fa fa-filter"></i> {{ t('pages.overview.filters') }}
+    <fa-icon [icon]="['fas', 'filter']"></fa-icon> {{ t('pages.overview.filters') }}
   </a>
   <div data-test="filters" id="filters" class="collapse d-md-block col-md-3 mb-3">
-    <h4 class="grid-title"><i class="fa fa-arrows-up-down"></i> {{ t('pages.overview.sort') }}</h4>
+    <h4 class="grid-title"><fa-icon [icon]="['fas', 'arrows-up-down']"></fa-icon> {{ t('pages.overview.sort') }}</h4>
     <hr>
     <form autocomplete=off>
       <div class="input-group mb-3">
@@ -28,14 +28,14 @@
       </div>
     </form>
 
-    <h4 class="grid-title"><i class="fa fa-arrows-left-right"></i> {{ t('pages.overview.price-range') }}</h4>
+    <h4 class="grid-title"><fa-icon [icon]="['fas', 'arrows-left-right']"></fa-icon> {{ t('pages.overview.price-range') }}</h4>
     <hr>
     <div class="input-group mb-3">
       <ngx-slider (userChangeEnd)="changePriceRange()" [(value)]="minPrice" [(highValue)]="maxPrice"
                   [options]="sliderOptions"></ngx-slider>
     </div>
 
-    <h4 class="grid-title"><i class="fa fa-search"></i> {{ t('pages.overview.search') }}</h4>
+    <h4 class="grid-title"><fa-icon [icon]="['fas', 'search']"></fa-icon> {{ t('pages.overview.search') }}</h4>
     <hr>
     <form [formGroup]="search" (ngSubmit)="onSearchSubmit()" autocomplete=off>
       <div class="input-group mb-3">
@@ -48,7 +48,7 @@
       </div>
     </form>
 
-    <h4 class="grid-title"><i class="fa fa-filter"></i> {{ t('pages.overview.filters') }}</h4>
+    <h4 class="grid-title"><fa-icon [icon]="['fas', 'filter']"></fa-icon> {{ t('pages.overview.filters') }}</h4>
     <hr>
     <h4>{{ t('pages.overview.by-category') }}:</h4>
     <ng-template #recursiveList let-list>
