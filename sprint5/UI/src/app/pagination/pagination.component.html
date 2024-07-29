@@ -2,17 +2,17 @@
   <nav>
     <ul class="pagination">
       <li class="page-item" [class.disabled]="currentPage === 1">
-        <a class="page-link" (click)="changePage(currentPage - 1)" aria-label="Previous">
+        <a class="page-link" (click)="changePage(currentPage - 1)" aria-label="Previous" role="button">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-      @for (page of pageNumbers();track page) {
+      @for (page of pageNumbers(); track page) {
         <li class="page-item" [class.active]="currentPage === page">
-          <a class="page-link" (click)="changePage(page)">{{ page }}</a>
+          <a class="page-link" aria-label="Page-{{page}}" role="button" (click)="changePage(page)">{{ page }}</a>
         </li>
       }
       <li class="page-item" [class.disabled]="currentPage === lastPage">
-        <a class="page-link" (click)="changePage(currentPage + 1)" aria-label="Next">
+        <a class="page-link" (click)="changePage(currentPage + 1)" aria-label="Next" role="button">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
