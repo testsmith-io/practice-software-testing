@@ -50,3 +50,34 @@
   color: red;
   font-size: 80%;
 }
+
+@media (max-width: 576px) {
+  .lead {
+    height: 75px !important;
+  }
+}
+@media (min-width: 577px) and (max-width: 768px) {
+  .lead {
+    height: 106px !important;
+  }
+}
+@media (min-width: 769px) and (max-width: 992px) {
+  .lead {
+    height: 145px !important;
+  }
+}
+@media (min-width: 993px) and (max-width: 1200px) {
+  .lead {
+    height: 194px !important;
+  }
+}
+@media (min-width: 1201px) and (max-width: 1400px) {
+  .lead {
+    height: 231px !important;
+  }
+}
+@media (min-width: 1400px) {
+  .lead {
+    height: 268px !important;
+  }
+}
