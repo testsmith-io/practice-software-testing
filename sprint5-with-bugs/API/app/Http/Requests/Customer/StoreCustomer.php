@@ -25,6 +25,7 @@ class StoreCustomer extends BaseFormRequest
     public function messages(): array
     {
         return ['dob.before' => 'Customer must be 18 years old.',
+            'dob.after' => 'Customer must be younger than 75 years old.',
             'email.unique' => 'User already registered - Your password hint is: Name of your cat!'];
     }
 
@@ -37,6 +38,7 @@ class StoreCustomer extends BaseFormRequest
     {
         $dt = new Carbon();
         $before = $dt->subYears(18)->format('Y-m-d');
+        $after = $dt->subYears(76)->format('Y-m-d');
 
         return [
             'first_name' => 'required|regex:/^[a-zA-Z]+$/|max:40',
@@ -47,7 +49,7 @@ class StoreCustomer extends BaseFormRequest
             'country' => 'required|string|max:40',
             'postcode' => 'string|max:10',
             'phone' => 'string|max:24',
-            'dob' => 'required|date|before:' . $before,
+            'dob' => ['date', 'date_format:Y-m-d',"before:{$before}", "after:{$after}"],
             'email' => 'required|unique:users,email|string|max:60',
             'password' => 'required|string|min:10|max:40'
         ];
