@@ -22,7 +22,7 @@ import {AverageSalesMonthComponent} from './reports/average-sales-month/average-
 import {AverageSalesWeekComponent} from './reports/average-sales-week/average-sales-week.component';
 import {StatisticsComponent} from './reports/statistics/statistics.component';
 import {PaginationComponent} from "../pagination/pagination.component";
-import {SharedModule} from "../shared.module";
+import {SharedModule} from "../shared/shared.module";
 
 const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [AdminAuthGuard], data: { title: 'Dashboard' } },

@@ -40,15 +40,14 @@
         }
         <div class="mb-3">
           <label for="password">{{ t('fields.password.label') }} *</label>
-          <input formControlName="password"
-                 class="form-control"
-                 id="password"
-                 data-test="password"
-                 [ngClass]="{ 'is-invalid': submitted && cf['password'].errors }" type="password"
-                 placeholder="{{ t('fields.password.placeholder') }}"
-                 aria-required="true"
-                 [attr.aria-describedby]="(password.invalid && submitted) ? 'password-error' : null"
-                 [attr.aria-invalid]="password.invalid && submitted ? 'true' : 'false'"/>
+          <app-password-input
+            formControlName="password"
+            id="password"
+            placeholder="{{ t('fields.password.placeholder') }}"
+            [isInvalid]="submitted && cf['password'].errors"
+            [ariaDescribedBy]="(password.invalid && submitted) ? 'password-error' : null"
+            [ariaInvalid]="password.invalid && submitted ? 'true' : 'false'"
+          ></app-password-input>
         </div>
         @if (password.invalid && submitted) {
           <div id="password-error" data-test="password-error" class="alert alert-danger">
@@ -61,7 +60,8 @@
           </div>
         }
         <div class="input-group mb-3">
-          <input type="submit" data-test="login-submit" class="btnSubmit" value="{{ t('pages.login.btn') }}" aria-label="Login"/>
+          <input type="submit" data-test="login-submit" class="btnSubmit" value="{{ t('pages.login.btn') }}"
+                 aria-label="Login"/>
         </div>
         @if (error) {
           <div data-test="login-error" class="alert alert-danger" aria-live="assertive">
@@ -70,7 +70,7 @@
         }
         <div class="input-group mb-3">
           <p>{{ t('pages.login.no-account') }} <a data-test="register-link" routerLink="/auth/register"
-                                    aria-label="Register your account">{{ t('pages.login.register') }}</a><br/>
+                                                  aria-label="Register your account">{{ t('pages.login.register') }}</a><br/>
             <a data-test="forgot-password-link" routerLink="/auth/forgot-password" class="ForgetPwd"
                aria-label="Forgot your Password?">{{ t('pages.login.forgot-password') }}</a></p>
         </div>

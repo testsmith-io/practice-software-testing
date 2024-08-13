@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
   isLoggedIn = false;
   isLoginFailed = false;
   roles: string[] = [];
+  protected readonly environment = environment;
 
   constructor(private formBuilder: FormBuilder,
               private accountService: CustomerAccountService,
@@ -103,5 +104,4 @@ export class LoginComponent implements OnInit {
     window.open('https://api.practicesoftwaretesting.com/auth/social-login?provider=' + provider, '', 'height=500,width=400');
   }
 
-  protected readonly environment = environment;
 }

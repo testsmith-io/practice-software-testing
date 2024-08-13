@@ -111,7 +111,8 @@
           </div>
           <div class="col-md-8">
             <div class="form-group mb-3">
-              <label for="city" [ngStyle]="(browserDetect.isFirefox()) ? {'position': 'absolute'}: {}" class="form-label">City</label>
+              <label for="city" [ngStyle]="(browserDetect.isFirefox()) ? {'position': 'absolute'}: {}"
+                     class="form-label">City</label>
               <input formControlName="city"
                      id="city"
                      data-test="city"
@@ -154,9 +155,12 @@
                       data-test="country"
                       formControlName="country"
                       [ngClass]="{ 'is-invalid': submitted && f['country'].errors }"
-                      [attr.tabindex]="browserDetect.isChrome() ? '9' : '8'"class="form-select">
+                      [attr.tabindex]="browserDetect.isChrome() ? '9' : '8'" class="form-select">
                 <option value="" disabled selected hidden>Select your country *</option>
-                <option *ngFor="let country of countries" [ngStyle]="(country.code === 'AT' || country.code === 'NL') ? {'font-size': 'smaller'} : {}" value="{{country.code}}">{{country.name}}</option>
+                <option *ngFor="let country of countries"
+                        [ngStyle]="(country.code === 'AT' || country.code === 'NL') ? {'font-size': 'smaller'} : {}"
+                        value="{{country.code}}">{{ country.name }}
+                </option>
               </select>
             </div>
             <div data-test="country-error" *ngIf="f['country'].invalid && submitted"
@@ -209,14 +213,14 @@
           </div>
           <div class="form-group mb-3">
             <label for="password" class="form-label">Password</label>
-            <input formControlName="password"
-                   id="password"
-                   data-test="password"
-                   class="form-control"
-                   [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" type="password"
-                   placeholder="Your password *"
-                   [attr.tabindex]="browserDetect.isChrome() ? '4' : '11'"
-                   value=""/>
+            <app-password-input
+              formControlName="password"
+              id="password"
+              placeholder="Your password *"
+              [isInvalid]="submitted && !!f['password'].errors"
+              [ariaDescribedBy]="(f['password'].invalid && submitted) ? 'password-error' : null"
+              [ariaInvalid]="f['password'].invalid && submitted ? true : false"
+            ></app-password-input>
             <div data-test="password-error" *ngIf="f['password'].invalid && submitted"
                  class="alert alert-danger mt-3">
               <div *ngIf="f['password'].errors?.['required']">
@@ -233,10 +237,13 @@
           <button type="submit" data-test="register-submit"
                   [ngStyle]="(browserDetect.isChrome()) ? {'width': 'unset'}: {}"
                   [attr.tabindex]="browserDetect.isChrome() ? '12' : '12'"
-                  class="btnSubmit mb-3">Register</button>
+                  class="btnSubmit mb-3">Register
+          </button>
           <div data-test="register-error" *ngIf="error" class="alert alert-danger">
             <div>
-              <div class="help-block" [ngStyle]="(browserDetect.isEdge() || browserDetect.isChrome()) ? {'font-family': 'Comic Sans'} : {}">{{error}}</div>
+              <div class="help-block"
+                   [ngStyle]="(browserDetect.isEdge() || browserDetect.isChrome()) ? {'font-family': 'Comic Sans'} : {}">{{ error }}
+              </div>
             </div>
           </div>
         </div>
