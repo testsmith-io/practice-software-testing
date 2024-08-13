@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ProductsRoutingModule} from './products-routing.module';
-import {ProductsComponent} from './products.component';
 import {CategoryComponent} from './category/category.component';
 import {OverviewComponent} from './rentals/overview/overview.component';
 import {OverviewComponent as ProductOverviewComponent} from './overview/overview.component';
@@ -23,7 +22,6 @@ import {
 
 @NgModule({
   declarations: [
-    ProductsComponent,
     ProductDetailComponent,
     CategoryComponent,
     OverviewComponent,

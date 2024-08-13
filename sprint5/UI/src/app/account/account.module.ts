@@ -12,7 +12,7 @@ import {TruncatePipe} from "../_helpers/truncate.pipe";
 import {MessagesComponent} from './messages/messages.component';
 import {MessageDetailComponent} from './messages/message-detail/message-detail.component';
 import {PaginationComponent} from "../pagination/pagination.component";
-import {SharedModule} from "../shared.module";
+import {SharedModule} from "../shared/shared.module";
 import {TranslocoDirective} from "@jsverse/transloco";
 import {FaIconComponent, FaIconLibrary, FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {faAddressCard, faCommentDots, faList, faRemove, faStar} from "@fortawesome/free-solid-svg-icons";

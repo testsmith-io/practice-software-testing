@@ -240,13 +240,14 @@
           </div>
           <div class="form-group mb-3">
             <label for="password" class="form-label">{{ t('fields.password.label') }}</label>
-            <input formControlName="password"
-                   id="password"
-                   data-test="password"
-                   class="form-control"
-                   [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" type="password"
-                   placeholder="{{ t('fields.password.placeholder') }} *"
-                   value=""/>
+            <app-password-input
+              formControlName="password"
+              id="password"
+              placeholder="{{ t('fields.password.placeholder') }}"
+              [isInvalid]="submitted && f['password'].errors"
+              [ariaDescribedBy]="(f['password'].invalid && submitted) ? 'password-error' : null"
+              [ariaInvalid]="f['password'].invalid && submitted ? 'true' : 'false'"
+            ></app-password-input>
             @if (f['password'].invalid && submitted) {
               <div data-test="password-error"
                    class="alert alert-danger mt-3">
