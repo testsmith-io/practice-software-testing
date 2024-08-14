@@ -98,6 +98,12 @@ class InvoiceItemSeeder extends Seeder
             'product_id' => DB::table('products')->where('name', '=', 'Open-end Spanners (Set)')->first()->id,
             'unit_price' => '38.51',
             'quantity' => 1
+        ], [
+            'id' => Str::ulid()->toBase32(),
+            'invoice_id' => DB::table('invoices')->where('invoice_number', '=', 'INV-2024000001')->first()->id,
+            'product_id' => DB::table('products')->where('name', '=', 'Open-end Spanners (Set)')->first()->id,
+            'unit_price' => '38.51',
+            'quantity' => 1
         ]]);
     }
 
