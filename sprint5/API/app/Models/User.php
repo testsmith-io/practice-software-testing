@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Observers\CachedAuthUserObserver;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -47,6 +48,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  *     }
  * )
  */
+#[ObservedBy([CachedAuthUserObserver::class])]
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable, HasUlids;
