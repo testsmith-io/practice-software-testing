@@ -182,7 +182,9 @@ return [
         /*
          * Application Service Providers...
          */
+        App\Providers\AuthServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+//        App\Providers\CachedAuthUserProvider::class,
 
     ],
 
