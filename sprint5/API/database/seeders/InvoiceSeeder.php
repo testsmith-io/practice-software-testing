@@ -91,6 +91,17 @@ class InvoiceSeeder extends Seeder
             'billing_country' => 'The Netherlands',
             'billing_postcode' => '1122AB',
             'total' => '52.66'
+        ], [
+            'id' => Str::ulid()->toBase32(),
+            'user_id' => DB::table('users')->where('email', '=', 'customer2@practicesoftwaretesting.com')->first()->id,
+            'invoice_date' => date('Y-m-d H:i:s', strtotime('-1 day', time())),
+            'invoice_number' => 'INV-2024000001',
+            'billing_address' => 'Test street 123',
+            'billing_city' => 'Utrecht',
+            'billing_state' => 'Utrecht',
+            'billing_country' => 'The Netherlands',
+            'billing_postcode' => '1122AB',
+            'total' => '52.66'
         ]]);
     }
 
