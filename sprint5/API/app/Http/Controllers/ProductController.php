@@ -8,12 +8,15 @@ use App\Http\Requests\Product\UpdateProduct;
 use App\Models\Product;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class ProductController extends Controller {
+class ProductController extends Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('role:admin', ['only' => ['destroy']]);
     }
 
@@ -88,48 +91,52 @@ class ProductController extends Controller {
      *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
      * )
      */
-    public function index(Request $request) {
-        // Initialize the query with eager loading
-        $query = Product::with('product_image', 'category', 'brand');
+    public function index(Request $request)
+    {
+        $cacheKey = $this->generateCacheKey($request->all());
 
-        // Apply category slug filter if present
-        if ($categorySlug = $request->get('by_category_slug')) {
-            $categoryIds = DB::table('categories')
-                ->where('slug', $categorySlug)
-                ->orWhereIn('parent_id', function ($query) use ($categorySlug) {
-                    $query->select('id')
-                        ->from('categories')
-                        ->where('slug', $categorySlug);
-                })
-                ->pluck('id');
-            $query->whereIn('category_id', $categoryIds);
-        }
+        $products = Cache::remember($cacheKey, 60 * 60, function () use ($request) {
+            $query = Product::with('product_image', 'category', 'brand');
 
-        // Apply category filter if present
-        if ($byCategory = $request->get('by_category')) {
-            $query->whereIn('category_id', explode(',', $byCategory));
-        }
+            if ($categorySlug = $request->get('by_category_slug')) {
+                $categoryIds = DB::table('categories')
+                    ->where('slug', $categorySlug)
+                    ->orWhereIn('parent_id', function ($query) use ($categorySlug) {
+                        $query->select('id')
+                            ->from('categories')
+                            ->where('slug', $categorySlug);
+                    })
+                    ->pluck('id');
+                $query->whereIn('category_id', $categoryIds);
+            }
 
-        // Apply brand filter if present
-        if ($byBrand = $request->get('by_brand')) {
-            $query->whereIn('brand_id', explode(',', $byBrand));
-        }
+            if ($byCategory = $request->get('by_category')) {
+                $query->whereIn('category_id', explode(',', $byCategory));
+            }
 
-        // Apply search query if present
-        if ($q = $request->get('q')) {
-            $query->where('name', 'like', "%$q%");
-        }
+            if ($byBrand = $request->get('by_brand')) {
+                $query->whereIn('brand_id', explode(',', $byBrand));
+            }
 
-        // Apply rental filter
-        $isRental = $request->get('is_rental') ? 1 : 0;
-        $query->where('is_rental', $isRental);
+            if ($q = $request->get('q')) {
+                $query->where('name', 'like', "%$q%");
+            }
 
-        // Fetch and paginate results
-        $results = $query->filter()->paginate(9);
+            $isRental = $request->get('is_rental') ? 1 : 0;
+            $query->where('is_rental', $isRental);
 
-        // Return results in preferred format
-        return $this->preferredFormat($results);
+            return $query->filter()->paginate(9);
+        });
+
+        return $this->preferredFormat($products);
     }
+
+    protected function generateCacheKey(array $params)
+    {
+        ksort($params);
+        return 'products.index.' . http_build_query($params);
+    }
+
 
     /**
      * @OA\Post(
@@ -163,7 +170,11 @@ class ProductController extends Controller {
      * )
      */
     public function store(StoreProduct $request) {
-        return $this->preferredFormat(Product::create($request->all()), ResponseAlias::HTTP_CREATED);
+        $product = Product::create($request->all());
+        Cache::forget('products.index.*'); // Invalidate index cache
+        Cache::forget("products.{$product->id}");
+
+        return $this->preferredFormat($product, ResponseAlias::HTTP_CREATED);
     }
 
     /**
@@ -191,7 +202,13 @@ class ProductController extends Controller {
      * )
      */
     public function show($id) {
-        return $this->preferredFormat(Product::with('product_image', 'category', 'brand')->findOrFail($id));
+        $cacheKey = "products.{$id}";
+
+        $product = Cache::remember($cacheKey, 60 * 60, function () use ($id) {
+            return Product::with('product_image', 'category', 'brand')->findOrFail($id);
+        });
+
+        return $this->preferredFormat($product);
     }
 
     /**
@@ -222,9 +239,18 @@ class ProductController extends Controller {
      * )
      */
     public function showRelated($id) {
-        $categoryId = Product::where('id', $id)->first()->category_id;
+        $cacheKey = "products.{$id}.related";
 
-        return $this->preferredFormat(Product::with('product_image', 'category', 'brand')->where('category_id', $categoryId)->where('id', '!=', $id)->get());
+        $relatedProducts = Cache::remember($cacheKey, 60 * 60, function () use ($id) {
+            $categoryId = Product::where('id', $id)->first()->category_id;
+
+            return Product::with('product_image', 'category', 'brand')
+                ->where('category_id', $categoryId)
+                ->where('id', '!=', $id)
+                ->get();
+        });
+
+        return $this->preferredFormat($relatedProducts);
     }
 
     /**
@@ -272,8 +298,15 @@ class ProductController extends Controller {
      */
     public function search(Request $request) {
         $q = $request->get('q');
+        $cacheKey = "products.search.{$q}.page.{$request->get('page', 1)}";
 
-        return $this->preferredFormat(Product::with('product_image')->where('name', 'like', "%$q%")->paginate(9));
+        $products = Cache::remember($cacheKey, 60 * 60, function () use ($q) {
+            return Product::with('product_image')
+                ->where('name', 'like', "%$q%")
+                ->paginate(9);
+        });
+
+        return $this->preferredFormat($products);
     }
 
     /**
@@ -302,7 +335,12 @@ class ProductController extends Controller {
      * )
      */
     public function update(UpdateProduct $request, $id) {
-        return $this->preferredFormat(['success' => (bool)Product::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
+        $updated = Product::where('id', $id)->update($request->all());
+
+        Cache::forget('products.index.*'); // Invalidate index cache
+        Cache::forget("products.{$id}");
+
+        return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -330,7 +368,11 @@ class ProductController extends Controller {
      */
     public function destroy(DestroyProduct $request, $id) {
         try {
-            Product::find($id)->delete();
+            Product::findOrFail($id)->delete();
+
+            Cache::forget('products.index.*'); // Invalidate index cache
+            Cache::forget("products.{$id}");
+
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {

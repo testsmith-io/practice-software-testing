@@ -8,6 +8,7 @@ use App\Http\Requests\Category\UpdateCategory;
 use App\Models\Category;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class CategoryController extends Controller
@@ -46,12 +47,28 @@ class CategoryController extends Controller
      */
     public function indexTree(Request $request)
     {
-        if ($request->get('by_category_slug')) {
-            return $this->preferredFormat(Category::with('sub_categories')->where("parent_id", "=", null)->where('slug', '=', $request->get('by_category_slug'))->get());
+        $byCategorySlug = $request->get('by_category_slug');
+
+        if ($byCategorySlug) {
+            $cacheKey = "categories.tree.{$byCategorySlug}";
+            $categories = Cache::remember($cacheKey, 60 * 60, function () use ($byCategorySlug) {
+                return Category::with('sub_categories')
+                    ->where("parent_id", "=", null)
+                    ->where('slug', '=', $byCategorySlug)
+                    ->get();
+            });
         } else {
-            return $this->preferredFormat(Category::with('sub_categories')->where("parent_id", "=", null)->get());
+            $cacheKey = "categories.tree.all";
+            $categories = Cache::remember($cacheKey, 60 * 60, function () {
+                return Category::with('sub_categories')
+                    ->where("parent_id", "=", null)
+                    ->get();
+            });
         }
+
+        return $this->preferredFormat($categories);
     }
+
 
     /**
      * @OA\Get(
@@ -74,7 +91,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return $this->preferredFormat(Category::all());
+        $categories = Cache::remember('categories.all', 60 * 60, function () {
+            return Category::all();
+        });
+
+        return $this->preferredFormat($categories);
     }
 
     /**
@@ -101,7 +122,11 @@ class CategoryController extends Controller
      */
     public function store(StoreCategory $request)
     {
-        return $this->preferredFormat(Category::create($request->all()), ResponseAlias::HTTP_CREATED);
+        $category = Category::create($request->all());
+        Cache::forget('categories.all');
+        Cache::forget('categories.tree.all');
+
+        return $this->preferredFormat($category, ResponseAlias::HTTP_CREATED);
     }
 
     /**
@@ -130,7 +155,12 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        return $this->preferredFormat(Category::with('sub_categories')->findOrFail($id));
+        $cacheKey = "categories.{$id}";
+        $category = Cache::remember($cacheKey, 60 * 60, function () use ($id) {
+            return Category::with('sub_categories')->findOrFail($id);
+        });
+
+        return $this->preferredFormat($category);
     }
 
     /**
@@ -162,8 +192,13 @@ class CategoryController extends Controller
     public function search(Request $request)
     {
         $q = $request->get('q');
+        $cacheKey = "categories.search.{$q}";
 
-        return $this->preferredFormat(Category::with('sub_categories')->where('name', 'like', "%$q%")->get());
+        $categories = Cache::remember($cacheKey, 60 * 60, function () use ($q) {
+            return Category::with('sub_categories')->where('name', 'like', "%$q%")->get();
+        });
+
+        return $this->preferredFormat($categories);
     }
 
     /**
@@ -194,7 +229,13 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategory $request, $id)
     {
-        return $this->preferredFormat(['success' => (bool)Category::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
+        $updated = Category::where('id', $id)->update($request->all());
+
+        Cache::forget('categories.all');
+        Cache::forget("categories.{$id}");
+        Cache::forget('categories.tree.all');
+
+        return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -224,7 +265,13 @@ class CategoryController extends Controller
     public function destroy(DestroyCategory $request, $id)
     {
         try {
-            Category::find($id)->delete();
+            $category = Category::findOrFail($id);
+            $category->delete();
+
+            Cache::forget('categories.all');
+            Cache::forget("categories.{$id}");
+            Cache::forget('categories.tree.all');
+
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {
