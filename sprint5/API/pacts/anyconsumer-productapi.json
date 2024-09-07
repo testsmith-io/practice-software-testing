@@ -1,0 +1,45 @@
+{
+  "consumer": {
+    "name": "AnyConsumer"
+  },
+  "provider": {
+    "name": "ProductAPI"
+  },
+  "interactions": [
+    {
+      "description": "A request for all products with is_rental=true",
+      "request": {
+        "method": "GET",
+        "path": "/api/products",
+        "headers": {
+          "Accept": "application/json"
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": [
+          {
+            "id": 1,
+            "name": "Product A",
+            "price": 99.99,
+            "in_stock": true
+          },
+          {
+            "id": 2,
+            "name": "Product B",
+            "price": 49.99,
+            "in_stock": false
+          }
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}
