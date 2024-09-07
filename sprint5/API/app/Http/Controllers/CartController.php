@@ -322,7 +322,7 @@ class CartController extends Controller
             $discount = $data["discount_percentage"];
 
             // Check if the provided lat and lng values are within +/- 2 of the predefined values
-            if (abs($lat - $cityLat) <= 2 && abs($lng - $cityLng) <= 2) {
+            if (abs($lat - $cityLat) <= 0.5 && abs($lng - $cityLng) <= 0.5) {
                 return $discount;
             }
         }
