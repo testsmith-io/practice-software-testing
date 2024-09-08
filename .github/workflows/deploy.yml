@@ -64,4 +64,5 @@ jobs:
         with:
           private-key: ${{ secrets.PRIVATE_KEY }}
           dep: upload-sprint${{ matrix.sprint }} production
-          deployer-version: '6.9.0'
+          deployer-binary: "${{ runner.tool_cache }}/composer/vendor/bin"
+#          deployer-version: '6.9.0'
