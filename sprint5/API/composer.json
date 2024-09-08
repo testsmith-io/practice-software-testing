@@ -22,6 +22,7 @@
         "zircote/swagger-php": "3.3.7"
     },
     "require-dev": {
+        "deployer/deployer": "7.0.0",
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
