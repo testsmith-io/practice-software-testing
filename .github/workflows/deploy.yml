@@ -8,7 +8,7 @@ concurrency: production_environment
 
 jobs:
   deploy:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         sprint: [1, 2, 3, 4, 5, '5-with-bugs']
@@ -28,6 +28,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+      - name: Install Deployer globally
+        run: |
+          composer global require deployer/deployer:6.9.0
+          echo "::add-path::$(composer global config home)/vendor/bin"
       - name: Install (dev) Dependencies
         run: |
           cd sprint${{ matrix.sprint }}/API
@@ -59,4 +63,4 @@ jobs:
         with:
           private-key: ${{ secrets.PRIVATE_KEY }}
           dep: upload-sprint${{ matrix.sprint }} production
-          deployer-version: '7.0.0'
+          deployer-version: '6.9.0'
