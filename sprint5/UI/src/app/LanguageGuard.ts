@@ -4,7 +4,7 @@ import {Injectable} from "@angular/core";
 @Injectable({ providedIn: 'root' })
 export class LanguageGuard implements CanActivate {
   defaultLang = 'en';
-  supportedLangs = ['en', 'fr', 'de', 'es']; // Extend as needed
+  supportedLangs = ['en', 'fr', 'de', 'es'];
 
   constructor(private router: Router) {}
 
@@ -14,7 +14,7 @@ export class LanguageGuard implements CanActivate {
       this.router.navigate([this.defaultLang]);
       return false;
     }
-    // Normalize URL if default language is accessed with '/en'
+
     if (lang === this.defaultLang) {
       this.router.navigate([state.url.substring(4)]);
       return false;

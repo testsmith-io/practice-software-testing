@@ -26,7 +26,7 @@ class UpdateBrand extends BaseFormRequest
     {
         return [
             'name' => ['string', 'max:120', new SubscriptSuperscriptRule()],
-            'slug' => ['string', 'max:120', new SubscriptSuperscriptRule()]
+            'slug' => ['alpha_dash:ascii', 'string', 'max:120', new SubscriptSuperscriptRule()]
         ];
     }
 }
