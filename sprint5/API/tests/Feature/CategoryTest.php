@@ -77,7 +77,7 @@ class CategoryTest extends TestCase {
 
     public function testAddCategory() {
         $payload = ['name' => 'new',
-            'slug' => 'some description'];
+            'slug' => 'some-description'];
 
         $response = $this->postJson('/categories', $payload);
 
