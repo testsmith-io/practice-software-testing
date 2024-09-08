@@ -28,10 +28,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-      - name: Install Deployer globally
-        run: |
-          composer global require deployer/deployer:6.9.0
-          echo "${{ runner.tool_cache }}/composer/vendor/bin" >> $GITHUB_PATH
+#      - name: Install Deployer globally
+#        run: |
+#          composer global require deployer/deployer:6.9.0
+#          echo "${{ runner.tool_cache }}/composer/vendor/bin" >> $GITHUB_PATH
 
       - name: Install (dev) Dependencies
         run: |
@@ -63,6 +63,5 @@ jobs:
         uses: deployphp/action@v1.0.23
         with:
           private-key: ${{ secrets.PRIVATE_KEY }}
-          dep: upload-sprint${{ matrix.sprint }} production
-          deployer-binary: "${{ runner.tool_cache }}/composer/vendor/bin"
-#          deployer-version: '6.9.0'
+          dep: deploy:sprint${{ matrix.sprint }} production
+          deployer-version: '7.4.0'
