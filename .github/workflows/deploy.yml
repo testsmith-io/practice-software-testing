@@ -8,7 +8,7 @@ concurrency: production_environment
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         sprint: [1, 2, 3, 4, 5, '5-with-bugs']
