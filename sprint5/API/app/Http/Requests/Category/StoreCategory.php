@@ -37,7 +37,7 @@ class StoreCategory extends BaseFormRequest
     {
         return [
             'name' => ['required', 'string', 'max:120', new SubscriptSuperscriptRule()],
-            'slug' => ['required', 'unique:categories,slug', 'string', 'max:120', new SubscriptSuperscriptRule()],
+            'slug' => ['alpha_dash:ascii', 'required', 'unique:categories,slug', 'string', 'max:120', new SubscriptSuperscriptRule()],
             'parent_id' => 'string|nullable'
         ];
     }
