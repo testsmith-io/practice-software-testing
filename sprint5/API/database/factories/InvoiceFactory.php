@@ -36,7 +36,8 @@ class InvoiceFactory extends Factory
             'billing_country' => $this->faker->country(),
             'billing_postcode' => $this->faker->postcode(),
             'subtotal' => $this->faker->randomFloat(2, 100, 1000),
-            'total' => $this->faker->randomFloat(2, 100, 1000)
+            'total' => $this->faker->randomFloat(2, 100, 1000),
+            'status' => 'COMPLETED'
         ];
     }
 
