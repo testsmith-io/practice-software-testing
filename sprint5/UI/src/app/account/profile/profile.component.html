@@ -88,28 +88,28 @@
           <label for="current-password" class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.current-password') }}</label>
           <div class="col-sm-9">
             <input type="password" class="form-control" formControlName="current_password" data-test="current-password"
-                   id="current-password" [disabled]="provider !== null">
+                   id="current-password">
           </div>
         </div>
         <div class="row mb-3">
           <label for="new-password" class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.new-password') }}</label>
           <div class="col-sm-9">
             <input type="password" class="form-control" formControlName="new_password" data-test="new-password"
-                   id="new-password" [disabled]="provider !== null">
+                   id="new-password">
           </div>
         </div>
         <div class="row mb-3">
           <label for="new-password-confirm" class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.confirm-new-password') }}</label>
           <div class="col-sm-9">
             <input type="password" class="form-control" formControlName="new_password_confirmation"
-                   data-test="new-password-confirm" id="new-password-confirm" [disabled]="provider !== null">
+                   data-test="new-password-confirm" id="new-password-confirm">
           </div>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col-12">
-        <button type="submit" class="btn btn-primary" data-test="change-password-submit" [disabled]="provider !== null">{{ t('pages.my-account.profile.change-password-btn') }}</button>
+        <button type="submit" class="btn btn-primary" data-test="change-password-submit">{{ t('pages.my-account.profile.change-password-btn') }}</button>
         @if (isPasswordUpdated && !hidePasswordAlert) {
           <div [ngClass]="fadeOutMessage()"
                class="alert alert-success mt-3" role="alert" [innerHTML]="t('pages.my-account.profile.change-password-success')">
