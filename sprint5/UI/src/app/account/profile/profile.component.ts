@@ -10,7 +10,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class ProfileComponent implements OnInit {
   id!: number;
-  provider: string = null;
+  provider: string;
   profileForm!: FormGroup;
   passwordForm!: FormGroup;
   isProfileUpdated: boolean = false;
@@ -30,6 +30,7 @@ export class ProfileComponent implements OnInit {
       .subscribe((profile) => {
         this.id = profile.id;
         this.provider = profile.provider;
+        console.log(profile.provider);
         this.profileForm.patchValue(profile);
       },(error) => {
         if (error.status === 401 || error.status === 403) {
