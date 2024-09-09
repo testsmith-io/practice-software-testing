@@ -55,6 +55,8 @@ export class ProfileComponent implements OnInit {
       new_password: new FormControl('', [Validators.required]),
       new_password_confirmation: new FormControl('', [Validators.required]),
     });
+
+    console.log(this.provider);
   }
 
   get f() {
