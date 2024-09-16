@@ -43,6 +43,7 @@ class ReportController extends Controller
     {
         $results = DB::table('invoices')
             ->selectRaw('SUM(total) as "total_sales", billing_country')
+            ->where('status', '=', 'COMPLETED')
             ->groupBy('billing_country')
             ->get();
 
@@ -180,6 +181,7 @@ class ReportController extends Controller
         $results = DB::table('invoices')
             ->selectRaw("SUM(total) AS total, $yearQuery")
             ->whereYear('invoice_date', '>=', $startYear)
+            ->where('status', '=', 'COMPLETED')
             ->groupBy(DB::raw($yearGroup))
             ->get();
 
@@ -239,6 +241,7 @@ class ReportController extends Controller
         $results = DB::table('invoices')
             ->selectRaw("$monthQuery, AVG(total) AS average, COUNT(*) AS amount")
             ->whereYear('invoice_date', '=', $year)
+            ->where('status', '=', 'COMPLETED')
             ->groupBy(DB::raw($monthGroup))
             ->get();
 
@@ -298,6 +301,7 @@ class ReportController extends Controller
         $results = DB::table('invoices')
             ->selectRaw("$weekQuery, AVG(total) AS average, COUNT(*) AS amount")
             ->whereYear('invoice_date', '=', $year)
+            ->where('status', '=', 'COMPLETED')
             ->groupBy(DB::raw($weekGroup))
             ->get();
 

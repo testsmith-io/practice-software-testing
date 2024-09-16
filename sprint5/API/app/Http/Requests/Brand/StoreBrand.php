@@ -37,7 +37,7 @@ class StoreBrand extends BaseFormRequest
     {
         return [
             'name' => ['required', 'string', 'max:120', new SubscriptSuperscriptRule()],
-            'slug' => ['required', 'unique:brands,slug', 'string', 'max:120', new SubscriptSuperscriptRule()]
+            'slug' => ['required', 'alpha_dash:ascii','unique:brands,slug', 'string', 'max:120', new SubscriptSuperscriptRule()]
         ];
     }
 }
