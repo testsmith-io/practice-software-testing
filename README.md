@@ -78,6 +78,14 @@ Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belong
 
 `XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html tests/coverage`
 
+## Start pact-mock-service
+
+`pact-mock-service start --host localhost --port 7203 --consumer AnyConsumer --provider ProductAPI --pact-dir ./pacts --log ./storage/logs/pact.log
+`
+
+## Stop pact-mock-service
+
+`pact-mock-service stop --port 7203`
 
 # Sprints
 
