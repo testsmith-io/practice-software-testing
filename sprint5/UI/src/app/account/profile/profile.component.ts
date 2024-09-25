@@ -103,7 +103,7 @@ export class ProfileComponent implements OnInit {
         this.auth.logout();
         window.location.reload();
       }
-    }, 3000);
+    }, 5000);
   }
 
 }
