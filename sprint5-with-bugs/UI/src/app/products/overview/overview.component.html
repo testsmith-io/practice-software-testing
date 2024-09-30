@@ -81,7 +81,7 @@
        role="button" aria-expanded="false" aria-controls="collapseExample">
       <i class="fa fa-filter"></i> Filters
     </a>
-    <h3 *ngIf="searchQuery">Searched for: {{searchQuery}}</h3>
+    <h3 *ngIf="searchQuery" data-test="search-caption">Searched for: <span data-test="search-term">{{searchQuery}}</span></h3>
     <div class="container" attr.data-test="{{resultState}}" *ngIf="results">
       <a attr.data-test="product-{{item.id}}" routerLink="/product/{{item.id}}"
          *ngFor="let item of results.data | paginate: { itemsPerPage: results.per_page, currentPage: p, totalItems: results.total }"

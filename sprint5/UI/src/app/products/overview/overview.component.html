@@ -103,7 +103,7 @@
   </div>
   <div class="col-md-9" *transloco="let t">
     @if (searchQuery) {
-      <h3>Searched for: {{ searchQuery }}</h3>
+      <h3 data-test="search-caption">Searched for: <span data-test="search-term">{{ searchQuery }}</span></h3>
     }
     @if (results) {
       <div class="container" attr.data-test="{{resultState}}">
