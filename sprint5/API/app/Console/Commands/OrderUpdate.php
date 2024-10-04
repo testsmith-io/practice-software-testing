@@ -41,14 +41,14 @@ class OrderUpdate extends Command {
         Invoice::with('payment', 'payment.payment_details')
             ->where('status', '=', 'AWAITING_FULFILLMENT')
             ->whereHas('payment', function($query) {
-                $query->where('payment_method', '!=', 'Bank Transfer');
+                $query->where('payment_method', '!=', 'bank-transfer');
             })
             ->update(array('status' => 'AWAITING_SHIPMENT'));
 
         Invoice::with('payment', 'payment.payment_details')
             ->where('status', '=', 'AWAITING_FULFILLMENT')
             ->whereHas('payment', function($query) {
-                $query->where('payment_method', '=', 'Bank Transfer');
+                $query->where('payment_method', '=', 'bank-transfer');
             })
             ->update(array('status' => 'ON_HOLD'));
     }
