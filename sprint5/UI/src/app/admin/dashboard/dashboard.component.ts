@@ -70,7 +70,7 @@ export class DashboardComponent implements OnInit {
         return item['year'];
       });
       let data = res.map((item) => {
-        return item['total'];
+        return item['total'].toFixed(2);
       });
 
       this.data = {
