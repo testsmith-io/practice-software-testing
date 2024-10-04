@@ -5,6 +5,7 @@ import {ActivatedRoute} from "@angular/router";
 import {first} from "rxjs/operators";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {OrderState} from "../../models/order-state";
+import {TranslocoService} from "@jsverse/transloco";
 
 @Component({
   selector: 'app-orders-add-edit',
@@ -22,7 +23,8 @@ export class OrdersAddEditComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private invoiceService: InvoiceService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private translocoService: TranslocoService) {
   }
 
   ngOnInit(): void {
@@ -69,4 +71,10 @@ export class OrdersAddEditComponent implements OnInit {
       this.hideAlert = true;
     }, 3000);
   }
+
+  getPaymentMethodTranslation(paymentMethod: string): string {
+    const translationKey = `pages.checkout.payment.options.${paymentMethod}`;
+    return this.translocoService.translate(translationKey);
+  }
+
 }

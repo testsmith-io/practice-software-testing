@@ -17,7 +17,7 @@
           <td>{{ item.invoice_number }}</td>
           <td>{{ item.billing_address }}</td>
           <td>{{ item.invoice_date }}</td>
-          <td>${{ item.total | number: '1.2-2' }}</td>
+          <td>${{ item.total.toFixed(2) }}</td>
           <td style="white-space: nowrap">
             <a routerLink="{{item.id}}"
                class="btn btn-sm btn-primary mr-1">{{ t('pages.my-account.invoices.details') }}</a>
@@ -25,9 +25,7 @@
         </tr>
       }
     </tbody>
-    <tfoot>
-    <app-pagination [currentPage]="currentPage" [lastPage]="results.last_page"
-                    (pageChange)="onPageChange($event)"></app-pagination>
-    </tfoot>
   </table>
+  <app-pagination [currentPage]="currentPage" [lastPage]="results.last_page"
+                  (pageChange)="onPageChange($event)"></app-pagination>
 }

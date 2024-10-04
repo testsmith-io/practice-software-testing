@@ -27,7 +27,7 @@
           <td>{{ item.billing_address }}</td>
           <td>{{ item.invoice_date }}</td>
           <td>{{ item.status }}</td>
-          <td>${{ item.total }}</td>
+          <td>${{ item.total.toFixed(2) }}</td>
           <td style="white-space: nowrap">
             <a routerLink="edit/{{item.id}}" attr.data-test="order-edit-{{item.id}}"
                class="btn btn-sm btn-primary mx-2">Edit</a>
@@ -35,9 +35,7 @@
         </tr>
       }
     </tbody>
-    <tfoot>
-    <app-pagination [currentPage]="currentPage" [lastPage]="results.last_page"
-                    (pageChange)="onPageChange($event)"></app-pagination>
-    </tfoot>
   </table>
+  <app-pagination [currentPage]="currentPage" [lastPage]="results.last_page"
+                  (pageChange)="onPageChange($event)"></app-pagination>
 }
