@@ -56,11 +56,11 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0" role="menubar" aria-label="Main menu">
+        <li class="nav-item" role="menuitem">
           <a class="nav-link active" data-test="nav-home" aria-current="page" href="/">{{ t('header.menu.home') }}</a>
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" role="menuitem">
           <a class="nav-link dropdown-toggle" href="#" data-test="nav-categories" role="button"
              data-bs-toggle="dropdown"
              aria-expanded="false">
@@ -80,17 +80,17 @@
             <li><a class="dropdown-item" data-test="nav-rentals" routerLink="/rentals">{{ t('header.menu.rentals') }}</a></li>
           </ul>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" role="menuitem">
           <a class="nav-link" data-test="nav-contact" routerLink="/contact">{{ t('header.menu.contact') }}</a>
         </li>
         <!--        <li class="nav-item" *ngIf="!isLoggedIn">-->
         @if (!name && role !== 'user') {
-          <li class="nav-item">
+          <li class="nav-item" role="menuitem">
             <a class="nav-link" data-test="nav-sign-in" routerLink="/auth/login">{{ t('header.menu.sign-in') }}</a>
           </li>
         }
         @if (name && role === 'user') {
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" role="menuitem">
             <a class="nav-link dropdown-toggle" href="#" data-test="nav-menu" id="menu" role="button"
                data-bs-toggle="dropdown"
                aria-expanded="false">
@@ -113,7 +113,7 @@
           </li>
         }
         @if (name && role === 'admin') {
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" role="menuitem">
             <a class="nav-link dropdown-toggle" href="#" data-test="nav-menu" id="menu" role="button"
                data-bs-toggle="dropdown"
                aria-expanded="false">
@@ -165,7 +165,7 @@
           </li>
         }
         @if (items && items !== 0) {
-          <li class="nav-item">
+          <li class="nav-item" role="menuitem">
             <a class="nav-link" data-test="nav-cart" aria-label="cart" routerLink="/checkout"> <fa-icon [icon]="['fas', 'shopping-cart']" class="px-1"></fa-icon><span
               class='badge rounded-pill bg-danger' data-test="cart-quantity" id='lblCartCount'>{{ items }}</span></a>
           </li>
