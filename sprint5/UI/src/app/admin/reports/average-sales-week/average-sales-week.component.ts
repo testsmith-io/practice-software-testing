@@ -13,10 +13,32 @@ export class AverageSalesWeekComponent implements OnInit {
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     aspectRatio: 4,
-    // We use these empty structures as placeholders for dynamic theming.
     scales: {
       x: {},
-      y: {},
+      y: {
+        beginAtZero: true,
+        type: 'linear',
+        position: 'left',
+        title: {
+          display: true,
+          text: 'Average Sales'
+        },
+      },
+      y1: {
+        beginAtZero: true,
+        type: 'linear',
+        position: 'right',
+        grid: {
+          drawOnChartArea: false, // Prevent y1 grid from overlapping with y
+        },
+        ticks: {
+          stepSize: 1, // Set step size to 1 for "Amount of orders"
+        },
+        title: {
+          display: true,
+          text: 'Amount of Orders'
+        }
+      }
     },
     plugins: {
       legend: {
@@ -53,7 +75,7 @@ export class AverageSalesWeekComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getData('2022')
+    this.getData('2024')
   }
 
   selectYear(year: any) {
@@ -66,7 +88,7 @@ export class AverageSalesWeekComponent implements OnInit {
         return item['week'];
       });
       let data = res.map((item) => {
-        return item['average'];
+        return item['average'].toFixed(2);
       });
       let amount = res.map((item) => {
         return item['amount'];
@@ -79,12 +101,15 @@ export class AverageSalesWeekComponent implements OnInit {
             label: "Average sales",
             data: data,
             backgroundColor: 'rgba(255, 206, 86, 1)',
+            yAxisID: 'y',
           },
           {
             label: "Amount of orders",
             data: amount,
             backgroundColor: 'rgba(75, 192, 192, 1)',
-          }]
+            yAxisID: 'y1',
+          }
+        ]
       };
     })
   }

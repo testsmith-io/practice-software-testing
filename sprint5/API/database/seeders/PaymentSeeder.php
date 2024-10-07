@@ -14,99 +14,97 @@ class PaymentSeeder extends Seeder
      */
     public function run(): void
     {
-        $payment_details_id_1 = Str::ulid()->toBase32();
-        $payment_details_id_2 = Str::ulid()->toBase32();
-        $payment_details_id_3 = Str::ulid()->toBase32();
-        $payment_details_id_4 = Str::ulid()->toBase32();
-        $payment_details_id_5 = Str::ulid()->toBase32();
-        $payment_details_id_6 = Str::ulid()->toBase32();
-        $payment_details_id_7 = Str::ulid()->toBase32();
+        $paymentMethods = [
+            'bank-transfer' => [
+                [
+                    'bank_name' => 'My Bank',
+                    'account_name' => 'John Doe',
+                    'account_number' => '987654321',
+                    'table' => 'payment_bank_transfer_details',
+                    'model' => 'App\\Models\\PaymentBankTransferDetails'
+                ],
+                [
+                    'bank_name' => 'New Bank',
+                    'account_name' => 'Jane Doe',
+                    'account_number' => '123456789',
+                    'table' => 'payment_bank_transfer_details',
+                    'model' => 'App\\Models\\PaymentBankTransferDetails'
+                ]
+            ],
+            'credit-card' => [
+                [
+                    'credit_card_number' => '0001-0002-0003-0004',
+                    'expiration_date' => '02/' . rand(2025, 2028),
+                    'cvv' => rand(100, 999),
+                    'card_holder_name' => 'John Doe',
+                    'table' => 'payment_credit_card_details',
+                    'model' => 'App\\Models\\PaymentCreditCardDetails'
+                ],
+                [
+                    'credit_card_number' => '1000-2000-3000-4000',
+                    'expiration_date' => rand(05, 12) . '/' . rand(2025, 2028),
+                    'cvv' => rand(100, 999),
+                    'card_holder_name' => 'Jane Doe',
+                    'table' => 'payment_credit_card_details',
+                    'model' => 'App\\Models\\PaymentCreditCardDetails'
+                ]
+            ],
+            'gift-card' => [
+                [
+                    'gift_card_number' => Str::random(8),
+                    'validation_code' => Str::random(4),
+                    'table' => 'payment_gift_card_details',
+                    'model' => 'App\\Models\\PaymentGiftCardDetails'
+                ]
+            ],
+            'cash-on-delivery' => [
+                [
+                    'table' => 'payment_cash_on_delivery_details',
+                    'model' => 'App\\Models\\PaymentCashOnDeliveryDetails'
+                ]
+            ],
+            'buy-now-pay-later' => [
+                [
+                    'monthly_installments' => 6,
+                    'table' => 'payment_bnpl_details',
+                    'model' => 'App\\Models\\PaymentBnplDetails'
+                ],
+                [
+                    'monthly_installments' => 3,
+                    'table' => 'payment_bnpl_details',
+                    'model' => 'App\\Models\\PaymentBnplDetails'
+                ]
+            ]
+        ];
 
-        DB::table('payment_bank_transfer_details')->insert([[
-            'id' => $payment_details_id_1,
-            'bank_name' => 'My Bank',
-            'account_name'=> 'John Doe',
-            'account_number' => '987654321'
-        ],[
-            'id' => $payment_details_id_2,
-            'bank_name' => 'New Bank',
-            'account_name'=> 'John Doe',
-            'account_number' => '345678'
-        ]]);
+        $invoices = DB::table('invoices')->get();
 
-        DB::table('payment_credit_card_details')->insert([[
-            'id' => $payment_details_id_3,
-            'credit_card_number' => '0001-0002-0003-0004',
-            'expiration_date'=> '02/2024',
-            'cvv' => '045',
-            'card_holder_name' => 'John Doe'
-        ],[
-            'id' => $payment_details_id_4,
-            'credit_card_number' => '1000-2000-3000-4000',
-            'expiration_date'=> '05/2025',
-            'cvv' => '031',
-            'card_holder_name' => 'John Doe'
-        ]]);
+        foreach ($invoices as $invoice) {
+            $paymentType = array_rand($paymentMethods);
+            $paymentDetails = $paymentMethods[$paymentType][array_rand($paymentMethods[$paymentType])];
 
-        DB::table('payment_gift_card_details')->insert([[
-            'id' => $payment_details_id_5,
-            'gift_card_number' => '23ded3d',
-            'validation_code'=> 'ed3d'
-        ]]);
+            $detailsToInsert = $paymentDetails;
+            unset($detailsToInsert['table']);
+            unset($detailsToInsert['model']);
 
-        DB::table('payment_cash_on_delivery_details')->insert([[
-            'id' => $payment_details_id_6
-        ]]);
+            $paymentDetailsId = Str::ulid()->toBase32();
+            DB::table($paymentDetails['table'])->insert([array_merge($detailsToInsert, ['id' => $paymentDetailsId])]);
 
-        DB::table('payment_bnpl_details')->insert([[
-            'id' => $payment_details_id_7,
-            'monthly_installments' => '6'
-        ]]);
+            if ($paymentType === 'bank-transfer') {
+                DB::table('invoices')->where('id', $invoice->id)->update(['status' => 'ON_HOLD']);
+            } else {
+                $statuses = ['AWAITING_FULFILLMENT', 'AWAITING_SHIPMENT', 'SHIPPED', 'COMPLETED'];
+                $status = $statuses[array_rand($statuses)];
+                DB::table('invoices')->where('id', $invoice->id)->update(['status' => $status]);
+            }
 
-        DB::table('payments')->insert([[
-            'id' => Str::ulid()->toBase32(),
-            'invoice_id' => DB::table('invoices')->where('invoice_number', '=', 'INV-2019000001')->first()->id,
-            'payment_method'=> 'Bank Transfer',
-            'payment_details_id' => $payment_details_id_1,
-            'payment_details_type' => 'App\\Models\\PaymentBankTransferDetails'
-        ],[
-            'id' => Str::ulid()->toBase32(),
-            'invoice_id' => DB::table('invoices')->where('invoice_number', '=', 'INV-2020000001')->first()->id,
-            'payment_method'=> 'Credit Card',
-            'payment_details_id' => $payment_details_id_3,
-            'payment_details_type' => 'App\\Models\\PaymentCreditCardDetails'
-        ],[
-            'id' => Str::ulid()->toBase32(),
-            'invoice_id' => DB::table('invoices')->where('invoice_number', '=', 'INV-2020000002')->first()->id,
-            'payment_method'=> 'Cash on Delivery',
-            'payment_details_id' => $payment_details_id_6,
-            'payment_details_type' => 'App\\Models\\PaymentCashOnDeliveryDetails'
-        ],[
-            'id' => Str::ulid()->toBase32(),
-            'invoice_id' => DB::table('invoices')->where('invoice_number', '=', 'INV-2021000001')->first()->id,
-            'payment_method'=> 'Buy Now Pay Later',
-            'payment_details_id' => $payment_details_id_7,
-            'payment_details_type' => 'App\\Models\\PaymentBnplDetails'
-        ],[
-            'id' => Str::ulid()->toBase32(),
-            'invoice_id' => DB::table('invoices')->where('invoice_number', '=', 'INV-2021000002')->first()->id,
-            'payment_method'=> 'Gift Card',
-            'payment_details_id' => $payment_details_id_5,
-            'payment_details_type' => 'App\\Models\\PaymentGiftCardDetails'
-        ],[
-            'id' => Str::ulid()->toBase32(),
-            'invoice_id' => DB::table('invoices')->where('invoice_number', '=', 'INV-2023000001')->first()->id,
-            'payment_method'=> 'Bank Transfer',
-            'payment_details_id' => $payment_details_id_2,
-            'payment_details_type' => 'App\\Models\\PaymentBankTransferDetails'
-        ],[
-            'id' => Str::ulid()->toBase32(),
-            'invoice_id' => DB::table('invoices')->where('invoice_number', '=', 'INV-2023000002')->first()->id,
-            'payment_method'=> 'Credit Card',
-            'payment_details_id' => $payment_details_id_4,
-            'payment_details_type' => 'App\\Models\\PaymentCreditCardDetails'
-        ]]);
-
+            DB::table('payments')->insert([[
+                'id' => Str::ulid()->toBase32(),
+                'invoice_id' => $invoice->id,
+                'payment_method' => $paymentType,
+                'payment_details_id' => $paymentDetailsId,
+                'payment_details_type' => $paymentDetails['model']
+            ]]);
+        }
     }
-
 }

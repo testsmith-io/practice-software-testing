@@ -6,6 +6,7 @@ import {ActivatedRoute} from "@angular/router";
 import {HttpResponse} from "@angular/common/http";
 import {interval, of, Subscription} from 'rxjs';
 import {switchMap, takeWhile} from 'rxjs/operators';
+import {TranslocoService} from "@jsverse/transloco";
 import {Title} from "@angular/platform-browser";
 
 @Component({
@@ -22,7 +23,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   constructor(private invoiceService: InvoiceService,
               private route: ActivatedRoute,
-              private titleService: Title) {
+              private titleService: Title,
+              private translocoService: TranslocoService) {
   }
 
   ngOnInit(): void {
@@ -88,7 +90,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  getPaymentMethodTranslation(paymentMethod: string): string {
+    const translationKey = `pages.checkout.payment.options.${paymentMethod}`;
+    return this.translocoService.translate(translationKey);
+  }
+
   private updateTitle(invoiceNumber: string) {
     this.titleService.setTitle(`Invoice: ${invoiceNumber} - Practice Software Testing - Toolshop - v5.0`);
   }
+
 }
