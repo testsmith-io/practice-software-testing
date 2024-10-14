@@ -11,7 +11,6 @@ class ReportController extends Controller
     public function __construct()
     {
         $this->middleware('throttle:10,1');
-        $this->middleware('role:admin');
     }
 
     /**
