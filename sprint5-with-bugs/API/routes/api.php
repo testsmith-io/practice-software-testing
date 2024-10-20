@@ -92,7 +92,7 @@ Route::controller(ProductController::class)->prefix('products')->group(function 
     Route::delete('/{id}', 'destroy');
 });
 
-Route::middleware(['throttle:reports'])->controller(ReportController::class)->prefix('reports')->group(function () {
+Route::controller(ReportController::class)->prefix('reports')->group(function () {
     Route::get('/total-sales-of-years', 'totalSalesOfYears');
     Route::get('/total-sales-per-country', 'totalSalesPerCountry');
     Route::get('/top10-purchased-products', 'top10PurchasedProducts');

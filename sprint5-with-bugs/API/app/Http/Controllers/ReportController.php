@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\DB;
 class ReportController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('throttle:10,1');
-    }
-
     /**
      * @OA\Get(
      *      path="/reports/total-sales-per-country",
