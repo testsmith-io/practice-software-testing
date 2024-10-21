@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {map, Observable, Subject, switchMap, of} from "rxjs";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
-import {catchError} from "rxjs/operators";
+import {catchError, tap} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -89,17 +89,23 @@ export class CartService {
   addItem(item: any): Observable<any> {
     return this.getOrCreateCartId().pipe(
       switchMap((cartId) => {
-        const currentQuantity = parseInt(sessionStorage.getItem('cart_quantity'), 10) || 0;
-        const newQuantity = currentQuantity + item.quantity;
-        sessionStorage.setItem('cart_quantity', JSON.stringify(newQuantity));
-        this.storageSub.next('changed');
+        // Call the API to add the item to the cart
         return this.httpClient.post(`${this.apiURL}/carts/${cartId}`, {
           product_id: item.id,
           quantity: item.quantity,
-        });
+        }).pipe(
+          // Only execute this block if the API call is successful
+          tap(() => {
+            const currentQuantity = parseInt(sessionStorage.getItem('cart_quantity'), 10) || 0;
+            const newQuantity = currentQuantity + item.quantity;
+            sessionStorage.setItem('cart_quantity', JSON.stringify(newQuantity));
+            this.storageSub.next('changed');
+          })
+        );
       })
     );
   }
+
 
   replaceQuantity(productId: number, quantity: number) {
     let cartId = sessionStorage.getItem('cart_id');
