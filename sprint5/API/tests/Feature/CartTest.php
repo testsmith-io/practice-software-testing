@@ -208,7 +208,7 @@ class CartTest extends TestCase
         ]);
 
         $response->assertStatus(ResponseAlias::HTTP_NOT_FOUND);
-        $response->assertJson(['message' => 'Cart doesn\'t exists']);
+        $response->assertJson(['message' => 'Cart doesn\'t exist']);
     }
 
     public function testSuccessfulCartDeletion()
