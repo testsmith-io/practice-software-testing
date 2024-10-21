@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { CartService } from "../../_services/cart.service";
-import { CustomerAccountService } from "../../shared/customer-account.service";
+import {Component, OnInit} from '@angular/core';
+import {CartService} from "../../_services/cart.service";
+import {CustomerAccountService} from "../../shared/customer-account.service";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-cart',
@@ -17,8 +18,10 @@ export class CartComponent implements OnInit {
 
   constructor(
     private cartService: CartService,
+    private toastr: ToastrService,
     private customerAccountService: CustomerAccountService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.fetchCartItems();
@@ -41,6 +44,9 @@ export class CartComponent implements OnInit {
     if (quantity >= 1) {
       this.cartService.replaceQuantity(item.product.id, quantity).subscribe(() => {
         this.fetchCartItems();
+        this.toastr.success('Product quantity updated.', null, {progressBar: true});
+      }, (response) => {
+        this.toastr.error(response.error.message, null, {progressBar: true});
       });
     }
   }
@@ -48,6 +54,7 @@ export class CartComponent implements OnInit {
   delete(id: number): void {
     this.cartService.deleteItem(id).subscribe(() => {
       this.fetchCartItems();
+      this.toastr.success('Product deleted.', null, {progressBar: true});
     });
   }
 

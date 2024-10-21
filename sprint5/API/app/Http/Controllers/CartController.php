@@ -105,23 +105,49 @@ class CartController extends Controller
      */
     public function addItem(Request $request, $id)
     {
+        // Retrieve the cart and its items
         $cart = Cart::with('cartItems')->findOrFail($id);
 
+        // Get product_id and quantity from the request
         $product_id = $request->input('product_id');
         $quantity = $request->input('quantity');
 
-        $existingItem = $cart->cartItems()->firstOrCreate(['product_id' => $product_id]);
-        $existingItem->increment('quantity', $quantity);
+        // Retrieve the product by its ID
+        $product = Product::findOrFail($product_id);
 
+        // Check if the product name is 'Thor Hammer'
+        if ($product->name === 'Thor Hammer') {
+            // Check if there's already a Thor Hammer in the cart
+            $existingThorHammer = $cart->cartItems()->where('product_id', $product_id)->first();
+
+            if ($existingThorHammer || $quantity > 1 ) {
+                // If Thor Hammer is already in the cart, don't allow adding more
+                return $this->preferredFormat(['message' => 'You can only have one Thor Hammer in the cart.'], ResponseAlias::HTTP_BAD_REQUEST);
+            }
+
+            // Add Thor Hammer to the cart if it's not already there
+            $cart->cartItems()->create([
+                'product_id' => $product_id,
+                'quantity' => 1 // Only allow one Thor Hammer
+            ]);
+        } else {
+            // For other products, allow adding multiple quantities
+            $existingItem = $cart->cartItems()->firstOrCreate(['product_id' => $product_id]);
+            $existingItem->increment('quantity', $quantity);
+        }
+
+        // Apply discounts if the location offers apply
         if ($cart->lat && $cart->lng && $existingItem->product->is_location_offer) {
             $existingItem->discount_percentage = $this->calculateDiscountPercentage($cart->lat, $cart->lng);
             $existingItem->save();
         }
 
+        // Update cart discounts
         $this->updateCartDiscounts($cart);
 
         return $this->preferredFormat(['result' => 'item added or updated'], ResponseAlias::HTTP_OK);
     }
+
 
     /**
      * @OA\Get(
@@ -199,15 +225,35 @@ class CartController extends Controller
      */
     public function updateQuantity(Request $request, $cartId)
     {
+        // Retrieve the cart and its items
         $cart = Cart::with('cartItems')->find($cartId);
 
+        // Check if the cart exists
         if (!isset($cart)) {
-            return $this->preferredFormat(['message' => 'Cart doesnt exists'], ResponseAlias::HTTP_NOT_FOUND);
+            return $this->preferredFormat(['message' => 'Cart doesn\'t exist'], ResponseAlias::HTTP_NOT_FOUND);
         }
-        $updateStatus = $cart->cartItems()
-            ->where('product_id', $request->input('product_id'))
-            ->update(['quantity' => $request->input('quantity')]);
 
+        // Get product_id and quantity from the request
+        $product_id = $request->input('product_id');
+        $newQuantity = $request->input('quantity');
+
+        // Retrieve the product by its ID
+        $product = Product::findOrFail($product_id);
+
+        // Check if the product name is 'Thor Hammer'
+        if ($product->name === 'Thor Hammer') {
+            // Prevent updating Thor Hammer's quantity to more than 1
+            if ($newQuantity > 1) {
+                return $this->preferredFormat(['message' => 'You can only have one Thor Hammer in the cart.'], ResponseAlias::HTTP_BAD_REQUEST);
+            }
+        }
+
+        // Update the product quantity in the cart
+        $updateStatus = $cart->cartItems()
+            ->where('product_id', $product_id)
+            ->update(['quantity' => $newQuantity]);
+
+        // Return the response
         return $this->preferredFormat(['success' => (bool)$updateStatus], ResponseAlias::HTTP_OK);
     }
 

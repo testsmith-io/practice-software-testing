@@ -96,6 +96,8 @@ export class DetailComponent implements OnInit {
       }
       this.cartService.addItem(item).subscribe(() => {
         this.toastr.success('Product added to shopping cart.', null, {progressBar: true});
+      }, (response) => {
+        this.toastr.error(response.error.message, null, {progressBar: true});
       });
     }
   }
