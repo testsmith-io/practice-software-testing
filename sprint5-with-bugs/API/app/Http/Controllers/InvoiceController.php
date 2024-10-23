@@ -90,6 +90,22 @@ class InvoiceController extends Controller
      */
     public function store(StoreInvoice $request)
     {
+        // Check if there is more than one Thor Hammer in the invoice items
+        $thorHammerCount = 0;
+
+        // Loop through the invoice items and check for 'Thor Hammer'
+        foreach ($request->only(['invoice_items'])['invoice_items'] as $invoiceItem) {
+            $product = Product::findOrFail($invoiceItem['product_id']);
+            if ($product->name === 'Thor Hammer') {
+                $thorHammerCount += $invoiceItem['quantity'];
+            }
+
+            // If more than one Thor Hammer is being ordered, throw an exception
+            if ($thorHammerCount > 1) {
+                return $this->preferredFormat(['message' => 'You can only order one Thor Hammer.'], ResponseAlias::HTTP_BAD_REQUEST);
+            }
+        }
+
         $input = $request->except(['invoice_items']);
         $input['invoice_date'] = date('Y-m-d H-i-s');
         $input['invoice_number'] = $this->invoiceNumberGenerator->generate([
