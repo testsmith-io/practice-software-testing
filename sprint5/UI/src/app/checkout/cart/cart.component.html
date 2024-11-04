@@ -14,7 +14,7 @@
         @for (item of cart.cart_items; track item) {
           <tr>
             <td class="col-md-4"><span
-              class="product-title">{{ item.product.name }}&nbsp;@if (item.discount_percentage) {
+              class="product-title" data-test="product-title">{{ item.product.name }}&nbsp;@if (item.discount_percentage) {
               <span
 
                 class="badge rounded-pill bg-warning me-1">-{{ item.discount_percentage }}%</span>
@@ -24,12 +24,12 @@
             }</td>
             <td class="col-md-2 align-middle">
               <label for="quantity-{{item.id}}" class="visually-hidden">Quantity for {{item.product.name}}</label>
-              <input type="number" id="quantity-{{item.id}}" min="1" max="99" class="form-control quantity"
+              <input type="number" id="quantity-{{item.id}}" data-test="product-quantity" min="1" max="99" class="form-control quantity"
                      (change)="updateQuantity($event, item)"
                      [value]="item.quantity">
             </td>
 
-            <td class="col-md-2 text-end"><span
+            <td class="col-md-2 text-end"><span data-test="product-price"
               [ngClass]="{'discounted' : item.discounted_price}">${{ item.product.price | number: '1.2-2' }}</span>@if (item.discounted_price) {
               <br
               />
@@ -39,7 +39,7 @@
                   data-test="offer-price">$<span
                   id="discount-price">{{ item.discounted_price }}</span></span>
               }</td>
-            <td class="col-md-2 text-end"><span
+            <td class="col-md-2 text-end"><span data-test="line-price"
               [ngClass]="{'discounted' : item.discounted_price}">${{ item.quantity * item.product.price | number: '1.2-2' }}</span>@if (item.discounted_price) {
               <br
               />
@@ -57,14 +57,14 @@
             <td class="col-md-5"></td>
             <td class="col-md-2"></td>
             <td class="col-md-2 text-end"><strong>{{t('pages.checkout.cart.subtotal')}}</strong></td>
-            <td class="col-md-2 text-end">${{ subtotal | number: '1.2-2' }}</td>
+            <td class="col-md-2 text-end" data-test="cart-subtotal">${{ subtotal | number: '1.2-2' }}</td>
             <td class="col-md-1"></td>
           </tr>
           <tr>
             <td class="col-md-5"></td>
             <td class="col-md-2"></td>
             <td class="col-md-2 text-end"><strong>{{t('pages.checkout.cart.discount')}} ({{cart.additional_discount_percentage}}%)</strong></td>
-            <td class="col-md-2 text-end">- ${{ discount | number: '1.2-2' }}</td>
+            <td class="col-md-2 text-end" data-test="cart-discount">- ${{ discount | number: '1.2-2' }}</td>
             <td class="col-md-1"></td>
           </tr>
         }
@@ -74,7 +74,7 @@
         <td class="col-md-5"></td>
         <td class="col-md-2"></td>
         <td class="col-md-2 text-end"><strong>{{t('pages.checkout.cart.total')}}</strong></td>
-        <td class="col-md-2 text-end">${{ total | number: '1.2-2' }}</td>
+        <td class="col-md-2 text-end" data-test="cart-total">${{ total | number: '1.2-2' }}</td>
         <td class="col-md-1"></td>
       </tr>
       </tfoot>

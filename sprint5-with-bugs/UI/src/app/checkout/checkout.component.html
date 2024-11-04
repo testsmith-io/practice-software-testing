@@ -14,14 +14,14 @@
         </thead>
         <tbody>
         <tr *ngFor="let item of items">
-          <td class="col-md-4"><span class="product-title">{{item.name}}</span><br><small *ngIf="item.is_rental">Item for rent, price per hour</small></td>
+          <td class="col-md-4"><span class="product-title" data-test="product-title">{{item.name}}</span><br><small *ngIf="item.is_rental">Item for rent, price per hour</small></td>
           <td class="col-md-2"></td>
           <td class="col-md-2 align-middle">
-            <input type="number" min="0" max="10" class="form-control quantity" (change)="updateQuantity($event, item)"
+            <input type="number" min="0" max="10" class="form-control quantity" data-test="product-quantity" (change)="updateQuantity($event, item)"
                    value="{{item.quantity}}">
           </td>
-          <td class="col-md-2 align-middle">${{item.price | number: '1.2-2'}}</td>
-          <td class="col-md-2 align-middle">$00.00</td>
+          <td class="col-md-2 align-middle" data-test="product-price">${{item.price | number: '1.2-2'}}</td>
+          <td class="col-md-2 align-middle" data-test="line-price">$00.00</td>
           <td class="col-md-1 align-middle"><a class="btn btn-danger"><i
             class="fa fa-remove"></i></a></td>
         </tr>
@@ -32,7 +32,7 @@
           <td class="col-md-2"></td>
           <td class="col-md-2"></td>
           <td class="col-md-2"><strong>Total</strong></td>
-          <td class="col-md-2">${{total | number: '1.2-2'}}</td>
+          <td class="col-md-2" data-test="cart-total">${{total | number: '1.2-2'}}</td>
           <td class="col-md-1"></td>
         </tr>
         </tfoot>
