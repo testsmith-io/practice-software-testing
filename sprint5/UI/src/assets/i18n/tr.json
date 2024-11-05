@@ -18,7 +18,8 @@
         "required": "Şifre gereklidir",
         "length": "Şifre uzunluğu geçersiz",
         "minlength": "Şifre en az 6 karakter olmalıdır.",
-        "maxlength": "Şifre 40 karakterden fazla olamaz."
+        "maxlength": "Şifre 40 karakterden fazla olamaz.",
+        "pattern": "Şifre, geçersiz karakterler içermemelidir."
       }
     },
     "first-name": {

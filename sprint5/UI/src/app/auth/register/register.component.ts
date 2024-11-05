@@ -16,6 +16,8 @@ export class RegisterComponent implements OnInit {
   countries = countriesList;
   error: string;
 
+  passwordStrengthIndicator: string;
+
   constructor(private formBuilder: FormBuilder, private accountService: CustomerAccountService) {
   }
 
@@ -34,9 +36,46 @@ export class RegisterComponent implements OnInit {
         email: ['', [Validators.required, Validators.pattern("^(?=.{1,256}$)[a-zA-Z0-9._%+-]{1,64}@[a-zA-Z0-9.-]{1,255}$")]],
         password: ['', [Validators.required,
           Validators.minLength(6),
-          Validators.maxLength(40)]],
+          Validators.maxLength(40),
+          Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!\"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~])[A-Za-z\d!\"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]+$/)
+        ]],
       }
     );
+  }
+
+  getStrengthWidth(passwordStrength: string): string {
+    switch(passwordStrength) {
+      case 'Weak':
+        return '20%';
+      case 'Moderate':
+        return '40%';
+      case 'Strong':
+        return '60%';
+      case 'Very Strong':
+        return '80%';
+      case 'Excellent':
+        return '100%'
+      default:
+        return '0%';
+    }
+  }
+
+  passwordStrength(password: string): string {
+    let strength = 0;
+    if (password.length >= 8) strength += 1;
+    if (/[a-z]/.test(password)) strength += 1;
+    if (/[A-Z]/.test(password)) strength += 1;
+    if (/\d/.test(password)) strength += 1;
+    if (/[!\"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]/.test(password)) strength += 1;
+
+    switch (strength) {
+      case 1: return 'Weak';
+      case 2: return 'Moderate';
+      case 3: return 'Strong';
+      case 4: return 'Very Strong';
+      case 5: return 'Excellent'
+      default: return 'Invalid';
+    }
   }
 
   get f(): { [key: string]: AbstractControl } {
