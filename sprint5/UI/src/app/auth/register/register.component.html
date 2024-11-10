@@ -249,6 +249,25 @@
               [ariaDescribedBy]="(f['password'].invalid && submitted) ? 'password-error' : null"
               [ariaInvalid]="f['password'].invalid && submitted ? 'true' : 'false'"
             ></app-password-input>
+            <div id="passwordHelp" class="form-text mt-2">
+              Your password must:
+              <ul>
+                <ul>
+                  <li [class.text-success]="!f['password']?.hasError('minLength')">
+                    Be at least 8 characters long
+                  </li>
+                  <li [class.text-success]="!f['password']?.hasError('mixedCase')">
+                    Contain both uppercase and lowercase letters
+                  </li>
+                  <li [class.text-success]="!f['password']?.hasError('hasNumber')">
+                    Include at least one number
+                  </li>
+                  <li [class.text-success]="!f['password']?.hasError('hasSymbol')">
+                    Have at least one special symbol (e.g., &#64;, #, $, etc.)
+                  </li>
+                </ul>
+              </ul>
+            </div>
 
             <div class="password-strength mt-2">
               Password strength:
@@ -257,7 +276,7 @@
                 <span [ngClass]="{'active': passwordStrengthIndicator === 'Moderate'}">Moderate</span>
                 <span [ngClass]="{'active': passwordStrengthIndicator === 'Strong'}">Strong</span>
                 <span [ngClass]="{'active': passwordStrengthIndicator === 'Very Strong'}">Very Strong</span>
-                <span [ngClass]="{'active': passwordStrengthIndicator === 'Excellent'}">Excellent</span> 
+                <span [ngClass]="{'active': passwordStrengthIndicator === 'Excellent'}">Excellent</span>
               </div>
               <div class="strength-bar">
                 <div class="fill" [ngClass]="{
@@ -269,7 +288,7 @@
                   }" [style.width]="getStrengthWidth(passwordStrengthIndicator)">
                 </div>
               </div>
-            </div>            
+            </div>
 
             @if (f['password'].invalid && submitted) {
               <div data-test="password-error"
@@ -289,7 +308,7 @@
                     {{ t('fields.password.errors.maxlength') }}
                   </div>
                 }
-                @if (f['password'].errors?.['pattern']) { 
+                @if (f['password'].errors?.['pattern']) {
                   <div>
                     {{ t('fields.password.errors.pattern') }}
                   </div>

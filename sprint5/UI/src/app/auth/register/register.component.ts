@@ -3,6 +3,7 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/form
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import countriesList from '../../../assets/countries.json';
 import {User} from "../../models/user.model";
+import {PasswordValidators} from "../../_helpers/password.validators";
 
 @Component({
   selector: 'app-register',
@@ -35,9 +36,10 @@ export class RegisterComponent implements OnInit {
         phone: ['', [Validators.required, Validators.pattern(/^[0-9]\d*$/)]],
         email: ['', [Validators.required, Validators.pattern("^(?=.{1,256}$)[a-zA-Z0-9._%+-]{1,64}@[a-zA-Z0-9.-]{1,255}$")]],
         password: ['', [Validators.required,
-          Validators.minLength(6),
-          Validators.maxLength(40),
-          Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!\"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~])[A-Za-z\d!\"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]+$/)
+          PasswordValidators.minLength(8),
+          PasswordValidators.mixedCase(),
+          PasswordValidators.hasNumber(),
+          PasswordValidators.hasSymbol()
         ]],
       }
     );

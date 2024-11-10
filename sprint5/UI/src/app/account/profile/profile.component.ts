@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import {first} from "rxjs/operators";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {PasswordValidators} from "../../_helpers/password.validators";
 
 @Component({
   selector: 'app-profile',
@@ -19,6 +20,8 @@ export class ProfileComponent implements OnInit {
   hideProfileAlert: boolean = false;
   hidePasswordAlert: boolean = false;
 
+  passwordStrengthIndicator: string;
+
   constructor(private customerAccountService: CustomerAccountService,
               private auth: CustomerAccountService) {
   }
@@ -29,7 +32,7 @@ export class ProfileComponent implements OnInit {
       .subscribe((profile) => {
         this.id = profile.id;
         this.profileForm.patchValue(profile);
-      },(error) => {
+      }, (error) => {
         if (error.status === 401 || error.status === 403) {
           window.localStorage.removeItem('TOKEN_KEY');
           window.location.href = '/auth/login';
@@ -50,13 +53,22 @@ export class ProfileComponent implements OnInit {
 
     this.passwordForm = new FormGroup({
       current_password: new FormControl('', [Validators.required]),
-      new_password: new FormControl('', [Validators.required]),
-      new_password_confirmation: new FormControl('', [Validators.required]),
+      new_password: new FormControl('', [Validators.required,
+        PasswordValidators.minLength(8),
+        PasswordValidators.mixedCase(),
+        PasswordValidators.hasNumber(),
+        PasswordValidators.hasSymbol()
+      ]),
+      new_password_confirmation: new FormControl('', [Validators.required, PasswordValidators.passwordsMatch()]),
     });
   }
 
   get f() {
     return this.profileForm.controls;
+  }
+
+  get p() {
+    return this.passwordForm.controls;
   }
 
   updateProfile() {
@@ -104,6 +116,47 @@ export class ProfileComponent implements OnInit {
         window.location.reload();
       }
     }, 5000);
+  }
+
+  getStrengthWidth(passwordStrength: string): string {
+    switch (passwordStrength) {
+      case 'Weak':
+        return '20%';
+      case 'Moderate':
+        return '40%';
+      case 'Strong':
+        return '60%';
+      case 'Very Strong':
+        return '80%';
+      case 'Excellent':
+        return '100%'
+      default:
+        return '0%';
+    }
+  }
+
+  passwordStrength(password: string): string {
+    let strength = 0;
+    if (password.length >= 8) strength += 1;
+    if (/[a-z]/.test(password)) strength += 1;
+    if (/[A-Z]/.test(password)) strength += 1;
+    if (/\d/.test(password)) strength += 1;
+    if (/[!\"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]/.test(password)) strength += 1;
+
+    switch (strength) {
+      case 1:
+        return 'Weak';
+      case 2:
+        return 'Moderate';
+      case 3:
+        return 'Strong';
+      case 4:
+        return 'Very Strong';
+      case 5:
+        return 'Excellent'
+      default:
+        return 'Invalid';
+    }
   }
 
 }

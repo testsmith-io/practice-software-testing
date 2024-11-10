@@ -94,15 +94,72 @@
         <div class="row mb-3">
           <label for="new-password" class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.new-password') }}</label>
           <div class="col-sm-9">
-            <input type="password" class="form-control" formControlName="new_password" data-test="new-password"
-                   id="new-password">
+            <app-password-input
+              formControlName="new_password"
+              id="new-password"
+              placeholder="{{ t('fields.password.placeholder') }}"
+              (input)="passwordStrengthIndicator = passwordStrength(p['new_password'].value)"
+              [isInvalid]="isPasswordUpdated && p['new_password'].errors"
+              [ariaDescribedBy]="(p['new_password'].invalid && isPasswordUpdated) ? 'password-error' : null"
+              [ariaInvalid]="p['new_password'].invalid && isPasswordUpdated ? 'true' : 'false'"
+            ></app-password-input>
+            <div id="passwordHelp" class="form-text mt-2">
+              Your password must:
+              <ul>
+                <ul>
+                  <li [class.text-success]="!p['new_password']?.hasError('minLength')">
+                    Be at least 8 characters long
+                  </li>
+                  <li [class.text-success]="!p['new_password']?.hasError('mixedCase')">
+                    Contain both uppercase and lowercase letters
+                  </li>
+                  <li [class.text-success]="!p['new_password']?.hasError('hasNumber')">
+                    Include at least one number
+                  </li>
+                  <li [class.text-success]="!p['new_password']?.hasError('hasSymbol')">
+                    Have at least one special symbol (e.g., &#64;, #, $, etc.)
+                  </li>
+                </ul>
+              </ul>
+            </div>
+
+            <div class="password-strength mt-2">
+              Password strength:
+              <div class="strength-labels">
+                <span [ngClass]="{'active': passwordStrengthIndicator === 'Weak'}">Weak</span>
+                <span [ngClass]="{'active': passwordStrengthIndicator === 'Moderate'}">Moderate</span>
+                <span [ngClass]="{'active': passwordStrengthIndicator === 'Strong'}">Strong</span>
+                <span [ngClass]="{'active': passwordStrengthIndicator === 'Very Strong'}">Very Strong</span>
+                <span [ngClass]="{'active': passwordStrengthIndicator === 'Excellent'}">Excellent</span>
+              </div>
+              <div class="strength-bar">
+                <div class="fill" [ngClass]="{
+                  'weak': passwordStrengthIndicator === 'Weak',
+                  'moderate': passwordStrengthIndicator === 'Moderate',
+                  'strong': passwordStrengthIndicator === 'Strong',
+                  'very-strong': passwordStrengthIndicator === 'Very Strong',
+                  'excellent': passwordStrengthIndicator === 'Excellent'
+                  }" [style.width]="getStrengthWidth(passwordStrengthIndicator)">
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="row mb-3">
           <label for="new-password-confirm" class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.confirm-new-password') }}</label>
           <div class="col-sm-9">
-            <input type="password" class="form-control" formControlName="new_password_confirmation"
-                   data-test="new-password-confirm" id="new-password-confirm">
+            <app-password-input
+              formControlName="new_password_confirmation"
+              id="new-password-confirm"
+              placeholder="{{ t('fields.password.placeholder') }}"
+              (input)="passwordStrengthIndicator = passwordStrength(f['new_password_confirmation'].value)"
+              [isInvalid]="isPasswordUpdated && p['new_password_confirmation'].errors"
+              [ariaDescribedBy]="(p['new_password_confirmation'].invalid && isPasswordUpdated) ? 'password-error' : null"
+              [ariaInvalid]="p['new_password_confirmation'].invalid && isPasswordUpdated ? 'true' : 'false'"
+            ></app-password-input>
+            <div *ngIf="passwordForm.hasError('passwordsMismatch')" class="text-danger">
+              Passwords do not match.
+            </div>
           </div>
         </div>
       </div>
