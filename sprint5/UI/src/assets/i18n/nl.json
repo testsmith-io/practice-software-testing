@@ -18,7 +18,8 @@
         "required": "Wachtwoord is vereist",
         "length": "Wachtwoordlengte is ongeldig",
         "minlength": "Wachtwoord moet minimaal 6 tekens lang zijn.",
-        "maxlength": "Wachtwoord mag niet langer zijn dan 40 tekens."
+        "maxlength": "Wachtwoord mag niet langer zijn dan 40 tekens.",
+        "pattern": "Wachtwoord mag geen ongeldige tekens bevatten."
       }
     },
     "first-name": {

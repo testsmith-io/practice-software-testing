@@ -18,7 +18,8 @@
         "required": "Password is required",
         "length": "Password length is invalid",
         "minlength": "Password must be minimal 6 characters long.",
-        "maxlength": "Password can not be more than 40 characters long."
+        "maxlength": "Password can not be more than 40 characters long.",
+        "pattern": "Password can not include invalid characters."
       }
     },
     "first-name": {
