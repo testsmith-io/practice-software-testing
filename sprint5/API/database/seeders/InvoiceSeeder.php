@@ -8,20 +8,21 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
-class InvoiceSeeder extends Seeder
-{
+class InvoiceSeeder extends Seeder {
     /**
      * Run the database seeds.
      */
-    public function run(): void
-    {
+    public function run(): void {
+        mt_srand(12345); // Fixed seed for reproducibility
+
         $user1 = DB::table('users')->where('email', '=', 'customer@practicesoftwaretesting.com')->first();
         $user2 = DB::table('users')->where('email', '=', 'customer2@practicesoftwaretesting.com')->first();
 
         $startDate = Carbon::now()->subYears(5);
         $dates = [];
-        for ($i = 1; $i <= 120; $i++) {
-            $dates[] = $startDate->copy()->addDays(rand(1, 1800))->toDateTimeString();
+
+        for ($i = 1; $i <= 150; $i++) {
+            $dates[] = $startDate->copy()->addDays(mt_rand(1, 1800))->toDateTimeString();
         }
         sort($dates);
 
@@ -44,7 +45,7 @@ class InvoiceSeeder extends Seeder
                 'user_id' => $user->id,
                 'invoice_date' => $invoiceDate,
                 'invoice_number' => $invoiceNumber,
-                'billing_address' => 'Test street ' . rand(1, 100),
+                'billing_address' => 'Test street ' . ($invoiceCounters[$year] % 100),
                 'billing_city' => 'Utrecht',
                 'billing_state' => 'Utrecht',
                 'billing_country' => 'The Netherlands',

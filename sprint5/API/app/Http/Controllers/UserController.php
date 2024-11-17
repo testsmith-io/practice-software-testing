@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Customer\DestroyCustomer;
+use App\Http\Requests\Customer\PatchCustomer;
 use App\Http\Requests\Customer\StoreCustomer;
 use App\Http\Requests\Customer\UpdateCustomer;
 use App\Mail\ForgetPassword;
@@ -579,6 +580,65 @@ class UserController extends Controller
             return response()->json(['error' => 'You can only update your own data.'], ResponseAlias::HTTP_FORBIDDEN);
         }
     }
+
+    /**
+     * @OA\Patch(
+     *      path="/users/{userId}",
+     *      operationId="patchUser",
+     *      tags={"User"},
+     *      summary="Partially update specific user",
+     *      description="Partially update specific user",
+     *      @OA\Parameter(
+     *          name="userId",
+     *          in="path",
+     *          description="The userId parameter in path",
+     *          required=true,
+     *          @OA\Schema(type="string")
+     *      ),
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="Partial user request object. Only fields to be updated should be included.",
+     *          @OA\JsonContent(ref="#/components/schemas/UserRequest")
+     *      ),
+     *      @OA\Response(response="200", ref="#/components/responses/UpdateResponse"),
+     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
+     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      security={{ "apiAuth": {} }}
+     * )
+     */
+    public function patch(PatchCustomer $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        // Check if the current user is the same as the one being updated or is an admin
+        if ((app('auth')->id() == $id) || (app('auth')->parseToken()->getPayload()->get('role') == "admin")) {
+            // If the 'role' field is present in the request, ensure the authenticated user is an admin
+            if ($request->has('role')) {
+                if (app('auth')->parseToken()->getPayload()->get('role') !== "admin") {
+                    return response()->json(['error' => 'Only admins can update the role.'], ResponseAlias::HTTP_FORBIDDEN);
+                }
+            }
+
+            // Update the user with the request data
+            $updateData = $request->except('password');
+
+            // For non-admin users, remove the 'role' field from the update data if present
+            if (app('auth')->parseToken()->getPayload()->get('role') !== "admin") {
+                unset($updateData['role']);
+            }
+
+            $success = $user->update($updateData);
+            return $this->preferredFormat(['success' => (bool)$success], ResponseAlias::HTTP_OK);
+        } else {
+            return response()->json(['error' => 'You can only update your own data.'], ResponseAlias::HTTP_FORBIDDEN);
+        }
+    }
+
 
     /**
      * @OA\Delete(

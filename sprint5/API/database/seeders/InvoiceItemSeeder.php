@@ -6,13 +6,13 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class InvoiceItemSeeder extends Seeder
-{
+class InvoiceItemSeeder extends Seeder {
     /**
      * Run the database seeds.
      */
-    public function run(): void
-    {
+    public function run(): void {
+        mt_srand(12345); // Fixed seed for reproducibility
+
         $products = [
             ['name' => 'Combination Pliers', 'price' => 14.15],
             ['name' => 'Pliers', 'price' => 12.01],
@@ -71,10 +71,14 @@ class InvoiceItemSeeder extends Seeder
         foreach ($invoices as $invoice) {
             $total = 0;
 
-            $itemsCount = rand(1, 6);
+            // Deterministic random number of items
+            $itemsCount = mt_rand(1, 6);
+
             for ($j = 0; $j < $itemsCount; $j++) {
-                $product = $products[array_rand($products)];
-                $quantity = rand(1, 3);
+                // Deterministic random product and quantity
+                $productIndex = $j % count($products);
+                $product = $products[$productIndex];
+                $quantity = mt_rand(1, 3);
                 $lineTotal = $product['price'] * $quantity;
 
                 // Insert into invoice_items

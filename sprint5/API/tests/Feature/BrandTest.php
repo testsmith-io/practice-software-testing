@@ -121,6 +121,23 @@ class BrandTest extends TestCase {
             ]);
     }
 
+    public function testPartialUpdateBrand() {
+        $brand = Brand::factory()->create();
+
+        $payload = ['name' => 'new name'];
+
+        $this->patchJson("/brands/{$brand->id}", $payload)
+            ->assertStatus(ResponseAlias::HTTP_OK)
+            ->assertJson([
+                'success' => true,
+            ]);
+
+        $this->assertDatabaseHas('brands', [
+            'id' => $brand->id,
+            'name' => 'new name'
+        ]);
+    }
+
     public function testSearchBrand() {
         Brand::factory()->create(['name' => 'brandname']);
 
