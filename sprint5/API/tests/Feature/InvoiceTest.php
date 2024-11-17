@@ -234,20 +234,19 @@ class InvoiceTest extends TestCase {
     }
 
     public function testPartialUpdateInvoice() {
-        $invoice = Invoice::factory()->create();
-
         $payload = [
             'billing_address' => 'new street'
         ];
 
-        $this->patchJson("/invoices/{$this->invoice->id}", $payload, $this->headers($this->customer))
-            ->assertStatus(ResponseAlias::HTTP_OK)
+        $response = $this->patchJson("/invoices/{$this->invoice->id}", $payload, $this->headers($this->customer));
+
+        $response->assertStatus(ResponseAlias::HTTP_OK)
             ->assertJson([
                 'success' => true,
             ]);
 
         $this->assertDatabaseHas('invoices', [
-            'id' => $invoice->id,
+            'id' => $this->invoice->id,
             'billing_address' => 'new street'
         ]);
     }
