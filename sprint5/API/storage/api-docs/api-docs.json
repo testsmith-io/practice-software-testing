@@ -219,6 +219,51 @@
                         "apiAuth": []
                     }
                 ]
+            },
+            "patch": {
+                "tags": [
+                    "Brand"
+                ],
+                "summary": "Partially update specific brand",
+                "description": "Partially update specific brand",
+                "operationId": "patchBrand",
+                "parameters": [
+                    {
+                        "name": "brandId",
+                        "in": "path",
+                        "description": "The brandId parameter in path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": 1
+                    }
+                ],
+                "requestBody": {
+                    "description": "Partial brand request object. Only fields to be updated should be included.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BrandRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/UpdateResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
+                    },
+                    "405": {
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
+                    }
+                }
             }
         },
         "/brands/search": {
@@ -854,6 +899,51 @@
                         "apiAuth": []
                     }
                 ]
+            },
+            "patch": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Partially update specific category",
+                "description": "Partially update specific category",
+                "operationId": "patchCategory",
+                "parameters": [
+                    {
+                        "name": "categoryId",
+                        "in": "path",
+                        "description": "The categoryId parameter in path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": 1
+                    }
+                ],
+                "requestBody": {
+                    "description": "Partial category request object. Only fields to be updated should be included.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CategoryRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/UpdateResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ResourceNotFoundResponse"
+                    },
+                    "405": {
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
+                    }
+                }
             }
         },
         "/messages": {
@@ -1690,6 +1780,58 @@
                         "apiAuth": []
                     }
                 ]
+            },
+            "patch": {
+                "tags": [
+                    "Invoice"
+                ],
+                "summary": "Partially update specific invoice",
+                "description": "Partially update specific invoice",
+                "operationId": "patchInvoice",
+                "parameters": [
+                    {
+                        "name": "invoiceId",
+                        "in": "path",
+                        "description": "The invoiceId parameter in path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Partial invoice request object. Only fields to be updated should be included.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/InvoiceRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/UpdateResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
+                    },
+                    "405": {
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
             }
         },
         "/invoices/{invoice_number}/download-pdf": {
@@ -2335,6 +2477,50 @@
                         "apiAuth": []
                     }
                 ]
+            },
+            "patch": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Partially update specific product",
+                "description": "Partially update specific product",
+                "operationId": "patchProduct",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "description": "The productId parameter in path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Partial product request object. Only fields to be updated should be included.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/UpdateResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
+                    },
+                    "405": {
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
+                    }
+                }
             }
         },
         "/products/{productId}/related": {
@@ -2953,6 +3139,9 @@
                     }
                 },
                 "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/UpdateResponse"
+                    },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedResponse"
                     },
@@ -3264,6 +3453,58 @@
                     },
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Partially update specific user",
+                "description": "Partially update specific user",
+                "operationId": "patchUser",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "The userId parameter in path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Partial user request object. Only fields to be updated should be included.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/UpdateResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "405": {
+                        "$ref": "#/components/responses/MethodNotAllowedResponse"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     },
                     "403": {
                         "description": "Forbidden"

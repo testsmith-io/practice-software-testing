@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Invoice\DestroyInvoice;
+use App\Http\Requests\Invoice\PatchInvoice;
 use App\Http\Requests\Invoice\StoreInvoice;
 use App\Jobs\SendCheckoutEmail;
 use App\Jobs\UpdateProductInventory;
@@ -494,7 +495,45 @@ class InvoiceController extends Controller
      */
     public function update(StoreInvoice $request, $id)
     {
-        return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->where('customer_id', Auth::user()->id)->update($request->all())], ResponseAlias::HTTP_OK);
+        return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->where('user_id', Auth::user()->id)->update($request->all())], ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @OA\Patch(
+     *      path="/invoices/{invoiceId}",
+     *      operationId="patchInvoice",
+     *      tags={"Invoice"},
+     *      summary="Partially update specific invoice",
+     *      description="Partially update specific invoice",
+     *      @OA\Parameter(
+     *          name="invoiceId",
+     *          in="path",
+     *          description="The invoiceId parameter in path",
+     *          required=true,
+     *          @OA\Schema(type="string")
+     *      ),
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="Partial invoice request object. Only fields to be updated should be included.",
+     *          @OA\JsonContent(ref="#/components/schemas/InvoiceRequest")
+     *      ),
+     *      @OA\Response(response="200", ref="#/components/responses/UpdateResponse"),
+     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
+     *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
+     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
+     *      security={{ "apiAuth": {} }}
+     * )
+     */
+    public function patch(PatchInvoice $request, $id)
+    {
+        $userId = Auth::user()->id;
+
+        $success = Invoice::where('id', $id)
+            ->where('user_id', $userId)
+            ->update($request->validated());
+
+        return $this->preferredFormat(['success' => (bool)$success], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -523,7 +562,7 @@ class InvoiceController extends Controller
     public function destroy(DestroyInvoice $request, $id)
     {
         try {
-            Invoice::find($id)->where('customer_id', Auth::user()->id)->delete();
+            Invoice::find($id)->where('user_id', Auth::user()->id)->delete();
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {

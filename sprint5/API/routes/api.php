@@ -46,6 +46,7 @@ Route::controller(BrandController::class)->prefix('brands')->group(function () {
     Route::get('/{id}', 'show');
     Route::post('', 'store');
     Route::put('/{id}', 'update');
+    Route::patch('/{id}', 'patch');
     Route::delete('/{id}', 'destroy');
 });
 
@@ -64,6 +65,7 @@ Route::controller(CategoryController::class)->prefix('categories')->group(functi
     Route::get('/search', 'search');
     Route::get('/tree/{id}', 'show');
     Route::post('', 'store');
+    Route::patch('/{id}', 'patch');
     Route::put('/{id}', 'update');
     Route::delete('/{id}', 'destroy');
 });
@@ -98,6 +100,7 @@ Route::controller(InvoiceController::class)->prefix('invoices')->group(function 
     Route::post('', 'store');
     Route::delete('/{id}', 'destroy');
     Route::put('/{id}', 'update');
+    Route::patch('/{id}', 'patch');
 });
 
 Route::controller(PaymentController::class)->prefix('payment')->group(function () {
@@ -111,6 +114,7 @@ Route::controller(ProductController::class)->prefix('products')->group(function 
     Route::get('/{id}/related', 'showRelated');
     Route::post('', 'store');
     Route::put('/{id}', 'update');
+    Route::patch('/{id}', 'patch');
     Route::delete('/{id}', 'destroy');
 });
 
@@ -134,6 +138,7 @@ Route::controller(UserController::class)->prefix('users')->group(function () {
     Route::get('/refresh', 'refresh');
     Route::get('/me', 'me');
     Route::put('{id}', 'update');
+    Route::patch('{id}', 'patch');
     Route::get('/', 'index');
     Route::get('/{id}', 'show');
     Route::delete('/{id}', 'destroy');

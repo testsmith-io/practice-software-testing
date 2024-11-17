@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Category\DestroyCategory;
+use App\Http\Requests\Category\PatchCategory;
 use App\Http\Requests\Category\StoreCategory;
 use App\Http\Requests\Category\UpdateCategory;
 use App\Models\Category;
@@ -237,6 +238,46 @@ class CategoryController extends Controller
 
         return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
     }
+
+    /**
+     * @OA\Patch(
+     *      path="/categories/{categoryId}",
+     *      operationId="patchCategory",
+     *      tags={"Category"},
+     *      summary="Partially update specific category",
+     *      description="Partially update specific category",
+     *      @OA\Parameter(
+     *          name="categoryId",
+     *          in="path",
+     *          example=1,
+     *          description="The categoryId parameter in path",
+     *          required=true,
+     *          @OA\Schema(type="string")
+     *      ),
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="Partial category request object. Only fields to be updated should be included.",
+     *          @OA\JsonContent(ref="#/components/schemas/CategoryRequest")
+     *      ),
+     *      @OA\Response(response="200", ref="#/components/responses/UpdateResponse"),
+     *      @OA\Response(response="404", ref="#/components/responses/ResourceNotFoundResponse"),
+     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
+     * )
+     */
+    public function patch(PatchCategory $request, $id)
+    {
+        $validatedData = $request->validated();
+
+        $updated = Category::where('id', $id)->update($validatedData);
+
+        Cache::forget('categories.all');
+        Cache::forget("categories.{$id}");
+        Cache::forget('categories.tree.all');
+
+        return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
+    }
+
 
     /**
      * @OA\Delete(

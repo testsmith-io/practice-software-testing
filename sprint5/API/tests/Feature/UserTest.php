@@ -267,6 +267,26 @@ class UserTest extends TestCase
         ]);
     }
 
+    public function testUserCanPartialUpdateOwnInformation()
+    {
+        $payload = [
+            'first_name' => 'Updated User Name',
+            'email' => 'updatedemail@example.com'
+        ];
+
+        // Make a PUT request to update user information
+        $response = $this->patchJson("/users/{$this->user->id}", $payload, $this->headers($this->user));
+
+        $response->assertStatus(ResponseAlias::HTTP_OK)
+            ->assertJson(['success' => true]);
+
+        // Assert the user's information is updated in the database
+        $this->assertDatabaseHas('users', [
+            'id' => $this->user->id,
+            'first_name' => 'Updated User Name'
+        ]);
+    }
+
     public function testAdminCanUpdateAnyUserInformation()
     {
         // Create an admin user

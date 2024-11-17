@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Brand\DestroyBrand;
+use App\Http\Requests\Brand\PatchBrand;
 use App\Http\Requests\Brand\StoreBrand;
 use App\Http\Requests\Brand\UpdateBrand;
 use App\Models\Brand;
@@ -177,6 +178,44 @@ class BrandController extends Controller
     public function update(UpdateBrand $request, $id)
     {
         $updated = Brand::where('id', $id)->update($request->all());
+
+        Cache::forget('brands.all');
+        Cache::forget("brands.{$id}");
+
+        return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
+    }
+
+    /**
+     * @OA\Patch(
+     *      path="/brands/{brandId}",
+     *      operationId="patchBrand",
+     *      tags={"Brand"},
+     *      summary="Partially update specific brand",
+     *      description="Partially update specific brand",
+     *      @OA\Parameter(
+     *          name="brandId",
+     *          in="path",
+     *          description="The brandId parameter in path",
+     *          required=true,
+     *          example=1,
+     *          @OA\Schema(type="string")
+     *      ),
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="Partial brand request object. Only fields to be updated should be included.",
+     *          @OA\JsonContent(ref="#/components/schemas/BrandRequest")
+     *      ),
+     *      @OA\Response(response="200", ref="#/components/responses/UpdateResponse"),
+     *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
+     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
+     * )
+     */
+    public function patch(PatchBrand $request, $id)
+    {
+        $validatedData = $request->validated();
+
+        $updated = Brand::where('id', $id)->update($validatedData);
 
         Cache::forget('brands.all');
         Cache::forget("brands.{$id}");

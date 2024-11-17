@@ -158,6 +158,23 @@ class CategoryTest extends TestCase {
             ]);
     }
 
+    public function testPartialUpdateCategory() {
+        $category = Category::factory()->create();
+
+        $payload = ['name' => 'updated category'];
+
+        $this->patchJson("/categories/{$category->id}", $payload)
+            ->assertStatus(ResponseAlias::HTTP_OK)
+            ->assertJson([
+                'success' => true,
+            ]);
+
+        $this->assertDatabaseHas('categories', [
+            'id' => $category->id,
+            'name' => 'updated category'
+        ]);
+    }
+
     public function testSearchCategory() {
         Category::factory()->create(['name' => 'categoryname']);
 

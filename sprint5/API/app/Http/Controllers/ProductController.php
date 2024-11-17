@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Product\DestroyProduct;
+use App\Http\Requests\Product\PatchProduct;
 use App\Http\Requests\Product\StoreProduct;
 use App\Http\Requests\Product\UpdateProduct;
 use App\Models\Product;
@@ -342,6 +343,43 @@ class ProductController extends Controller
 
         return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
     }
+
+    /**
+     * @OA\Patch(
+     *      path="/products/{productId}",
+     *      operationId="patchProduct",
+     *      tags={"Product"},
+     *      summary="Partially update specific product",
+     *      description="Partially update specific product",
+     *      @OA\Parameter(
+     *          name="productId",
+     *          in="path",
+     *          description="The productId parameter in path",
+     *          required=true,
+     *          @OA\Schema(type="string")
+     *      ),
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="Partial product request object. Only fields to be updated should be included.",
+     *          @OA\JsonContent(ref="#/components/schemas/ProductRequest")
+     *      ),
+     *      @OA\Response(response="200", ref="#/components/responses/UpdateResponse"),
+     *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
+     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
+     * )
+     */
+    public function patch(PatchProduct $request, $id) {
+        $validatedData = $request->validated();
+
+        $updated = Product::where('id', $id)->update($validatedData);
+
+        Cache::forget('products.index.*'); // Invalidate index cache
+        Cache::forget("products.{$id}");
+
+        return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
+    }
+
 
     /**
      * @OA\Delete(

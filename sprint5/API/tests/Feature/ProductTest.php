@@ -236,6 +236,27 @@ class ProductTest extends TestCase {
             ]);
     }
 
+    public function testPartialUpdateProduct() {
+        $product = Product::factory()->create();
+
+        $payload = [
+            'name' => 'updated product',
+            'price' => 99.99
+        ];
+
+        $this->patchJson("/products/{$product->id}", $payload)
+            ->assertStatus(ResponseAlias::HTTP_OK)
+            ->assertJson([
+                'success' => true,
+            ]);
+
+        $this->assertDatabaseHas('products', [
+            'id' => $product->id,
+            'name' => 'updated product',
+            'price' => 99.99
+        ]);
+    }
+
     public function testRetrieveRelatedProducts() {
         $product = $this->addProduct();
 

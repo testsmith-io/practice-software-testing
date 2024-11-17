@@ -233,6 +233,25 @@ class InvoiceTest extends TestCase {
         $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
     }
 
+    public function testPartialUpdateInvoice() {
+        $invoice = Invoice::factory()->create();
+
+        $payload = [
+            'billing_address' => 'new street'
+        ];
+
+        $this->patchJson("/invoices/{$this->invoice->id}", $payload, $this->headers($this->customer))
+            ->assertStatus(ResponseAlias::HTTP_OK)
+            ->assertJson([
+                'success' => true,
+            ]);
+
+        $this->assertDatabaseHas('invoices', [
+            'id' => $invoice->id,
+            'billing_address' => 'new street'
+        ]);
+    }
+
     public function testItReturnsNotFoundForNonexistentInvoice()
     {
         $response = $this->putJson("/invoices/99999/status", ['status' => 'COMPLETED'], $this->headers($this->customer));

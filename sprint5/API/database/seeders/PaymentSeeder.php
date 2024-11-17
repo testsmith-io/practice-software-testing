@@ -7,13 +7,13 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class PaymentSeeder extends Seeder
-{
+class PaymentSeeder extends Seeder {
     /**
      * Run the database seeds.
      */
-    public function run(): void
-    {
+    public function run(): void {
+        mt_srand(12345); // Fixed seed for reproducibility
+
         $paymentMethods = [
             'bank-transfer' => [
                 [
@@ -79,9 +79,10 @@ class PaymentSeeder extends Seeder
 
         $invoices = DB::table('invoices')->get();
 
-        foreach ($invoices as $invoice) {
-            $paymentType = array_rand($paymentMethods);
-            $paymentDetails = $paymentMethods[$paymentType][array_rand($paymentMethods[$paymentType])];
+        foreach ($invoices as $key => $invoice) {
+            $paymentTypeKeys = array_keys($paymentMethods);
+            $paymentType = $paymentTypeKeys[$key % count($paymentTypeKeys)];
+            $paymentDetails = $paymentMethods[$paymentType][$key % count($paymentMethods[$paymentType])];
 
             $detailsToInsert = $paymentDetails;
             unset($detailsToInsert['table']);
@@ -90,14 +91,6 @@ class PaymentSeeder extends Seeder
             $paymentDetailsId = Str::ulid()->toBase32();
             DB::table($paymentDetails['table'])->insert([array_merge($detailsToInsert, ['id' => $paymentDetailsId])]);
 
-            if ($paymentType === 'bank-transfer') {
-                DB::table('invoices')->where('id', $invoice->id)->update(['status' => 'ON_HOLD']);
-            } else {
-                $statuses = ['AWAITING_FULFILLMENT', 'AWAITING_SHIPMENT', 'SHIPPED', 'COMPLETED'];
-                $status = $statuses[array_rand($statuses)];
-                DB::table('invoices')->where('id', $invoice->id)->update(['status' => $status]);
-            }
-
             DB::table('payments')->insert([[
                 'id' => Str::ulid()->toBase32(),
                 'invoice_id' => $invoice->id,
@@ -105,6 +98,8 @@ class PaymentSeeder extends Seeder
                 'payment_details_id' => $paymentDetailsId,
                 'payment_details_type' => $paymentDetails['model']
             ]]);
+
+            DB::table('invoices')->where('id', $invoice->id)->update(['status' => 'AWAITING_FULFILLMENT']);
         }
     }
 }
