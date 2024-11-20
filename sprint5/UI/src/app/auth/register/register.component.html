@@ -298,7 +298,7 @@
                     {{ t('fields.password.errors.required') }}
                   </div>
                 }
-                @if (f['password'].errors?.['minlength']) {
+                @if (f['password']?.hasError('minLength')) {
                   <div>
                     {{ t('fields.password.errors.minlength') }}
                   </div>
@@ -308,7 +308,7 @@
                     {{ t('fields.password.errors.maxlength') }}
                   </div>
                 }
-                @if (f['password'].errors?.['pattern']) {
+                @if (f['password']?.hasError('mixedCase') || f['password']?.hasError('hasNumber') || f['password']?.hasError('hasSymbol')) {
                   <div>
                     {{ t('fields.password.errors.pattern') }}
                   </div>
