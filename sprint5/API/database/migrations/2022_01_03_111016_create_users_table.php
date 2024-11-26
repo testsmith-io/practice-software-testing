@@ -32,6 +32,9 @@ class CreateUsersTable extends Migration
             $table->string('role');
             $table->boolean('enabled')->default(true);
             $table->integer('failed_login_attempts')->default(0);
+            $table->string('totp_secret')->nullable();
+            $table->boolean('totp_enabled')->default(false);
+            $table->timestamp('totp_verified_at')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });

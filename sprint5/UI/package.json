@@ -26,6 +26,7 @@
     "@jsverse/transloco": "^7.4.1",
     "@popperjs/core": "2.11.8",
     "@y3krulez/angular-archwizard": "8.0.0-develop",
+    "angularx-qrcode": "^19.0.0",
     "bootstrap": "5.3.2",
     "chart.js": "^4.4.0",
     "chartjs-plugin-datalabels": "^2.2.0",

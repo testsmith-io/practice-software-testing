@@ -156,7 +156,9 @@
       "generic-error": "Ongeldig e-mailadres of wachtwoord",
       "no-account": "Nog geen account?",
       "register": "Registreer uw account",
-      "forgot-password": "Wachtwoord vergeten?"
+      "forgot-password": "Wachtwoord vergeten?",
+      "verify_totp": "TOTP verifiëren",
+      "totp_code": "TOTP-code"
     },
     "register": {
       "title": "Klantregistratie",
@@ -294,7 +296,15 @@
         "new-password": "Nieuw wachtwoord",
         "confirm-new-password": "Bevestig nieuw wachtwoord",
         "change-password-btn": "Wachtwoord wijzigen",
-        "change-password-success": "Uw wachtwoord is <strong>succesvol</strong> bijgewerkt!"
+        "change-password-success": "Uw wachtwoord is <strong>succesvol</strong> bijgewerkt!",
+        "two_factor_authentication_enabled": "Twee-factor-authenticatie is al ingeschakeld.",
+        "verify_totp": "TOTP verifiëren",
+        "enter_totp_code": "Voer TOTP-code in",
+        "manually_enter_key": "Of voer deze sleutel handmatig in in uw app:",
+        "scan_qr_code": "Scan de QR-code hieronder met uw authenticator-app (bijv. Google Authenticator, Authy):",
+        "setup_two_factor_authentication": "Twee-factor-authenticatie instellen",
+        "totp_verified": "TOTP succesvol geverifieerd en ingeschakeld.",
+        "invalid_totp_code": "Ongeldige TOTP-code. Probeer het opnieuw."
       },
       "messages": {
         "title": "Berichten",

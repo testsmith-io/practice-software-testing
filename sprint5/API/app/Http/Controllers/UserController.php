@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use PragmaRX\Google2FA\Google2FA;
 use App\Http\Requests\Customer\DestroyCustomer;
 use App\Http\Requests\Customer\PatchCustomer;
 use App\Http\Requests\Customer\StoreCustomer;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
@@ -156,46 +158,84 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
-        // Validate input
-        $this->validateLogin($request);
+        // Case 1: Login with email and password
+        if ($request->has(['email', 'password'])) {
+            $credentials = $request->only(['email', 'password']);
 
-        $credentials = $request->only(['email', 'password']);
+            // Find the user
+            $user = User::where('email', $credentials['email'])->first();
 
-        // Check if the user exists
-        $user = User::where('email', $credentials['email'])->first();
-
-        // Check if user exists and if role is not admin
-        if ($user && $user->role != "admin") {
-            // Check if account is locked
-            if ($user->failed_login_attempts >= self::MAX_LOGIN_ATTEMPTS) {
-                return $this->lockedAccountResponse();
-            }
-        }
-
-        // Attempt login and get token
-        $token = app('auth')->attempt($credentials);
-
-        // Check if login was successful
-        if (!$token) {
-            // Login failed
+            // Handle login failures and account locking
             if ($user && $user->role != "admin") {
-                $this->incrementLoginAttempts($user);
+                if ($user->failed_login_attempts >= self::MAX_LOGIN_ATTEMPTS) {
+                    return $this->lockedAccountResponse();
+                }
             }
-            return $this->failedLoginResponse();
+
+            // Attempt to authenticate
+            $token = app('auth')->attempt($credentials);
+
+            if (!$token) {
+                if ($user && $user->role != "admin") {
+                    $this->incrementLoginAttempts($user);
+                }
+                return $this->failedLoginResponse();
+            }
+
+            // Check if user is enabled
+            if (!$user->enabled) {
+                return response()->json([
+                    'error' => 'Account disabled.',
+                ], ResponseAlias::HTTP_FORBIDDEN);
+            }
+
+            // Handle TOTP-enabled users
+            if ($user->totp_enabled) {
+                // Invalidate the token and issue a temporary one for TOTP verification
+                app('auth')->invalidate($token);
+
+                $tempToken = app('auth')->attempt($credentials);
+                return response()->json([
+                    'message' => 'TOTP required. Please provide your TOTP code.',
+                    'requires_totp' => true,
+                    'access_token' => $tempToken,
+                ], ResponseAlias::HTTP_OK);
+            }
+
+            // Reset failed login attempts
+            $this->resetLoginAttempts($user);
+
+            // Return successful login response
+            return $this->successfulLoginResponse($token);
         }
 
-        // Check if the user is enabled
-        if (!$user->enabled) {
-            return response()->json([
-                'error' => 'Account disabled.'
-            ], ResponseAlias::HTTP_FORBIDDEN);
+        // Case 2: Login with access_token and TOTP
+        if ($request->has(['access_token', 'totp'])) {
+            $accessToken = $request->input('access_token');
+            $totpCode = $request->input('totp');
+
+            $user = User::find(JWTAuth::setToken($accessToken)->toUser()->id);
+
+            // Validate user and TOTP
+            if (!$user || !$user->totp_enabled) {
+                return response()->json(['error' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
+            }
+
+            $google2fa = new Google2FA();
+            if (!$google2fa->verifyKey($user->totp_secret, $totpCode)) {
+                return response()->json(['error' => 'Invalid TOTP'], ResponseAlias::HTTP_UNAUTHORIZED);
+            }
+
+            // Generate a new token after TOTP verification
+            $finalToken = app('auth')->login($user);
+
+            return $this->successfulLoginResponse($finalToken);
         }
 
-        // Reset failed login attempts on successful login
-        $this->resetLoginAttempts($user);
-
-        // Return the successful login response
-        return $this->successfulLoginResponse($token);
+        // Invalid request payload
+        return response()->json([
+            'error' => 'Invalid login request. Provide either email/password or access_token/TOTP.',
+        ], ResponseAlias::HTTP_BAD_REQUEST);
     }
 
     protected function validateLogin(Request $request)

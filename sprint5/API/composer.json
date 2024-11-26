@@ -15,6 +15,7 @@
         "laravel/tinker": "^2.8",
         "mehradsadeghi/laravel-filter-querystring": "^1.1",
         "pact-foundation/pact-php": "^8.1",
+        "pragmarx/google2fa": "^8.0",
         "predis/predis": "^2.2",
         "socialconnect/auth": "3.3.5",
         "socialconnect/http-client": "^1.0",

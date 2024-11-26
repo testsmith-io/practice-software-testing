@@ -3,6 +3,9 @@ import {CustomerAccountService} from "../../shared/customer-account.service";
 import {first} from "rxjs/operators";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {PasswordValidators} from "../../_helpers/password.validators";
+import {HttpClient} from "@angular/common/http";
+import {environment} from "../../../environments/environment";
+import { Profile } from 'src/app/models/profile';
 
 @Component({
   selector: 'app-profile',
@@ -10,9 +13,10 @@ import {PasswordValidators} from "../../_helpers/password.validators";
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  id!: number;
+  profile!: Profile;
   profileForm!: FormGroup;
   passwordForm!: FormGroup;
+  totpForm!: FormGroup;
   isProfileUpdated: boolean = false;
   isPasswordUpdated: boolean = false;
   passwordError: string;
@@ -22,15 +26,22 @@ export class ProfileComponent implements OnInit {
 
   passwordStrengthIndicator: string;
 
+  apiURL = environment.apiUrl;
+  qrCodeUrl: string = '';
+  secret: string = '';
+  totpCode: string = '';
+  errorMessage: string = '';
+  successMessage: string = '';
   constructor(private customerAccountService: CustomerAccountService,
-              private auth: CustomerAccountService) {
+              private auth: CustomerAccountService,
+              private http: HttpClient) {
   }
 
   ngOnInit(): void {
     this.customerAccountService.getDetails()
       .pipe(first())
       .subscribe((profile) => {
-        this.id = profile.id;
+        this.profile = profile;
         this.profileForm.patchValue(profile);
       }, (error) => {
         if (error.status === 401 || error.status === 403) {
@@ -61,6 +72,12 @@ export class ProfileComponent implements OnInit {
       ]),
       new_password_confirmation: new FormControl('', [Validators.required, PasswordValidators.passwordsMatch()]),
     });
+
+    this.totpForm = new FormGroup({
+      totpCode: new FormControl('', [Validators.required])
+    });
+
+    this.getTotpSetup();
   }
 
   get f() {
@@ -72,7 +89,7 @@ export class ProfileComponent implements OnInit {
   }
 
   updateProfile() {
-    this.customerAccountService.update(this.id, this.profileForm.value).subscribe({
+    this.customerAccountService.update(this.profile.id, this.profileForm.value).subscribe({
       next: (res) => {
         if (res.success) {
           this.isProfileUpdated = true;
@@ -94,7 +111,7 @@ export class ProfileComponent implements OnInit {
   }
 
   updatePassword() {
-    this.customerAccountService.updatePassword(this.id, this.passwordForm.value).subscribe({
+    this.customerAccountService.updatePassword(this.profile.id, this.passwordForm.value).subscribe({
       next: (res) => {
         if (res.success) {
           this.isPasswordUpdated = true;
@@ -159,4 +176,30 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  getTotpSetup(): void {
+    this.http.post(this.apiURL +'/totp/setup', {}).subscribe(
+      (response: any) => {
+        this.qrCodeUrl = response.qrCodeUrl;
+        this.secret = response.secret;
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load TOTP setup details.';
+        console.error(error);
+      }
+    );
+  }
+
+  verifyTotp(): void {
+    this.http.post(this.apiURL +'/totp/verify', { totp: this.totpForm.get('totpCode').value }).subscribe(
+      () => {
+        this.successMessage = 'TOTP verified and enabled successfully.';
+        this.errorMessage = '';
+      },
+      (error) => {
+        this.errorMessage = 'Invalid TOTP code. Please try again.';
+        this.successMessage = '';
+        console.error(error);
+      }
+    );
+  }
 }

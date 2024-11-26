@@ -65,7 +65,9 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <button type="submit" class="btn btn-primary" data-test="update-profile-submit">{{ t('pages.my-account.profile.update-profile-btn') }}</button>
+        <button type="submit" class="btn btn-primary"
+                data-test="update-profile-submit">{{ t('pages.my-account.profile.update-profile-btn') }}
+        </button>
         @if (isProfileUpdated && !hideProfileAlert) {
           <div [ngClass]="fadeOutMessage()" class="alert alert-success mt-3"
                role="alert" [innerHTML]="t('pages.my-account.profile.update-profile-success')">
@@ -73,7 +75,8 @@
         }
         @if (profileError && !hideProfileAlert) {
           <div [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
-               role="alert" style="white-space:pre-wrap">{{ profileError }}</div>
+               role="alert" style="white-space:pre-wrap">{{ profileError }}
+          </div>
         }
       </div>
     </div>
@@ -85,14 +88,16 @@
     <div class="row">
       <div class="col-lg-6">
         <div class="row mb-3">
-          <label for="current-password" class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.current-password') }}</label>
+          <label for="current-password"
+                 class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.current-password') }}</label>
           <div class="col-sm-9">
             <input type="password" class="form-control" formControlName="current_password" data-test="current-password"
                    id="current-password">
           </div>
         </div>
         <div class="row mb-3">
-          <label for="new-password" class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.new-password') }}</label>
+          <label for="new-password"
+                 class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.new-password') }}</label>
           <div class="col-sm-9">
             <app-password-input
               formControlName="new_password"
@@ -146,7 +151,8 @@
           </div>
         </div>
         <div class="row mb-3">
-          <label for="new-password-confirm" class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.confirm-new-password') }}</label>
+          <label for="new-password-confirm"
+                 class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.confirm-new-password') }}</label>
           <div class="col-sm-9">
             <app-password-input
               formControlName="new_password_confirmation"
@@ -166,10 +172,13 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <button type="submit" class="btn btn-primary" data-test="change-password-submit">{{ t('pages.my-account.profile.change-password-btn') }}</button>
+        <button type="submit" class="btn btn-primary"
+                data-test="change-password-submit">{{ t('pages.my-account.profile.change-password-btn') }}
+        </button>
         @if (isPasswordUpdated && !hidePasswordAlert) {
           <div [ngClass]="fadeOutMessage()"
-               class="alert alert-success mt-3" role="alert" [innerHTML]="t('pages.my-account.profile.change-password-success')">
+               class="alert alert-success mt-3" role="alert"
+               [innerHTML]="t('pages.my-account.profile.change-password-success')">
           </div>
         }
         @if (passwordError && !hidePasswordAlert) {
@@ -181,4 +190,34 @@
       </div>
     </div>
   </form>
+</div>
+<div class="container" *transloco="let t">
+  <div class="row mt-3">
+    <h2>{{t('pages.my-account.profile.setup_two_factor_authentication')}}</h2>
+    @if (!profile.totp_enabled) {
+    <p>{{t('pages.my-account.profile.scan_qr_code')}}</p>
+
+    <qrcode [qrdata]="qrCodeUrl" [width]="156" [errorCorrectionLevel]="'M'"></qrcode>
+
+    <p>{{t('pages.my-account.profile.manually_enter_key')}}</p>
+    <p data-test="totp-secret"><strong>{{ secret }}</strong></p>
+    <form [formGroup]="totpForm" (ngSubmit)="verifyTotp()" autocomplete="off">
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="row mb-3">
+            <div class="col-sm-9">
+              <input type="text" class="form-control" data-test="totp-code" placeholder="{{t('pages.my-account.profile.enter_totp_code')}}" formControlName="totpCode"/>
+              <button type="submit" class="btn btn-primary" data-test="verify-totp">{{t('pages.my-account.profile.verify_totp')}}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </form>
+    <p *ngIf="errorMessage" data-test="totp-error" style="color: red;">{{ errorMessage }}</p>
+    <p *ngIf="successMessage" data-test="totp-success" style="color: green;">{{ successMessage }}</p>
+    } @else {
+      <p>{{t('pages.my-account.profile.two_factor_authentication_enabled')}}</p>
+    }
+  </div>
 </div>

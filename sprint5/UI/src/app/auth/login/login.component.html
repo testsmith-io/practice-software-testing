@@ -15,6 +15,7 @@
         <div class="separator" aria-label="Alternative login methods">{{ t('pages.login.alternative') }}</div>
       }
 
+      @if (!showTotpInput) {
       <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off" data-test="login-form">
         <div class="mb-3">
           <label for="email" class="form-label">{{ t('fields.email.label') }} *</label>
@@ -63,18 +64,37 @@
           <input type="submit" data-test="login-submit" class="btnSubmit" value="{{ t('pages.login.btn') }}"
                  aria-label="Login"/>
         </div>
-        @if (error) {
-          <div data-test="login-error" class="alert alert-danger" aria-live="assertive">
-            <div class="help-block">{{ error }}</div>
-          </div>
-        }
-        <div class="input-group mb-3">
-          <p>{{ t('pages.login.no-account') }} <a data-test="register-link" routerLink="/auth/register"
-                                                  aria-label="Register your account">{{ t('pages.login.register') }}</a><br/>
-            <a data-test="forgot-password-link" routerLink="/auth/forgot-password" class="ForgetPwd"
-               aria-label="Forgot your Password?">{{ t('pages.login.forgot-password') }}</a></p>
-        </div>
+
       </form>
+      }
+
+      @if (showTotpInput) {
+        <form [formGroup]="form" (ngSubmit)="verifyTotp()">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="row mb-3">
+                <label for="totp">{{ t('pages.login.totp_code') }}</label>
+                <div class="col-sm-9">
+                  <input id="totp" type="text" formControlName="totp" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <input type="submit" [disabled]="submitted && form.invalid" data-test="verify-totp" class="btnSubmit" value="{{ t('pages.login.verify_totp') }}"
+                 [attr.aria-label]="t('pages.login.verify_totp')"/>
+        </form>
+      }
+      @if (error) {
+        <div data-test="login-error" class="alert alert-danger" aria-live="assertive">
+          <div class="help-block">{{ error }}</div>
+        </div>
+      }
+      <div class="input-group mb-3">
+        <p>{{ t('pages.login.no-account') }} <a data-test="register-link" routerLink="/auth/register"
+                                                aria-label="Register your account">{{ t('pages.login.register') }}</a><br/>
+          <a data-test="forgot-password-link" routerLink="/auth/forgot-password" class="ForgetPwd"
+             aria-label="Forgot your Password?">{{ t('pages.login.forgot-password') }}</a></p>
+      </div>
     </div>
   </div>
 </div>

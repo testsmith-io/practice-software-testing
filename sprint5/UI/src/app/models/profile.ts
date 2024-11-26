@@ -9,4 +9,5 @@ export class Profile {
   state!: string;
   country!: string;
   email!: string;
+  totp_enabled!: boolean;
 }
