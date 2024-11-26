@@ -2968,6 +2968,131 @@
                 ]
             }
         },
+        "/totp/setup": {
+            "post": {
+                "tags": [
+                    "TOTP"
+                ],
+                "summary": "Setup TOTP for the authenticated user",
+                "description": "Generates a TOTP secret and QR code URL for the user to scan and enables TOTP setup.",
+                "operationId": "6d47e2cfc2f1079261c4c93ce0007ae0",
+                "responses": {
+                    "200": {
+                        "description": "TOTP setup successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "secret": {
+                                            "description": "The TOTP secret key",
+                                            "type": "string"
+                                        },
+                                        "qrCodeUrl": {
+                                            "description": "URL for the QR code",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "TOTP already enabled or another error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Error message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/totp/verify": {
+            "post": {
+                "tags": [
+                    "TOTP"
+                ],
+                "summary": "Verify TOTP code for the authenticated user",
+                "description": "Validates the submitted TOTP code and enables TOTP if verification is successful.",
+                "operationId": "0a819cdd91a22a616d7ddbb08330394a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "access_token": {
+                                        "description": "The user's access token",
+                                        "type": "string"
+                                    },
+                                    "totp": {
+                                        "description": "The 6-digit TOTP code",
+                                        "type": "string",
+                                        "example": "123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "TOTP verified successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string",
+                                            "example": "TOTP enabled successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid TOTP code or another error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Error message",
+                                            "type": "string",
+                                            "example": "Invalid TOTP"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/users": {
             "get": {
                 "tags": [

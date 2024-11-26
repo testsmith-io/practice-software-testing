@@ -156,7 +156,9 @@
       "generic-error": "Geçersiz e-posta veya şifre",
       "no-account": "Henüz hesabınız yok mu?",
       "register": "Hesap oluşturun",
-      "forgot-password": "Şifrenizi mi unuttunuz?"
+      "forgot-password": "Şifrenizi mi unuttunuz?",
+      "verify_totp": "TOTP'yi Doğrula",
+      "totp_code": "TOTP Kodu"
     },
     "register": {
       "title": "Müşteri Kaydı",
@@ -294,7 +296,15 @@
         "new-password": "Yeni Şifre",
         "confirm-new-password": "Yeni Şifreyi Onaylayın",
         "change-password-btn": "Şifreyi Değiştir",
-        "change-password-success": "Şifreniz <strong>başarıyla</strong> güncellendi!"
+        "change-password-success": "Şifreniz <strong>başarıyla</strong> güncellendi!",
+        "two_factor_authentication_enabled": "İki Faktörlü Kimlik Doğrulama zaten etkin.",
+        "verify_totp": "TOTP'yi Doğrula",
+        "enter_totp_code": "TOTP kodunu girin",
+        "manually_enter_key": "Veya bu anahtarı uygulamanıza manuel olarak girin:",
+        "scan_qr_code": "QR kodunu aşağıdaki kimlik doğrulama uygulamanızla tarayın (ör. Google Authenticator, Authy):",
+        "setup_two_factor_authentication": "İki Faktörlü Kimlik Doğrulamayı Ayarla",
+        "totp_verified": "TOTP başarıyla doğrulandı ve etkinleştirildi.",
+        "invalid_totp_code": "Geçersiz TOTP kodu. Lütfen tekrar deneyin."
       },
       "messages": {
         "title": "Mesajlar",

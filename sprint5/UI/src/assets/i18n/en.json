@@ -156,7 +156,9 @@
       "generic-error": "Invalid email or password",
       "no-account": "Not yet an account?",
       "register": "Register your account",
-      "forgot-password": "Forgot your Password?"
+      "forgot-password": "Forgot your Password?",
+      "totp_code": "TOTP Code",
+      "verify_totp": "Verify TOTP"
     },
     "register": {
       "title": "Customer registration",
@@ -294,7 +296,15 @@
         "new-password": "New Password",
         "confirm-new-password": "Confirm New Password",
         "change-password-btn": "Change Password",
-        "change-password-success": "Your password is <strong>successfully</strong> updated!"
+        "change-password-success": "Your password is <strong>successfully</strong> updated!",
+        "two_factor_authentication_enabled": "Two-Factor Authentication already enabled.",
+        "verify_totp": "Verify TOTP",
+        "enter_totp_code": "Enter TOTP code",
+        "manually_enter_key": "Or manually enter this key in your app:",
+        "scan_qr_code": "Scan the QR code below with your authenticator app (e.g., Google Authenticator, Authy):",
+        "setup_two_factor_authentication": "Set up Two-Factor Authentication",
+        "totp_verified": "TOTP verified and enabled successfully.",
+        "invalid_totp_code": "Invalid TOTP code. Please try again."
       },
       "messages": {
         "title": "Messages",

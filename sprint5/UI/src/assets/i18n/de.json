@@ -156,7 +156,9 @@
       "generic-error": "Ungültige EMail oder Passwort",
       "no-account": "Sie haben kein Konto?",
       "register": "Registrieren Sie ein Konto",
-      "forgot-password": "Passwort vergessen?"
+      "forgot-password": "Passwort vergessen?",
+      "verify_totp": "TOTP überprüfen",
+      "totp_code": "TOTP-Code"
     },
     "register": {
       "title": "Kunden Registrierung",
@@ -294,7 +296,15 @@
         "new-password": "Neues Passwort",
         "confirm-new-password": "Bestätigen Sie das neue Passwort",
         "change-password-btn": "Passwort ändern",
-        "change-password-success": "Ihr Passwort wurde <strong>erfolgreich</strong> geändert!"
+        "change-password-success": "Ihr Passwort wurde <strong>erfolgreich</strong> geändert!",
+        "two_factor_authentication_enabled": "Zwei-Faktor-Authentifizierung bereits aktiviert.",
+        "verify_totp": "TOTP überprüfen",
+        "enter_totp_code": "Geben Sie den TOTP-Code ein",
+        "manually_enter_key": "Oder geben Sie diesen Schlüssel manuell in Ihrer App ein:",
+        "scan_qr_code": "Scannen Sie den QR-Code unten mit Ihrer Authentifizierungs-App (z. B. Google Authenticator, Authy):",
+        "setup_two_factor_authentication": "Zwei-Faktor-Authentifizierung einrichten",
+        "totp_verified": "TOTP erfolgreich überprüft und aktiviert.",
+        "invalid_totp_code": "Ungültiger TOTP-Code. Bitte versuchen Sie es erneut."
       },
       "messages": {
         "title": "Nachrichten",

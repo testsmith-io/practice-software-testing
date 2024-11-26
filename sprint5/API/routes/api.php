@@ -11,6 +11,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SocialConnectController;
+use App\Http\Controllers\TOTPController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -150,3 +151,8 @@ Route::controller(SocialConnectController::class)->prefix('auth')->group(functio
     Route::get('/cb/github', 'callbackGithub');
 });
 
+Route::controller(TOTPController::class)->prefix('totp')->group(function () {
+    Route::post('/setup', 'setup');
+    Route::post('/verify', 'verify');
+    Route::post('/login/totp', 'loginWithTOTP');
+});

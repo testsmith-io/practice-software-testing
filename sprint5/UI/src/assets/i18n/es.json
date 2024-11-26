@@ -156,7 +156,9 @@
       "generic-error": "Correo electrónico o contraseña no válidos",
       "no-account": "¿Aún no tienes una cuenta?",
       "register": "Registra tu cuenta",
-      "forgot-password": "¿Olvidaste tu contraseña?"
+      "forgot-password": "¿Olvidaste tu contraseña?",
+      "verify_totp": "Verificar TOTP",
+      "totp_code": "Código TOTP"
     },
     "register": {
       "title": "Registro de cliente",
@@ -294,7 +296,15 @@
         "new-password": "Nueva contraseña",
         "confirm-new-password": "Confirmar nueva contraseña",
         "change-password-btn": "Cambiar contraseña",
-        "change-password-success": "¡Tu contraseña se ha actualizado <strong>exitosamente</strong>!"
+        "change-password-success": "¡Tu contraseña se ha actualizado <strong>exitosamente</strong>!",
+        "two_factor_authentication_enabled": "La autenticación de dos factores ya está habilitada.",
+        "verify_totp": "Verificar TOTP",
+        "enter_totp_code": "Ingrese el código TOTP",
+        "manually_enter_key": "O ingrese esta clave manualmente en su aplicación:",
+        "scan_qr_code": "Escanee el código QR a continuación con su aplicación de autenticación (p. ej., Google Authenticator, Authy):",
+        "setup_two_factor_authentication": "Configurar autenticación de dos factores",
+        "totp_verified": "TOTP verificado y habilitado con éxito.",
+        "invalid_totp_code": "Código TOTP no válido. Inténtalo de nuevo."
       },
       "messages": {
         "title": "Mensajes",
