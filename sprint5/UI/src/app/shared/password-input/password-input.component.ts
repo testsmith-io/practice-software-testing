@@ -1,4 +1,4 @@
-import {booleanAttribute, Component, forwardRef, Input} from '@angular/core';
+import {booleanAttribute, Component, forwardRef, HostBinding, Input} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -14,11 +14,13 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ]
 })
 export class PasswordInputComponent implements ControlValueAccessor {
-  @Input() id: string = 'password';
+  @Input() id: string = '';
   @Input() placeholder: string = '';
   @Input({transform: booleanAttribute}) isInvalid: boolean = false;
   @Input() ariaDescribedBy: string | null = null;
   @Input({transform: booleanAttribute}) ariaInvalid: boolean = false;
+
+  @HostBinding('attr.id') hostId: string = null;
 
   passwordFieldType: string = 'password';
   value: string = '';  // This will hold the value of the input field
