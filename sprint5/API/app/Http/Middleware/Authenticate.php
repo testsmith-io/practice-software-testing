@@ -6,6 +6,8 @@ use Closure;
 use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 /**
  * @OA\SecurityScheme(
@@ -60,6 +62,26 @@ class Authenticate
                 'message' => 'Account disabled.'
             ], ResponseAlias::HTTP_FORBIDDEN);
         }
+
+        // Check for "restricted" token claim
+        try {
+            $token = JWTAuth::getToken();
+            if ($token) {
+                $payload = JWTAuth::getPayload($token);
+
+                // If the token is restricted, block it
+                if ($payload->get('restricted', false)) {
+                    return response()->json([
+                        'message' => 'Unauthorized token usage'
+                    ], ResponseAlias::HTTP_UNAUTHORIZED);
+                }
+            }
+        } catch (JWTException $e) {
+            return response()->json([
+                'message' => 'Token error: ' . $e->getMessage()
+            ], ResponseAlias::HTTP_UNAUTHORIZED);
+        }
+
         return $next($request);
     }
 }

@@ -43,6 +43,15 @@ class TOTPController extends Controller
     {
         $user = $request->user();
 
+        $restrictedEmails = [
+            'customer@practicesoftwaretesting.com',
+            'admin@practicesoftwaretesting.com'
+        ];
+
+        if (in_array($user->email, $restrictedEmails)) {
+            return response()->json(['error' => 'TOTP cannot be set up for this account'], 403);
+        }
+
         if ($user->totp_enabled) {
             return response()->json(['error' => 'TOTP already enabled'], 400);
         }

@@ -80,8 +80,7 @@ Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belong
 
 ## Start pact-mock-service
 
-`pact-mock-service start --host localhost --port 7203 --consumer AnyConsumer --provider ProductAPI --pact-dir ./pacts --log ./storage/logs/pact.log
-`
+`pact-mock-service start --host localhost --port 7203 --consumer AnyConsumer --provider ProductAPI --pact-dir ./pacts --log ./storage/logs/pact.log`
 
 ## Stop pact-mock-service
 

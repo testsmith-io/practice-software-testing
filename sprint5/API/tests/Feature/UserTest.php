@@ -144,9 +144,11 @@ class UserTest extends TestCase
     public function testUserCanLogoutSuccessfully()
     {
         $response = $this->getJson('/users/logout', $this->headers($this->user));
+
         $response->assertStatus(ResponseAlias::HTTP_OK);
 
         $response->assertJson(['message' => 'Successfully logged out']);
+
         JWTAuth::fromUser($this->user);
         $this->assertFalse(JWTAuth::check());
     }

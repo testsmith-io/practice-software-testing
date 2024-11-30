@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller {
 
@@ -308,10 +309,14 @@ class UserController extends Controller {
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function logout() {
-        app('auth')->logout();
-
-        return response()->json(['message' => 'Successfully logged out']);
+    public function logout()
+    {
+        try {
+            JWTAuth::invalidate(JWTAuth::getToken());
+            return response()->json(['message' => 'Successfully logged out'], ResponseAlias::HTTP_OK);
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'Failed to logout, please try again.'], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**

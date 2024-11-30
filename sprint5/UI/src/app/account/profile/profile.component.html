@@ -194,7 +194,7 @@
 <div class="container" *transloco="let t">
   <div class="row mt-3">
     <h2>{{t('pages.my-account.profile.setup_two_factor_authentication')}}</h2>
-    @if (!profile.totp_enabled) {
+    @if (!profile.totp_enabled && !errorMessage) {
     <p>{{t('pages.my-account.profile.scan_qr_code')}}</p>
 
     <qrcode [qrdata]="qrCodeUrl" [width]="156" [errorCorrectionLevel]="'M'"></qrcode>
@@ -214,10 +214,10 @@
       </div>
 
     </form>
-    <p *ngIf="errorMessage" data-test="totp-error" style="color: red;">{{ errorMessage }}</p>
-    <p *ngIf="successMessage" data-test="totp-success" style="color: green;">{{ successMessage }}</p>
-    } @else {
+    } @else if (profile.totp_enabled) {
       <p>{{t('pages.my-account.profile.two_factor_authentication_enabled')}}</p>
     }
+    <p *ngIf="errorMessage" data-test="totp-error" style="color: red;">{{ errorMessage }}</p>
+    <p *ngIf="successMessage" data-test="totp-success" style="color: green;">{{ successMessage }}</p>
   </div>
 </div>
