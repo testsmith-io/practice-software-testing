@@ -183,8 +183,11 @@ export class ProfileComponent implements OnInit {
         this.secret = response.secret;
       },
       (error) => {
-        this.errorMessage = 'Failed to load TOTP setup details.';
-        console.error(error);
+        if (error.status === 403) {
+          this.errorMessage = 'Access denied: If you want to configure TOTP, please create your own account.';
+        } else {
+          this.errorMessage = 'Failed to load TOTP setup details.';
+        }
       }
     );
   }
@@ -198,7 +201,6 @@ export class ProfileComponent implements OnInit {
       (error) => {
         this.errorMessage = 'Invalid TOTP code. Please try again.';
         this.successMessage = '';
-        console.error(error);
       }
     );
   }

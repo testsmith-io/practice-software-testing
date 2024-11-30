@@ -194,7 +194,8 @@ class UserController extends Controller
                 // Invalidate the token and issue a temporary one for TOTP verification
                 app('auth')->invalidate($token);
 
-                $tempToken = app('auth')->attempt($credentials);
+                $tempToken = app('auth')->claims(['restricted' => true])->attempt($credentials);
+
                 return response()->json([
                     'message' => 'TOTP required. Please provide your TOTP code.',
                     'requires_totp' => true,
@@ -214,6 +215,12 @@ class UserController extends Controller
             $accessToken = $request->input('access_token');
             $totpCode = $request->input('totp');
 
+            // Decode the token and check the custom claim
+            $payload = JWTAuth::setToken($accessToken)->getPayload();
+            if (!$payload->get('restricted', false)) {
+                return response()->json(['error' => 'Unauthorized token usage'], ResponseAlias::HTTP_UNAUTHORIZED);
+            }
+
             $user = User::find(JWTAuth::setToken($accessToken)->toUser()->id);
 
             // Validate user and TOTP
@@ -227,7 +234,7 @@ class UserController extends Controller
             }
 
             // Generate a new token after TOTP verification
-            $finalToken = app('auth')->login($user);
+            $finalToken = app('auth')->claims(['restricted' => false])->login($user);
 
             return $this->successfulLoginResponse($finalToken);
         }
@@ -432,9 +439,12 @@ class UserController extends Controller
      */
     public function logout()
     {
-        app('auth')->logout();
-
-        return response()->json(['message' => 'Successfully logged out']);
+        try {
+            JWTAuth::invalidate(JWTAuth::getToken());
+            return response()->json(['message' => 'Successfully logged out'], ResponseAlias::HTTP_OK);
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'Failed to logout, please try again.'], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
