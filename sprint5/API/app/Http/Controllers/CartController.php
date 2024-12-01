@@ -3,17 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
-use App\Models\CartItem;
 use App\Models\Product;
-use Illuminate\Database\QueryException;
+use App\Services\CartService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class CartController extends Controller
 {
 
-    public function __construct()
+    private $cartService;
+
+    public function __construct(CartService $cartService)
     {
+        $this->cartService = $cartService;
         $this->middleware('role:admin', ['only' => ['destroy']]);
     }
 
@@ -46,10 +49,8 @@ class CartController extends Controller
      */
     public function createCart(Request $request)
     {
-        $cart = new Cart($request->only(['lat', 'lng']));
-        $cart->save();
-
-        return $this->preferredFormat(['id' => $cart->id], ResponseAlias::HTTP_CREATED);
+        $cartId = $this->cartService->createCart($request->only(['lat', 'lng']));
+        return $this->preferredFormat(['id' => $cartId], ResponseAlias::HTTP_CREATED);
     }
 
     /**
@@ -105,49 +106,22 @@ class CartController extends Controller
      */
     public function addItem(Request $request, $id)
     {
-        // Retrieve the cart and its items
-        $cart = Cart::with('cartItems')->findOrFail($id);
+        try {
+            $this->cartService->addItemToCart(
+                $id,
+                $request->input('product_id'),
+                $request->input('quantity'),
+                $request->input('lat'),
+                $request->input('lng')
+            );
 
-        // Get product_id and quantity from the request
-        $product_id = $request->input('product_id');
-        $quantity = $request->input('quantity');
-
-        // Retrieve the product by its ID
-        $product = Product::findOrFail($product_id);
-
-        // Check if the product name is 'Thor Hammer'
-        if ($product->name === 'Thor Hammer') {
-            // Check if there's already a Thor Hammer in the cart
-            $existingThorHammer = $cart->cartItems()->where('product_id', $product_id)->first();
-
-            if ($existingThorHammer || $quantity > 1 ) {
-                // If Thor Hammer is already in the cart, don't allow adding more
-                return $this->preferredFormat(['message' => 'You can only have one Thor Hammer in the cart.'], ResponseAlias::HTTP_BAD_REQUEST);
-            }
-
-            // Add Thor Hammer to the cart if it's not already there
-            $cart->cartItems()->create([
-                'product_id' => $product_id,
-                'quantity' => 1 // Only allow one Thor Hammer
-            ]);
-        } else {
-            // For other products, allow adding multiple quantities
-            $existingItem = $cart->cartItems()->firstOrCreate(['product_id' => $product_id]);
-            $existingItem->increment('quantity', $quantity);
+            return $this->preferredFormat(['result' => 'item added or updated'], ResponseAlias::HTTP_OK);
+        } catch (ModelNotFoundException $e) {
+            return $this->preferredFormat(['message' => 'Cart not found'], ResponseAlias::HTTP_NOT_FOUND);
+        } catch (\Exception $e) {
+            return $this->preferredFormat(['message' => $e->getMessage()], ResponseAlias::HTTP_BAD_REQUEST);
         }
-
-        // Apply discounts if the location offers apply
-        if ($cart->lat && $cart->lng && $existingItem->product->is_location_offer) {
-            $existingItem->discount_percentage = $this->calculateDiscountPercentage($cart->lat, $cart->lng);
-            $existingItem->save();
-        }
-
-        // Update cart discounts
-        $this->updateCartDiscounts($cart);
-
-        return $this->preferredFormat(['result' => 'item added or updated'], ResponseAlias::HTTP_OK);
     }
-
 
     /**
      * @OA\Get(
@@ -175,14 +149,7 @@ class CartController extends Controller
      */
     public function getCart($id)
     {
-        $cart = Cart::with(['cartItems', 'cartItems.product'])->findOrFail($id);
-
-        foreach ($cart->cartItems as $cartItem) {
-            if ($cartItem->product && $cartItem->discount_percentage) {
-                $cartItem->discounted_price = round($cartItem->product->price * (1 - ($cartItem->discount_percentage / 100)), 2);
-            }
-        }
-
+        $cart = $this->cartService->getCartById($id);
         return $this->preferredFormat($cart);
     }
 
@@ -225,36 +192,19 @@ class CartController extends Controller
      */
     public function updateQuantity(Request $request, $cartId)
     {
-        // Retrieve the cart and its items
-        $cart = Cart::with('cartItems')->find($cartId);
+        try {
+            $success = $this->cartService->updateCartItemQuantity(
+                $cartId,
+                $request->input('product_id'),
+                $request->input('quantity')
+            );
 
-        // Check if the cart exists
-        if (!isset($cart)) {
+            return $this->preferredFormat(['result' => 'item added or updated'], ResponseAlias::HTTP_OK);
+        } catch (ModelNotFoundException $e) {
             return $this->preferredFormat(['message' => 'Cart doesn\'t exist'], ResponseAlias::HTTP_NOT_FOUND);
+        } catch (\Exception $e) {
+            return $this->preferredFormat(['message' => $e->getMessage()], ResponseAlias::HTTP_BAD_REQUEST);
         }
-
-        // Get product_id and quantity from the request
-        $product_id = $request->input('product_id');
-        $newQuantity = $request->input('quantity');
-
-        // Retrieve the product by its ID
-        $product = Product::findOrFail($product_id);
-
-        // Check if the product name is 'Thor Hammer'
-        if ($product->name === 'Thor Hammer') {
-            // Prevent updating Thor Hammer's quantity to more than 1
-            if ($newQuantity > 1) {
-                return $this->preferredFormat(['message' => 'You can only have one Thor Hammer in the cart.'], ResponseAlias::HTTP_BAD_REQUEST);
-            }
-        }
-
-        // Update the product quantity in the cart
-        $updateStatus = $cart->cartItems()
-            ->where('product_id', $product_id)
-            ->update(['quantity' => $newQuantity]);
-
-        // Return the response
-        return $this->preferredFormat(['success' => (bool)$updateStatus], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -282,15 +232,12 @@ class CartController extends Controller
      */
     public function deleteCart($cartId)
     {
-        $cart = Cart::with('cartItems')->find($cartId);
-
-        if (!isset($cart)) {
+        try {
+            $this->cartService->deleteCart($cartId);
+            return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return $this->preferredFormat(['message' => 'Cart doesnt exists'], ResponseAlias::HTTP_NOT_FOUND);
         }
-
-        $cart->cartItems()->delete();
-        $cart->delete();
-        return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
     }
 
     /**
@@ -326,53 +273,12 @@ class CartController extends Controller
      */
     public function removeProductFromCart($cartId, $productId)
     {
-        // Find the cart
-        $cart = Cart::with('cartItems')->find($cartId);
-
-        if (!isset($cart)) {
+        try {
+            $this->cartService->removeProductFromCart($cartId, $productId);
+            return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return $this->preferredFormat(['message' => 'Cart doesnt exists'], ResponseAlias::HTTP_NOT_FOUND);
         }
-
-        $cart->cartItems()->where('product_id', $productId)->delete();
-        $this->updateCartDiscounts($cart);
-        return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
     }
 
-    private function updateCartDiscounts($cart)
-    {
-        $cart->load('cartItems.product');
-        $hasProduct = $cart->cartItems->contains(fn($item) => !$item->product->is_rental);
-        $hasRental = $cart->cartItems->contains(fn($item) => $item->product->is_rental);
-
-        $cart->additional_discount_percentage = $hasProduct && $hasRental ? 15 : null;
-        $cart->save();
-    }
-
-    private function calculateDiscountPercentage($lat, $lng)
-    {
-        $coordinates = [
-            "new york" => ["lat" => 41, "lng" => 74, "discount_percentage" => 5],
-            "mumbai" => ["lat" => 19, "lng" => 73, "discount_percentage" => 10],
-            "tokyo" => ["lat" => 35, "lng" => 139, "discount_percentage" => 15],
-            "amsterdam" => ["lat" => 52, "lng" => 5, "discount_percentage" => 20],
-            "london" => ["lat" => 51, "lng" => 0, "discount_percentage" => 25],
-        ];
-
-        // Initialize a default discount percentage
-        $defaultDiscountPercentage = 0;
-
-        // Check if the provided coordinates match any of the predefined coordinates
-        foreach ($coordinates as $data) {
-            $cityLat = $data["lat"];
-            $cityLng = $data["lng"];
-            $discount = $data["discount_percentage"];
-
-            // Check if the provided lat and lng values are within +/- 2 of the predefined values
-            if (abs($lat - $cityLat) <= 0.5 && abs($lng - $cityLng) <= 0.5) {
-                return $discount;
-            }
-        }
-
-        return $defaultDiscountPercentage;
-    }
 }
