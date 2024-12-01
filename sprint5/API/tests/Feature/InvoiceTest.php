@@ -78,7 +78,7 @@ class InvoiceTest extends TestCase {
         $paymentDetails = [
             'monthly_installments' => '6'
         ];
-        $this->testItCreatesNewInvoiceSuccessfully('Buy Now Pay Later', $paymentDetails);
+        $this->testItCreatesNewInvoiceSuccessfully('buy-now-pay-later', $paymentDetails);
     }
 
     public function testItCreatesNewInvoiceSuccessfullyGiftCard() {
@@ -86,7 +86,7 @@ class InvoiceTest extends TestCase {
             'gift_card_number' => '1234567890123456',
             'validation_code' => '1234'
         ];
-        $this->testItCreatesNewInvoiceSuccessfully('Gift Card', $paymentDetails);
+        $this->testItCreatesNewInvoiceSuccessfully('gift-card', $paymentDetails);
     }
 
     public function testItCreatesNewInvoiceSuccessfullyCreditCard() {
@@ -96,13 +96,13 @@ class InvoiceTest extends TestCase {
             'cvv' => '123',
             'card_holder_name' => 'John Doe'
         ];
-        $this->testItCreatesNewInvoiceSuccessfully('Credit Card', $paymentDetails);
+        $this->testItCreatesNewInvoiceSuccessfully('credit-card', $paymentDetails);
     }
 
     public function testItCreatesNewInvoiceSuccessfullyCash() {
         $paymentDetails = [
         ];
-        $this->testItCreatesNewInvoiceSuccessfully('Cash on Delivery', $paymentDetails);
+        $this->testItCreatesNewInvoiceSuccessfully('cash-on-delivery', $paymentDetails);
     }
 
     public function testItCreatesNewInvoiceSuccessfullyBankTransfer() {
@@ -113,7 +113,7 @@ class InvoiceTest extends TestCase {
             'account_name' => 'John Doe',
             'account_number' => '123456789'
         ];
-        $this->testItCreatesNewInvoiceSuccessfully('Bank Transfer', $paymentDetails);
+        $this->testItCreatesNewInvoiceSuccessfully('bank-transfer', $paymentDetails);
     }
 
     public function testAdminCanRetrieveAnyInvoice()
