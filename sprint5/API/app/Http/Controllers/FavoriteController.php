@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Favorite\DestroyFavorite;
 use App\Http\Requests\Favorite\StoreFavorite;
 use App\Models\Favorite;
+use App\Services\FavoriteService;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class FavoriteController extends Controller {
 
-    public function __construct() {
+    private $favoriteService;
+
+    public function __construct(FavoriteService $favoriteService)
+    {
+        $this->favoriteService = $favoriteService;
         $this->middleware('auth:users');
     }
 
@@ -35,8 +40,10 @@ class FavoriteController extends Controller {
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function index() {
-        return $this->preferredFormat(Favorite::with('product', 'product.product_image')->where('user_id', Auth::user()->id)->get());
+    public function index()
+    {
+        $favorites = $this->favoriteService->getAllFavorites();
+        return $this->preferredFormat($favorites);
     }
 
     /**
@@ -63,11 +70,10 @@ class FavoriteController extends Controller {
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function store(StoreFavorite $request) {
-        $input = $request->all();
-        $input['user_id'] = Auth::user()->id;
-
-        return $this->preferredFormat(Favorite::create($input), ResponseAlias::HTTP_CREATED);
+    public function store(StoreFavorite $request)
+    {
+        $favorite = $this->favoriteService->createFavorite($request->all());
+        return $this->preferredFormat($favorite, ResponseAlias::HTTP_CREATED);
     }
 
     /**
@@ -96,8 +102,10 @@ class FavoriteController extends Controller {
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function show($id) {
-        return $this->preferredFormat(Favorite::findOrFail($id));
+    public function show($id)
+    {
+        $favorite = $this->favoriteService->getFavoriteById($id);
+        return $this->preferredFormat($favorite);
     }
 
     /**
@@ -123,8 +131,9 @@ class FavoriteController extends Controller {
      *      security={{ "apiAuth": {} }}
      * ),
      */
-    public function destroy(DestroyFavorite $request, $id) {
-        Favorite::where('user_id', Auth::user()->id)->where('product_id', $id)->delete();
+    public function destroy(DestroyFavorite $request, $id)
+    {
+        $this->favoriteService->deleteFavorite($id);
         return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
     }
 }

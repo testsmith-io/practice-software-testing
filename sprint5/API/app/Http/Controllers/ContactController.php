@@ -7,6 +7,7 @@ use App\Http\Requests\Contact\StoreContactReply;
 use App\Mail\Contact;
 use App\Models\ContactRequestReply;
 use App\Models\ContactRequests;
+use App\Services\ContactService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -17,8 +18,11 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class ContactController extends Controller
 {
 
-    public function __construct()
+    private $contactService;
+
+    public function __construct(ContactService $contactService)
     {
+        $this->contactService = $contactService;
         $this->middleware('auth:users', ['except' => ['send', 'attachFile']]);
         $this->middleware('assign.guard:users');
     }
@@ -56,21 +60,8 @@ class ContactController extends Controller
      */
     public function send(StoreContact $request)
     {
-        if (Auth::check()) {
-            $input = $request->all();
-            $input['user_id'] = Auth::user()->id;
-        } else {
-            $input = $request->all();
-        }
-        $input['status'] = 'NEW';
-        $result = ContactRequests::create($input);
-
-        if (App::environment('local')) {
-            $email = ($request->input('email')) ? $request->input('email') : Auth::user()->email;
-            $name = ($request->input('name')) ? $request->input('name') : Auth::user()->first_name . ' ' . Auth::user()->last_name;
-            Mail::to([$email])->send(new Contact($name, $request->input('subject'), $request->input('message')));
-        }
-
+        $input = $request->all();
+        $result = $this->contactService->sendContactMessage($input, Auth::check());
         return $this->preferredFormat($result, ResponseAlias::HTTP_OK);
     }
 
@@ -123,21 +114,12 @@ class ContactController extends Controller
      */
     public function attachFile($id, Request $request)
     {
-        if ($request->hasFile('file')) {
-            if ($request->file('file')->getSize() != 0) {
-                $result['errors'][] = "Currently we only allow empty files.";
-            }
-            if ($request->file('file')->getClientOriginalExtension() != 'txt') {
-                $result['errors'][] = "The file extension is incorrect, we only accept txt files.";
-            }
-        } else {
-            $result['errors'][] = "No file attached.";
+        $errors = $this->contactService->attachFile($id, $request->file('file'));
+        if (!empty($errors)) {
+            return $this->preferredFormat(['errors' => $errors], ResponseAlias::HTTP_BAD_REQUEST);
         }
-        if (!empty($result['errors'])) {
-            return $this->preferredFormat($result, ResponseAlias::HTTP_BAD_REQUEST);
-        } else {
-            return $this->preferredFormat(['success' => 'true'], ResponseAlias::HTTP_OK);
-        }
+
+        return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -180,11 +162,9 @@ class ContactController extends Controller
      */
     public function index()
     {
-        if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
-            return $this->preferredFormat(ContactRequests::with('user')->orderBy('created_at', 'DESC')->paginate());
-        } else {
-            return $this->preferredFormat(ContactRequests::where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->paginate());
-        }
+        $role = app('auth')->parseToken()->getPayload()->get('role');
+        $messages = $this->contactService->getMessages($role, Auth::id());
+        return $this->preferredFormat($messages);
     }
 
     /**
@@ -215,11 +195,9 @@ class ContactController extends Controller
      */
     public function show($id)
     {
-        if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
-            return $this->preferredFormat(ContactRequests::with(['user', 'replies', 'replies.user'])->where('id', $id)->orderBy('created_at', 'DESC')->first());
-        } else {
-            return $this->preferredFormat(ContactRequests::with(['user', 'replies', 'replies.user'])->where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->first());
-        }
+        $role = app('auth')->parseToken()->getPayload()->get('role');
+        $message = $this->contactService->getMessageById($id, $role, Auth::id());
+        return $this->preferredFormat($message);
     }
 
     /**
@@ -256,11 +234,8 @@ class ContactController extends Controller
     public function storeReply(StoreContactReply $request, $id)
     {
         $input = $request->all(['message']);
-        $input['message_id'] = $id;
-        $input['user_id'] = Auth::user()->id;
-
-        ContactRequests::where('id', $id)->update(['status' => 'IN_PROGRESS']);
-        return $this->preferredFormat(ContactRequestReply::create($input), ResponseAlias::HTTP_CREATED);
+        $reply = $this->contactService->addReply($id, $input);
+        return $this->preferredFormat($reply, ResponseAlias::HTTP_CREATED);
     }
 
     /**
@@ -300,10 +275,11 @@ class ContactController extends Controller
     public function updateStatus($id, Request $request)
     {
         $request->validate([
-            'status' => Rule::in("NEW", "IN_PROGRESS", "RESOLVED")
+            'status' => 'in:NEW,IN_PROGRESS,RESOLVED',
         ]);
 
-        return $this->preferredFormat(['success' => (bool)ContactRequests::where('id', $id)->update(array('status' => $request['status']))]);
+        $success = $this->contactService->updateStatus($id, $request->input('status'));
+        return $this->preferredFormat(['success' => (bool)$success]);
     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\UserService;
 use PragmaRX\Google2FA\Google2FA;
 use App\Http\Requests\Customer\DestroyCustomer;
 use App\Http\Requests\Customer\PatchCustomer;
@@ -25,8 +26,11 @@ class UserController extends Controller
 {
     const MAX_LOGIN_ATTEMPTS = 3;
 
-    public function __construct()
+    protected $userService;
+
+    public function __construct(UserService $userService)
     {
+        $this->userService = $userService;
         $this->middleware('auth:users', ['except' => ['login', 'store', 'forgotPassword', 'refresh']]);
         $this->middleware('assign.guard:users');
         $this->middleware('role:admin', ['only' => ['index', 'destroy']]);
@@ -64,7 +68,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        return $this->preferredFormat(User::where('role', '=', 'user')->paginate());
+        $users = $this->userService->getAllUsers();
+        return $this->preferredFormat($users);
     }
 
     /**
@@ -97,15 +102,8 @@ class UserController extends Controller
      */
     public function store(StoreCustomer $request)
     {
-        $input = $request->all();
-        $input['role'] = 'user';
-
-        if (App::environment('local')) {
-            Mail::to([$input['email']])->send(new Register("{$input['first_name']} {$input['last_name']}", $input['email'], $input['password']));
-        }
-        // Hash the password
-        $input['password'] = app('hash')->make($input['password']);
-        return $this->preferredFormat(User::create($input), ResponseAlias::HTTP_CREATED);
+        $user = $this->userService->registerUser($request->all());
+        return $this->preferredFormat($user, ResponseAlias::HTTP_CREATED);
     }
 
     /**
@@ -158,127 +156,34 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
-        // Case 1: Login with email and password
-        if ($request->has(['email', 'password'])) {
-            $credentials = $request->only(['email', 'password']);
+        $credentials = $request->only(['email', 'password', 'access_token', 'totp']);
+        $response = $this->userService->login($credentials);
 
-            // Find the user
-            $user = User::where('email', $credentials['email'])->first();
-
-            // Handle login failures and account locking
-            if ($user && $user->role != "admin") {
-                if ($user->failed_login_attempts >= self::MAX_LOGIN_ATTEMPTS) {
-                    return $this->lockedAccountResponse();
-                }
-            }
-
-            // Attempt to authenticate
-            $token = app('auth')->attempt($credentials);
-
-            if (!$token) {
-                if ($user && $user->role != "admin") {
-                    $this->incrementLoginAttempts($user);
-                }
-                return $this->failedLoginResponse();
-            }
-
-            // Check if user is enabled
-            if (!$user->enabled) {
-                return response()->json([
-                    'error' => 'Account disabled.',
-                ], ResponseAlias::HTTP_FORBIDDEN);
-            }
-
-            // Handle TOTP-enabled users
-            if ($user->totp_enabled) {
-                // Invalidate the token and issue a temporary one for TOTP verification
-                app('auth')->invalidate($token);
-
-                $tempToken = app('auth')->claims(['restricted' => true])->attempt($credentials);
-
-                return response()->json([
-                    'message' => 'TOTP required. Please provide your TOTP code.',
-                    'requires_totp' => true,
-                    'access_token' => $tempToken,
-                ], ResponseAlias::HTTP_OK);
-            }
-
-            // Reset failed login attempts
-            $this->resetLoginAttempts($user);
-
-            // Return successful login response
-            return $this->successfulLoginResponse($token);
+        if (isset($response['error'])) {
+            $statusCode = match ($response['error']) {
+                'Account locked, too many failed attempts. Please contact the administrator.' => ResponseAlias::HTTP_LOCKED,
+                'Account disabled' => ResponseAlias::HTTP_FORBIDDEN,
+                'Invalid or expired token' => ResponseAlias::HTTP_BAD_REQUEST,
+                'Unauthorized token usage' => ResponseAlias::HTTP_UNAUTHORIZED,
+                'Invalid TOTP' => ResponseAlias::HTTP_UNAUTHORIZED,
+                default => ResponseAlias::HTTP_UNAUTHORIZED,
+            };
+            return response()->json(['error' => $response['error']], $statusCode);
         }
 
-        // Case 2: Login with access_token and TOTP
-        if ($request->has(['access_token', 'totp'])) {
-            $accessToken = $request->input('access_token');
-            $totpCode = $request->input('totp');
-
-            // Decode the token and check the custom claim
-            $payload = JWTAuth::setToken($accessToken)->getPayload();
-            if (!$payload->get('restricted', false)) {
-                return response()->json(['error' => 'Unauthorized token usage'], ResponseAlias::HTTP_UNAUTHORIZED);
-            }
-
-            $user = User::find(JWTAuth::setToken($accessToken)->toUser()->id);
-
-            // Validate user and TOTP
-            if (!$user || !$user->totp_enabled) {
-                return response()->json(['error' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
-            }
-
-            $google2fa = new Google2FA();
-            if (!$google2fa->verifyKey($user->totp_secret, $totpCode)) {
-                return response()->json(['error' => 'Invalid TOTP'], ResponseAlias::HTTP_UNAUTHORIZED);
-            }
-
-            // Generate a new token after TOTP verification
-            $finalToken = app('auth')->claims(['restricted' => false])->login($user);
-
-            return $this->successfulLoginResponse($finalToken);
+        // TOTP response
+        if (isset($response['requires_totp']) && $response['requires_totp']) {
+            return response()->json([
+                'message' => $response['message'],
+                'requires_totp' => $response['requires_totp'],
+                'access_token' => $response['access_token'],
+            ], ResponseAlias::HTTP_OK);
         }
 
-        // Invalid request payload
-        return response()->json([
-            'error' => 'Invalid login request. Provide either email/password or access_token/TOTP.',
-        ], ResponseAlias::HTTP_BAD_REQUEST);
+        // Successful login
+        return $this->respondWithToken($response['token']);
     }
 
-    protected function validateLogin(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-    }
-
-    protected function incrementLoginAttempts($user)
-    {
-        if ($user->failed_login_attempts < self::MAX_LOGIN_ATTEMPTS) {
-            $user->increment('failed_login_attempts');
-        }
-    }
-
-    protected function resetLoginAttempts($user)
-    {
-        $user->update(['failed_login_attempts' => 0]);
-    }
-
-    protected function lockedAccountResponse()
-    {
-        return response()->json(['error' => 'Account locked, too many failed attempts. Please contact the administrator.'], ResponseAlias::HTTP_LOCKED);
-    }
-
-    protected function failedLoginResponse()
-    {
-        return response()->json(['error' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
-    }
-
-    protected function successfulLoginResponse($token)
-    {
-        return $this->respondWithToken($token);
-    }
 
     /**
      * @OA\Post(
@@ -312,17 +217,9 @@ class UserController extends Controller
      */
     public function forgotPassword(Request $request)
     {
-        $request->validate([
-            'email' => 'exists:users,email'
-        ]);
-
-        $request['password'] = app('hash')->make('welcome02');
-
-        if (App::environment('local')) {
-            $user = User::where('email', $request['email'])->first();
-            Mail::to([$request['email']])->send(new ForgetPassword("{$user->first_name} {$user->last_name}", "welcome02"));
-        }
-        return $this->preferredFormat(['success' => (bool)User::where('email', $request['email'])->update(['password' => $request['password']])], ResponseAlias::HTTP_OK);
+        $request->validate(['email' => 'exists:users,email']);
+        $response = $this->userService->resetPassword($request->email);
+        return $this->preferredFormat($response, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -362,15 +259,15 @@ class UserController extends Controller
         $new = $request->get('new_password');
         $confirm = $request->get('new_password_confirmation');
 
-        if (!(Hash::check($current, Auth::user()->password))) {
-            return $this->preferredFormat([
+        if (!Hash::check($current, Auth::user()->password)) {
+            return response()->json([
                 'success' => false,
                 'message' => 'Your current password does not matches with the password.',
             ], ResponseAlias::HTTP_BAD_REQUEST);
         }
 
-        if (strcmp($current, $new) == 0) {
-            return $this->preferredFormat([
+        if ($current === $new) {
+            return response()->json([
                 'success' => false,
                 'message' => 'New Password cannot be same as your current password.',
             ], ResponseAlias::HTTP_BAD_REQUEST);
@@ -378,13 +275,14 @@ class UserController extends Controller
 
         $request->validate([
             'current_password' => 'required',
-            'new_password' => ['required', Password::min(8)->mixedCase()->numbers()->symbols()->uncompromised(), 'confirmed', new SubscriptSuperscriptRule()],
+            'new_password' => ['required', Password::min(8)->mixedCase()->numbers()->symbols()->uncompromised(), 'confirmed'],
         ]);
 
         $user = Auth::user();
-        $user->password = app('hash')->make($request->get('new_password'));
+        $user->password = Hash::make($new);
+        $user->save();
 
-        return $this->preferredFormat(['success' => $user->save()]);
+        return response()->json(['success' => true], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -404,7 +302,8 @@ class UserController extends Controller
      */
     public function me()
     {
-        return response()->json(Auth::user());
+        $user = $this->userService->getAuthenticatedUser();
+        return response()->json($user);
     }
 
     /**
@@ -439,12 +338,13 @@ class UserController extends Controller
      */
     public function logout()
     {
-        try {
-            JWTAuth::invalidate(JWTAuth::getToken());
-            return response()->json(['message' => 'Successfully logged out'], ResponseAlias::HTTP_OK);
-        } catch (JWTException $e) {
-            return response()->json(['error' => 'Failed to logout, please try again.'], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+        $response = $this->userService->logout();
+
+        if (isset($response['error'])) {
+            return response()->json(['error' => $response['error']], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
+
+        return response()->json(['message' => $response['message']], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -489,7 +389,8 @@ class UserController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(app('auth')->refresh(true, false));
+        $token = $this->userService->refreshToken();
+        return $this->respondWithToken($token);
     }
 
     /**
@@ -520,10 +421,14 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
-            return $this->preferredFormat(User::findOrFail($id));
-        } else {
-            return $this->preferredFormat(User::where('id', Auth::user()->id)->findOrFail($id));
+        try {
+            $currentUserId = Auth::id();
+            $currentUserRole = Auth::user()->role;
+            $user = $this->userService->getUserById($id, $currentUserId, $currentUserRole);
+
+            return response()->json($user, ResponseAlias::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], ResponseAlias::HTTP_NOT_FOUND);
         }
     }
 
@@ -563,14 +468,8 @@ class UserController extends Controller
      */
     public function search(Request $request)
     {
-        $q = $request->get('q');
-
-        return $this->preferredFormat(User::where('role', '=', 'user')->where(function ($query) use ($q) {
-            $query->where('first_name', 'like', "%$q%")
-                ->orWhere('last_name', 'like', "%$q%")
-                ->orWhere('email', 'like', "%$q%")
-                ->orWhere('city', 'like', "%$q%");
-        })->paginate());
+        $users = $this->userService->searchUsers($request->get('q'));
+        return $this->preferredFormat($users);
     }
 
     /**
@@ -605,29 +504,16 @@ class UserController extends Controller
      */
     public function update(UpdateCustomer $request, $id)
     {
-        $user = User::findOrFail($id);
+        try {
+            $currentUserId = app('auth')->id();
+            $currentUserRole = app('auth')->parseToken()->getPayload()->get('role');
 
-        // Check if the current user is the same as the one being updated or is an admin
-        if ((app('auth')->id() == $id) || (app('auth')->parseToken()->getPayload()->get('role') == "admin")) {
-            // If the 'role' field is present in the request, ensure the authenticated user is an admin
-            if ($request->has('role')) {
-                if (app('auth')->parseToken()->getPayload()->get('role') !== "admin") {
-                    return response()->json(['error' => 'Only admins can update the role.'], ResponseAlias::HTTP_FORBIDDEN);
-                }
-            }
+            // Use the service to handle the update logic
+            $response = $this->userService->updateUser($id, $request->all(), $currentUserId, $currentUserRole);
 
-            // Update the user with the request data
-            $updateData = $request->except('password');
-
-            // For non-admin users, remove the 'role' field from the update data if present
-            if (app('auth')->parseToken()->getPayload()->get('role') !== "admin") {
-                unset($updateData['role']);
-            }
-
-            $success = $user->update($updateData);
-            return $this->preferredFormat(['success' => (bool)$success], ResponseAlias::HTTP_OK);
-        } else {
-            return response()->json(['error' => 'You can only update your own data.'], ResponseAlias::HTTP_FORBIDDEN);
+            return $this->preferredFormat($response, ResponseAlias::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], ResponseAlias::HTTP_FORBIDDEN);
         }
     }
 
@@ -663,32 +549,18 @@ class UserController extends Controller
      */
     public function patch(PatchCustomer $request, $id)
     {
-        $user = User::findOrFail($id);
+        try {
+            $currentUserId = Auth::id();
+            $currentUserRole = Auth::user()->role;
+            $data = $request->validated();
 
-        // Check if the current user is the same as the one being updated or is an admin
-        if ((app('auth')->id() == $id) || (app('auth')->parseToken()->getPayload()->get('role') == "admin")) {
-            // If the 'role' field is present in the request, ensure the authenticated user is an admin
-            if ($request->has('role')) {
-                if (app('auth')->parseToken()->getPayload()->get('role') !== "admin") {
-                    return response()->json(['error' => 'Only admins can update the role.'], ResponseAlias::HTTP_FORBIDDEN);
-                }
-            }
+            $this->userService->patchUser($id, $data, $currentUserId, $currentUserRole);
 
-            // Update the user with the request data
-            $updateData = $request->except('password');
-
-            // For non-admin users, remove the 'role' field from the update data if present
-            if (app('auth')->parseToken()->getPayload()->get('role') !== "admin") {
-                unset($updateData['role']);
-            }
-
-            $success = $user->update($updateData);
-            return $this->preferredFormat(['success' => (bool)$success], ResponseAlias::HTTP_OK);
-        } else {
-            return response()->json(['error' => 'You can only update your own data.'], ResponseAlias::HTTP_FORBIDDEN);
+            return response()->json(['success' => true], ResponseAlias::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], ResponseAlias::HTTP_FORBIDDEN); // Ensure 403 is returned
         }
     }
-
 
     /**
      * @OA\Delete(
@@ -719,17 +591,28 @@ class UserController extends Controller
     public function destroy(DestroyCustomer $request, $id)
     {
         try {
-            if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
-                User::find($id)->delete();
-                return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
+            // Ensure the authenticated user is an admin
+            if (app('auth')->parseToken()->getPayload()->get('role') !== "admin") {
+                return $this->preferredFormat(['error' => 'Forbidden'], ResponseAlias::HTTP_FORBIDDEN);
             }
-        } catch (QueryException $e) {
-            if ($e->getCode() === '23000') {
+
+            // Use the service to delete the user
+            $this->userService->deleteUser($id);
+
+            return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
+        } catch (\Exception $e) {
+            // Handle specific exceptions for integrity constraint violations
+            if ($e->getCode() === '23000') { // SQLSTATE 23000 indicates a foreign key constraint failure
                 return $this->preferredFormat([
                     'success' => false,
                     'message' => 'Seems like this customer is used elsewhere.',
                 ], ResponseAlias::HTTP_CONFLICT);
             }
+
+            // Handle other exceptions
+            return $this->preferredFormat([
+                'error' => $e->getMessage(),
+            ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

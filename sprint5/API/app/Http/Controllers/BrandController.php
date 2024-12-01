@@ -6,17 +6,18 @@ use App\Http\Requests\Brand\DestroyBrand;
 use App\Http\Requests\Brand\PatchBrand;
 use App\Http\Requests\Brand\StoreBrand;
 use App\Http\Requests\Brand\UpdateBrand;
-use App\Models\Brand;
+use App\Services\BrandService;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class BrandController extends Controller
 {
+    private $brandService;
 
-    public function __construct()
+    public function __construct(BrandService $brandService)
     {
+        $this->brandService = $brandService;
         $this->middleware('role:admin', ['only' => ['destroy']]);
     }
 
@@ -41,10 +42,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brands = Cache::remember('brands.all', 60 * 60, function () {
-            return Brand::all();
-        });
-
+        $brands = $this->brandService->getAllBrands();
         return $this->preferredFormat($brands);
     }
 
@@ -72,9 +70,7 @@ class BrandController extends Controller
      */
     public function store(StoreBrand $request)
     {
-        $brand = Brand::create($request->all());
-        Cache::forget('brands.all');
-
+        $brand = $this->brandService->createBrand($request->all());
         return $this->preferredFormat($brand, ResponseAlias::HTTP_CREATED);
     }
 
@@ -104,10 +100,7 @@ class BrandController extends Controller
      */
     public function show($id)
     {
-        $brand = Cache::remember("brands.{$id}", 60 * 60, function () use ($id) {
-            return Brand::findOrFail($id);
-        });
-
+        $brand = $this->brandService->getBrandById($id);
         return $this->preferredFormat($brand);
     }
 
@@ -140,12 +133,7 @@ class BrandController extends Controller
     public function search(Request $request)
     {
         $q = $request->get('q');
-        $cacheKey = "brands.search.{$q}";
-
-        $brands = Cache::remember($cacheKey, 60 * 60, function () use ($q) {
-            return Brand::where('name', 'like', "%$q%")->get();
-        });
-
+        $brands = $this->brandService->searchBrands($q);
         return $this->preferredFormat($brands);
     }
 
@@ -177,11 +165,7 @@ class BrandController extends Controller
      */
     public function update(UpdateBrand $request, $id)
     {
-        $updated = Brand::where('id', $id)->update($request->all());
-
-        Cache::forget('brands.all');
-        Cache::forget("brands.{$id}");
-
+        $updated = $this->brandService->updateBrand($id, $request->all());
         return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
     }
 
@@ -214,12 +198,7 @@ class BrandController extends Controller
     public function patch(PatchBrand $request, $id)
     {
         $validatedData = $request->validated();
-
-        $updated = Brand::where('id', $id)->update($validatedData);
-
-        Cache::forget('brands.all');
-        Cache::forget("brands.{$id}");
-
+        $updated = $this->brandService->updateBrand($id, $validatedData);
         return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
     }
 
@@ -250,12 +229,7 @@ class BrandController extends Controller
     public function destroy(DestroyBrand $request, $id)
     {
         try {
-            $brand = Brand::findOrFail($id);
-            $brand->delete();
-
-            Cache::forget('brands.all');
-            Cache::forget("brands.{$id}");
-
+            $this->brandService->deleteBrand($id);
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {

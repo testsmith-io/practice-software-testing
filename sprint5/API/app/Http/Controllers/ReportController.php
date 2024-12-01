@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ReportService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
 
-    public function __construct()
+    private $reportService;
+
+    public function __construct(ReportService $reportService)
     {
+        $this->reportService = $reportService;
         $this->middleware('role:admin');
     }
 
@@ -41,12 +45,7 @@ class ReportController extends Controller
      */
     public function totalSalesPerCountry()
     {
-        $results = DB::table('invoices')
-            ->selectRaw('SUM(total) as "total_sales", billing_country')
-            ->where('status', '=', 'COMPLETED')
-            ->groupBy('billing_country')
-            ->get();
-
+        $results = $this->reportService->getTotalSalesPerCountry();
         return $this->preferredFormat($results);
     }
 
@@ -78,14 +77,7 @@ class ReportController extends Controller
      */
     public function top10PurchasedProducts()
     {
-        $results = DB::table('products AS p')
-            ->join('invoice_items AS i', 'i.product_id', '=', 'p.id')
-            ->selectRaw('p.name, count(p.name) as count')
-            ->groupBy('p.name')
-            ->orderByDesc('count')
-            ->limit(10)
-            ->get();
-
+        $results = $this->reportService->getTop10PurchasedProducts();
         return $this->preferredFormat($results);
     }
 
@@ -117,15 +109,7 @@ class ReportController extends Controller
      */
     public function top10BestSellingCategories()
     {
-        $results = DB::table('categories AS c')
-            ->join('products AS p', 'p.category_id', '=', 'c.id')
-            ->join('invoice_items AS i', 'i.product_id', '=', 'p.id')
-            ->selectRaw('c.name as category_name, SUM(i.unit_price) as total_earned')
-            ->groupBy('c.name')
-            ->orderByDesc('total_earned')
-            ->limit(10)
-            ->get();
-
+        $results = $this->reportService->getTop10BestSellingCategories();
         return $this->preferredFormat($results);
     }
 
@@ -170,23 +154,9 @@ class ReportController extends Controller
         $startYear = $endYear - $numberOfYears;
 
         $driver = config('database.default');
-        if ($driver == 'sqlite') {
-            $yearQuery = "strftime('%Y', invoice_date) AS year";
-            $yearGroup = "strftime('%Y', invoice_date)";
-        } elseif ($driver == 'mysql') {
-            $yearQuery = 'YEAR(invoice_date) AS year';
-            $yearGroup = 'YEAR(invoice_date)';
-        }
-
-        $results = DB::table('invoices')
-            ->selectRaw("SUM(total) AS total, $yearQuery")
-            ->whereYear('invoice_date', '>=', $startYear)
-            ->where('status', '=', 'COMPLETED')
-            ->groupBy(DB::raw($yearGroup))
-            ->get();
+        $results = $this->reportService->getTotalSalesOfYears($startYear, $endYear, $driver);
 
         $formattedResults = $this->formatYearlySalesData($results, $startYear, $endYear);
-
         return $this->preferredFormat($formattedResults);
     }
 
@@ -230,23 +200,9 @@ class ReportController extends Controller
         $year = $request->get('year', now()->year);
 
         $driver = config('database.default');
-        if ($driver == 'sqlite') {
-            $monthQuery = 'CAST(strftime("%m", invoice_date) AS INTEGER) AS month';
-            $monthGroup = 'strftime("%m", invoice_date)';
-        } elseif ($driver == 'mysql') {
-            $monthQuery = 'MONTH(invoice_date) AS month';
-            $monthGroup = 'MONTH(invoice_date)';
-        }
-
-        $results = DB::table('invoices')
-            ->selectRaw("$monthQuery, AVG(total) AS average, COUNT(*) AS amount")
-            ->whereYear('invoice_date', '=', $year)
-            ->where('status', '=', 'COMPLETED')
-            ->groupBy(DB::raw($monthGroup))
-            ->get();
+        $results = $this->reportService->getAverageSalesPerMonth($year, $driver);
 
         $formattedResults = $this->formatMonthlySalesData($results);
-
         return $this->preferredFormat($formattedResults);
     }
 
@@ -290,23 +246,9 @@ class ReportController extends Controller
         $year = $request->get('year', now()->year);
 
         $driver = config('database.default');
-        if ($driver == 'sqlite') {
-            $weekQuery = 'CAST(strftime("%W", invoice_date) AS INTEGER) AS week';
-            $weekGroup = 'strftime("%W", invoice_date)';
-        } elseif ($driver == 'mysql') {
-            $weekQuery = 'WEEK(invoice_date) AS week';
-            $weekGroup = 'WEEK(invoice_date)';
-        }
-
-        $results = DB::table('invoices')
-            ->selectRaw("$weekQuery, AVG(total) AS average, COUNT(*) AS amount")
-            ->whereYear('invoice_date', '=', $year)
-            ->where('status', '=', 'COMPLETED')
-            ->groupBy(DB::raw($weekGroup))
-            ->get();
+        $results = $this->reportService->getAverageSalesPerWeek($year, $driver);
 
         $formattedResults = $this->formatWeeklySalesData($results);
-
         return $this->preferredFormat($formattedResults);
     }
 
@@ -338,12 +280,7 @@ class ReportController extends Controller
      */
     public function customersByCountry(Request $request)
     {
-        $results = DB::table('users AS u')
-            ->selectRaw('COUNT(*) AS amount, u.country')
-            ->where('u.role', '=', 'user')
-            ->groupBy('u.country')
-            ->get();
-
+        $results = $this->reportService->getCustomersByCountry();
         return $this->preferredFormat($results);
     }
 

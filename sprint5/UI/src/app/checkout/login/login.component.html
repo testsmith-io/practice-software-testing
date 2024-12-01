@@ -3,7 +3,8 @@
     <div class="col-md-6 offset-md-3 login-form-1">
       @if (!isLoggedIn) {
         <div><h3>{{t('pages.login.title')}}</h3>
-          <form [formGroup]="cusForm" (ngSubmit)="onCusSubmit()">
+          @if (!showTotpInput) {
+          <form [formGroup]="cusForm" (ngSubmit)="onSubmit()">
             <div class="mb-3">
               <label for="email" class="form-label">{{t('fields.email.label')}} *</label>
               <input formControlName="email"
@@ -51,16 +52,34 @@
             <div class="input-group mb-3">
               <input type="submit" class="btnSubmit" data-test="login-submit" value="{{t('pages.login.btn')}}"/>
             </div>
-            @if (customerError) {
-              <div class="alert alert-danger">
-                <div class="help-block">{{ customerError }}</div>
-              </div>
-            }
             <div class="input-group mb-3">
               <p>{{t('pages.login.no-account')}} <a data-test="register-link" routerLink="/auth/register">{{t('pages.login.register')}}</a><br/>
                 <a data-test="forgot-password-link" routerLink="/auth/forgot-password" class="ForgetPwd">{{t('pages.login.forgot-password')}}</a></p>
             </div>
           </form>
+          }
+          @if (showTotpInput) {
+            <form [formGroup]="cusForm" (ngSubmit)="verifyTotp()">
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="row mb-3">
+                    <label for="totp" class="form-label">{{ t('pages.login.totp_code') }}</label>
+                    <div class="col-sm-9">
+                      <input id="totp" class="form-control" type="text" formControlName="totp"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <input type="submit" [disabled]="cusSubmitted && cusForm.invalid" data-test="verify-totp" class="btnSubmit"
+                     value="{{ t('pages.login.verify_totp') }}"
+                     [attr.aria-label]="t('pages.login.verify_totp')"/>
+            </form>
+          }
+          @if (customerError) {
+            <div data-test="login-error" class="alert alert-danger" aria-live="assertive">
+              <div class="help-block">{{ customerError }}</div>
+            </div>
+          }
         </div>
       } @else {
         <p>{{t('pages.checkout.sign-in.already', {first_name: customer.first_name, last_name: customer.last_name})}}</p>

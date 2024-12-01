@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\TOTPService;
 use Illuminate\Support\Facades\Cache;
 use PragmaRX\Google2FA\Google2FA;
 use Illuminate\Http\Request;
 
 class TOTPController extends Controller
 {
+    private $totpService;
 
-    public function __construct()
+    public function __construct(TOTPService $totpService)
     {
+        $this->totpService = $totpService;
         $this->middleware('auth:users');
         $this->middleware('assign.guard:users');
     }
@@ -39,37 +42,15 @@ class TOTPController extends Controller
      *     )
      * )
      */
-    public function setup(Request $request)
+        public function setup(Request $request)
     {
         $user = $request->user();
+        $response = $this->totpService->setupTOTP($user);
 
-        $restrictedEmails = [
-            'customer@practicesoftwaretesting.com',
-            'admin@practicesoftwaretesting.com'
-        ];
-
-        if (in_array($user->email, $restrictedEmails)) {
-            return response()->json(['error' => 'TOTP cannot be set up for this account'], 403);
-        }
-
-        if ($user->totp_enabled) {
-            return response()->json(['error' => 'TOTP already enabled'], 400);
-        }
-
-        $google2fa = new Google2FA();
-        $secret = $google2fa->generateSecretKey();
-
-        $user->totp_secret = $secret;
-        $user->save();
-        Cache::forget('auth.user.' . $user->id);
-
-        $qrCodeUrl = $google2fa->getQRCodeUrl(
-            'Practice Software Testing',
-            $user->email,
-            $secret
+        return response()->json(
+            array_diff_key($response, ['status' => null]),
+            $response['status']
         );
-
-        return response()->json(['secret' => $secret, 'qrCodeUrl' => $qrCodeUrl]);
     }
 
     /**
@@ -109,18 +90,12 @@ class TOTPController extends Controller
         ]);
 
         $user = $request->user();
-        $google2fa = new Google2FA();
+        $response = $this->totpService->verifyTOTP($user, $validated['totp']);
 
-        if (!$google2fa->verifyKey($user->totp_secret, $validated['totp'])) {
-            return response()->json(['error' => 'Invalid TOTP'], 400);
-        }
-
-        $user->totp_enabled = true;
-        $user->totp_verified_at = now();
-        $user->save();
-        Cache::forget('auth.user.' . $user->id);
-
-        return response()->json(['message' => 'TOTP enabled successfully']);
+        return response()->json(
+            array_diff_key($response, ['status' => null]),
+            $response['status']
+        );
     }
 
 }

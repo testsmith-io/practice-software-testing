@@ -17,7 +17,7 @@ use App\Models\PaymentCashOnDeliveryDetails;
 use App\Models\PaymentCreditCardDetails;
 use App\Models\PaymentGiftCardDetails;
 use App\Rules\SubscriptSuperscriptRule;
-use App\Services\InvoiceNumberGenerator;
+use App\Services\InvoiceService;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -29,11 +29,11 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class InvoiceController extends Controller
 {
 
-    protected $invoiceNumberGenerator;
+    private $invoiceService;
 
-    public function __construct(InvoiceNumberGenerator $invoiceNumberGenerator)
+    public function __construct(InvoiceService $invoiceService)
     {
-        $this->invoiceNumberGenerator = $invoiceNumberGenerator;
+        $this->invoiceService = $invoiceService;
         $this->middleware('auth:users');
     }
 
@@ -77,11 +77,8 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->orderBy('invoice_date', 'DESC')->filter()->paginate());
-        } else {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->where('user_id', Auth::user()->id)->orderBy('invoice_date', 'DESC')->filter()->paginate());
-        }
+        $isAdmin = app('auth')->parseToken()->getPayload()->get('role') == "admin";
+        return $this->preferredFormat($this->invoiceService->getInvoices($isAdmin));
     }
 
     /**
@@ -110,133 +107,8 @@ class InvoiceController extends Controller
      */
     public function store(StoreInvoice $request)
     {
-        $input = $request->except(['cart_id']);
-        $input['user_id'] = Auth::user()->id;
-        $input['invoice_date'] = now();
-        $input['invoice_number'] = $this->invoiceNumberGenerator->generate([
-            'table' => 'invoices',
-            'field' => 'invoice_number',
-            'length' => 14,
-            'prefix' => 'INV-' . now()->year
-        ]);
-
-        $invoice = Invoice::create($input);
-
-        $subTotalPrice = 0;
-
-        $cart = Cart::with('cartItems', 'cartItems.product')->findOrFail($request->input('cart_id'));
-        // Iterate through cart items to calculate discounted prices
-        foreach ($cart->cartItems as $cartItem) {
-            $quantity = $cartItem['quantity'];
-            $unitPrice = $cartItem['product']->price;
-
-            $discountedPrice = null;
-            if ($cartItem->discount_percentage !== null) {
-                $discountedPrice = $cartItem->product->price * (1 - ($cartItem->discount_percentage / 100));
-                // Round the discounted price to two decimal places
-                $discountedPrice = round($discountedPrice, 2);
-            }
-
-            // Decrement the product stock
-            UpdateProductInventory::dispatch($cartItem['product']->id, $quantity);
-
-            // Create the invoice line
-            $invoice->invoicelines()->create([
-                'product_id' => $cartItem['product']->id,
-                'unit_price' => $unitPrice,
-                'quantity' => $quantity,
-                'discount_percentage' => $cartItem->discount_percentage,
-                'discounted_price' => $discountedPrice
-            ]);
-
-            $subTotalPrice += $cartItem->discount_percentage ? $quantity * ($cartItem->product->price * (1 - ($cartItem->discount_percentage / 100))) : $quantity * $unitPrice;
-        }
-
-        $discountAmount = $subTotalPrice * ($cart->additional_discount_percentage / 100);
-        $totalPrice = ($cart->additional_discount_percentage) ? $subTotalPrice - $discountAmount : $subTotalPrice;
-        $invoice->update(['subtotal' => $subTotalPrice,
-            'total' => $totalPrice,
-            'additional_discount_percentage' => $cart->additional_discount_percentage,
-            'additional_discount_amount' => $discountAmount]);
-
-        // After creating the invoice
-        $paymentMethod = $request->input('payment_method');
-
-        // Create a payment record
-        $payment = new Payment([
-            'invoice_id' => $invoice->id,
-            'payment_method' => $paymentMethod
-        ]);
-
-        // Check payment method and create corresponding payment details
-        if ($paymentMethod === 'bank-transfer') {
-            $request->validate([
-                'payment_details.bank_name' => 'required|string|max:255|regex:/^[a-zA-Z ]+$/',
-                'payment_details.account_name' => 'required|string|max:255|regex:/^[a-zA-Z0-9 .\'-]+$/',
-                'payment_details.account_number' => 'required|string|max:255|regex:/^\d+$/',
-            ]);
-            $bankTransferDetailsData = $request->input('payment_details');
-            $bankTransferDetails = new PaymentBankTransferDetails($bankTransferDetailsData);
-            $bankTransferDetails->save();
-
-            $payment->payment_details_id = $bankTransferDetails->id;
-            $payment->payment_details_type = PaymentBankTransferDetails::class;
-        }
-
-        if ($paymentMethod === 'cash-on-delivery') {
-            $cashOnDeliveryDetails = new PaymentCashOnDeliveryDetails();
-            $cashOnDeliveryDetails->save();
-
-            $payment->payment_details_id = $cashOnDeliveryDetails->id;
-            $payment->payment_details_type = PaymentCashOnDeliveryDetails::class;
-        }
-
-        if ($paymentMethod === 'credit-card') {
-            $request->validate([
-                'payment_details.credit_card_number' => 'required|string|regex:/^\d{4}-\d{4}-\d{4}-\d{4}$/',
-                'payment_details.expiration_date' => 'required|date_format:m/Y|after:today',
-                'payment_details.cvv' => 'required|string|regex:/^\d{3,4}$/',
-                'payment_details.card_holder_name' => 'required|string|max:255|regex:/^[a-zA-Z ]+$/',
-            ]);
-            $creditCardDetailsData = $request->input('payment_details');
-            $creditCardDetails = new PaymentCreditCardDetails($creditCardDetailsData);
-            $creditCardDetails->save();
-
-            $payment->payment_details_id = $creditCardDetails->id;
-            $payment->payment_details_type = PaymentCreditCardDetails::class;
-        }
-
-        if ($paymentMethod === 'buy-now-pay-later') {
-            $request->validate([
-                'payment_details.monthly_installments' => 'required|numeric',
-            ]);
-            $bnplDetailsData = $request->input('payment_details');
-            $bnplDetails = new PaymentBnplDetails($bnplDetailsData);
-            $bnplDetails->save();
-
-            $payment->payment_details_id = $bnplDetails->id;
-            $payment->payment_details_type = PaymentBnplDetails::class;
-        }
-
-        if ($paymentMethod === 'gift-card') {
-            $request->validate([
-                'payment_details.gift_card_number' => 'required|string|max:255|regex:/^[a-zA-Z0-9]+$/',
-                'payment_details.validation_code' => 'required|string|max:255|regex:/^[a-zA-Z0-9]+$/',
-            ]);
-            $giftCardDetailsData = $request->input('payment_details');
-            $giftCardDetails = new PaymentGiftCardDetails($giftCardDetailsData);
-            $giftCardDetails->save();
-
-            $payment->payment_details_id = $giftCardDetails->id;
-            $payment->payment_details_type = PaymentGiftCardDetails::class;
-        }
-
-        // Save the payment record
-        $payment->save();
-
-        if (App::environment('local')) {
-            SendCheckoutEmail::dispatch($invoice->id, Auth::user());
-        }
+        $invoice = $this->invoiceService->createInvoice($request->except(['cart_id']), $request->input('cart_id'));
+        $this->invoiceService->handlePayment($invoice->id, $request->input('payment_method'), $request->input('payment_details') ?? []);
 
         return $this->preferredFormat($invoice, ResponseAlias::HTTP_CREATED);
     }
@@ -269,11 +141,8 @@ class InvoiceController extends Controller
      */
     public function show($id)
     {
-        if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->findOrFail($id));
-        } else {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->where('user_id', Auth::user()->id)->findOrFail($id));
-        }
+        $isAdmin = app('auth')->parseToken()->getPayload()->get('role') == "admin";
+        return $this->preferredFormat($this->invoiceService->getInvoice($id, $isAdmin));
     }
 
     /**
@@ -302,13 +171,13 @@ class InvoiceController extends Controller
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function downloadPDF($invoice_number)
+    public function downloadPDF($invoiceNumber)
     {
-        if (Storage::exists("invoices/{$invoice_number}.pdf")) {
-            return Storage::download("invoices/{$invoice_number}.pdf", "{$invoice_number}.pdf");
-        } else {
-            return $this->preferredFormat(['message' => 'Document not created. Try again later.'], ResponseAlias::HTTP_NOT_FOUND);
+        $file = $this->invoiceService->downloadPDF($invoiceNumber);
+        if ($file) {
+            return $file;
         }
+        return $this->preferredFormat(['message' => 'Document not created. Try again later.'], ResponseAlias::HTTP_NOT_FOUND);
     }
 
     /**
@@ -337,14 +206,15 @@ class InvoiceController extends Controller
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function downloadPDFStatus($invoice_number)
+    public function downloadPDFStatus($invoiceNumber)
     {
-        $status = Download::where('name', $invoice_number)->first(['status']);
-        if (empty($status)) {
-            return $this->preferredFormat(['status' => 'NOT_INITIATED'], ResponseAlias::HTTP_BAD_REQUEST);
-        } else {
-            return $this->preferredFormat($status, ResponseAlias::HTTP_OK);
+        $status = $this->invoiceService->getPDFStatus($invoiceNumber);
+
+        if ($status['status'] === 'NOT_INITIATED') {
+            return $this->preferredFormat($status, ResponseAlias::HTTP_BAD_REQUEST);
         }
+
+        return $this->preferredFormat($status, ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -395,19 +265,14 @@ class InvoiceController extends Controller
     {
         $request->validate([
             'status' => Rule::in("AWAITING_FULFILLMENT", "ON_HOLD", "AWAITING_SHIPMENT", "SHIPPED", "COMPLETED"),
-            'status_message' => ['string', 'between:5,50', 'nullable', new SubscriptSuperscriptRule()]
+            'status_message' => ['string', 'between:5,50', 'nullable'],
         ]);
 
-        $affectedRows = Invoice::where('id', $id)->update([
-            'status' => $request['status'],
-            'status_message' => $request['status_message']
-        ]);
+        $updated = $this->invoiceService->updateInvoiceStatus($id, $request->all());
 
-        if ($affectedRows === 0) {
-            return $this->preferredFormat(['message' => 'Invoice not found'], ResponseAlias::HTTP_NOT_FOUND);
-        }
-
-        return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK);
+        return $updated
+            ? $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK)
+            : $this->preferredFormat(['message' => 'Invoice not found'], ResponseAlias::HTTP_NOT_FOUND);
     }
 
     /**
@@ -458,12 +323,9 @@ class InvoiceController extends Controller
     public function search(Request $request)
     {
         $q = $request->get('q');
+        $isAdmin = app('auth')->parseToken()->getPayload()->get('role') == "admin";
 
-        if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->where('invoice_number', 'like', "%$q%")->orWhere('billing_address', 'like', "%$q%")->orWhere('status', 'like', "%$q%")->orderBy('invoice_date', 'DESC')->paginate());
-        } else {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->where('user_id', Auth::user()->id)->orWhere('invoice_number', 'like', "%$q%")->orWhere('billing_address', 'like', "%$q%")->orWhere('status', 'like', "%$q%")->orderBy('invoice_date', 'DESC')->paginate());
-        }
+        return $this->preferredFormat($this->invoiceService->searchInvoices($q, $isAdmin));
     }
 
     /**
@@ -495,7 +357,9 @@ class InvoiceController extends Controller
      */
     public function update(StoreInvoice $request, $id)
     {
-        return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->where('user_id', Auth::user()->id)->update($request->all())], ResponseAlias::HTTP_OK);
+        $success = $this->invoiceService->updateInvoice($id, $request->all());
+
+        return $this->preferredFormat(['success' => (bool)$success], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -527,11 +391,8 @@ class InvoiceController extends Controller
      */
     public function patch(PatchInvoice $request, $id)
     {
-        $userId = Auth::user()->id;
-
-        $success = Invoice::where('id', $id)
-            ->where('user_id', $userId)
-            ->update($request->validated());
+        $validatedData = $request->validated();
+        $success = $this->invoiceService->patchInvoice($id, $validatedData);
 
         return $this->preferredFormat(['success' => (bool)$success], ResponseAlias::HTTP_OK);
     }
@@ -561,16 +422,10 @@ class InvoiceController extends Controller
      */
     public function destroy(DestroyInvoice $request, $id)
     {
-        try {
-            Invoice::find($id)->where('user_id', Auth::user()->id)->delete();
-            return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
-        } catch (QueryException $e) {
-            if ($e->getCode() === '23000') {
-                return $this->preferredFormat([
-                    'success' => false,
-                    'message' => 'Seems like this invoice is used elsewhere.',
-                ], ResponseAlias::HTTP_CONFLICT);
-            }
-        }
+        $deleted = $this->invoiceService->deleteInvoice($id);
+
+        return $deleted
+            ? $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT)
+            : $this->preferredFormat(['message' => 'Unable to delete invoice'], ResponseAlias::HTTP_CONFLICT);
     }
 }
