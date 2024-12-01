@@ -45,18 +45,17 @@ class ProductService
             }
 
             // Is rental
-            if (isset($filters['is_rental'])) {
-                $query->where('is_rental', (int)$filters['is_rental']);
-            }
+            $isRental = $filters['is_rental'] ?? 0;
+            $query->where('is_rental', (int)$isRental);
 
-            // Apply any additional filters
-            if (method_exists($query, 'filter')) {
-                $query->filter();
-            }
-
-            // Ensure sorting and pagination are consistent
-            return $query->orderBy('created_at', 'asc')->paginate(9);
+            return $query->filter()->paginate(9);
         });
+    }
+
+    protected function generateCacheKey(array $params)
+    {
+        ksort($params);
+        return 'products.index.' . http_build_query($params);
     }
 
     public function createProduct(array $data)
@@ -122,9 +121,4 @@ class ProductService
         }
     }
 
-    protected function generateCacheKey(array $params)
-    {
-        ksort($params);
-        return 'products.index.' . http_build_query($params);
-    }
 }
