@@ -6,18 +6,19 @@ use App\Http\Requests\Product\DestroyProduct;
 use App\Http\Requests\Product\PatchProduct;
 use App\Http\Requests\Product\StoreProduct;
 use App\Http\Requests\Product\UpdateProduct;
-use App\Models\Product;
+use App\Services\ProductService;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class ProductController extends Controller
 {
 
-    public function __construct()
+    private $productService;
+
+    public function __construct(ProductService $productService)
     {
+        $this->productService = $productService;
         $this->middleware('role:admin', ['only' => ['destroy']]);
     }
 
@@ -94,50 +95,9 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $cacheKey = $this->generateCacheKey($request->all());
-
-        $products = Cache::remember($cacheKey, 60 * 60, function () use ($request) {
-            $query = Product::with('product_image', 'category', 'brand');
-
-            if ($categorySlug = $request->get('by_category_slug')) {
-                $categoryIds = DB::table('categories')
-                    ->where('slug', $categorySlug)
-                    ->orWhereIn('parent_id', function ($query) use ($categorySlug) {
-                        $query->select('id')
-                            ->from('categories')
-                            ->where('slug', $categorySlug);
-                    })
-                    ->pluck('id');
-                $query->whereIn('category_id', $categoryIds);
-            }
-
-            if ($byCategory = $request->get('by_category')) {
-                $query->whereIn('category_id', explode(',', $byCategory));
-            }
-
-            if ($byBrand = $request->get('by_brand')) {
-                $query->whereIn('brand_id', explode(',', $byBrand));
-            }
-
-            if ($q = $request->get('q')) {
-                $query->where('name', 'like', "%$q%");
-            }
-
-            $isRental = $request->get('is_rental') ? 1 : 0;
-            $query->where('is_rental', $isRental);
-
-            return $query->filter()->paginate(9);
-        });
-
+        $products = $this->productService->getAllProducts($request->all());
         return $this->preferredFormat($products);
     }
-
-    protected function generateCacheKey(array $params)
-    {
-        ksort($params);
-        return 'products.index.' . http_build_query($params);
-    }
-
 
     /**
      * @OA\Post(
@@ -170,11 +130,9 @@ class ProductController extends Controller
      *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
      * )
      */
-    public function store(StoreProduct $request) {
-        $product = Product::create($request->all());
-        Cache::forget('products.index.*'); // Invalidate index cache
-        Cache::forget("products.{$product->id}");
-
+    public function store(StoreProduct $request)
+    {
+        $product = $this->productService->createProduct($request->all());
         return $this->preferredFormat($product, ResponseAlias::HTTP_CREATED);
     }
 
@@ -202,13 +160,9 @@ class ProductController extends Controller
      *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
      * )
      */
-    public function show($id) {
-        $cacheKey = "products.{$id}";
-
-        $product = Cache::remember($cacheKey, 60 * 60, function () use ($id) {
-            return Product::with('product_image', 'category', 'brand')->findOrFail($id);
-        });
-
+    public function show($id)
+    {
+        $product = $this->productService->getProductById($id);
         return $this->preferredFormat($product);
     }
 
@@ -239,18 +193,9 @@ class ProductController extends Controller
      *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
      * )
      */
-    public function showRelated($id) {
-        $cacheKey = "products.{$id}.related";
-
-        $relatedProducts = Cache::remember($cacheKey, 60 * 60, function () use ($id) {
-            $categoryId = Product::where('id', $id)->first()->category_id;
-
-            return Product::with('product_image', 'category', 'brand')
-                ->where('category_id', $categoryId)
-                ->where('id', '!=', $id)
-                ->get();
-        });
-
+    public function showRelated($id)
+    {
+        $relatedProducts = $this->productService->getRelatedProducts($id);
         return $this->preferredFormat($relatedProducts);
     }
 
@@ -297,16 +242,12 @@ class ProductController extends Controller
      *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
      * )
      */
-    public function search(Request $request) {
-        $q = $request->get('q');
-        $cacheKey = "products.search.{$q}.page.{$request->get('page', 1)}";
-
-        $products = Cache::remember($cacheKey, 60 * 60, function () use ($q) {
-            return Product::with('product_image')
-                ->where('name', 'like', "%$q%")
-                ->paginate(9);
-        });
-
+    public function search(Request $request)
+    {
+        $products = $this->productService->searchProducts(
+            $request->get('q'),
+            $request->get('page', 1)
+        );
         return $this->preferredFormat($products);
     }
 
@@ -335,12 +276,9 @@ class ProductController extends Controller
      *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
      * )
      */
-    public function update(UpdateProduct $request, $id) {
-        $updated = Product::where('id', $id)->update($request->all());
-
-        Cache::forget('products.index.*'); // Invalidate index cache
-        Cache::forget("products.{$id}");
-
+    public function update(UpdateProduct $request, $id)
+    {
+        $updated = $this->productService->updateProduct($id, $request->all());
         return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
     }
 
@@ -369,17 +307,12 @@ class ProductController extends Controller
      *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
      * )
      */
-    public function patch(PatchProduct $request, $id) {
+    public function patch(PatchProduct $request, $id)
+    {
         $validatedData = $request->validated();
-
-        $updated = Product::where('id', $id)->update($validatedData);
-
-        Cache::forget('products.index.*'); // Invalidate index cache
-        Cache::forget("products.{$id}");
-
+        $updated = $this->productService->updateProduct($id, $validatedData);
         return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
     }
-
 
     /**
      * @OA\Delete(
@@ -404,13 +337,10 @@ class ProductController extends Controller
      *      security={{ "apiAuth": {} }}
      * ),
      */
-    public function destroy(DestroyProduct $request, $id) {
+    public function destroy(DestroyProduct $request, $id)
+    {
         try {
-            Product::findOrFail($id)->delete();
-
-            Cache::forget('products.index.*'); // Invalidate index cache
-            Cache::forget("products.{$id}");
-
+            $this->productService->deleteProduct($id);
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {
