@@ -7,6 +7,7 @@ use App\Mail\Register;
 use App\Models\User;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use PragmaRX\Google2FA\Google2FA;
@@ -191,6 +192,7 @@ class UserService
         unset($data['password']);
 
         $success = $user->update($data);
+        Cache::forget('auth.user.' . $user->id);
 
         return ['success' => (bool)$success];
     }
@@ -265,6 +267,7 @@ class UserService
             }
 
             $user->update($data);
+            Cache::forget('auth.user.' . $user->id);
             return ['success' => true];
         }
 
