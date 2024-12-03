@@ -21,6 +21,11 @@ class CachedAuthUserObserver
         Cache::forget("auth.user.{$user->id}");
     }
 
+    public function updated(User $user): void
+    {
+        Cache::forget("auth.user.{$user->id}");
+    }
+
     public function restored(User $user): void
     {
         Cache::put("auth.user.{$user->id}", $user, $this->restoredTtl);
