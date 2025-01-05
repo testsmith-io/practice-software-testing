@@ -20,13 +20,17 @@
 | Sprint 5             | [https://practicesoftwaretesting.com](https://practicesoftwaretesting.com)                     | [https://api.practicesoftwaretesting.com](https://api.practicesoftwaretesting.com/status)                     | [https://api.practicesoftwaretesting.com](https://api.practicesoftwaretesting.com/api/documentation)                     |
 | Sprint 5 (with bugs) | [https://with-bugs.practicesoftwaretesting.com](https://with-bugs.practicesoftwaretesting.com) | [https://api-with-bugs.practicesoftwaretesting.com](https://api-with-bugs.practicesoftwaretesting.com/status) | [https://api-with-bugs.practicesoftwaretesting.com](https://api-with-bugs.practicesoftwaretesting.com/api/documentation) |
 
-## Android Mobile App
+## Mobile App
+
+The mobile app is fully integrated with version 4 of Practice Software Testing, which means both share the same environment. Any changes you make through the mobile app (like creating or editing data) will appear on the website, and updates on the website will also show up in the app.
 
 [Android Mobile APK](https://testsmith.s3.eu-central-1.amazonaws.com/artifacts/practice-software-testing.apk)
 
+[iOS Simulator App](https://testsmith.s3.eu-central-1.amazonaws.com/artifacts/practice-software-testing.zip)
+
 # Using the docker containers
 
-I will take up to 5 minutes (depending on the speed of your internet connection), if you run `docker-compose up -d` for the first
+I will take up to 5 minutes (depending on your internet connection speed), if you run `docker-compose up -d` for the first
 time. Any subsequent `docker-compose up -d` will take seconds.
 
 All images together are less than 1,5 GB.
@@ -93,7 +97,7 @@ Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belong
 
 ## Sprint 0
 
-During this initial sprint, we took some architectural decisions. We decided to implement a
+During this initial sprint, we made some architectural decisions. We decided to implement a
 super-fast [Laravel](https://laravel.com/) API, as well as an [Angular](https://angular.io/) frontend.
 
 Every developer or tester can spin up the environment on its own machine. This makes testing easier, and it
