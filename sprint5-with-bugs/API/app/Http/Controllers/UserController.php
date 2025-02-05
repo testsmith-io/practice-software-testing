@@ -155,8 +155,9 @@ class UserController extends Controller
         $password = $credentials['password'];
 
         // 🚨 VULNERABLE SQL QUERY 🚨 (SQL Injection Possible)
-        $query = "SELECT * FROM users WHERE email = '$email' AND password = '$password' LIMIT 1";
+        $query = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
         $user = DB::select($query);
+        $user = $user[0] ?? null;
 
         // Check if user exists and if role is not admin
         if ($user && $user->role != "admin") {
@@ -203,14 +204,21 @@ class UserController extends Controller
     protected function incrementLoginAttempts($user)
     {
         if ($user->failed_login_attempts < 1) {
-            $user->increment('failed_login_attempts');
+            DB::table('users')
+                ->where('id', $user->id)
+                ->update(['failed_login_attempts' => $user->failed_login_attempts + 1]);
         }
     }
 
     protected function resetLoginAttempts($user)
     {
-        $user->update(['failed_login_attempts' => 0]);
+        if ($user->failed_login_attempts < 1) {
+            DB::table('users')
+                ->where('id', $user->id)
+                ->update(['failed_login_attempts' => 0]);
+        }
     }
+
 
     protected function lockedAccountResponse()
     {
