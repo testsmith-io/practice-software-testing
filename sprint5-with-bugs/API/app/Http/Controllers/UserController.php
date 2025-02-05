@@ -196,7 +196,7 @@ class UserController extends Controller
     protected function validateLogin(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email' => 'required',
             'password' => 'required',
         ]);
     }
