@@ -151,13 +151,7 @@ class UserController extends Controller
         $this->validateLogin($request);
 
         $credentials = $request->only(['email', 'password']);
-        $email = $credentials['email'];
-        $password = $credentials['password'];
-
-        // 🚨 VULNERABLE SQL QUERY 🚨 (SQL Injection Possible)
-        $query = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
-        $user = DB::select($query);
-        $user = $user[0] ?? null;
+        $user = User::where('email', $credentials['email'])->first();
 
         // Check if user exists and if role is not admin
         if ($user && $user->role != "admin") {
@@ -196,7 +190,7 @@ class UserController extends Controller
     protected function validateLogin(Request $request)
     {
         $request->validate([
-            'email' => 'required',
+            'email' => 'required|email',
             'password' => 'required',
         ]);
     }
