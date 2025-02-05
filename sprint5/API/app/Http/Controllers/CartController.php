@@ -106,6 +106,11 @@ class CartController extends Controller
      */
     public function addItem(Request $request, $id)
     {
+        $request->validate([
+            'product_id' => 'required|string|exists:products,id',
+            'quantity' => 'required|integer|min:1'
+        ]);
+
         try {
             $this->cartService->addItemToCart(
                 $id,
@@ -192,6 +197,11 @@ class CartController extends Controller
      */
     public function updateQuantity(Request $request, $cartId)
     {
+        $request->validate([
+            'product_id' => 'required|string|exists:products,id',
+            'quantity' => 'required|integer|min:1'
+        ]);
+
         try {
             $success = $this->cartService->updateCartItemQuantity(
                 $cartId,
