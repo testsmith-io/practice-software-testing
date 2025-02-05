@@ -72,9 +72,10 @@ class CartTest extends TestCase
     public function testCartNotFound()
     {
         $nonExistentCartId = 999;
+        $product = $this->addProduct();
 
         $response = $this->postJson("/carts/{$nonExistentCartId}", [
-            'product_id' => 1,
+            'product_id' => $product->id,
             'quantity' => 1
         ]);
 
