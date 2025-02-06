@@ -40,8 +40,8 @@ set('writable_dirs', []);
 
 // Hosts
 host('production')
-    ->setHostname('54.229.94.142')
-    ->set('remote_user', 'ubuntu')
+    ->setHostname('142.93.137.65')
+    ->set('remote_user', 'root')
     ->setForwardAgent(true)
     ->set('stage', 'production')
     ->set('deploy_path', '/var/www/api.practicesoftwaretesting.com');
