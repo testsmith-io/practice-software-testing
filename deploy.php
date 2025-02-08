@@ -80,7 +80,7 @@ function deploy($source, $webDestination, $apiDestination) {
     run("sudo mv /var/www/api{$apiDestination}.practicesoftwaretesting.com_tmp /var/www/api{$apiDestination}.practicesoftwaretesting.com");
     run("sudo rm -rf /var/www/api{$apiDestination}.practicesoftwaretesting.com_tmp");
     run("sudo rm -rf /var/www/api{$apiDestination}.practicesoftwaretesting.com_bak");
-    run("curl https://api{$apiDestination}.practicesoftwaretesting.com");
+    run("curl https://api{$apiDestination}.practicesoftwaretesting.com/status");
 
     // Running Artisan commands
     run("/usr/bin/php /var/www/api{$apiDestination}.practicesoftwaretesting.com/artisan migrate:fresh --force -vvvv");
