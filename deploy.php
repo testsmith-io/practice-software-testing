@@ -91,7 +91,7 @@ function deploy($source, $webDestination, $apiDestination) {
     run("/usr/bin/php /var/www/api{$apiDestination}.practicesoftwaretesting.com/artisan config:clear");
     run("/usr/bin/php /var/www/api{$apiDestination}.practicesoftwaretesting.com/artisan l5-swagger:generate");
     run("sudo chmod -R 777 /var/www/api{$apiDestination}.practicesoftwaretesting.com/storage");
-    run("sudo chown -R www-data:www-data /var/www/api{$apiDestination}.practicesoftwaretesting.com/storage/framework");
+    run("sudo chown -R www-data:www-data /var/www/api{$apiDestination}.practicesoftwaretesting.com/storage");
 
     // UI Deployment
     runLocally("rm -rf {$source}/UI/node_modules/esbuild/");
