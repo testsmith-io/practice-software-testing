@@ -33,7 +33,7 @@
           <td>{{ item.billing_address }}</td>
           <td>{{ item.invoice_date }}</td>
           <td>{{ item.status }}</td>
-          <td>${{ item.total }}</td>
+          <td>${{ item.total.toFixed(2) }}</td>
           <td style="white-space: nowrap">
             <a routerLink="/admin/orders/edit/{{item.id}}" class="btn btn-sm btn-primary mx-2">Edit</a>
           </td>
