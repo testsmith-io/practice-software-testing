@@ -79,7 +79,13 @@ class ProductService
         $cacheKey = "products.{$id}.related";
 
         return Cache::remember($cacheKey, 60 * 60, function () use ($id) {
-            $categoryId = Product::where('id', $id)->first()->category_id;
+            $product = Product::find($id);
+
+            if (!$product) {
+                throw new \Exception("Product with ID {$id} not found");
+            }
+
+            $categoryId = $product->category_id;
 
             return Product::with('product_image', 'category', 'brand')
                 ->where('category_id', $categoryId)
