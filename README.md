@@ -30,8 +30,8 @@ The mobile app is fully integrated with version 4 of Practice Software Testing, 
 
 # Using the docker containers
 
-I will take up to 5 minutes (depending on your internet connection speed), if you run `docker-compose up -d` for the first
-time. Any subsequent `docker-compose up -d` will take seconds.
+I will take up to 5 minutes (depending on your internet connection speed), if you run `docker compose up -d` for the first
+time. Any subsequent `docker compose up -d` will take seconds. You may need to add sudo before the docker command `sudo docker compose up -d`
 
 All images together are less than 1,5 GB.
 
@@ -51,31 +51,31 @@ Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belong
 
 ## Roll Back - Run Migrations - Seed Database
 
-`docker-compose exec laravel-api php artisan migrate:fresh --seed`
+`docker compose exec laravel-api php artisan migrate:fresh --seed`
 
 ## Migrate database schema
 
-`docker-compose exec laravel-api php artisan migrate`
+`docker compose exec laravel-api php artisan migrate`
 
 ## Seed database
 
-`docker-compose exec laravel-api php artisan db:seed`
+`docker compose exec laravel-api php artisan db:seed`
 
 ## Generate Swagger documentation
 
-`docker-compose exec laravel-api php artisan l5-swagger:generate`
+`docker compose exec laravel-api php artisan l5-swagger:generate`
 
 ## Update order status
 
-`docker-compose exec laravel-api php artisan order:update`
+`docker compose exec laravel-api php artisan order:update`
 
 ## Remove PDF documents
 
-`docker-compose exec laravel-api php artisan invoice:remove`
+`docker compose exec laravel-api php artisan invoice:remove`
 
 ## Generate PDF documents
 
-`docker-compose exec laravel-api php artisan invoice:generate`
+`docker compose exec laravel-api php artisan invoice:generate`
 
 ## Execute unit tests
 
