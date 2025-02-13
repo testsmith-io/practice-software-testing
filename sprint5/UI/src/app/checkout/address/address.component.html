@@ -4,13 +4,13 @@
       <h3>{{t('pages.checkout.address.title')}}</h3>
       <form [formGroup]="cusAddress">
         <div class="input-group mb-3">
-          <label for="address" class="visually-hidden">{{t('fields.address.label')}}</label>
-          <input formControlName="address"
-                 data-test="address"
+          <label for="street" class="visually-hidden">{{t('fields.street.label')}}</label>
+          <input formControlName="street"
+                 data-test="street"
                  class="form-control"
-                 id="address"
-                 [ngClass]="{ 'is-invalid': cusAddress && cusAddress.address?.errors }" type="text"
-                 placeholder="{{t('fields.address.placeholder')}} *"/>
+                 id="street"
+                 [ngClass]="{ 'is-invalid': cusAddress && cusAddress.street?.errors }" type="text"
+                 placeholder="{{t('fields.street.placeholder')}} *"/>
         </div>
 
         <div class="input-group mb-3">

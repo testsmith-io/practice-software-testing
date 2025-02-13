@@ -45,7 +45,7 @@ class InvoiceSeeder extends Seeder {
                 'user_id' => $user->id,
                 'invoice_date' => $invoiceDate,
                 'invoice_number' => $invoiceNumber,
-                'billing_address' => 'Test street ' . ($invoiceCounters[$year] % 100),
+                'billing_street' => 'Test street ' . ($invoiceCounters[$year] % 100),
                 'billing_city' => 'Utrecht',
                 'billing_state' => 'Utrecht',
                 'billing_country' => 'The Netherlands',

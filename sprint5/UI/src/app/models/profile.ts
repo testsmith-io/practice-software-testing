@@ -3,7 +3,7 @@ export class Profile {
   first_name!: string;
   last_name!: string;
   phone!: string;
-  address!: string;
+  street!: string;
   postal_code!: string;
   city!: string;
   state!: string;

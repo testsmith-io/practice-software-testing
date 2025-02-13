@@ -153,7 +153,7 @@ class InvoiceService
     {
         $baseQuery = Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')
             ->where('invoice_number', 'like', "%$query%")
-            ->orWhere('billing_address', 'like', "%$query%")
+            ->orWhere('billing_street', 'like', "%$query%")
             ->orWhere('status', 'like', "%$query%")
             ->orderBy('invoice_date', 'DESC');
 

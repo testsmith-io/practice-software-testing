@@ -136,26 +136,21 @@
               <li>
                 <hr class="dropdown-divider">
               </li>
-              <li>
-                <div class="accordion accordion-flush" id="accordionFlushExample">
-                <span class="dropdown-item" data-test="nav-admin-reports">
+              <li class="reports nav-item dropdown dropstart">
+                <a class="nav-link dropdown-toggle" href="#" id="reportsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Reports
-                </span>
-                  <ul class="accordion-body nav flex-column">
-                    <li class="nav-item">
-                      <a class="nav-link" data-test="nav-admin-statistics"
-                         routerLink="/admin/reports/statistics">Statistics</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" data-test="nav-average-month-sales"
-                         routerLink="/admin/reports/average-sales-per-month">Average sales per month</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" data-test="nav-average-week-sales"
-                         routerLink="/admin/reports/average-sales-per-week">Average sales per week</a>
-                    </li>
-                  </ul>
-                </div>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="reportsDropdown">
+                  <li>
+                    <a class="dropdown-item" data-test="nav-admin-statistics" routerLink="/admin/reports/statistics">Statistics</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" data-test="nav-average-month-sales" routerLink="/admin/reports/average-sales-per-month">Average sales per month</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" data-test="nav-average-week-sales" routerLink="/admin/reports/average-sales-per-week">Average sales per week</a>
+                  </li>
+                </ul>
               </li>
               <li>
                 <hr class="dropdown-divider">

@@ -3,7 +3,7 @@ import {Invoiceline} from "./invoiceline";
 export class Invoice {
   id!: number;
   user_id!: number;
-  billing_address!: string;
+  billing_street!: string;
   billing_city!: string;
   billing_country!: string;
   billing_postal_code!: string;

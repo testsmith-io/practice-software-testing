@@ -20,7 +20,7 @@ class CreateInvoicesTable extends Migration
             $table->ulid('additional_discount_percentage')->nullable();
             $table->ulid('additional_discount_amount')->nullable();
             $table->string('invoice_number', 70)->nullable();
-            $table->string('billing_address', 70);
+            $table->string('billing_street', 70);
             $table->string('billing_city', 40);
             $table->string('billing_state', 40)->nullable();
             $table->string('billing_country', 40);

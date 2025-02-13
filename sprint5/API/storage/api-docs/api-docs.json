@@ -2009,7 +2009,7 @@
                     "Invoice"
                 ],
                 "summary": "Retrieve specific invoices matching the search query",
-                "description": "Search is performed on the `invoice_number`, `billing_address` and `status` column",
+                "description": "Search is performed on the `invoice_number`, `billing_street` and `status` column",
                 "operationId": "searchInvoice",
                 "parameters": [
                     {
@@ -3957,17 +3957,17 @@
             },
             "BaseInvoiceRequest": {
                 "required": [
-                    "billing_address",
+                    "billing_street",
                     "billing_city",
                     "billing_state",
                     "billing_country",
-                    "billing_postcode",
+                    "billing_postal_code",
                     "payment_method",
                     "payment_details",
                     "cart_id"
                 ],
                 "properties": {
-                    "billing_address": {
+                    "billing_street": {
                         "type": "string"
                     },
                     "billing_city": {
@@ -3979,7 +3979,7 @@
                     "billing_country": {
                         "type": "string"
                     },
-                    "billing_postcode": {
+                    "billing_postal_code": {
                         "type": "string"
                     },
                     "payment_method": {
@@ -4065,7 +4065,7 @@
             "InvoiceRequest": {
                 "title": "InvoiceRequest",
                 "properties": {
-                    "billing_address": {
+                    "billing_street": {
                         "type": "string"
                     },
                     "billing_city": {
@@ -4077,7 +4077,7 @@
                     "billing_state": {
                         "type": "string"
                     },
-                    "billing_postcode": {
+                    "billing_postal_code": {
                         "type": "string"
                     },
                     "cart_id": {
@@ -4102,7 +4102,7 @@
                         "type": "string",
                         "example": "INV-2022000002"
                     },
-                    "billing_address": {
+                    "billing_street": {
                         "type": "string"
                     },
                     "billing_city": {
@@ -4114,7 +4114,7 @@
                     "billing_state": {
                         "type": "string"
                     },
-                    "billing_postcode": {
+                    "billing_postal_code": {
                         "type": "string"
                     },
                     "additional_discount_percentage": {
@@ -4296,7 +4296,7 @@
                                 "type": "string",
                                 "example": "Country"
                             },
-                            "postcode": {
+                            "postal_code": {
                                 "type": "string",
                                 "example": "1234AA"
                             }
@@ -4349,7 +4349,7 @@
                         "type": "string",
                         "example": "Country"
                     },
-                    "postcode": {
+                    "postal_code": {
                         "type": "string",
                         "example": "1234AA"
                     },
