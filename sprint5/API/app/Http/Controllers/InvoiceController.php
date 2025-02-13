@@ -281,7 +281,7 @@ class InvoiceController extends Controller
      *      operationId="searchInvoice",
      *      tags={"Invoice"},
      *      summary="Retrieve specific invoices matching the search query",
-     *      description="Search is performed on the `invoice_number`, `billing_address` and `status` column",
+     *      description="Search is performed on the `invoice_number`, `billing_street` and `status` column",
      *      @OA\Parameter(
      *          name="q",
      *          in="query",

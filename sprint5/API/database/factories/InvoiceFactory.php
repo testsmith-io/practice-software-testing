@@ -30,7 +30,7 @@ class InvoiceFactory extends Factory
             'invoice_number' => Str::random(10),
             'additional_discount_percentage' => $this->faker->randomFloat(2, 0, 100),
             'additional_discount_amount' => $this->faker->randomFloat(2, 0, 1000),
-            'billing_address' => $this->faker->streetAddress(),
+            'billing_street' => $this->faker->streetAddress(),
             'billing_city' => $this->faker->city(),
             'billing_state' => $this->faker->state(),
             'billing_country' => $this->faker->country(),

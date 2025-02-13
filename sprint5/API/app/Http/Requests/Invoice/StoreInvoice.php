@@ -26,7 +26,7 @@ class StoreInvoice extends BaseFormRequest
     {
         return [
             'invoice_date' => 'date_format:Y-m-d',
-            'billing_address' => ['required', 'string', 'max:70', new SubscriptSuperscriptRule()],
+            'billing_street' => ['required', 'string', 'max:70', new SubscriptSuperscriptRule()],
             'billing_city' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'billing_state' => ['string', 'max:40', new SubscriptSuperscriptRule()],
             'billing_country' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule()],

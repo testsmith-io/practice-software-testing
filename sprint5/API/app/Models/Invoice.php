@@ -12,8 +12,8 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  * @OA\Schema(
  *      schema="BaseInvoiceRequest",
  *      type="object",
- *      required={"billing_address", "billing_city", "billing_state", "billing_country", "billing_postal_code", "payment_method", "payment_details", "cart_id"},
- *      @OA\Property(property="billing_address", type="string"),
+ *      required={"billing_street", "billing_city", "billing_state", "billing_country", "billing_postal_code", "payment_method", "payment_details", "cart_id"},
+ *      @OA\Property(property="billing_street", type="string"),
  *      @OA\Property(property="billing_city", type="string"),
  *      @OA\Property(property="billing_state", type="string"),
  *      @OA\Property(property="billing_country", type="string"),
@@ -68,7 +68,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *     type="object",
  *     title="InvoiceRequest",
  *     properties={
- *         @OA\Property(property="billing_address", type="string"),
+ *         @OA\Property(property="billing_street", type="string"),
  *         @OA\Property(property="billing_city", type="string"),
  *         @OA\Property(property="billing_country", type="string"),
  *         @OA\Property(property="billing_state", type="string"),
@@ -85,7 +85,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="id", type="string", example=1),
  *         @OA\Property(property="invoice_date", type="string", example="2022-10-20 09:49:45"),
  *         @OA\Property(property="invoice_number", type="string", example="INV-2022000002"),
- *         @OA\Property(property="billing_address", type="string"),
+ *         @OA\Property(property="billing_street", type="string"),
  *         @OA\Property(property="billing_city", type="string"),
  *         @OA\Property(property="billing_country", type="string"),
  *         @OA\Property(property="billing_state", type="string"),
@@ -106,7 +106,7 @@ class Invoice extends BaseModel
 
     protected $filters = ['in', 'sort', 'starts_with'];
     protected $table = 'invoices';
-    protected $fillable = ['user_id', 'invoice_date', 'invoice_number', 'additional_discount_percentage', 'additional_discount_amount', 'billing_address', 'billing_city', 'billing_state', 'billing_country', 'billing_postal_code', 'subtotal', 'total'];
+    protected $fillable = ['user_id', 'invoice_date', 'invoice_number', 'additional_discount_percentage', 'additional_discount_amount', 'billing_street', 'billing_city', 'billing_state', 'billing_country', 'billing_postal_code', 'subtotal', 'total'];
     protected $hidden = ['updated_at', 'document'];
 
     protected $casts = array(

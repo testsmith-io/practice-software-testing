@@ -26,7 +26,7 @@ class PatchInvoice extends BaseFormRequest
     {
         return [
             'invoice_date' => 'sometimes|date_format:Y-m-d',
-            'billing_address' => ['sometimes', 'string', 'max:70', new SubscriptSuperscriptRule()],
+            'billing_street' => ['sometimes', 'string', 'max:70', new SubscriptSuperscriptRule()],
             'billing_city' => ['sometimes', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'billing_state' => ['sometimes', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'billing_country' => ['sometimes', 'string', 'max:40', new SubscriptSuperscriptRule()],

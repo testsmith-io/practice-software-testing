@@ -5,7 +5,7 @@
     <thead>
     <tr>
       <th scope="col">{{ t('pages.my-account.invoices.invoice-number') }}</th>
-      <th scope="col">{{ t('pages.my-account.invoices.billing-address') }}</th>
+      <th scope="col">{{ t('pages.my-account.invoices.billing-street') }}</th>
       <th scope="col">{{ t('pages.my-account.invoices.invoice-date') }}</th>
       <th scope="col">{{ t('pages.my-account.invoices.total') }}</th>
       <th></th>
@@ -15,7 +15,7 @@
       @for (item of results.data; track item) {
         <tr>
           <td>{{ item.invoice_number }}</td>
-          <td>{{ item.billing_address }}</td>
+          <td>{{ item.billing_street }}</td>
           <td>{{ item.invoice_date }}</td>
           <td>${{ item.total.toFixed(2) }}</td>
           <td style="white-space: nowrap">

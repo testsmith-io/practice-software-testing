@@ -235,7 +235,7 @@ class InvoiceTest extends TestCase {
 
     public function testPartialUpdateInvoice() {
         $payload = [
-            'billing_address' => 'new street'
+            'billing_street' => 'new street'
         ];
 
         $response = $this->patchJson("/invoices/{$this->invoice->id}", $payload, $this->headers($this->customer));
@@ -247,7 +247,7 @@ class InvoiceTest extends TestCase {
 
         $this->assertDatabaseHas('invoices', [
             'id' => $this->invoice->id,
-            'billing_address' => 'new street'
+            'billing_street' => 'new street'
         ]);
     }
 
@@ -294,7 +294,7 @@ class InvoiceTest extends TestCase {
             'cart_id' => $cart->id,
             'payment_method' => $paymentMethod,
             'payment_details' => $paymentDetails,
-            'billing_address' => 'address',
+            'billing_street' => 'address',
             'billing_city' => 'city',
             'billing_country' => 'country',
             'billing_state' => 'state',

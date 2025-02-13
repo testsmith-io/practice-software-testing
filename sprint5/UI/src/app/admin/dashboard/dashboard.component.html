@@ -30,7 +30,7 @@
       @for (item of results.data; track item) {
         <tr>
           <td>{{ item.invoice_number }}</td>
-          <td>{{ item.billing_address }}</td>
+          <td>{{ item.billing_street }}</td>
           <td>{{ item.invoice_date }}</td>
           <td>{{ item.status }}</td>
           <td>${{ item.total.toFixed(2) }}</td>

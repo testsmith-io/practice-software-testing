@@ -32,7 +32,7 @@ export class AddressComponent implements OnInit, OnDestroy {
 
   private initializeForm(): void {
     this.cusAddress = this.formBuilder.group({
-      address: ['', [Validators.required, Validators.maxLength(70)]],
+      street: ['', [Validators.required, Validators.maxLength(70)]],
       city: ['', [Validators.required, Validators.maxLength(40)]],
       state: ['', [Validators.required, Validators.maxLength(40)]],
       country: ['', [Validators.required, Validators.maxLength(40)]],
