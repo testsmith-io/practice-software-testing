@@ -28,11 +28,11 @@ export class RegisterComponent implements OnInit {
         first_name: ['', [Validators.required]],
         last_name: ['', [Validators.required]],
         dob: ['', [Validators.required]],
-        address: ['', [Validators.required]],
+        street: ['', [Validators.required]],
         city: ['', [Validators.required]],
         state: ['', [Validators.required]],
         country: ['', [Validators.required]],
-        postcode: ['', [Validators.required]],
+        postal_code: ['', [Validators.required]],
         phone: ['', [Validators.required, Validators.pattern(/^[0-9]\d*$/)]],
         email: ['', [Validators.required, Validators.pattern("^(?=.{1,256}$)[a-zA-Z0-9._%+-]{1,64}@[a-zA-Z0-9.-]{1,255}$")]],
         password: ['', [Validators.required,
@@ -97,15 +97,18 @@ export class RegisterComponent implements OnInit {
       first_name: this.register.value.first_name,
       last_name: this.register.value.last_name,
       dob: this.register.value.dob,
-      address: this.register.value.address,
-      city: this.register.value.city,
-      state: this.register.value.state,
-      country: this.register.value.country,
-      postcode: this.register.value.postcode,
       phone: this.register.value.phone,
       email: this.register.value.email,
-      password: this.register.value.password
+      password: this.register.value.password,
+      address: {
+        street: this.register.value.street,
+        city: this.register.value.city,
+        state: this.register.value.state,
+        country: this.register.value.country,
+        postal_code: this.register.value.postal_code
+      }
     };
+
 
     this.accountService.register(payload).subscribe({
       next: () => {

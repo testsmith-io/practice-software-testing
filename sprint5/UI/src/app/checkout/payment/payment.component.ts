@@ -151,7 +151,7 @@ export class PaymentComponent implements OnInit {
       'billing_city': this.address.value.city,
       'billing_state': this.address.value.state,
       'billing_country': this.address.value.country,
-      'billing_postcode': this.address.value.postcode,
+      'billing_postal_code': this.address.value.postal_code,
       'payment_method': paymentData.payment_method,
       'payment_details': payment,
       'cart_id': cartId

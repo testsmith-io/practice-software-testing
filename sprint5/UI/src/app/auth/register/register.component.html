@@ -73,20 +73,20 @@
           </div>
 
           <div class="form-group mb-3">
-            <label for="address" class="form-label">{{ t('fields.address.label') }}</label>
-            <input formControlName="address"
-                   id="address"
-                   data-test="address"
+            <label for="street" class="form-label">{{ t('fields.street.label') }}</label>
+            <input formControlName="street"
+                   id="street"
+                   data-test="street"
                    class="form-control"
-                   [ngClass]="{ 'is-invalid': submitted && f['address'].errors }" type="text"
-                   placeholder="{{ t('fields.address.placeholder') }} *"
+                   [ngClass]="{ 'is-invalid': submitted && f['street'].errors }" type="text"
+                   placeholder="{{ t('fields.street.placeholder') }} *"
                    value=""/>
-            @if (f['address'].invalid && submitted) {
-              <div data-test="address-error"
+            @if (f['street'].invalid && submitted) {
+              <div data-test="street-error"
                    class="alert alert-danger mt-3">
-                @if (f['address'].errors?.['required']) {
+                @if (f['street'].errors?.['required']) {
                   <div>
-                    {{ t('fields.address.errors.required') }}
+                    {{ t('fields.street.errors.required') }}
                   </div>
                 }
               </div>
@@ -95,26 +95,26 @@
 
           <div class="col-md-4">
             <div class="form-group mb-3">
-              <label for="postcode" class="form-label">{{ t('fields.postcode.label') }}</label>
-              <input formControlName="postcode"
-                     id="postcode"
-                     data-test="postcode"
+              <label for="postal_code" class="form-label">{{ t('fields.postal_code.label') }}</label>
+              <input formControlName="postal_code"
+                     id="postal_code"
+                     data-test="postal_code"
                      class="form-control"
-                     [ngClass]="{ 'is-invalid': submitted && f['postcode'].errors }" type="text"
-                     placeholder="{{ t('fields.postcode.placeholder') }} *"
+                     [ngClass]="{ 'is-invalid': submitted && f['postal_code'].errors }" type="text"
+                     placeholder="{{ t('fields.postal_code.placeholder') }} *"
                      value=""/>
             </div>
-            @if (f['postcode'].invalid && submitted) {
-              <div data-test="postcode-error"
+            @if (f['postal_code'].invalid && submitted) {
+              <div data-test="postal_code-error"
                    class="alert alert-danger">
-                @if (f['postcode'].errors?.['required']) {
+                @if (f['postal_code'].errors?.['required']) {
                   <div>
-                    {{ t('fields.postcode.errors.required') }}
+                    {{ t('fields.postal_code.errors.required') }}
                   </div>
                 }
-                @if (f['postcode'].errors?.['pattern']) {
+                @if (f['postal_code'].errors?.['pattern']) {
                   <div>
-                    {{ t('fields.postcode.errors.format') }}
+                    {{ t('fields.postal_code.errors.format') }}
                   </div>
                 }
               </div>

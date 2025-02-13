@@ -20,11 +20,11 @@ class CreateUsersTable extends Migration
             $table->string('provider')->nullable();
             $table->string('first_name', 40);
             $table->string('last_name', 20);
-            $table->string('address', 70)->nullable();
+            $table->string('street', 70)->nullable();
             $table->string('city', 40)->nullable();
             $table->string('state', 40)->nullable();
             $table->string('country', 40)->nullable();
-            $table->string('postcode', 10)->nullable();
+            $table->string('postal_code', 10)->nullable();
             $table->string('phone', 24)->nullable();
             $table->date('dob')->nullable();
             $table->string('email', 256)->unique();

@@ -6,7 +6,7 @@ export class Invoice {
   billing_address!: string;
   billing_city!: string;
   billing_country!: string;
-  billing_postcode!: string;
+  billing_postal_code!: string;
   billing_state!: string;
   invoice_date!: string;
   invoice_number!: string;

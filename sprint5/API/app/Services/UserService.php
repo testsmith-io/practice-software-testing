@@ -27,6 +27,16 @@ class UserService
         $data['role'] = 'user';
         $data['password'] = app('hash')->make($data['password']);
 
+        // Extract address fields from the nested address array
+        if (isset($data['address']) && is_array($data['address'])) {
+            $data['street'] = $data['address']['street'] ?? null;
+            $data['city'] = $data['address']['city'] ?? null;
+            $data['state'] = $data['address']['state'] ?? null;
+            $data['country'] = $data['address']['country'] ?? null;
+            $data['postal_code'] = $data['address']['postal_code'] ?? null;
+            unset($data['address']); // Remove nested address to prevent issues
+        }
+
         if (App::environment('local')) {
             Mail::to([$data['email']])->send(new Register("{$data['first_name']} {$data['last_name']}", $data['email'], $data['password']));
         }

@@ -49,7 +49,7 @@ class InvoiceSeeder extends Seeder {
                 'billing_city' => 'Utrecht',
                 'billing_state' => 'Utrecht',
                 'billing_country' => 'The Netherlands',
-                'billing_postcode' => '1122AB',
+                'billing_postal_code' => '1122AB',
                 'total' => 0,
                 'status' => 'AWAITING_FULFILLMENT'
             ]]);

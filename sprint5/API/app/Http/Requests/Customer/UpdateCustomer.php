@@ -42,11 +42,11 @@ class UpdateCustomer extends BaseFormRequest
         return [
             'first_name' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'last_name' => ['required', 'string', 'max:20', new SubscriptSuperscriptRule()],
-            'address' => ['required', 'string', 'max:70', new SubscriptSuperscriptRule()],
+            'street' => ['required', 'string', 'max:70', new SubscriptSuperscriptRule()],
             'city' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'state' => ['nullable', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'country' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule()],
-            'postcode' => ['nullable', 'string', 'max:10', new SubscriptSuperscriptRule()],
+            'postal_code' => ['nullable', 'string', 'max:10', new SubscriptSuperscriptRule()],
             'phone' => ['nullable', 'string', 'max:24', new SubscriptSuperscriptRule()],
             'dob' => ['date', 'date_format:Y-m-d',"before:{$before}"],
             'email' => ['required', 'string', 'max:256', new SubscriptSuperscriptRule()]

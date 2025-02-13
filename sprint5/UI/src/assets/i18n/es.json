@@ -43,7 +43,7 @@
         "required": "La dirección es obligatoria"
       }
     },
-    "postcode": {
+    "postal_code": {
       "label": "Código postal",
       "placeholder": "Tu código postal",
       "errors": {

@@ -36,7 +36,7 @@ export class AddressComponent implements OnInit, OnDestroy {
       city: ['', [Validators.required, Validators.maxLength(40)]],
       state: ['', [Validators.required, Validators.maxLength(40)]],
       country: ['', [Validators.required, Validators.maxLength(40)]],
-      postcode: ['', [Validators.required, Validators.maxLength(10)]]
+      postal_code: ['', [Validators.required, Validators.maxLength(10)]]
     });
 
     this.subscription.add(

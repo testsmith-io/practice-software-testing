@@ -43,7 +43,7 @@
         "required": "L'adresse est requise"
       }
     },
-    "postcode": {
+    "postal_code": {
       "label": "Code postal",
       "placeholder": "Votre code postal",
       "errors": {

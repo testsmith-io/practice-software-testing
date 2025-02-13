@@ -30,7 +30,7 @@ class PatchInvoice extends BaseFormRequest
             'billing_city' => ['sometimes', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'billing_state' => ['sometimes', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'billing_country' => ['sometimes', 'string', 'max:40', new SubscriptSuperscriptRule()],
-            'billing_postcode' => ['sometimes', 'string', 'max:10', new SubscriptSuperscriptRule()],
+            'billing_postal_code' => ['sometimes', 'string', 'max:10', new SubscriptSuperscriptRule()],
             'cart_id' => 'sometimes'
         ];
     }
