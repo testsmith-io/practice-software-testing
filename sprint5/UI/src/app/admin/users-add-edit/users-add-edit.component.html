@@ -65,27 +65,27 @@
           }
         </div>
         <div class="row mb-3">
-          <label for="address" class="col-sm-3 col-form-label">Address</label>
+          <label for="street" class="col-sm-3 col-form-label">Street</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" formControlName="address" data-test="address" id="address">
+            <input type="text" class="form-control" formControlName="street" data-test="street" id="street">
           </div>
-          @if (submitted && f['address'].errors) {
+          @if (submitted && f['street'].errors) {
             <div class="alert alert-danger mt-3 p-2" role="alert">
-              @if (f['address'].errors['required']) {
+              @if (f['street'].errors['required']) {
                 <div>Address is required</div>
               }
             </div>
           }
         </div>
         <div class="row mb-3">
-          <label for="postcode" class="col-sm-3 col-form-label">Postal code</label>
+          <label for="postal_code" class="col-sm-3 col-form-label">Postal code</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" formControlName="postcode" data-test="postcode" id="postcode">
+            <input type="text" class="form-control" formControlName="postal_code" data-test="postal_code" id="postal_code">
           </div>
-          @if (submitted && f['postcode'].errors) {
+          @if (submitted && f['postal_code'].errors) {
             <div class="alert alert-danger mt-3 p-2" role="alert">
-              @if (f['postcode'].errors['required']) {
-                <div>Postcode is required</div>
+              @if (f['postal_code'].errors['required']) {
+                <div>Postal code is required</div>
               }
             </div>
           }

@@ -36,11 +36,13 @@ class UserTest extends TestCase
         $userData = [
             'first_name' => 'John',
             'last_name' => 'Doe',
-            'address' => 'Street 1',
-            'city' => 'City',
-            'state' => 'State',
-            'country' => 'Country',
-            'postcode' => '1234AA',
+            'address' => [
+                'street' => 'Street 1',
+                'city' => 'City',
+                'state' => 'State',
+                'country' => 'Country',
+                'postal_code' => '1234AA'
+            ],
             'phone' => '0987654321',
             'dob' => '1970-01-01',
             'email' => 'john@doe.example',
@@ -63,11 +65,13 @@ class UserTest extends TestCase
         $userData = [
             'first_name' => 'John',
             'last_name' => 'Doe',
-            'address' => 'Street 1',
-            'city' => 'City',
-            'state' => 'State',
-            'country' => 'Country',
-            'postcode' => '1234AA',
+            'address' => [
+                'street' => 'Street 1',
+                'city' => 'City',
+                'state' => 'State',
+                'country' => 'Country',
+                'postal_code' => '1234AA'
+            ],
             'phone' => '0987654321',
             'dob' => '1970-01-01',
             'email' => 'john@doe.example',
@@ -250,7 +254,7 @@ class UserTest extends TestCase
         $newData = [
             'first_name' => 'UpdatedName',
             'last_name' => 'Doe',
-            'address' => 'Street 1',
+            'street' => 'Street 1',
             'city' => 'City',
             'country' => 'Country',
             'email' => 'john@doe.example',
@@ -297,7 +301,7 @@ class UserTest extends TestCase
         $newData = [
             'first_name' => 'UpdatedByAdmin',
             'last_name' => 'Doe',
-            'address' => 'Street 1',
+            'street' => 'Street 1',
             'city' => 'City',
             'country' => 'Country',
             'email' => 'john@doe.example',
@@ -321,7 +325,7 @@ class UserTest extends TestCase
         $newData = [
             'first_name' => 'John',
             'last_name' => 'Doe',
-            'address' => 'Street 1',
+            'street' => 'Street 1',
             'city' => 'City',
             'country' => 'Country',
             'email' => 'john@doe.example',
@@ -332,6 +336,7 @@ class UserTest extends TestCase
         // Make a PUT request to attempt to update the other user's information
         $response = $this->putJson("/users/{$otherUser->id}", $newData, $this->headers($this->user));
 
+//        dd($response);
         $response->assertStatus(ResponseAlias::HTTP_FORBIDDEN);
     }
 
@@ -496,11 +501,11 @@ class UserTest extends TestCase
                         'id',
                         'first_name',
                         'last_name',
-                        'address',
+                        'street',
                         'city',
                         'state',
                         'country',
-                        'postcode',
+                        'postal_code',
                         'phone',
                         'dob',
                         'email',

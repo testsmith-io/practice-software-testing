@@ -12,12 +12,12 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  * @OA\Schema(
  *      schema="BaseInvoiceRequest",
  *      type="object",
- *      required={"billing_address", "billing_city", "billing_state", "billing_country", "billing_postcode", "payment_method", "payment_details", "cart_id"},
+ *      required={"billing_address", "billing_city", "billing_state", "billing_country", "billing_postal_code", "payment_method", "payment_details", "cart_id"},
  *      @OA\Property(property="billing_address", type="string"),
  *      @OA\Property(property="billing_city", type="string"),
  *      @OA\Property(property="billing_state", type="string"),
  *      @OA\Property(property="billing_country", type="string"),
- *      @OA\Property(property="billing_postcode", type="string"),
+ *      @OA\Property(property="billing_postal_code", type="string"),
  *      @OA\Property(property="payment_method", type="string"),
  *      @OA\Property(property="cart_id", type="string"),
  *      @OA\Property(
@@ -72,7 +72,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="billing_city", type="string"),
  *         @OA\Property(property="billing_country", type="string"),
  *         @OA\Property(property="billing_state", type="string"),
- *         @OA\Property(property="billing_postcode", type="string"),
+ *         @OA\Property(property="billing_postal_code", type="string"),
  *         @OA\Property(property="cart_id", type="string", example="Cash on Delivery")
  *     }
  * )
@@ -89,7 +89,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="billing_city", type="string"),
  *         @OA\Property(property="billing_country", type="string"),
  *         @OA\Property(property="billing_state", type="string"),
- *         @OA\Property(property="billing_postcode", type="string"),
+ *         @OA\Property(property="billing_postal_code", type="string"),
  *         @OA\Property(property="additional_discount_percentage", type="number"),
  *         @OA\Property(property="additional_discount_amount", type="number"),
  *         @OA\Property(property="subtotal", type="number"),
@@ -106,7 +106,7 @@ class Invoice extends BaseModel
 
     protected $filters = ['in', 'sort', 'starts_with'];
     protected $table = 'invoices';
-    protected $fillable = ['user_id', 'invoice_date', 'invoice_number', 'additional_discount_percentage', 'additional_discount_amount', 'billing_address', 'billing_city', 'billing_state', 'billing_country', 'billing_postcode', 'subtotal', 'total'];
+    protected $fillable = ['user_id', 'invoice_date', 'invoice_number', 'additional_discount_percentage', 'additional_discount_amount', 'billing_address', 'billing_city', 'billing_state', 'billing_country', 'billing_postal_code', 'subtotal', 'total'];
     protected $hidden = ['updated_at', 'document'];
 
     protected $casts = array(

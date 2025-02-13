@@ -4279,24 +4279,29 @@
                         "example": "Doe"
                     },
                     "address": {
-                        "type": "string",
-                        "example": "Street 1"
-                    },
-                    "city": {
-                        "type": "string",
-                        "example": "City"
-                    },
-                    "state": {
-                        "type": "string",
-                        "example": "State"
-                    },
-                    "country": {
-                        "type": "string",
-                        "example": "Country"
-                    },
-                    "postcode": {
-                        "type": "string",
-                        "example": "1234AA"
+                        "properties": {
+                            "street": {
+                                "type": "string",
+                                "example": "Street 1"
+                            },
+                            "city": {
+                                "type": "string",
+                                "example": "City"
+                            },
+                            "state": {
+                                "type": "string",
+                                "example": "State"
+                            },
+                            "country": {
+                                "type": "string",
+                                "example": "Country"
+                            },
+                            "postcode": {
+                                "type": "string",
+                                "example": "1234AA"
+                            }
+                        },
+                        "type": "object"
                     },
                     "phone": {
                         "type": "string",
@@ -4328,7 +4333,7 @@
                         "type": "string",
                         "example": "Doe"
                     },
-                    "address": {
+                    "street": {
                         "type": "string",
                         "example": "Street 1"
                     },

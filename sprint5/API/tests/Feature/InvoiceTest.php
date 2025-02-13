@@ -298,7 +298,7 @@ class InvoiceTest extends TestCase {
             'billing_city' => 'city',
             'billing_country' => 'country',
             'billing_state' => 'state',
-            'billing_postcode' => '12345'
+            'billing_postal_code' => '12345'
         ];
 
         $response = $this->postJson('/invoices', $requestData, $this->headers($user));

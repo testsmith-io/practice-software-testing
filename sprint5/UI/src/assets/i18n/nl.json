@@ -43,7 +43,7 @@
         "required": "Adres is vereist"
       }
     },
-    "postcode": {
+    "postal_code": {
       "label": "Postcode",
       "placeholder": "Uw postcode",
       "errors": {

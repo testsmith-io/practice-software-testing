@@ -36,15 +36,15 @@
         "required": "Last name is required"
       }
     },
-    "address": {
-      "label": "Address",
-      "placeholder": "Your Address",
+    "street": {
+      "label": "Street",
+      "placeholder": "Your Street",
       "errors": {
-        "required": "Address is required"
+        "required": "Street is required"
       }
     },
-    "postcode": {
-      "label": "Postcode",
+    "postal_code": {
+      "label": "Postal code",
       "placeholder": "Your Postcode",
       "errors": {
         "required": "Postcode is required",

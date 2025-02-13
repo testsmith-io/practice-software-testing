@@ -4,7 +4,7 @@ export class Profile {
   last_name!: string;
   phone!: string;
   address!: string;
-  postcode!: string;
+  postal_code!: string;
   city!: string;
   state!: string;
   country!: string;

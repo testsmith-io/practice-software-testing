@@ -24,11 +24,11 @@ class UserFactory extends Factory
         return [
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
-            'address' => $this->faker->streetAddress,
+            'street' => $this->faker->streetAddress,
             'city' => $this->faker->city,
             'state' => $this->faker->name,
             'country' => $this->faker->country,
-            'postcode' => $this->faker->postcode,
+            'postal_code' => $this->faker->postcode,
             'phone' => $this->faker->phoneNumber,
             'dob' => '2000-01-01',
             'email' => $this->faker->email,

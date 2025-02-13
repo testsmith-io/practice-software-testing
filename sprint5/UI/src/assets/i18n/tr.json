@@ -43,7 +43,7 @@
         "required": "Adres gereklidir"
       }
     },
-    "postcode": {
+    "postal_code": {
       "label": "Posta Kodu",
       "placeholder": "Posta Kodunuz",
       "errors": {

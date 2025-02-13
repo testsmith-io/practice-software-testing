@@ -43,7 +43,7 @@
         "required": "Adresse ist verpflichtend"
       }
     },
-    "postcode": {
+    "postal_code": {
       "label": "Postleitzahl",
       "placeholder": "Ihre Postleitzahl",
       "errors": {

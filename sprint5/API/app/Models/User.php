@@ -17,11 +17,15 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  *     properties={
  *         @OA\Property(property="first_name", type="string", example="John"),
  *         @OA\Property(property="last_name", type="string", example="Doe"),
- *         @OA\Property(property="address", type="string", example="Street 1"),
- *         @OA\Property(property="city", type="string", example="City"),
- *         @OA\Property(property="state", type="string", example="State"),
- *         @OA\Property(property="country", type="string", example="Country"),
- *         @OA\Property(property="postcode", type="string", example="1234AA"),
+ *         @OA\Property(
+ *              property="address",
+ *              type="object",
+ *              @OA\Property(property="street", type="string", example="Street 1"),
+ *              @OA\Property(property="city", type="string", example="City"),
+ *              @OA\Property(property="state", type="string", example="State"),
+ *              @OA\Property(property="country", type="string", example="Country"),
+ *              @OA\Property(property="postal_code", type="string", example="1234AA")
+ *         ),
  *         @OA\Property(property="phone", type="string", example="0987654321"),
  *         @OA\Property(property="dob", type="string", example="1970-01-01"),
  *         @OA\Property(property="password", type="string", example="super-secret"),
@@ -36,11 +40,11 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  *     properties={
  *         @OA\Property(property="first_name", type="string", example="John"),
  *         @OA\Property(property="last_name", type="string", example="Doe"),
- *         @OA\Property(property="address", type="string", example="Street 1"),
+ *         @OA\Property(property="street", type="string", example="Street 1"),
  *         @OA\Property(property="city", type="string", example="City"),
  *         @OA\Property(property="state", type="string", example="State"),
  *         @OA\Property(property="country", type="string", example="Country"),
- *         @OA\Property(property="postcode", type="string", example="1234AA"),
+ *         @OA\Property(property="postal_code", type="string", example="1234AA"),
  *         @OA\Property(property="phone", type="string", example="0987654321"),
  *         @OA\Property(property="dob", type="string", example="1970-01-01"),
  *         @OA\Property(property="email", type="string", example="john@doe.example"),
@@ -60,7 +64,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array<int, string>
      */
-    protected $fillable = ['first_name', 'last_name', 'address', 'city', 'state', 'country', 'postcode', 'phone', 'dob', 'email', 'password', 'role', 'failed_login_attempts', 'totp_secret', 'totp_verified_at', 'totp_enabled'];
+    protected $fillable = ['first_name', 'last_name', 'street', 'city', 'state', 'country', 'postal_code', 'phone', 'dob', 'email', 'password', 'role', 'failed_login_attempts', 'totp_secret', 'totp_verified_at', 'totp_enabled'];
 
 
     /**

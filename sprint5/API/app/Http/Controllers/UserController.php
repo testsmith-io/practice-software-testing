@@ -102,7 +102,8 @@ class UserController extends Controller
      */
     public function store(StoreCustomer $request)
     {
-        $user = $this->userService->registerUser($request->all());
+        $data = $request->all();
+        $user = $this->userService->registerUser($data);
         return $this->preferredFormat($user, ResponseAlias::HTTP_CREATED);
     }
 
