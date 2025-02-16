@@ -39,17 +39,22 @@ export class UsersAddEditComponent implements OnInit {
       first_name: ['', [Validators.required]],
       last_name: ['', [Validators.required]],
       dob: ['', [Validators.required]],
-      street: ['', [Validators.required]],
-      city: ['', [Validators.required]],
-      state: ['', []],
-      country: ['', [Validators.required]],
-      postal_code: ['', []],
       phone: ['', []],
       email: ['', [Validators.required, Validators.pattern("^(?=.{1,256}$)[a-zA-Z0-9._%+-]{1,64}@[a-zA-Z0-9.-]{1,255}$")]],
       failed_login_attempts: ['', []],
       enabled: ['', []],
       password: ['', [Validators.minLength(6), Validators.maxLength(40)]],
+
+      // Nest the address fields inside an "address" FormGroup
+      address: this.formBuilder.group({
+        street: ['', [Validators.required]],
+        city: ['', [Validators.required]],
+        state: ['', []],
+        country: ['', [Validators.required]],
+        postal_code: ['', []]
+      })
     });
+
 
     if (!this.isAddMode) {
       this.userService.getById(this.id)
@@ -62,6 +67,10 @@ export class UsersAddEditComponent implements OnInit {
 
   get f() {
     return this.form.controls;
+  }
+
+  get a() {
+    return (this.form.get('address') as FormGroup).controls; // For nested address fields
   }
 
   onSubmit() {

@@ -28,20 +28,13 @@ class UserService
         $data['password'] = app('hash')->make($data['password']);
 
         // Extract address fields from the nested address array
-        if (isset($data['address']) && is_array($data['address'])) {
-            $data['street'] = $data['address']['street'] ?? null;
-            $data['city'] = $data['address']['city'] ?? null;
-            $data['state'] = $data['address']['state'] ?? null;
-            $data['country'] = $data['address']['country'] ?? null;
-            $data['postal_code'] = $data['address']['postal_code'] ?? null;
-            unset($data['address']); // Remove nested address to prevent issues
-        }
+        $data = $this->extractAddressFields($data);
 
         if (App::environment('local')) {
             Mail::to([$data['email']])->send(new Register("{$data['first_name']} {$data['last_name']}", $data['email'], $data['password']));
         }
 
-        return User::create($data);
+        return User::create($data);;
     }
 
     public function login($credentials)
@@ -201,6 +194,9 @@ class UserService
         // Exclude the password field from updates
         unset($data['password']);
 
+        // Extract address fields from the nested address array
+        $data = $this->extractAddressFields($data);
+
         $success = $user->update($data);
         Cache::forget('auth.user.' . $user->id);
 
@@ -276,12 +272,30 @@ class UserService
                 unset($data['role']);
             }
 
+            $data = $this->extractAddressFields($data);
             $user->update($data);
             Cache::forget('auth.user.' . $user->id);
             return ['success' => true];
         }
 
         throw new \Exception('You can only update your own data.');
+    }
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function extractAddressFields($data)
+    {
+        if (isset($data['address']) && is_array($data['address'])) {
+            $data['street'] = $data['address']['street'] ?? null;
+            $data['city'] = $data['address']['city'] ?? null;
+            $data['state'] = $data['address']['state'] ?? null;
+            $data['country'] = $data['address']['country'] ?? null;
+            $data['postal_code'] = $data['address']['postal_code'] ?? null;
+            unset($data['address']);
+        }
+        return $data;
     }
 
 }

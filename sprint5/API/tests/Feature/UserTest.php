@@ -254,9 +254,11 @@ class UserTest extends TestCase
         $newData = [
             'first_name' => 'UpdatedName',
             'last_name' => 'Doe',
-            'street' => 'Street 1',
-            'city' => 'City',
-            'country' => 'Country',
+            'address' => [
+                'street' => 'Street 1',
+                'city' => 'City',
+                'country' => 'Country'
+            ],
             'email' => 'john@doe.example',
         ];
 
@@ -301,9 +303,11 @@ class UserTest extends TestCase
         $newData = [
             'first_name' => 'UpdatedByAdmin',
             'last_name' => 'Doe',
-            'street' => 'Street 1',
-            'city' => 'City',
-            'country' => 'Country',
+            'address' => [
+                'street' => 'Street 1',
+                'city' => 'City',
+                'country' => 'Country'
+            ],
             'email' => 'john@doe.example',
         ];
 
@@ -325,9 +329,11 @@ class UserTest extends TestCase
         $newData = [
             'first_name' => 'John',
             'last_name' => 'Doe',
-            'street' => 'Street 1',
-            'city' => 'City',
-            'country' => 'Country',
+            'address' => [
+                'street' => 'Street 1',
+                'city' => 'City',
+                'country' => 'Country'
+            ],
             'email' => 'john@doe.example',
         ];
         // Create two users
@@ -501,11 +507,13 @@ class UserTest extends TestCase
                         'id',
                         'first_name',
                         'last_name',
-                        'street',
-                        'city',
-                        'state',
-                        'country',
-                        'postal_code',
+                        'address' => [
+                            'street',
+                            'city',
+                            'state',
+                            'country',
+                            'postal_code'
+                        ],
                         'phone',
                         'dob',
                         'email',

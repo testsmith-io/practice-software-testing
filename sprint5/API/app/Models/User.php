@@ -40,11 +40,15 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  *     properties={
  *         @OA\Property(property="first_name", type="string", example="John"),
  *         @OA\Property(property="last_name", type="string", example="Doe"),
- *         @OA\Property(property="street", type="string", example="Street 1"),
- *         @OA\Property(property="city", type="string", example="City"),
- *         @OA\Property(property="state", type="string", example="State"),
- *         @OA\Property(property="country", type="string", example="Country"),
- *         @OA\Property(property="postal_code", type="string", example="1234AA"),
+ *         @OA\Property(
+ *              property="address",
+ *              type="object",
+ *              @OA\Property(property="street", type="string", example="Street 1"),
+ *              @OA\Property(property="city", type="string", example="City"),
+ *              @OA\Property(property="state", type="string", example="State"),
+ *              @OA\Property(property="country", type="string", example="Country"),
+ *              @OA\Property(property="postal_code", type="string", example="1234AA")
+ *         ),
  *         @OA\Property(property="phone", type="string", example="0987654321"),
  *         @OA\Property(property="dob", type="string", example="1970-01-01"),
  *         @OA\Property(property="email", type="string", example="john@doe.example"),
@@ -72,7 +76,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array<int, string>
      */
-    protected $hidden = ['enabled', 'failed_login_attempts', 'updated_at', 'password', 'role', 'uid', 'totp_secret', 'totp_verified_at'];
+    protected $hidden = ['enabled', 'failed_login_attempts', 'updated_at', 'password', 'role', 'uid', 'totp_secret', 'totp_verified_at', 'street', 'city', 'state', 'country', 'postal_code'];
 
     /**
      * The attributes that should be cast.
@@ -84,6 +88,19 @@ class User extends Authenticatable implements JWTSubject
     );
 
 //    protected $appends = ['admin_details'];
+    protected $appends = ['address'];
+
+    public function getAddressAttribute()
+    {
+        return [
+            'street' => $this->street,
+            'city' => $this->city,
+            'state' => $this->state,
+            'country' => $this->country,
+            'postal_code' => $this->postal_code, // Renamed for API consistency
+        ];
+    }
+
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
