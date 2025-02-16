@@ -64,76 +64,78 @@
             </div>
           }
         </div>
-        <div class="row mb-3">
-          <label for="street" class="col-sm-3 col-form-label">Street</label>
-          <div class="col-sm-9">
-            <input type="text" class="form-control" formControlName="street" data-test="street" id="street">
-          </div>
-          @if (submitted && f['street'].errors) {
-            <div class="alert alert-danger mt-3 p-2" role="alert">
-              @if (f['street'].errors['required']) {
-                <div>Address is required</div>
-              }
+        <div formGroupName="address">
+          <div class="row mb-3">
+            <label for="street" class="col-sm-3 col-form-label">Street</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" formControlName="street" data-test="street" id="street">
             </div>
-          }
-        </div>
-        <div class="row mb-3">
-          <label for="postal_code" class="col-sm-3 col-form-label">Postal code</label>
-          <div class="col-sm-9">
-            <input type="text" class="form-control" formControlName="postal_code" data-test="postal_code" id="postal_code">
+            @if (submitted && a['street'].errors) {
+              <div class="alert alert-danger mt-3 p-2" role="alert">
+                @if (a['street'].errors['required']) {
+                  <div>Street is required</div>
+                }
+              </div>
+            }
           </div>
-          @if (submitted && f['postal_code'].errors) {
-            <div class="alert alert-danger mt-3 p-2" role="alert">
-              @if (f['postal_code'].errors['required']) {
-                <div>Postal code is required</div>
-              }
+          <div class="row mb-3">
+            <label for="postal_code" class="col-sm-3 col-form-label">Postal code</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" formControlName="postal_code" data-test="postal_code" id="postal_code">
             </div>
-          }
-        </div>
-        <div class="row mb-3">
-          <label for="city" class="col-sm-3 col-form-label">City</label>
-          <div class="col-sm-9">
-            <input type="text" class="form-control" formControlName="city" data-test="city" id="city">
+            @if (submitted && a['postal_code'].errors) {
+              <div class="alert alert-danger mt-3 p-2" role="alert">
+                @if (a['postal_code'].errors['required']) {
+                  <div>Postal code is required</div>
+                }
+              </div>
+            }
           </div>
-          @if (submitted && f['city'].errors) {
-            <div class="alert alert-danger mt-3 p-2" role="alert">
-              @if (f['city'].errors['required']) {
-                <div>City is required</div>
-              }
+          <div class="row mb-3">
+            <label for="city" class="col-sm-3 col-form-label">City</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" formControlName="city" data-test="city" id="city">
             </div>
-          }
-        </div>
-        <div class="row mb-3">
-          <label for="state" class="col-sm-3 col-form-label">State</label>
-          <div class="col-sm-9">
-            <input type="text" class="form-control" formControlName="state" data-test="state" id="state">
+            @if (submitted && a['city'].errors) {
+              <div class="alert alert-danger mt-3 p-2" role="alert">
+                @if (a['city'].errors['required']) {
+                  <div>City is required</div>
+                }
+              </div>
+            }
           </div>
-          @if (submitted && f['state'].errors) {
-            <div class="alert alert-danger mt-3 p-2" role="alert">
-              @if (f['state'].errors['required']) {
-                <div>State is required</div>
-              }
+          <div class="row mb-3">
+            <label for="state" class="col-sm-3 col-form-label">State</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" formControlName="state" data-test="state" id="state">
             </div>
-          }
-        </div>
-        <div class="row mb-3">
-          <label for="country" class="col-sm-3 col-form-label">Country</label>
-          <div class="col-sm-9">
-            <select id="country" data-test="country" formControlName="country"
-                    [ngClass]="{ 'is-invalid': submitted && f['country'].errors }" class="form-select">
-              <option value="" disabled selected hidden>Select your country *</option>
-              @for (country of countries;track country) {
-                <option value="{{country.code}}">{{ country.name }}</option>
-              }
-            </select>
+            @if (submitted && a['state'].errors) {
+              <div class="alert alert-danger mt-3 p-2" role="alert">
+                @if (a['state'].errors['required']) {
+                  <div>State is required</div>
+                }
+              </div>
+            }
           </div>
-          @if (submitted && f['country'].errors) {
-            <div class="alert alert-danger mt-3 p-2" role="alert">
-              @if (f['country'].errors['required']) {
-                <div>Country is required</div>
-              }
+          <div class="row mb-3">
+            <label for="country" class="col-sm-3 col-form-label">Country</label>
+            <div class="col-sm-9">
+              <select id="country" data-test="country" formControlName="country"
+                      [ngClass]="{ 'is-invalid': submitted && a['country'].errors }" class="form-select">
+                <option value="" disabled selected hidden>Select your country *</option>
+                @for (country of countries;track country) {
+                  <option value="{{country.code}}">{{ country.name }}</option>
+                }
+              </select>
             </div>
-          }
+            @if (submitted && a['country'].errors) {
+              <div class="alert alert-danger mt-3 p-2" role="alert">
+                @if (a['country'].errors['required']) {
+                  <div>Country is required</div>
+                }
+              </div>
+            }
+          </div>
         </div>
 
         <div class="row mb-3">
