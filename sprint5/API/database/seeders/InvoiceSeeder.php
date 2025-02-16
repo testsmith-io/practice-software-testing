@@ -19,10 +19,12 @@ class InvoiceSeeder extends Seeder {
         $user2 = DB::table('users')->where('email', '=', 'customer2@practicesoftwaretesting.com')->first();
 
         $startDate = Carbon::now()->subYears(5);
+        $endDate = Carbon::now(); // Ensures invoices are created up to today
         $dates = [];
 
-        for ($i = 1; $i <= 150; $i++) {
-            $dates[] = $startDate->copy()->addDays(mt_rand(1, 1800))->toDateTimeString();
+        // Generate 170 random invoice dates over the last 5 years, including current year
+        for ($i = 1; $i <= 200; $i++) {
+            $dates[] = $startDate->copy()->addDays(mt_rand(0, $startDate->diffInDays($endDate)))->toDateTimeString();
         }
         sort($dates);
 
@@ -35,11 +37,14 @@ class InvoiceSeeder extends Seeder {
                 $invoiceCounters[$year] = 1;
             }
 
+            // Generate Invoice Number
             $invoiceNumber = 'INV-' . $year . str_pad($invoiceCounters[$year], 7, '0', STR_PAD_LEFT);
             $invoiceCounters[$year]++;
 
+            // Assign alternating users
             $user = ($invoiceCounters[$year] % 5 == 0) ? $user2 : $user1;
 
+            // Insert Invoice
             DB::table('invoices')->insert([[
                 'id' => Str::ulid()->toBase32(),
                 'user_id' => $user->id,

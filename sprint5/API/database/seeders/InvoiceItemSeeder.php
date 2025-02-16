@@ -73,11 +73,14 @@ class InvoiceItemSeeder extends Seeder {
 
             // Deterministic random number of items
             $itemsCount = mt_rand(1, 6);
+// Shuffle and pick unique products
+            $shuffledProducts = $products;
+            shuffle($shuffledProducts);
+            $selectedProducts = array_slice($shuffledProducts, 0, $itemsCount);
 
-            for ($j = 0; $j < $itemsCount; $j++) {
-                // Deterministic random product and quantity
-                $productIndex = $j % count($products);
-                $product = $products[$productIndex];
+            $invoiceItems = [];
+
+            foreach ($selectedProducts as $product) {
                 $quantity = mt_rand(1, 3);
                 $lineTotal = $product['price'] * $quantity;
 
