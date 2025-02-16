@@ -75,7 +75,7 @@ export class AverageSalesWeekComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getData('2024')
+    this.getData('2025')
   }
 
   selectYear(year: any) {
