@@ -147,11 +147,11 @@ export class PaymentComponent implements OnInit {
     }
 
     const payload = {
-      'billing_street': this.address.value.street,
-      'billing_city': this.address.value.city,
-      'billing_state': this.address.value.state,
-      'billing_country': this.address.value.country,
-      'billing_postal_code': this.address.value.postal_code,
+      'billing_street': this.address.street,
+      'billing_city': this.address.city,
+      'billing_state': this.address.state,
+      'billing_country': this.address.country,
+      'billing_postal_code': this.address.postal_code,
       'payment_method': paymentData.payment_method,
       'payment_details': payment,
       'cart_id': cartId

@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import {Subscription} from "rxjs";
 
@@ -32,11 +32,13 @@ export class AddressComponent implements OnInit, OnDestroy {
 
   private initializeForm(): void {
     this.cusAddress = this.formBuilder.group({
-      street: ['', [Validators.required, Validators.maxLength(70)]],
-      city: ['', [Validators.required, Validators.maxLength(40)]],
-      state: ['', [Validators.required, Validators.maxLength(40)]],
-      country: ['', [Validators.required, Validators.maxLength(40)]],
-      postal_code: ['', [Validators.required, Validators.maxLength(10)]]
+      address: new FormGroup({
+        street: new FormControl('', [Validators.required, Validators.maxLength(70)]),
+        city: new FormControl('', [Validators.required, Validators.maxLength(40)]),
+        state: new FormControl('', [Validators.required, Validators.maxLength(40)]),
+        country: new FormControl('', [Validators.required, Validators.maxLength(40)]),
+        postal_code: new FormControl('', [Validators.required, Validators.maxLength(10)]),
+      })
     });
 
     this.subscription.add(
