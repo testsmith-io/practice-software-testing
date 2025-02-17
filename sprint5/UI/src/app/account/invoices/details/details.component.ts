@@ -45,7 +45,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
               })
             )
           ),
-          takeWhile((response) => response.status !== 'COMPLETED', true) // Stop polling zodra de status COMPLETED is
+          takeWhile((response) => response.status !== 'COMPLETED', true)
         ))
       )
       .subscribe((response) => {
@@ -84,7 +84,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // Zorg dat de subscription stopt als de component wordt vernietigd
     if (this.pollingSubscription) {
       this.pollingSubscription.unsubscribe();
     }

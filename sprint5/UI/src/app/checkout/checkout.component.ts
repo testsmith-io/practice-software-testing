@@ -15,7 +15,7 @@ export class CheckoutComponent {
   addressData: FormGroup;
 
   handleCusAddressChange(cusAddress: FormGroup) {
-    this.addressData = cusAddress;
+    this.addressData = cusAddress.value.address;
     this.canExitStep3 = cusAddress.valid;
   }
 
