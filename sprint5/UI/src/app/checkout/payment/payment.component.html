@@ -190,12 +190,12 @@
 
           @if (paymentError) {
             <div class="alert alert-danger">
-              <div class="help-block">{{ paymentError }}</div>
+              <div class="help-block" data-test="payment-error-message">{{ paymentError }}</div>
             </div>
           }
           @if (paymentMessage) {
             <div class="alert alert-success">
-              <div class="help-block">{{ paymentMessage }}</div>
+              <div class="help-block" data-test="payment-success-message">{{ paymentMessage }}</div>
             </div>
           }
         </form>

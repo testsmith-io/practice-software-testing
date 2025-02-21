@@ -168,18 +168,18 @@
       </ul>
       <div class="btn-group dropdown" >
         <button id="language" type="button" class="btn nav-link dropdown-toggle"
-                data-test="language" aria-hidden="true" data-bs-toggle="dropdown" aria-expanded="false"><fa-icon [icon]="['fas', 'globe']"></fa-icon>
+                data-test="language-select" aria-hidden="true" data-bs-toggle="dropdown" aria-expanded="false"><fa-icon [icon]="['fas', 'globe']"></fa-icon>
           {{ activeLanguage | uppercase }}
           <span class="caret"></span>
         </button>
         <ul id="dropdown-animated" class="dropdown-menu dropdown-menu-right" role="menu"
             aria-labelledby="language">
-          <li role="menuitem"><a class="dropdown-item" (click)="changeSiteLanguage('de')">DE</a></li>
-          <li role="menuitem"><a class="dropdown-item" (click)="changeSiteLanguage('en')">EN</a></li>
-          <li role="menuitem"><a class="dropdown-item" (click)="changeSiteLanguage('es')">ES</a></li>
-          <li role="menuitem"><a class="dropdown-item" (click)="changeSiteLanguage('fr')">FR</a></li>
-          <li role="menuitem"><a class="dropdown-item" (click)="changeSiteLanguage('nl')">NL</a></li>
-          <li role="menuitem"><a class="dropdown-item" (click)="changeSiteLanguage('tr')">TR</a></li>
+          <li role="menuitem"><a class="dropdown-item" data-test="lang-de" (click)="changeSiteLanguage('de')">DE</a></li>
+          <li role="menuitem"><a class="dropdown-item" data-test="lang-en" (click)="changeSiteLanguage('en')">EN</a></li>
+          <li role="menuitem"><a class="dropdown-item" data-test="lang-es" (click)="changeSiteLanguage('es')">ES</a></li>
+          <li role="menuitem"><a class="dropdown-item" data-test="lang-fr" (click)="changeSiteLanguage('fr')">FR</a></li>
+          <li role="menuitem"><a class="dropdown-item" data-test="lang-nl" (click)="changeSiteLanguage('nl')">NL</a></li>
+          <li role="menuitem"><a class="dropdown-item" data-test="lang-tr" (click)="changeSiteLanguage('tr')">TR</a></li>
         </ul>
       </div>
     </div>
