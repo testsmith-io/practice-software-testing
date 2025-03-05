@@ -44,7 +44,7 @@ class TOTPController extends Controller
      *     )
      * )
      */
-        public function setup(Request $request)
+    public function setup(Request $request)
     {
         $user = $request->user();
         $response = $this->totpService->setupTOTP($user);

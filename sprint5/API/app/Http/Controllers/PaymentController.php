@@ -26,7 +26,7 @@ class PaymentController extends Controller
      *              mediaType="application/json",
      *              @OA\Schema(
      *                  type="object",
-     *                  title="PaymentRequest"
+     *                  title="PaymentRequest",
      *                  required={"payment_method", "payment_details"},
      *                  @OA\Property(
      *                      property="payment_method",

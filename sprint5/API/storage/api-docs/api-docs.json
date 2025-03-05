@@ -2113,6 +2113,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "title": "PaymentRequest",
                                 "required": [
                                     "payment_method",
                                     "payment_details"
@@ -3010,6 +3011,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "title": "TOTPErrorResponse",
                                     "properties": {
                                         "error": {
                                             "description": "Error message",
@@ -3083,6 +3085,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "title": "TOTPErrorResponse",
                                     "properties": {
                                         "error": {
                                             "description": "Error message",
@@ -3847,9 +3850,6 @@
             },
             "ContactRequest": {
                 "title": "ContactRequest",
-                "required": [
-                    "name"
-                ],
                 "properties": {
                     "name": {
                         "description": "If set, Authorization header is required",
@@ -3876,9 +3876,6 @@
             },
             "ContactRequestAuthenticated": {
                 "title": "ContactRequestAuthenticated",
-                "required": [
-                    "name"
-                ],
                 "properties": {
                     "name": {
                         "description": "If set, Authorization header is required",
