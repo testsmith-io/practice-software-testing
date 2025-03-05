@@ -2125,7 +2125,7 @@
                                     },
                                     "payment_details": {
                                         "type": "object",
-                                        "oneOf": [
+                                        "anyOf": [
                                             {
                                                 "$ref": "#/components/schemas/BankTransferDetails"
                                             },
@@ -3850,6 +3850,9 @@
             },
             "ContactRequest": {
                 "title": "ContactRequest",
+                "required": [
+                    "name"
+                ],
                 "properties": {
                     "name": {
                         "description": "If set, Authorization header is required",
@@ -3876,6 +3879,9 @@
             },
             "ContactRequestAuthenticated": {
                 "title": "ContactRequestAuthenticated",
+                "required": [
+                    "name"
+                ],
                 "properties": {
                     "name": {
                         "description": "If set, Authorization header is required",
@@ -3939,6 +3945,11 @@
                 "title": "ContactResponseAuthenticated",
                 "properties": {
                     "user_id": {
+                        "description": "",
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "name": {
                         "description": "",
                         "type": "string",
                         "example": "John Doe"

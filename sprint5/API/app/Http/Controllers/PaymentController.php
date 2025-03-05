@@ -36,7 +36,7 @@ class PaymentController extends Controller
      *                  @OA\Property(
      *                      property="payment_details",
      *                      type="object",
-     *                      oneOf={
+     *                      anyOf={
      *                          @OA\Schema(ref="#/components/schemas/BankTransferDetails"),
      *                          @OA\Schema(ref="#/components/schemas/CreditCardDetails"),
      *                          @OA\Schema(ref="#/components/schemas/BuyNowPayLaterDetails"),
