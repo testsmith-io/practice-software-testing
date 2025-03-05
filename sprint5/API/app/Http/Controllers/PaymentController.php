@@ -36,13 +36,23 @@ class PaymentController extends Controller
      *                  @OA\Property(
      *                      property="payment_details",
      *                      type="object",
-     *                      anyOf={
+     *                      oneOf={
      *                          @OA\Schema(ref="#/components/schemas/BankTransferDetails"),
      *                          @OA\Schema(ref="#/components/schemas/CreditCardDetails"),
      *                          @OA\Schema(ref="#/components/schemas/BuyNowPayLaterDetails"),
      *                          @OA\Schema(ref="#/components/schemas/GiftCardDetails"),
      *                          @OA\Schema(type="object", title="CashOnDeliveryDetails")
-     *                      }
+     *                      },
+     *                       discriminator={
+     *                           "propertyName": "type",
+     *                           "mapping": {
+     *                               "bank_transfer": "#/components/schemas/BankTransferDetails",
+     *                               "credit_card": "#/components/schemas/CreditCardDetails",
+     *                               "buy_now_pay_later": "#/components/schemas/BuyNowPayLaterDetails",
+     *                               "gift_card": "#/components/schemas/GiftCardDetails",
+     *                               "cash_on_delivery": "#/components/schemas/CashOnDeliveryDetails"
+     *                           }
+     *                       }
      *                  )
      *              )
      *           )
