@@ -49,8 +49,7 @@ class PaymentController extends Controller
      *                               "bank_transfer": "#/components/schemas/BankTransferDetails",
      *                               "credit_card": "#/components/schemas/CreditCardDetails",
      *                               "buy_now_pay_later": "#/components/schemas/BuyNowPayLaterDetails",
-     *                               "gift_card": "#/components/schemas/GiftCardDetails",
-     *                               "cash_on_delivery": "#/components/schemas/CashOnDeliveryDetails"
+     *                               "gift_card": "#/components/schemas/GiftCardDetails"
      *                           }
      *                       }
      *                  )
