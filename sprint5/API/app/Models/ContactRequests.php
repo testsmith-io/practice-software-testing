@@ -53,6 +53,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *      title="ContactResponseAuthenticated",
  *      properties={
  *          @OA\Property(property="user_id", type="string", example="John Doe", description=""),
+ *          @OA\Property(property="name", type="string", example="John Doe", description=""),
  *          @OA\Property(property="email", type="string", example="john@doe.example", description=""),
  *          @OA\Property(property="subject", type="string", example="website", description=""),
  *          @OA\Property(property="message", type="string", example="Something is wrong with the website.", description=""),
