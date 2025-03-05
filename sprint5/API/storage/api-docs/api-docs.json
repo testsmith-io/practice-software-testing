@@ -2167,8 +2167,8 @@
                                 "schema": {
                                     "title": "PaymentResponse",
                                     "properties": {
-                                        "success": {
-                                            "type": "boolean",
+                                        "message": {
+                                            "type": "string",
                                             "example": "Success status"
                                         }
                                     },
@@ -4111,41 +4111,15 @@
                 },
                 "type": "object"
             },
-            "CashOnDeliveryDetails": {
-                "allOf": [
-                    {
-                        "$ref": "#/components/schemas/PaymentRequestPaymentDetails"
-                    },
-                    {
-                        "description": "Placeholder for Cash on Delivery payment method",
-                        "type": "object"
-                    }
-                ]
-            },
-            "BankTransferDetails": {
-                "allOf": [
-                    {
-                        "properties": {
-                            "bank_name": {
-                                "type": "string"
-                            },
-                            "account_name": {
-                                "type": "string"
-                            },
-                            "account_number": {
-                                "type": "string"
-                            }
-                        },
-                        "type": "object"
-                    },
-                    {
-                        "$ref": "#/components/schemas/PaymentRequestPaymentDetails"
-                    }
-                ]
-            },
             "CreditCardDetails": {
                 "allOf": [
                     {
+                        "required": [
+                            "credit_card_number",
+                            "expiration_date",
+                            "cvv",
+                            "card_holder_name"
+                        ],
                         "properties": {
                             "credit_card_number": {
                                 "type": "string"
@@ -4170,11 +4144,47 @@
             "GiftCardDetails": {
                 "allOf": [
                     {
+                        "required": [
+                            "gift_card_number",
+                            "validation_code"
+                        ],
                         "properties": {
                             "gift_card_number": {
                                 "type": "string"
                             },
                             "validation_code": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/PaymentRequestPaymentDetails"
+                    }
+                ]
+            },
+            "CashOnDeliveryDetails": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/PaymentRequestPaymentDetails"
+                    },
+                    {
+                        "description": "Placeholder for Cash on Delivery payment method",
+                        "type": "object"
+                    }
+                ]
+            },
+            "BankTransferDetails": {
+                "allOf": [
+                    {
+                        "properties": {
+                            "bank_name": {
+                                "type": "string"
+                            },
+                            "account_name": {
+                                "type": "string"
+                            },
+                            "account_number": {
                                 "type": "string"
                             }
                         },

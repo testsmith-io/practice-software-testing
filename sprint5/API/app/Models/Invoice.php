@@ -33,12 +33,49 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *      )
  * )
  *
+ *
+ *  Base class for all payment details.
  * @OA\Schema(
- *      schema="PaymentRequestPaymentDetails",
- *      type="object",
- *      required={"type"},
- *      @OA\Property(property="type", type="string", description="The type of payment details")
- * )
+ *       schema="PaymentRequestPaymentDetails",
+ *       type="object",
+ *       required={"type"},
+ *       @OA\Property(
+ *           property="type",
+ *           type="string",
+ *           description="The type of payment details"
+ *       )
+ *  )
+ *
+ *
+ *  CreditCardDetails should inherit from PaymentRequestPaymentDetails
+ * @OA\Schema(
+ *       schema="CreditCardDetails",
+ *       allOf={
+ *           @OA\Schema(ref="#/components/schemas/PaymentRequestPaymentDetails"),
+ *           @OA\Schema(
+ *               type="object",
+ *               required={"credit_card_number", "expiration_date", "cvv", "card_holder_name"},
+ *               @OA\Property(property="credit_card_number", type="string"),
+ *               @OA\Property(property="expiration_date", type="string"),
+ *               @OA\Property(property="cvv", type="string"),
+ *               @OA\Property(property="card_holder_name", type="string")
+ *           )
+ *       }
+ *  )
+ *
+ *  Other payment details should inherit in the same way
+ * @OA\Schema(
+ *       schema="GiftCardDetails",
+ *       allOf={
+ *           @OA\Schema(ref="#/components/schemas/PaymentRequestPaymentDetails"),
+ *           @OA\Schema(
+ *               type="object",
+ *               required={"gift_card_number", "validation_code"},
+ *               @OA\Property(property="gift_card_number", type="string"),
+ *               @OA\Property(property="validation_code", type="string")
+ *           )
+ *       }
+ *  )
  * @OA\Schema(
  *       schema="CashOnDeliveryDetails",
  *       allOf={
@@ -62,31 +99,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *      }
  * )
  *
- * @OA\Schema(
- *      schema="CreditCardDetails",
- *      allOf={
- *          @OA\Schema(ref="#/components/schemas/PaymentRequestPaymentDetails"),
- *          @OA\Schema(
- *              type="object",
- *              @OA\Property(property="credit_card_number", type="string"),
- *              @OA\Property(property="expiration_date", type="string"),
- *              @OA\Property(property="cvv", type="string"),
- *              @OA\Property(property="card_holder_name", type="string")
- *          )
- *      }
- * )
  *
- * @OA\Schema(
- *      schema="GiftCardDetails",
- *      allOf={
- *          @OA\Schema(ref="#/components/schemas/PaymentRequestPaymentDetails"),
- *          @OA\Schema(
- *              type="object",
- *              @OA\Property(property="gift_card_number", type="string"),
- *              @OA\Property(property="validation_code", type="string")
- *          )
- *      }
- * )
  *
  * @OA\Schema(
  *      schema="BuyNowPayLaterDetails",
