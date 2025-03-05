@@ -39,7 +39,16 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *      required={"type"},
  *      @OA\Property(property="type", type="string", description="The type of payment details")
  * )
- *
+ * @OA\Schema(
+ *       schema="CashOnDeliveryDetails",
+ *       allOf={
+ *           @OA\Schema(ref="#/components/schemas/PaymentRequestPaymentDetails"),
+ *           @OA\Schema(
+ *               type="object",
+ *               description="Placeholder for Cash on Delivery payment method"
+ *           )
+ *       }
+ *  )
  * @OA\Schema(
  *      schema="BankTransferDetails",
  *      allOf={
