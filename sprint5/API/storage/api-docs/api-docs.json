@@ -2125,7 +2125,17 @@
                                     },
                                     "payment_details": {
                                         "type": "object",
-                                        "anyOf": [
+                                        "discriminator": {
+                                            "propertyName": "type",
+                                            "mapping": {
+                                                "bank_transfer": "#/components/schemas/BankTransferDetails",
+                                                "credit_card": "#/components/schemas/CreditCardDetails",
+                                                "buy_now_pay_later": "#/components/schemas/BuyNowPayLaterDetails",
+                                                "gift_card": "#/components/schemas/GiftCardDetails",
+                                                "cash_on_delivery": "#/components/schemas/CashOnDeliveryDetails"
+                                            }
+                                        },
+                                        "oneOf": [
                                             {
                                                 "$ref": "#/components/schemas/BankTransferDetails"
                                             },
@@ -4090,55 +4100,95 @@
                 },
                 "type": "object"
             },
-            "BankTransferDetails": {
+            "PaymentRequestPaymentDetails": {
+                "required": [
+                    "type"
+                ],
                 "properties": {
-                    "bank_name": {
-                        "type": "string"
-                    },
-                    "account_name": {
-                        "type": "string"
-                    },
-                    "account_number": {
+                    "type": {
+                        "description": "The type of payment details",
                         "type": "string"
                     }
                 },
                 "type": "object"
+            },
+            "BankTransferDetails": {
+                "allOf": [
+                    {
+                        "properties": {
+                            "bank_name": {
+                                "type": "string"
+                            },
+                            "account_name": {
+                                "type": "string"
+                            },
+                            "account_number": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/PaymentRequestPaymentDetails"
+                    }
+                ]
             },
             "CreditCardDetails": {
-                "properties": {
-                    "credit_card_number": {
-                        "type": "string"
+                "allOf": [
+                    {
+                        "properties": {
+                            "credit_card_number": {
+                                "type": "string"
+                            },
+                            "expiration_date": {
+                                "type": "string"
+                            },
+                            "cvv": {
+                                "type": "string"
+                            },
+                            "card_holder_name": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
                     },
-                    "expiration_date": {
-                        "type": "string"
-                    },
-                    "cvv": {
-                        "type": "string"
-                    },
-                    "card_holder_name": {
-                        "type": "string"
+                    {
+                        "$ref": "#/components/schemas/PaymentRequestPaymentDetails"
                     }
-                },
-                "type": "object"
+                ]
             },
             "GiftCardDetails": {
-                "properties": {
-                    "gift_card_number": {
-                        "type": "string"
+                "allOf": [
+                    {
+                        "properties": {
+                            "gift_card_number": {
+                                "type": "string"
+                            },
+                            "validation_code": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
                     },
-                    "validation_code": {
-                        "type": "string"
+                    {
+                        "$ref": "#/components/schemas/PaymentRequestPaymentDetails"
                     }
-                },
-                "type": "object"
+                ]
             },
             "BuyNowPayLaterDetails": {
-                "properties": {
-                    "monthly_installments": {
-                        "type": "string"
+                "allOf": [
+                    {
+                        "properties": {
+                            "monthly_installments": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/PaymentRequestPaymentDetails"
                     }
-                },
-                "type": "object"
+                ]
             },
             "InvoiceRequest": {
                 "title": "InvoiceRequest",
