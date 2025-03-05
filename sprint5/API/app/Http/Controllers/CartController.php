@@ -34,7 +34,7 @@ class CartController extends Controller
      *                 mediaType="application/json",
      *            @OA\Schema(
      *                title="CartCreatedResponse",
-     *                @OA\Property(property="cart_id",
+     *                @OA\Property(property="id",
      *                         type="string",
      *                         example="1234",
      *                         description=""

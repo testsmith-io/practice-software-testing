@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *     type="object",
  *     title="CartResponse",
  *     properties={
- *       @OA\Property(property="cart_id", type="string")
+ *       @OA\Property(property="id", type="string")
  *     }
  * )
  */

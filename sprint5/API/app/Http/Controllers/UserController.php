@@ -117,6 +117,7 @@ class UserController extends Controller
      *        @OA\MediaType(
      *                mediaType="application/json",
      *           @OA\Schema(
+     *               title="AccountRequest",
      *               @OA\Property(property="email",
      *                        type="string",
      *                        example="customer@practicesoftwaretesting.com"
