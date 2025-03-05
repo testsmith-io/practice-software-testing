@@ -324,7 +324,7 @@
                                 "schema": {
                                     "title": "CartCreatedResponse",
                                     "properties": {
-                                        "cart_id": {
+                                        "id": {
                                             "description": "",
                                             "type": "string",
                                             "example": "1234"
@@ -1038,7 +1038,14 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/ContactRequest"
+                                "oneOf": [
+                                    {
+                                        "$ref": "#/components/schemas/ContactRequest"
+                                    },
+                                    {
+                                        "$ref": "#/components/schemas/ContactRequestAuthenticated"
+                                    }
+                                ]
                             }
                         }
                     }
@@ -2982,6 +2989,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "title": "TOTPSetupResponse",
                                     "properties": {
                                         "secret": {
                                             "description": "The TOTP secret key",
@@ -3034,6 +3042,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "title": "TOTPVerifyRequest",
                                 "properties": {
                                     "access_token": {
                                         "description": "The user's access token",
@@ -3056,6 +3065,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "title": "TOTPVerifyResponse",
                                     "properties": {
                                         "message": {
                                             "description": "Success message",
@@ -3193,6 +3203,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "title": "AccountRequest",
                                 "properties": {
                                     "email": {
                                         "type": "string",
@@ -3737,7 +3748,7 @@
             "CartItemResponse": {
                 "title": "CartResponse",
                 "properties": {
-                    "cart_id": {
+                    "id": {
                         "type": "string"
                     }
                 },
@@ -3746,7 +3757,7 @@
             "CartResponse": {
                 "title": "CartResponse",
                 "properties": {
-                    "cart_id": {
+                    "id": {
                         "type": "string"
                     }
                 },
@@ -3775,7 +3786,7 @@
                         "type": "string"
                     },
                     "parent_id": {
-                        "type": "integer"
+                        "type": "string"
                     },
                     "name": {
                         "type": "string",
@@ -3840,15 +3851,10 @@
                     "name"
                 ],
                 "properties": {
-                    "first_name": {
-                        "description": "",
+                    "name": {
+                        "description": "If set, Authorization header is required",
                         "type": "string",
-                        "example": "John"
-                    },
-                    "last_name": {
-                        "description": "",
-                        "type": "string",
-                        "example": "Doe"
+                        "example": "John Doe"
                     },
                     "email": {
                         "description": "",
@@ -3868,10 +3874,74 @@
                 },
                 "type": "object"
             },
+            "ContactRequestAuthenticated": {
+                "title": "ContactRequestAuthenticated",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "If set, Authorization header is required",
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "subject": {
+                        "description": "",
+                        "type": "string",
+                        "example": "website"
+                    },
+                    "message": {
+                        "description": "",
+                        "type": "string",
+                        "example": "Something is wrong with the website."
+                    }
+                },
+                "type": "object"
+            },
             "ContactResponse": {
                 "title": "ContactResponse",
                 "properties": {
                     "name": {
+                        "description": "",
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "description": "",
+                        "type": "string",
+                        "example": "john@doe.example"
+                    },
+                    "subject": {
+                        "description": "",
+                        "type": "string",
+                        "example": "website"
+                    },
+                    "message": {
+                        "description": "",
+                        "type": "string",
+                        "example": "Something is wrong with the website."
+                    },
+                    "status": {
+                        "description": "",
+                        "type": "string",
+                        "example": "NEW"
+                    },
+                    "id": {
+                        "description": "",
+                        "type": "string",
+                        "example": "1"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2022-08-01 08:24:56"
+                    }
+                },
+                "type": "object"
+            },
+            "ContactResponseAuthenticated": {
+                "title": "ContactResponseAuthenticated",
+                "properties": {
+                    "user_id": {
                         "description": "",
                         "type": "string",
                         "example": "John Doe"
@@ -4187,7 +4257,7 @@
                         "example": 1
                     },
                     "product_image_id": {
-                        "type": "integer",
+                        "type": "string",
                         "example": 1
                     },
                     "is_location_offer": {
@@ -4225,6 +4295,10 @@
                         "example": 1
                     },
                     "is_rental": {
+                        "type": "boolean",
+                        "example": 0
+                    },
+                    "in_stock": {
                         "type": "boolean",
                         "example": 0
                     },
@@ -4333,25 +4407,30 @@
                         "type": "string",
                         "example": "Doe"
                     },
-                    "street": {
-                        "type": "string",
-                        "example": "Street 1"
-                    },
-                    "city": {
-                        "type": "string",
-                        "example": "City"
-                    },
-                    "state": {
-                        "type": "string",
-                        "example": "State"
-                    },
-                    "country": {
-                        "type": "string",
-                        "example": "Country"
-                    },
-                    "postal_code": {
-                        "type": "string",
-                        "example": "1234AA"
+                    "address": {
+                        "properties": {
+                            "street": {
+                                "type": "string",
+                                "example": "Street 1"
+                            },
+                            "city": {
+                                "type": "string",
+                                "example": "City"
+                            },
+                            "state": {
+                                "type": "string",
+                                "example": "State"
+                            },
+                            "country": {
+                                "type": "string",
+                                "example": "Country"
+                            },
+                            "postal_code": {
+                                "type": "string",
+                                "example": "1234AA"
+                            }
+                        },
+                        "type": "object"
                     },
                     "phone": {
                         "type": "string",
@@ -4367,6 +4446,10 @@
                     },
                     "id": {
                         "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2022-08-01 08:24:56"
                     }
                 },
                 "type": "object"

@@ -29,6 +29,7 @@ class TOTPController extends Controller
      *         response=200,
      *         description="TOTP setup successful",
      *         @OA\JsonContent(
+     *             title="TOTPSetupResponse",
      *             @OA\Property(property="secret", type="string", description="The TOTP secret key"),
      *             @OA\Property(property="qrCodeUrl", type="string", description="URL for the QR code")
      *         )
@@ -37,6 +38,7 @@ class TOTPController extends Controller
      *         response=400,
      *         description="TOTP already enabled or another error",
      *         @OA\JsonContent(
+     *             title="TOTPErrorResponse",
      *             @OA\Property(property="error", type="string", description="Error message")
      *         )
      *     )
@@ -63,6 +65,7 @@ class TOTPController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
+     *             title="TOTPVerifyRequest",
      *             @OA\Property(property="access_token", type="string", description="The user's access token"),
      *             @OA\Property(property="totp", type="string", description="The 6-digit TOTP code", example="123456")
      *         )
@@ -71,6 +74,7 @@ class TOTPController extends Controller
      *         response=200,
      *         description="TOTP verified successfully",
      *         @OA\JsonContent(
+     *             title="TOTPVerifyResponse",
      *             @OA\Property(property="message", type="string", description="Success message", example="TOTP enabled successfully")
      *         )
      *     ),
@@ -78,6 +82,7 @@ class TOTPController extends Controller
      *         response=400,
      *         description="Invalid TOTP code or another error",
      *         @OA\JsonContent(
+     *             title="TOTPErrorResponse",
      *             @OA\Property(property="error", type="string", description="Error message", example="Invalid TOTP")
      *         )
      *     )

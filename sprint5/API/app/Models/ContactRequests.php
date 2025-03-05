@@ -13,13 +13,24 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *     title="ContactRequest",
  *     required={"name"},
  *     properties={
- *         @OA\Property(property="first_name", type="string", example="John", description=""),
- *         @OA\Property(property="last_name", type="string", example="Doe", description=""),
+ *         @OA\Property(property="name", type="string", example="John Doe", description="If set, Authorization header is required"),
  *         @OA\Property(property="email", type="string", example="john@doe.example", description=""),
  *         @OA\Property(property="subject", type="string", example="website", description=""),
  *         @OA\Property(property="message", type="string", example="Something is wrong with the website.", description="")
  *     }
  * )
+ *
+ * @OA\Schema(
+ *      schema="ContactRequestAuthenticated",
+ *      type="object",
+ *      title="ContactRequestAuthenticated",
+ *      required={"name"},
+ *      properties={
+ *          @OA\Property(property="name", type="string", example="John Doe", description="If set, Authorization header is required"),
+ *          @OA\Property(property="subject", type="string", example="website", description=""),
+ *          @OA\Property(property="message", type="string", example="Something is wrong with the website.", description="")
+ *      }
+ *  )
  *
  * @OA\Schema(
  *     schema="ContactResponse",
@@ -35,6 +46,21 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *         @OA\Property(property="created_at", type="string", example="2022-08-01 08:24:56")
  *     }
  * )
+ *
+ * @OA\Schema(
+ *      schema="ContactResponseAuthenticated",
+ *      type="object",
+ *      title="ContactResponseAuthenticated",
+ *      properties={
+ *          @OA\Property(property="user_id", type="string", example="John Doe", description=""),
+ *          @OA\Property(property="email", type="string", example="john@doe.example", description=""),
+ *          @OA\Property(property="subject", type="string", example="website", description=""),
+ *          @OA\Property(property="message", type="string", example="Something is wrong with the website.", description=""),
+ *          @OA\Property(property="status", type="string", example="NEW", description=""),
+ *          @OA\Property(property="id", type="string", example="1", description=""),
+ *          @OA\Property(property="created_at", type="string", example="2022-08-01 08:24:56")
+ *      }
+ *  )
  */
 class ContactRequests extends BaseModel
 {
