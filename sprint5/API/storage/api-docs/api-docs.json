@@ -3808,6 +3808,12 @@
                     "slug": {
                         "type": "string",
                         "example": "new-category"
+                    },
+                    "sub_categories": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CategoryResponse"
+                        }
                     }
                 },
                 "type": "object"
