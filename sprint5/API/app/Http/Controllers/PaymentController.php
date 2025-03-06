@@ -21,40 +21,15 @@ class PaymentController extends Controller
      *      description="Check payment",
      *      @OA\RequestBody(
      *           required=true,
-     *           description="Invoice request object",
-     *           @OA\MediaType(
-     *              mediaType="application/json",
-     *              @OA\Schema(
-     *                  type="object",
-     *                  title="PaymentRequest",
-     *                  required={"payment_method", "payment_details"},
-     *                  @OA\Property(
-     *                      property="payment_method",
-     *                      type="string",
-     *                      example="Credit Card"
-     *                  ),
-     *                  @OA\Property(
-     *                      property="payment_details",
-     *                      type="object",
-     *                      oneOf={
-     *                          @OA\Schema(ref="#/components/schemas/BankTransferDetails"),
-     *                          @OA\Schema(ref="#/components/schemas/CreditCardDetails"),
-     *                          @OA\Schema(ref="#/components/schemas/BuyNowPayLaterDetails"),
-     *                          @OA\Schema(ref="#/components/schemas/GiftCardDetails"),
-     *                          @OA\Schema(ref="#/components/schemas/CashOnDeliveryDetails")
-     *                      },
-     *                       discriminator={
-     *                           "propertyName": "type",
-     *                           "mapping": {
-     *                               "bank_transfer": "#/components/schemas/BankTransferDetails",
-     *                               "credit_card": "#/components/schemas/CreditCardDetails",
-     *                               "buy_now_pay_later": "#/components/schemas/BuyNowPayLaterDetails",
-     *                               "gift_card": "#/components/schemas/GiftCardDetails",
-     *                               "cash_on_delivery": "#/components/schemas/CashOnDeliveryDetails"
-     *                           }
-     *                       }
-     *                  )
-     *              )
+     *           description="Contact request object",
+     *           @OA\JsonContent(
+     *               oneOf={
+     *                    @OA\Schema(ref="#/components/schemas/PaymentBankTransferRequest"),
+     *                    @OA\Schema(ref="#/components/schemas/PaymentCreditCardRequest"),
+     *                    @OA\Schema(ref="#/components/schemas/PaymentBuyNowPayLaterRequest"),
+     *                    @OA\Schema(ref="#/components/schemas/PaymentGiftCardRequest"),
+     *                    @OA\Schema(ref="#/components/schemas/PaymentCashOnDeliveryRequest")
+     *               }
      *           )
      *       ),
      *      @OA\Response(
