@@ -42,7 +42,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *          @OA\Property(
  *               property="payment_details",
  *               type="object",
- *               @OA\Schema(ref="#/components/schemas/CreditCardDetails"),
+ *               ref="#/components/schemas/CreditCardDetails"
  *          )
  *      }
  *  )
@@ -56,7 +56,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *           @OA\Property(
  *                property="payment_details",
  *                type="object",
- *                @OA\Schema(ref="#/components/schemas/BankTransferDetails"),
+ *                ref="#/components/schemas/BankTransferDetails"
  *           )
  *       }
  *   )
@@ -70,7 +70,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *           @OA\Property(
  *                property="payment_details",
  *                type="object",
- *                @OA\Schema(ref="#/components/schemas/BuyNowPayLaterDetails"),
+ *                ref="#/components/schemas/BuyNowPayLaterDetails"
  *           )
  *       }
  *   )
@@ -84,7 +84,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *           @OA\Property(
  *                property="payment_details",
  *                type="object",
- *                @OA\Schema(ref="#/components/schemas/GiftCardDetails"),
+ *                ref="#/components/schemas/GiftCardDetails"
  *           )
  *       }
  *   )
@@ -98,7 +98,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *           @OA\Property(
  *                property="payment_details",
  *                type="object",
- *                @OA\Schema(ref="#/components/schemas/CashOnDeliveryDetails"),
+ *                ref="#/components/schemas/CashOnDeliveryDetails"
  *           )
  *       }
  *   )
@@ -132,8 +132,6 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *      @OA\Property(property="account_name", type="string"),
  *      @OA\Property(property="account_number", type="string")
  * )
- *
- *
  *
  * @OA\Schema(
  *      schema="BuyNowPayLaterDetails",
