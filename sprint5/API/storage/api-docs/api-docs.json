@@ -4082,7 +4082,7 @@
                         "example": "Credit Card"
                     },
                     "payment_details": {
-                        "type": "object"
+                        "$ref": "#/components/schemas/CreditCardDetails"
                     }
                 },
                 "type": "object"
@@ -4095,7 +4095,7 @@
                         "example": "Bank Transfer"
                     },
                     "payment_details": {
-                        "type": "object"
+                        "$ref": "#/components/schemas/BankTransferDetails"
                     }
                 },
                 "type": "object"
@@ -4108,7 +4108,7 @@
                         "example": "Buy Now Pay Later"
                     },
                     "payment_details": {
-                        "type": "object"
+                        "$ref": "#/components/schemas/BuyNowPayLaterDetails"
                     }
                 },
                 "type": "object"
@@ -4121,7 +4121,7 @@
                         "example": "Gift Card"
                     },
                     "payment_details": {
-                        "type": "object"
+                        "$ref": "#/components/schemas/GiftCardDetails"
                     }
                 },
                 "type": "object"
@@ -4134,7 +4134,7 @@
                         "example": "Cash On Delivery"
                     },
                     "payment_details": {
-                        "type": "object"
+                        "$ref": "#/components/schemas/CashOnDeliveryDetails"
                     }
                 },
                 "type": "object"
