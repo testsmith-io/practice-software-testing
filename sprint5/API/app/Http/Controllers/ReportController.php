@@ -31,12 +31,21 @@ class ReportController extends Controller
      *              type="array",
      *              @OA\Items(
      *                  type="object",
-     *                  example={
-     *                      "total_sales": 9.99,
-     *                      "billing_country": "The Netherlands",
-     *                  },
+     *                  title="TotalSalesPerCountryResponse",
+     *                  @OA\Property(
+     *                      property="billing_country",
+     *                      type="string",
+     *                      example="The Netherlands",
+     *                      description="The billing country"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="total_sales",
+     *                      type="string",
+     *                      example="1234",
+     *                      description="Total sales in the country"
+     *                  )
      *              )
-     *          ),
+     *          )
      *      ),
      *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
      *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
@@ -57,18 +66,27 @@ class ReportController extends Controller
      *      summary="Get top 10 purchased products",
      *      description="`Admin` role is required to get top 10 purchased products",
      *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent(
-     *              type="array",
-     *              @OA\Items(
-     *                  type="object",
-     *                  example={
-     *                      "name": "item",
-     *                      "count": 2,
-     *                  },
-     *              )
-     *          ),
+     *           response=200,
+     *           description="Successful operation",
+     *           @OA\JsonContent(
+     *               type="array",
+     *               @OA\Items(
+     *                   type="object",
+     *                   title="TopPurchasedProductsResponse",
+     *                   @OA\Property(
+     *                       property="name",
+     *                       type="string",
+     *                       example="item",
+     *                       description="Name of the product"
+     *                   ),
+     *                   @OA\Property(
+     *                       property="count",
+     *                       type="integer",
+     *                       example=2,
+     *                       description="Number of times the product was purchased"
+     *                   )
+     *               )
+     *           )
      *      ),
      *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
      *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
@@ -92,15 +110,24 @@ class ReportController extends Controller
      *          response=200,
      *          description="Successful operation",
      *          @OA\JsonContent(
-     *              type="array",
-     *              @OA\Items(
-     *                  type="object",
-     *                  example={
-     *                      "category_name": "item",
-     *                      "total_earned": 2,
-     *                  },
-     *              )
-     *          ),
+     *             type="array",
+     *             @OA\Items(
+     *                type="object",
+     *                title="TopSellingCategoriesResponse",
+     *                @OA\Property(
+     *                   property="category_name",
+     *                   type="string",
+     *                   example="item",
+     *                   description="Name of the category"
+     *                 ),
+     *                 @OA\Property(
+     *                   property="total_earned",
+     *                   type="string",
+     *                   example="1234",
+     *                   description="Total earnings from this category"
+     *                 )
+     *             )
+     *         )
      *      ),
      *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
      *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
@@ -134,13 +161,22 @@ class ReportController extends Controller
      *          @OA\JsonContent(
      *              type="array",
      *              @OA\Items(
-     *                  type="object",
-     *                  example={
-     *                      "year": 2022,
-     *                      "total": 2,
-     *                  },
+     *                 type="object",
+     *                 title="TotalSalesOfYearsResponse",
+     *                  @OA\Property(
+     *                     property="year",
+     *                     type="integer",
+     *                     example=2022,
+     *                     description="Year of the sales data"
+     *                  ),
+     *                  @OA\Property(
+     *                     property="total",
+     *                     type="integer",
+     *                     example=2,
+     *                     description="Total sales for the given year"
+     *                  )
      *              )
-     *          ),
+     *          )
      *      ),
      *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
      *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
@@ -179,17 +215,32 @@ class ReportController extends Controller
      *          response=200,
      *          description="Successful operation",
      *          @OA\JsonContent(
-     *              type="array",
-     *              @OA\Items(
-     *                  type="object",
-     *                  example={
-     *                      "month": 1,
-     *                      "average": 2,
-     *                      "amount": 9.99
-     *                  },
+     *             type="array",
+     *             @OA\Items(
+     *                 type="object",
+     *                 title="AverageSalesPerMonthResponse",
+     *                 @OA\Property(
+     *                    property="month",
+     *                    type="integer",
+     *                    example=1,
+     *                    description="Month number (1 for January, 12 for December)"
+     *                 ),
+     *                 @OA\Property(
+     *                    property="average",
+     *                    type="integer",
+     *                    example=2,
+     *                    description="Average number of sales for the month"
+     *                 ),
+     *                 @OA\Property(
+     *                    property="amount",
+     *                    type="number",
+     *                    format="float",
+     *                    example=9.99,
+     *                    description="Average sales amount for the month"
      *              )
-     *          ),
-     *      ),
+     *          )
+     *      )
+     *  ),
      *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
      *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
      *      security={{ "apiAuth": {} }}
@@ -228,13 +279,28 @@ class ReportController extends Controller
      *              type="array",
      *              @OA\Items(
      *                  type="object",
-     *                  example={
-     *                      "week": 1,
-     *                      "average": 2,
-     *                      "amount": 9.99
-     *                  },
-     *              )
-     *          ),
+     *                  title="AverageSalesPerWeekResponse",
+     *                  @OA\Property(
+     *                     property="week",
+     *                     type="integer",
+     *                     example=1,
+     *                     description="Week number of the year (1-52)"
+     *                  ),
+     *                  @OA\Property(
+     *                     property="average",
+     *                     type="integer",
+     *                     example=2,
+     *                     description="Average number of sales for the week"
+     *                  ),
+     *                  @OA\Property(
+     *                     property="amount",
+     *                     type="number",
+     *                     format="float",
+     *                     example=9.99,
+     *                     description="Average sales amount for the week"
+     *                 )
+     *             )
+     *         )
      *      ),
      *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
      *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
@@ -266,12 +332,21 @@ class ReportController extends Controller
      *              type="array",
      *              @OA\Items(
      *                  type="object",
-     *                  example={
-     *                      "customer": "Jane Doe",
-     *                      "country": "The Netherlands"
-     *                  },
+     *                  title="CustomersByCountryResponse",
+     *                  @OA\Property(
+     *                      property="customer",
+     *                      type="string",
+     *                      example="Jane Doe",
+     *                      description="Name of the customer"
+     *                  ),
+     *                  @OA\Property(
+     *                      property="country",
+     *                      type="string",
+     *                      example="The Netherlands",
+     *                      description="Country of the customer"
+     *                  )
      *              )
-     *          ),
+     *          )
      *      ),
      *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
      *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
