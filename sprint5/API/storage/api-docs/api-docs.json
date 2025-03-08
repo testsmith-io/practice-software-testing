@@ -1323,7 +1323,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/FavoriteResponse"
+                                        "$ref": "#/components/schemas/FavoriteWithProductResponse"
                                     }
                                 }
                             }
@@ -2688,6 +2688,351 @@
                 ]
             }
         },
+        "/reports/top10-purchased-products": {
+            "get": {
+                "tags": [
+                    "Report"
+                ],
+                "summary": "Get top 10 purchased products",
+                "description": "`Admin` role is required to get top 10 purchased products",
+                "operationId": "getTopPurchasedProducts",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "title": "TopPurchasedProductsResponse",
+                                        "properties": {
+                                            "name": {
+                                                "description": "Name of the product",
+                                                "type": "string",
+                                                "example": "item"
+                                            },
+                                            "count": {
+                                                "description": "Number of times the product was purchased",
+                                                "type": "integer",
+                                                "example": 2
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/reports/top10-best-selling-categories": {
+            "get": {
+                "tags": [
+                    "Report"
+                ],
+                "summary": "Get top 10 best selling categories",
+                "description": "`Admin` role is required to get top 10 best selling categories",
+                "operationId": "getBestSellingCategories",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "title": "TopSellingCategoriesResponse",
+                                        "properties": {
+                                            "category_name": {
+                                                "description": "Name of the category",
+                                                "type": "string",
+                                                "example": "item"
+                                            },
+                                            "total_earned": {
+                                                "description": "Total earnings from this category",
+                                                "type": "string",
+                                                "example": "1234"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/reports/total-sales-of-years": {
+            "get": {
+                "tags": [
+                    "Report"
+                ],
+                "summary": "Get total sales of years",
+                "description": "`Admin` role is required to get total sales of years",
+                "operationId": "getTotalSalesOfYears",
+                "parameters": [
+                    {
+                        "name": "years",
+                        "in": "query",
+                        "description": "Number of years",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        },
+                        "example": 2
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "title": "TotalSalesOfYearsResponse",
+                                        "properties": {
+                                            "year": {
+                                                "description": "Year of the sales data",
+                                                "type": "integer",
+                                                "example": 2022
+                                            },
+                                            "total": {
+                                                "description": "Total sales for the given year",
+                                                "type": "integer",
+                                                "example": 2
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/reports/average-sales-per-month": {
+            "get": {
+                "tags": [
+                    "Report"
+                ],
+                "summary": "Get average sales per month",
+                "description": "`Admin` role is required to get average sales per month",
+                "operationId": "getAverageSalesPerMonth",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "query",
+                        "description": "Specific year",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 2022
+                        },
+                        "example": 2021
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "title": "AverageSalesPerMonthResponse",
+                                        "properties": {
+                                            "month": {
+                                                "description": "Month number (1 for January, 12 for December)",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "average": {
+                                                "description": "Average number of sales for the month",
+                                                "type": "integer",
+                                                "example": 2
+                                            },
+                                            "amount": {
+                                                "description": "Average sales amount for the month",
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 9.99
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/reports/average-sales-per-week": {
+            "get": {
+                "tags": [
+                    "Report"
+                ],
+                "summary": "Get average sales per week",
+                "description": "`Admin` role is required to get average sales per week",
+                "operationId": "getAverageSalesPerWeek",
+                "parameters": [
+                    {
+                        "name": "year",
+                        "in": "query",
+                        "description": "Specific year",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 2022
+                        },
+                        "example": 2021
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "title": "AverageSalesPerWeekResponse",
+                                        "properties": {
+                                            "week": {
+                                                "description": "Week number of the year (1-52)",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "average": {
+                                                "description": "Average number of sales for the week",
+                                                "type": "integer",
+                                                "example": 2
+                                            },
+                                            "amount": {
+                                                "description": "Average sales amount for the week",
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 9.99
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/reports/customers-by-country": {
+            "get": {
+                "tags": [
+                    "Report"
+                ],
+                "summary": "Get customers by country",
+                "description": "`Admin` role is required to get customers by country",
+                "operationId": "getCustomersByCountry",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "title": "CustomersByCountryResponse",
+                                        "properties": {
+                                            "amount": {
+                                                "description": "Amount of customers",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "country": {
+                                                "description": "Country",
+                                                "type": "string",
+                                                "example": "The Netherlands"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ItemNotFoundResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
         "/totp/setup": {
             "post": {
                 "tags": [
@@ -3748,6 +4093,30 @@
                     "id": {
                         "type": "string",
                         "example": "1234"
+                    }
+                },
+                "type": "object"
+            },
+            "FavoriteWithProductResponse": {
+                "title": "FavoriteResponse",
+                "properties": {
+                    "product_id": {
+                        "type": "string",
+                        "example": "1234"
+                    },
+                    "user_id": {
+                        "type": "string",
+                        "example": "1234"
+                    },
+                    "id": {
+                        "type": "string",
+                        "example": "1234"
+                    },
+                    "product": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductResponse"
+                        }
                     }
                 },
                 "type": "object"
