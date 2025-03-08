@@ -334,16 +334,16 @@ class ReportController extends Controller
      *                  type="object",
      *                  title="CustomersByCountryResponse",
      *                  @OA\Property(
-     *                      property="customer",
-     *                      type="string",
-     *                      example="Jane Doe",
-     *                      description="Name of the customer"
+     *                      property="amount",
+     *                      type="integer",
+     *                      example=1,
+     *                      description="Amount of customers"
      *                  ),
      *                  @OA\Property(
      *                      property="country",
      *                      type="string",
      *                      example="The Netherlands",
-     *                      description="Country of the customer"
+     *                      description="Country"
      *                  )
      *              )
      *          )
