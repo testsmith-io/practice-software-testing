@@ -4109,13 +4109,11 @@
                     },
                     "name": {
                         "type": "string",
-                        "example": null,
-                        "nullable": true
+                        "example": null
                     },
                     "email": {
                         "type": "string",
-                        "example": null,
-                        "nullable": true
+                        "example": null
                     },
                     "subject": {
                         "type": "string",
@@ -4131,7 +4129,6 @@
                     },
                     "created_at": {
                         "type": "string",
-                        "format": "date-time",
                         "example": "2025-03-09 09:14:49"
                     },
                     "user": {
@@ -4715,6 +4712,14 @@
                     },
                     "totp_enabled": {
                         "type": "string"
+                    },
+                    "enabled": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
+                    "failed_login_attempts": {
+                        "type": "integer",
+                        "nullable": true
                     },
                     "created_at": {
                         "type": "string",
