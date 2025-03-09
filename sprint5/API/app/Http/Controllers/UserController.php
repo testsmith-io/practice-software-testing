@@ -54,8 +54,18 @@ class UserController extends Controller
      *          response=200,
      *          description="Successful operation",
      *          @OA\JsonContent(
-     *              type="array",
-     *              @OA\Items(ref="#/components/schemas/UserResponse")
+     *              title="PaginatedUserResponse",
+     *              @OA\Property(property="current_page", type="integer", example=1),
+     *              @OA\Property(
+     *                  property="data",
+     *                  type="array",
+     *                  @OA\Items(ref="#/components/schemas/UserResponse")
+     *              ),
+     *              @OA\Property(property="from", type="integer", example=1),
+     *              @OA\Property(property="last_page", type="integer", example=1),
+     *              @OA\Property(property="per_page", type="integer", example=1),
+     *              @OA\Property(property="to", type="integer", example=1),
+     *              @OA\Property(property="total", type="integer", example=1),
      *          )
      *      ),
      *      @OA\Response(
@@ -198,6 +208,7 @@ class UserController extends Controller
      *         @OA\MediaType(
      *                 mediaType="application/json",
      *            @OA\Schema(
+     *                title="ForgotPasswordRequest",
      *                @OA\Property(property="email",
      *                         type="string",
      *                         example="customer@practicesoftwaretesting.com"
@@ -235,6 +246,7 @@ class UserController extends Controller
      *         @OA\MediaType(
      *                 mediaType="application/json",
      *            @OA\Schema(
+     *                title="ChangePasswordRequest",
      *                @OA\Property(property="current_password",
      *                         type="string",
      *                         example="welcome01"

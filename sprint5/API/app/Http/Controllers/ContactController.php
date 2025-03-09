@@ -142,22 +142,27 @@ class ContactController extends Controller
      *          @OA\Schema(type="integer")
      *      ),
      *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent(
-     *              title="PaginatedContactMessageResponse",
-     *              @OA\Property(property="current_page", type="integer", example=1),
-     *              @OA\Property(
-     *                  property="data",
-     *                  type="array",
-     *                  @OA\Items(ref="#/components/schemas/ContactResponse")
-     *              ),
-     *              @OA\Property(property="from", type="integer", example=1),
-     *              @OA\Property(property="last_page", type="integer", example=1),
-     *              @OA\Property(property="per_page", type="integer", example=1),
-     *              @OA\Property(property="to", type="integer", example=1),
-     *              @OA\Property(property="total", type="integer", example=1),
-     *          )
+     *           response=200,
+     *           description="Successful operation",
+     *           @OA\JsonContent(
+     *               title="PaginatedContactMessageResponse",
+     *               @OA\Property(property="current_page", type="integer", example=1),
+     *               @OA\Property(
+     *                   property="data",
+     *                   type="array",
+     *                   @OA\Items(
+     *                       oneOf={
+     *                           @OA\Schema(ref="#/components/schemas/ContactResponse"),
+     *                           @OA\Schema(ref="#/components/schemas/ContactResponseAuthenticated")
+     *                       }
+     *                   )
+     *               ),
+     *               @OA\Property(property="from", type="integer", example=1),
+     *               @OA\Property(property="last_page", type="integer", example=1),
+     *               @OA\Property(property="per_page", type="integer", example=1),
+     *               @OA\Property(property="to", type="integer", example=1),
+     *               @OA\Property(property="total", type="integer", example=1),
+     *           )
      *      ),
      *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
      *      @OA\Response(response="404", ref="#/components/responses/ResourceNotFoundResponse"),
@@ -190,8 +195,13 @@ class ContactController extends Controller
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
-     *          @OA\JsonContent(ref="#/components/schemas/ContactResponse")
-     *       ),
+     *          @OA\JsonContent(
+     *              oneOf={
+     *                  @OA\Schema(ref="#/components/schemas/ContactResponse"),
+     *                  @OA\Schema(ref="#/components/schemas/ContactResponseAuthenticated")
+     *              }
+     *          )
+     *      ),
      *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
      *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
      *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
