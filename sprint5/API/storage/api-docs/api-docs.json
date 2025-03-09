@@ -3407,6 +3407,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "title": "ChangePasswordRequest",
                                 "properties": {
                                     "current_password": {
                                         "type": "string",
@@ -4090,6 +4091,57 @@
                     "created_at": {
                         "type": "string",
                         "example": "2022-08-01 08:24:56"
+                    }
+                },
+                "type": "object"
+            },
+            "ContactResponseFull": {
+                "title": "ContactResponseFull",
+                "description": "A detailed contact message response with user and replies",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "01jnx2z1a6s8qx9z3hhqy3rdyp"
+                    },
+                    "user_id": {
+                        "type": "string",
+                        "example": "01JNX24JV5Q3QFDB2ZPTRBMFN8"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "subject": {
+                        "type": "string",
+                        "example": "test-subject"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "This is a test contact message."
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "IN_PROGRESS"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-03-09 09:14:49"
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/UserResponse"
+                    },
+                    "replies": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ContactReplyResponse"
+                        }
                     }
                 },
                 "type": "object"
