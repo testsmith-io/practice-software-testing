@@ -55,7 +55,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  *         @OA\Property(property="id", type="string"),
  *         @OA\Property(property="provider", type="string"),
  *         @OA\Property(property="totp_enabled", type="string"),
- *         @OA\Property(property="created_at", type="string", example="2022-08-01 08:24:56")
+ *         @OA\Property(property="enabled", nullable=true, type="boolean"),
+ *         @OA\Property(property="failed_login_attempts", nullable=true, type="integer"),
+ *         @OA\Property(property="created_at", type="string", example="2022-08-01 08:24:56"),
  *     }
  * )
  */
