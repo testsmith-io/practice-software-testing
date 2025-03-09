@@ -980,7 +980,14 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/components/schemas/ContactResponse"
+                                                "oneOf": [
+                                                    {
+                                                        "$ref": "#/components/schemas/ContactResponse"
+                                                    },
+                                                    {
+                                                        "$ref": "#/components/schemas/ContactResponseAuthenticated"
+                                                    }
+                                                ]
                                             }
                                         },
                                         "from": {
@@ -1169,7 +1176,14 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ContactResponse"
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ContactResponse"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ContactResponseAuthenticated"
+                                        }
+                                    ]
                                 }
                             }
                         }
@@ -3188,10 +3202,40 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/UserResponse"
-                                    }
+                                    "title": "PaginatedUserResponse",
+                                    "properties": {
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/UserResponse"
+                                            }
+                                        },
+                                        "from": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "last_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "to": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "total": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -3323,6 +3367,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "title": "ForgotPasswordRequest",
                                 "properties": {
                                     "email": {
                                         "type": "string",
@@ -4113,10 +4158,7 @@
                         "example": "1234"
                     },
                     "product": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/ProductResponse"
-                        }
+                        "$ref": "#/components/schemas/ProductResponse"
                     }
                 },
                 "type": "object"
@@ -4377,6 +4419,10 @@
                         "items": {
                             "$ref": "#/components/schemas/InvoiceLineResponse"
                         }
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2022-08-01 08:24:56"
                     }
                 },
                 "type": "object"
@@ -4610,6 +4656,12 @@
                         "example": "john@doe.example"
                     },
                     "id": {
+                        "type": "string"
+                    },
+                    "provider": {
+                        "type": "string"
+                    },
+                    "totp_enabled": {
                         "type": "string"
                     },
                     "created_at": {

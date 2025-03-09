@@ -53,10 +53,13 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  *         @OA\Property(property="dob", type="string", example="1970-01-01"),
  *         @OA\Property(property="email", type="string", example="john@doe.example"),
  *         @OA\Property(property="id", type="string"),
+ *         @OA\Property(property="provider", type="string"),
+ *         @OA\Property(property="totp_enabled", type="string"),
  *         @OA\Property(property="created_at", type="string", example="2022-08-01 08:24:56")
  *     }
  * )
  */
+
 #[ObservedBy([CachedAuthUserObserver::class])]
 class User extends Authenticatable implements JWTSubject
 {

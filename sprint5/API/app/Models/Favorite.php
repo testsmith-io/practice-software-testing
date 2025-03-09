@@ -33,7 +33,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *          @OA\Property(property="product_id", type="string", example="1234"),
  *          @OA\Property(property="user_id", type="string", example="1234"),
  *          @OA\Property(property="id", type="string", example="1234"),
- *          @OA\Property(property="product", type="array", @OA\Items(ref="#/components/schemas/ProductResponse"))
+ *          @OA\Property(property="product", type="object", ref="#/components/schemas/ProductResponse")
  *      }
  *  )
  */
