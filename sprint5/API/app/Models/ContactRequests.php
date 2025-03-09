@@ -62,6 +62,30 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *          @OA\Property(property="created_at", type="string", example="2022-08-01 08:24:56")
  *      }
  *  )
+ * @OA\Schema(
+ *       schema="ContactResponseFull",
+ *       type="object",
+ *       title="ContactResponseFull",
+ *       description="A detailed contact message response with user and replies",
+ *       @OA\Property(property="id", type="string", example="01jnx2z1a6s8qx9z3hhqy3rdyp"),
+ *       @OA\Property(property="user_id", type="string", example="01JNX24JV5Q3QFDB2ZPTRBMFN8"),
+ *       @OA\Property(property="name", type="string", nullable=true, example=null),
+ *       @OA\Property(property="email", type="string", nullable=true, example=null),
+ *       @OA\Property(property="subject", type="string", example="test-subject"),
+ *       @OA\Property(property="message", type="string", example="This is a test contact message."),
+ *       @OA\Property(property="status", type="string", example="IN_PROGRESS"),
+ *       @OA\Property(property="created_at", type="string", format="date-time", example="2025-03-09 09:14:49"),
+ *       @OA\Property(
+ *           property="user",
+ *           type="object",
+ *           ref="#/components/schemas/UserResponse"
+ *       ),
+ *       @OA\Property(
+ *           property="replies",
+ *           type="array",
+ *           @OA\Items(ref="#/components/schemas/ContactReplyResponse")
+ *       )
+ *   )
  */
 class ContactRequests extends BaseModel
 {
