@@ -49,7 +49,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="payment_account_number", type="string", example="0987654345"),
  *         @OA\Property(property="status", type="string", example="COMPLETED"),
  *         @OA\Property(property="status_message", type="string", example=""),
- *         @OA\Property(property="invoice_items", type="array", @OA\Items(ref="#/components/schemas/InvoiceLineResponse"))
+ *         @OA\Property(property="invoicelines", type="array", @OA\Items(ref="#/components/schemas/InvoiceLineResponse"))
  *     }
  * )
  */
