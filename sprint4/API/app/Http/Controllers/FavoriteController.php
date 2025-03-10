@@ -27,7 +27,7 @@ class FavoriteController extends Controller {
      *          description="Successful operation",
      *          @OA\JsonContent(
      *              type="array",
-     *              @OA\Items(ref="#/components/schemas/FavoriteResponse")
+     *              @OA\Items(ref="#/components/schemas/FavoriteWithProductResponse")
      *          )
      *      ),
      *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),

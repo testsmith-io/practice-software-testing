@@ -24,6 +24,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *         @OA\Property(property="id", ref="#/components/schemas/ProductResponse")
  *     }
  * )
+ * @OA\Schema(
+ *     schema="FavoriteWithProductResponse",
+ *     type="object",
+ *     title="FavoriteResponse",
+ *     properties={
+ *         @OA\Property(property="product_id", type="string", example="1234"),
+ *         @OA\Property(property="user_id", type="string", example="1234"),
+ *         @OA\Property(property="id", type="string", example="1234"),
+ *         @OA\Property(property="product", type="object", ref="#/components/schemas/ProductResponse")
+ *     }
+ * )
  */
 class Favorite extends BaseModel
 {

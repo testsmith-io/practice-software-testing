@@ -177,7 +177,7 @@ export class CheckoutComponent implements OnInit {
       'payment_method': this.cusPayment.value.payment_method,
       'payment_account_name': this.cusPayment.value.account_name,
       'payment_account_number': this.cusPayment.value.account_number,
-      'invoice_items': invoiceItems
+      'invoicelines': invoiceItems
     };
 
     this.checkPayment().subscribe(result => {

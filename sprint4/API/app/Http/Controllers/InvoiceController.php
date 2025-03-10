@@ -89,17 +89,17 @@ class InvoiceController extends Controller {
      * )
      */
     public function store(StoreInvoice $request) {
-        $input = $request->except(['invoice_items']);
+        $input = $request->except(['invoicelines']);
         $input['invoice_date'] = date('Y-m-d H-i-s');
         $input['invoice_number'] = IdGenerator::generate(['table' => 'invoices', 'field' => 'invoice_number', 'length' => 14, 'prefix' => 'INV-' . date('Y')]);
         $invoice = Invoice::create($input);
 
-        $invoice->invoicelines()->createMany($request->only(['invoice_items'])['invoice_items']);
+        $invoice->invoicelines()->createMany($request->only(['invoicelines'])['invoicelines']);
 
         if (App::environment('local')) {
             $items = [];
             $total = 0;
-            foreach ($request->only(['invoice_items'])['invoice_items'] as $invoiceItem) {
+            foreach ($request->only(['invoicelines'])['invoicelines'] as $invoiceItem) {
                 $item['quantity'] = $invoiceItem['quantity'];
                 $item['name'] = Product::findOrFail($invoiceItem['product_id'])->name;
                 $item['is_rental'] = Product::findOrFail($invoiceItem['product_id'])->is_rental;

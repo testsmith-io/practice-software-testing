@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *          @OA\Property(property="quantity", type="integer")
  *      }
  *  )
- * 
+ *
  * @OA\Schema(
  *     schema="InvoiceLineResponse",
  *     type="object",
