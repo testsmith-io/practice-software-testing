@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *     properties={
  *         @OA\Property(property="id", type="string", example=1),
  *         @OA\Property(property="invoice_id", type="string", example=1),
- *         @OA\Property(property="id", type="string", example=1),
  *         @OA\Property(property="unit_price", type="number"),
  *         @OA\Property(property="discount_percentage", type="number"),
  *         @OA\Property(property="discounted_price", type="number"),
