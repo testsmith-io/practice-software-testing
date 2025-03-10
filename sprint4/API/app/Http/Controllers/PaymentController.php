@@ -18,6 +18,7 @@ class PaymentController extends Controller
      *        @OA\MediaType(
      *                mediaType="application/json",
      *           @OA\Schema(
+     *               title="PaymentRequest",
      *               @OA\Property(property="method",
      *                        type="string",
      *                        example="Credit Card"
@@ -38,7 +39,7 @@ class PaymentController extends Controller
      *          description="Successful operation",
      *          @OA\JsonContent(
      *              title="PaymentResponse",
-     *              @OA\Property(property="success", type="boolean", example="Success status"),
+     *              @OA\Property(property="message", type="boolean", example="Success status"),
      *          )
      *      )
      * )
