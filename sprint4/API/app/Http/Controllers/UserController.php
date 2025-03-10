@@ -108,6 +108,7 @@ class UserController extends Controller {
      *        @OA\MediaType(
      *                mediaType="application/json",
      *           @OA\Schema(
+     *               title="AccountRequest",
      *               @OA\Property(property="email",
      *                        type="string",
      *                        example="customer@practicesoftwaretesting.com"
@@ -166,6 +167,7 @@ class UserController extends Controller {
      *         @OA\MediaType(
      *                 mediaType="application/json",
      *            @OA\Schema(
+     *                title="ForgotPasswordRequest",
      *                @OA\Property(property="email",
      *                         type="string",
      *                         example="customer@practicesoftwaretesting.com"
@@ -210,6 +212,7 @@ class UserController extends Controller {
      *        @OA\MediaType(
      *                mediaType="application/json",
      *           @OA\Schema(
+     *               title="ChangePasswordRequest",
      *               @OA\Property(property="current_password",
      *                        type="string",
      *                        example="welcome01"

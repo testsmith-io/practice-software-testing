@@ -568,7 +568,14 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/components/schemas/ContactResponse"
+                                                "oneOf": [
+                                                    {
+                                                        "$ref": "#/components/schemas/ContactResponse"
+                                                    },
+                                                    {
+                                                        "$ref": "#/components/schemas/ContactResponseAuthenticated"
+                                                    }
+                                                ]
                                             }
                                         },
                                         "from": {
@@ -626,7 +633,14 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/ContactRequest"
+                                "oneOf": [
+                                    {
+                                        "$ref": "#/components/schemas/ContactRequest"
+                                    },
+                                    {
+                                        "$ref": "#/components/schemas/ContactRequestAuthenticated"
+                                    }
+                                ]
                             }
                         }
                     }
@@ -685,7 +699,14 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ContactResponse"
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ContactResponse"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ContactResponseAuthenticated"
+                                        }
+                                    ]
                                 }
                             }
                         }
@@ -1362,6 +1383,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "title": "PaymentRequest",
                                 "properties": {
                                     "method": {
                                         "type": "string",
@@ -1389,7 +1411,7 @@
                                 "schema": {
                                     "title": "PaymentResponse",
                                     "properties": {
-                                        "success": {
+                                        "message": {
                                             "type": "boolean",
                                             "example": "Success status"
                                         }
@@ -1921,6 +1943,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "title": "AccountRequest",
                                 "properties": {
                                     "email": {
                                         "type": "string",
@@ -1980,6 +2003,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "title": "ForgotPasswordRequest",
                                 "properties": {
                                     "email": {
                                         "type": "string",
@@ -2019,6 +2043,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "title": "ChangePasswordRequest",
                                 "properties": {
                                     "current_password": {
                                         "type": "string",
@@ -2468,6 +2493,12 @@
                     "slug": {
                         "type": "string",
                         "example": "new-category"
+                    },
+                    "sub_categories": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CategoryResponse"
+                        }
                     }
                 },
                 "type": "object"
@@ -2498,15 +2529,10 @@
                     "name"
                 ],
                 "properties": {
-                    "first_name": {
+                    "name": {
                         "description": "",
                         "type": "string",
                         "example": "John"
-                    },
-                    "last_name": {
-                        "description": "",
-                        "type": "string",
-                        "example": "Doe"
                     },
                     "email": {
                         "description": "",
@@ -2518,10 +2544,47 @@
                         "type": "string",
                         "example": "website"
                     },
+                    "status": {
+                        "description": "",
+                        "type": "string",
+                        "example": "NEW"
+                    },
                     "message": {
                         "description": "",
                         "type": "string",
                         "example": "Something is wrong with the website."
+                    }
+                },
+                "type": "object"
+            },
+            "ContactRequestAuthenticated": {
+                "title": "ContactRequestAuthenticated",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "example": "test@example.com"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "subject": {
+                        "description": "",
+                        "type": "string",
+                        "example": "website"
+                    },
+                    "message": {
+                        "description": "",
+                        "type": "string",
+                        "example": "Something is wrong with the website."
+                    },
+                    "status": {
+                        "description": "",
+                        "type": "string",
+                        "example": "NEW"
                     }
                 },
                 "type": "object"
@@ -2557,6 +2620,46 @@
                     "id": {
                         "description": "",
                         "type": "integer",
+                        "example": "1"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2022-08-01 08:24:56"
+                    }
+                },
+                "type": "object"
+            },
+            "ContactResponseAuthenticated": {
+                "title": "ContactResponseAuthenticated",
+                "properties": {
+                    "name": {
+                        "description": "",
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "description": "",
+                        "type": "string",
+                        "example": "john@doe.example"
+                    },
+                    "subject": {
+                        "description": "",
+                        "type": "string",
+                        "example": "website"
+                    },
+                    "message": {
+                        "description": "",
+                        "type": "string",
+                        "example": "Something is wrong with the website."
+                    },
+                    "status": {
+                        "description": "",
+                        "type": "string",
+                        "example": "NEW"
+                    },
+                    "id": {
+                        "description": "",
+                        "type": "string",
                         "example": "1"
                     },
                     "created_at": {
@@ -2628,7 +2731,7 @@
                         "type": "string",
                         "example": "0987654345"
                     },
-                    "invoice_items": {
+                    "invoicelines": {
                         "type": "array",
                         "items": {
                             "type": "object",
@@ -2695,7 +2798,7 @@
                         "type": "string",
                         "example": ""
                     },
-                    "invoice_items": {
+                    "invoicelines": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/InvoiceLineResponse"
