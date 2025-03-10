@@ -21,7 +21,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="payment_method", type="string", example="Cash on Delivery"),
  *         @OA\Property(property="payment_account_name", type="string", example="Jogn Doe"),
  *         @OA\Property(property="payment_account_number", type="string", example="0987654345"),
- *         @OA\Property(property="invoice_items", type="array", @OA\Items(type="object", example={"product_id": 9, "quantity": 1, "unit_price": 12.01}))
+ *         @OA\Property(property="invoicelines", type="array", @OA\Items(type="object", example={"product_id": 9, "quantity": 1, "unit_price": 12.01}))
  *     }
  * )
  *
@@ -44,7 +44,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="payment_account_number", type="string", example="0987654345"),
  *         @OA\Property(property="status", type="string", example="COMPLETED"),
  *         @OA\Property(property="status_message", type="string", example=""),
- *         @OA\Property(property="invoice_items", type="array", @OA\Items(ref="#/components/schemas/InvoiceLineResponse"))
+ *         @OA\Property(property="invoicelines", type="array", @OA\Items(ref="#/components/schemas/InvoiceLineResponse"))
  *     }
  * )
  */

@@ -172,7 +172,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="total", type="number"),
  *         @OA\Property(property="status", type="string", example="COMPLETED"),
  *         @OA\Property(property="status_message", type="string", example=""),
- *         @OA\Property(property="invoice_items", type="array", @OA\Items(ref="#/components/schemas/InvoiceLineResponse")),
+ *         @OA\Property(property="invoicelines", type="array", @OA\Items(ref="#/components/schemas/InvoiceLineResponse")),
  *         @OA\Property(property="created_at", type="string", example="2022-08-01 08:24:56")
  *     }
  * )
