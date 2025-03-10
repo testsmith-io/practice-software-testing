@@ -43,7 +43,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *         @OA\Property(property="email", type="string", example="john@doe.example", description=""),
  *         @OA\Property(property="subject", type="string", example="website", description=""),
  *         @OA\Property(property="message", type="string", example="Something is wrong with the website.", description=""),
- *         @OA\Property(property="status", type="string", example="NEW", description=""),
+ *              @OA\Property(property="status", type="string", example="NEW", description=""),
  *         @OA\Property(property="id", type="integer", example="1", description=""),
  *         @OA\Property(property="created_at", type="string", example="2022-08-01 08:24:56")
  *     }
