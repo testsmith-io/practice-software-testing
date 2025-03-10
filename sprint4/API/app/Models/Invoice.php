@@ -21,7 +21,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="payment_method", type="string", example="Cash on Delivery"),
  *         @OA\Property(property="payment_account_name", type="string", example="Jogn Doe"),
  *         @OA\Property(property="payment_account_number", type="string", example="0987654345"),
- *         @OA\Property(property="invoicelines", type="array", @OA\Items(ref="#/components/schemas/InvoiceLineResponse"))
+ *         @OA\Property(property="invoicelines", type="array", @OA\Items(ref="#/components/schemas/InvoiceLineRequest"))
  *     }
  * )
  *
