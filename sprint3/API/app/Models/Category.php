@@ -40,7 +40,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *         @OA\Property(property="id", type="integer"),
  *         @OA\Property(property="parent_id", type="integer"),
  *         @OA\Property(property="name", type="string", example="new category"),
- *         @OA\Property(property="slug", type="string", example="new-category")
+ *         @OA\Property(property="slug", type="string", example="new-category"),
+ *         @OA\Property(
+ *              property="sub_categories",
+ *              type="array",
+ *              @OA\Items(ref="#/components/schemas/CategoryResponse")
+ *         )
  *     }
  * )
  */
