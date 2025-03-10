@@ -31,6 +31,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="id", type="integer", example=1),
  *         @OA\Property(property="name", type="string", example="new brand"),
  *         @OA\Property(property="description", type="string", example="Lorum ipsum"),
+ *         @OA\Property(property="stock", type="number", example=10),
  *         @OA\Property(property="price", type="number", example=9.99),
  *         @OA\Property(property="is_location_offer", type="boolean", example=1),
  *         @OA\Property(property="is_rental", type="boolean", example=0),
