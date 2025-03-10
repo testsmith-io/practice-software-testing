@@ -18,6 +18,7 @@ class PaymentController extends Controller
      *        @OA\MediaType(
      *                mediaType="application/json",
      *           @OA\Schema(
+     *               title="PaymentRequest",
      *               @OA\Property(property="method",
      *                        type="string",
      *                        example="Credit Card"

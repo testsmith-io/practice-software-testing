@@ -910,6 +910,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "title": "PaymentRequest",
                                 "properties": {
                                     "method": {
                                         "type": "string",
@@ -1512,15 +1513,10 @@
                         "type": "string",
                         "example": "0987654345"
                     },
-                    "invoice_items": {
+                    "invoicelines": {
                         "type": "array",
                         "items": {
-                            "type": "object",
-                            "example": {
-                                "product_id": 9,
-                                "quantity": 1,
-                                "unit_price": 12.01
-                            }
+                            "$ref": "#/components/schemas/InvoiceLineResponse"
                         }
                     }
                 },
