@@ -39,12 +39,22 @@ class UserController extends Controller {
      *          @OA\Schema(type="integer")
      *      ),
      *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent(
-     *              type="array",
-     *              @OA\Items(ref="#/components/schemas/UserResponse")
-     *          )
+     *           response=200,
+     *           description="Successful operation",
+     *           @OA\JsonContent(
+     *               title="PaginatedUserResponse",
+     *               @OA\Property(property="current_page", type="integer", example=1),
+     *               @OA\Property(
+     *                   property="data",
+     *                   type="array",
+     *                   @OA\Items(ref="#/components/schemas/UserResponse")
+     *               ),
+     *               @OA\Property(property="from", type="integer", example=1),
+     *               @OA\Property(property="last_page", type="integer", example=1),
+     *               @OA\Property(property="per_page", type="integer", example=1),
+     *               @OA\Property(property="to", type="integer", example=1),
+     *               @OA\Property(property="total", type="integer", example=1),
+     *           )
      *       ),
      *      @OA\Response(
      *          response=400,
@@ -162,7 +172,7 @@ class UserController extends Controller {
      *      operationId="forgotPassword",
      *      tags={"User"},
      *      summary="Request a new password",
-     *      description="Request a new password, it actually sets the password to `welcome01`",
+     *      description="Request a new password, it actually sets the password to `welcome02`",
      *      @OA\RequestBody(
      *         @OA\MediaType(
      *                 mediaType="application/json",
@@ -418,12 +428,22 @@ class UserController extends Controller {
      *          @OA\Schema(type="integer")
      *      ),
      *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent(
-     *              type="array",
-     *              @OA\Items(ref="#/components/schemas/UserResponse")
-     *          )
+     *           response=200,
+     *           description="Successful operation",
+     *           @OA\JsonContent(
+     *               title="PaginatedUserResponse",
+     *               @OA\Property(property="current_page", type="integer", example=1),
+     *               @OA\Property(
+     *                   property="data",
+     *                   type="array",
+     *                   @OA\Items(ref="#/components/schemas/UserResponse")
+     *               ),
+     *               @OA\Property(property="from", type="integer", example=1),
+     *               @OA\Property(property="last_page", type="integer", example=1),
+     *               @OA\Property(property="per_page", type="integer", example=1),
+     *               @OA\Property(property="to", type="integer", example=1),
+     *               @OA\Property(property="total", type="integer", example=1),
+     *           )
      *       ),
      *       @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
      *       @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
