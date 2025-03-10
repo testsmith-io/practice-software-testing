@@ -31,7 +31,12 @@ class ContactController extends Controller {
      *      @OA\RequestBody(
      *          required=true,
      *          description="Contact request object",
-     *          @OA\JsonContent(ref="#/components/schemas/ContactRequest")
+     *          @OA\JsonContent(
+     *              oneOf={
+     *                  @OA\Schema(ref="#/components/schemas/ContactRequest"),
+     *                  @OA\Schema(ref="#/components/schemas/ContactRequestAuthenticated")
+     *              }
+     *          )
      *      ),
      *      @OA\Response(
      *          response=200,
@@ -85,11 +90,16 @@ class ContactController extends Controller {
      *          @OA\JsonContent(
      *              title="PaginatedContactMessageResponse",
      *              @OA\Property(property="current_page", type="integer", example=1),
-     *              @OA\Property(
-     *                  property="data",
-     *                  type="array",
-     *                  @OA\Items(ref="#/components/schemas/ContactResponse")
-     *              ),
+     *               @OA\Property(
+     *                   property="data",
+     *                   type="array",
+     *                   @OA\Items(
+     *                       oneOf={
+     *                           @OA\Schema(ref="#/components/schemas/ContactResponse"),
+     *                           @OA\Schema(ref="#/components/schemas/ContactResponseAuthenticated")
+     *                       }
+     *                   )
+     *               ),
      *              @OA\Property(property="from", type="integer", example=1),
      *              @OA\Property(property="last_page", type="integer", example=1),
      *              @OA\Property(property="per_page", type="integer", example=1),
@@ -125,7 +135,12 @@ class ContactController extends Controller {
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
-     *          @OA\JsonContent(ref="#/components/schemas/ContactResponse")
+     *          @OA\JsonContent(
+     *              oneOf={
+     *                  @OA\Schema(ref="#/components/schemas/ContactResponse"),
+     *                  @OA\Schema(ref="#/components/schemas/ContactResponseAuthenticated")
+     *              }
+     *          )
      *      ),
      *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
      *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
