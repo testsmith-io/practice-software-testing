@@ -14,7 +14,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *     properties={
  *         @OA\Property(property="message", type="string", example="Reply message", description=""),
  *         @OA\Property(property="id", type="string", example="1", description=""),
- *         @OA\Property(property="created_at", type="string", example="2022-08-01 08:24:56")
+ *         @OA\Property(property="created_at", type="string", example="2022-08-01 08:24:56"),
+ *         @OA\Property(
+ *            property="user",
+ *            type="object",
+ *            ref="#/components/schemas/UserResponse"
+ *        )
  *     }
  * )
  */
