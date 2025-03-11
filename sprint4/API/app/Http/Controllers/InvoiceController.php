@@ -16,9 +16,11 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class InvoiceController extends Controller {
+class InvoiceController extends Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth:users');
     }
 
@@ -60,7 +62,8 @@ class InvoiceController extends Controller {
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function index() {
+    public function index()
+    {
         return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('user_id', Auth::user()->id)->orderBy('invoice_date', 'DESC')->filter()->paginate());
     }
 
@@ -88,7 +91,8 @@ class InvoiceController extends Controller {
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function store(StoreInvoice $request) {
+    public function store(StoreInvoice $request)
+    {
         $input = $request->except(['invoicelines']);
         $input['invoice_date'] = date('Y-m-d H-i-s');
         $input['invoice_number'] = IdGenerator::generate(['table' => 'invoices', 'field' => 'invoice_number', 'length' => 14, 'prefix' => 'INV-' . date('Y')]);
@@ -96,20 +100,21 @@ class InvoiceController extends Controller {
 
         $invoice->invoicelines()->createMany($request->only(['invoicelines'])['invoicelines']);
 
-        if (App::environment('local')) {
-            $items = [];
-            $total = 0;
-            foreach ($request->only(['invoicelines'])['invoicelines'] as $invoiceItem) {
-                $item['quantity'] = $invoiceItem['quantity'];
-                $item['name'] = Product::findOrFail($invoiceItem['product_id'])->name;
-                $item['is_rental'] = Product::findOrFail($invoiceItem['product_id'])->is_rental;
-                $item['price'] = $invoiceItem['unit_price'];
-                $itemTotal = $invoiceItem['quantity'] * $invoiceItem['unit_price'];
-                $item['total'] = $itemTotal;
-                $total += $itemTotal;
-                $items[] = $item;
-            }
 
+        $items = [];
+        $total = 0;
+        foreach ($request->only(['invoicelines'])['invoicelines'] as $invoiceItem) {
+            $item['quantity'] = $invoiceItem['quantity'];
+            $item['name'] = Product::findOrFail($invoiceItem['product_id'])->name;
+            $item['is_rental'] = Product::findOrFail($invoiceItem['product_id'])->is_rental;
+            $item['price'] = $invoiceItem['unit_price'];
+            $itemTotal = $invoiceItem['quantity'] * $invoiceItem['unit_price'];
+            $item['total'] = $itemTotal;
+            $total += $itemTotal;
+            $items[] = $item;
+        }
+
+        if (App::environment('local')) {
             $user = Auth::user();
             Mail::to([$user->email])->send(new Checkout($user->first_name . ' ' . $user->last_name, $items, $total,));
         }
@@ -143,7 +148,8 @@ class InvoiceController extends Controller {
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function show($id) {
+    public function show($id)
+    {
         return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('id', $id)->where('user_id', Auth::user()->id)->first());
     }
 
@@ -191,7 +197,8 @@ class InvoiceController extends Controller {
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function updateStatus($id, Request $request) {
+    public function updateStatus($id, Request $request)
+    {
         $request->validate([
             'status' => Rule::in("AWAITING_FULFILLMENT", "ON_HOLD", "AWAITING_SHIPMENT", "SHIPPED", "COMPLETED"),
             'status_message' => 'string|between:5,50|nullable'
@@ -245,7 +252,8 @@ class InvoiceController extends Controller {
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function search(Request $request) {
+    public function search(Request $request)
+    {
         $q = $request->get('q');
 
         return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('user_id', Auth::user()->id)->orWhere('invoice_number', 'like', "%$q%")->orWhere('billing_address', 'like', "%$q%")->orWhere('status', 'like', "%$q%")->orderBy('invoice_date', 'DESC')->paginate());
@@ -278,8 +286,22 @@ class InvoiceController extends Controller {
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function update(StoreInvoice $request, $id) {
-        return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->where('user_id', Auth::user()->id)->update($request->all())], ResponseAlias::HTTP_OK);
+    public function update(StoreInvoice $request, $id)
+    {
+        $invoice = Invoice::where('id', $id)->where('user_id', Auth::id())->first();
+
+        if (!$invoice) {
+            return $this->preferredFormat(['success' => false, 'message' => 'Invoice not found'], ResponseAlias::HTTP_NOT_FOUND);
+        }
+
+        $updated = (bool) $invoice->update($request->except(['invoicelines']));
+
+        if ($updated && $request->has('invoicelines')) {
+            $invoice->invoicelines()->delete();  // Clear old invoice lines
+            $invoice->invoicelines()->createMany($request->only('invoicelines')['invoicelines']);
+        }
+
+        return $this->preferredFormat(['success' => $updated], ResponseAlias::HTTP_OK);
     }
 
 }
