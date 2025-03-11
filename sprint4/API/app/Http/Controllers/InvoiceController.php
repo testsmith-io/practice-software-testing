@@ -306,7 +306,7 @@ class InvoiceController extends Controller {
      */
     public function destroy(DestroyInvoice $request, $id) {
         try {
-            Invoice::find($id)->where('customer_id', Auth::user()->id)->delete();
+            Invoice::find($id)->where('user_id', Auth::user()->id)->delete();
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {
