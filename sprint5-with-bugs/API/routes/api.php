@@ -74,7 +74,6 @@ Route::controller(InvoiceController::class)->prefix('invoices')->group(function 
     Route::get('/{id}', 'show');
     Route::put('/{id}/status', 'updateStatus');
     Route::post('', 'store');
-    Route::delete('/{id}', 'destroy');
     Route::put('/{id}', 'update');
 });
 
