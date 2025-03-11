@@ -1292,6 +1292,12 @@
                                 "properties": {
                                     "status": {
                                         "type": "string",
+                                        "enum": [
+                                            "NEW",
+                                            "ON_HOLD",
+                                            "IN_PROGRESS",
+                                            "RESOLVED"
+                                        ],
                                         "example": "IN_PROGRESS"
                                     }
                                 },
@@ -1744,50 +1750,6 @@
                     },
                     "404": {
                         "$ref": "#/components/responses/ItemNotFoundResponse"
-                    },
-                    "405": {
-                        "$ref": "#/components/responses/MethodNotAllowedResponse"
-                    },
-                    "422": {
-                        "$ref": "#/components/responses/UnprocessableEntityResponse"
-                    }
-                },
-                "security": [
-                    {
-                        "apiAuth": []
-                    }
-                ]
-            },
-            "delete": {
-                "tags": [
-                    "Invoice"
-                ],
-                "summary": "Delete specific invoice",
-                "description": "Admin role is required to delete a specific invoice",
-                "operationId": "deleteInvoice",
-                "parameters": [
-                    {
-                        "name": "invoiceId",
-                        "in": "path",
-                        "description": "The invoiceId parameter in path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "Successful operation"
-                    },
-                    "401": {
-                        "$ref": "#/components/responses/UnauthorizedResponse"
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/ItemNotFoundResponse"
-                    },
-                    "409": {
-                        "$ref": "#/components/responses/ConflictResponse"
                     },
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
@@ -3953,6 +3915,9 @@
                     "created_at": {
                         "type": "string",
                         "example": "2022-08-01 08:24:56"
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/UserResponse"
                     }
                 },
                 "type": "object"
@@ -4337,16 +4302,20 @@
             "CreditCardDetails": {
                 "properties": {
                     "credit_card_number": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": false
                     },
                     "expiration_date": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": false
                     },
                     "cvv": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": false
                     },
                     "card_holder_name": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": false
                     }
                 },
                 "type": "object"
@@ -4354,10 +4323,12 @@
             "GiftCardDetails": {
                 "properties": {
                     "gift_card_number": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": false
                     },
                     "validation_code": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": false
                     }
                 },
                 "type": "object"
@@ -4369,13 +4340,16 @@
             "BankTransferDetails": {
                 "properties": {
                     "bank_name": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": false
                     },
                     "account_name": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": false
                     },
                     "account_number": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": false
                     }
                 },
                 "type": "object"
@@ -4383,7 +4357,8 @@
             "BuyNowPayLaterDetails": {
                 "properties": {
                     "monthly_installments": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": false
                     }
                 },
                 "type": "object"
@@ -4417,6 +4392,10 @@
                 "title": "InvoiceResponse",
                 "properties": {
                     "id": {
+                        "type": "string",
+                        "example": 1
+                    },
+                    "user_id": {
                         "type": "string",
                         "example": 1
                     },
@@ -4463,7 +4442,7 @@
                         "type": "string",
                         "example": ""
                     },
-                    "invoice_items": {
+                    "invoicelines": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/InvoiceLineResponse"
@@ -4483,7 +4462,21 @@
                         "type": "string",
                         "example": 1
                     },
+                    "invoice_id": {
+                        "type": "string",
+                        "example": 1
+                    },
+                    "product_id": {
+                        "type": "string",
+                        "example": 1
+                    },
                     "unit_price": {
+                        "type": "number"
+                    },
+                    "discount_percentage": {
+                        "type": "number"
+                    },
+                    "discounted_price": {
                         "type": "number"
                     },
                     "quantity": {

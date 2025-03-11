@@ -106,18 +106,18 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  * @OA\Schema(
  *      schema="CreditCardDetails",
  *      type="object",
- *      @OA\Property(property="credit_card_number", type="string"),
- *      @OA\Property(property="expiration_date", type="string"),
- *      @OA\Property(property="cvv", type="string"),
- *      @OA\Property(property="card_holder_name", type="string")
+ *      @OA\Property(property="credit_card_number", type="string", nullable=false),
+ *      @OA\Property(property="expiration_date", type="string", nullable=false),
+ *      @OA\Property(property="cvv", type="string", nullable=false),
+ *      @OA\Property(property="card_holder_name", type="string", nullable=false)
  * )
  *
  *  Other payment details should inherit in the same way
  * @OA\Schema(
  *       schema="GiftCardDetails",
  *       type="object",
- *       @OA\Property(property="gift_card_number", type="string"),
- *       @OA\Property(property="validation_code", type="string")
+ *       @OA\Property(property="gift_card_number", type="string", nullable=false),
+ *       @OA\Property(property="validation_code", type="string", nullable=false)
  *  )
  * @OA\Schema(
  *       schema="CashOnDeliveryDetails",
@@ -128,15 +128,15 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  * @OA\Schema(
  *      schema="BankTransferDetails",
  *      type="object",
- *      @OA\Property(property="bank_name", type="string"),
- *      @OA\Property(property="account_name", type="string"),
- *      @OA\Property(property="account_number", type="string")
+ *      @OA\Property(property="bank_name", type="string", nullable=false),
+ *      @OA\Property(property="account_name", type="string", nullable=false),
+ *      @OA\Property(property="account_number", type="string", nullable=false)
  * )
  *
  * @OA\Schema(
  *      schema="BuyNowPayLaterDetails",
  *      type="object",
- *      @OA\Property(property="monthly_installments", type="string")
+ *      @OA\Property(property="monthly_installments", type="string", nullable=false)
  * )
  *
  * @OA\Schema(
