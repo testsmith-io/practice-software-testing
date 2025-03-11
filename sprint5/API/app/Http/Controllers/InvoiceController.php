@@ -397,35 +397,4 @@ class InvoiceController extends Controller
         return $this->preferredFormat(['success' => (bool)$success], ResponseAlias::HTTP_OK);
     }
 
-    /**
-     * @OA\Delete(
-     *      path="/invoices/{invoiceId}",
-     *      operationId="deleteInvoice",
-     *      tags={"Invoice"},
-     *      summary="Delete specific invoice",
-     *      description="Admin role is required to delete a specific invoice",
-     *      @OA\Parameter(
-     *          name="invoiceId",
-     *          in="path",
-     *          description="The invoiceId parameter in path",
-     *          required=true,
-     *          @OA\Schema(type="string")
-     *      ),
-     *      @OA\Response(response=204, description="Successful operation"),
-     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
-     *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
-     *      @OA\Response(response="409", ref="#/components/responses/ConflictResponse"),
-     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
-     *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
-     *      security={{ "apiAuth": {} }}
-     * ),
-     */
-    public function destroy(DestroyInvoice $request, $id)
-    {
-        $deleted = $this->invoiceService->deleteInvoice($id);
-
-        return $deleted
-            ? $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT)
-            : $this->preferredFormat(['message' => 'Unable to delete invoice'], ResponseAlias::HTTP_CONFLICT);
-    }
 }

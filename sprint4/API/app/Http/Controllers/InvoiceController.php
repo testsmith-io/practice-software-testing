@@ -281,40 +281,4 @@ class InvoiceController extends Controller {
         return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->where('customer_id', Auth::user()->id)->update($request->all())], ResponseAlias::HTTP_OK);
     }
 
-    /**
-     * @OA\Delete(
-     *      path="/invoices/{invoiceId}",
-     *      operationId="deleteInvoice",
-     *      tags={"Invoice"},
-     *      summary="Delete specific invoice",
-     *      description="Delete a specific invoice",
-     *      @OA\Parameter(
-     *          name="invoiceId",
-     *          in="path",
-     *          description="The invoiceId parameter in path",
-     *          required=true,
-     *          @OA\Schema(type="integer")
-     *      ),
-     *      @OA\Response(response=204, description="Successful operation"),
-     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
-     *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
-     *      @OA\Response(response="409", ref="#/components/responses/ConflictResponse"),
-     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
-     *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
-     *      security={{ "apiAuth": {} }}
-     * ),
-     */
-    public function destroy(DestroyInvoice $request, $id) {
-        try {
-            Invoice::find($id)->where('user_id', Auth::user()->id)->delete();
-            return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
-        } catch (QueryException $e) {
-            if ($e->getCode() === '23000') {
-                return $this->preferredFormat([
-                    'success' => false,
-                    'message' => 'Seems like this invoice is used elsewhere.',
-                ], ResponseAlias::HTTP_CONFLICT);
-            }
-        }
-    }
 }
