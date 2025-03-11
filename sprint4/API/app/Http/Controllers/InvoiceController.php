@@ -165,6 +165,7 @@ class InvoiceController extends Controller {
      *          @OA\MediaType(
      *                  mediaType="application/json",
      *             @OA\Schema(
+     *                 title="InvoiceStatusRequest",
      *                 @OA\Property(
      *                    property="status",
      *                    type="string",
@@ -278,7 +279,7 @@ class InvoiceController extends Controller {
      * )
      */
     public function update(StoreInvoice $request, $id) {
-        return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->where('customer_id', Auth::user()->id)->update($request->all())], ResponseAlias::HTTP_OK);
+        return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->where('user_id', Auth::user()->id)->update($request->all())], ResponseAlias::HTTP_OK);
     }
 
 }
