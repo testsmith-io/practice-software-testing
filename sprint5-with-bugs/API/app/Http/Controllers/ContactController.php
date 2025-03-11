@@ -277,10 +277,11 @@ class ContactController extends Controller
      *            @OA\Schema(
      *                title="ContactStatusRequest",
      *                @OA\Property(property="status",
-     *                         type="string",
-     *                         example="IN_PROGRESS"
-     *                     )
-     *              )
+     *                    type="string",
+     *                    enum={"NEW", "ON_HOLD", "IN_PROGRESS", "RESOLVED"},
+     *                    example="IN_PROGRESS"
+     *                )
+     *             )
      *          )
      *      ),
      *      @OA\Response(response="200", ref="#/components/responses/UpdateResponse"),

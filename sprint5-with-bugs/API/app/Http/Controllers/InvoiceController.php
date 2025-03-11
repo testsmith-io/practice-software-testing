@@ -310,7 +310,7 @@ class InvoiceController extends Controller
      */
     public function update(StoreInvoice $request, $id)
     {
-        return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->where('customer_id', app('auth')->user()->id)->update($request->all())], ResponseAlias::HTTP_OK);
+        return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->where('user_id', app('auth')->user()->id)->update($request->all())], ResponseAlias::HTTP_OK);
     }
-    
+
 }
