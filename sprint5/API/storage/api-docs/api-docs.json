@@ -4211,28 +4211,40 @@
                         "type": "string"
                     },
                     "payment_details": {
-                        "type": "object",
-                        "oneOf": [
-                            {
-                                "$ref": "#/components/schemas/BankTransferDetails"
-                            },
-                            {
-                                "$ref": "#/components/schemas/CreditCardDetails"
-                            },
-                            {
-                                "$ref": "#/components/schemas/GiftCardDetails"
-                            },
-                            {
-                                "$ref": "#/components/schemas/BuyNowPayLaterDetails"
-                            },
-                            {
-                                "title": "CashOnDeliveryDetails",
-                                "type": "object"
-                            }
-                        ]
+                        "$ref": "#/components/schemas/PaymentDetails"
                     }
                 },
                 "type": "object"
+            },
+            "PaymentDetails": {
+                "type": "object",
+                "discriminator": {
+                    "propertyName": "payment_type",
+                    "mapping": {
+                        "bank_transfer": "#/components/schemas/BankTransferDetails",
+                        "credit_card": "#/components/schemas/CreditCardDetails",
+                        "gift_card": "#/components/schemas/GiftCardDetails",
+                        "buy_now_pay_later": "#/components/schemas/BuyNowPayLaterDetails",
+                        "cash_on_delivery": "#/components/schemas/CashOnDeliveryDetails"
+                    }
+                },
+                "oneOf": [
+                    {
+                        "$ref": "#/components/schemas/BankTransferDetails"
+                    },
+                    {
+                        "$ref": "#/components/schemas/CreditCardDetails"
+                    },
+                    {
+                        "$ref": "#/components/schemas/GiftCardDetails"
+                    },
+                    {
+                        "$ref": "#/components/schemas/BuyNowPayLaterDetails"
+                    },
+                    {
+                        "$ref": "#/components/schemas/CashOnDeliveryDetails"
+                    }
+                ]
             },
             "PaymentCreditCardRequest": {
                 "title": "PaymentCreditCardRequest",
@@ -4301,6 +4313,10 @@
             },
             "CreditCardDetails": {
                 "properties": {
+                    "payment_type": {
+                        "type": "string",
+                        "example": "credit_card"
+                    },
                     "credit_card_number": {
                         "type": "string",
                         "nullable": false
@@ -4322,6 +4338,10 @@
             },
             "GiftCardDetails": {
                 "properties": {
+                    "payment_type": {
+                        "type": "string",
+                        "example": "gift_card"
+                    },
                     "gift_card_number": {
                         "type": "string",
                         "nullable": false
@@ -4335,10 +4355,20 @@
             },
             "CashOnDeliveryDetails": {
                 "description": "Placeholder for Cash on Delivery payment method",
+                "properties": {
+                    "payment_type": {
+                        "type": "string",
+                        "example": "cash_on_delivery"
+                    }
+                },
                 "type": "object"
             },
             "BankTransferDetails": {
                 "properties": {
+                    "payment_type": {
+                        "type": "string",
+                        "example": "bank_transfer"
+                    },
                     "bank_name": {
                         "type": "string",
                         "nullable": false
@@ -4356,6 +4386,10 @@
             },
             "BuyNowPayLaterDetails": {
                 "properties": {
+                    "payment_type": {
+                        "type": "string",
+                        "example": "buy_now_pay_later"
+                    },
                     "monthly_installments": {
                         "type": "string",
                         "nullable": false
