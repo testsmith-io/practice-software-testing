@@ -10,7 +10,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
 
 /**
  * @OA\Schema(
- *      schema="BaseInvoiceRequest",
+ *      schema="InvoiceRequest",
  *      type="object",
  *      required={"billing_street", "billing_city", "billing_state", "billing_country", "billing_postal_code", "payment_method", "payment_details", "cart_id"},
  *      @OA\Property(property="billing_street", type="string"),
@@ -36,7 +36,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  * @OA\Schema(
  *      schema="PaymentRequest",
  *      type="object",
- *      title="PaymentCreditCardRequest",
+ *      title="PaymentRequest",
  *      properties={
  *        @OA\Property(property="payment_method", type="string", example="Credit Card"),
  *        @OA\Property(
@@ -87,20 +87,6 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *      schema="BuyNowPayLaterDetails",
  *      type="object",
  *      @OA\Property(property="monthly_installments", type="string", nullable=false)
- * )
- *
- * @OA\Schema(
- *     schema="InvoiceRequest",
- *     type="object",
- *     title="InvoiceRequest",
- *     properties={
- *         @OA\Property(property="billing_street", type="string"),
- *         @OA\Property(property="billing_city", type="string"),
- *         @OA\Property(property="billing_country", type="string"),
- *         @OA\Property(property="billing_state", type="string"),
- *         @OA\Property(property="billing_postal_code", type="string"),
- *         @OA\Property(property="cart_id", type="string", example="Cash on Delivery")
- *     }
  * )
  *
  * @OA\Schema(

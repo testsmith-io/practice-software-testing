@@ -91,7 +91,7 @@ class InvoiceController extends Controller
      *      @OA\RequestBody(
      *           required=true,
      *           description="Invoice request object",
-     *           @OA\JsonContent(ref="#/components/schemas/BaseInvoiceRequest")
+     *           @OA\JsonContent(ref="#/components/schemas/InvoiceRequest")
      *       ),
      *      @OA\Response(
      *          response=200,
