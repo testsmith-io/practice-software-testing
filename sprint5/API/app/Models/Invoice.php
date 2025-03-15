@@ -30,7 +30,17 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *              @OA\Schema(ref="#/components/schemas/BuyNowPayLaterDetails"),
  *              @OA\Schema(type="object", title="CashOnDeliveryDetails")
  *          }
- *      )
+ *      ),
+ *      discriminator={
+ *          "propertyName": "payment_method",
+ *          "mapping": {
+ *             "bank_transfer": "#/components/schemas/BankTransferDetails",
+ *             "credit_card": "#/components/schemas/CreditCardDetails",
+ *             "gift_card": "#/components/schemas/GiftCardDetails",
+ *             "buy-now-pay-later": "#/components/schemas/BuyNowPayLaterDetails",
+ *             "cash-on-delivery": "#/components/schemas/CashOnDeliveryDetails"
+ *          }
+ *      }
  * )
  *
  * @OA\Schema(

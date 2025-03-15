@@ -2,27 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Invoice\DestroyInvoice;
 use App\Http\Requests\Invoice\PatchInvoice;
 use App\Http\Requests\Invoice\StoreInvoice;
-use App\Jobs\SendCheckoutEmail;
-use App\Jobs\UpdateProductInventory;
-use App\Models\PaymentBankTransferDetails;
-use App\Models\Cart;
-use App\Models\Download;
-use App\Models\Invoice;
-use App\Models\Payment;
-use App\Models\PaymentBnplDetails;
-use App\Models\PaymentCashOnDeliveryDetails;
-use App\Models\PaymentCreditCardDetails;
-use App\Models\PaymentGiftCardDetails;
-use App\Rules\SubscriptSuperscriptRule;
+use App\Models\PaymentzCreditCardDetails;
 use App\Services\InvoiceService;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -108,7 +93,7 @@ class InvoiceController extends Controller
     public function store(StoreInvoice $request)
     {
         $invoice = $this->invoiceService->createInvoice($request->except(['cart_id']), $request->input('cart_id'));
-        $this->invoiceService->handlePayment($invoice->id, $request->input('payment_method'), $request->input('payment_details') ?? []);
+        $this->invoiceService->handlePayment($invoice->id, $request->input('payment_method'), Arr::except($request->input('payment_details'), ['@type']) ?? []);
 
         return $this->preferredFormat($invoice, ResponseAlias::HTTP_CREATED);
     }
