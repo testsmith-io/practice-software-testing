@@ -21,16 +21,8 @@ class PaymentController extends Controller
      *      description="Check payment",
      *      @OA\RequestBody(
      *           required=true,
-     *           description="Contact request object",
-     *           @OA\JsonContent(
-     *               oneOf={
-     *                    @OA\Schema(ref="#/components/schemas/PaymentBankTransferRequest"),
-     *                    @OA\Schema(ref="#/components/schemas/PaymentCreditCardRequest"),
-     *                    @OA\Schema(ref="#/components/schemas/PaymentBuyNowPayLaterRequest"),
-     *                    @OA\Schema(ref="#/components/schemas/PaymentGiftCardRequest"),
-     *                    @OA\Schema(ref="#/components/schemas/PaymentCashOnDeliveryRequest")
-     *               }
-     *           )
+     *           description="Payment request object",
+     *           @OA\JsonContent(ref="#/components/schemas/PaymentRequest")
      *       ),
      *      @OA\Response(
      *          response=200,

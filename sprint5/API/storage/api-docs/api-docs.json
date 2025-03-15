@@ -2084,28 +2084,12 @@
                 "description": "Check payment",
                 "operationId": "checkPayment",
                 "requestBody": {
-                    "description": "Contact request object",
+                    "description": "Payment request object",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "oneOf": [
-                                    {
-                                        "$ref": "#/components/schemas/PaymentBankTransferRequest"
-                                    },
-                                    {
-                                        "$ref": "#/components/schemas/PaymentCreditCardRequest"
-                                    },
-                                    {
-                                        "$ref": "#/components/schemas/PaymentBuyNowPayLaterRequest"
-                                    },
-                                    {
-                                        "$ref": "#/components/schemas/PaymentGiftCardRequest"
-                                    },
-                                    {
-                                        "$ref": "#/components/schemas/PaymentCashOnDeliveryRequest"
-                                    }
-                                ]
+                                "$ref": "#/components/schemas/PaymentRequest"
                             }
                         }
                     }
@@ -4211,42 +4195,30 @@
                         "type": "string"
                     },
                     "payment_details": {
-                        "$ref": "#/components/schemas/PaymentDetails"
+                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/BankTransferDetails"
+                            },
+                            {
+                                "$ref": "#/components/schemas/CreditCardDetails"
+                            },
+                            {
+                                "$ref": "#/components/schemas/GiftCardDetails"
+                            },
+                            {
+                                "$ref": "#/components/schemas/BuyNowPayLaterDetails"
+                            },
+                            {
+                                "title": "CashOnDeliveryDetails",
+                                "type": "object"
+                            }
+                        ]
                     }
                 },
                 "type": "object"
             },
-            "PaymentDetails": {
-                "type": "object",
-                "discriminator": {
-                    "propertyName": "payment_type",
-                    "mapping": {
-                        "bank_transfer": "#/components/schemas/BankTransferDetails",
-                        "credit_card": "#/components/schemas/CreditCardDetails",
-                        "gift_card": "#/components/schemas/GiftCardDetails",
-                        "buy_now_pay_later": "#/components/schemas/BuyNowPayLaterDetails",
-                        "cash_on_delivery": "#/components/schemas/CashOnDeliveryDetails"
-                    }
-                },
-                "oneOf": [
-                    {
-                        "$ref": "#/components/schemas/BankTransferDetails"
-                    },
-                    {
-                        "$ref": "#/components/schemas/CreditCardDetails"
-                    },
-                    {
-                        "$ref": "#/components/schemas/GiftCardDetails"
-                    },
-                    {
-                        "$ref": "#/components/schemas/BuyNowPayLaterDetails"
-                    },
-                    {
-                        "$ref": "#/components/schemas/CashOnDeliveryDetails"
-                    }
-                ]
-            },
-            "PaymentCreditCardRequest": {
+            "PaymentRequest": {
                 "title": "PaymentCreditCardRequest",
                 "properties": {
                     "payment_method": {
@@ -4254,69 +4226,31 @@
                         "example": "Credit Card"
                     },
                     "payment_details": {
-                        "$ref": "#/components/schemas/CreditCardDetails"
-                    }
-                },
-                "type": "object"
-            },
-            "PaymentBankTransferRequest": {
-                "title": "PaymentBankTransferRequest",
-                "properties": {
-                    "payment_method": {
-                        "type": "string",
-                        "example": "Bank Transfer"
-                    },
-                    "payment_details": {
-                        "$ref": "#/components/schemas/BankTransferDetails"
-                    }
-                },
-                "type": "object"
-            },
-            "PaymentBuyNowPayLaterRequest": {
-                "title": "PaymentBuyNowPayLaterRequest",
-                "properties": {
-                    "payment_method": {
-                        "type": "string",
-                        "example": "Buy Now Pay Later"
-                    },
-                    "payment_details": {
-                        "$ref": "#/components/schemas/BuyNowPayLaterDetails"
-                    }
-                },
-                "type": "object"
-            },
-            "PaymentGiftCardRequest": {
-                "title": "PaymentGiftCardRequest",
-                "properties": {
-                    "payment_method": {
-                        "type": "string",
-                        "example": "Gift Card"
-                    },
-                    "payment_details": {
-                        "$ref": "#/components/schemas/GiftCardDetails"
-                    }
-                },
-                "type": "object"
-            },
-            "PaymentCashOnDeliveryRequest": {
-                "title": "PaymentCashOnDeliveryRequest",
-                "properties": {
-                    "payment_method": {
-                        "type": "string",
-                        "example": "Cash On Delivery"
-                    },
-                    "payment_details": {
-                        "$ref": "#/components/schemas/CashOnDeliveryDetails"
+                        "type": "object",
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/BankTransferDetails"
+                            },
+                            {
+                                "$ref": "#/components/schemas/CreditCardDetails"
+                            },
+                            {
+                                "$ref": "#/components/schemas/GiftCardDetails"
+                            },
+                            {
+                                "$ref": "#/components/schemas/BuyNowPayLaterDetails"
+                            },
+                            {
+                                "title": "CashOnDeliveryDetails",
+                                "type": "object"
+                            }
+                        ]
                     }
                 },
                 "type": "object"
             },
             "CreditCardDetails": {
                 "properties": {
-                    "payment_type": {
-                        "type": "string",
-                        "example": "credit_card"
-                    },
                     "credit_card_number": {
                         "type": "string",
                         "nullable": false
@@ -4338,10 +4272,6 @@
             },
             "GiftCardDetails": {
                 "properties": {
-                    "payment_type": {
-                        "type": "string",
-                        "example": "gift_card"
-                    },
                     "gift_card_number": {
                         "type": "string",
                         "nullable": false
@@ -4355,20 +4285,10 @@
             },
             "CashOnDeliveryDetails": {
                 "description": "Placeholder for Cash on Delivery payment method",
-                "properties": {
-                    "payment_type": {
-                        "type": "string",
-                        "example": "cash_on_delivery"
-                    }
-                },
                 "type": "object"
             },
             "BankTransferDetails": {
                 "properties": {
-                    "payment_type": {
-                        "type": "string",
-                        "example": "bank_transfer"
-                    },
                     "bank_name": {
                         "type": "string",
                         "nullable": false
@@ -4386,10 +4306,6 @@
             },
             "BuyNowPayLaterDetails": {
                 "properties": {
-                    "payment_type": {
-                        "type": "string",
-                        "example": "buy_now_pay_later"
-                    },
                     "monthly_installments": {
                         "type": "string",
                         "nullable": false
