@@ -22,129 +22,62 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *      @OA\Property(property="cart_id", type="string"),
  *      @OA\Property(
  *          property="payment_details",
- *          ref="#/components/schemas/PaymentDetails"
+ *          type="object",
+ *          oneOf={
+ *              @OA\Schema(ref="#/components/schemas/BankTransferDetails"),
+ *              @OA\Schema(ref="#/components/schemas/CreditCardDetails"),
+ *              @OA\Schema(ref="#/components/schemas/GiftCardDetails"),
+ *              @OA\Schema(ref="#/components/schemas/BuyNowPayLaterDetails"),
+ *              @OA\Schema(type="object", title="CashOnDeliveryDetails")
+ *          }
  *      )
  * )
  *
  * @OA\Schema(
- *       schema="PaymentDetails",
- *       type="object",
- *       oneOf={
- *           @OA\Schema(ref="#/components/schemas/BankTransferDetails"),
- *           @OA\Schema(ref="#/components/schemas/CreditCardDetails"),
- *           @OA\Schema(ref="#/components/schemas/GiftCardDetails"),
- *           @OA\Schema(ref="#/components/schemas/BuyNowPayLaterDetails"),
- *           @OA\Schema(ref="#/components/schemas/CashOnDeliveryDetails")
- *       },
- *       discriminator={
- *           "propertyName": "payment_type",
- *           "mapping": {
- *               "bank_transfer": "#/components/schemas/BankTransferDetails",
- *               "credit_card": "#/components/schemas/CreditCardDetails",
- *               "gift_card": "#/components/schemas/GiftCardDetails",
- *               "buy_now_pay_later": "#/components/schemas/BuyNowPayLaterDetails",
- *               "cash_on_delivery": "#/components/schemas/CashOnDeliveryDetails"
- *           }
- *       }
- *  )
- * @OA\Schema(
- *      schema="PaymentCreditCardRequest",
+ *      schema="PaymentRequest",
  *      type="object",
  *      title="PaymentCreditCardRequest",
  *      properties={
- *          @OA\Property(property="payment_method", type="string", example="Credit Card"),
- *          @OA\Property(
- *               property="payment_details",
- *               type="object",
- *               ref="#/components/schemas/CreditCardDetails"
- *          )
+ *        @OA\Property(property="payment_method", type="string", example="Credit Card"),
+ *        @OA\Property(
+ *            property="payment_details",
+ *            type="object",
+ *            oneOf={
+ *                @OA\Schema(ref="#/components/schemas/BankTransferDetails"),
+ *                @OA\Schema(ref="#/components/schemas/CreditCardDetails"),
+ *                @OA\Schema(ref="#/components/schemas/GiftCardDetails"),
+ *                @OA\Schema(ref="#/components/schemas/BuyNowPayLaterDetails"),
+ *                @OA\Schema(type="object", title="CashOnDeliveryDetails")
+ *            }
+ *        )
  *      }
  *  )
  *
  * @OA\Schema(
- *       schema="PaymentBankTransferRequest",
- *       type="object",
- *       title="PaymentBankTransferRequest",
- *       properties={
- *           @OA\Property(property="payment_method", type="string", example="Bank Transfer"),
- *           @OA\Property(
- *                property="payment_details",
- *                type="object",
- *                ref="#/components/schemas/BankTransferDetails"
- *           )
- *       }
- *   )
- *
- * @OA\Schema(
- *       schema="PaymentBuyNowPayLaterRequest",
- *       type="object",
- *       title="PaymentBuyNowPayLaterRequest",
- *       properties={
- *           @OA\Property(property="payment_method", type="string", example="Buy Now Pay Later"),
- *           @OA\Property(
- *                property="payment_details",
- *                type="object",
- *                ref="#/components/schemas/BuyNowPayLaterDetails"
- *           )
- *       }
- *   )
- *
- * @OA\Schema(
- *       schema="PaymentGiftCardRequest",
- *       type="object",
- *       title="PaymentGiftCardRequest",
- *       properties={
- *           @OA\Property(property="payment_method", type="string", example="Gift Card"),
- *           @OA\Property(
- *                property="payment_details",
- *                type="object",
- *                ref="#/components/schemas/GiftCardDetails"
- *           )
- *       }
- *   )
- *
- * @OA\Schema(
- *       schema="PaymentCashOnDeliveryRequest",
- *       type="object",
- *       title="PaymentCashOnDeliveryRequest",
- *       properties={
- *           @OA\Property(property="payment_method", type="string", example="Cash On Delivery"),
- *           @OA\Property(
- *                property="payment_details",
- *                type="object",
- *                ref="#/components/schemas/CashOnDeliveryDetails"
- *           )
- *       }
- *   )
- *
- * @OA\Schema(
  *      schema="CreditCardDetails",
  *      type="object",
- *      @OA\Property(property="payment_type", type="string", example="credit_card"),
  *      @OA\Property(property="credit_card_number", type="string", nullable=false),
  *      @OA\Property(property="expiration_date", type="string", nullable=false),
  *      @OA\Property(property="cvv", type="string", nullable=false),
  *      @OA\Property(property="card_holder_name", type="string", nullable=false)
  * )
  *
+ *  Other payment details should inherit in the same way
  * @OA\Schema(
  *       schema="GiftCardDetails",
  *       type="object",
- *       @OA\Property(property="payment_type", type="string", example="gift_card"),
  *       @OA\Property(property="gift_card_number", type="string", nullable=false),
  *       @OA\Property(property="validation_code", type="string", nullable=false)
  *  )
  * @OA\Schema(
  *       schema="CashOnDeliveryDetails",
  *       type="object",
- *       @OA\Property(property="payment_type", type="string", example="cash_on_delivery"),
  *       description="Placeholder for Cash on Delivery payment method"
  *  )
  *
  * @OA\Schema(
  *      schema="BankTransferDetails",
  *      type="object",
- *       @OA\Property(property="payment_type", type="string", example="bank_transfer"),
  *      @OA\Property(property="bank_name", type="string", nullable=false),
  *      @OA\Property(property="account_name", type="string", nullable=false),
  *      @OA\Property(property="account_number", type="string", nullable=false)
@@ -153,7 +86,6 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  * @OA\Schema(
  *      schema="BuyNowPayLaterDetails",
  *      type="object",
- *      @OA\Property(property="payment_type", type="string", example="buy_now_pay_later"),
  *      @OA\Property(property="monthly_installments", type="string", nullable=false)
  * )
  *
