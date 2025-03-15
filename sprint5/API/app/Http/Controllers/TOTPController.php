@@ -24,7 +24,7 @@ class TOTPController extends Controller
      *     summary="Setup TOTP for the authenticated user",
      *     description="Generates a TOTP secret and QR code URL for the user to scan and enables TOTP setup.",
      *     tags={"TOTP"},
-     *     security={{"bearerAuth":{}}},
+     *     security={{ "apiAuth": {} }},
      *     @OA\Response(
      *         response=200,
      *         description="TOTP setup successful",
@@ -61,7 +61,7 @@ class TOTPController extends Controller
      *     summary="Verify TOTP code for the authenticated user",
      *     description="Validates the submitted TOTP code and enables TOTP if verification is successful.",
      *     tags={"TOTP"},
-     *     security={{"bearerAuth":{}}},
+     *     security={{ "apiAuth": {} }},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(

@@ -2,11 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PaymentBankTransferDetails;
-use App\Models\PaymentBnplDetails;
-use App\Models\PaymentCashOnDeliveryDetails;
-use App\Models\PaymentCreditCardDetails;
-use App\Models\PaymentGiftCardDetails;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
