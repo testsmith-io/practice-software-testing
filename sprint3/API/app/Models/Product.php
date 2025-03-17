@@ -50,7 +50,9 @@ class Product extends BaseModel
     protected $filters = ['sort'];
 
     protected $casts = array(
-        "price" => "double"
+        "price" => "double",
+        "is_location_offer" => "boolean",
+        "is_rental" => "boolean"
     );
 
     /**
