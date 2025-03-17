@@ -171,7 +171,7 @@ class ReportController extends Controller
      *                  ),
      *                  @OA\Property(
      *                     property="total",
-     *                     type="integer",
+     *                     type="number",
      *                     example=2,
      *                     description="Total sales for the given year"
      *                  )
@@ -227,7 +227,7 @@ class ReportController extends Controller
      *                 ),
      *                 @OA\Property(
      *                    property="average",
-     *                    type="integer",
+     *                    type="number",
      *                    example=2,
      *                    description="Average number of sales for the month"
      *                 ),
@@ -288,14 +288,14 @@ class ReportController extends Controller
      *                  ),
      *                  @OA\Property(
      *                     property="average",
-     *                     type="integer",
+     *                     type="number",
      *                     example=2,
      *                     description="Average number of sales for the week"
      *                  ),
      *                  @OA\Property(
      *                     property="amount",
      *                     type="number",
-     *                     format="float",
+     *                     format="number",
      *                     example=9.99,
      *                     description="Average sales amount for the week"
      *                 )
