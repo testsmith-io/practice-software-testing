@@ -18,7 +18,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *      @OA\Property(property="billing_state", type="string"),
  *      @OA\Property(property="billing_country", type="string"),
  *      @OA\Property(property="billing_postal_code", type="string"),
- *      @OA\Property(property="payment_method", type="string"),
+ *      @OA\Property(property="payment_method", type="string", enum={"bank-transfer", "cash-on-delivery", "credit-card", "buy-now-pay-later", "gift-card"}),
  *      @OA\Property(property="cart_id", type="string"),
  *      @OA\Property(
  *          property="payment_details",
@@ -38,7 +38,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *      type="object",
  *      title="PaymentRequest",
  *      properties={
- *        @OA\Property(property="payment_method", type="string", example="Credit Card"),
+ *        @OA\Property(property="payment_method", type="string", enum={"bank-transfer", "cash-on-delivery", "credit-card", "buy-now-pay-later", "gift-card"}),
  *        @OA\Property(
  *            property="payment_details",
  *            type="object",

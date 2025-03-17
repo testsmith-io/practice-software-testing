@@ -980,7 +980,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "oneOf": [
+                                                "anyOf": [
                                                     {
                                                         "$ref": "#/components/schemas/ContactResponse"
                                                     },
@@ -2784,7 +2784,7 @@
                                             },
                                             "total": {
                                                 "description": "Total sales for the given year",
-                                                "type": "integer",
+                                                "type": "number",
                                                 "example": 2
                                             }
                                         },
@@ -2846,7 +2846,7 @@
                                             },
                                             "average": {
                                                 "description": "Average number of sales for the month",
-                                                "type": "integer",
+                                                "type": "number",
                                                 "example": 2
                                             },
                                             "amount": {
@@ -2914,13 +2914,13 @@
                                             },
                                             "average": {
                                                 "description": "Average number of sales for the week",
-                                                "type": "integer",
+                                                "type": "number",
                                                 "example": 2
                                             },
                                             "amount": {
                                                 "description": "Average sales amount for the week",
                                                 "type": "number",
-                                                "format": "float",
+                                                "format": "number",
                                                 "example": 9.99
                                             }
                                         },
@@ -4189,7 +4189,14 @@
                         "type": "string"
                     },
                     "payment_method": {
-                        "type": "string"
+                        "type": "string",
+                        "enum": [
+                            "bank-transfer",
+                            "cash-on-delivery",
+                            "credit-card",
+                            "buy-now-pay-later",
+                            "gift-card"
+                        ]
                     },
                     "cart_id": {
                         "type": "string"
@@ -4223,7 +4230,13 @@
                 "properties": {
                     "payment_method": {
                         "type": "string",
-                        "example": "Credit Card"
+                        "enum": [
+                            "bank-transfer",
+                            "cash-on-delivery",
+                            "credit-card",
+                            "buy-now-pay-later",
+                            "gift-card"
+                        ]
                     },
                     "payment_details": {
                         "type": "object",
