@@ -151,7 +151,7 @@ class ContactController extends Controller
      *                   property="data",
      *                   type="array",
      *                   @OA\Items(
-     *                       oneOf={
+     *                       anyOf={
      *                           @OA\Schema(ref="#/components/schemas/ContactResponse"),
      *                           @OA\Schema(ref="#/components/schemas/ContactResponseAuthenticated")
      *                       }
