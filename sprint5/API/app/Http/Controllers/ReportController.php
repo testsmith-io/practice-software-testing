@@ -237,13 +237,13 @@ class ReportController extends Controller
      *                    format="float",
      *                    example=9.99,
      *                    description="Average sales amount for the month"
-     *              )
-     *          )
-     *      )
-     *  ),
-     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
-     *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
-     *      security={{ "apiAuth": {} }}
+     *                )
+     *            )
+     *        )
+     *    ),
+     *    @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
+     *    @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
+     *    security={{ "apiAuth": {} }}
      * )
      */
     public function averageSalesPerMonth(Request $request)

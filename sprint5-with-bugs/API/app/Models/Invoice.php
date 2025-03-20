@@ -22,7 +22,14 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="payment_method", type="string", example="Cash on Delivery"),
  *         @OA\Property(property="payment_account_name", type="string", example="Jogn Doe"),
  *         @OA\Property(property="payment_account_number", type="string", example="0987654345"),
- *         @OA\Property(property="invoice_items", type="array", @OA\Items(type="object", example={"product_id": 9, "quantity": 1, "unit_price": 12.01}))
+ *         @OA\Property(property="invoice_items", type="array",
+ *              @OA\Items(
+ *                  type="object",
+ *                  @OA\Property(property="product_id", type="integer", example=9),
+ *                  @OA\Property(property="quantity", type="integer", example=1),
+ *                  @OA\Property(property="unit_price", type="number", format="float", example=12.01)
+ *              )
+ *          )
  *     }
  * )
  *

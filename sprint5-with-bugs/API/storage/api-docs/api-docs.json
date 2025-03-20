@@ -866,6 +866,12 @@
                                 "properties": {
                                     "status": {
                                         "type": "string",
+                                        "enum": [
+                                            "NEW",
+                                            "ON_HOLD",
+                                            "IN_PROGRESS",
+                                            "RESOLVED"
+                                        ],
                                         "example": "IN_PROGRESS"
                                     }
                                 },
@@ -1306,50 +1312,6 @@
                     },
                     "404": {
                         "$ref": "#/components/responses/ItemNotFoundResponse"
-                    },
-                    "405": {
-                        "$ref": "#/components/responses/MethodNotAllowedResponse"
-                    },
-                    "422": {
-                        "$ref": "#/components/responses/UnprocessableEntityResponse"
-                    }
-                },
-                "security": [
-                    {
-                        "apiAuth": []
-                    }
-                ]
-            },
-            "delete": {
-                "tags": [
-                    "Invoice"
-                ],
-                "summary": "Delete specific invoice",
-                "description": "Admin role is required to delete a specific invoice",
-                "operationId": "deleteInvoice",
-                "parameters": [
-                    {
-                        "name": "invoiceId",
-                        "in": "path",
-                        "description": "The invoiceId parameter in path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "Successful operation"
-                    },
-                    "401": {
-                        "$ref": "#/components/responses/UnauthorizedResponse"
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/ItemNotFoundResponse"
-                    },
-                    "409": {
-                        "$ref": "#/components/responses/ConflictResponse"
                     },
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
@@ -2012,11 +1974,20 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "type": "object",
-                                        "example": {
-                                            "total_sales": 9.99,
-                                            "billing_country": "The Netherlands"
-                                        }
+                                        "title": "TotalSalesPerCountryResponse",
+                                        "properties": {
+                                            "billing_country": {
+                                                "description": "The billing country",
+                                                "type": "string",
+                                                "example": "The Netherlands"
+                                            },
+                                            "total_sales": {
+                                                "description": "Total sales in the country",
+                                                "type": "string",
+                                                "example": "1234"
+                                            }
+                                        },
+                                        "type": "object"
                                     }
                                 }
                             }
@@ -2052,11 +2023,20 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "type": "object",
-                                        "example": {
-                                            "name": "item",
-                                            "count": 2
-                                        }
+                                        "title": "TopPurchasedProductsResponse",
+                                        "properties": {
+                                            "name": {
+                                                "description": "Name of the product",
+                                                "type": "string",
+                                                "example": "item"
+                                            },
+                                            "count": {
+                                                "description": "Number of times the product was purchased",
+                                                "type": "integer",
+                                                "example": 2
+                                            }
+                                        },
+                                        "type": "object"
                                     }
                                 }
                             }
@@ -2092,11 +2072,20 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "type": "object",
-                                        "example": {
-                                            "category_name": "item",
-                                            "total_earned": 2
-                                        }
+                                        "title": "TopSellingCategoriesResponse",
+                                        "properties": {
+                                            "category_name": {
+                                                "description": "Name of the category",
+                                                "type": "string",
+                                                "example": "item"
+                                            },
+                                            "total_earned": {
+                                                "description": "Total earnings from this category",
+                                                "type": "string",
+                                                "example": "1234"
+                                            }
+                                        },
+                                        "type": "object"
                                     }
                                 }
                             }
@@ -2145,11 +2134,20 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "type": "object",
-                                        "example": {
-                                            "year": 2022,
-                                            "total": 2
-                                        }
+                                        "title": "TotalSalesOfYearsResponse",
+                                        "properties": {
+                                            "year": {
+                                                "description": "Year of the sales data",
+                                                "type": "integer",
+                                                "example": 2022
+                                            },
+                                            "total": {
+                                                "description": "Total sales for the given year",
+                                                "type": "number",
+                                                "example": 2
+                                            }
+                                        },
+                                        "type": "object"
                                     }
                                 }
                             }
@@ -2198,12 +2196,26 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "type": "object",
-                                        "example": {
-                                            "month": 1,
-                                            "average": 2,
-                                            "amount": 9.99
-                                        }
+                                        "title": "AverageSalesPerMonthResponse",
+                                        "properties": {
+                                            "month": {
+                                                "description": "Month number (1 for January, 12 for December)",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "average": {
+                                                "description": "Average number of sales for the month",
+                                                "type": "number",
+                                                "example": 2
+                                            },
+                                            "amount": {
+                                                "description": "Average sales amount for the month",
+                                                "type": "number",
+                                                "format": "float",
+                                                "example": 9.99
+                                            }
+                                        },
+                                        "type": "object"
                                     }
                                 }
                             }
@@ -2252,12 +2264,26 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "type": "object",
-                                        "example": {
-                                            "week": 1,
-                                            "average": 2,
-                                            "amount": 9.99
-                                        }
+                                        "title": "AverageSalesPerWeekResponse",
+                                        "properties": {
+                                            "week": {
+                                                "description": "Week number of the year (1-52)",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "average": {
+                                                "description": "Average number of sales for the week",
+                                                "type": "number",
+                                                "example": 2
+                                            },
+                                            "amount": {
+                                                "description": "Average sales amount for the week",
+                                                "type": "number",
+                                                "format": "number",
+                                                "example": 9.99
+                                            }
+                                        },
+                                        "type": "object"
                                     }
                                 }
                             }
@@ -2306,11 +2332,20 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "type": "object",
-                                        "example": {
-                                            "customer": "Jane Doe",
-                                            "country": "The Netherlands"
-                                        }
+                                        "title": "CustomersByCountryResponse",
+                                        "properties": {
+                                            "amount": {
+                                                "description": "Amount of customers",
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "country": {
+                                                "description": "Country",
+                                                "type": "string",
+                                                "example": "The Netherlands"
+                                            }
+                                        },
+                                        "type": "object"
                                     }
                                 }
                             }
@@ -2344,10 +2379,40 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/UserResponse"
-                                    }
+                                    "title": "PaginatedUserResponse",
+                                    "properties": {
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/UserResponse"
+                                            }
+                                        },
+                                        "from": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "last_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "to": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "total": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -2419,6 +2484,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "title": "AccountRequest",
                                 "properties": {
                                     "email": {
                                         "type": "string",
@@ -2915,6 +2981,32 @@
                 },
                 "type": "object"
             },
+            "CategoryTreeResponse": {
+                "title": "CategoryTreeResponse",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "parent_id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "new category"
+                    },
+                    "slug": {
+                        "type": "string",
+                        "example": "new-category"
+                    },
+                    "sub_categories": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CategoryResponse"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "CategoryResponse": {
                 "title": "CategoryResponse",
                 "properties": {
@@ -2961,20 +3053,39 @@
                     "name"
                 ],
                 "properties": {
-                    "first_name": {
-                        "description": "",
+                    "name": {
+                        "description": "If set, Authorization header is required",
                         "type": "string",
-                        "example": "John"
-                    },
-                    "last_name": {
-                        "description": "",
-                        "type": "string",
-                        "example": "Doe"
+                        "example": "John Doe"
                     },
                     "email": {
                         "description": "",
                         "type": "string",
                         "example": "john@doe.example"
+                    },
+                    "subject": {
+                        "description": "",
+                        "type": "string",
+                        "example": "website"
+                    },
+                    "message": {
+                        "description": "",
+                        "type": "string",
+                        "example": "Something is wrong with the website."
+                    }
+                },
+                "type": "object"
+            },
+            "ContactRequestAuthenticated": {
+                "title": "ContactRequestAuthenticated",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "If set, Authorization header is required",
+                        "type": "string",
+                        "example": "John Doe"
                     },
                     "subject": {
                         "description": "",
@@ -3029,6 +3140,99 @@
                 },
                 "type": "object"
             },
+            "ContactResponseAuthenticated": {
+                "title": "ContactResponseAuthenticated",
+                "properties": {
+                    "user_id": {
+                        "description": "",
+                        "type": "integer",
+                        "example": "John Doe"
+                    },
+                    "name": {
+                        "description": "",
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "description": "",
+                        "type": "string",
+                        "example": "john@doe.example"
+                    },
+                    "subject": {
+                        "description": "",
+                        "type": "string",
+                        "example": "website"
+                    },
+                    "message": {
+                        "description": "",
+                        "type": "string",
+                        "example": "Something is wrong with the website."
+                    },
+                    "status": {
+                        "description": "",
+                        "type": "string",
+                        "example": "NEW"
+                    },
+                    "id": {
+                        "description": "",
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2022-08-01 08:24:56"
+                    }
+                },
+                "type": "object"
+            },
+            "ContactResponseFull": {
+                "title": "ContactResponseFull",
+                "description": "A detailed contact message response with user and replies",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "01jnx2z1a6s8qx9z3hhqy3rdyp"
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": "01JNX24JV5Q3QFDB2ZPTRBMFN8"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": null
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": null
+                    },
+                    "subject": {
+                        "type": "string",
+                        "example": "test-subject"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "This is a test contact message."
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "IN_PROGRESS"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2025-03-09 09:14:49"
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/UserResponse"
+                    },
+                    "replies": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ContactReplyResponse"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "FavoriteRequest": {
                 "title": "FavoriteRequest",
                 "properties": {
@@ -3050,6 +3254,27 @@
                         "example": "2022-08-01 08:24:56"
                     },
                     "id": {
+                        "$ref": "#/components/schemas/ProductResponse"
+                    }
+                },
+                "type": "object"
+            },
+            "FavoriteWithProductResponse": {
+                "title": "FavoriteResponse",
+                "properties": {
+                    "product_id": {
+                        "type": "integer",
+                        "example": 1234
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1234
+                    },
+                    "id": {
+                        "type": "integer",
+                        "example": 1234
+                    },
+                    "product": {
                         "$ref": "#/components/schemas/ProductResponse"
                     }
                 },
@@ -3094,12 +3319,22 @@
                     "invoice_items": {
                         "type": "array",
                         "items": {
-                            "type": "object",
-                            "example": {
-                                "product_id": 9,
-                                "quantity": 1,
-                                "unit_price": 12.01
-                            }
+                            "properties": {
+                                "product_id": {
+                                    "type": "integer",
+                                    "example": 9
+                                },
+                                "quantity": {
+                                    "type": "integer",
+                                    "example": 1
+                                },
+                                "unit_price": {
+                                    "type": "number",
+                                    "format": "float",
+                                    "example": 12.01
+                                }
+                            },
+                            "type": "object"
                         }
                     }
                 },
