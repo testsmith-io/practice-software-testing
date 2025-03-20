@@ -36,13 +36,23 @@ class UserController extends Controller
      *      summary="Retrieve all users",
      *      description="Retrieve all users",
      *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent(
-     *              type="array",
-     *              @OA\Items(ref="#/components/schemas/UserResponse")
-     *          )
-     *      ),
+     *           response=200,
+     *           description="Successful operation",
+     *           @OA\JsonContent(
+     *               title="PaginatedUserResponse",
+     *               @OA\Property(property="current_page", type="integer", example=1),
+     *               @OA\Property(
+     *                   property="data",
+     *                   type="array",
+     *                   @OA\Items(ref="#/components/schemas/UserResponse")
+     *               ),
+     *               @OA\Property(property="from", type="integer", example=1),
+     *               @OA\Property(property="last_page", type="integer", example=1),
+     *               @OA\Property(property="per_page", type="integer", example=1),
+     *               @OA\Property(property="to", type="integer", example=1),
+     *               @OA\Property(property="total", type="integer", example=1),
+     *           )
+     *       ),
      *      @OA\Response(
      *          response=400,
      *          description="Bad Request"
@@ -107,6 +117,7 @@ class UserController extends Controller
      *        @OA\MediaType(
      *                mediaType="application/json",
      *           @OA\Schema(
+     *               title="AccountRequest",
      *               @OA\Property(property="email",
      *                        type="string",
      *                        example="customer@practicesoftwaretesting.com"
