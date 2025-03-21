@@ -19,22 +19,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *     type="object",
  *     title="FavoriteResponse",
  *     properties={
- *         @OA\Property(property="product", type="string", example="new-brand"),
- *         @OA\Property(property="created_at", type="string", example="2022-08-01 08:24:56"),
- *         @OA\Property(property="id", ref="#/components/schemas/ProductResponse")
+ *         @OA\Property(property="product_id", type="integer", example=1234),
+ *         @OA\Property(property="user_id", type="integer", example=1234),
+ *         @OA\Property(property="id", type="integer", example=1234)
  *     }
  * )
  * @OA\Schema(
- *       schema="FavoriteWithProductResponse",
- *       type="object",
- *       title="FavoriteResponse",
- *       properties={
- *           @OA\Property(property="product_id", type="integer", example=1234),
- *           @OA\Property(property="user_id", type="integer", example=1234),
- *           @OA\Property(property="id", type="integer", example=1234),
- *           @OA\Property(property="product", type="object", ref="#/components/schemas/ProductResponse")
- *       }
- *   )
+ *      schema="FavoriteWithProductResponse",
+ *      type="object",
+ *      title="FavoriteResponse",
+ *      properties={
+ *          @OA\Property(property="product_id", type="integer", example=1234),
+ *          @OA\Property(property="user_id", type="integer", example=1234),
+ *          @OA\Property(property="id", type="integer", example=1234),
+ *          @OA\Property(property="product", type="object", ref="#/components/schemas/ProductResponse")
+ *      }
+ *  )
  */
 class Favorite extends BaseModel
 {

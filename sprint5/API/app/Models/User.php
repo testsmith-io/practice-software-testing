@@ -54,14 +54,13 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  *         @OA\Property(property="email", type="string", example="john@doe.example"),
  *         @OA\Property(property="id", type="string"),
  *         @OA\Property(property="provider", type="string"),
- *         @OA\Property(property="totp_enabled", type="string"),
- *         @OA\Property(property="enabled", nullable=true, type="boolean"),
+ *         @OA\Property(property="totp_enabled", type="boolean"),
+ *         @OA\Property(property="enabled", type="boolean"),
  *         @OA\Property(property="failed_login_attempts", nullable=true, type="integer"),
  *         @OA\Property(property="created_at", type="string", example="2022-08-01 08:24:56"),
  *     }
  * )
  */
-
 #[ObservedBy([CachedAuthUserObserver::class])]
 class User extends Authenticatable implements JWTSubject
 {
@@ -90,7 +89,9 @@ class User extends Authenticatable implements JWTSubject
      * @var array<string, string>
      */
     protected $casts = array(
-        'created_at' => 'datetime:Y-m-d H:i:s'
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'enabled' => 'boolean',
+        'totp_enabled' => 'boolean',
     );
 
 //    protected $appends = ['admin_details'];
