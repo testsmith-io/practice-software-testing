@@ -25,7 +25,7 @@ class UserTest extends TestCase
         parent::setUp();
 
         $this->user = User::factory()->create([
-            'password' => bcrypt($password = 'welcome01'),
+            'password' => hash('sha256', 'welcome01'),
         ]);
 
         Mail::fake();

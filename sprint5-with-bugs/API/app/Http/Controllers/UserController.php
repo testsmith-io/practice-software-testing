@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -350,7 +349,7 @@ class UserController extends Controller
         $new = $request->get('new_password');
         $confirm = $request->get('new_password_confirmation');
 
-        if (!(Hash::check($current, app('auth')->user()->password))) {
+        if (hash('sha256', $current) !== auth()->user()->password) {
             return $this->preferredFormat([
                 'success' => false,
                 'message' => 'Your current password does not matches with the password.',
