@@ -6,11 +6,11 @@
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `address`, `city`, `state`, `country`, `postcode`, `phone`, `dob`,
                      `email`, `password`, `role`)
 VALUES (1, 'John', 'Doe', 'Test street 123', 'Utrecht', NULL, 'The Netherlands', NULL, NULL, '1980-01-01',
-        'admin@practicesoftwaretesting.com', '$2y$10$pvW9Ixi7okDIJC98Vte6e.iAMD6IZAxAR2V.SjW.m1.u5guoq1wxW', 'admin'),
+        'admin@practicesoftwaretesting.com', '9e2ed9cb4bf54a6b9dc4669a1d295466b2585c4346092bffb5333098431cd61d', 'admin'),
        (2, 'Jane', 'Doe', 'Test street 98', 'Vienna', NULL, 'Austria', NULL, NULL, '1980-02-02',
-        'customer@practicesoftwaretesting.com', '$2y$10$pvW9Ixi7okDIJC98Vte6e.iAMD6IZAxAR2V.SjW.m1.u5guoq1wxW', 'user'),
+        'customer@practicesoftwaretesting.com', '9e2ed9cb4bf54a6b9dc4669a1d295466b2585c4346092bffb5333098431cd61d', 'user'),
        (3, 'Jack', 'Howe', 'Test street 654', 'Frankfurt', NULL, 'Germany', NULL, NULL, '1980-03-03',
-        'customer2@practicesoftwaretesting.com', '$2y$10$pvW9Ixi7okDIJC98Vte6e.iAMD6IZAxAR2V.SjW.m1.u5guoq1wxW', 'user');
+        'customer2@practicesoftwaretesting.com', '9e2ed9cb4bf54a6b9dc4669a1d295466b2585c4346092bffb5333098431cd61d', 'user');
 
 /** Brand names **/
 INSERT INTO `brands` (`name`, `slug`)

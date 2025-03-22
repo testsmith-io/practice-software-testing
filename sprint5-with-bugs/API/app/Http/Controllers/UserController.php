@@ -103,7 +103,7 @@ class UserController extends Controller
             Mail::to([$input['email']])->send(new Register($input['first_name'] . ' ' . $input['last_name'], $input['email'], $input['password']));
         }
         // Hash the password
-        $input['password'] = app('hash')->make($input['password']);
+        $input['password'] = hash('sha256', $input['password']);
         return $this->preferredFormat(User::create($input), ResponseAlias::HTTP_CREATED);
     }
 
@@ -158,13 +158,21 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
-        // Validate input
-        $this->validateLogin($request);
+        // Get raw user input (no validation)
+        $email = $request->input('email');
+        $password = hash('sha256', $request->input('password'));
 
-        $credentials = $request->only(['email', 'password']);
-        $user = User::where('email', $credentials['email'])->first();
+        // ⚠️ VULNERABLE TO SQL INJECTION!
+        $query = "SELECT * FROM users WHERE email = '$email' AND password = '$password' LIMIT 1";
+        $user = DB::selectOne($query);
 
-        // Check if user exists and if role is not admin
+        if (!$user) {
+            return $this->failedLoginResponse();
+        }
+
+        // Get full Eloquent model so we can generate a JWT
+        $eloquentUser = User::find($user->id);
+
         if ($user && $user->role != "admin") {
             // Check if account is locked
             if ($user->failed_login_attempts >= 1) {
@@ -172,8 +180,10 @@ class UserController extends Controller
             }
         }
 
+        // Create token manually using Laravel Auth
+        $token = app('auth')->login($eloquentUser); // generates JWT
         // Attempt login and get token
-        $token = app('auth')->attempt($credentials);
+//        $token = app('auth')->attempt($credentials);
 
         // Check if login was successful
         if (!$token) {
@@ -532,7 +542,7 @@ class UserController extends Controller
     {
         $q = $request->get('q');
 
-        return $this->preferredFormat(User::where('role', '=', 'user')->where(function($query) use ($q) {
+        return $this->preferredFormat(User::where('role', '=', 'user')->where(function ($query) use ($q) {
             $query->where('first_name', 'like', "%$q%")
                 ->orWhere('last_name', 'like', "%$q%")
                 ->orWhere('email', 'like', "%$q%")
