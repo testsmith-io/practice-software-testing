@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +28,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/status', function () {
     return response()->json(['version' => config('app.version'), 'environment' => env('APP_ENV'), 'app_name' => env('APP_NAME')], 200,
         ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
+});
+
+Route::get('/logs/laravel.log', function () {
+    $logPath = storage_path('logs/laravel.log');
+
+    if (File::exists($logPath)) {
+        $logContents = File::get($logPath);
+    } else {
+        $logContents = 'Log file not found.';
+    }
+
+    return nl2br(e($logContents));
 });
 
 Route::controller(BrandController::class)->prefix('brands')->group(function () {
