@@ -1,8 +1,8 @@
 import {Invoiceline} from "./invoiceline";
 
 export class Invoice {
-  id!: number;
-  user_id!: number;
+  id!: string;
+  user_id!: string;
   billing_street!: string;
   billing_city!: string;
   billing_country!: string;
@@ -14,11 +14,9 @@ export class Invoice {
   additional_discount_amount!: number;
   invoicelines!: Invoiceline[];
   payment!: any;
-  payment_account_name!: string;
-  payment_account_number!: string;
-  payment_method!: string;
   subtotal!: number;
   total!: number;
   status!: string;
   status_message!: string;
+  created_at: string;
 }

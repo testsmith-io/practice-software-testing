@@ -49,7 +49,7 @@ export class InvoiceService {
     return this.http.post(API_URL + '/invoices', payload, {responseType: 'json'});
   }
 
-  updateStatus(id: number, status: string, status_message: string): Observable<any> {
+  updateStatus(id: string, status: string, status_message: string): Observable<any> {
     return this.http.put(API_URL + `/invoices/${id}/status`, {
       status: status,
       status_message: status_message

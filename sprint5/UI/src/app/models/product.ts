@@ -3,18 +3,18 @@ import {Brand} from "./brand";
 import {Category} from "./category";
 
 export class Product {
-  id!: number;
+  id!: string;
   name!: string;
   description!: string;
   price!: number;
-  in_stock!: number;
+  in_stock!: boolean;
   is_location_offer!: boolean;
   is_rental!: boolean;
-  discount_price!: number;
-  product_image_id!: number;
-  product_image!: Image;
-  brand_id!: number;
-  category_id!: number;
-  brand: Brand;
-  category: Category;
+  discount_price?: number;
+  product_image_id?: number;
+  product_image?: Image;
+  brand_id?: number;
+  category_id?: number;
+  brand?: Brand;
+  category?: Category;
 }

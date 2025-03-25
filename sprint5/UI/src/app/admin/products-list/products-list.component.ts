@@ -43,7 +43,7 @@ export class ProductsListComponent implements OnInit {
     this.getProducts();
   }
 
-  deleteProduct(id: number) {
+  deleteProduct(id: string) {
     this.productService.delete(id)
       .pipe(first())
       .subscribe({

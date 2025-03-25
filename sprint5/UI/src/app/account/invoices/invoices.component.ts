@@ -3,6 +3,7 @@ import {InvoiceService} from "../../_services/invoice.service";
 import {Invoice} from "../../models/invoice";
 import {first} from "rxjs/operators";
 import {Pagination} from "../../models/pagination";
+import {NavigationService} from "../../_services/navigation.service";
 
 @Component({
   selector: 'app-invoices',
@@ -13,7 +14,8 @@ export class InvoicesComponent implements OnInit {
   currentPage: number = 1;
   results: Pagination<Invoice>;
 
-  constructor(private invoiceService: InvoiceService) {
+  constructor(private invoiceService: InvoiceService,
+              private navigationService: NavigationService) {
   }
 
   ngOnInit(): void {
@@ -29,8 +31,7 @@ export class InvoicesComponent implements OnInit {
         },
         (error) => {
           if (error.status === 401 || error.status === 403) {
-            window.localStorage.removeItem('TOKEN_KEY');
-            window.location.href = '/auth/login';
+            this.navigationService.redirectToLogin();
           }
         }
       );
