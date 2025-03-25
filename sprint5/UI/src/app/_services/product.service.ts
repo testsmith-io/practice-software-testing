@@ -111,7 +111,7 @@ export class ProductService {
       )
   }
 
-  delete(id: number) {
+  delete(id: string) {
     return this.httpClient.delete(this.apiURL + `/products/${id}`, {responseType: 'json'})
       .pipe(
         catchError(this.errorHandler)

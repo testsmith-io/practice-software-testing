@@ -20,7 +20,7 @@ export class FavoriteService {
     return this.http.get(API_URL + '/favorites', {responseType: 'json'});
   }
 
-  deleteFavorite(id: number): Observable<any> {
+  deleteFavorite(id: string): Observable<any> {
     return this.http.delete(`${API_URL}/favorites/${id}`, {responseType: 'json'});
   }
 }
