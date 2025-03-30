@@ -62,6 +62,8 @@ class ProductService
     {
         $product = Product::create($data);
         $this->clearCache();
+
+        $product->load('product_image', 'category', 'brand');
         return $product;
     }
 
