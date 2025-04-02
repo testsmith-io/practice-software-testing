@@ -171,11 +171,7 @@ class InvoiceController extends Controller
      */
     public function show($id)
     {
-        if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
             return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->findOrFail($id));
-        } else {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('user_id', app('auth')->user()->id)->findOrFail($id));
-        }
     }
 
     /**
