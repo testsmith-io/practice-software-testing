@@ -13,6 +13,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SocialConnectController;
 use App\Http\Controllers\TOTPController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,11 +33,11 @@ Route::get('/status', function () {
 });
 
 Route::post('/refresh', function() {
-    \Illuminate\Support\Facades\Artisan::call('migrate:fresh', [
-        '--seed' => null, '--force' => null
+    Artisan::call('migrate:fresh', [
+        '--seed' => null
     ]);
 
-    \Illuminate\Support\Facades\Artisan::call('invoice:remove');
+    Artisan::call('invoice:remove');
 
     return response()->json(['result' => 'refresh done']);
 });
