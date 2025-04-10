@@ -11,6 +11,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,10 +31,9 @@ Route::get('/status', function () {
 });
 
 Route::post('/refresh', function() {
-    \Illuminate\Support\Facades\Artisan::call('migrate:fresh', [
-        '--seed' => null, '--force' => null
+    Artisan::call('migrate:fresh', [
+        '--seed' => null
     ]);
-
     return response()->json(['result' => 'refresh done']);
 });
 
