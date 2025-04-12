@@ -128,6 +128,7 @@ class UserController extends Controller
      *                mediaType="application/json",
      *           @OA\Schema(
      *               title="AccountRequest",
+     *               required={"email", "password"},
      *               @OA\Property(property="email",
      *                        type="string",
      *                        example="customer@practicesoftwaretesting.com"
