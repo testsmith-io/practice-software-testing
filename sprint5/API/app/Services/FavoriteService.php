@@ -4,31 +4,68 @@ namespace App\Services;
 
 use App\Models\Favorite;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class FavoriteService
 {
     public function getAllFavorites()
     {
-        return Favorite::with('product', 'product.product_image')
-            ->where('user_id', Auth::user()->id)
+        $userId = Auth::id();
+        Log::debug('Fetching all favorites for user', ['user_id' => $userId]);
+
+        $favorites = Favorite::with('product', 'product.product_image')
+            ->where('user_id', $userId)
             ->get();
+
+        Log::debug('Favorites fetched', ['count' => $favorites->count()]);
+
+        return $favorites;
     }
 
     public function createFavorite(array $data)
     {
-        $data['user_id'] = Auth::user()->id;
-        return Favorite::create($data);
+        $userId = Auth::id();
+        $data['user_id'] = $userId;
+
+        Log::debug('Creating favorite', ['user_id' => $userId, 'data' => $data]);
+
+        $favorite = Favorite::create($data);
+
+        Log::info('Favorite created', ['favorite_id' => $favorite->id]);
+
+        return $favorite;
     }
 
     public function getFavoriteById($id)
     {
-        return Favorite::findOrFail($id);
+        Log::debug('Fetching favorite by ID', ['favorite_id' => $id]);
+
+        $favorite = Favorite::findOrFail($id);
+
+        Log::debug('Favorite found', ['favorite' => $favorite]);
+
+        return $favorite;
     }
 
     public function deleteFavorite($productId)
     {
-        return Favorite::where('user_id', Auth::user()->id)
+        $userId = Auth::id();
+
+        Log::debug('Attempting to delete favorite', [
+            'user_id' => $userId,
+            'product_id' => $productId
+        ]);
+
+        $deleted = Favorite::where('user_id', $userId)
             ->where('product_id', $productId)
             ->delete();
+
+        Log::info('Favorite delete operation completed', [
+            'user_id' => $userId,
+            'product_id' => $productId,
+            'deleted' => $deleted
+        ]);
+
+        return $deleted;
     }
 }
