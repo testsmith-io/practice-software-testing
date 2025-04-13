@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Routing\Controller as BaseController;
 use Spatie\ArrayToXml\ArrayToXml;
+
 /**
  * @OA\Info(
  *   title="Toolshop API",

@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Favorite\DestroyFavorite;
 use App\Http\Requests\Favorite\StoreFavorite;
 use App\Models\Favorite;
-use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class FavoriteController extends Controller {
+class FavoriteController extends Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth:users');
     }
 
@@ -36,7 +37,8 @@ class FavoriteController extends Controller {
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function index() {
+    public function index()
+    {
         return $this->preferredFormat(Favorite::with('product', 'product.product_image')->where('user_id', Auth::user()->id)->get());
     }
 
@@ -64,7 +66,8 @@ class FavoriteController extends Controller {
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function store(StoreFavorite $request) {
+    public function store(StoreFavorite $request)
+    {
         $input = $request->all();
         $input['user_id'] = Auth::user()->id;
 
@@ -97,7 +100,8 @@ class FavoriteController extends Controller {
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function show($id) {
+    public function show($id)
+    {
         return $this->preferredFormat(Favorite::findOrFail($id));
     }
 
@@ -124,7 +128,8 @@ class FavoriteController extends Controller {
      *      security={{ "apiAuth": {} }}
      * ),
      */
-    public function destroy(DestroyFavorite $request, $id) {
+    public function destroy(DestroyFavorite $request, $id)
+    {
         Favorite::where('user_id', Auth::user()->id)->where('product_id', $id)->delete();
         return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
     }

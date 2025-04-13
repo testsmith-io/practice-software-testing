@@ -3,20 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Contact\StoreContact;
-use App\Http\Requests\Contact\StoreContactReply;
 use App\Mail\Contact;
-use App\Models\ContactRequestReply;
 use App\Models\ContactRequests;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class ContactController extends Controller {
+class ContactController extends Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth:users', ['except' => ['send']]);
         $this->middleware('assign.guard:users');
     }
@@ -57,9 +55,10 @@ class ContactController extends Controller {
      *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
      *  )
      */
-    public function send(StoreContact $request) {
-            $input = $request->all();
-            $result = ContactRequests::create($input);
+    public function send(StoreContact $request)
+    {
+        $input = $request->all();
+        $result = ContactRequests::create($input);
 
         if (App::environment('local')) {
             $email = $request->input('email');
@@ -113,7 +112,8 @@ class ContactController extends Controller {
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function index() {
+    public function index()
+    {
         return $this->preferredFormat(ContactRequests::where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->paginate());
     }
 
@@ -148,7 +148,8 @@ class ContactController extends Controller {
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function show($id) {
+    public function show($id)
+    {
         return $this->preferredFormat(ContactRequests::with(['user', 'replies', 'replies.user'])->where('id', $id)->orderBy('created_at', 'DESC')->first());
     }
 
