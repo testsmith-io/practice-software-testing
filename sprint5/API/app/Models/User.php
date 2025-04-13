@@ -14,22 +14,42 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  *     schema="UserRequest",
  *     type="object",
  *     title="UserRequest",
+ *     required={"first_name", "last_name", "email", "password"},
  *     properties={
- *         @OA\Property(property="first_name", type="string", example="John"),
- *         @OA\Property(property="last_name", type="string", example="Doe"),
+ *         @OA\Property(property="first_name", type="string", maxLength=40, example="John"),
+ *         @OA\Property(property="last_name", type="string", maxLength=20, example="Doe"),
  *         @OA\Property(
  *              property="address",
  *              type="object",
- *              @OA\Property(property="street", type="string", example="Street 1"),
- *              @OA\Property(property="city", type="string", example="City"),
- *              @OA\Property(property="state", type="string", example="State"),
- *              @OA\Property(property="country", type="string", example="Country"),
- *              @OA\Property(property="postal_code", type="string", example="1234AA")
+ *              @OA\Property(property="street", type="string", maxLength=70, example="Street 1"),
+ *              @OA\Property(property="city", type="string", maxLength=40, example="City"),
+ *              @OA\Property(property="state", type="string", maxLength=40, example="State"),
+ *              @OA\Property(property="country", type="string", maxLength=40, example="Country"),
+ *              @OA\Property(property="postal_code", type="string", maxLength=10, example="1234AA")
  *         ),
- *         @OA\Property(property="phone", type="string", example="0987654321"),
- *         @OA\Property(property="dob", type="string", example="1970-01-01"),
- *         @OA\Property(property="password", type="string", example="super-secret"),
- *         @OA\Property(property="email", type="string", example="john@doe.example")
+ *         @OA\Property(property="phone", type="string", maxLength=24, example="0987654321"),
+ *         @OA\Property(
+ *             property="dob",
+ *             type="string",
+ *             format="date",
+ *             example="1970-01-01",
+ *             description="Must be a valid date between 18 and 75 years ago"
+ *         ),
+ *         @OA\Property(
+ *             property="password",
+ *             type="string",
+ *             format="password",
+ *             minLength=8,
+ *             example="SuperSecure@123",
+ *             description="Must include uppercase, lowercase, number, and symbol"
+ *         ),
+ *         @OA\Property(
+ *             property="email",
+ *             type="string",
+ *             format="email",
+ *             maxLength=256,
+ *             example="john@doe.example"
+ *         )
  *     }
  * )
  *
