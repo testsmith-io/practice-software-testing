@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Invoiceline extends BaseModel
 {
     use HasFactory, HasUlids;
+
     protected $table = 'invoice_items';
     protected $fillable = ['invoice_id', 'product_id', 'unit_price', 'quantity', 'discount_percentage', 'discounted_price'];
 

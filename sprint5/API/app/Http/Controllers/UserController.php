@@ -2,25 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\UserService;
-use PragmaRX\Google2FA\Google2FA;
 use App\Http\Requests\Customer\DestroyCustomer;
 use App\Http\Requests\Customer\PatchCustomer;
 use App\Http\Requests\Customer\StoreCustomer;
 use App\Http\Requests\Customer\UpdateCustomer;
-use App\Mail\ForgetPassword;
-use App\Mail\Register;
-use App\Models\User;
-use App\Rules\SubscriptSuperscriptRule;
-use Illuminate\Database\QueryException;
+use App\Services\UserService;
+use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
@@ -442,7 +434,7 @@ class UserController extends Controller
             $user = $this->userService->getUserById($id, $currentUserId, $currentUserRole);
 
             return response()->json($user, ResponseAlias::HTTP_OK);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], ResponseAlias::HTTP_NOT_FOUND);
         }
     }
@@ -527,7 +519,7 @@ class UserController extends Controller
             $response = $this->userService->updateUser($id, $request->all(), $currentUserId, $currentUserRole);
 
             return $this->preferredFormat($response, ResponseAlias::HTTP_OK);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], ResponseAlias::HTTP_FORBIDDEN);
         }
     }
@@ -572,7 +564,7 @@ class UserController extends Controller
             $this->userService->patchUser($id, $data, $currentUserId, $currentUserRole);
 
             return response()->json(['success' => true], ResponseAlias::HTTP_OK);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], ResponseAlias::HTTP_FORBIDDEN); // Ensure 403 is returned
         }
     }
@@ -615,7 +607,7 @@ class UserController extends Controller
             $this->userService->deleteUser($id);
 
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Handle specific exceptions for integrity constraint violations
             if ($e->getCode() === '23000') { // SQLSTATE 23000 indicates a foreign key constraint failure
                 return $this->preferredFormat([

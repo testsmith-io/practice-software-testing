@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Services\TOTPService;
-use Illuminate\Support\Facades\Cache;
-use PragmaRX\Google2FA\Google2FA;
 use Illuminate\Http\Request;
 
 class TOTPController extends Controller

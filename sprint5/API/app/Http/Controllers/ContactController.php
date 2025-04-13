@@ -4,15 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Contact\StoreContact;
 use App\Http\Requests\Contact\StoreContactReply;
-use App\Mail\Contact;
-use App\Models\ContactRequestReply;
-use App\Models\ContactRequests;
 use App\Services\ContactService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class ContactController extends Controller

@@ -15,6 +15,7 @@ class UpdateProductInventory implements ShouldQueue
 
     protected $productId;
     protected $quantity;
+
     /**
      * Create a new job instance.
      */

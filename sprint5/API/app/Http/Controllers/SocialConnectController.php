@@ -3,9 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use ErrorException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use SocialConnect\Auth\Service;
+use SocialConnect\Common\HttpStack;
+use SocialConnect\HttpClient\Curl;
+use SocialConnect\HttpClient\RequestFactory;
+use SocialConnect\HttpClient\StreamFactory;
+use SocialConnect\Provider\Session\Session;
 
 class SocialConnectController extends Controller
 {
@@ -35,17 +42,17 @@ class SocialConnectController extends Controller
         ];
 
         $collectionFactory = null;
-        $httpClient = new \SocialConnect\HttpClient\Curl();
+        $httpClient = new Curl();
 
-        $httpStack = new \SocialConnect\Common\HttpStack(
+        $httpStack = new HttpStack(
             $httpClient,
-            new \SocialConnect\HttpClient\RequestFactory(),
-            new \SocialConnect\HttpClient\StreamFactory()
+            new RequestFactory(),
+            new StreamFactory()
         );
 
-        $this->service = new \SocialConnect\Auth\Service(
+        $this->service = new Service(
             $httpStack,
-            new \SocialConnect\Provider\Session\Session(),
+            new Session(),
             $configureProviders,
             $collectionFactory
         );
@@ -63,7 +70,7 @@ class SocialConnectController extends Controller
 
     public function getAuthUrl(Request $request)
     {
-        $providerName = $request->input('provider');;
+        $providerName = $request->input('provider');
 
         $provider = $this->service->getProvider($providerName);
         return redirect($provider->makeAuthUrl());
@@ -103,7 +110,7 @@ class SocialConnectController extends Controller
                 </script>
                 <?php
             }
-        } catch (\ErrorException $e) {
+        } catch (ErrorException $e) {
             ?>
             <script language="javascript">
                 if (window.opener) {

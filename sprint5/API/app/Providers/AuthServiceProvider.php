@@ -2,11 +2,7 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 
 class AuthServiceProvider extends ServiceProvider
@@ -19,7 +15,7 @@ class AuthServiceProvider extends ServiceProvider
 
         $this->app['auth']->provider('cached-auth-user',
             function ($app, $config) {
-                return new \App\Providers\CachedAuthUserProvider(
+                return new CachedAuthUserProvider(
                     $this->app['hash'],
                     $config['model']
                 );

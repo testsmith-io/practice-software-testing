@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Favorite\DestroyFavorite;
 use App\Http\Requests\Favorite\StoreFavorite;
-use App\Models\Favorite;
 use App\Services\FavoriteService;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-class FavoriteController extends Controller {
+class FavoriteController extends Controller
+{
 
     private $favoriteService;
 

@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Models\Cart;
 use App\Models\Product;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CartService
@@ -29,7 +30,7 @@ class CartService
         if ($product->name === 'Thor Hammer') {
             $existingThorHammer = $cart->cartItems()->where('product_id', $productId)->first();
             if ($existingThorHammer || $quantity > 1) {
-                throw new \Exception('You can only have one Thor Hammer in the cart.');
+                throw new Exception('You can only have one Thor Hammer in the cart.');
             }
 
             $cart->cartItems()->create([
@@ -77,14 +78,14 @@ class CartService
         $product = Product::findOrFail($productId);
 
         if ($product->name === 'Thor Hammer' && $quantity > 1) {
-            throw new \Exception('You can only have one Thor Hammer in the cart.');
+            throw new Exception('You can only have one Thor Hammer in the cart.');
         }
 
         $updateStatus = $cart->cartItems()
             ->where('product_id', $productId)
             ->update(['quantity' => $quantity]);
 
-        return (bool) $updateStatus;
+        return (bool)$updateStatus;
     }
 
     public function deleteCart($cartId)

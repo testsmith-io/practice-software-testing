@@ -18,12 +18,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Cart extends BaseModel
 {
     use HasFactory, HasUlids;
+
     protected $table = 'carts';
     protected $fillable = ['lat'];
 
     protected $casts = array(
         "additional_discount_percentage" => "double"
     );
+
     public function cartItems(): HasMany
     {
         return $this->hasMany(CartItem::class);

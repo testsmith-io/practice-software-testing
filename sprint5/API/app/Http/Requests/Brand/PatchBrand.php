@@ -37,7 +37,7 @@ class PatchBrand extends BaseFormRequest
     {
         return [
             'name' => ['sometimes', 'string', 'max:120', new SubscriptSuperscriptRule()],
-            'slug' => ['sometimes', 'alpha_dash:ascii','unique:brands,slug', 'string', 'max:120', new SubscriptSuperscriptRule()]
+            'slug' => ['sometimes', 'alpha_dash:ascii', 'unique:brands,slug', 'string', 'max:120', new SubscriptSuperscriptRule()]
         ];
     }
 }

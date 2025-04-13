@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cart;
-use App\Models\Product;
 use App\Services\CartService;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -123,7 +122,7 @@ class CartController extends Controller
             return $this->preferredFormat(['result' => 'item added or updated'], ResponseAlias::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             return $this->preferredFormat(['message' => 'Cart not found'], ResponseAlias::HTTP_NOT_FOUND);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->preferredFormat(['message' => $e->getMessage()], ResponseAlias::HTTP_BAD_REQUEST);
         }
     }
@@ -212,7 +211,7 @@ class CartController extends Controller
             return $this->preferredFormat(['result' => 'item added or updated'], ResponseAlias::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             return $this->preferredFormat(['message' => 'Cart doesn\'t exist'], ResponseAlias::HTTP_NOT_FOUND);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->preferredFormat(['message' => $e->getMessage()], ResponseAlias::HTTP_BAD_REQUEST);
         }
     }
@@ -245,7 +244,7 @@ class CartController extends Controller
         try {
             $this->cartService->deleteCart($cartId);
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return $this->preferredFormat(['message' => 'Cart doesnt exists'], ResponseAlias::HTTP_NOT_FOUND);
         }
     }
@@ -286,7 +285,7 @@ class CartController extends Controller
         try {
             $this->cartService->removeProductFromCart($cartId, $productId);
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return $this->preferredFormat(['message' => 'Cart doesnt exists'], ResponseAlias::HTTP_NOT_FOUND);
         }
     }

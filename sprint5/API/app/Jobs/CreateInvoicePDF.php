@@ -6,15 +6,15 @@ use App\Models\Download;
 use App\Models\Invoice;
 use App\Models\JobsInformation;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
-class CreateInvoicePDF implements ShouldQueue {
+class CreateInvoicePDF implements ShouldQueue
+{
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $id;
@@ -22,14 +22,16 @@ class CreateInvoicePDF implements ShouldQueue {
     /**
      * Create a new job instance.
      */
-    public function __construct($id) {
+    public function __construct($id)
+    {
         $this->id = $id;
     }
 
     /**
      * Execute the job.
      */
-    public function handle(): void {
+    public function handle(): void
+    {
         $jobInfo = new JobsInformation();
         $jobInfo->name = get_class();
         $jobInfo->start_time = now();
