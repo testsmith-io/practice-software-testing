@@ -1,12 +1,12 @@
 <?php
 
-
 namespace App\Services;
 
 use App\Models\Cart;
 use App\Models\Product;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Log;
 
 class CartService
 {
@@ -15,39 +15,68 @@ class CartService
         $cart = new Cart($data);
         $cart->save();
 
+        Log::info('Cart created', ['cart_id' => $cart->id]);
+
         return $cart->id;
     }
 
     public function addItemToCart($cartId, $productId, $quantity, $lat = null, $lng = null)
     {
-        $cart = Cart::with('cartItems')->find($cartId);
+        Log::debug('Adding item to cart', compact('cartId', 'productId', 'quantity', 'lat', 'lng'));
 
+        $cart = Cart::with('cartItems')->find($cartId);
         if (!$cart) {
+            Log::warning('Cart not found', ['cart_id' => $cartId]);
             throw new ModelNotFoundException('Cart doesnt exists.');
         }
+
         $product = Product::findOrFail($productId);
 
-        if ($product->name === 'Thor Hammer') {
-            $existingThorHammer = $cart->cartItems()->where('product_id', $productId)->first();
-            if ($existingThorHammer || $quantity > 1) {
-                throw new Exception('You can only have one Thor Hammer in the cart.');
+        try {
+            if ($product->name === 'Thor Hammer') {
+                $existingThorHammer = $cart->cartItems()->where('product_id', $productId)->first();
+                if ($existingThorHammer || $quantity > 1) {
+                    Log::warning('Thor Hammer constraint violated', ['cart_id' => $cartId]);
+                    throw new Exception('You can only have one Thor Hammer in the cart.');
+                }
+
+                $cart->cartItems()->create([
+                    'product_id' => $productId,
+                    'quantity' => 1
+                ]);
+
+                Log::info('Thor Hammer added to cart', ['cart_id' => $cartId, 'product_id' => $productId]);
+            } else {
+                $existingItem = $cart->cartItems()->firstOrCreate(['product_id' => $productId]);
+                $existingItem->increment('quantity', $quantity);
+
+                Log::info('Item added/incremented in cart', [
+                    'cart_id' => $cartId,
+                    'product_id' => $productId,
+                    'quantity' => $quantity
+                ]);
             }
 
-            $cart->cartItems()->create([
-                'product_id' => $productId,
-                'quantity' => 1
+            if ($lat && $lng && isset($existingItem->product->is_location_offer)) {
+                $discount = $this->calculateDiscountPercentage($lat, $lng);
+                $existingItem->discount_percentage = $discount;
+                $existingItem->save();
+
+                Log::info('Location-based discount applied', [
+                    'cart_id' => $cartId,
+                    'product_id' => $productId,
+                    'discount' => $discount
+                ]);
+            }
+
+            $this->updateCartDiscounts($cart);
+        } catch (\Throwable $e) {
+            Log::error('Error adding item to cart', [
+                'cart_id' => $cartId,
+                'error' => $e->getMessage()
             ]);
-        } else {
-            $existingItem = $cart->cartItems()->firstOrCreate(['product_id' => $productId]);
-            $existingItem->increment('quantity', $quantity);
+            throw $e;
         }
-
-        if ($lat && $lng && isset($existingItem->product->is_location_offer)) {
-            $existingItem->discount_percentage = $this->calculateDiscountPercentage($lat, $lng);
-            $existingItem->save();
-        }
-
-        $this->updateCartDiscounts($cart);
     }
 
     public function getCartById($cartId)
@@ -55,6 +84,7 @@ class CartService
         $cart = Cart::with(['cartItems', 'cartItems.product'])->find($cartId);
 
         if (!$cart) {
+            Log::warning('Cart not found', ['cart_id' => $cartId]);
             throw new ModelNotFoundException('Cart not found.');
         }
 
@@ -64,58 +94,87 @@ class CartService
             }
         }
 
+        Log::debug('Cart retrieved', ['cart_id' => $cartId]);
+
         return $cart;
     }
 
     public function updateCartItemQuantity($cartId, $productId, $quantity)
     {
-        $cart = Cart::with('cartItems')->find($cartId);
+        Log::debug('Updating cart item quantity', compact('cartId', 'productId', 'quantity'));
 
+        $cart = Cart::with('cartItems')->find($cartId);
         if (!$cart) {
+            Log::warning('Cart not found for update', ['cart_id' => $cartId]);
             throw new ModelNotFoundException('Cart doesn\'t exist');
         }
 
         $product = Product::findOrFail($productId);
 
         if ($product->name === 'Thor Hammer' && $quantity > 1) {
+            Log::warning('Attempted to set Thor Hammer quantity > 1', ['cart_id' => $cartId]);
             throw new Exception('You can only have one Thor Hammer in the cart.');
         }
 
-        $updateStatus = $cart->cartItems()
+        $updated = $cart->cartItems()
             ->where('product_id', $productId)
             ->update(['quantity' => $quantity]);
 
-        return (bool)$updateStatus;
+        Log::info('Cart item quantity updated', [
+            'cart_id' => $cartId,
+            'product_id' => $productId,
+            'quantity' => $quantity,
+            'updated' => (bool)$updated
+        ]);
+
+        return (bool)$updated;
     }
 
     public function deleteCart($cartId)
     {
         $cart = Cart::with('cartItems')->find($cartId);
         if (!$cart) {
+            Log::warning('Attempted to delete non-existent cart', ['cart_id' => $cartId]);
             throw new ModelNotFoundException('Cart doesnt exists.');
         }
+
         $cart->cartItems()->delete();
         $cart->delete();
+
+        Log::info('Cart deleted', ['cart_id' => $cartId]);
     }
 
     public function removeProductFromCart($cartId, $productId)
     {
         $cart = Cart::with('cartItems')->find($cartId);
         if (!$cart) {
+            Log::warning('Cart not found when removing product', ['cart_id' => $cartId]);
             throw new ModelNotFoundException('Cart doesnt exists.');
         }
+
         $cart->cartItems()->where('product_id', $productId)->delete();
         $this->updateCartDiscounts($cart);
+
+        Log::info('Product removed from cart', [
+            'cart_id' => $cartId,
+            'product_id' => $productId
+        ]);
     }
 
     private function updateCartDiscounts($cart)
     {
         $cart->load('cartItems.product');
+
         $hasProduct = $cart->cartItems->contains(fn($item) => !$item->product->is_rental);
         $hasRental = $cart->cartItems->contains(fn($item) => $item->product->is_rental);
 
         $cart->additional_discount_percentage = $hasProduct && $hasRental ? 15 : null;
         $cart->save();
+
+        Log::debug('Cart discounts updated', [
+            'cart_id' => $cart->id,
+            'discount_applied' => $cart->additional_discount_percentage
+        ]);
     }
 
     private function calculateDiscountPercentage($lat, $lng)
@@ -128,8 +187,9 @@ class CartService
             "london" => ["lat" => 51, "lng" => 0, "discount_percentage" => 25],
         ];
 
-        foreach ($coordinates as $data) {
+        foreach ($coordinates as $city => $data) {
             if (abs($lat - $data["lat"]) <= 0.5 && abs($lng - $data["lng"]) <= 0.5) {
+                Log::info('Location matched for discount', ['city' => $city, 'discount' => $data['discount_percentage']]);
                 return $data["discount_percentage"];
             }
         }

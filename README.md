@@ -61,6 +61,10 @@ Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belong
 
 `docker-compose exec laravel-api php artisan db:seed`
 
+## Access to the Laravel Logs
+
+`docker-compose exec laravel-api tail -f storage/logs/laravel.log`
+
 ## Generate Swagger documentation
 
 `docker-compose exec laravel-api php artisan l5-swagger:generate`
