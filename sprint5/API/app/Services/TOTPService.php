@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use PragmaRX\Google2FA\Google2FA;
-use Carbon\Carbon;
 
 class TOTPService
 {

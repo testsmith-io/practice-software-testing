@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Invoice\DestroyInvoice;
 use App\Http\Requests\Invoice\StoreInvoice;
 use App\Mail\Checkout;
 use App\Models\Invoice;
 use App\Models\Product;
-use App\Rules\SubscriptSuperscriptRule;
 use App\Services\InvoiceNumberGenerator;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Mail;
@@ -61,7 +57,7 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->orderBy('invoice_date', 'DESC')->paginate());
+        return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->orderBy('invoice_date', 'DESC')->paginate());
     }
 
     /**
@@ -171,7 +167,7 @@ class InvoiceController extends Controller
      */
     public function show($id)
     {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->findOrFail($id));
+        return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->findOrFail($id));
     }
 
     /**

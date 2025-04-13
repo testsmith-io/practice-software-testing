@@ -6,11 +6,9 @@ use App\Http\Requests\Category\DestroyCategory;
 use App\Http\Requests\Category\PatchCategory;
 use App\Http\Requests\Category\StoreCategory;
 use App\Http\Requests\Category\UpdateCategory;
-use App\Models\Category;
 use App\Services\CategoryService;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class CategoryController extends Controller

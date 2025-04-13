@@ -16,6 +16,7 @@ class Payment extends BaseModel
     protected $casts = [
         'payment_details' => 'array',  // Cast payment_details to an array
     ];
+
     public function payment_details()
     {
         return $this->morphTo();

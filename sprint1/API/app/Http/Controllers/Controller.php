@@ -75,8 +75,10 @@ use Spatie\ArrayToXml\ArrayToXml;
  *      )
  *  )
  */
-class Controller extends BaseController {
-    private function makeXML($xml, $status = 200, array $headers = [], $xmlRoot = 'response', $encoding = null) {
+class Controller extends BaseController
+{
+    private function makeXML($xml, $status = 200, array $headers = [], $xmlRoot = 'response', $encoding = null)
+    {
         if (is_array($xml)) {
             $xml = ArrayToXml::convert($xml, $xmlRoot, true, $encoding);
         } elseif (is_object($xml) && method_exists($xml, 'toArray')) {
@@ -92,7 +94,8 @@ class Controller extends BaseController {
         return response($xml, $status)->withHeaders($headers);
     }
 
-    protected function preferredFormat($data, $status = 200, array $headers = [], $xmlRoot = 'response') {
+    protected function preferredFormat($data, $status = 200, array $headers = [], $xmlRoot = 'response')
+    {
         if (strcmp(app('request')->headers->get('Accept'), 'text/xml') == 0) {
             return $this->makeXML($data, $status, array_merge($headers, ['Content-Type' => app('request')->headers->get('Accept')]), $xmlRoot);
         } else {

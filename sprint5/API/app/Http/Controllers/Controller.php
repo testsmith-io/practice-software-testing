@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
 use Spatie\ArrayToXml\ArrayToXml;
 
@@ -77,7 +79,6 @@ use Spatie\ArrayToXml\ArrayToXml;
  *     )
  * )
  */
-
 class Controller extends BaseController
 {
 //    use AuthorizesRequests, ValidatesRequests;
@@ -105,7 +106,7 @@ class Controller extends BaseController
         return response($xml, $status)->withHeaders($headers);
     }
 
-    protected function preferredFormat($data, $status = 200, array $headers = [], $xmlRoot = 'response'): \Illuminate\Foundation\Application|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
+    protected function preferredFormat($data, $status = 200, array $headers = [], $xmlRoot = 'response'): Application|Response|JsonResponse|\Illuminate\Contracts\Foundation\Application|ResponseFactory
     {
         if (str_contains(app('request')->headers->get('Accept'), 'text/xml')) {
             return $this->makeXML($data, $status, array_merge($headers, ['Content-Type' => app('request')->headers->get('Accept')]), $xmlRoot);
@@ -120,7 +121,7 @@ class Controller extends BaseController
      *
      * @param string $token
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Foundation\Application|\Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|ResponseFactory|Application|JsonResponse|Response
      */
     protected function respondWithToken(string $token)
     {

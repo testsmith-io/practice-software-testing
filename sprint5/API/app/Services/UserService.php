@@ -5,12 +5,14 @@ namespace App\Services;
 use App\Mail\ForgetPassword;
 use App\Mail\Register;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use PragmaRX\Google2FA\Google2FA;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserService
@@ -34,7 +36,7 @@ class UserService
             Mail::to([$data['email']])->send(new Register("{$data['first_name']} {$data['last_name']}", $data['email'], $data['password']));
         }
 
-        return User::create($data);;
+        return User::create($data);
     }
 
     public function login($credentials)
@@ -99,7 +101,7 @@ class UserService
 
                 $finalToken = app('auth')->claims(['restricted' => false])->login($user);
                 return ['token' => $finalToken];
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return ['error' => 'Invalid or expired token'];
             }
         }
@@ -178,12 +180,12 @@ class UserService
 
         // Check if the current user is authorized
         if ($currentUserId !== $id && $currentUserRole !== 'admin') {
-            throw new \Exception('You can only update your own data.');
+            throw new Exception('You can only update your own data.');
         }
 
         // If 'role' is included in the data, ensure only admins can update it
         if (isset($data['role']) && $currentUserRole !== 'admin') {
-            throw new \Exception('Only admins can update the role.');
+            throw new Exception('Only admins can update the role.');
         }
 
         // Remove 'role' field from the data if the user is not an admin
@@ -236,7 +238,7 @@ class UserService
         try {
             JWTAuth::invalidate(JWTAuth::getToken());
             return ['message' => 'Successfully logged out'];
-        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+        } catch (JWTException $e) {
             return ['error' => 'Failed to logout, please try again.'];
         }
     }
@@ -254,7 +256,7 @@ class UserService
         if ($currentUserId == $id) {
             return User::findOrFail($id);
         }
-        throw new \Exception('You are not authorized to view this user.');
+        throw new Exception('You are not authorized to view this user.');
     }
 
     public function patchUser($id, $data, $currentUserId, $currentUserRole)
@@ -264,7 +266,7 @@ class UserService
         // Check if the current user is the same as the one being updated or is an admin
         if ($currentUserId === $id || $currentUserRole === "admin") {
             if (isset($data['role']) && $currentUserRole !== "admin") {
-                throw new \Exception('Only admins can update the role.');
+                throw new Exception('Only admins can update the role.');
             }
 
             // Remove 'role' field for non-admin users
@@ -278,7 +280,7 @@ class UserService
             return ['success' => true];
         }
 
-        throw new \Exception('You can only update your own data.');
+        throw new Exception('You can only update your own data.');
     }
 
     /**

@@ -17,9 +17,11 @@ use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class UserController extends Controller {
+class UserController extends Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth:users', ['except' => ['login', 'store', 'forgotPassword', 'refresh']]);
         $this->middleware('assign.guard:users');
     }
@@ -64,7 +66,8 @@ class UserController extends Controller {
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function index() {
+    public function index()
+    {
         return $this->preferredFormat(User::where('role', '=', 'user')->paginate());
     }
 
@@ -96,7 +99,8 @@ class UserController extends Controller {
      *      )
      * )
      */
-    public function store(StoreCustomer $request) {
+    public function store(StoreCustomer $request)
+    {
         $input = $request->all();
         $input['role'] = 'user';
 
@@ -157,7 +161,8 @@ class UserController extends Controller {
      *     )
      * )
      */
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $credentials = $request->all(['email', 'password']);
 
         if (!$token = app('auth')->attempt($credentials)) {
@@ -197,7 +202,8 @@ class UserController extends Controller {
      *      )
      *  )
      */
-    public function forgotPassword(Request $request) {
+    public function forgotPassword(Request $request)
+    {
         $request->validate([
             'email' => 'exists:users,email'
         ]);
@@ -243,7 +249,8 @@ class UserController extends Controller {
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function changePassword(Request $request) {
+    public function changePassword(Request $request)
+    {
         $current = $request->get('current_password');
         $new = $request->get('new_password');
         $confirm = $request->get('new_password_confirmation');
@@ -288,7 +295,8 @@ class UserController extends Controller {
      *     security={{ "apiAuth": {} }}
      * )
      */
-    public function me() {
+    public function me()
+    {
         return response()->json(Auth::user());
     }
 
@@ -372,7 +380,8 @@ class UserController extends Controller {
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function refresh() {
+    public function refresh()
+    {
         return $this->respondWithToken(app('auth')->refresh(true, false));
     }
 
@@ -402,7 +411,8 @@ class UserController extends Controller {
      *       security={{ "apiAuth": {} }}
      * )
      */
-    public function show($id) {
+    public function show($id)
+    {
         return $this->preferredFormat(User::findOrFail($id));
     }
 
@@ -450,7 +460,8 @@ class UserController extends Controller {
      *       security={{ "apiAuth": {} }}
      * )
      */
-    public function search(Request $request) {
+    public function search(Request $request)
+    {
         $q = $request->get('q');
 
         return $this->preferredFormat(User::where('role', '=', 'user')->where(function ($query) use ($q) {
@@ -491,7 +502,8 @@ class UserController extends Controller {
      *      security={{ "apiAuth": {} }}
      * )
      */
-    public function update(UpdateCustomer $request, $id) {
+    public function update(UpdateCustomer $request, $id)
+    {
         if ((app('auth')->id() == $id)) {
             //$request['password'] = app('hash')->make($request['password']);
             return $this->preferredFormat(['success' => (bool)User::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
@@ -526,7 +538,8 @@ class UserController extends Controller {
      *      security={{ "apiAuth": {} }}
      * ),
      */
-    public function destroy(DestroyCustomer $request, $id) {
+    public function destroy(DestroyCustomer $request, $id)
+    {
         try {
             return response()->json(['error' => 'Only admins can delete accounts.'], ResponseAlias::HTTP_FORBIDDEN);
         } catch (QueryException $e) {

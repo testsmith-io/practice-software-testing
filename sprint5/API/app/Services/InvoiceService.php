@@ -2,18 +2,19 @@
 
 namespace App\Services;
 
+use App\Jobs\UpdateProductInventory;
 use App\Models\Cart;
 use App\Models\Download;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\PaymentBankTransferDetails;
+use App\Models\PaymentBnplDetails;
 use App\Models\PaymentCashOnDeliveryDetails;
 use App\Models\PaymentCreditCardDetails;
 use App\Models\PaymentGiftCardDetails;
-use App\Models\PaymentBnplDetails;
-use App\Jobs\UpdateProductInventory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use InvalidArgumentException;
 
 class InvoiceService
 {
@@ -111,7 +112,7 @@ class InvoiceService
                 $paymentDetails = new PaymentGiftCardDetails($details);
                 break;
             default:
-                throw new \InvalidArgumentException("Invalid payment method: {$paymentMethod}");
+                throw new InvalidArgumentException("Invalid payment method: {$paymentMethod}");
         }
 
         if ($paymentDetails) {

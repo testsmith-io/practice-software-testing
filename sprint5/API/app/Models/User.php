@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 /** @OA\Schema(
  *     schema="UserRequest",
@@ -160,7 +161,7 @@ class User extends Authenticatable implements JWTSubject
                 $array['enabled'] = $this->enabled;
                 $array['failed_login_attempts'] = $this->failed_login_attempts;
             }
-        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+        } catch (JWTException $e) {
         }
 
         return $array;

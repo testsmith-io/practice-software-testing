@@ -49,11 +49,11 @@ class PatchCustomer extends BaseFormRequest
             'address.country' => ['sometimes', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'address.postal_code' => ['nullable', 'string', 'max:10', new SubscriptSuperscriptRule()],
             'phone' => ['nullable', 'string', 'max:24', new SubscriptSuperscriptRule()],
-            'dob' => ['date', 'date_format:Y-m-d',"before:{$before}"],
+            'dob' => ['date', 'date_format:Y-m-d', "before:{$before}"],
             'email' => ['sometimes', 'string', 'max:256', new SubscriptSuperscriptRule()],
-            'totp_secret'  => ['sometimes', 'string', 'nullable'],
+            'totp_secret' => ['sometimes', 'string', 'nullable'],
             'totp_verified_at' => ['sometimes', 'nullable'],
-            'totp_enabled'  => ['sometimes', 'boolean'],
+            'totp_enabled' => ['sometimes', 'boolean'],
         ];
     }
 }

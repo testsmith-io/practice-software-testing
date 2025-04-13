@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Product;
+use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -84,7 +85,7 @@ class ProductService
             $product = Product::find($id);
 
             if (!$product) {
-                throw new \Exception("Product with ID {$id} not found");
+                throw new Exception("Product with ID {$id} not found");
             }
 
             $categoryId = $product->category_id;

@@ -49,7 +49,7 @@ class StoreCustomer extends BaseFormRequest
             'country' => 'required|string|max:40',
             'postcode' => 'string|max:10',
             'phone' => 'string|max:24',
-            'dob' => ['date', 'date_format:Y-m-d',"before:{$before}", "after:{$after}"],
+            'dob' => ['date', 'date_format:Y-m-d', "before:{$before}", "after:{$after}"],
             'email' => 'required|unique:users,email|string|max:60',
             'password' => 'required|string|min:9|max:40'
         ];

@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Invoice\DestroyInvoice;
 use App\Http\Requests\Invoice\StoreInvoice;
 use App\Mail\Checkout;
 use App\Models\Invoice;
 use App\Models\Product;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -294,7 +292,7 @@ class InvoiceController extends Controller
             return $this->preferredFormat(['success' => false, 'message' => 'Invoice not found'], ResponseAlias::HTTP_NOT_FOUND);
         }
 
-        $updated = (bool) $invoice->update($request->except(['invoicelines']));
+        $updated = (bool)$invoice->update($request->except(['invoicelines']));
 
         if ($updated && $request->has('invoicelines')) {
             $invoice->invoicelines()->delete();  // Clear old invoice lines

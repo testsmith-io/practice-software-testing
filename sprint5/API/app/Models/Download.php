@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Mehradsadeghi\FilterQueryString\FilterQueryString;
 
- /** @OA\Schema(
+/** @OA\Schema(
  *     schema="DownloadResponse",
  *     type="object",
  *     title="DownloadResponse",

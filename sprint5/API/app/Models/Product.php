@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Mehradsadeghi\FilterQueryString\FilterQueryString;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 /** @OA\Schema(
  *     schema="ProductRequest",
@@ -79,7 +80,7 @@ class Product extends BaseModel
             if ($role == "admin") {
                 return $this->stock;
             }
-        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+        } catch (JWTException $e) {
         }
         return $this->stock > 0;
     }
