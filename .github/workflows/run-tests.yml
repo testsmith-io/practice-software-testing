@@ -16,7 +16,6 @@ jobs:
       - name: Start containers 🐳
         run: |
           docker compose -f docker-compose.yml up -d
-
       - name: Sleep for 60 seconds
         run: sleep 60s
         shell: bash
@@ -33,6 +32,8 @@ jobs:
           curl -v -X POST 'http://localhost:8091/users/login' \
           -H 'Content-Type: application/json' \
           --data-raw '{"email":"customer@practicesoftwaretesting.com","password":"welcome01"}'
+      - name: Docker Logs
+        run: docker compose exec laravel-api tail -f storage/logs/laravel.log
       - name: Install node ⚙️
         uses: actions/setup-node@v4
         with:
