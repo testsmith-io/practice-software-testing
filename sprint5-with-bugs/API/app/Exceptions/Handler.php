@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
@@ -59,33 +60,58 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
+        // Log all unhandled exceptions with full context
+        Log::debug('Exception caught', [
+            'type' => get_class($e),
+            'message' => $e->getMessage(),
+            'url' => $request->fullUrl(),
+            'input' => $request->all(),
+        ]);
+
         if ($e instanceof TokenExpiredException) {
+            Log::info('JWT token expired', ['url' => $request->fullUrl()]);
             return response()->json([
                 'message' => 'Token has expired and can no longer be refreshed',
             ], ResponseAlias::HTTP_UNAUTHORIZED);
         }
+
         if ($e instanceof MethodNotAllowedHttpException) {
+            Log::warning('Method not allowed', ['method' => $request->method(), 'url' => $request->fullUrl()]);
             return response()->json([
                 'message' => 'Method is not allowed for the requested route',
             ], ResponseAlias::HTTP_METHOD_NOT_ALLOWED);
         }
+
         if ($e instanceof TokenBlacklistedException) {
+            Log::info('Blacklisted JWT token attempt', ['url' => $request->fullUrl()]);
             return response()->json([
                 'message' => 'Token is not valid',
             ], ResponseAlias::HTTP_UNAUTHORIZED);
         }
+
         if ($e instanceof NotFoundHttpException) {
+            Log::notice('Route not found', ['url' => $request->fullUrl()]);
             return response()->json([
                 'message' => 'Resource not found'
             ], ResponseAlias::HTTP_NOT_FOUND);
         }
+
         if ($e instanceof ModelNotFoundException) {
+            Log::notice('Model not found', ['url' => $request->fullUrl()]);
             return response()->json([
                 'message' => 'Requested item not found'
             ], ResponseAlias::HTTP_NOT_FOUND);
         }
+
         if ($e instanceof QueryException) {
             $errorCode = $e->errorInfo[1];
+            Log::error('Query exception', [
+                'message' => $e->getMessage(),
+                'sql' => $e->getSql(),
+                'bindings' => $e->getBindings(),
+                'code' => $errorCode
+            ]);
+
             return match ($errorCode) {
                 1062 => response([
                     'message' => 'Duplicate Entry'

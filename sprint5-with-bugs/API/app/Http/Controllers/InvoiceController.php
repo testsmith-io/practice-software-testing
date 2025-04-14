@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Services\InvoiceNumberGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log; // Importing Log facade
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -57,7 +58,12 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->orderBy('invoice_date', 'DESC')->paginate());
+        Log::debug('Fetching invoices for the user.', ['user_id' => auth()->id()]);
+        $invoices = Invoice::with('invoicelines', 'invoicelines.product')
+            ->orderBy('invoice_date', 'DESC')
+            ->paginate();
+        Log::debug('Fetched invoices:', ['invoice_count' => $invoices->count()]);
+        return $this->preferredFormat($invoices);
     }
 
     /**
@@ -86,18 +92,21 @@ class InvoiceController extends Controller
      */
     public function store(StoreInvoice $request)
     {
+        Log::debug('Storing new invoice.', ['user_id' => auth()->id(), 'invoice_data' => $request->all()]);
+
         // Check if there is more than one Thor Hammer in the invoice items
         $thorHammerCount = 0;
-
-        // Loop through the invoice items and check for 'Thor Hammer'
         foreach ($request->only(['invoice_items'])['invoice_items'] as $invoiceItem) {
             $product = Product::findOrFail($invoiceItem['product_id']);
             if ($product->name === 'Thor Hammer') {
                 $thorHammerCount += $invoiceItem['quantity'];
             }
 
-            // If more than one Thor Hammer is being ordered, throw an exception
+            // Log each product check
+            Log::debug('Checking product in invoice.', ['product_name' => $product->name, 'quantity' => $invoiceItem['quantity']]);
+
             if ($thorHammerCount > 1) {
+                Log::warning('Too many Thor Hammers in invoice.', ['quantity' => $thorHammerCount]);
                 return $this->preferredFormat(['message' => 'You can only order one Thor Hammer.'], ResponseAlias::HTTP_BAD_REQUEST);
             }
         }
@@ -112,12 +121,17 @@ class InvoiceController extends Controller
         ]);
         $invoice = Invoice::create($input);
 
+        Log::info('Invoice created successfully.', ['invoice_id' => $invoice->id, 'invoice_number' => $invoice->invoice_number]);
+
         $invoice->invoicelines()->createMany($request->only(['invoice_items'])['invoice_items']);
 
+        // Decrement stock for each product ordered
         foreach ($request->only(['invoice_items'])['invoice_items'] as $invoiceItem) {
             Product::where('id', '=', $invoiceItem['product_id'])->decrement('stock', $invoiceItem['quantity']);
+            Log::debug('Decrementing stock for product.', ['product_id' => $invoiceItem['product_id'], 'quantity' => $invoiceItem['quantity']]);
         }
 
+        // Send checkout email in local environment
         if (App::environment('local')) {
             $items = [];
             $total = 0;
@@ -134,6 +148,8 @@ class InvoiceController extends Controller
 
             $user = app('auth')->user();
             Mail::to([$user->email])->send(new Checkout($user->first_name . ' ' . $user->last_name, $items, $total,));
+
+            Log::info('Checkout email sent to user.', ['user_email' => $user->email, 'total_amount' => $total]);
         }
 
         return $this->preferredFormat($invoice, ResponseAlias::HTTP_CREATED);
@@ -167,6 +183,7 @@ class InvoiceController extends Controller
      */
     public function show($id)
     {
+        Log::debug('Retrieving specific invoice.', ['invoice_id' => $id]);
         return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->findOrFail($id));
     }
 
@@ -216,12 +233,19 @@ class InvoiceController extends Controller
      */
     public function updateStatus($id, Request $request)
     {
+        Log::debug('Updating invoice status.', ['invoice_id' => $id, 'status' => $request->get('status')]);
         $request->validate([
             'status' => Rule::in("AWAITING_FULFILLMENT", "ON_HOLD", "AWAITING_SHIPMENT", "SHIPPED", "COMPLETED"),
             'status_message' => ['string', 'between:5,50', 'nullable']
         ]);
+        $updated = Invoice::where('id', $id)->update([
+            'status' => $request['status'],
+            'status_message' => $request['status_message']
+        ]);
 
-        return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->update(array('status' => $request['status'], 'status_message' => $request['status_message']))]);
+        Log::info('Invoice status updated.', ['invoice_id' => $id, 'updated' => $updated]);
+
+        return $this->preferredFormat(['success' => (bool)$updated]);
     }
 
     /**
@@ -265,12 +289,27 @@ class InvoiceController extends Controller
     public function search(Request $request)
     {
         $q = $request->get('q');
+        Log::debug('Searching invoices with query.', ['query' => $q, 'user_role' => app('auth')->parseToken()->getPayload()->get('role')]);
 
         if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('invoice_number', 'like', "%$q%")->orWhere('billing_address', 'like', "%$q%")->orWhere('status', 'like', "%$q%")->orderBy('invoice_date', 'DESC')->paginate());
+            $invoices = Invoice::with('invoicelines', 'invoicelines.product')
+                ->where('invoice_number', 'like', "%$q%")
+                ->orWhere('billing_address', 'like', "%$q%")
+                ->orWhere('status', 'like', "%$q%")
+                ->orderBy('invoice_date', 'DESC')
+                ->paginate();
         } else {
-            return $this->preferredFormat(Invoice::with('invoicelines', 'invoicelines.product')->where('user_id', app('auth')->user()->id)->orWhere('invoice_number', 'like', "%$q%")->orWhere('billing_address', 'like', "%$q%")->orWhere('status', 'like', "%$q%")->orderBy('invoice_date', 'DESC')->paginate());
+            $invoices = Invoice::with('invoicelines', 'invoicelines.product')
+                ->where('user_id', app('auth')->user()->id)
+                ->orWhere('invoice_number', 'like', "%$q%")
+                ->orWhere('billing_address', 'like', "%$q%")
+                ->orWhere('status', 'like', "%$q%")
+                ->orderBy('invoice_date', 'DESC')
+                ->paginate();
         }
+
+        Log::debug('Invoice search results.', ['result_count' => $invoices->count()]);
+        return $this->preferredFormat($invoices);
     }
 
     /**
@@ -302,7 +341,12 @@ class InvoiceController extends Controller
      */
     public function update(StoreInvoice $request, $id)
     {
-        return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->where('user_id', app('auth')->user()->id)->update($request->all())], ResponseAlias::HTTP_OK);
-    }
+        Log::debug('Updating invoice details.', ['invoice_id' => $id, 'updated_data' => $request->all()]);
+        $updated = Invoice::where('id', $id)
+            ->where('user_id', app('auth')->user()->id)
+            ->update($request->all());
 
+        Log::info('Invoice update status.', ['invoice_id' => $id, 'updated' => $updated]);
+        return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
+    }
 }

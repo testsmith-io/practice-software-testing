@@ -9,6 +9,7 @@ use App\Models\Product;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class ProductController extends Controller
@@ -81,9 +82,14 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
+        Log::info('Fetching products', $request->all());
+
         if ($request->get('by_category') || $request->get('by_brand') || $request->get('by_category_slug') || $request->get('q')) {
+            Log::debug('Building filtered product query');
             $query = Product::with('product_image', 'category', 'brand');
+
             if ($request->get('by_category_slug')) {
+                Log::debug('Filtering by category_slug', ['slug' => $request->get('by_category_slug')]);
                 $ids = DB::table('categories')->select('id')
                     ->from('categories')
                     ->where('slug', '=', $request->get('by_category_slug'))
@@ -94,24 +100,40 @@ class ProductController extends Controller
                     });
                 $query->whereIn('category_id', $ids);
             }
+
             if ($request->get('by_category')) {
+                Log::debug('Filtering by category', ['ids' => $request->get('by_category')]);
                 $query->whereIn('category_id', explode(',', $request->get('by_category')));
             }
+
             if ($request->get('by_brand')) {
+                Log::debug('Filtering by brand', ['ids' => $request->get('by_brand')]);
                 $query->whereIn('brand_id', explode(',', $request->get('by_brand')));
             }
+
             if ($request->get('is_rental')) {
+                Log::debug('Filtering by rental flag', ['is_rental' => $request->get('is_rental')]);
                 $query->where('is_rental', '=', $request->get('is_rental') ? 1 : 0);
             }
+
             if ($request->get('q')) {
                 $q = $request->get('q');
+                Log::debug('Searching by name', ['query' => $q]);
                 $query->where('name', 'like', "%$q%");
             }
+
             $results = $query->filter()->paginate(9);
+            Log::info('Filtered product results returned');
             return $this->preferredFormat($results);
-        } else {
-            return $this->preferredFormat(Product::where('is_rental', $request->get('is_rental') ? 1 : 0)->with('product_image', 'category', 'brand')->filter()->paginate(9));
         }
+
+        Log::debug('Fetching products without filters');
+        $results = Product::where('is_rental', $request->get('is_rental') ? 1 : 0)
+            ->with('product_image', 'category', 'brand')
+            ->filter()
+            ->paginate(9);
+
+        return $this->preferredFormat($results);
     }
 
     /**
@@ -146,7 +168,13 @@ class ProductController extends Controller
      */
     public function store(StoreProduct $request)
     {
-        return $this->preferredFormat(Product::create($request->all()), ResponseAlias::HTTP_CREATED);
+        Log::info('Creating new product', $request->validated());
+
+        $product = Product::create($request->all());
+
+        Log::debug('Product created', ['id' => $product->id]);
+
+        return $this->preferredFormat($product, ResponseAlias::HTTP_CREATED);
     }
 
     /**
@@ -175,7 +203,13 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        return $this->preferredFormat(Product::with('product_image', 'category', 'brand')->findOrFail($id));
+        Log::info('Fetching product by ID', ['id' => $id]);
+
+        $product = Product::with('product_image', 'category', 'brand')->findOrFail($id);
+
+        Log::debug('Product found', ['id' => $product->id]);
+
+        return $this->preferredFormat($product);
     }
 
     /**
@@ -207,9 +241,18 @@ class ProductController extends Controller
      */
     public function showRelated($id)
     {
+        Log::info('Fetching related products for product ID', ['id' => $id]);
+
         $categoryId = Product::where('id', $id)->first()->category_id;
 
-        return $this->preferredFormat(Product::with('product_image', 'category', 'brand')->where('category_id', $categoryId)->where('id', '!=', $id)->get());
+        $related = Product::with('product_image', 'category', 'brand')
+            ->where('category_id', $categoryId)
+            ->where('id', '!=', $id)
+            ->get();
+
+        Log::debug('Related products retrieved', ['count' => $related->count()]);
+
+        return $this->preferredFormat($related);
     }
 
     /**
@@ -253,7 +296,13 @@ class ProductController extends Controller
     {
         $q = $request->get('q');
 
-        return $this->preferredFormat(Product::with('product_image')->where('name', 'like', "%$q%")->paginate(9));
+        Log::info('Searching for products', ['query' => $q]);
+
+        $results = Product::with('product_image')
+            ->where('name', 'like', "%$q%")
+            ->paginate(9);
+
+        return $this->preferredFormat($results);
     }
 
     /**
@@ -283,7 +332,13 @@ class ProductController extends Controller
      */
     public function update(UpdateProduct $request, $id)
     {
-        return $this->preferredFormat(['success' => (bool)Product::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
+        Log::info('Updating product', ['id' => $id, 'payload' => $request->validated()]);
+
+        $success = Product::where('id', $id)->update($request->all());
+
+        Log::debug('Product update result', ['success' => $success]);
+
+        return $this->preferredFormat(['success' => (bool)$success], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -311,10 +366,21 @@ class ProductController extends Controller
      */
     public function destroy(DestroyProduct $request, $id)
     {
+        Log::info('Attempting to delete product', ['id' => $id]);
+
         try {
             Product::find($id)->delete();
+
+            Log::debug('Product deleted successfully');
+
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
         } catch (QueryException $e) {
+            Log::error('Failed to delete product', [
+                'id' => $id,
+                'error' => $e->getMessage(),
+                'code' => $e->getCode()
+            ]);
+
             if ($e->getCode() === '23000') {
                 return $this->preferredFormat([
                     'success' => false,

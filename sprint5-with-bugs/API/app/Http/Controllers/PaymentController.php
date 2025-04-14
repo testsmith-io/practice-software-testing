@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class PaymentController extends Controller
@@ -46,7 +47,19 @@ class PaymentController extends Controller
      */
     public function check(Request $request)
     {
-        return $this->preferredFormat(['message' => 'Payment was successful'], ResponseAlias::HTTP_OK);
-    }
+        Log::info('Payment check requested', [
+            'payload' => $request->all(),
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
 
+        $response = ['message' => 'Payment was successful'];
+
+        Log::debug('Payment check response', [
+            'response' => $response,
+            'status' => ResponseAlias::HTTP_OK
+        ]);
+
+        return $this->preferredFormat($response, ResponseAlias::HTTP_OK);
+    }
 }

@@ -8,11 +8,11 @@ use App\Http\Requests\Category\UpdateCategory;
 use App\Models\Category;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class CategoryController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('role:admin', ['only' => ['destroy']]);
@@ -46,10 +46,19 @@ class CategoryController extends Controller
      */
     public function indexTree(Request $request)
     {
+        Log::debug('Fetching category tree', ['slug' => $request->get('by_category_slug')]);
+
         if ($request->get('by_category_slug')) {
-            return $this->preferredFormat(Category::with('sub_categories')->where("parent_id", "=", null)->where('slug', '=', $request->get('by_category_slug'))->get());
+            return $this->preferredFormat(
+                Category::with('sub_categories')
+                    ->where("parent_id", "=", null)
+                    ->where('slug', '=', $request->get('by_category_slug'))
+                    ->get()
+            );
         } else {
-            return $this->preferredFormat(Category::with('sub_categories')->where("parent_id", "=", null)->get());
+            return $this->preferredFormat(
+                Category::with('sub_categories')->where("parent_id", "=", null)->get()
+            );
         }
     }
 
@@ -74,6 +83,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        Log::debug('Fetching all categories');
         return $this->preferredFormat(Category::all());
     }
 
@@ -101,7 +111,13 @@ class CategoryController extends Controller
      */
     public function store(StoreCategory $request)
     {
-        return $this->preferredFormat(Category::create($request->all()), ResponseAlias::HTTP_CREATED);
+        Log::info('Creating new category', ['data' => $request->only(['name', 'slug', 'parent_id'])]);
+
+        $category = Category::create($request->all());
+
+        Log::debug('Category created', ['id' => $category->id]);
+
+        return $this->preferredFormat($category, ResponseAlias::HTTP_CREATED);
     }
 
     /**
@@ -130,6 +146,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
+        Log::debug('Fetching category by ID', ['id' => $id]);
         return $this->preferredFormat(Category::with('sub_categories')->findOrFail($id));
     }
 
@@ -162,8 +179,11 @@ class CategoryController extends Controller
     public function search(Request $request)
     {
         $q = $request->get('q');
+        Log::debug('Searching categories', ['query' => $q]);
 
-        return $this->preferredFormat(Category::with('sub_categories')->where('name', 'like', "%$q%")->get());
+        return $this->preferredFormat(
+            Category::with('sub_categories')->where('name', 'like', "%$q%")->get()
+        );
     }
 
     /**
@@ -194,7 +214,13 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategory $request, $id)
     {
-        return $this->preferredFormat(['success' => (bool)Category::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
+        Log::info('Updating category', ['id' => $id, 'data' => $request->only(['name', 'slug', 'parent_id'])]);
+
+        $updated = Category::where('id', $id)->update($request->all());
+
+        Log::debug('Update result', ['success' => (bool)$updated]);
+
+        return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -223,16 +249,32 @@ class CategoryController extends Controller
      */
     public function destroy(DestroyCategory $request, $id)
     {
+        Log::warning('Attempting to delete category', ['id' => $id]);
+
         try {
             Category::find($id)->delete();
+
+            Log::info('Category deleted', ['id' => $id]);
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
+
         } catch (QueryException $e) {
+            Log::error('Failed to delete category', [
+                'id' => $id,
+                'error_code' => $e->getCode(),
+                'message' => $e->getMessage()
+            ]);
+
             if ($e->getCode() === '23000') {
                 return $this->preferredFormat([
                     'success' => false,
                     'message' => 'Seems like this category is used elsewhere.',
                 ], ResponseAlias::HTTP_CONFLICT);
             }
+
+            return $this->preferredFormat([
+                'success' => false,
+                'message' => 'Could not delete category.',
+            ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

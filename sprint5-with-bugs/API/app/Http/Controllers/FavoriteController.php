@@ -6,6 +6,7 @@ use App\Http\Requests\Favorite\DestroyFavorite;
 use App\Http\Requests\Favorite\StoreFavorite;
 use App\Models\Favorite;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class FavoriteController extends Controller
@@ -39,7 +40,15 @@ class FavoriteController extends Controller
      */
     public function index()
     {
-        return $this->preferredFormat(Favorite::with('product', 'product.product_image')->where('user_id', app('auth')->user()->id)->get());
+        $user = app('auth')->user();
+        Log::info('Fetching favorites', ['user_id' => $user->id]);
+
+        $favorites = Favorite::with('product', 'product.product_image')
+            ->where('user_id', $user->id)
+            ->get();
+
+        Log::debug('Favorites retrieved', ['count' => $favorites->count()]);
+        return $this->preferredFormat($favorites);
     }
 
     /**
@@ -68,10 +77,17 @@ class FavoriteController extends Controller
      */
     public function store(StoreFavorite $request)
     {
+        $user = app('auth')->user();
         $input = $request->all();
-        $input['user_id'] = app('auth')->user()->id;
+        $input['user_id'] = $user->id;
 
-        return $this->preferredFormat(Favorite::create($input), ResponseAlias::HTTP_CREATED);
+        Log::info('Creating favorite', ['user_id' => $user->id, 'product_id' => $input['product_id'] ?? null]);
+
+        $favorite = Favorite::create($input);
+
+        Log::debug('Favorite created', ['favorite_id' => $favorite->id]);
+
+        return $this->preferredFormat($favorite, ResponseAlias::HTTP_CREATED);
     }
 
     /**
@@ -102,7 +118,11 @@ class FavoriteController extends Controller
      */
     public function show($id)
     {
-        return $this->preferredFormat(Favorite::findOrFail($id));
+        Log::info('Fetching favorite', ['favorite_id' => $id]);
+        $favorite = Favorite::findOrFail($id);
+        Log::debug('Favorite found', ['favorite_id' => $favorite->id]);
+
+        return $this->preferredFormat($favorite);
     }
 
     /**
@@ -130,16 +150,32 @@ class FavoriteController extends Controller
      */
     public function destroy(DestroyFavorite $request, $id)
     {
+        $user = app('auth')->user();
+
         try {
-            Favorite::where('user_id', app('auth')->user()->id)->where('product_id', $id)->delete();
+            Log::info('Attempting to delete favorite', ['user_id' => $user->id, 'product_id' => $id]);
+
+            $deleted = Favorite::where('user_id', $user->id)->where('product_id', $id)->delete();
+
+            Log::debug('Favorite deletion result', ['deleted' => $deleted]);
+
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
         } catch (QueryException $e) {
+            Log::error('Error deleting favorite', [
+                'error' => $e->getMessage(),
+                'code' => $e->getCode(),
+                'user_id' => $user->id,
+                'product_id' => $id
+            ]);
+
             if ($e->getCode() === '23000') {
                 return $this->preferredFormat([
                     'success' => false,
                     'message' => 'Seems like this Brand is used elsewhere.',
                 ], ResponseAlias::HTTP_CONFLICT);
             }
+
+            throw $e; // Re-throw if not handled
         }
     }
 }
