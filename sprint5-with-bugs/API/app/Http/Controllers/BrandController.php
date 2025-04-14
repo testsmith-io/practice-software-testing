@@ -8,6 +8,7 @@ use App\Http\Requests\Brand\UpdateBrand;
 use App\Models\Brand;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class BrandController extends Controller
@@ -34,7 +35,10 @@ class BrandController extends Controller
      */
     public function index()
     {
-        return $this->preferredFormat(Brand::all());
+        Log::info('Fetching all brands');
+        $brands = Brand::all();
+        Log::debug('Brands retrieved', ['count' => $brands->count()]);
+        return $this->preferredFormat($brands);
     }
 
     /**
@@ -61,7 +65,10 @@ class BrandController extends Controller
      */
     public function store(StoreBrand $request)
     {
-        return $this->preferredFormat(Brand::create($request->all()), ResponseAlias::HTTP_CREATED);
+        Log::info('Creating a new brand', ['payload' => $request->all()]);
+        $brand = Brand::create($request->all());
+        Log::debug('Brand created', ['brand' => $brand]);
+        return $this->preferredFormat($brand, ResponseAlias::HTTP_CREATED);
     }
 
     /**
@@ -90,7 +97,10 @@ class BrandController extends Controller
      */
     public function show($id)
     {
-        return $this->preferredFormat(Brand::findOrFail($id));
+        Log::info("Fetching brand by ID", ['id' => $id]);
+        $brand = Brand::findOrFail($id);
+        Log::debug('Brand found', ['brand' => $brand]);
+        return $this->preferredFormat($brand);
     }
 
     /**
@@ -122,8 +132,10 @@ class BrandController extends Controller
     public function search(Request $request)
     {
         $q = $request->get('q');
-
-        return $this->preferredFormat(Brand::where('name', 'like', "%$q%")->get());
+        Log::info('Searching brands', ['query' => $q]);
+        $results = Brand::where('name', 'like', "%$q%")->get();
+        Log::debug('Search results', ['count' => $results->count()]);
+        return $this->preferredFormat($results);
     }
 
     /**
@@ -154,7 +166,10 @@ class BrandController extends Controller
      */
     public function update(UpdateBrand $request, $id)
     {
-        return $this->preferredFormat(['success' => (bool)Brand::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
+        Log::info('Updating brand', ['id' => $id, 'payload' => $request->all()]);
+        $updated = Brand::where('id', $id)->update($request->all());
+        Log::debug('Update result', ['updated' => $updated]);
+        return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -183,16 +198,35 @@ class BrandController extends Controller
      */
     public function destroy(DestroyBrand $request, $id)
     {
+        Log::info('Deleting brand', ['id' => $id]);
+
         try {
-            Brand::find($id)->delete();
+            $brand = Brand::find($id);
+
+            if (!$brand) {
+                Log::warning('Attempted to delete non-existent brand', ['id' => $id]);
+                abort(ResponseAlias::HTTP_NOT_FOUND, 'Brand not found');
+            }
+
+            $brand->delete();
+            Log::debug('Brand deleted successfully', ['id' => $id]);
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
+
         } catch (QueryException $e) {
+            Log::error('QueryException during brand deletion', [
+                'id' => $id,
+                'error' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ]);
+
             if ($e->getCode() === '23000') {
                 return $this->preferredFormat([
                     'success' => false,
                     'message' => 'Seems like this brand is used elsewhere.',
                 ], ResponseAlias::HTTP_CONFLICT);
             }
+
+            throw $e;
         }
     }
 }

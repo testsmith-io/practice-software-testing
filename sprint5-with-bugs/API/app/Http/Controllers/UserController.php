@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -25,6 +26,8 @@ class UserController extends Controller
         $this->middleware('auth:users', ['except' => ['login', 'store', 'forgotPassword', 'refresh']]);
         $this->middleware('assign.guard:users');
         $this->middleware('role:admin', ['only' => ['index', 'destroy']]);
+
+        Log::debug('UserController constructed');
     }
 
     /**
@@ -62,7 +65,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        return $this->preferredFormat(User::where('role', '=', 'user')->paginate());
+        Log::info('Index method called to retrieve all users with role user');
+        $users = User::where('role', '=', 'user')->paginate();
+        Log::debug('Users retrieved', ['count' => count($users->items())]);
+        return $this->preferredFormat($users);
     }
 
     /**
@@ -95,15 +101,24 @@ class UserController extends Controller
      */
     public function store(StoreCustomer $request)
     {
+        Log::info('Store method called for new user registration');
         $input = $request->all();
         $input['role'] = 'user';
 
+        // Avoid logging the password or any sensitive data.
+        Log::debug('User registration input received', ['email' => $input['email'], 'first_name' => $input['first_name'], 'last_name' => $input['last_name']]);
+
         if (App::environment('local')) {
+            Log::debug('Running in local environment. Sending registration email.');
             Mail::to([$input['email']])->send(new Register($input['first_name'] . ' ' . $input['last_name'], $input['email'], $input['password']));
         }
         // Hash the password
         $input['password'] = hash('sha256', $input['password']);
-        return $this->preferredFormat(User::create($input), ResponseAlias::HTTP_CREATED);
+
+        $user = User::create($input);
+        Log::info('User created successfully', ['user_id' => $user->id]);
+
+        return $this->preferredFormat($user, ResponseAlias::HTTP_CREATED);
     }
 
     /**
@@ -157,36 +172,41 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
+        Log::info('Login method called');
         // Get raw user input (no validation)
         $email = $request->input('email');
         $password = hash('sha256', $request->input('password'));
+        Log::debug('Login attempt', ['email' => $email]);
 
         // ⚠️ VULNERABLE TO SQL INJECTION!
         $query = "SELECT * FROM users WHERE email = '$email' AND password = '$password' LIMIT 1";
+        Log::debug('Executing raw query', ['query' => $query]);
         $user = DB::selectOne($query);
 
         if (!$user) {
+            Log::warning('Login failed: user not found', ['email' => $email]);
             return $this->failedLoginResponse();
         }
 
         // Get full Eloquent model so we can generate a JWT
         $eloquentUser = User::find($user->id);
+        Log::debug('User found and retrieved from Eloquent', ['user_id' => $user->id]);
 
         if ($user && $user->role != "admin") {
             // Check if account is locked
             if ($user->failed_login_attempts >= 1) {
+                Log::notice('Login attempt for locked account', ['user_id' => $user->id]);
                 return $this->lockedAccountResponse();
             }
         }
 
         // Create token manually using Laravel Auth
         $token = app('auth')->login($eloquentUser); // generates JWT
-        // Attempt login and get token
-//        $token = app('auth')->attempt($credentials);
 
         // Check if login was successful
         if (!$token) {
-            // Login failed
+            Log::warning('JWT generation failed', ['user_id' => $user->id]);
+            // Login failed - increment failed login count for non-admins
             if ($user && $user->role != "admin") {
                 $this->incrementLoginAttempts($user);
             }
@@ -195,6 +215,7 @@ class UserController extends Controller
 
         // Check if the user is enabled
         if (!$user->enabled) {
+            Log::notice('Login attempted on disabled account', ['user_id' => $user->id]);
             return response()->json([
                 'error' => 'Account disabled.'
             ], ResponseAlias::HTTP_FORBIDDEN);
@@ -202,6 +223,7 @@ class UserController extends Controller
 
         // Reset failed login attempts on successful login
         $this->resetLoginAttempts($user);
+        Log::info('User logged in successfully', ['user_id' => $user->id]);
 
         // Return the successful login response
         return $this->successfulLoginResponse($token);
@@ -209,6 +231,7 @@ class UserController extends Controller
 
     protected function validateLogin(Request $request)
     {
+        Log::debug('Validating login request');
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -217,6 +240,7 @@ class UserController extends Controller
 
     protected function incrementLoginAttempts($user)
     {
+        Log::debug('Incrementing login attempts', ['user_id' => $user->id, 'failed_login_attempts' => $user->failed_login_attempts]);
         if ($user->failed_login_attempts < 1) {
             DB::table('users')
                 ->where('id', $user->id)
@@ -226,6 +250,7 @@ class UserController extends Controller
 
     protected function resetLoginAttempts($user)
     {
+        Log::debug('Resetting login attempts', ['user_id' => $user->id, 'failed_login_attempts' => $user->failed_login_attempts]);
         if ($user->failed_login_attempts < 1) {
             DB::table('users')
                 ->where('id', $user->id)
@@ -233,43 +258,23 @@ class UserController extends Controller
         }
     }
 
-
     protected function lockedAccountResponse()
     {
+        Log::info('Locked account response generated');
         return response()->json(['error' => 'Account locked.'], ResponseAlias::HTTP_BAD_REQUEST);
     }
 
     protected function failedLoginResponse()
     {
+        Log::info('Failed login response generated');
         return response()->json(['error' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
     }
 
     protected function successfulLoginResponse($token)
     {
+        Log::info('Successful login response generated');
         return $this->respondWithToken($token);
     }
-//    public function login(Request $request)
-//    {
-//        $credentials = $request->all(['email', 'password']);
-//
-//        if (!$token = app('auth')->attempt($credentials)) {
-//            $user = User::where('email', '=', $credentials['email'])->first();
-//            if ($user->role != "admin") {
-//                // Check if the user is enabled
-//                if (!$user->enabled) {
-//                    return response()->json([
-//                        'error' => 'Account disabled.'
-//                    ], ResponseAlias::HTTP_FORBIDDEN);
-//                } else if ($user['failed_login_attempts'] >= 1) {
-//                    return response()->json(['error' => 'Account locked.'], ResponseAlias::HTTP_BAD_REQUEST);
-//                } else {
-//                    User::where('email', '=', $credentials['email'])->increment('failed_login_attempts', 1);
-//                }
-//            }
-//            return response()->json(['error' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
-//        }
-//        return $this->respondWithToken($token);
-//    }
 
     /**
      * @OA\Post(
@@ -303,13 +308,18 @@ class UserController extends Controller
      */
     public function forgotPassword(Request $request)
     {
+        Log::info('Forgot password request received', ['email' => $request->get('email')]);
         $request['password'] = app('hash')->make('welcome02');
 
         if (App::environment('local')) {
             $user = User::where('email', $request['email'])->first();
+            Log::debug('Sending forget password email', ['user_id' => $user->id]);
             Mail::to([$request['email']])->send(new ForgetPassword($user->first_name . ' ' . $user->last_name, "welcome02"));
         }
-        return $this->preferredFormat(['success' => (bool)User::where('email', $request['email'])->update(['password' => $request['password']])], ResponseAlias::HTTP_OK);
+        $updated = (bool)User::where('email', $request['email'])->update(['password' => $request['password']]);
+        Log::debug('Forgot password update', ['email' => $request->get('email'), 'updated' => $updated]);
+
+        return $this->preferredFormat(['success' => $updated], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -345,11 +355,13 @@ class UserController extends Controller
      */
     public function changePassword(Request $request)
     {
+        Log::info('Change password request initiated', ['user_id' => auth()->user()->id]);
         $current = $request->get('current_password');
         $new = $request->get('new_password');
         $confirm = $request->get('new_password_confirmation');
 
         if (hash('sha256', $current) !== auth()->user()->password) {
+            Log::warning('Password change failed: current password does not match', ['user_id' => auth()->user()->id]);
             return $this->preferredFormat([
                 'success' => false,
                 'message' => 'Your current password does not matches with the password.',
@@ -357,6 +369,7 @@ class UserController extends Controller
         }
 
         if (strcmp($current, $new) == 0) {
+            Log::warning('Password change failed: new password is the same as current', ['user_id' => auth()->user()->id]);
             return $this->preferredFormat([
                 'success' => false,
                 'message' => 'New Password cannot be same as your current password.',
@@ -370,8 +383,10 @@ class UserController extends Controller
 
         $user = Auth::user();
         $user->password = $request->get('new_password');
+        $saved = $user->save();
+        Log::info('Password changed successfully', ['user_id' => $user->id]);
 
-        return $this->preferredFormat(['success' => $user->save()]);
+        return $this->preferredFormat(['success' => $saved]);
     }
 
     /**
@@ -391,6 +406,7 @@ class UserController extends Controller
      */
     public function me()
     {
+        Log::info('Retrieving current authenticated user info', ['user_id' => auth()->id()]);
         return response()->json(app('auth')->user());
     }
 
@@ -426,10 +442,13 @@ class UserController extends Controller
      */
     public function logout()
     {
+        Log::info('Logout requested', ['user_id' => auth()->id()]);
         try {
             JWTAuth::invalidate(JWTAuth::getToken());
+            Log::info('User successfully logged out', ['user_id' => auth()->id()]);
             return response()->json(['message' => 'Successfully logged out'], ResponseAlias::HTTP_OK);
-        } catch (JWTException $e) {
+        } catch (\Exception $e) {
+            Log::error('Logout failed', ['error' => $e->getMessage()]);
             return response()->json(['error' => 'Failed to logout, please try again.'], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -476,7 +495,10 @@ class UserController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(app('auth')->refresh(true, false));
+        Log::info('Token refresh requested', ['user_id' => auth()->id()]);
+        $newToken = app('auth')->refresh(true, false);
+        Log::info('Token refreshed successfully', ['user_id' => auth()->id()]);
+        return $this->respondWithToken($newToken);
     }
 
     /**
@@ -507,7 +529,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return $this->preferredFormat(User::findOrFail($id));
+        Log::info('Show method called to retrieve user', ['user_id' => $id]);
+        $user = User::findOrFail($id);
+        return $this->preferredFormat($user);
     }
 
     /**
@@ -540,13 +564,15 @@ class UserController extends Controller
     public function search(Request $request)
     {
         $q = $request->get('q');
-
-        return $this->preferredFormat(User::where('role', '=', 'user')->where(function ($query) use ($q) {
+        Log::info('Search method called', ['query' => $q]);
+        $results = User::where('role', '=', 'user')->where(function ($query) use ($q) {
             $query->where('first_name', 'like', "%$q%")
                 ->orWhere('last_name', 'like', "%$q%")
                 ->orWhere('email', 'like', "%$q%")
                 ->orWhere('city', 'like', "%$q%");
-        })->paginate());
+        })->paginate();
+        Log::debug('Search results retrieved', ['count' => count($results->items())]);
+        return $this->preferredFormat($results);
     }
 
     /**
@@ -581,10 +607,14 @@ class UserController extends Controller
      */
     public function update(UpdateCustomer $request, $id)
     {
+        Log::info('Update method called for user', ['user_id' => $id]);
         if ((app('auth')->id() == $id) || (app('auth')->parseToken()->getPayload()->get('role') == "admin")) {
             unset($request['enabled']);
-            return $this->preferredFormat(['success' => (bool)User::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
+            $updated = (bool)User::where('id', $id)->update($request->all());
+            Log::debug('User update attempted', ['user_id' => $id, 'success' => $updated]);
+            return $this->preferredFormat(['success' => $updated], ResponseAlias::HTTP_OK);
         } else {
+            Log::warning('Unauthorized update attempt', ['user_id' => $id, 'current_user' => app('auth')->id()]);
             return response()->json(['error' => 'You can only update your own data.'], ResponseAlias::HTTP_FORBIDDEN);
         }
     }
@@ -617,14 +647,24 @@ class UserController extends Controller
      */
     public function destroy(DestroyCustomer $request, $id)
     {
+        Log::info('Destroy method called for user deletion', ['user_id' => $id]);
         try {
             if (app('auth')->parseToken()->getPayload()->get('role') == "admin") {
-                User::find($id)->delete();
-                return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
+                $user = User::find($id);
+                if ($user) {
+                    $user->delete();
+                    Log::info('User deleted successfully', ['user_id' => $id]);
+                    return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
+                } else {
+                    Log::warning('User not found for deletion', ['user_id' => $id]);
+                    return response()->json(['error' => 'User not found.'], ResponseAlias::HTTP_NOT_FOUND);
+                }
             } else {
+                Log::warning('Unauthorized deletion attempt', ['attempting_user' => app('auth')->parseToken()->getPayload()->get('role')]);
                 return response()->json(['error' => 'Only admins can delete accounts.'], ResponseAlias::HTTP_FORBIDDEN);
             }
         } catch (QueryException $e) {
+            Log::error('QueryException during user deletion', ['user_id' => $id, 'error' => $e->getMessage()]);
             if ($e->getCode() === '23000') {
                 return $this->preferredFormat([
                     'success' => false,
@@ -633,5 +673,4 @@ class UserController extends Controller
             }
         }
     }
-
 }

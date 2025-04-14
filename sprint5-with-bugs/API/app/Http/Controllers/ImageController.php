@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductImage;
+use Illuminate\Support\Facades\Log;
 
 class ImageController extends Controller
 {
@@ -27,7 +28,11 @@ class ImageController extends Controller
      */
     public function index()
     {
-        return $this->preferredFormat(ProductImage::all());
-    }
+        Log::info('ImageController@index called');
 
+        $images = ProductImage::all();
+        Log::debug('Number of images retrieved', ['count' => $images->count()]);
+
+        return $this->preferredFormat($images);
+    }
 }
