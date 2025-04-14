@@ -33,7 +33,7 @@ jobs:
           -H 'Content-Type: application/json' \
           --data-raw '{"email":"customer@practicesoftwaretesting.com","password":"welcome01"}'
       - name: Docker Logs
-        run: docker compose exec laravel-api tail -f storage/logs/laravel.log
+        run: docker compose exec laravel-api cat storage/logs/laravel.log
       - name: Install node ⚙️
         uses: actions/setup-node@v4
         with:
