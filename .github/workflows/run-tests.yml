@@ -12,19 +12,15 @@ jobs:
     steps:
       - name: Checkout ⚙️
         uses: actions/checkout@v4
-
       - name: Start containers 🐳
         run: |
           docker compose -f docker-compose.yml up -d
-      - name: Sleep for 60 seconds
-        run: sleep 60s
+      - name: Sleep for 90 seconds
+        run: sleep90s
         shell: bash
       - name: Create & Seed database 🌱
         run: |
           docker compose exec laravel-api php artisan db:seed
-      - name: Sleep for 60 seconds
-        run: sleep 60s
-        shell: bash
       - name: GET Version
         run: curl -v -X GET 'http://localhost:8091/status'
       - name: POST login
