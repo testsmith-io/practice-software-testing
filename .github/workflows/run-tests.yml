@@ -8,19 +8,21 @@ concurrency: production_environment
 
 jobs:
   test:
-    runs-on: ubuntu-22.04-arm
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout ⚙️
         uses: actions/checkout@v4
       - name: Start containers 🐳
         run: |
           docker compose -f docker-compose.yml up -d
-      - name: Sleep for 120 seconds
-        run: sleep 120s
+      - name: Sleep for 60 seconds
+        run: sleep 60s
         shell: bash
       - name: Create & Seed database 🌱
         run: |
           docker compose exec -T laravel-api php artisan migrate:refresh --seed
+      - name: Docker ps
+        run: docker ps
       - name: GET Version
         run: curl -v -X GET 'http://localhost:8091/status'
       - name: POST login
@@ -28,6 +30,8 @@ jobs:
           curl -v -X POST 'http://localhost:8091/users/login' \
           -H 'Content-Type: application/json' \
           --data-raw '{"email":"customer@practicesoftwaretesting.com","password":"welcome01"}'
+      - name: Docker ps
+        run: docker ps
       - name: Docker Logs
         run: docker compose exec laravel-api cat storage/logs/laravel.log
       - name: Install node ⚙️
