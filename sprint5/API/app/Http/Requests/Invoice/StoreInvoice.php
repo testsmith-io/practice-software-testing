@@ -27,7 +27,7 @@ class StoreInvoice extends BaseFormRequest
     {
         return [
             'payment_method' => ['required', Rule::in(['bank-transfer', 'cash-on-delivery', 'credit-card', 'buy-now-pay-later', 'gift-card'])],
-            "payment_details" => ['required'],
+            "payment_details" => ['present'],
             'invoice_date' => 'date_format:Y-m-d',
             'billing_street' => ['required', 'string', 'max:70', new SubscriptSuperscriptRule()],
             'billing_city' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule()],
