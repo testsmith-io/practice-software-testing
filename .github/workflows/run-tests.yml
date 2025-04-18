@@ -24,7 +24,7 @@ jobs:
       - name: Docker ps
         run: docker ps
       - name: Docker ps
-        run: docker compose logs nginx
+        run: docker compose logs web
       - name: GET Version
         run: curl -v -X GET 'http://localhost:8091/status'
       - name: POST login
