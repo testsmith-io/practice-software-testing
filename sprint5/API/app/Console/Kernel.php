@@ -14,8 +14,8 @@ class Kernel extends ConsoleKernel
     {
         if (!app()->environment('local')) {
             $schedule->command('migrate:fresh --seed --force')->hourly()->environments(['production']);
-            $schedule->command('cache:clear')->hourly()->environments(['production']);
             $schedule->command('invoice:remove')->hourly()->environments(['production']);
+            $schedule->command('cache:clear')->hourly()->environments(['production']);
         }
         $schedule->command('invoice:generate')
             ->everyMinute();
