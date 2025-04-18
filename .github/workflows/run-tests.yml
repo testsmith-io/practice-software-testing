@@ -26,12 +26,14 @@ jobs:
       - name: Docker ps
         run: docker compose logs web
       - name: GET Version
-        run: curl -v -X GET 'http://localhost:8091/status'
+        run: curl -vvv -X GET 'http://localhost:8091/status'
       - name: POST login
         run: |
           curl -v -X POST 'http://localhost:8091/users/login' \
           -H 'Content-Type: application/json' \
           --data-raw '{"email":"customer@practicesoftwaretesting.com","password":"welcome01"}'
+      - name: Docker ps
+        run: docker compose logs web
       - name: Docker ps
         run: docker ps
       - name: Docker Logs
