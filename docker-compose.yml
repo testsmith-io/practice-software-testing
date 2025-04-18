@@ -50,6 +50,8 @@ services:
     container_name: cron
     restart: always
     command: crond -f -l 8
+    depends_on:
+      - laravel-api
     volumes_from:
       - laravel-api
     environment:
