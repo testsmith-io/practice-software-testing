@@ -8,7 +8,7 @@ concurrency: production_environment
 
 jobs:
   test:
-    runs-on: ubuntu-22.04
+    runs-on: macos-latest
     steps:
       - name: Checkout ⚙️
         uses: actions/checkout@v4
@@ -33,7 +33,7 @@ jobs:
       - name: Install node ⚙️
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 23
       - name: Install dependencies ⚙️
         run: |
           npm ci
