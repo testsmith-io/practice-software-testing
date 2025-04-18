@@ -144,6 +144,10 @@ export class PaymentComponent implements OnInit {
           'monthly_installments': paymentData.monthly_installments
         }
         break;
+      case 'cash-on-delivery':
+        payment = {
+        }
+        break;
     }
 
     const payload = {

@@ -103,7 +103,7 @@ class UserController extends Controller
     {
         Log::info('Store method called for new user registration');
         $input = $request->all();
-        $input['role'] = 'user';
+        $input['role'] = $input['role'] ?? 'user';
 
         // Avoid logging the password or any sensitive data.
         Log::debug('User registration input received', ['email' => $input['email'], 'first_name' => $input['first_name'], 'last_name' => $input['last_name']]);
