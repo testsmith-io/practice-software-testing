@@ -102,7 +102,7 @@ class InvoiceTest extends TestCase {
     public function testItCreatesNewInvoiceSuccessfullyCash() {
         $paymentDetails = [
         ];
-        $this->testItCreatesNewInvoiceSuccessfully('cash-on-delivery', $paymentDetails);
+        $this->testItCreatesNewInvoiceSuccessfully('cash-on-delivery', []);
     }
 
     public function testItCreatesNewInvoiceSuccessfullyBankTransfer() {
@@ -293,7 +293,7 @@ class InvoiceTest extends TestCase {
         $requestData = [
             'cart_id' => $cart->id,
             'payment_method' => $paymentMethod,
-            'payment_details' => $paymentDetails,
+            'payment_details' => empty($paymentDetails) ? (object) [] : $paymentDetails,
             'billing_street' => 'address',
             'billing_city' => 'city',
             'billing_country' => 'country',
