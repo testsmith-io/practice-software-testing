@@ -22,7 +22,7 @@ jobs:
         run: sleep 90s
         shell: bash
       - name: Docker ps
-        run: docker ps
+        run: docker compose exec laravel-api ls -la
       - name: Create & Seed database 🌱
         run: |
           docker compose exec -T laravel-api php artisan migrate:refresh --seed
