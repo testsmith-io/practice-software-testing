@@ -13,6 +13,12 @@ services:
       - "DB_PORT=3306"
       - "DB_HOST=mariadb"
       - "host=localhost"
+    command: >
+      sh -c "
+        mkdir -p storage/framework/{views,cache,sessions} bootstrap/cache &&
+        chmod -R 777 storage bootstrap/cache &&
+        php-fpm
+      "
 
   angular-ui:
     build:
