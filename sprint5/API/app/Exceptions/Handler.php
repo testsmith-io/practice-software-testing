@@ -51,15 +51,15 @@ class Handler extends ExceptionHandler
      *
      * @param \Illuminate\Http\Request $request
      * @param Throwable $e
-     * @return Response|JsonResponse
+     * @return ResponseAlias
      *
      * @throws Throwable
      */
     public function render($request, Throwable $e)
     {
-        $route = $request->path();
-        $method = $request->method();
-        $ip = $request->ip() ?? 'Unknown';
+        $route = $request->path() ?? 'Unknown-route';
+        $method = $request->method() ?? 'Unknown-method';
+        $ip = $request->ip() ?? 'Unknown-ip';
 
         if ($e instanceof TokenExpiredException) {
             Log::warning('TokenExpiredException', ['route' => $route, 'ip' => $ip]);
