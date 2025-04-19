@@ -15,8 +15,8 @@ jobs:
       - name: Start containers 🐳
         run: |
           docker compose -f docker-compose.yml up -d
-      - name: Sleep for 180 seconds
-        run: sleep 180s
+      - name: Sleep for 60 seconds
+        run: sleep 60s
         shell: bash
       - name: Create & Seed database 🌱
         run: |
@@ -27,6 +27,8 @@ jobs:
         run: docker compose logs web
       - name: GET Version
         run: curl -vvv -X GET 'http://localhost:8091/status'
+      - name: GET Products
+        run: curl -vvv -X GET 'http://localhost:8091/products'
       - name: POST login
         run: |
           curl -v -X POST 'http://localhost:8091/users/login' \
