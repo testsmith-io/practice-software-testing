@@ -2,14 +2,13 @@
 
 namespace App\Exceptions;
 
-use Exception;
+use HttpException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -29,7 +28,7 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
         AuthorizationException::class,
-        \Symfony\Component\HttpKernel\Exception\HttpException::class,
+        HttpException::class,
         ModelNotFoundException::class,
         ValidationException::class,
     ];
@@ -60,7 +59,7 @@ class Handler extends ExceptionHandler
     {
         $route = $request->path();
         $method = $request->method();
-        $ip = $request->ip();
+        $ip = $request->ip() ?? 'Unknown';
 
         if ($e instanceof TokenExpiredException) {
             Log::warning('TokenExpiredException', ['route' => $route, 'ip' => $ip]);
