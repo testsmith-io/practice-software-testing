@@ -6,6 +6,7 @@ services:
       context: ./_docker
       dockerfile: app.docker
     working_dir: /var/www
+    user: www-data
     volumes:
       - ./${SPRINT_FOLDER}/API:/var/www:cached
     environment:
@@ -13,12 +14,6 @@ services:
       - "DB_PORT=3306"
       - "DB_HOST=mariadb"
       - "host=localhost"
-    command: >
-      sh -c "
-        mkdir -p storage/framework/{views,cache,sessions} bootstrap/cache &&
-        chmod -R 777 storage bootstrap/cache &&
-        php-fpm
-      "
 
   angular-ui:
     build:

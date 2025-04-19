@@ -22,4 +22,9 @@ RUN usermod -u 1000 www-data
 
 RUN chown -R www-data:www-data /var/www
 
+# Add entrypoint script
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 USER www-data
+ENTRYPOINT ["entrypoint.sh"]
