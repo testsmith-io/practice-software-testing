@@ -62,7 +62,7 @@ services:
 
   composer:
     image: composer:2.5.0
-    command: install --no-dev --optimize-autoloader
+    command: install --no-dev --optimize-autoloader && chmod -R 777 storage bootstrap/cache
     volumes_from:
       - laravel-api
     working_dir: /var/www
