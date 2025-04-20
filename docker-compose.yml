@@ -13,7 +13,7 @@ services:
       - "DB_PORT=3306"
       - "DB_HOST=mariadb"
       - "host=localhost"
-      - DISABLE_LOGGING=false
+      - DISABLE_LOGGING=${DISABLE_LOGGING}
 
   angular-ui:
     build:
@@ -58,7 +58,7 @@ services:
       - "DB_PORT=3306"
       - "DB_HOST=mariadb"
       - "host=localhost"
-      - DISABLE_LOGGING=false
+      - DISABLE_LOGGING=${DISABLE_LOGGING}
 
   composer:
     image: composer:2.5.0
