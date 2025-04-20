@@ -18,7 +18,8 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'stack'),
+    'default' => env('DISABLE_LOGGING', false) ? 'null' : env('LOG_CHANNEL', 'stack'),
+
 
     /*
     |--------------------------------------------------------------------------
