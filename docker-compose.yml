@@ -6,7 +6,6 @@ services:
       context: ./_docker
       dockerfile: app.docker
     working_dir: /var/www
-    user: www-data
     volumes:
       - ./${SPRINT_FOLDER}/API:/var/www:cached
     environment:

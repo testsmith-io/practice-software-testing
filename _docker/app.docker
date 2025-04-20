@@ -22,9 +22,11 @@ RUN usermod -u 1000 www-data
 
 RUN chown -R www-data:www-data /var/www
 
-# Add entrypoint script
+# Copy entrypoint script
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-USER www-data
-ENTRYPOINT ["entrypoint.sh"]
+# Install su-exec to drop privileges
+RUN apk add --no-cache su-exec
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
