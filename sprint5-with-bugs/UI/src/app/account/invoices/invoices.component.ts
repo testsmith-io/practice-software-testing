@@ -3,6 +3,7 @@ import {InvoiceService} from "../../_services/invoice.service";
 import {Invoice} from "../../models/invoice";
 import {first} from "rxjs/operators";
 import {Pagination} from "../../models/pagination";
+import {CustomerAccountService} from "../../shared/customer-account.service";
 
 @Component({
   selector: 'app-invoices',
@@ -12,11 +13,25 @@ import {Pagination} from "../../models/pagination";
 export class InvoicesComponent implements OnInit {
   p: number = 1;
   results: Pagination<Invoice>;
+  protected id: any;
 
-  constructor(private invoiceService: InvoiceService) {
+  constructor(private invoiceService: InvoiceService,
+              private customerAccountService: CustomerAccountService,) {
   }
 
   ngOnInit(): void {
+    this.customerAccountService.getDetails()
+      .pipe(first())
+      .subscribe((profile) => {
+          this.id = profile.id;
+        },
+        (error) => {
+          if (error.status === 401 || error.status === 403) {
+            window.localStorage.removeItem('TOKEN_KEY');
+            window.location.href = '/#/auth/login';
+          }
+        });
+
     this.getInvoices();
   }
 
