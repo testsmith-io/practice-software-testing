@@ -10,14 +10,17 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let item of results.data | paginate: { itemsPerPage: results.per_page, currentPage: p, totalItems: results.total }">
-    <td>{{item.invoice_number}}</td>
-    <td>{{item.billing_address}}</td>
-    <td>{{item.invoice_date}}</td>
-    <td>${{item.total | number: '1.2-2'}}</td>
-    <td style="white-space: nowrap">
-      <a routerLink="{{item.id}}" class="btn btn-sm btn-primary mr-1">Details</a>
-    </td>
+  <tr
+    *ngFor="let item of results.data | paginate: { itemsPerPage: results.per_page, currentPage: p, totalItems: results.total }">
+    <ng-container *ngIf="item.user_id === id">
+      <td>{{ item.invoice_number }}</td>
+      <td>{{ item.billing_address }}</td>
+      <td>{{ item.invoice_date }}</td>
+      <td>${{ item.total | number: '1.2-2' }}</td>
+      <td style="white-space: nowrap">
+        <a routerLink="{{item.id}}" class="btn btn-sm btn-primary mr-1">Details</a>
+      </td>
+    </ng-container>
   </tr>
   </tbody>
   <tfoot>
