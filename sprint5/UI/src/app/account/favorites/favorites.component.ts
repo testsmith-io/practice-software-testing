@@ -20,7 +20,7 @@ export class FavoritesComponent implements OnInit {
   }
 
   deleteFavorite(favorite: Favorite) {
-    this.favoriteService.deleteFavorite(favorite.product.id)
+    this.favoriteService.deleteFavorite(favorite.id)
       .pipe(first())
       .subscribe(() => {
         this.getFavorites();

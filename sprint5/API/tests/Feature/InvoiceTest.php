@@ -1,23 +1,19 @@
 <?php
 
-use App\Models\Brand;
+use App\Http\Controllers\InvoiceController;
 use App\Models\Cart;
 use App\Models\CartItem;
-use App\Models\Category;
 use App\Models\Download;
 use App\Models\Invoice;
-use App\Models\Product;
-use App\Models\ProductImage;
 use App\Models\User;
 use App\Services\InvoiceNumberGenerator;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-uses(\Illuminate\Foundation\Testing\DatabaseMigrations::class);
+uses(DatabaseMigrations::class);
+
+//covers(InvoiceController::class);
 
 beforeEach(function () {
     $this->admin = User::factory()->create(['role' => 'admin']);
@@ -140,7 +136,7 @@ test('it downloads the invoice pdf successfully', function () {
     $response = $this->get("/invoices/{$invoiceNumber}/download-pdf", $this->headers($this->customer));
 
     $response->assertStatus(ResponseAlias::HTTP_OK);
-    $response->assertHeader('Content-Disposition', 'attachment; filename='.$invoiceNumber.'.pdf');
+    $response->assertHeader('Content-Disposition', 'attachment; filename=' . $invoiceNumber . '.pdf');
 });
 
 test('it returns not found if pdf does not exist', function () {
@@ -192,7 +188,7 @@ test('it updates invoice status successfully', function () {
     $response = $this->putJson("/invoices/{$this->invoice->id}/status", $payload, $this->headers($this->customer));
 
     $response->assertStatus(ResponseAlias::HTTP_OK);
-    $response->assertJson(['success' => true]);
+    $response->assertExactJson(['success' => true]);
     $this->assertDatabaseHas('invoices', [
         'id' => $this->invoice->id,
         'status' => 'COMPLETED',
@@ -219,7 +215,7 @@ test('partial update invoice', function () {
     $response = $this->patchJson("/invoices/{$this->invoice->id}", $payload, $this->headers($this->customer));
 
     $response->assertStatus(ResponseAlias::HTTP_OK)
-        ->assertJson([
+        ->assertExactJson([
             'success' => true,
         ]);
 
@@ -272,7 +268,7 @@ function createsNewInvoiceSuccessfully(\Tests\TestCase $testCase, string $paymen
     $requestData = [
         'cart_id' => $cart->id,
         'payment_method' => $paymentMethod,
-        'payment_details' => empty($paymentDetails) ? (object) [] : $paymentDetails,
+        'payment_details' => empty($paymentDetails) ? (object)[] : $paymentDetails,
         'billing_street' => 'address',
         'billing_city' => 'city',
         'billing_country' => 'country',

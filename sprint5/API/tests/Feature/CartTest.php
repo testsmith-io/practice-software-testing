@@ -1,12 +1,16 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Product;
+use App\Services\CartService;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-uses(\Illuminate\Foundation\Testing\DatabaseMigrations::class);
+uses(DatabaseMigrations::class);
 
-covers(\App\Http\Controllers\CartController::class);
+//covers(CartController::class);
 
 test('create cart', function () {
     $response = $this->postJson('/carts', ['lat' => 40.7128, 'lng' => -74.0060]);
@@ -176,11 +180,64 @@ test('successful quantity update', function () {
         'quantity' => $updatedQuantity
     ]);
 
-    $response->assertStatus(ResponseAlias::HTTP_OK);
+    $response->assertStatus(ResponseAlias::HTTP_OK)->assertExactJson([
+        'result' => 'item added or updated',
+    ]);
     $this->assertDatabaseHas('cart_items', [
         'cart_id' => $cart->id,
         'product_id' => $product->id,
         'quantity' => $updatedQuantity
+    ]);
+});
+
+test('update quantity requires quantity field', function () {
+    $cart = Cart::factory()->create();
+    $product = $this->addProduct();
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'product_id' => $product->id,
+        'quantity' => 1
+    ]);
+
+    $updatedQuantity = 3;
+
+    $response = $this->putJson("/carts/{$cart->id}/product/quantity", [
+        'product_id' => $product->id
+    ]);
+
+    $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)->assertExactJson([
+        'errors' => [
+            'quantity' => [
+                'The quantity field is required.',
+            ],
+        ],
+        'message' => 'The quantity field is required.',
+    ]);
+});
+
+test('update quantity must be an integer', function () {
+    $cart = Cart::factory()->create();
+    $product = $this->addProduct();
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'product_id' => $product->id,
+        'quantity' => 1
+    ]);
+
+    $updatedQuantity = 3;
+
+    $response = $this->putJson("/carts/{$cart->id}/product/quantity", [
+        'product_id' => $product->id,
+        'quantity' => 'invalid'
+    ]);
+
+    $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)->assertExactJson([
+        'errors' => [
+            'quantity' => [
+                'The quantity field must be an integer.',
+            ],
+        ],
+        'message' => 'The quantity field must be an integer.',
     ]);
 });
 
@@ -228,6 +285,7 @@ test('deletion when cart is in use', function () {
     $response = $this->deleteJson("/carts/{$cart->id}");
 
     $response->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
+    $this->assertDatabaseMissing('carts', ['id' => $cart->id]);
 });
 
 test('successful product removal from cart', function () {
@@ -265,4 +323,91 @@ test('product not found in cart', function () {
     $response = $this->deleteJson("/carts/{$cart->id}/product/{$nonExistentProductId}");
 
     $response->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
+});
+
+test('unexpected error returns 400 with message', function () {
+    $cart = Cart::factory()->create();
+    $product = $this->addProduct();
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'product_id' => $product->id,
+        'quantity' => 1
+    ]);
+    $cartServiceMock = Mockery::mock(CartService::class);
+    $cartServiceMock
+        ->shouldReceive('updateCartItemQuantity')
+        ->once()
+        ->andThrow(new \Exception('Unexpected error'));
+
+    app()->instance(CartService::class, $cartServiceMock);
+
+    $response = $this->putJson("/carts/{$cart->id}/product/quantity", [
+        'product_id' => $product->id,
+        'quantity' => 2,
+    ]);
+
+    $response
+        ->assertStatus(400)
+        ->assertJson([
+            'message' => 'Unexpected error',
+        ]);
+});
+
+test('addItem requires product_id', function () {
+    $cart = Cart::factory()->create();
+
+    $this->postJson("/carts/{$cart->id}", ['quantity' => 1])
+        ->assertStatus(422)
+        ->assertJsonValidationErrors(['product_id']);
+});
+
+test('addItem requires quantity', function () {
+    $cart = Cart::factory()->create();
+    $product = Product::factory()->create();
+
+    $this->postJson("/carts/{$cart->id}", ['product_id' => $product->id])
+        ->assertStatus(422)
+        ->assertJsonValidationErrors(['quantity']);
+});
+
+test('addItem requires quantity to be >= 1', function () {
+    $cart = Cart::factory()->create();
+    $product = Product::factory()->create();
+
+    $this->postJson("/carts/{$cart->id}", [
+        'product_id' => $product->id,
+        'quantity' => 0,
+    ])->assertStatus(422)->assertJsonValidationErrors(['quantity']);
+});
+
+test('addItem handles unexpected exceptions', function () {
+    $mock = Mockery::mock(CartService::class);
+    $mock->shouldReceive('addItemToCart')->once()->andThrow(new Exception('Unexpected failure'));
+
+    app()->instance(CartService::class, $mock);
+
+    $cart = Cart::factory()->create();
+    $product = Product::factory()->create();
+
+    $response = $this->postJson("/carts/{$cart->id}", [
+        'product_id' => $product->id,
+        'quantity' => 1,
+    ]);
+
+    $response->assertStatus(400)->assertJsonFragment([
+        'message' => 'Unexpected failure',
+    ]);
+});
+
+test('updateQuantity requires product_id', function () {
+    $cart = Cart::factory()->create();
+
+    $response = $this->putJson("/carts/{$cart->id}/product/quantity", [
+        // 'product_id' is missing
+        'quantity' => 2,
+    ]);
+
+    $response
+        ->assertStatus(422)
+        ->assertJsonValidationErrors(['product_id']);
 });

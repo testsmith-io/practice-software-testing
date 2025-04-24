@@ -16,7 +16,6 @@ class CartController extends Controller
     public function __construct(CartService $cartService)
     {
         $this->cartService = $cartService;
-        $this->middleware('role:admin', ['only' => ['destroy']]);
     }
 
     /**

@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\ImageController;
 use App\Models\ProductImage;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-uses(\Illuminate\Foundation\Testing\DatabaseMigrations::class);
+uses(DatabaseMigrations::class);
+
+//covers(ImageController::class);
 
 test('retrieve images', function () {
     ProductImage::factory()->create();

@@ -26,7 +26,7 @@ class StoreContactReply extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'message' => ['string', 'max:250', new SubscriptSuperscriptRule()]
+            'message' => ['required', 'string', 'max:250', new SubscriptSuperscriptRule()]
         ];
     }
 }

@@ -1,15 +1,17 @@
 <?php
 
+use App\Http\Controllers\BrandController;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-uses(\Illuminate\Foundation\Testing\DatabaseMigrations::class);
+uses(DatabaseMigrations::class);
 
-covers(\App\Http\Controllers\BrandController::class);
+//covers(BrandController::class);
 
 test('retrieve brands', function () {
     $response = $this->getJson('/brands');
@@ -76,6 +78,8 @@ test('delete brand', function () {
 
     $this->json('DELETE', "/brands/{$brand->id}", [], $this->headers($admin))
         ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
+
+    $this->assertDatabaseMissing('brands', ['id' => $brand->id]);
 });
 
 test('delete non existing brand', function () {
@@ -111,8 +115,8 @@ test('update brand', function () {
 
     $this->putJson("/brands/{$brand->id}", $payload)
         ->assertStatus(ResponseAlias::HTTP_OK)
-        ->assertJson([
-            'success' => true
+        ->assertExactJson([
+            'success' => true,
         ]);
 });
 
@@ -123,7 +127,7 @@ test('partial update brand', function () {
 
     $this->patchJson("/brands/{$brand->id}", $payload)
         ->assertStatus(ResponseAlias::HTTP_OK)
-        ->assertJson([
+        ->assertExactJson([
             'success' => true,
         ]);
 
@@ -144,4 +148,18 @@ test('search brand', function () {
                 'slug'
             ]
         ]);
+});
+
+test('deleting a brand used by products returns 409 with appropriate message', function () {
+    $brand = Brand::factory()->create();
+    $admin = User::factory()->create(['role' => 'admin']);
+    Product::factory()->create(['brand_id' => $brand->id]);
+
+    $response = $this->deleteJson("/brands/{$brand->id}", [], $this->headers($admin));
+
+    $response->assertStatus(ResponseAlias::HTTP_CONFLICT);
+    $response->assertJson([
+        'success' => false,
+        'message' => 'Seems like this brand is used elsewhere.',
+    ]);
 });
