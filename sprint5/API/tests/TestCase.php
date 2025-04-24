@@ -11,27 +11,19 @@ use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Artisan;
 
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication, DatabaseMigrations;
-
-    private Generator $faker;
+    use CreatesApplication, DatabaseMigrations, WithFaker;
 
     protected function setUp(): void
     {
 
         parent::setUp();
-        $this->faker = Factory::create();
+        $this->setUpFaker();
         Artisan::call('migrate:refresh');
-    }
-
-    public function __get($key)
-    {
-        if ($key === 'faker')
-            return $this->faker;
-        throw new Exception('Unknown Key Requested');
     }
 
     public function headers($user = null): array
