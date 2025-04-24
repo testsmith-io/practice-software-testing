@@ -61,8 +61,8 @@ services:
       - DISABLE_LOGGING=${DISABLE_LOGGING}
 
   composer:
-    image: composer:2.5.0
-    command: install --no-dev --optimize-autoloader && chown -R www-data /var/www && chmod 777 /var/www
+    image: composer:latest
+    command: install --no-dev --optimize-autoloader --ignore-platform-req=ext-ffi && chown -R www-data /var/www && chmod 777 /var/www
     volumes_from:
       - laravel-api
     working_dir: /var/www

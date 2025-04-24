@@ -5,7 +5,7 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.1",
+        "php": "^8.3",
         "barryvdh/laravel-dompdf": "v3.1.1",
         "darkaonline/l5-swagger": "9.0.1",
         "guzzlehttp/guzzle": "^7.2",
