@@ -18,3 +18,5 @@ yarn-error.log
 /.idea
 /.vscode
 tests/coverage/*
+--cache-directory
+report

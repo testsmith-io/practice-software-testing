@@ -1,14 +1,17 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-uses(\Illuminate\Foundation\Testing\DatabaseMigrations::class);
+uses(DatabaseMigrations::class);
+
+//covers(CategoryController::class);
 
 test('retrieve categories', function () {
     Category::factory()->create();
@@ -110,6 +113,7 @@ test('delete category', function () {
 
     $this->deleteJson("/categories/{$category->id}", [], $this->headers($admin))
         ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
+    $this->assertDatabaseMissing('categories', ['id' => $category->id]);
 });
 
 test('delete non existing category', function () {
@@ -147,9 +151,10 @@ test('update category', function () {
 
     $response
         ->assertStatus(ResponseAlias::HTTP_OK)
-        ->assertJson([
+        ->assertExactJson([
             'success' => true
-        ]);
+        ])
+        ->assertJsonStructure(['success']);
 });
 
 test('partial update category', function () {
@@ -159,7 +164,7 @@ test('partial update category', function () {
 
     $this->patchJson("/categories/{$category->id}", $payload)
         ->assertStatus(ResponseAlias::HTTP_OK)
-        ->assertJson([
+        ->assertExactJson([
             'success' => true,
         ]);
 
@@ -180,4 +185,34 @@ test('search category', function () {
                 'slug'
             ]
         ]);
+});
+
+test('deleting a category in use returns 409 conflict with message', function () {
+    $admin = User::factory()->create(['role' => 'admin']);
+    $category = Category::factory()->create();
+    Product::factory()->create(['category_id' => $category->id]);
+
+    $response = $this->deleteJson("/categories/{$category->id}", [], $this->headers($admin));
+
+    $response
+        ->assertStatus(409)
+        ->assertJson([
+            'success' => false,
+            'message' => 'Seems like this category is used elsewhere.',
+        ])
+        ->assertJsonStructure(['success', 'message']);
+});
+
+test('patch category returns success false if update fails', function () {
+    $category = Category::factory()->create();
+    $admin = User::factory()->create(['role' => 'admin']);
+    Product::factory()->create(['category_id' => $category->id]);
+
+    $response = $this->deleteJson("/categories/{$category->id}", [], $this->headers($admin));
+
+    $response->assertStatus(ResponseAlias::HTTP_CONFLICT);
+    $response->assertJson([
+        'success' => false,
+        'message' => 'Seems like this category is used elsewhere.',
+    ]);
 });

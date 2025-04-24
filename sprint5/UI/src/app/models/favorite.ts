@@ -1,6 +1,6 @@
 import {Product} from "./product";
 
 export class Favorite {
-  id!: number;
+  id!: string;
   product!: Product;
 }

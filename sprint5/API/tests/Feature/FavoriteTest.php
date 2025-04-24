@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\FavoriteController;
 use App\Models\Favorite;
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-uses(\Illuminate\Foundation\Testing\DatabaseMigrations::class);
+uses(DatabaseMigrations::class);
+
+//covers(FavoriteController::class);
 
 test('retrieve favorites', function () {
     $user = User::factory()->create();
@@ -48,6 +52,17 @@ test('delete favorite', function () {
 
     $response
         ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
+
+    $this->assertDatabaseMissing('favorites', ['id' => $favorite->id]);
+});
+
+test('guests cannot delete favorites', function () {
+    $user = User::factory()->create();
+
+    $favorite = addFavorite($user);
+
+    $this->deleteJson("/favorites/{$favorite->id}")
+        ->assertUnauthorized(); // Or ->assertStatus(401);
 });
 
 test('add favorite', function () {

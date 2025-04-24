@@ -1,6 +1,11 @@
 <?php
 
-uses(\Illuminate\Foundation\Testing\DatabaseMigrations::class);
+use App\Http\Controllers\SocialConnectController;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+
+uses(DatabaseMigrations::class);
+
+//covers(SocialConnectController::class);
 
 afterEach(function () {
     Mockery::close();

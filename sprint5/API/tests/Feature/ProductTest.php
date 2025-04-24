@@ -1,14 +1,18 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-uses(\Illuminate\Foundation\Testing\DatabaseMigrations::class);
+uses(DatabaseMigrations::class);
+
+//covers(ProductController::class);
 
 test('retrieve products', function () {
     $product = addProduct();
@@ -194,6 +198,8 @@ test('delete product', function () {
 
     $this->deleteJson("/products/{$product->id}", [], $this->headers($admin))
         ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
+
+    $this->assertDatabaseMissing('products', ['id' => $product->id]);
 });
 
 test('delete non existing product', function () {
@@ -225,7 +231,7 @@ test('update product', function () {
 
     $this->putJson("/products/{$product->id}", $payload)
         ->assertStatus(ResponseAlias::HTTP_OK)
-        ->assertJson([
+        ->assertExactJson([
             'success' => true
         ]);
 });
@@ -240,7 +246,7 @@ test('partial update product', function () {
 
     $this->patchJson("/products/{$product->id}", $payload)
         ->assertStatus(ResponseAlias::HTTP_OK)
-        ->assertJson([
+        ->assertExactJson([
             'success' => true,
         ]);
 

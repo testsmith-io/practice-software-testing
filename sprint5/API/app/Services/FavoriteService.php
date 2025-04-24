@@ -47,22 +47,22 @@ class FavoriteService
         return $favorite;
     }
 
-    public function deleteFavorite($productId)
+    public function deleteFavorite($favoriteId)
     {
         $userId = Auth::id();
 
         Log::debug('Attempting to delete favorite', [
             'user_id' => $userId,
-            'product_id' => $productId
+            'favorite_id' => $favoriteId
         ]);
 
         $deleted = Favorite::where('user_id', $userId)
-            ->where('product_id', $productId)
+            ->where('id', $favoriteId)
             ->delete();
 
         Log::info('Favorite delete operation completed', [
             'user_id' => $userId,
-            'product_id' => $productId,
+            'favorite_id' => $favoriteId,
             'deleted' => $deleted
         ]);
 

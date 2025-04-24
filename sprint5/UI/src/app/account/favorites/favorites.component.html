@@ -6,7 +6,7 @@
     </div>
   }
   @for (favorite of favorites;track favorite) {
-    <div attr.data-test="favorite-{{favorite.product.id}}" class="card mb-3">
+    <div attr.data-test="favorite-{{favorite.id}}" class="card mb-3">
       <div class="row no-gutters">
         <div class="col-md-3 text-center">
           <img src="assets/img/products/{{favorite.product.product_image.file_name}}" class="card-img"

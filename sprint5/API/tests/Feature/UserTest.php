@@ -5,13 +5,15 @@ use App\Mail\ForgetPassword;
 use App\Mail\Register;
 use App\Models\Favorite;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 
-uses(\Illuminate\Foundation\Testing\DatabaseMigrations::class);
+uses(DatabaseMigrations::class);
+
+//covers(UserController::class);
 
 beforeEach(function () {
     $this->user = User::factory()->create([
@@ -241,7 +243,7 @@ test('user can update own information', function () {
     $response = $this->putJson("/users/{$this->user->id}", $newData, $this->headers($this->user));
 
     $response->assertStatus(ResponseAlias::HTTP_OK)
-        ->assertJson(['success' => true]);
+        ->assertExactJson(['success' => true]);
 
     // Assert the user's information is updated in the database
     $this->assertDatabaseHas('users', [
@@ -260,7 +262,7 @@ test('user can partial update own information', function () {
     $response = $this->patchJson("/users/{$this->user->id}", $payload, $this->headers($this->user));
 
     $response->assertStatus(ResponseAlias::HTTP_OK)
-        ->assertJson(['success' => true]);
+        ->assertExactJson(['success' => true]);
 
     // Assert the user's information is updated in the database
     $this->assertDatabaseHas('users', [
@@ -288,7 +290,7 @@ test('admin can update any user information', function () {
     $response = $this->putJson("/users/{$this->user->id}", $newData, $this->headers($adminUser));
 
     $response->assertStatus(ResponseAlias::HTTP_OK)
-        ->assertJson(['success' => true]);
+        ->assertExactJson(['success' => true]);
 
     // Assert the other user's information is updated in the database
     $this->assertDatabaseHas('users', [
@@ -361,7 +363,7 @@ test('deletion prevented when user is in use', function () {
     $response = $this->json('DELETE', "/users/{$this->user->id}", [], $this->headers($adminUser));
 
     $response->assertStatus(ResponseAlias::HTTP_CONFLICT)
-        ->assertJson([
+        ->assertExactJson([
             'success' => false,
             'message' => 'Seems like this customer is used elsewhere.'
         ]);
@@ -375,7 +377,7 @@ test('current password incorrect', function () {
     ], $this->headers($this->user));
 
     $response->assertStatus(ResponseAlias::HTTP_BAD_REQUEST)
-        ->assertJson([
+        ->assertExactJson([
             'success' => false,
             'message' => 'Your current password does not matches with the password.',
         ]);
@@ -389,7 +391,7 @@ test('new password same as current', function () {
     ], $this->headers($this->user));
 
     $response->assertStatus(ResponseAlias::HTTP_BAD_REQUEST)
-        ->assertJson([
+        ->assertExactJson([
             'success' => false,
             'message' => 'New Password cannot be same as your current password.'
         ]);
@@ -415,7 +417,7 @@ test('password change success', function () {
     ], $this->headers($this->user));
 
     $response->assertOk()
-        ->assertJson(['success' => true]);
+        ->assertExactJson(['success' => true]);
 });
 
 test('password reset in local environment', function () {
@@ -426,7 +428,7 @@ test('password reset in local environment', function () {
     ]);
 
     $response->assertOk()
-        ->assertJson(['success' => true]);
+        ->assertExactJson(['success' => true]);
 
     Mail::assertSent(ForgetPassword::class, function ($mail) {
         return $mail->hasTo($this->user->email);
@@ -441,7 +443,7 @@ test('password reset in non local environment', function () {
     ]);
 
     $response->assertOk()
-        ->assertJson(['success' => true]);
+        ->assertExactJson(['success' => true]);
 
     Mail::assertNotSent(ForgetPassword::class);
 });

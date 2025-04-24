@@ -1,14 +1,16 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use App\Mail\Contact;
-use \Faker\Generator;
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-uses(\Illuminate\Foundation\Testing\DatabaseMigrations::class);
+uses(DatabaseMigrations::class);
+
+covers(ContactController::class);
 
 test('send message as guest', function () {
     $response = addMessage($this, $this->faker);
@@ -82,8 +84,8 @@ test('attach empty file', function () {
     $response = $this->postJson("/messages/{$response->json('id')}/attach-file", [
         'file' => UploadedFile::fake()->create('log.txt', 0)
     ]);
-    $response->assertJson([
-        'success' => 'true'
+    $response->assertExactJson([
+        'success' => true
     ]);
 });
 
@@ -248,8 +250,8 @@ test('update status', function () {
     $reply = $this->json('put', "/messages/{$message->json('id')}/status", $payload, $this->headers($admin));
 
     $reply->assertStatus(ResponseAlias::HTTP_OK)
-        ->assertJsonStructure([
-            'success'
+        ->assertExactJson([
+            'success' => true
         ]);
 });
 
@@ -288,4 +290,67 @@ test('email is sent in local environment', function () {
     Mail::assertSent(Contact::class);
     $this->assertDatabaseHas('contact_requests', ['user_id' => $user->id]);
     $response->assertStatus(200);
+});
+
+test('unauthenticated users cannot reply to a message', function () {
+    $message = addMessage($this, $this->faker);
+
+    $payload = ['message' => 'unauthenticated reply'];
+
+    $response = $this->postJson("/messages/{$message->json('id')}/reply", $payload);
+
+    $response->assertStatus(401); // or 403, depending on auth setup
+});
+
+test('reply message is required', function () {
+    $message = addMessage($this, $this->faker);
+    $admin = User::factory()->create(['role' => 'admin']);
+
+    $response = $this->postJson("/messages/{$message->json('id')}/reply", [], $this->headers($admin));
+
+    $response->assertStatus(422)
+        ->assertJson([
+            'message' => [
+                'The message field is required.',
+            ],
+        ]);
+});
+
+test('fails without correct guard set', function () {
+    $message = addMessage($this, $this->faker);
+    $admin = User::factory()->create(['role' => 'admin']);
+
+    $response = $this->postJson("/messages/{$message->json('id')}/reply", []);
+
+    $response->assertStatus(401)
+        ->assertJson([
+            'message' => 'Unauthorized',
+        ]);
+});
+
+test('storeReply saves the message properly', function () {
+    $message = addMessage($this, $this->faker);
+    $admin = User::factory()->create(['role' => 'admin']);
+
+    $payload = [];
+
+    $response = $this->postJson("/messages/{$message->json('id')}/reply", $payload, $this->headers($admin));
+
+    $response->assertStatus(422)
+        ->assertJsonFragment(['message' => ['The message field is required.']]);
+});
+
+test('status is required and must be one of the allowed values', function () {
+    $message = addMessage($this, $this->faker);
+    $admin = User::factory()->create(['role' => 'admin']);
+
+    // Case: missing status
+    $response = $this->putJson("/messages/{$message->json('id')}/status", [], $this->headers($admin));
+    $response->assertStatus(422)->assertJsonValidationErrors('status');
+
+    // Case: invalid status
+    $response = $this->putJson("/messages/{$message->json('id')}/status", [
+        'status' => 'WRONG_STATUS'
+    ], $this->headers($admin));
+    $response->assertStatus(422)->assertJsonValidationErrors('status');
 });

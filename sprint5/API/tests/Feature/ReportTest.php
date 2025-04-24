@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\ReportController;
 use App\Models\Invoice;
 use App\Models\User;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+
+//covers(ReportController::class);
 
 beforeEach(function () {
     $this->admin = User::factory()->create([

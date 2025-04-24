@@ -285,7 +285,7 @@ class ContactController extends Controller
     public function updateStatus($id, Request $request)
     {
         $request->validate([
-            'status' => 'in:NEW,IN_PROGRESS,RESOLVED',
+            'status' => 'required|in:NEW,IN_PROGRESS,RESOLVED',
         ]);
 
         $success = $this->contactService->updateStatus($id, $request->input('status'));

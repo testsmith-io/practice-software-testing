@@ -1,10 +1,12 @@
 <?php
 
-use App\Models\ProductImage;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Http\Controllers\PaymentController;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
-uses(\Illuminate\Foundation\Testing\DatabaseMigrations::class);
+uses(DatabaseMigrations::class);
+
+//covers(PaymentController::class);
 
 test('bank transfer with valid details returns success', function () {
     $response = $this->postJson('/payment/check', [
