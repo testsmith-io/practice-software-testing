@@ -37,10 +37,14 @@ jobs:
         run: |
           cd sprint${{ matrix.sprint }}/API
           composer update --no-progress --prefer-dist
-      - name: Run Laravel Unit Tests
+      - name: Run Laravel Tests
         run: |
           cd sprint${{ matrix.sprint }}/API
-          ./vendor/bin/phpunit
+          if [ "${{ matrix.sprint }}" = "5" ]; then
+            ./vendor/bin/pest
+          else
+            ./vendor/bin/phpunit
+          fi
       - name: Install Dependencies
         run: |
           cd sprint${{ matrix.sprint }}/API

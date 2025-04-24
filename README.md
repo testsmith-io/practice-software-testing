@@ -81,9 +81,13 @@ Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belong
 
 `docker-compose exec laravel-api php artisan invoice:generate`
 
-## Execute unit tests
+## Execute unit tests (sprint 1 to sprint 4)
 
 `./vendor/bin/phpunit`
+
+## Execute unit tests (sprint 5)
+
+`./vendor/bin/pest`
 
 ## Execute unit tests with coverage
 
