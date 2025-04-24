@@ -257,7 +257,7 @@ function createsNewInvoiceSuccessfully(\Tests\TestCase $testCase, string $paymen
         ->once()
         ->andReturn('INV-' . now()->year . '-12345678');
 
-    $testCase->app->instance(InvoiceNumberGenerator::class, $invoiceNumberGeneratorMock);
+    app()->instance(InvoiceNumberGenerator::class, $invoiceNumberGeneratorMock);
 
     $user = User::factory()->create(['role' => 'user']);
     $cart = Cart::factory()->create();
