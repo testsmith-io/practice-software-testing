@@ -19,7 +19,7 @@ abstract class TestCase extends BaseTestCase
 
     private Generator $faker;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
 
         parent::setUp();
@@ -34,7 +34,7 @@ abstract class TestCase extends BaseTestCase
         throw new Exception('Unknown Key Requested');
     }
 
-    protected function headers($user = null): array
+    public function headers($user = null): array
     {
         $headers = ['Content-Type' => 'application/json',
             'Accept' => 'application/json'];
