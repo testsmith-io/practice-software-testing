@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.3-fpm-alpine
 
 RUN apk add --no-cache mysql-client msmtp perl wget procps shadow libzip libpng libjpeg-turbo libwebp freetype icu
 
