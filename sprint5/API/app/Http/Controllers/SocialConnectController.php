@@ -12,7 +12,7 @@ class SocialConnectController extends Controller
     public function callbackGoogle()
     {
         $socialUser = Socialite::driver("google")->stateless()->user();
-        $user = User::where(['provider_id' => $socialUser->id])->where('provider', 'google')->first();
+        $user = User::where(['uid' => $socialUser->id])->where('provider', 'google')->first();
         if (!$user) {
             $user = new User;
             $user->provider = 'google';
