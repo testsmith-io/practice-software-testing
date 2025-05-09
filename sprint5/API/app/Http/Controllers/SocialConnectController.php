@@ -18,8 +18,11 @@ class SocialConnectController extends Controller
             $user->provider = 'google';
             $user->uid = $socialUser->id;
             $user->email = $socialUser->email;
-            $user->first_name = $socialUser->firstname;
-            $user->last_name = $socialUser->lastname;
+            $parts = explode(' ', $socialUser->name, 2);
+            $firstName = $parts[0];
+            $lastName = $parts[1] ?? '';
+            $user->first_name = $firstName;
+            $user->last_name = $lastName;
             $user->role = 'user';
             $user->save();
         }
