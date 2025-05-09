@@ -27,7 +27,7 @@ class SocialConnectController extends Controller
             $user->save();
         }
 
-        $token = Auth::login($user);;
+        $token = app('auth')->login($user);
 
         // Now check user role
         if ($token) {
