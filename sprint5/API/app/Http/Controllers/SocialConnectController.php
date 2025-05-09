@@ -31,9 +31,23 @@ class SocialConnectController extends Controller
 
         // Now check user role
         if ($token) {
-            return redirect('https://practicesoftwaretesting.com/auth/login;socialid='. $token);
+            ?>
+            <script language="javascript">
+                if (window.opener) {
+                    window.opener.parent.location.href = "https://practicesoftwaretesting.com/auth/login;socialid=<?php echo urlencode($token); ?>";
+                }
+                window.self.close();
+            </script>
+            <?php
         }
-        return redirect('https://practicesoftwaretesting.com/auth/login');
+        ?>
+        <script language="javascript">
+            if (window.opener) {
+                window.opener.parent.location.href = "https://practicesoftwaretesting.com/auth/login";
+            }
+            window.self.close();
+        </script>
+        <?php
     }
 
     public function getAuthUrl(Request $request)
