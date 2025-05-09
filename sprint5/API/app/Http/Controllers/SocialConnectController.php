@@ -3,123 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use ErrorException;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use SocialConnect\Auth\Service;
-use SocialConnect\Common\HttpStack;
-use SocialConnect\HttpClient\Curl;
-use SocialConnect\HttpClient\RequestFactory;
-use SocialConnect\HttpClient\StreamFactory;
-use SocialConnect\Provider\Session\Session;
+use Laravel\Socialite\Facades\Socialite;
 
 class SocialConnectController extends Controller
 {
-    public $service;
-
-    public function __construct()
-    {
-        $configureProviders = [
-            'redirectUri' => 'https://api.practicesoftwaretesting.com/auth/cb/${provider}/',
-            'provider' => [
-                'google' => [
-                    'applicationId' => env('APP_GOOGLE_ID'),
-                    'applicationSecret' => env('APP_GOOGLE_SECRET'),
-                    'scope' => [
-                        'https://www.googleapis.com/auth/userinfo.email',
-                        'https://www.googleapis.com/auth/userinfo.profile'
-                    ]
-                ],
-                'github' => [
-                    'applicationId' => env('APP_GITHUB_ID'),
-                    'applicationSecret' => env('APP_GITHUB_SECRET'),
-                    'options' => [
-                        'fetch_emails' => true
-                    ]
-                ]
-            ]
-        ];
-
-        $collectionFactory = null;
-        $httpClient = new Curl();
-
-        $httpStack = new HttpStack(
-            $httpClient,
-            new RequestFactory(),
-            new StreamFactory()
-        );
-
-        $this->service = new Service(
-            $httpStack,
-            new Session(),
-            $configureProviders,
-            $collectionFactory
-        );
-    }
-
     public function callbackGoogle()
     {
-        $this->callback('google');
-    }
+        $socialUser = Socialite::driver("google")->user();
+        $user = User::where(['provider_id' => $socialUser->id])->where('provider', 'google')->first();
+        if (!$user) {
+            $user = new User;
+            $user->provider = 'google';
+            $user->uid = $socialUser->id;
+            $user->email = $socialUser->email;
+            $user->first_name = $socialUser->firstname;
+            $user->last_name = $socialUser->lastname;
+            $user->role = 'user';
+            $user->save();
+        }
 
-    public function callbackGithub()
-    {
-        $this->callback('github');
+        $token = Auth::login($user);;
+
+        // Now check user role
+        if ($token) {
+            return redirect('https://practicesoftwaretesting.com/auth/login;socialid='. $token);
+        }
+        return redirect('https://practicesoftwaretesting.com/auth/login');
     }
 
     public function getAuthUrl(Request $request)
     {
         $providerName = $request->input('provider');
 
-        $provider = $this->service->getProvider($providerName);
-        return redirect($provider->makeAuthUrl());
-    }
-
-    private function callback($provider)
-    {
-        $providerName = $provider;
-
-        try {
-            $provider = $this->service->getProvider($providerName);
-            $accessToken = $provider->getAccessTokenByRequestParameters($_GET);
-            $oauthUser = $provider->getIdentity($accessToken);
-            $user = User::where(['uid' => $oauthUser->id])->where('provider', $providerName)->first(); // , 'provider', $request->provider
-            if (!$user) {
-                $user = new User;
-                $user->provider = $providerName;
-                $user->uid = $oauthUser->id;
-                $user->email = $oauthUser->email;
-                $user->first_name = $oauthUser->firstname;
-                $user->last_name = $oauthUser->lastname;
-                $user->role = 'user';
-                try {
-                    $user->save();
-                } catch (QueryException $e) {
-                    return response()->json(['status' => 'Account with email already exists']);
-                }
-            }
-            $token = Auth::login($user);//(['uid' => '$oauthUser->id']);
-            if (isset($oauthUser->id)) {
-                ?>
-                <script language="javascript">
-                    if (window.opener) {
-                        window.opener.parent.location.href = "https://practicesoftwaretesting.com/auth/login;socialid=<?php echo urlencode($token); ?>";
-                    }
-                    window.self.close();
-                </script>
-                <?php
-            }
-        } catch (ErrorException $e) {
-            ?>
-            <script language="javascript">
-                if (window.opener) {
-                    window.opener.parent.location.href = "https://practicesoftwaretesting.com/auth/login";
-                }
-                window.self.close();
-            </script>
-            <?php
-        }
+        return Socialite::driver($providerName)->redirect();
     }
 
 }
