@@ -20,7 +20,11 @@ return [
         'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
         'scheme' => 'https',
     ],
-
+    'google' => [
+        'client_id'     => env('OAUTH_GOOGLE_CLIENT_ID'),
+        'client_secret' => env('OAUTH_GOOGLE_CLIENT_SECRET'),
+        'redirect'      => 'https://www.practicesoftwaretesting.com/auth/cb/google',
+    ],
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
