@@ -481,6 +481,7 @@ test('retrieve users', function () {
                     'phone',
                     'dob',
                     'email',
+                    'role',
                     'created_at'
                 ]
             ]

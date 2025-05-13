@@ -20,10 +20,10 @@ class UserService
 {
     const MAX_LOGIN_ATTEMPTS = 3;
 
-    public function getAllUsers($role = 'user')
+    public function getAllUsers()
     {
-        Log::debug("Fetching users with role: {$role}");
-        return User::where('role', '=', $role)->paginate();
+        Log::debug("Fetching users");
+        return User::paginate();
     }
 
     public function registerUser($data)
