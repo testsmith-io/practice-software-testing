@@ -159,6 +159,7 @@ class User extends Authenticatable implements JWTSubject
             if ($role == "admin") {
                 // Directly add the attributes to the root of the array
                 $array['enabled'] = $this->enabled;
+                $array['role'] = $this->role;
                 $array['failed_login_attempts'] = $this->failed_login_attempts;
             }
         } catch (JWTException $e) {
