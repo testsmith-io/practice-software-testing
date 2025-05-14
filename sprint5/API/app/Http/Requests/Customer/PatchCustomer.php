@@ -54,6 +54,7 @@ class PatchCustomer extends BaseFormRequest
             'totp_secret' => ['sometimes', 'string', 'nullable'],
             'totp_verified_at' => ['sometimes', 'nullable'],
             'totp_enabled' => ['sometimes', 'boolean'],
+            'enabled' => ['sometimes', 'boolean'],
         ];
     }
 }
