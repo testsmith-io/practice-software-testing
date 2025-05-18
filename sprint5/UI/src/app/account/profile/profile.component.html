@@ -1,7 +1,7 @@
 <div class="container mt-5" *transloco="let t">
   <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" autocomplete="off">
     <div class="row">
-      <h2>{{ t('pages.my-account.profile.title') }}</h2>
+      <h1 data-test="page-title">{{ t('pages.my-account.profile.title') }}</h1>
     </div>
     <div class="row">
       <div class="col-lg-6">
@@ -40,7 +40,8 @@
         <div class="row mb-3">
           <label for="postal_code" class="col-sm-3 col-form-label">{{ t('fields.postal_code.label') }}</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" data-test="postal_code" id="postal_code" formControlName="postal_code">
+            <input type="text" class="form-control" data-test="postal_code" id="postal_code"
+                   formControlName="postal_code">
           </div>
         </div>
         <div class="row mb-3">
@@ -193,29 +194,32 @@
 </div>
 <div class="container" *transloco="let t">
   <div class="row mt-3">
-    <h2>{{t('pages.my-account.profile.setup_two_factor_authentication')}}</h2>
+    <h2>{{ t('pages.my-account.profile.setup_two_factor_authentication') }}</h2>
     @if (!profile?.totp_enabled && !errorMessage) {
-    <p>{{t('pages.my-account.profile.scan_qr_code')}}</p>
+      <p>{{ t('pages.my-account.profile.scan_qr_code') }}</p>
 
-    <qrcode [qrdata]="qrCodeUrl" [width]="156" [errorCorrectionLevel]="'M'"></qrcode>
+      <qrcode [qrdata]="qrCodeUrl" [width]="156" [errorCorrectionLevel]="'M'"></qrcode>
 
-    <p>{{t('pages.my-account.profile.manually_enter_key')}}</p>
-    <p data-test="totp-secret"><strong>{{ secret }}</strong></p>
-    <form [formGroup]="totpForm" (ngSubmit)="verifyTotp()" autocomplete="off">
-      <div class="row">
-        <div class="col-lg-6">
-          <div class="row mb-3">
-            <div class="col-sm-9">
-              <input type="text" class="form-control" data-test="totp-code" placeholder="{{t('pages.my-account.profile.enter_totp_code')}}" formControlName="totpCode"/>
-              <button type="submit" class="btn btn-primary" data-test="verify-totp">{{t('pages.my-account.profile.verify_totp')}}</button>
+      <p>{{ t('pages.my-account.profile.manually_enter_key') }}</p>
+      <p data-test="totp-secret"><strong>{{ secret }}</strong></p>
+      <form [formGroup]="totpForm" (ngSubmit)="verifyTotp()" autocomplete="off">
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="row mb-3">
+              <div class="col-sm-9">
+                <input type="text" class="form-control" data-test="totp-code"
+                       placeholder="{{t('pages.my-account.profile.enter_totp_code')}}" formControlName="totpCode"/>
+                <button type="submit" class="btn btn-primary"
+                        data-test="verify-totp">{{ t('pages.my-account.profile.verify_totp') }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-    </form>
+      </form>
     } @else if (profile.totp_enabled) {
-      <p>{{t('pages.my-account.profile.two_factor_authentication_enabled')}}</p>
+      <p>{{ t('pages.my-account.profile.two_factor_authentication_enabled') }}</p>
     }
     <p *ngIf="errorMessage" data-test="totp-error" style="color: red;">{{ errorMessage }}</p>
     <p *ngIf="successMessage" data-test="totp-success" style="color: green;">{{ successMessage }}</p>
