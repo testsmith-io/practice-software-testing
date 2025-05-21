@@ -55,6 +55,7 @@ class PatchCustomer extends BaseFormRequest
             'totp_verified_at' => ['sometimes', 'nullable'],
             'totp_enabled' => ['sometimes', 'boolean'],
             'enabled' => ['sometimes', 'boolean'],
+            'failed_login_attempts' => ['sometimes', 'numeric'],
         ];
     }
 }
