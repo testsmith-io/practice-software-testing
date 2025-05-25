@@ -19,6 +19,7 @@ class AuthServiceProvider extends ServiceProvider
                     $this->app['hash'],
                     $config['model']
                 );
-            });
+            }
+        );
     }
 }

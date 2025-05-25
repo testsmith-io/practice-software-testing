@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\FavoriteController;
 use App\Models\Favorite;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -86,10 +87,10 @@ test('add favorite', function () {
 });
 
 /**
- * @param \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection $user
- * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+ * @param Model|Collection $user
+ * @return Collection|Model
  */
-function addFavorite(\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection $user): \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+function addFavorite(Model|Collection $user): Collection|Model
 {
     $product = addProduct();
 

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\InvoiceController;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Download;
@@ -10,6 +9,7 @@ use App\Services\InvoiceNumberGenerator;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Tests\TestCase;
 
 uses(DatabaseMigrations::class);
 
@@ -242,11 +242,11 @@ test('admin user can search invoices', function () {
 });
 
 /**
- * @param \Tests\TestCase $test
+ * @param TestCase $test
  * @param string $paymentMethod
  * @param array $paymentDetails
  */
-function createsNewInvoiceSuccessfully(\Tests\TestCase $testCase, string $paymentMethod, array $paymentDetails): void
+function createsNewInvoiceSuccessfully(TestCase $testCase, string $paymentMethod, array $paymentDetails): void
 {
     $invoiceNumberGeneratorMock = Mockery::mock(InvoiceNumberGenerator::class);
     $invoiceNumberGeneratorMock->shouldReceive('generate')

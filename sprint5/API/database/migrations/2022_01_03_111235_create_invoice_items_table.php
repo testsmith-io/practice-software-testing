@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateInvoiceItemsTable extends Migration
@@ -16,7 +15,7 @@ class CreateInvoiceItemsTable extends Migration
     {
         Schema::create('invoice_items', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->decimal('unit_price', 10,2);
+            $table->decimal('unit_price', 10, 2);
             $table->integer('quantity');
             $table->decimal('discount_percentage')->nullable();
             $table->decimal('discounted_price')->nullable();

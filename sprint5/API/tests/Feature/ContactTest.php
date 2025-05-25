@@ -6,7 +6,9 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Testing\TestResponse;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Tests\TestCase;
 
 uses(DatabaseMigrations::class);
 
@@ -256,11 +258,11 @@ test('update status', function () {
 });
 
 /**
- * @param \Tests\TestCase $testCase
+ * @param TestCase $testCase
  * @param Faker\Generator $faker
- * @return \Illuminate\Testing\TestResponse
+ * @return TestResponse
  */
-function addMessage(\Tests\TestCase $testCase, Faker\Generator $faker): \Illuminate\Testing\TestResponse
+function addMessage(TestCase $testCase, Faker\Generator $faker): TestResponse
 {
     $payload = [
         'first_name' => $faker->firstName,

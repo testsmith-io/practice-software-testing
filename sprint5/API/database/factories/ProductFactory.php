@@ -29,7 +29,7 @@ class ProductFactory extends Factory
             'description' => $this->faker->text,
             'brand_id' => Brand::factory(),
             'category_id' => Category::factory(),
-            'price' => $this->faker->numberBetween(0,9),
+            'price' => $this->faker->numberBetween(0, 9),
             'is_location_offer' => false,
             'is_rental' => false,
             'product_image_id' => ProductImage::factory()

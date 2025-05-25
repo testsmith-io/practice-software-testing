@@ -6,11 +6,13 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class InvoiceItemSeeder extends Seeder {
+class InvoiceItemSeeder extends Seeder
+{
     /**
      * Run the database seeds.
      */
-    public function run(): void {
+    public function run(): void
+    {
         mt_srand(12345); // Fixed seed for reproducibility
 
         $products = [

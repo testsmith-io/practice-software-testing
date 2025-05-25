@@ -2,16 +2,17 @@
 
 namespace database\seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class PaymentSeeder extends Seeder {
+class PaymentSeeder extends Seeder
+{
     /**
      * Run the database seeds.
      */
-    public function run(): void {
+    public function run(): void
+    {
         mt_srand(12345); // Fixed seed for reproducibility
 
         $paymentMethods = [

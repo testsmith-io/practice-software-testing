@@ -2,17 +2,18 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
 
-class InvoiceSeeder extends Seeder {
+class InvoiceSeeder extends Seeder
+{
     /**
      * Run the database seeds.
      */
-    public function run(): void {
+    public function run(): void
+    {
         mt_srand(12345); // Fixed seed for reproducibility
 
         $user1 = DB::table('users')->where('email', '=', 'customer@practicesoftwaretesting.com')->first();

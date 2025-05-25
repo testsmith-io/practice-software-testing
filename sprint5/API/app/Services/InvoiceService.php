@@ -12,6 +12,7 @@ use App\Models\PaymentBnplDetails;
 use App\Models\PaymentCashOnDeliveryDetails;
 use App\Models\PaymentCreditCardDetails;
 use App\Models\PaymentGiftCardDetails;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -137,7 +138,7 @@ class InvoiceService
 
             $payment->save();
             Log::info('Payment saved', ['invoice_id' => $invoiceId, 'payment_id' => $payment->id]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Payment handling failed', [
                 'invoice_id' => $invoiceId,
                 'error' => $e->getMessage(),

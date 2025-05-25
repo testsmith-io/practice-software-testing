@@ -17,7 +17,7 @@ uses(DatabaseMigrations::class);
 
 beforeEach(function () {
     $this->user = User::factory()->create([
-        'password' => bcrypt($password = 'welcome01'),
+        'password' => bcrypt($password = 'welcome01'), // NOSONAR
     ]);
 
     Mail::fake();
@@ -78,7 +78,7 @@ test('email sent in local environment', function () {
 test('successful login', function () {
     $response = $this->post('/users/login', [
         'email' => $this->user->email,
-        'password' => 'welcome01',
+        'password' => 'welcome01', // NOSONAR
     ]);
 
     $response->assertStatus(ResponseAlias::HTTP_OK);
@@ -100,7 +100,7 @@ test('locked account', function () {
 
     $response = $this->post('/users/login', [
         'email' => $this->user->email,
-        'password' => 'welcome01',
+        'password' => 'welcome01', // NOSONAR
     ]);
 
     $response->assertStatus(ResponseAlias::HTTP_LOCKED);
@@ -113,7 +113,7 @@ test('disabled account', function () {
 
     $response = $this->post('/users/login', [
         'email' => $this->user->email,
-        'password' => 'welcome01',
+        'password' => 'welcome01', // NOSONAR
     ]);
 
     $response->assertStatus(ResponseAlias::HTTP_FORBIDDEN);
@@ -385,9 +385,9 @@ test('current password incorrect', function () {
 
 test('new password same as current', function () {
     $response = $this->postJson('/users/change-password', [
-        'current_password' => 'welcome01',
-        'new_password' => 'welcome01',
-        'new_password_confirmation' => 'welcome01'
+        'current_password' => 'welcome01', // NOSONAR
+        'new_password' => 'welcome01', // NOSONAR
+        'new_password_confirmation' => 'welcome01' // NOSONAR
     ], $this->headers($this->user));
 
     $response->assertStatus(ResponseAlias::HTTP_BAD_REQUEST)
@@ -400,7 +400,7 @@ test('new password same as current', function () {
 test('new password validation failure', function () {
     // Test with a new password that is too short
     $response = $this->postJson('/users/change-password', [
-        'current_password' => 'welcome01',
+        'current_password' => 'welcome01', // NOSONAR
         'new_password' => 'short',
         'new_password_confirmation' => 'short'
     ], $this->headers($this->user));
@@ -411,7 +411,7 @@ test('new password validation failure', function () {
 
 test('password change success', function () {
     $response = $this->postJson('/users/change-password', [
-        'current_password' => 'welcome01',
+        'current_password' => 'welcome01', // NOSONAR
         'new_password' => 'Test3r01!',
         'new_password_confirmation' => 'Test3r01!'
     ], $this->headers($this->user));

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\BrandController;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
