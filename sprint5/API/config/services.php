@@ -21,9 +21,9 @@ return [
         'scheme' => 'https',
     ],
     'google' => [
-        'client_id'     => env('OAUTH_GOOGLE_CLIENT_ID'),
+        'client_id' => env('OAUTH_GOOGLE_CLIENT_ID'),
         'client_secret' => env('OAUTH_GOOGLE_CLIENT_SECRET'),
-        'redirect'      => 'https://api.practicesoftwaretesting.com/auth/cb/google/',
+        'redirect' => 'https://api.practicesoftwaretesting.com/auth/cb/google/',
     ],
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),

@@ -2,7 +2,6 @@
 
 namespace database\factories;
 
-use App\Models\Brand;
 use App\Models\Favorite;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

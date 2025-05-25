@@ -6,6 +6,7 @@ use App\Mail\ForgetPassword;
 use App\Mail\Register;
 use App\Models\User;
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -154,7 +155,7 @@ class UserService
     {
         Log::info("Resetting password for: {$email}");
         $user = User::where('email', $email)->firstOrFail();
-        $newPassword = 'welcome02';
+        $newPassword = 'welcome02'; // NOSONAR
         $user->update(['password' => app('hash')->make($newPassword)]);
 
         if (App::environment('local')) {
@@ -192,7 +193,7 @@ class UserService
 
         try {
             $user->delete();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             Log::error("Failed to delete user ID: {$user->id} - " . $e->getMessage());
             throw $e;
         }

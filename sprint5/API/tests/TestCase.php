@@ -6,9 +6,8 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
-use Exception;
-use Faker\Factory;
-use Faker\Generator;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -40,9 +39,10 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     * @return Collection|Model
      */
-    public function addProduct(): \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model {
+    public function addProduct(): Collection|Model
+    {
         $brand = Brand::factory()->create();
         $category = Category::factory()->create();
         $productImage = ProductImage::factory()->create();
@@ -55,7 +55,8 @@ abstract class TestCase extends BaseTestCase
         return $product;
     }
 
-    public function addRental(): \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model {
+    public function addRental(): Collection|Model
+    {
         $brand = Brand::factory()->create();
         $category = Category::factory()->create();
         $productImage = ProductImage::factory()->create();

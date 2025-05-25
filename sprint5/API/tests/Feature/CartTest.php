@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\CartController;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
@@ -337,7 +336,7 @@ test('unexpected error returns 400 with message', function () {
     $cartServiceMock
         ->shouldReceive('updateCartItemQuantity')
         ->once()
-        ->andThrow(new \Exception('Unexpected error'));
+        ->andThrow(new Exception('Unexpected error'));
 
     app()->instance(CartService::class, $cartServiceMock);
 

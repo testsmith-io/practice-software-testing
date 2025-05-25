@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\ProductController;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -294,9 +295,9 @@ test('search product', function () {
 });
 
 /**
- * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+ * @return Collection|Model
  */
-function addProduct(): \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+function addProduct(): Collection|Model
 {
     $brand = Brand::factory()->create([
         'name' => 'brand-name',

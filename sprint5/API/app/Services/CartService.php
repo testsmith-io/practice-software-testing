@@ -7,6 +7,7 @@ use App\Models\Product;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class CartService
 {
@@ -70,7 +71,7 @@ class CartService
             }
 
             $this->updateCartDiscounts($cart);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Log::error('Error adding item to cart', [
                 'cart_id' => $cartId,
                 'error' => $e->getMessage()

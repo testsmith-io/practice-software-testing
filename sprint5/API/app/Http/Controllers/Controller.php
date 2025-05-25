@@ -95,14 +95,14 @@ class Controller extends BaseController
             $xml = ArrayToXml::convert($xml, $xmlRoot, true, $encoding);
         } elseif (is_object($xml) && method_exists($xml, 'toArray')) {
             $xml = ArrayToXml::convert($xml->toArray(), $xmlRoot, true, $encoding);
-        } elseif (is_string($xml)) {
-            $xml = $xml;
-        } else {
+        } elseif (!is_string($xml)) {
             $xml = '';
         }
+
         if (!isset($headers['Content-Type'])) {
-            $headers = array_merge($headers, ['Content-Type' => 'application/xml']);
+            $headers['Content-Type'] = 'application/xml';
         }
+
         return response($xml, $status)->withHeaders($headers);
     }
 
@@ -112,7 +112,8 @@ class Controller extends BaseController
             return $this->makeXML($data, $status, array_merge($headers, ['Content-Type' => app('request')->headers->get('Accept')]), $xmlRoot);
         } else {
             return response()->json($data, $status,
-                ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
+                ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE
+            );
         }
     }
 
