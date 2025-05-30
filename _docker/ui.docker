@@ -1,10 +1,10 @@
-FROM node:18.19.0-alpine
+FROM node:20.16-alpine
 
 RUN apk update && \
     apk add bash && \
-    npm install -g npm@8.3.0
+    npm install -g npm@10.9.2
 
-RUN npm install -s -g @angular/cli
+RUN npm install -s -g @angular/cli@latest
 #    && \
 #    mkdir -p /app # Create a directory where our app will be placed
 
