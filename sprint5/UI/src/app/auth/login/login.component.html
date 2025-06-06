@@ -31,7 +31,7 @@
           </div>
           @if (email.invalid && submitted) {
             <div id="email-error" data-test="email-error" class="alert alert-danger">
-              @if (email.errors?.required) {
+              @if (email.errors?.['required']) {
                 <div>{{ t('fields.email.errors.required') }}</div>
               }
               @if (email.errors?.['email']) {
@@ -52,7 +52,7 @@
           </div>
           @if (password.invalid && submitted) {
             <div id="password-error" data-test="password-error" class="alert alert-danger">
-              @if (password.errors?.required) {
+              @if (password.errors?.['required']) {
                 <div>{{ t('fields.password.errors.required') }}</div>
               }
               @if (password.errors?.['minlength'] || password.errors?.['maxlength']) {
