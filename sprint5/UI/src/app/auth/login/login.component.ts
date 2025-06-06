@@ -1,10 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {CustomerAccountService} from "../../shared/customer-account.service";
-import {TokenStorageService} from "../../_services/token-storage.service";
-import {environment} from "../../../environments/environment";
-import {ActivatedRoute} from "@angular/router";
-import {HttpClient} from "@angular/common/http";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { CustomerAccountService } from '../../shared/customer-account.service';
+import { TokenStorageService } from '../../_services/token-storage.service';
+import { ActivatedRoute } from '@angular/router';
+import { TotpAuthService } from '../../_services/totp-auth.service';
+import { BrowserService } from '../../_services/browser.service';
+import { environment } from '../../../environments/environment';
+
 
 @Component({
   selector: 'app-login',
@@ -12,24 +14,23 @@ import {HttpClient} from "@angular/common/http";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  apiURL = environment.apiUrl;
-  form: FormGroup | any;
+  form: FormGroup;
   submitted = false;
-  error: string | undefined;
-
+  error?: string;
   isLoggedIn = false;
   isLoginFailed = false;
-  showTotpInput: boolean = false;
-  accessToken: string = '';
-  roles: string[] = [];
+  showTotpInput = false;
+  accessToken = '';
   protected readonly environment = environment;
 
-  constructor(private formBuilder: FormBuilder,
-              private accountService: CustomerAccountService,
-              private tokenStorage: TokenStorageService,
-              private activatedRoute: ActivatedRoute,
-              private http: HttpClient) {
-  }
+  constructor(
+    private formBuilder: FormBuilder,
+    private accountService: CustomerAccountService,
+    private tokenStorage: TokenStorageService,
+    private activatedRoute: ActivatedRoute,
+    private totpAuthService: TotpAuthService,
+    private browser: BrowserService
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
@@ -45,46 +46,18 @@ export class LoginComponent implements OnInit {
       this.isLoggedIn = true;
     }
 
-    this.form = this.formBuilder.group(
-      {
-        email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(40)]],
-        totp: [''],
-      }
-    );
-  }
-
-  verifyTotp(): void {
-    if (!this.form.value.totp) {
-      this.error = 'TOTP code is required';
-      this.isLoginFailed = true;
-      return;
-    }
-
-    const payload = {
-      totp: this.form.value.totp,
-      access_token: this.accessToken, // Send the access token for TOTP verification
-    };
-
-    this.http.post(this.apiURL +'/users/login', payload).subscribe({
-      next: (res) => {
-        // Step 2 successful: Complete login
-        // @ts-ignore
-        this.handleSuccessfulLogin(res.access_token);
-      },
-      error: (err) => {
-        this.handleLoginTOTPError(err);
-      },
+    this.form = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
+      totp: ['']
     });
   }
 
-  get email() {
+  get email(): AbstractControl {
     return this.form.get('email');
   }
 
-  get password() {
+  get password(): AbstractControl {
     return this.form.get('password');
   }
 
@@ -94,10 +67,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     this.submitted = true;
-
-    if (this.form.invalid) {
-      return;
-    }
+    if (this.form.invalid) return;
 
     const payload = {
       email: this.form.value.email,
@@ -107,57 +77,63 @@ export class LoginComponent implements OnInit {
     this.accountService.login(payload).subscribe({
       next: (res) => {
         if (res.requires_totp) {
-          // Step 1 successful: TOTP required
           this.showTotpInput = true;
           this.error = null;
           this.accessToken = res.access_token;
         } else {
-          // Regular login
           this.handleSuccessfulLogin(res.access_token);
         }
       },
-      error: (err) => {
-        this.handleLoginError(err);
-      },
+      error: (err) => this.handleLoginError(err),
+    });
+  }
+
+  verifyTotp(): void {
+    if (!this.form.value.totp) {
+      this.error = 'TOTP code is required';
+      this.isLoginFailed = true;
+      return;
+    }
+
+    this.totpAuthService.verifyTotp(this.form.value.totp, this.accessToken).subscribe({
+      next: (res: { access_token: string; }) => this.handleSuccessfulLogin(res.access_token),
+      error: (err: any) => this.handleLoginTOTPError(err)
     });
   }
 
   handleSuccessfulLogin(token: string): void {
     this.tokenStorage.saveToken(token);
-
     this.isLoginFailed = false;
     this.isLoggedIn = true;
     this.accountService.authSub.next('changed');
 
-    if (this.accountService.getRole() === 'user') {
+    const role = this.accountService.getRole();
+    if (role === 'user') {
       this.accountService.redirectToAccount();
-    } else if (this.accountService.getRole() === 'admin') {
+    } else if (role === 'admin') {
       this.accountService.redirectToDashboard();
     }
   }
 
   handleLoginError(err: any): void {
-    if (err.error === 'Unauthorized') {
-      this.error = 'Invalid email or password';
-    } else {
-      console.log(err);
-      this.error = err.error || 'Login failed';
-    }
+    this.error = err.error === 'Unauthorized'
+      ? 'Invalid email or password'
+      : err.error || 'Login failed';
     this.isLoginFailed = true;
   }
 
   handleLoginTOTPError(err: any): void {
-    if (err.error === 'Unauthorized') {
-      this.error = 'Invalid TOTP';
-    } else {
-      console.log(err);
-      this.error = err.error.error || 'Login failed';
-    }
+    this.error = err.error === 'Unauthorized'
+      ? 'Invalid TOTP'
+      : err.error?.error || 'Login failed';
     this.isLoginFailed = true;
   }
 
-  socialLogin(provider: string) {
-    window.open('https://api.practicesoftwaretesting.com/auth/social-login?provider=' + provider, '', 'height=500,width=400');
+  socialLogin(provider: string): void {
+    this.browser.open(
+      `https://api.practicesoftwaretesting.com/auth/social-login?provider=${provider}`,
+      '',
+      'height=500,width=400'
+    );
   }
-
 }

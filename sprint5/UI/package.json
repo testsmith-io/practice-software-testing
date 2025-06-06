@@ -47,6 +47,8 @@
     "@angular/cli": "17.1.1",
     "@angular/compiler-cli": "17.1.1",
     "@angular/localize": "17.1.1",
+    "@stryker-mutator/core": "^9.0.1",
+    "@stryker-mutator/karma-runner": "^9.0.1",
     "@types/jasmine": "5.1.2",
     "@types/node": "20.9.0",
     "@typescript-eslint/eslint-plugin": "6.10.0",
