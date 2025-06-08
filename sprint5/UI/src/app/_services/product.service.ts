@@ -1,127 +1,93 @@
-import {Injectable} from '@angular/core';
-import {environment} from "../../environments/environment";
-import {map, Observable, throwError} from "rxjs";
-import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
-import {catchError} from "rxjs/operators";
-import {Product} from "../models/product";
-import {Pagination} from "../models/pagination";
+import { Injectable } from '@angular/core';
+import { environment } from "../../environments/environment";
+import { Observable, throwError } from "rxjs";
+import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
+import { catchError } from "rxjs/operators";
+import { Product } from "../models/product";
+import { Pagination } from "../models/pagination";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  private apiURL = environment.apiUrl;
+  private readonly apiURL = `${environment.apiUrl}/products`;
+  private readonly jsonHeaders = { 'Content-Type': 'application/json' };
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient) {}
+
+  getProducts(page: number): Observable<Pagination<Product>> {
+    const params = new HttpParams().set('page', page.toString());
+    return this.httpClient.get<Pagination<Product>>(this.apiURL, { params });
   }
 
-  getProducts(page: any): Observable<Pagination<Product>> {
-    let params = new HttpParams().set('page', page);
+  getProductsNew(searchQuery: string, sorting: string, minPrice: string, maxPrice: string, categoryIds: string, brandIds: string, page: number): Observable<Pagination<Product>> {
+    let params = new HttpParams().set('page', page.toString());
 
-    return this.httpClient.get(this.apiURL + `/products`, {params: params})
-      .pipe(map(this.extractData));
-  }
+    if (searchQuery) params = params.set('q', searchQuery);
+    if (sorting) params = params.set('sort', sorting);
+    if (minPrice && maxPrice) params = params.set('between', `price,${minPrice},${maxPrice}`);
+    if (categoryIds) params = params.set('by_category', categoryIds);
+    if (brandIds) params = params.set('by_brand', brandIds);
 
-  getProductsNew(searchQuery: string, sorting: string, minPrice: string, maxPrice: string, categoryIds: any, brandIds: any, page: any): Observable<Pagination<Product>> {
-    let params = new HttpParams();
-    if (searchQuery) {
-      params = params.set('q', searchQuery);
-    }
-    if (sorting) {
-      params = params.set('sort', sorting);
-    }
-    if (minPrice && maxPrice) {
-      params = params.set('between', `price,${minPrice},${maxPrice}`);
-    }
-    if (categoryIds.length) {
-      params = params.set('by_category', categoryIds);
-    }
-    if (brandIds.length) {
-      params = params.set('by_brand', brandIds);
-    }
-    params = params.set('page', page);
-    return this.httpClient.get(this.apiURL + '/products', {params: params})
-      .pipe(map(this.extractData));
+    return this.httpClient.get<Pagination<Product>>(this.apiURL, { params });
   }
 
   getProductRentals(): Observable<Pagination<Product>> {
-    let params = new HttpParams().set('is_rental', true);
-
-    return this.httpClient.get(this.apiURL + `/products`, {params: params})
-      .pipe(map(this.extractData));
+    const params = new HttpParams().set('is_rental', 'true');
+    return this.httpClient.get<Pagination<Product>>(this.apiURL, { params });
   }
 
-  getProductsByCategory(slug: string, page: any): Observable<Pagination<Product>> {
-    let params = new HttpParams()
-      .set('page', page)
+  getProductsByCategory(slug: string, page: number): Observable<Pagination<Product>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
       .set('by_category_slug', slug);
-    return this.httpClient.get(this.apiURL + `/products`, {params: params})
-      .pipe(map(this.extractData));
+    return this.httpClient.get<Pagination<Product>>(this.apiURL, { params });
   }
 
   searchProducts(query: string): Observable<Pagination<Product>> {
-    let params = new HttpParams().set('q', query);
-
-    return this.httpClient.get(this.apiURL + `/products/search`, {params: params})
-      .pipe(map(this.extractData));
+    const params = new HttpParams().set('q', query);
+    return this.httpClient.get<Pagination<Product>>(`${this.apiURL}/search`, { params });
   }
 
-
-  getProduct(id: string): Observable<any> {
-    return this.httpClient.get(this.apiURL + `/products/${id}`);
+  getProduct(id: string): Observable<Product> {
+    return this.httpClient.get<Product>(`${this.apiURL}/${id}`);
   }
 
-  getRelatedProducts(id: string): Observable<any> {
-    return this.httpClient.get(this.apiURL + `/products/${id}/related`);
+  getRelatedProducts(id: string): Observable<Product[]> {
+    return this.httpClient.get<Product[]>(`${this.apiURL}/${id}/related`);
   }
 
-  getProductsByCategoryAndBrand(categoryIds: any, brandIds: any, sorting: string, slug?: string): Observable<Pagination<Product>> {
+  getProductsByCategoryAndBrand(categoryIds: string, brandIds: string, sorting: string, slug?: string): Observable<Pagination<Product>> {
     let params = new HttpParams();
-    if (categoryIds.length) {
-      params = params.set('by_category', categoryIds);
-    }
-    if (brandIds.length) {
-      params = params.set('by_brand', brandIds);
-    }
-    if (sorting) {
-      params = params.set('sort', sorting);
-    }
-    if (slug) {
-      params = params.set('by_category_slug', slug);
-    }
-    return this.httpClient.get(this.apiURL + '/products', {params: params})
-      .pipe(map(this.extractData));
+
+    if (categoryIds) params = params.set('by_category', categoryIds);
+    if (brandIds) params = params.set('by_brand', brandIds);
+    if (sorting) params = params.set('sort', sorting);
+    if (slug) params = params.set('by_category_slug', slug);
+
+    return this.httpClient.get<Pagination<Product>>(this.apiURL, { params });
   }
 
   getById(id: string): Observable<Product> {
-    return this.httpClient.get<Product>(environment.apiUrl + `/products/${id}`);
+    return this.httpClient.get<Product>(`${this.apiURL}/${id}`);
   }
 
-  create(product: Product): Observable<any> {
-    return this.httpClient.post(this.apiURL + '/products', JSON.stringify(product), {responseType: 'json'})
-      .pipe(
-        catchError(this.errorHandler)
-      )
+  create(product: Product): Observable<Product> {
+    return this.httpClient.post<Product>(this.apiURL, product, { headers: this.jsonHeaders })
+      .pipe(catchError(this.errorHandler));
   }
 
-  update(id: string, product: Product) {
-    return this.httpClient.put(this.apiURL + `/products/${id}`, JSON.stringify(product), {responseType: 'json'})
-      .pipe(
-        catchError(this.errorHandler)
-      )
+  update(id: string, product: Product): Observable<Product> {
+    return this.httpClient.put<Product>(`${this.apiURL}/${id}`, product, { headers: this.jsonHeaders })
+      .pipe(catchError(this.errorHandler));
   }
 
-  delete(id: string) {
-    return this.httpClient.delete(this.apiURL + `/products/${id}`, {responseType: 'json'})
-      .pipe(
-        catchError(this.errorHandler)
-      )
+  delete(id: string): Observable<void> {
+    return this.httpClient.delete<void>(`${this.apiURL}/${id}`)
+      .pipe(catchError(this.errorHandler));
   }
 
-  errorHandler(error: HttpErrorResponse) {
-    return throwError(error.error || "server error.");
+  private errorHandler(error: HttpErrorResponse): Observable<never> {
+    return throwError(() => error.error || "Server error.");
   }
-
-  private extractData = (res: any) => res;
-
 }

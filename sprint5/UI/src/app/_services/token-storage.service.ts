@@ -1,25 +1,20 @@
-import {Injectable} from '@angular/core';
-
-const TOKEN_KEY = 'auth-token';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenStorageService {
-  constructor() {
-  }
+  private readonly tokenKey = 'auth-token';
 
   signOut(): void {
-    window.localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(this.tokenKey);
   }
 
-  public saveToken(token: string): void {
-    window.localStorage.removeItem(TOKEN_KEY);
-    window.localStorage.setItem(TOKEN_KEY, token);
+  saveToken(token: string): void {
+    localStorage.setItem(this.tokenKey, token);
   }
 
-  public getToken(): string | null {
-    return window.localStorage.getItem(TOKEN_KEY);
+  getToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
   }
-
 }

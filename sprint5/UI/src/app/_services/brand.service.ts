@@ -1,61 +1,57 @@
-import {Injectable} from '@angular/core';
-import {environment} from "../../environments/environment";
-import {map, Observable, throwError} from "rxjs";
-import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
-import {Brand} from "../models/brand";
-import {catchError} from "rxjs/operators";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+import { Brand } from '../models/brand';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BrandService {
+  private readonly apiURL = `${environment.apiUrl}/brands`;
 
-  private apiURL = environment.apiUrl;
+  constructor(private readonly httpClient: HttpClient) {}
 
-  constructor(private httpClient: HttpClient) {
-  }
-
-  searchBrands(query: string): Observable<any> {
-    let params = new HttpParams()
-      .set('q', query);
-
-    return this.httpClient.get(this.apiURL + '/brands/search', {responseType: 'json', params: params});
+  searchBrands(query: string): Observable<Brand[]> {
+    const params = new HttpParams().set('q', query);
+    return this.httpClient.get<Brand[]>(`${this.apiURL}/search`, { params })
+      .pipe(catchError(this.handleError));
   }
 
   getBrands(): Observable<Brand[]> {
-    return this.httpClient.get<Brand[]>(this.apiURL + `/brands`)
-      .pipe(map(this.extractData));
+    return this.httpClient.get<Brand[]>(this.apiURL)
+      .pipe(catchError(this.handleError));
   }
 
   getById(id: string): Observable<Brand> {
-    return this.httpClient.get<Brand>(this.apiURL + `/brands/${id}`);
+    return this.httpClient.get<Brand>(`${this.apiURL}/${id}`)
+      .pipe(catchError(this.handleError));
   }
 
-  create(brand: Brand): Observable<any> {
-    return this.httpClient.post(this.apiURL + '/brands', JSON.stringify(brand), {responseType: 'json'})
-      .pipe(
-        catchError(this.errorHandler)
-      )
+  create(brand: Brand): Observable<Brand> {
+    return this.httpClient.post<Brand>(this.apiURL, brand)
+      .pipe(catchError(this.handleError));
   }
 
-  update(id: string, brand: Brand) {
-    return this.httpClient.put(this.apiURL + `/brands/${id}`, JSON.stringify(brand), {responseType: 'json'})
-      .pipe(
-        catchError(this.errorHandler)
-      )
+  update(id: string, brand: Brand): Observable<Brand> {
+    return this.httpClient.put<Brand>(`${this.apiURL}/${id}`, brand)
+      .pipe(catchError(this.handleError));
   }
 
-  delete(id: number) {
-    return this.httpClient.delete(this.apiURL + `/brands/${id}`, {responseType: 'json'})
-      .pipe(
-        catchError(this.errorHandler)
-      )
+  delete(id: string): Observable<void> {
+    return this.httpClient.delete<void>(`${this.apiURL}/${id}`)
+      .pipe(catchError(this.handleError));
   }
 
-  errorHandler(error: HttpErrorResponse) {
-    return throwError(error.error || "server error.");
-  }
+  private handleError = (error: HttpErrorResponse): Observable<never> => {
+    console.error('BrandService Error:', error);
 
-  private extractData = (res: any) => res;
+    // Return user-friendly error message
+    const errorMessage = error.error?.message ||
+      error.message ||
+      'An unexpected error occurred';
 
+    return throwError(() => new Error(errorMessage));
+  };
 }

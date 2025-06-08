@@ -20,7 +20,7 @@ class CartItem extends BaseModel
     use HasFactory, HasUlids;
 
     protected $table = 'cart_items';
-    protected $fillable = ['cart_id', 'product_id', 'quantity'];
+    protected $fillable = ['cart_id', 'product_id', 'quantity', 'discount_percentage'];
 
     protected $casts = array(
         "discount_percentage" => "double"

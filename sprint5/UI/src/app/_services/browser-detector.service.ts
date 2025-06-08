@@ -1,60 +1,167 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
+
+export interface BrowserInfo {
+  name: string;
+  version: string;
+  isMobile: boolean;
+}
+
+export enum BrowserType {
+  CHROME = 'Chrome',
+  FIREFOX = 'Firefox',
+  SAFARI = 'Safari',
+  EDGE = 'Microsoft Edge',
+  CHROMIUM_EDGE = 'Chromium-based Edge',
+  OPERA = 'Opera',
+  IE = 'Internet Explorer',
+  OTHER = 'Other'
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class BrowserDetectorService {
+  private readonly userAgent: string;
+  private readonly browserInfo: BrowserInfo;
 
-  agent: any;
+  // Regex patterns for better accuracy
+  private readonly browserPatterns = {
+    [BrowserType.EDGE]: /edg(?:e|ios|a)?\/([\d\.]+)/i,
+    [BrowserType.CHROMIUM_EDGE]: /edg\/([\d\.]+)/i,
+    [BrowserType.OPERA]: /(?:opr|opera)\/([\d\.]+)/i,
+    [BrowserType.CHROME]: /chrome\/([\d\.]+)/i,
+    [BrowserType.FIREFOX]: /firefox\/([\d\.]+)/i,
+    [BrowserType.SAFARI]: /version\/([\d\.]+).*safari/i,
+    [BrowserType.IE]: /(?:msie |trident.*rv:)([\d\.]+)/i
+  };
 
   constructor() {
-    this.agent = window.navigator.userAgent.toLowerCase();
+    this.userAgent = this.getUserAgent();
+    this.browserInfo = this.detectBrowser();
   }
 
+  // Public API methods
   isFirefox(): boolean {
-    return this.getBrowserName() === 'Firefox';
+    return this.browserInfo.name === BrowserType.FIREFOX;
   }
 
   isChrome(): boolean {
-    return this.getBrowserName() === 'Chrome';
+    return this.browserInfo.name === BrowserType.CHROME;
   }
 
   isSafari(): boolean {
-    return this.getBrowserName() === 'Safari';
+    return this.browserInfo.name === BrowserType.SAFARI;
   }
 
   isEdge(): boolean {
-    return this.getBrowserName() === 'Microsoft Edge';
+    return this.browserInfo.name === BrowserType.EDGE ||
+      this.browserInfo.name === BrowserType.CHROMIUM_EDGE;
+  }
 
+  isOpera(): boolean {
+    return this.browserInfo.name === BrowserType.OPERA;
+  }
+
+  isInternetExplorer(): boolean {
+    return this.browserInfo.name === BrowserType.IE;
+  }
+
+  getBrowserName(): string {
+    return this.browserInfo.name;
   }
 
   getBrowserVersion(): string {
-    if (this.isFirefox()) {
-      return this.agent.split('firefox/')[1].split('.')[0];
-    } else if (this.isChrome()) {
-      return this.agent.split('chrome/')[1].split('.')[0];
-    } else if (this.isEdge()) {
-      return this.agent.split('edg/')[1].split('.')[0];
-    } else if (this.isSafari()) {
-      return this.agent.split('version/')[1].split('.')[0];
-    } else {
-      return '';
-    }
+    return this.browserInfo.version;
   }
 
   isMobile(): boolean {
-    return window.navigator.maxTouchPoints > 0;
+    return this.browserInfo.isMobile;
   }
 
-  private getBrowserName(): string {
-    return this.agent.indexOf('edge') > -1 ? 'Microsoft Edge'
-      : this.agent.indexOf('edg') > -1 ? 'Chromium-based Edge'
-        : this.agent.indexOf('opr') > -1 ? 'Opera'
-          : this.agent.indexOf('chrome') > -1 ? 'Chrome'
-            : this.agent.indexOf('trident') > -1 ? 'Internet Explorer'
-              : this.agent.indexOf('firefox') > -1 ? 'Firefox'
-                : this.agent.indexOf('safari') > -1 ? 'Safari'
-                  : 'other';
+  getBrowserInfo(): BrowserInfo {
+    return { ...this.browserInfo };
   }
 
+  // Check for specific features
+  supportsWebGL(): boolean {
+    try {
+      const canvas = document.createElement('canvas');
+      return !!(canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
+    } catch {
+      return false;
+    }
+  }
+
+  supportsLocalStorage(): boolean {
+    try {
+      return typeof Storage !== 'undefined';
+    } catch {
+      return false;
+    }
+  }
+
+  // Private methods
+  private getUserAgent(): string {
+    if (typeof window === 'undefined' || !window.navigator) {
+      return ''; // SSR compatibility
+    }
+    return window.navigator.userAgent.toLowerCase();
+  }
+
+  private detectBrowser(): BrowserInfo {
+    const name = this.detectBrowserName();
+    const version = this.detectBrowserVersion(name);
+    const isMobile = this.detectMobile();
+
+    return { name, version, isMobile };
+  }
+
+  private detectBrowserName(): string {
+    // Order matters - check more specific patterns first
+    const checkOrder: (keyof typeof this.browserPatterns)[] = [
+      BrowserType.EDGE,
+      BrowserType.CHROMIUM_EDGE,
+      BrowserType.OPERA,
+      BrowserType.CHROME,
+      BrowserType.IE,
+      BrowserType.FIREFOX,
+      BrowserType.SAFARI
+    ];
+
+    for (const browser of checkOrder) {
+      if (this.browserPatterns[browser].test(this.userAgent)) {
+        return browser;
+      }
+    }
+
+    return BrowserType.OTHER;
+  }
+
+  private detectBrowserVersion(browserName: string): string {
+    if (browserName === BrowserType.OTHER || !(browserName in this.browserPatterns)) {
+      return '';
+    }
+
+    const pattern = this.browserPatterns[browserName as keyof typeof this.browserPatterns];
+    const match = this.userAgent.match(pattern);
+
+    if (match && match[1]) {
+      return match[1].split('.')[0]; // Return major version only
+    }
+
+    return '';
+  }
+
+  private detectMobile(): boolean {
+    if (typeof window === 'undefined' || !window.navigator) {
+      return false;
+    }
+
+    // Multiple detection methods for better accuracy
+    const touchPoints = window.navigator.maxTouchPoints > 0;
+    const mobileUserAgent = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(this.userAgent);
+    const smallScreen = window.screen && window.screen.width < 768;
+
+    return touchPoints || mobileUserAgent || smallScreen;
+  }
 }

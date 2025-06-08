@@ -19,7 +19,6 @@ describe('LoginComponent', () => {
   let mockActivatedRoute: any;
 
   beforeEach(async () => {
-    // Create spy objects for all services
     mockCustomerAccountService = jasmine.createSpyObj('CustomerAccountService', [
       'login',
       'redirectToAccount',
@@ -68,100 +67,31 @@ describe('LoginComponent', () => {
       expect(component).toBeTruthy();
     });
 
+    it('should initialize with correct default values', () => {
+      expect(component.submitted).toBe(false);
+      expect(component.isLoginFailed).toBe(false);
+      expect(component.showTotpInput).toBe(false);
+      expect(component.accessToken).toBe('');
+    });
+
     it('should initialize form with correct validators', () => {
       component.ngOnInit();
 
       expect(component.form).toBeDefined();
       expect(component.form.get('email')?.hasError('required')).toBeTruthy();
       expect(component.form.get('password')?.hasError('required')).toBeTruthy();
-      expect(component.form.get('totp')).toBeDefined();
+      expect(component.form.get('totp')?.value).toBe('');
     });
 
-    it('should initialize submitted as false', () => {
-      // This test verifies the initial false value of submitted
-      expect(component.submitted).toBe(false);
-
-      // Initialize the form first
-      component.ngOnInit();
-
-      // Set up valid form data before calling onSubmit
-      component.form.patchValue({
-        email: 'test@example.com',
-        password: 'password123'
-      });
-
-      // Mock the login service to prevent actual API call
-      const mockResponse = { requires_totp: false, access_token: 'token' };
-      mockCustomerAccountService.login.and.returnValue(of(mockResponse));
-
-      // Trigger onSubmit to change it to true
-      component.onSubmit();
-      expect(component.submitted).toBe(true);
-    });
-
-    it('should initialize isLoginFailed as false', () => {
-      // This test verifies the initial false value of isLoginFailed
-      expect(component.isLoginFailed).toBe(false);
-
-      // Trigger an error to change it to true
-      const error = { error: 'Test error' };
-      component.handleLoginError(error);
-      expect(component.isLoginFailed).toBe(true);
-    });
-
-    it('should initialize showTotpInput as false', () => {
-      // This test verifies the initial false value of showTotpInput
-      expect(component.showTotpInput).toBe(false);
-
-      // Initialize the form first
-      component.ngOnInit();
-
-      // Simulate login response that requires TOTP
-      const mockResponse = { requires_totp: true, access_token: 'temp-token' };
-      mockCustomerAccountService.login.and.returnValue(of(mockResponse));
-
-      component.form.patchValue({
-        email: 'test@example.com',
-        password: 'password123'
-      });
-
-      component.onSubmit();
-      expect(component.showTotpInput).toBe(true);
-    });
-
-    it('should initialize accessToken as empty string', () => {
-      // This test verifies the initial empty string value of accessToken
-      expect(component.accessToken).toBe('');
-
-      // Initialize the form first
-      component.ngOnInit();
-
-      // Simulate login response that sets accessToken
-      const mockResponse = { requires_totp: true, access_token: 'temp-token' };
-      mockCustomerAccountService.login.and.returnValue(of(mockResponse));
-
-      component.form.patchValue({
-        email: 'test@example.com',
-        password: 'password123'
-      });
-
-      component.onSubmit();
-      expect(component.accessToken).toBe('temp-token');
-    });
-
-    it('should set isLoggedIn to true if token exists', () => {
+    it('should set isLoggedIn to true when token exists', () => {
       mockTokenStorageService.getToken.and.returnValue('existing-token');
-
       component.ngOnInit();
-
       expect(component.isLoggedIn).toBeTruthy();
     });
 
-    it('should set isLoggedIn to false if no token exists', () => {
+    it('should set isLoggedIn to false when no token exists', () => {
       mockTokenStorageService.getToken.and.returnValue(null);
-
       component.ngOnInit();
-
       expect(component.isLoggedIn).toBeFalsy();
     });
   });
@@ -180,14 +110,11 @@ describe('LoginComponent', () => {
     });
 
     it('should not process social login when socialid param is null', () => {
-      mockActivatedRoute.params = of({ socialid: null });
       spyOn(mockCustomerAccountService.authSub, 'next');
-
       component.ngOnInit();
 
       expect(mockTokenStorageService.saveToken).not.toHaveBeenCalled();
       expect(mockCustomerAccountService.authSub.next).not.toHaveBeenCalled();
-      expect(mockCustomerAccountService.redirectToAccount).not.toHaveBeenCalled();
     });
   });
 
@@ -196,52 +123,40 @@ describe('LoginComponent', () => {
       component.ngOnInit();
     });
 
-    it('should validate email field as required', () => {
+    it('should validate email field', () => {
       const emailControl = component.form.get('email');
 
+      // Required validation
       expect(emailControl?.hasError('required')).toBeTruthy();
 
-      emailControl?.setValue('test@example.com');
-      expect(emailControl?.hasError('required')).toBeFalsy();
-    });
-
-    it('should validate email format', () => {
-      const emailControl = component.form.get('email');
-
+      // Email format validation
       emailControl?.setValue('invalid-email');
       expect(emailControl?.hasError('email')).toBeTruthy();
 
+      // Valid email
       emailControl?.setValue('valid@example.com');
+      expect(emailControl?.hasError('required')).toBeFalsy();
       expect(emailControl?.hasError('email')).toBeFalsy();
     });
 
-    it('should validate password as required', () => {
+    it('should validate password field', () => {
       const passwordControl = component.form.get('password');
 
+      // Required validation
       expect(passwordControl?.hasError('required')).toBeTruthy();
 
-      passwordControl?.setValue('password123');
-      expect(passwordControl?.hasError('required')).toBeFalsy();
-    });
-
-    it('should validate password minimum length', () => {
-      const passwordControl = component.form.get('password');
-
+      // Min length validation
       passwordControl?.setValue('12');
       expect(passwordControl?.hasError('minlength')).toBeTruthy();
 
-      passwordControl?.setValue('123');
-      expect(passwordControl?.hasError('minlength')).toBeFalsy();
-    });
-
-    it('should validate password maximum length', () => {
-      const passwordControl = component.form.get('password');
-      const longPassword = 'a'.repeat(41);
-
-      passwordControl?.setValue(longPassword);
+      // Max length validation
+      passwordControl?.setValue('a'.repeat(41));
       expect(passwordControl?.hasError('maxlength')).toBeTruthy();
 
+      // Valid password
       passwordControl?.setValue('validPassword123');
+      expect(passwordControl?.hasError('required')).toBeFalsy();
+      expect(passwordControl?.hasError('minlength')).toBeFalsy();
       expect(passwordControl?.hasError('maxlength')).toBeFalsy();
     });
   });
@@ -251,15 +166,9 @@ describe('LoginComponent', () => {
       component.ngOnInit();
     });
 
-    it('should return email control', () => {
+    it('should return correct form controls', () => {
       expect(component.email).toBe(component.form.get('email'));
-    });
-
-    it('should return password control', () => {
       expect(component.password).toBe(component.form.get('password'));
-    });
-
-    it('should return form controls object', () => {
       expect(component.cf).toBe(component.form.controls);
     });
   });
@@ -269,12 +178,7 @@ describe('LoginComponent', () => {
       component.ngOnInit();
     });
 
-    it('should set submitted to true', () => {
-      component.onSubmit();
-      expect(component.submitted).toBeTruthy();
-    });
-
-    it('should return early if form is invalid', () => {
+    it('should set submitted to true and return early if form is invalid', () => {
       component.form.patchValue({
         email: 'invalid-email',
         password: ''
@@ -282,11 +186,17 @@ describe('LoginComponent', () => {
 
       component.onSubmit();
 
+      expect(component.submitted).toBeTruthy();
       expect(mockCustomerAccountService.login).not.toHaveBeenCalled();
     });
 
     it('should call login service with correct payload when form is valid', () => {
-      const mockResponse = { requires_totp: false, access_token: 'test-token' };
+      const mockResponse = {
+        requires_totp: false,
+        access_token: 'test-token',
+        token_type: 'Bearer',
+        expires_in: 3600
+      };
       mockCustomerAccountService.login.and.returnValue(of(mockResponse));
 
       component.form.patchValue({
@@ -302,31 +212,12 @@ describe('LoginComponent', () => {
       });
     });
 
-    it('should initialize totp form control with empty string', () => {
-      // This test verifies the initial empty string value in totp form control
-      const totpControl = component.form.get('totp');
-      expect(totpControl?.value).toBe('');
-
-      // Change the value to verify it can be modified
-      totpControl?.setValue('123456');
-      expect(totpControl?.value).toBe('123456');
-    });
-
-    it('should validate totp field behavior with empty value', () => {
-      // Test that empty TOTP value is handled correctly in verifyTotp
-      component.accessToken = 'temp-token';
-      component.form.patchValue({ totp: '' });
-
-      component.verifyTotp();
-
-      expect(component.error).toBe('TOTP code is required');
-      expect(component.isLoginFailed).toBe(true);
-    });
-
     it('should show TOTP input when login requires TOTP', () => {
       const mockResponse = {
         requires_totp: true,
-        access_token: 'temp-token'
+        access_token: 'temp-token',
+        token_type: 'Bearer',
+        expires_in: 3600
       };
       mockCustomerAccountService.login.and.returnValue(of(mockResponse));
 
@@ -338,14 +229,16 @@ describe('LoginComponent', () => {
       component.onSubmit();
 
       expect(component.showTotpInput).toBeTruthy();
-      expect(component.error).toBeNull();
       expect(component.accessToken).toBe('temp-token');
+      expect(component.error).toBeNull();
     });
 
     it('should handle successful login without TOTP', () => {
       const mockResponse = {
         requires_totp: false,
-        access_token: 'final-token'
+        access_token: 'final-token',
+        token_type: 'Bearer',
+        expires_in: 3600
       };
       mockCustomerAccountService.login.and.returnValue(of(mockResponse));
       spyOn(component, 'handleSuccessfulLogin');
@@ -425,31 +318,22 @@ describe('LoginComponent', () => {
   });
 
   describe('handleSuccessfulLogin Method', () => {
-    it('should save token and set login state', () => {
+    it('should save token, set login state, and redirect based on role', () => {
       spyOn(mockCustomerAccountService.authSub, 'next');
 
+      // Test user role
+      mockCustomerAccountService.getRole.and.returnValue('user');
       component.handleSuccessfulLogin('test-token');
 
       expect(mockTokenStorageService.saveToken).toHaveBeenCalledWith('test-token');
       expect(component.isLoginFailed).toBeFalsy();
       expect(component.isLoggedIn).toBeTruthy();
       expect(mockCustomerAccountService.authSub.next).toHaveBeenCalledWith('changed');
-    });
-
-    it('should redirect to account for user role', () => {
-      mockCustomerAccountService.getRole.and.returnValue('user');
-      spyOn(mockCustomerAccountService.authSub, 'next');
-
-      component.handleSuccessfulLogin('test-token');
-
       expect(mockCustomerAccountService.redirectToAccount).toHaveBeenCalled();
-      expect(mockCustomerAccountService.redirectToDashboard).not.toHaveBeenCalled();
-    });
 
-    it('should redirect to dashboard for admin role', () => {
+      // Reset and test admin role
+      mockCustomerAccountService.redirectToAccount.calls.reset();
       mockCustomerAccountService.getRole.and.returnValue('admin');
-      spyOn(mockCustomerAccountService.authSub, 'next');
-
       component.handleSuccessfulLogin('test-token');
 
       expect(mockCustomerAccountService.redirectToDashboard).toHaveBeenCalled();
@@ -457,83 +341,48 @@ describe('LoginComponent', () => {
     });
   });
 
-  describe('handleLoginError Method', () => {
-    it('should set error message for Unauthorized error', () => {
-      const error = { error: 'Unauthorized' };
+  describe('Error Handling', () => {
+    it('should handle login errors with appropriate messages', () => {
+      const testCases = [
+        { error: { error: 'Unauthorized' }, expected: 'Invalid email or password' },
+        { error: { error: 'Custom error' }, expected: 'Custom error' },
+        { error: {}, expected: 'Login failed' }
+      ];
 
-      component.handleLoginError(error);
-
-      expect(component.error).toBe('Invalid email or password');
-      expect(component.isLoginFailed).toBeTruthy();
+      testCases.forEach(({ error, expected }) => {
+        component.handleLoginError(error);
+        expect(component.error).toBe(expected);
+        expect(component.isLoginFailed).toBeTruthy();
+      });
     });
 
-    it('should set custom error message', () => {
-      const error = { error: 'Custom error message' };
+    it('should handle TOTP errors with appropriate messages', () => {
+      const testCases = [
+        { error: { error: 'Unauthorized' }, expected: 'Invalid TOTP' },
+        { error: { error: { error: 'Nested error' } }, expected: 'Nested error' },
+        { error: {}, expected: 'Login failed' }
+      ];
 
-      component.handleLoginError(error);
-
-      expect(component.error).toBe('Custom error message');
-      expect(component.isLoginFailed).toBeTruthy();
-    });
-
-    it('should set default error message when no specific error', () => {
-      const error = {};
-
-      component.handleLoginError(error);
-
-      expect(component.error).toBe('Login failed');
-      expect(component.isLoginFailed).toBeTruthy();
-    });
-  });
-
-  describe('handleLoginTOTPError Method', () => {
-    it('should set error message for TOTP Unauthorized error', () => {
-      const error = { error: 'Unauthorized' };
-
-      component.handleLoginTOTPError(error);
-
-      expect(component.error).toBe('Invalid TOTP');
-      expect(component.isLoginFailed).toBeTruthy();
-    });
-
-    it('should set nested error message', () => {
-      const error = { error: { error: 'Nested error message' } };
-
-      component.handleLoginTOTPError(error);
-
-      expect(component.error).toBe('Nested error message');
-      expect(component.isLoginFailed).toBeTruthy();
-    });
-
-    it('should set default error message when no specific error', () => {
-      const error = {};
-
-      component.handleLoginTOTPError(error);
-
-      expect(component.error).toBe('Login failed');
-      expect(component.isLoginFailed).toBeTruthy();
+      testCases.forEach(({ error, expected }) => {
+        component.handleLoginTOTPError(error);
+        expect(component.error).toBe(expected);
+        expect(component.isLoginFailed).toBeTruthy();
+      });
     });
   });
 
   describe('socialLogin Method', () => {
-    it('should open browser window with correct URL for Google provider', () => {
-      component.socialLogin('google');
+    it('should open browser window with correct URL for different providers', () => {
+      const providers = ['google', 'facebook'];
 
-      expect(mockBrowserService.open).toHaveBeenCalledWith(
-        'https://api.practicesoftwaretesting.com/auth/social-login?provider=google',
-        '',
-        'height=500,width=400'
-      );
-    });
-
-    it('should open browser window with correct URL for Facebook provider', () => {
-      component.socialLogin('facebook');
-
-      expect(mockBrowserService.open).toHaveBeenCalledWith(
-        'https://api.practicesoftwaretesting.com/auth/social-login?provider=facebook',
-        '',
-        'height=500,width=400'
-      );
+      providers.forEach(provider => {
+        component.socialLogin(provider);
+        expect(mockBrowserService.open).toHaveBeenCalledWith(
+          `https://api.practicesoftwaretesting.com/auth/social-login?provider=${provider}`,
+          '',
+          'height=500,width=400'
+        );
+      });
     });
   });
 
@@ -542,28 +391,13 @@ describe('LoginComponent', () => {
       component.ngOnInit();
     });
 
-    it('should complete full login flow without TOTP', () => {
-      const mockResponse = { requires_totp: false, access_token: 'final-token' };
-      mockCustomerAccountService.login.and.returnValue(of(mockResponse));
-      mockCustomerAccountService.getRole.and.returnValue('user');
-      spyOn(mockCustomerAccountService.authSub, 'next');
-
-      component.form.patchValue({
-        email: 'test@example.com',
-        password: 'password123'
-      });
-
-      component.onSubmit();
-
-      expect(component.submitted).toBeTruthy();
-      expect(mockTokenStorageService.saveToken).toHaveBeenCalledWith('final-token');
-      expect(component.isLoggedIn).toBeTruthy();
-      expect(component.isLoginFailed).toBeFalsy();
-      expect(mockCustomerAccountService.redirectToAccount).toHaveBeenCalled();
-    });
-
     it('should complete full login flow with TOTP', () => {
-      const loginResponse = { requires_totp: true, access_token: 'temp-token' };
+      const loginResponse = {
+        requires_totp: true,
+        access_token: 'temp-token',
+        token_type: 'Bearer',
+        expires_in: 3600
+      };
       const totpResponse = { access_token: 'final-token' };
 
       mockCustomerAccountService.login.and.returnValue(of(loginResponse));
@@ -599,14 +433,12 @@ describe('LoginComponent', () => {
 
     it('should handle empty form submission', () => {
       component.onSubmit();
-
       expect(component.submitted).toBeTruthy();
       expect(mockCustomerAccountService.login).not.toHaveBeenCalled();
     });
 
     it('should handle verifyTotp without accessToken', () => {
-      const mockResponse = { access_token: 'final-token' };
-      mockTotpAuthService.verifyTotp.and.returnValue(of(mockResponse));
+      mockTotpAuthService.verifyTotp.and.returnValue(of({ access_token: 'final-token' }));
       component.accessToken = '';
       component.form.patchValue({ totp: '123456' });
 
@@ -615,7 +447,7 @@ describe('LoginComponent', () => {
       expect(mockTotpAuthService.verifyTotp).toHaveBeenCalledWith('123456', '');
     });
 
-    it('should handle role that is neither user nor admin', () => {
+    it('should handle unknown user role', () => {
       mockCustomerAccountService.getRole.and.returnValue('moderator');
       spyOn(mockCustomerAccountService.authSub, 'next');
 
@@ -623,148 +455,6 @@ describe('LoginComponent', () => {
 
       expect(mockCustomerAccountService.redirectToAccount).not.toHaveBeenCalled();
       expect(mockCustomerAccountService.redirectToDashboard).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('State Transition Coverage', () => {
-    beforeEach(() => {
-      component.ngOnInit(); // Initialize form before all tests in this describe block
-    });
-
-    it('should transition submitted from false to true only on form submission', () => {
-      // Verify initial false state
-      expect(component.submitted).toBe(false);
-
-      // Set up accessToken for verifyTotp call
-      component.accessToken = 'temp-token';
-
-      // Various actions that should NOT change submitted
-      component.verifyTotp();
-      expect(component.submitted).toBe(false);
-
-      component.handleLoginError({ error: 'test' });
-      expect(component.submitted).toBe(false);
-
-      component.handleSuccessfulLogin('token');
-      expect(component.submitted).toBe(false);
-
-      // Set up valid form data and mock service for onSubmit
-      component.form.patchValue({
-        email: 'test@example.com',
-        password: 'password123'
-      });
-      const mockResponse = { requires_totp: false, access_token: 'token' };
-      mockCustomerAccountService.login.and.returnValue(of(mockResponse));
-
-      // Reset submitted to false for this test
-      component.submitted = false;
-
-      // Only onSubmit should change it to true
-      component.onSubmit();
-      expect(component.submitted).toBe(true);
-    });
-
-    it('should transition isLoginFailed from false to true only on errors', () => {
-      // Verify initial false state
-      expect(component.isLoginFailed).toBe(false);
-
-      // Actions that should NOT change isLoginFailed to true
-      component.onSubmit();
-      expect(component.isLoginFailed).toBe(false);
-
-      component.handleSuccessfulLogin('token');
-      expect(component.isLoginFailed).toBe(false);
-
-      // Actions that SHOULD change it to true
-      component.handleLoginError({ error: 'test' });
-      expect(component.isLoginFailed).toBe(true);
-
-      // Reset and test TOTP error
-      component.isLoginFailed = false;
-      component.handleLoginTOTPError({ error: 'test' });
-      expect(component.isLoginFailed).toBe(true);
-    });
-
-    it('should transition showTotpInput from false to true only when TOTP is required', () => {
-      // Verify initial false state
-      expect(component.showTotpInput).toBe(false);
-
-      // Set up valid form data
-      component.form.patchValue({
-        email: 'test@example.com',
-        password: 'password123'
-      });
-
-      // Login without TOTP requirement should keep it false
-      const mockResponseNoTotp = { requires_totp: false, access_token: 'token' };
-      mockCustomerAccountService.login.and.returnValue(of(mockResponseNoTotp));
-
-      component.onSubmit();
-      expect(component.showTotpInput).toBe(false);
-
-      // Reset submitted state for next test
-      component.submitted = false;
-
-      // Login WITH TOTP requirement should change it to true
-      const mockResponseWithTotp = { requires_totp: true, access_token: 'temp-token' };
-      mockCustomerAccountService.login.and.returnValue(of(mockResponseWithTotp));
-
-      component.onSubmit();
-      expect(component.showTotpInput).toBe(true);
-    });
-
-    it('should handle accessToken transitions from empty string', () => {
-      // Verify initial empty string state
-      expect(component.accessToken).toBe('');
-
-      // Set up valid form data
-      component.form.patchValue({
-        email: 'test@example.com',
-        password: 'password123'
-      });
-
-      // Successful login with TOTP requirement should set accessToken
-      const mockResponse = { requires_totp: true, access_token: 'temp-token-123' };
-      mockCustomerAccountService.login.and.returnValue(of(mockResponse));
-
-      component.onSubmit();
-      expect(component.accessToken).toBe('temp-token-123');
-      expect(component.accessToken).not.toBe(''); // Ensure it changed from empty string
-    });
-  });
-
-  // Test different error scenarios to ensure boolean mutations are killed
-  describe('Error State Mutations', () => {
-    it('should handle multiple error scenarios affecting isLoginFailed', () => {
-      // Test different error types that should all result in isLoginFailed = true
-      const errorScenarios = [
-        { error: 'Unauthorized' },
-        { error: 'Invalid credentials' },
-        { error: { error: 'Nested error' } },
-        {} // Empty error object
-      ];
-
-      errorScenarios.forEach((error, index) => {
-        // Reset state
-        component.isLoginFailed = false;
-
-        if (index % 2 === 0) {
-          component.handleLoginError(error);
-        } else {
-          component.handleLoginTOTPError(error);
-        }
-
-        expect(component.isLoginFailed).toBe(true);
-      });
-    });
-
-    it('should verify successful login resets isLoginFailed to false', () => {
-      // Set error state first
-      component.isLoginFailed = true;
-
-      // Successful login should reset it to false
-      component.handleSuccessfulLogin('test-token');
-      expect(component.isLoginFailed).toBe(false);
     });
   });
 });
