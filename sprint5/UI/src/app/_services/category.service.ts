@@ -1,71 +1,69 @@
-import {Injectable} from '@angular/core';
-import {environment} from "../../environments/environment";
-import {map, Observable, throwError} from "rxjs";
-import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
-import {catchError} from "rxjs/operators";
-import {Category} from "../models/category";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
+import { Category } from '../models/category';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
-  private apiURL = environment.apiUrl;
+  private readonly apiURL = `${environment.apiUrl}/categories`;
 
-  constructor(private httpClient: HttpClient) {
-  }
+  constructor(private readonly httpClient: HttpClient) {}
 
   searchCategories(query: string): Observable<any> {
-    let params = new HttpParams()
-      .set('q', query);
+    const params = new HttpParams().set('q', query);
 
-    return this.httpClient.get(this.apiURL + '/categories/search', {responseType: 'json', params: params});
+    return this.httpClient.get<any>(`${this.apiURL}/search`, { params })
+      .pipe(catchError(this.handleError));
   }
 
   getCategoriesTree(): Observable<Category[]> {
-    return this.httpClient.get(this.apiURL + `/categories/tree`)
-      .pipe(map(this.extractData));
+    return this.httpClient.get<Category[]>(`${this.apiURL}/tree`)
+      .pipe(catchError(this.handleError));
   }
 
   getSubCategoriesTreeBySlug(slug: string): Observable<Category[]> {
-    let params = new HttpParams().set('by_category_slug', slug);
-    return this.httpClient.get(this.apiURL + `/categories/tree`, {params: params})
-      .pipe(map(this.extractData));
+    const params = new HttpParams().set('by_category_slug', slug);
+
+    return this.httpClient.get<Category[]>(`${this.apiURL}/tree`, { params })
+      .pipe(catchError(this.handleError));
   }
 
   getCategories(): Observable<Category[]> {
-    return this.httpClient.get<Category[]>(this.apiURL + `/categories`)
-      .pipe(map(this.extractData));
+    return this.httpClient.get<Category[]>(this.apiURL)
+      .pipe(catchError(this.handleError));
   }
 
   getById(id: string): Observable<Category> {
-    return this.httpClient.get<Category>(this.apiURL + `/categories/tree/${id}`);
+    return this.httpClient.get<Category>(`${this.apiURL}/tree/${id}`)
+      .pipe(catchError(this.handleError));
   }
 
-  create(category: Category): Observable<any> {
-    return this.httpClient.post(this.apiURL + '/categories', JSON.stringify(category), {responseType: 'json'})
-      .pipe(
-        catchError(this.errorHandler)
-      )
+  create(category: Category): Observable<Category> {
+    return this.httpClient.post<Category>(this.apiURL, category)
+      .pipe(catchError(this.handleError));
   }
 
-  update(id: string, category: Category) {
-    return this.httpClient.put(this.apiURL + `/categories/${id}`, JSON.stringify(category), {responseType: 'json'})
-      .pipe(
-        catchError(this.errorHandler)
-      )
+  update(id: string, category: Category): Observable<Category> {
+    return this.httpClient.put<Category>(`${this.apiURL}/${id}`, category)
+      .pipe(catchError(this.handleError));
   }
 
-  delete(id: number) {
-    return this.httpClient.delete(this.apiURL + `/categories/${id}`, {responseType: 'json'})
-      .pipe(
-        catchError(this.errorHandler)
-      )
+  delete(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.apiURL}/${id}`)
+      .pipe(catchError(this.handleError));
   }
 
-  errorHandler(error: HttpErrorResponse) {
-    return throwError(error.error || "server error.");
-  }
+  private handleError = (error: HttpErrorResponse): Observable<never> => {
+    console.error('CategoryService Error:', error);
 
-  private extractData = (res: any) => res;
+    const errorMessage = error.error?.message ||
+      error.message ||
+      'An unexpected error occurred';
 
+    return throwError(() => new Error(errorMessage));
+  };
 }

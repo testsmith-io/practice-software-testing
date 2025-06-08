@@ -39,7 +39,7 @@ export class BrandsListComponent implements OnInit {
     this.getBrands();
   }
 
-  deleteBrand(id: number) {
+  deleteBrand(id: string) {
     this.brandService.delete(id)
       .pipe(first())
       .subscribe({

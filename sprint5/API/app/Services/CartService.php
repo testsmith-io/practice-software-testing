@@ -58,8 +58,8 @@ class CartService
                 ]);
             }
 
-            if ($lat && $lng && isset($existingItem->product->is_location_offer)) {
-                $discount = $this->calculateDiscountPercentage($lat, $lng);
+            if ($cart->lat && $cart->lng && isset($existingItem->product->is_location_offer)) {
+                $discount = $this->calculateDiscountPercentage($cart->lat, $cart->lng);
                 $existingItem->discount_percentage = $discount;
                 $existingItem->save();
 
@@ -180,6 +180,7 @@ class CartService
 
     private function calculateDiscountPercentage($lat, $lng)
     {
+        Log::info('Coordinates', ['lat' => $lat, 'lng' => $lng]);
         $coordinates = [
             "new york" => ["lat" => 41, "lng" => 74, "discount_percentage" => 5],
             "mumbai" => ["lat" => 19, "lng" => 73, "discount_percentage" => 10],
@@ -189,7 +190,7 @@ class CartService
         ];
 
         foreach ($coordinates as $city => $data) {
-            if (abs($lat - $data["lat"]) <= 0.5 && abs($lng - $data["lng"]) <= 0.5) {
+            if (abs($lat - $data["lat"]) <= 2 && abs($lng - $data["lng"]) <= 2) {
                 Log::info('Location matched for discount', ['city' => $city, 'discount' => $data['discount_percentage']]);
                 return $data["discount_percentage"];
             }

@@ -1,5 +1,5 @@
 export class Brand {
-  id!: number;
+  id!: string;
   name!: string;
   slug!: string;
 }

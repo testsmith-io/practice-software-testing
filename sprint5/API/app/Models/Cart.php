@@ -20,10 +20,12 @@ class Cart extends BaseModel
     use HasFactory, HasUlids;
 
     protected $table = 'carts';
-    protected $fillable = ['lat'];
+    protected $fillable = ['lat', 'lng', 'additional_discount_percentage'];
 
     protected $casts = array(
-        "additional_discount_percentage" => "double"
+        "additional_discount_percentage" => "double",
+        "lat" => "double",
+        "lng" => "double"
     );
 
     public function cartItems(): HasMany

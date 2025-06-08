@@ -1,133 +1,130 @@
-import {Injectable} from '@angular/core';
-import {map, Observable, Subject, switchMap, of} from "rxjs";
-import {environment} from "../../environments/environment";
-import {HttpClient} from "@angular/common/http";
-import {catchError, tap} from "rxjs/operators";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { Observable, Subject, of, throwError } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  private apiURL = environment.apiUrl;
+  private readonly apiURL = `${environment.apiUrl}/carts`;
   public storageSub = new Subject<string>();
 
-  constructor(private httpClient: HttpClient) {
-  }
+  constructor(private readonly httpClient: HttpClient) {}
 
   private createCartAndStoreId(): Observable<string> {
-    const location = JSON.parse(window.localStorage.getItem('GEO_LOCATION') || '{}');
-    const requestBody: {lat:number, lng:number} | {} = location.lat && location.lng ? { lat: location.lat, lng: location.lng } : {};
+    const location = this.getGeoLocation();
+    const requestBody = location.lat && location.lng ? { lat: location.lat, lng: location.lng } : {};
 
-    return this.httpClient.post(`${this.apiURL}/carts`, requestBody).pipe(
-      switchMap((response: any) => {
+    return this.httpClient.post<{ id: string }>(this.apiURL, requestBody).pipe(
+      map(response => {
         const cartId = response.id;
         sessionStorage.setItem('cart_id', cartId);
-        return of(cartId);
+        return cartId;
       })
     );
   }
 
   private checkCartExistence(cartId: string): Observable<boolean> {
-    return this.httpClient.get(`${this.apiURL}/carts/${cartId}`).pipe(
+    return this.httpClient.get(`${this.apiURL}/${cartId}`).pipe(
       map(() => true),
-      catchError((error) => {
-        if (error) {
-          sessionStorage.removeItem('cart_quantity');
-          sessionStorage.removeItem('cart_id');
-          this.storageSub.next('changed');
-          return of(false);
-        } else {
-          throw error;
-        }
+      catchError(error => {
+        sessionStorage.removeItem('cart_quantity');
+        sessionStorage.removeItem('cart_id');
+        this.storageSub.next('changed');
+        return of(false);
       })
     );
   }
 
   getOrCreateCartId(): Observable<string> {
     const cartId = sessionStorage.getItem('cart_id');
+    return cartId
+      ? this.checkCartExistence(cartId).pipe(
+        switchMap(exists => (exists ? of(cartId) : this.createCartAndStoreId()))
+      )
+      : this.createCartAndStoreId();
+  }
 
-    if (cartId) {
-      return this.checkCartExistence(cartId).pipe(
-        switchMap((cartExists) => {
-          if (cartExists) {
-            return of(cartId);
-          } else {
-            return this.createCartAndStoreId();
-          }
-        })
-      );
-    } else {
-      return this.createCartAndStoreId();
+  getQuantity(): number {
+    try {
+      return JSON.parse(sessionStorage.getItem('cart_quantity') || '0');
+    } catch {
+      return 0;
     }
   }
 
-  getQuantity() {
-    return JSON.parse(<string>sessionStorage.getItem('cart_quantity'))
-  }
-
   private calculateCartQuantity(cartItems: any[]): number {
-    return cartItems.reduce((totalQuantity, cartItem) => totalQuantity + cartItem.quantity, 0);
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
   }
 
   getCart(): Observable<any> {
-    let cartId = sessionStorage.getItem('cart_id');
+    const cartId = sessionStorage.getItem('cart_id');
+    if (!cartId) return of(null);
 
-    return this.httpClient.get<any[]>(`${this.apiURL}/carts/${cartId}`).pipe(
-      map((cartData: any) => {
-        // Calculate the total cart quantity
-        const cartQuantity = this.calculateCartQuantity(cartData.cart_items);
-
-        // Store the cart_quantity in sessionStorage
-        sessionStorage.setItem('cart_quantity', JSON.stringify(cartQuantity));
+    return this.httpClient.get<any>(`${this.apiURL}/${cartId}`).pipe(
+      tap(cart => {
+        const quantity = this.calculateCartQuantity(cart.cart_items || []);
+        sessionStorage.setItem('cart_quantity', JSON.stringify(quantity));
         this.storageSub.next('changed');
-
-        return cartData;
       })
     );
   }
 
   addItem(item: any): Observable<any> {
     return this.getOrCreateCartId().pipe(
-      switchMap((cartId) => {
-        // Call the API to add the item to the cart
-        return this.httpClient.post(`${this.apiURL}/carts/${cartId}`, {
+      switchMap(cartId =>
+        this.httpClient.post(`${this.apiURL}/${cartId}`, {
           product_id: item.id,
-          quantity: item.quantity,
+          quantity: item.quantity
         }).pipe(
-          // Only execute this block if the API call is successful
           tap(() => {
-            const currentQuantity = parseInt(sessionStorage.getItem('cart_quantity'), 10) || 0;
-            const newQuantity = currentQuantity + item.quantity;
-            sessionStorage.setItem('cart_quantity', JSON.stringify(newQuantity));
+            const current = this.getQuantity();
+            sessionStorage.setItem('cart_quantity', JSON.stringify(current + item.quantity));
             this.storageSub.next('changed');
           })
-        );
-      })
+        )
+      )
     );
   }
 
-
-  replaceQuantity(productId: number, quantity: number) {
-    let cartId = sessionStorage.getItem('cart_id');
-    return this.httpClient.put(this.apiURL + `/carts/${cartId}/product/quantity`, {
-      product_id: productId,
-      quantity: quantity
-    });
+  replaceQuantity(productId: number, quantity: number): Observable<any> {
+    const cartId = sessionStorage.getItem('cart_id');
+    if (!cartId) return throwError(() => new Error('No cart ID'));
+    return this.httpClient.put(`${this.apiURL}/${cartId}/product/quantity`, { product_id: productId, quantity });
   }
 
-  deleteItem(productId: number) {
-    let cartId = sessionStorage.getItem('cart_id');
+  deleteItem(productId: number): Observable<any> {
+    const cartId = sessionStorage.getItem('cart_id');
+    if (!cartId) return throwError(() => new Error('No cart ID'));
     this.storageSub.next('changed');
-    return this.httpClient.delete(this.apiURL + `/carts/${cartId}/product/${productId}`);
+    return this.httpClient.delete(`${this.apiURL}/${cartId}/product/${productId}`);
   }
 
-  emptyCart() {
-    let cartId = sessionStorage.getItem('cart_id');
-    this.httpClient.delete(this.apiURL + `/carts/${cartId}`).subscribe(() => {
-      sessionStorage.removeItem('cart_quantity');
-      sessionStorage.removeItem('cart_id');
-      this.storageSub.next('changed');
+  emptyCart(): void {
+    const cartId = sessionStorage.getItem('cart_id');
+    if (!cartId) return;
+
+    this.httpClient.delete(`${this.apiURL}/${cartId}`).subscribe({
+      next: () => this.clearCart(),
+      error: () => this.clearCart() // clear anyway
     });
   }
 
+  // 🔒 Private helpers
+
+  private getGeoLocation(): { lat?: number; lng?: number } {
+    try {
+      return JSON.parse(localStorage.getItem('GEO_LOCATION') || '{}');
+    } catch {
+      return {};
+    }
+  }
+
+  private clearCart(): void {
+    sessionStorage.removeItem('cart_quantity');
+    sessionStorage.removeItem('cart_id');
+    this.storageSub.next('changed');
+  }
 }

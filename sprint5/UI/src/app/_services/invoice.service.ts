@@ -1,61 +1,58 @@
-import {Injectable} from '@angular/core';
-import {environment} from "../../environments/environment";
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {map, Observable} from "rxjs";
-
-const API_URL = environment.apiUrl;
+import { Injectable } from '@angular/core';
+import { environment } from "../../environments/environment";
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class InvoiceService {
+  private readonly apiUrl = `${environment.apiUrl}/invoices`;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient) {}
+
+  getInvoices(page: number): Observable<any> {
+    const params = new HttpParams().set('page', page.toString());
+    return this.http.get(this.apiUrl, { params });
   }
 
-  getInvoices(page:any): Observable<any> {
-    let params = new HttpParams().set('page', page);
-
-    return this.http.get(API_URL + '/invoices', {responseType: 'json', params: params});
-  }
-
-  searchInvoices(page:any, query: string): Observable<any> {
-    let params = new HttpParams().set('page', page)
+  searchInvoices(page: number, query: string): Observable<any> {
+    const params = new HttpParams()
+      .set('page', page.toString())
       .set('q', query);
-
-    return this.http.get(API_URL + '/invoices/search', {responseType: 'json', params: params});
+    return this.http.get(`${this.apiUrl}/search`, { params });
   }
 
-  getNewInvoices(page:any): Observable<any> {
-    let params = new HttpParams().set('page', page)
+  getNewInvoices(page: number): Observable<any> {
+    const params = new HttpParams()
+      .set('page', page.toString())
       .set('in', 'status,AWAITING_FULFILLMENT');
-
-    return this.http.get(API_URL + '/invoices', {responseType: 'json', params: params})
-      .pipe(map(this.extractData));
+    return this.http.get(this.apiUrl, { params });
   }
 
   getInvoice(id: string): Observable<any> {
-    return this.http.get(API_URL + `/invoices/${id}`, {responseType: 'json'});
+    return this.http.get(`${this.apiUrl}/${id}`);
   }
 
-  downloadPDF(invoice_number: string) {
-    return this.http.get<Blob>(API_URL + `/invoices/${invoice_number}/download-pdf`, { observe: 'response', responseType: 'blob' as 'json' });
+  downloadPDF(invoice_number: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${invoice_number}/download-pdf`, {
+      observe: 'response',
+      responseType: 'blob'
+    });
   }
 
   getInvoicePdfStatus(invoice_number: string): Observable<any> {
-    return this.http.get<any>(API_URL + `/invoices/${invoice_number}/download-pdf-status`);
+    return this.http.get(`${this.apiUrl}/${invoice_number}/download-pdf-status`);
   }
+
   createInvoice(payload: any): Observable<any> {
-    return this.http.post(API_URL + '/invoices', payload, {responseType: 'json'});
+    return this.http.post(this.apiUrl, payload);
   }
 
   updateStatus(id: string, status: string, status_message: string): Observable<any> {
-    return this.http.put(API_URL + `/invoices/${id}/status`, {
-      status: status,
-      status_message: status_message
-    }, {responseType: 'json'});
+    return this.http.put(`${this.apiUrl}/${id}/status`, {
+      status,
+      status_message
+    });
   }
-
-  private extractData = (res: any) => res;
-
 }

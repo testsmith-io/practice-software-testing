@@ -1,42 +1,54 @@
-import {Component, OnInit} from '@angular/core';
-import {first} from "rxjs/operators";
-import {FavoriteService} from "../../_services/favorite.service";
-import {Favorite} from "../../models/favorite";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
+import { FavoriteService } from "../../_services/favorite.service";
+import { Favorite } from "../../models/favorite";
+import { RedirectService } from "../../_services/redirect.service";
 
 @Component({
   selector: 'app-favorites',
   templateUrl: './favorites.component.html',
   styleUrls: ['./favorites.component.css']
 })
-export class FavoritesComponent implements OnInit {
+export class FavoritesComponent implements OnInit, OnDestroy {
+  favorites: Favorite[] = [];
+  private readonly destroy$ = new Subject<void>();
 
-  favorites!: Favorite[];
-
-  constructor(private favoriteService: FavoriteService) {
-  }
+  constructor(
+    private readonly favoriteService: FavoriteService,
+    private readonly redirectService: RedirectService
+  ) {}
 
   ngOnInit(): void {
-    this.getFavorites();
+    this.loadFavorites();
   }
 
-  deleteFavorite(favorite: Favorite) {
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  deleteFavorite(favorite: Favorite): void {
     this.favoriteService.deleteFavorite(favorite.id)
-      .pipe(first())
-      .subscribe(() => {
-        this.getFavorites();
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => this.loadFavorites(),
+        error: (error) => this.handleError(error)
       });
   }
 
-  getFavorites() {
+  private loadFavorites(): void {
     this.favoriteService.getFavorites()
-      .pipe(first())
-      .subscribe((favorites) => {
-        this.favorites = favorites
-      }, (error) => {
-        if (error.status === 401 || error.status === 403) {
-          window.localStorage.removeItem('TOKEN_KEY');
-          window.location.href = '/auth/login';
-        }
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (favorites) => this.favorites = favorites,
+        error: (error) => this.handleError(error)
       });
+  }
+
+  private handleError(error: any): void {
+    if (error.status === 401 || error.status === 403) {
+      localStorage.removeItem('TOKEN_KEY');
+      this.redirectService.redirectTo('/auth/login');
+    }
   }
 }

@@ -12,6 +12,13 @@ class ProductService
 {
     public function getAllProducts(array $filters)
     {
+        if (isset($filters['is_rental'])) {
+            $value = strtolower((string) $filters['is_rental']);
+            $filters['is_rental'] = in_array($value, ['1', 'true'], true) ? 1 : 0;
+        } else {
+            $filters['is_rental'] =  0;
+        }
+
         $cacheKey = $this->generateCacheKey($filters);
 
         Log::debug("Fetching all products with filters", ['filters' => $filters, 'cacheKey' => $cacheKey]);
@@ -50,9 +57,10 @@ class ProductService
                 $query->where('name', 'like', '%' . $filters['q'] . '%');
             }
 
-            $isRental = $filters['is_rental'] ?? 0;
-            $query->where('is_rental', (int)$isRental);
-            Log::debug("Filtering by is_rental", ['is_rental' => $isRental]);
+            if (isset($filters['is_rental'])) {
+                $query->where('is_rental', '=', $filters['is_rental']);
+                Log::debug("Filtering by is_rental", ['is_rental' => $filters['is_rental']]);
+            }
 
             $results = $query->filter()->paginate(9);
             Log::debug("Product query executed", ['result_count' => $results->total()]);
@@ -60,6 +68,7 @@ class ProductService
             return $results;
         });
     }
+
 
     protected function generateCacheKey(array $params)
     {
