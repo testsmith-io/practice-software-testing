@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
             'phone' => null,
             'dob' => '1980-01-01',
             'email' => 'admin@practicesoftwaretesting.com',
-            'password' => '$2y$10$pvW9Ixi7okDIJC98Vte6e.iAMD6IZAxAR2V.SjW.m1.u5guoq1wxW',
+            'password' => app('hash')->make('welcome01'),
             'role' => 'admin'
         ],
             [
@@ -40,7 +40,7 @@ class UserSeeder extends Seeder
                 'phone' => null,
                 'dob' => '1980-02-02',
                 'email' => 'customer@practicesoftwaretesting.com',
-                'password' => '$2y$10$pvW9Ixi7okDIJC98Vte6e.iAMD6IZAxAR2V.SjW.m1.u5guoq1wxW',
+                'password' => app('hash')->make('welcome01'),
                 'role' => 'user'
             ],
             [
@@ -55,7 +55,22 @@ class UserSeeder extends Seeder
                 'phone' => null,
                 'dob' => '1980-03-03',
                 'email' => 'customer2@practicesoftwaretesting.com',
-                'password' => '$2y$10$pvW9Ixi7okDIJC98Vte6e.iAMD6IZAxAR2V.SjW.m1.u5guoq1wxW',
+                'password' => app('hash')->make('welcome01'),
+                'role' => 'user'
+            ],
+            [
+                'id' => Str::ulid()->toBase32(),
+                'first_name' => 'Bob',
+                'last_name' => 'Smith',
+                'street' => 'Test street 200',
+                'city' => 'London',
+                'state' => null,
+                'country' => 'United Kingdom',
+                'postal_code' => null,
+                'phone' => null,
+                'dob' => '1985-05-05',
+                'email' => 'customer3@practicesoftwaretesting.com',
+                'password' => app('hash')->make('pass123'),
                 'role' => 'user'
             ]]);
     }
