@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         if (!app()->environment('local')) {
-            $schedule->command('migrate:fresh --seed --force')->hourly();
+            $schedule->command('migrate:fresh --seed --force')
+                ->cron('2 * * * *');
         }
         $schedule->command('order:update')
             ->everyTenMinutes();
