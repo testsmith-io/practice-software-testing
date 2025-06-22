@@ -1,0 +1,342 @@
+{
+  "title": "Practice Software Testing",
+  "buttons": {
+  },
+  "fields": {
+    "email": {
+      "label": "Email address",
+      "placeholder": "Your email",
+      "errors": {
+        "required": "Email is required",
+        "format": "Email format is invalid"
+      }
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Your password",
+      "errors": {
+        "required": "Password is required",
+        "length": "Password length is invalid",
+        "minlength": "Password must be minimal 6 characters long.",
+        "maxlength": "Password can not be more than 40 characters long.",
+        "pattern": "Password can not include invalid characters."
+      }
+    },
+    "first-name": {
+      "label": "First name",
+      "placeholder": "Your first name",
+      "errors": {
+        "required": "First name is required"
+      }
+    },
+    "last-name": {
+      "label": "Last name",
+      "placeholder": "Your last name",
+      "errors": {
+        "required": "Last name is required"
+      }
+    },
+    "street": {
+      "label": "Street",
+      "placeholder": "Your Street",
+      "errors": {
+        "required": "Street is required"
+      }
+    },
+    "postal_code": {
+      "label": "Postal code",
+      "placeholder": "Your Postcode",
+      "errors": {
+        "required": "Postcode is required",
+        "format": "Only 5 numbers are allowed."
+      }
+    },
+    "city": {
+      "label": "City",
+      "placeholder": "Your City",
+      "errors": {
+        "required": "City is required"
+      }
+    },
+    "state": {
+      "label": "State",
+      "placeholder": "Your State",
+      "errors": {
+        "required": "State is required"
+      }
+    },
+    "country": {
+      "label": "Country",
+      "placeholder": "Your country",
+      "errors": {
+        "required": "Country is required"
+      }
+    },
+    "dob": {
+      "label": "Date of Birth",
+      "placeholder": "Your Date of birth",
+      "errors": {
+        "required": "Date of Birth is required"
+      }
+    },
+    "phone": {
+      "label": "Phone",
+      "placeholder": "Your phone",
+      "errors": {
+        "required": "Phone is required.",
+        "format": "Only numbers are allowed."
+      }
+    }
+  },
+  "header": {
+    "menu": {
+      "home": "Home",
+      "categories": "Categories",
+      "hand-tools": "Hand Tools",
+      "power-tools": "Power Tools",
+      "other": "Other",
+      "special-tools": "Special Tools",
+      "rentals": "Rentals",
+      "contact": "Contact",
+      "sign-in": "Sign in",
+      "my-account": "My account",
+      "my-favorites": "My favorites",
+      "my-profile": "My profile",
+      "my-invoices": "My invoices",
+      "my-messages": "My messages",
+      "sign-out": "Sign out"
+    }
+  },
+  "footer": {
+    "demo-app": "This is a DEMO application",
+    "demo-purpose": "used for software testing training purpose."
+  },
+  "pages": {
+    "overview": {
+      "filters": "Filters",
+      "sort": "Sort",
+      "sort-options": {
+        "name-asc": "Name (A - Z)",
+        "name-desc": "Name (Z - A)",
+        "price-desc": "Price (High - Low)",
+        "price-asc": "Price (Low - High)"
+      },
+      "price-range": "Price Range",
+      "search": "Search",
+      "categories": "Categories",
+      "by-category": "By category",
+      "category": "Category",
+      "brands": "Brands",
+      "by-brand": "By brand",
+      "no-results": "There are no products found.",
+      "no-stock": "Out of stock"
+    },
+    "product-detail": {
+      "photo-by": "Photo by",
+      "on": "on",
+      "add-to-cart-btn": "Add to cart",
+      "add-to-favorites-btn": "Add to favourites",
+      "per-hour": "per hour",
+      "increase-quantity": "Increase quantity",
+      "decrease-quantity": "Decrease quantity",
+      "quantity": "Quantity",
+      "total": "Total",
+      "duration": "Duration",
+      "hours": "hour(s)",
+      "related-products": "Related products",
+      "more-information": "More information"
+    },
+    "rentals": {
+      "title": "Rentals"
+    },
+    "login": {
+      "title": "Login",
+      "alternative": "or use",
+      "btn": "Login",
+      "generic-error": "Invalid email or password",
+      "no-account": "Not yet an account?",
+      "register": "Register your account",
+      "forgot-password": "Forgot your Password?",
+      "totp_code": "TOTP Code",
+      "verify_totp": "Verify TOTP"
+    },
+    "register": {
+      "title": "Customer registration",
+      "email-in-use": "Email is already in use.",
+      "btn": "Register"
+    },
+    "forgot-password": {
+      "title": "Forgot Password",
+      "btn": "Set New Password",
+      "confirm": "Your password is <strong>successfully</strong> updated!"
+    },
+    "contact": {
+      "title": "Contact",
+      "btn": "Send",
+      "subject": {
+        "label": "Subject",
+        "options": {
+          "select": "Select a subject *",
+          "customer-service": "Customer service",
+          "webmaster": "Webmaster",
+          "return": "Return",
+          "payments": "Payments",
+          "warranty": "Warranty",
+          "status-of-order": "Status of my order"
+        },
+        "errors": {
+          "required": "Subject is required"
+        }
+      },
+      "message": {
+        "label": "Message",
+        "errors": {
+          "required": "Message is required",
+          "minlength": "Message must be minimal 50 characters"
+        }
+      },
+      "attachment": {
+        "label": "Attachment",
+        "help": "Only files with the <strong>txt</strong> extension are allowed, and files must be 0kb.",
+        "errors": {
+          "incorrect-type": "File should have a txt extension.",
+          "incorrect-size": "File should be empty."
+        }
+      },
+      "known-user": "Hello {{ name }}, please fill out this form to submit your message.",
+      "confirm": "Thanks for your message! We will contact you shortly."
+    },
+    "checkout": {
+      "btn": "Proceed to checkout",
+      "cart": {
+        "title": "Cart",
+        "empty": "The cart is empty. Nothing to display.",
+        "rental-explainer": "Item for rent, price per hour",
+        "item-header": "Item",
+        "quantity-header": "Quantity",
+        "price-header": "Price",
+        "subtotal": "Subtotal",
+        "discount": "Discount",
+        "total": "Total"
+      },
+      "sign-in": {
+        "title": "Sign in",
+        "already": "Hello {{ first_name }} {{ last_name }}, you are already logged in. You can proceed to checkout."
+      },
+      "address": {
+        "title": "Billing Address"
+      },
+      "payment": {
+        "title": "Payment",
+        "confirm-btn": "Confirm",
+        "confirm": "Thanks for your order! Your invoice number is <span id=\"invoice-number\">{{ invoice_number }}</span>.",
+        "method-label": "Payment Method",
+        "method-required": "Payment method is required.",
+        "options": {
+          "select": "Choose your payment method",
+          "bank-transfer": "Bank Transfer",
+          "cash-on-delivery": "Cash on Delivery",
+          "credit-card": "Credit Card",
+          "buy-now-pay-later": "Buy Now Pay Later",
+          "gift-card": "Gift Card"
+        },
+        "bank-transfer": {
+          "bank-name": "Bank Name",
+          "bank-name-error-format": "Bank name can only contain letters and spaces.",
+          "account-name": "Account Name",
+          "account-name-error-format": "Account name can contain letters, numbers, spaces, periods, apostrophes, and hyphens.",
+          "account-number": "Account Number",
+          "account-number-help": "Please enter your bank account number as it appears on your bank statement. It's a unique series of numbers used to identify your individual account. Avoid including any spaces or hyphens.",
+          "account-number-error-format": "Account number must be numeric."
+        },
+        "credit-card": {
+          "number": "Credit Card Number",
+          "number-help": "Enter your 16-digit credit card number as it appears on the card, in the format 0000-0000-0000-0000. Ensure that you include the hyphens for proper formatting.",
+          "number-error-format": "Invalid card number format.",
+          "expiration-date": "Expiration Date",
+          "date-error-format": "Invalid date format. Use MM/YYYY.",
+          "date-error-past": "Expiration date must be in the future.",
+          "cvv": "CVV",
+          "cvv-help": "The CVV is a 3-digit or 4-digit number. It's used for added security during card-not-present transactions.",
+          "cvv-error-format": "CVV must be 3 or 4 digits.",
+          "name": "Card Holder Name",
+          "name-required": "Only letters and spaces are allowed."
+        },
+        "bnpl": {
+          "monthly-installments": "Monthly Installments",
+          "monthly-installments-choose": "Choose your monthly installments",
+          "monthly-installments-help": "This option allows you to spread the cost of your purchase over several months.",
+          "monthly-installments-error-required": "Please select the number of monthly installments."
+        },
+        "gift-card": {
+          "number": "Gift Card Number",
+          "number-help": "Enter the unique number found on your gift card. This number is usually located on the back of the card and may consist of digits and/or letters.",
+          "number-error-format": "Gift card number must be alphanumeric.",
+          "validation-code": "Validation Code",
+          "validation-code-help": "The validation code is a security feature found on your gift card, often located near the gift card number. Enter this code exactly as it appears on your card.",
+          "validation-code-error-format": "Validation code must be alphanumeric."
+        }
+      }
+    },
+    "my-account": {
+      "overview": {
+        "title": "My account",
+        "description": "Here you can manage your profile, favorites and orders.",
+        "favorites": "Favorites",
+        "profile": "Profile",
+        "invoices": "Invoices",
+        "messages": "Messages"
+      },
+      "profile": {
+        "title": "Profile",
+        "update-profile-btn": "Update Profile",
+        "update-profile-success": "Your profile is <strong>successfully</strong> updated!",
+        "password-section": "Password",
+        "current-password": "Current Password",
+        "new-password": "New Password",
+        "confirm-new-password": "Confirm New Password",
+        "change-password-btn": "Change Password",
+        "change-password-success": "Your password is <strong>successfully</strong> updated!",
+        "two_factor_authentication_enabled": "Two-Factor Authentication already enabled.",
+        "verify_totp": "Verify TOTP",
+        "enter_totp_code": "Enter TOTP code",
+        "manually_enter_key": "Or manually enter this key in your app:",
+        "scan_qr_code": "Scan the QR code below with your authenticator app (e.g., Google Authenticator, Authy):",
+        "setup_two_factor_authentication": "Set up Two-Factor Authentication",
+        "totp_verified": "TOTP verified and enabled successfully.",
+        "invalid_totp_code": "Invalid TOTP code. Please try again."
+      },
+      "messages": {
+        "title": "Messages",
+        "no-messages": "There are no messages yet. Navigate to the <a class=\"link-primary\" id=\"contact-link\">contact form</a> and fill out the form.",
+        "subject": "Subject",
+        "message": "Message",
+        "status": "Status",
+        "date": "Date",
+        "details": "Details",
+        "back-btn": "Back",
+        "replies": "Replies",
+        "reply-btn": "Reply",
+        "add-reply": "Add Reply"
+      },
+      "favorites": {
+        "title": "Favorites",
+        "no-favorites": "There are no favorites yet. In order to add favorites, please go to the product listing and mark some products as your favorite."
+      },
+      "invoices": {
+        "title": "Invoices",
+        "invoice-number": "Invoice Number",
+        "billing-address": "Billing Address",
+        "invoice-date": "Invoice Date",
+        "total": "Total",
+        "details": "Details",
+        "not-exist": "This invoice doesn't exist.",
+        "download-pdf": "Download PDF",
+        "general-information": "General Information",
+        "payment-information": "Payment Information",
+        "products": "Products",
+        "product": "Product"
+      }
+    }
+  }
+}

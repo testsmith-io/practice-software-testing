@@ -1,0 +1,66 @@
+<div class="container login-container" *transloco="let t">
+  <div class="row">
+    <div class="col-md-6 offset-md-3 login-form-1">
+      <h3>{{ t('pages.checkout.address.title') }}</h3>
+      <form [formGroup]="cusAddress">
+        <div formGroupName="address">
+          <div class="input-group mb-3">
+            <label for="street" class="visually-hidden">{{ t('fields.street.label') }}</label>
+            <input formControlName="street"
+                   data-test="street"
+                   class="form-control"
+                   id="street"
+                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.street?.errors }" type="text"
+                   placeholder="{{t('fields.street.placeholder')}} *"/>
+          </div>
+
+          <div class="input-group mb-3">
+            <label for="city" class="visually-hidden">{{ t('fields.city.label') }}</label>
+            <input formControlName="city"
+                   data-test="city"
+                   class="form-control"
+                   id="city"
+                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.city?.errors }" type="text"
+                   placeholder="{{t('fields.city.placeholder')}} *"/>
+          </div>
+
+          <div class="input-group mb-3">
+            <label for="state" class="visually-hidden">{{ t('fields.state.label') }}</label>
+            <input formControlName="state"
+                   data-test="state"
+                   class="form-control"
+                   id="state"
+                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.state?.errors }" type="text"
+                   placeholder="{{t('fields.state.label')}} *"/>
+          </div>
+
+          <div class="input-group mb-3">
+            <label for="country" class="visually-hidden">{{ t('fields.country.label') }}</label>
+            <input formControlName="country"
+                   data-test="country"
+                   class="form-control"
+                   id="country"
+                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.country?.errors }" type="text"
+                   placeholder="{{t('fields.country.placeholder')}} *"/>
+          </div>
+
+          <div class="input-group mb-3">
+            <label for="postal_code" class="visually-hidden">{{ t('fields.postal_code.label') }}</label>
+            <input formControlName="postal_code"
+                   data-test="postal_code"
+                   class="form-control"
+                   id="postal_code"
+                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.postal_code?.errors }" type="text"
+                   placeholder="{{t('fields.postal_code.placeholder')}} *"/>
+          </div>
+        </div>
+      </form>
+
+      <div class="float-end">
+        <button data-test="proceed-3" [disabled]="!cusAddress.valid" type="button" class="btn btn-success"
+                awNextStep>{{ t('pages.checkout.btn') }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

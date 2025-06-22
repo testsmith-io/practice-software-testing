@@ -1,0 +1,14 @@
+<h1 data-test="page-title" *transloco="let t">{{ t('pages.my-account.overview.title') }}</h1>
+
+<p *transloco="let t">{{ t('pages.my-account.overview.description') }}</p>
+
+<div class="btn-group-vertical" *transloco="let t">
+  <a routerLink="favorites" data-test="nav-favorites" role="button"
+     class="btn btn-outline-secondary d-flex justify-content-start align-items-center"><fa-icon [icon]="['fas', 'star']"></fa-icon>&nbsp;{{ t('pages.my-account.overview.favorites') }}</a>
+  <a routerLink="profile" data-test="nav-profile" role="button"
+     class="btn btn-outline-secondary d-flex justify-content-start align-items-center"><fa-icon [icon]="['fas', 'address-card']"></fa-icon>&nbsp;{{ t('pages.my-account.overview.profile') }}</a>
+  <a routerLink="invoices" data-test="nav-invoices" role="button"
+     class="btn btn-outline-secondary d-flex justify-content-start align-items-center"><fa-icon [icon]="['fas', 'list']"></fa-icon>&nbsp;{{ t('pages.my-account.overview.invoices') }}</a>
+  <a routerLink="messages" data-test="nav-messages" role="button"
+     class="btn btn-outline-secondary d-flex justify-content-start align-items-center"><fa-icon [icon]="['fas', 'comment-dots']"></fa-icon>&nbsp;{{ t('pages.my-account.overview.messages') }}</a>
+</div>

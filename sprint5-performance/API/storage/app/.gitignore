@@ -1,0 +1,4 @@
+*.pdf
+!invoices/
+!public/
+!.gitignore

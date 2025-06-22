@@ -1,0 +1,342 @@
+{
+  "title": "Practice Software Testing",
+  "buttons": {
+  },
+  "fields": {
+    "email": {
+      "label": "Email Adresse",
+      "placeholder": "Ihre EMail",
+      "errors": {
+        "required": "Email ist verpflichtend",
+        "format": "Email Format ist ungültig"
+      }
+    },
+    "password": {
+      "label": "Passwort",
+      "placeholder": "Ihr Passwort",
+      "errors": {
+        "required": "Passwort ist verpflichtend",
+        "length": "Passwortlänge ist ungültig",
+        "minlength": "Passwort muss mindestens 6 Zeichen lang sein.",
+        "maxlength": "Passwort darf nicht länger als 40 Zeichen lang sein.",
+        "pattern": "Das Passwort darf keine ungültigen Zeichen enthalten."
+      }
+    },
+    "first-name": {
+      "label": "Vorname",
+      "placeholder": "Ihr Vorname",
+      "errors": {
+        "required": "Vorname ist verpflichtend"
+      }
+    },
+    "last-name": {
+      "label": "Nachname",
+      "placeholder": "Ihr Nachname",
+      "errors": {
+        "required": "Nachname ist verpflichtend"
+      }
+    },
+    "address": {
+      "label": "Adresse",
+      "placeholder": "Ihre Adresse",
+      "errors": {
+        "required": "Adresse ist verpflichtend"
+      }
+    },
+    "postal_code": {
+      "label": "Postleitzahl",
+      "placeholder": "Ihre Postleitzahl",
+      "errors": {
+        "required": "Postleitzahl ist verpflichtend",
+        "format": "Max. 5 Nummern nur erlaubt."
+      }
+    },
+    "city": {
+      "label": "Stadt",
+      "placeholder": "Ihre Stadt",
+      "errors": {
+        "required": "Stadt ist verpflichtend"
+      }
+    },
+    "state": {
+      "label": "Bundesland",
+      "placeholder": "Ihr Bundesland",
+      "errors": {
+        "required": "Bundesland ist verpflichtend"
+      }
+    },
+    "country": {
+      "label": "Land",
+      "placeholder": "Ihr Land",
+      "errors": {
+        "required": "Land ist verpflichtend"
+      }
+    },
+    "dob": {
+      "label": "Geburtsdatum",
+      "placeholder": "Ihr Geburtsdatum",
+      "errors": {
+        "required": "Geburtsdatum ist verpflichtend"
+      }
+    },
+    "phone": {
+      "label": "Telefonnummer",
+      "placeholder": "Ihre Telefonnummer",
+      "errors": {
+        "required": "Telefonnummer ist verpflichtend.",
+        "format": "Nur Zahlen sind erlaubt."
+      }
+    }
+  },
+  "header": {
+    "menu": {
+      "home": "Home",
+      "categories": "Kategorien",
+      "hand-tools": "Hand Werkzeuge",
+      "power-tools": "Elektrische Werkzeuge",
+      "other": "Andere",
+      "special-tools": "Spezial Werkzeuge",
+      "rentals": "Mietgeräte",
+      "contact": "Kontakt",
+      "sign-in": "Einloggen",
+      "my-account": "Mein Account",
+      "my-favorites": "Meine Favoriten",
+      "my-profile": "Mein Profil",
+      "my-invoices": "Meine Rechnungen",
+      "my-messages": "Meine Nachrichten",
+      "sign-out": "Abmelden"
+    }
+  },
+  "footer": {
+    "demo-app": "Das ist eine Demo Applikation ",
+    "demo-purpose": "um Software Test Workshops zu unterstützen."
+  },
+  "pages": {
+    "overview": {
+      "filters": "Filter",
+      "sort": "Sortieren",
+      "sort-options": {
+        "name-asc": "Name (A - Z)",
+        "name-desc": "Name (Z - A)",
+        "price-desc": "Preis (Hoch - Niedrig)",
+        "price-asc": "Preis (Niedrig - Hoch)"
+      },
+      "price-range": "Preisspanne",
+      "search": "Suche",
+      "categories": "Kategorien",
+      "by-category": "Nach Kategorie",
+      "category": "Kategorie",
+      "brands": "Marken",
+      "by-brand": "Nach Marken",
+      "no-results": "Es wurden keine passenden Produkte gefunden.",
+      "no-stock": "Nicht auf Lager"
+    },
+    "product-detail": {
+      "photo-by": "Foto von",
+      "on": "am",
+      "add-to-cart-btn": "Zum Einkaufswagen hinzufügen",
+      "add-to-favorites-btn": "Zu Favoriten hinzufügen",
+      "per-hour": "pro Stunde",
+      "increase-quantity": "Menge erhöhen",
+      "decrease-quantity": "Menge verringern",
+      "quantity": "Menge",
+      "total": "Total",
+      "duration": "Dauer",
+      "hours": "Stunde(n)",
+      "related-products": "Verwandte Produkte",
+      "more-information": "Mehr Informationen"
+    },
+    "rentals": {
+      "title": "Mieten"
+    },
+    "login": {
+      "title": "Einloggen",
+      "alternative": "oder",
+      "btn": "Einloggen",
+      "generic-error": "Ungültige EMail oder Passwort",
+      "no-account": "Sie haben kein Konto?",
+      "register": "Registrieren Sie ein Konto",
+      "forgot-password": "Passwort vergessen?",
+      "verify_totp": "TOTP überprüfen",
+      "totp_code": "TOTP-Code"
+    },
+    "register": {
+      "title": "Kunden Registrierung",
+      "email-in-use": "EMail bereits in Verwendung.",
+      "btn": "Registrieren"
+    },
+    "forgot-password": {
+      "title": "Passwort vergessen?",
+      "btn": "Neues Passwort setzen",
+      "confirm": "Passwort wurde <strong>erfolgreich</strong> geändert!"
+    },
+    "contact": {
+      "title": "Kontakt",
+      "btn": "Senden",
+      "subject": {
+        "label": "Betreff",
+        "options": {
+          "select": "Betreff auswählen *",
+          "customer-service": "Kundenservice",
+          "webmaster": "Webmaster",
+          "return": "Zurück",
+          "payments": "Zahlungen",
+          "warranty": "Garantie",
+          "status-of-order": "Status meiner Bestellung"
+        },
+        "errors": {
+          "required": "Betreff ist verpflichtend"
+        }
+      },
+      "message": {
+        "label": "Nachricht",
+        "errors": {
+          "required": "Nachrichttext ist verpflichtend",
+          "minlength": "Nachrichttext muss mindestens 50 Zeichen lang sein"
+        }
+      },
+      "attachment": {
+        "label": "Anhang",
+        "help": "Nur Dateien mit der Endung <strong>txt</strong> sind erlaubt.",
+        "errors": {
+          "incorrect-type": "Dateien müssen die Endung txt haben.",
+          "incorrect-size": "Die Datei sollte leer sein."
+        }
+      },
+      "known-user": "Hallo {{ name }}, bitte füllen Sie dieses Formular aus um die Nachricht zu senden.",
+      "confirm": "Danke für Ihre Nachricht. Wir werden uns in Kürze bei Ihnen melden."
+    },
+    "checkout": {
+      "btn": "Zur Kasse",
+      "cart": {
+        "title": "Einkaufswagen",
+        "empty": "Der Einkaufswagen ist leer. Nichts zum Anzeigen.",
+        "rental-explainer": "Werkzeug zum Mieten, Preise pro Stunde",
+        "item-header": "Artikel",
+        "quantity-header": "Anzahl",
+        "price-header": "Preis",
+        "subtotal": "Gesamt",
+        "discount": "Rabatt",
+        "total": "Gesamtsumme"
+      },
+      "sign-in": {
+        "title": "Anmelden",
+        "already": "Hallo {{ first_name }} {{ last_name }}, Sie sind bereits angemeldet. Sie können weiter zur Kasse."
+      },
+      "address": {
+        "title": "Rechnungsadresse"
+      },
+      "payment": {
+        "title": "Zahlung",
+        "confirm-btn": "Bestätigen",
+        "confirm": "Danke für den Auftrag. Ihre Rechnungsnummer ist <span id=\"invoice-number\">{{ invoice_number }}</span>.",
+        "method-label": "Zahlungsmethode",
+        "method-required": "Zahlungsmethode ist verpflichtend.",
+        "options": {
+          "select": "Wählen Sie Ihre Zahlungsmethode",
+          "bank-transfer": "Banküberweisung",
+          "cash-on-delivery": "Bar bei Lieferung",
+          "credit-card": "Kreditkarte",
+          "buy-now-pay-later": "Kaufe jetzt, zahle später",
+          "gift-card": "Geschenkgutschein"
+        },
+        "bank-transfer": {
+          "bank-name": "Name der Bank",
+          "bank-name-error-format": "Bankname darf nur Buchstaben und Leerzeichen enthalten.",
+          "account-name": "Kontoname",
+          "account-name-error-format": "Kontoname darf Buchstaben, Zahlen, Leerzeichen, Punkte & Hochkomma enthalten.",
+          "account-number": "Kontonummer",
+          "account-number-help": "Bitte geben Sie Ihre Bankkontonummer so ein, wie sie auf Ihrem Kontoauszug steht. Es handelt sich um eine einmalige Zahlenfolge zur Identifizierung Ihres individuellen Kontos. Vermeiden Sie Leerzeichen oder Bindestriche.",
+          "account-number-error-format": "Kontonummer darf nur Zahlen enthalten."
+        },
+        "credit-card": {
+          "number": "Credit Card Number",
+          "number-help": "Enter your 16-digit credit card number as it appears on the card, in the format 0000-0000-0000-0000. Ensure that you include the hyphens for proper formatting.",
+          "number-error-format": "Ungültiges Kreditkartennummer-Format.",
+          "expiration-date": "Expiration Date",
+          "date-error-format": "Ungültiges Datumsformat. Use MM/YYYY.",
+          "date-error-past": "Expiration date must be in the future.",
+          "cvv": "CVV",
+          "cvv-help": "The CVV is a 3-digit or 4-digit number. It's used for added security during card-not-present transactions.",
+          "cvv-error-format": "CVV must be 3 or 4 digits.",
+          "name": "Card Holder Name",
+          "name-required": "Only letters and spaces are allowed."
+        },
+        "bnpl": {
+          "monthly-installments": "Monatliche Raten",
+          "monthly-installments-choose": "Wählen Sie Ihre monatlichen Raten",
+          "monthly-installments-help": "Mit dieser Option können Sie die Kosten Ihres Einkaufs auf mehrere Monate verteilen.",
+          "monthly-installments-error-required": "Bitte wählen Sie die Anzahl der Monatsraten aus."
+        },
+        "gift-card": {
+          "number": "Gutscheinnummer",
+          "number-help": "Geben Sie die eindeutige Nummer ein, die Sie auf Ihrer Geschenkkarte finden. Diese Nummer befindet sich normalerweise auf der Rückseite der Karte und kann aus Ziffern und/oder Buchstaben bestehen",
+          "number-error-format": "Die Gutscheinnummer muss alphanumerisch sein.",
+          "validation-code": "Prüfkennzahl",
+          "validation-code-help": "Die Prüfkennzahl ist ein Sicherheitsmerkmal auf Ihrer Geschenkkarte, das sich oft in der Nähe der Geschenkkartennummer befindet. Geben Sie diesen Code genau so ein, wie er auf Ihrer Karte steht.",
+          "validation-code-error-format": "Prüfkennzahl muss alphanumerisch sein."
+        }
+      }
+    },
+    "my-account": {
+      "overview": {
+        "title": "Mein Konto",
+        "description": "Hier können Sie Ihr Profil, Ihre Favoriten und Ihre Bestellungen verwalten.",
+        "favorites": "Favoriten",
+        "profile": "Profil",
+        "invoices": "Rechnungen",
+        "messages": "Nachrichten"
+      },
+      "profile": {
+        "title": "Profil",
+        "update-profile-btn": "Profil ändern",
+        "update-profile-success": "Ihr Profil wurde <strong>erfolgreich</strong> geändert!",
+        "password-section": "Passwort",
+        "current-password": "Aktuelles Passwort",
+        "new-password": "Neues Passwort",
+        "confirm-new-password": "Bestätigen Sie das neue Passwort",
+        "change-password-btn": "Passwort ändern",
+        "change-password-success": "Ihr Passwort wurde <strong>erfolgreich</strong> geändert!",
+        "two_factor_authentication_enabled": "Zwei-Faktor-Authentifizierung bereits aktiviert.",
+        "verify_totp": "TOTP überprüfen",
+        "enter_totp_code": "Geben Sie den TOTP-Code ein",
+        "manually_enter_key": "Oder geben Sie diesen Schlüssel manuell in Ihrer App ein:",
+        "scan_qr_code": "Scannen Sie den QR-Code unten mit Ihrer Authentifizierungs-App (z. B. Google Authenticator, Authy):",
+        "setup_two_factor_authentication": "Zwei-Faktor-Authentifizierung einrichten",
+        "totp_verified": "TOTP erfolgreich überprüft und aktiviert.",
+        "invalid_totp_code": "Ungültiger TOTP-Code. Bitte versuchen Sie es erneut."
+      },
+      "messages": {
+        "title": "Nachrichten",
+        "no-messages": "Es gibt noch keine Nachrichten. Navigieren Sie zum <a class=\"link-primary\" id=\"contact-link\">Kontaktformular</a> und füllen Sie das Formular aus.",
+        "subject": "Betreff",
+        "message": "Nachricht",
+        "status": "Status",
+        "date": "Datum",
+        "details": "Details",
+        "back-btn": "Zurück",
+        "replies": "Antworten",
+        "reply-btn": "Antwort",
+        "add-reply": "Antwort hinzufügen"
+      },
+      "favorites": {
+        "title": "Favoriten",
+        "no-favorites": "Es sind noch keine Favoriten vorhanden. Um Favoriten hinzuzufügen, gehen Sie bitte zur Produktliste und markieren Sie einige Produkte als Favoriten."
+      },
+      "invoices": {
+        "title": "Rechnungen",
+        "invoice-number": "Rechnungsnummer",
+        "billing-address": "Rechnungsadresse",
+        "invoice-date": "Rechnungsdatum",
+        "total": "Gesamt",
+        "details": "Details",
+        "not-exist": "Die Rechnung existiert nicht.",
+        "download-pdf": "PDF herunterladen",
+        "general-information": "Allgemeine Information",
+        "payment-information": "Zahlungs Information",
+        "products": "Produkte",
+        "product": "Produkt"
+      }
+    }
+  }
+}

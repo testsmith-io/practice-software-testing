@@ -1,0 +1,342 @@
+{
+  "title": "Oefenen met Software Testen",
+  "buttons": {
+  },
+  "fields": {
+    "email": {
+      "label": "E-mailadres",
+      "placeholder": "Uw e-mail",
+      "errors": {
+        "required": "E-mail is vereist",
+        "format": "E-mailformaat is ongeldig"
+      }
+    },
+    "password": {
+      "label": "Wachtwoord",
+      "placeholder": "Uw wachtwoord",
+      "errors": {
+        "required": "Wachtwoord is vereist",
+        "length": "Wachtwoordlengte is ongeldig",
+        "minlength": "Wachtwoord moet minimaal 6 tekens lang zijn.",
+        "maxlength": "Wachtwoord mag niet langer zijn dan 40 tekens.",
+        "pattern": "Wachtwoord mag geen ongeldige tekens bevatten."
+      }
+    },
+    "first-name": {
+      "label": "Voornaam",
+      "placeholder": "Uw voornaam",
+      "errors": {
+        "required": "Voornaam is vereist"
+      }
+    },
+    "last-name": {
+      "label": "Achternaam",
+      "placeholder": "Uw achternaam",
+      "errors": {
+        "required": "Achternaam is vereist"
+      }
+    },
+    "address": {
+      "label": "Adres",
+      "placeholder": "Uw adres",
+      "errors": {
+        "required": "Adres is vereist"
+      }
+    },
+    "postal_code": {
+      "label": "Postcode",
+      "placeholder": "Uw postcode",
+      "errors": {
+        "required": "Postcode is vereist",
+        "format": "Alleen 5 cijfers zijn toegestaan."
+      }
+    },
+    "city": {
+      "label": "Stad",
+      "placeholder": "Uw stad",
+      "errors": {
+        "required": "Stad is vereist"
+      }
+    },
+    "state": {
+      "label": "Provincie",
+      "placeholder": "Uw provincie",
+      "errors": {
+        "required": "Provincie is vereist"
+      }
+    },
+    "country": {
+      "label": "Land",
+      "placeholder": "Uw land",
+      "errors": {
+        "required": "Land is vereist"
+      }
+    },
+    "dob": {
+      "label": "Geboortedatum",
+      "placeholder": "Uw geboortedatum",
+      "errors": {
+        "required": "Geboortedatum is vereist"
+      }
+    },
+    "phone": {
+      "label": "Telefoon",
+      "placeholder": "Uw telefoon",
+      "errors": {
+        "required": "Telefoon is vereist.",
+        "format": "Alleen nummers zijn toegestaan."
+      }
+    }
+  },
+  "header": {
+    "menu": {
+      "home": "Home",
+      "categories": "Categorieën",
+      "hand-tools": "Handgereedschap",
+      "power-tools": "Elektrisch gereedschap",
+      "other": "Overige",
+      "special-tools": "Speciaal gereedschap",
+      "rentals": "Verhuur",
+      "contact": "Contact",
+      "sign-in": "Inloggen",
+      "my-account": "Mijn account",
+      "my-favorites": "Mijn favorieten",
+      "my-profile": "Mijn profiel",
+      "my-invoices": "Mijn facturen",
+      "my-messages": "Mijn berichten",
+      "sign-out": "Uitloggen"
+    }
+  },
+  "footer": {
+    "demo-app": "Dit is een DEMO-applicatie",
+    "demo-purpose": "die wordt gebruikt voor trainingsdoeleinden in softwaretesten."
+  },
+  "pages": {
+    "overview": {
+      "filters": "Filter",
+      "sort": "Sorteren",
+      "sort-options": {
+        "name-asc": "Naam (A - Z)",
+        "name-desc": "Naam (Z - A)",
+        "price-desc": "Prijs (Hoog - Laag)",
+        "price-asc": "Prijs (Laag - Hoog)"
+      },
+      "price-range": "Prijsklasse",
+      "search": "Zoeken",
+      "categories": "Categorieën",
+      "by-category": "Op categorie",
+      "category": "Categorie",
+      "brands": "Merken",
+      "by-brand": "Op merk",
+      "no-results": "Geen producten gevonden.",
+      "no-stock": "Niet op voorraad"
+    },
+    "product-detail": {
+      "photo-by": "Foto door",
+      "on": "op",
+      "add-to-cart-btn": "Toevoegen aan winkelwagen",
+      "add-to-favorites-btn": "Toevoegen aan favorieten",
+      "per-hour": "per uur",
+      "increase-quantity": "Hoeveelheid verhogen",
+      "decrease-quantity": "Hoeveelheid verlagen",
+      "quantity": "Aantal",
+      "total": "Totaal",
+      "duration": "Duur",
+      "hours": "uur",
+      "related-products": "Gerelateerde producten",
+      "more-information": "Meer informatie"
+    },
+    "rentals": {
+      "title": "Verhuur"
+    },
+    "login": {
+      "title": "Inloggen",
+      "alternative": "of gebruik",
+      "btn": "Inloggen",
+      "generic-error": "Ongeldig e-mailadres of wachtwoord",
+      "no-account": "Nog geen account?",
+      "register": "Registreer uw account",
+      "forgot-password": "Wachtwoord vergeten?",
+      "verify_totp": "TOTP verifiëren",
+      "totp_code": "TOTP-code"
+    },
+    "register": {
+      "title": "Klantregistratie",
+      "email-in-use": "E-mail is al in gebruik.",
+      "btn": "Registreren"
+    },
+    "forgot-password": {
+      "title": "Wachtwoord vergeten",
+      "btn": "Stel nieuw wachtwoord in",
+      "confirm": "Uw wachtwoord is <strong>succesvol</strong> bijgewerkt!"
+    },
+    "contact": {
+      "title": "Contact",
+      "btn": "Verzenden",
+      "subject": {
+        "label": "Onderwerp",
+        "options": {
+          "select": "Kies een onderwerp *",
+          "customer-service": "Klantenservice",
+          "webmaster": "Webmaster",
+          "return": "Retour",
+          "payments": "Betalingen",
+          "warranty": "Garantie",
+          "status-of-order": "Status van mijn bestelling"
+        },
+        "errors": {
+          "required": "Onderwerp is vereist"
+        }
+      },
+      "message": {
+        "label": "Bericht",
+        "errors": {
+          "required": "Bericht is vereist",
+          "minlength": "Bericht moet minimaal 50 tekens lang zijn"
+        }
+      },
+      "attachment": {
+        "label": "Bijlage",
+        "help": "Alleen bestanden met de <strong>txt</strong> extensie zijn toegestaan, en bestanden moeten 0kb zijn.",
+        "errors": {
+          "incorrect-type": "Bestand moet een txt-extensie hebben.",
+          "incorrect-size": "Bestand moet leeg zijn."
+        }
+      },
+      "known-user": "Hallo {{ name }}, vul dit formulier in om uw bericht te versturen.",
+      "confirm": "Bedankt voor uw bericht! We nemen spoedig contact met u op."
+    },
+    "checkout": {
+      "btn": "Verder naar betaling",
+      "cart": {
+        "title": "Winkelwagen",
+        "empty": "De winkelwagen is leeg. Niets te tonen.",
+        "rental-explainer": "Item te huur, prijs per uur",
+        "item-header": "Item",
+        "quantity-header": "Aantal",
+        "price-header": "Prijs",
+        "subtotal": "Subtotaal",
+        "discount": "Korting",
+        "total": "Totaal"
+      },
+      "sign-in": {
+        "title": "Inloggen",
+        "already": "Hallo {{ first_name }} {{ last_name }}, u bent al ingelogd. U kunt doorgaan naar betaling."
+      },
+      "address": {
+        "title": "Factuuradres"
+      },
+      "payment": {
+        "title": "Betaling",
+        "confirm-btn": "Bevestigen",
+        "confirm": "Bedankt voor uw bestelling! Uw factuurnummer is <span id=\"invoice-number\">{{ invoice_number }}</span>.",
+        "method-label": "Betaalmethode",
+        "method-required": "Betaalmethode is vereist.",
+        "options": {
+          "select": "Kies uw betaalmethode",
+          "bank-transfer": "Bankoverschrijving",
+          "cash-on-delivery": "Contant bij levering",
+          "credit-card": "Creditcard",
+          "buy-now-pay-later": "Koop nu, betaal later",
+          "gift-card": "Cadeaukaart"
+        },
+        "bank-transfer": {
+          "bank-name": "Banknaam",
+          "bank-name-error-format": "Banknaam mag alleen letters en spaties bevatten.",
+          "account-name": "Rekeninghouder",
+          "account-name-error-format": "Rekeningnaam kan letters, cijfers, spaties, punten, apostrofs en koppeltekens bevatten.",
+          "account-number": "Rekeningnummer",
+          "account-number-help": "Voer uw bankrekeningnummer in zoals dat op uw bankafschrift staat. Het is een unieke reeks nummers die gebruikt wordt om uw individuele rekening te identificeren. Vermijd het gebruik van spaties of koppeltekens.",
+          "account-number-error-format": "Rekeningnummer moet numeriek zijn."
+        },
+        "credit-card": {
+          "number": "Creditcardnummer",
+          "number-help": "Voer uw 16-cijferige creditcardnummer in zoals dat op de kaart staat, in het formaat 0000-0000-0000-0000. Zorg ervoor dat u de koppeltekens gebruikt voor de juiste indeling.",
+          "number-error-format": "Ongeldig creditcardnummerformaat.",
+          "expiration-date": "Vervaldatum",
+          "date-error-format": "Ongeldig datumformaat. Gebruik MM/JJJJ.",
+          "date-error-past": "Vervaldatum moet in de toekomst liggen.",
+          "cvv": "CVV",
+          "cvv-help": "De CVV is een 3-cijferig of 4-cijferig nummer. Het wordt gebruikt voor extra beveiliging tijdens transacties waarbij de kaart niet aanwezig is.",
+          "cvv-error-format": "CVV moet 3 of 4 cijfers zijn.",
+          "name": "Naam kaarthouder",
+          "name-required": "Alleen letters en spaties zijn toegestaan."
+        },
+        "bnpl": {
+          "monthly-installments": "Maandelijkse termijnen",
+          "monthly-installments-choose": "Kies uw maandelijkse termijnen",
+          "monthly-installments-help": "Deze optie stelt u in staat om de kosten van uw aankoop over meerdere maanden te spreiden.",
+          "monthly-installments-error-required": "Selecteer het aantal maandelijkse termijnen."
+        },
+        "gift-card": {
+          "number": "Cadeaukaartnummer",
+          "number-help": "Voer het unieke nummer in dat op uw cadeaukaart staat. Dit nummer bevindt zich meestal op de achterkant van de kaart en kan bestaan uit cijfers en/of letters.",
+          "number-error-format": "Cadeaukaartnummer moet alfanumeriek zijn.",
+          "validation-code": "Validatiecode",
+          "validation-code-help": "De validatiecode is een beveiligingskenmerk op uw cadeaukaart, vaak gelegen bij het cadeaukaartnummer. Voer deze code exact in zoals deze op uw kaart verschijnt.",
+          "validation-code-error-format": "Validatiecode moet alfanumeriek zijn."
+        }
+      }
+    },
+    "my-account": {
+      "overview": {
+        "title": "Mijn account",
+        "description": "Hier kunt u uw profiel, favorieten en bestellingen beheren.",
+        "favorites": "Favorieten",
+        "profile": "Profiel",
+        "invoices": "Facturen",
+        "messages": "Berichten"
+      },
+      "profile": {
+        "title": "Profiel",
+        "update-profile-btn": "Profiel bijwerken",
+        "update-profile-success": "Uw profiel is <strong>succesvol</strong> bijgewerkt!",
+        "password-section": "Wachtwoord",
+        "current-password": "Huidig wachtwoord",
+        "new-password": "Nieuw wachtwoord",
+        "confirm-new-password": "Bevestig nieuw wachtwoord",
+        "change-password-btn": "Wachtwoord wijzigen",
+        "change-password-success": "Uw wachtwoord is <strong>succesvol</strong> bijgewerkt!",
+        "two_factor_authentication_enabled": "Twee-factor-authenticatie is al ingeschakeld.",
+        "verify_totp": "TOTP verifiëren",
+        "enter_totp_code": "Voer TOTP-code in",
+        "manually_enter_key": "Of voer deze sleutel handmatig in in uw app:",
+        "scan_qr_code": "Scan de QR-code hieronder met uw authenticator-app (bijv. Google Authenticator, Authy):",
+        "setup_two_factor_authentication": "Twee-factor-authenticatie instellen",
+        "totp_verified": "TOTP succesvol geverifieerd en ingeschakeld.",
+        "invalid_totp_code": "Ongeldige TOTP-code. Probeer het opnieuw."
+      },
+      "messages": {
+        "title": "Berichten",
+        "no-messages": "Er zijn nog geen berichten. Navigeer naar het <a class=\"link-primary\" id=\"contact-link\">contactformulier</a> en vul het formulier in.",
+        "subject": "Onderwerp",
+        "message": "Bericht",
+        "status": "Status",
+        "date": "Datum",
+        "details": "Details",
+        "back-btn": "Terug",
+        "replies": "Reacties",
+        "reply-btn": "Beantwoorden",
+        "add-reply": "Reactie toevoegen"
+      },
+      "favorites": {
+        "title": "Favorieten",
+        "no-favorites": "Er zijn nog geen favorieten. Om favorieten toe te voegen, ga naar de productlijst en markeer enkele producten als uw favoriet."
+      },
+      "invoices": {
+        "title": "Facturen",
+        "invoice-number": "Factuurnummer",
+        "billing-address": "Factuuradres",
+        "invoice-date": "Factuurdatum",
+        "total": "Totaal",
+        "details": "Details",
+        "not-exist": "Deze factuur bestaat niet.",
+        "download-pdf": "PDF downloaden",
+        "general-information": "Algemene informatie",
+        "payment-information": "Betalingsinformatie",
+        "products": "Producten",
+        "product": "Product"
+      }
+    }
+  }
+}

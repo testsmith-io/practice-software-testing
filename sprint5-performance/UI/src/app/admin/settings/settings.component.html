@@ -1,0 +1,64 @@
+<div class="container mt-5">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+    <div class="row">
+      <h2 data-test="page-title">Settings</h2>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="row mb-4">
+          <label for="endpoint" class="col-sm-4 col-form-label">Payment endpoint</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" formControlName="endpoint" data-test="payment-endpoint"
+                   id="endpoint">
+            <small class="form-text text-muted">
+              By configuring the "payment endpoint", the application will use an different endpoint to check and
+              validate the payments.
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="row mb-4">
+          <label for="geolocation" class="col-sm-4 col-form-label">Retrieve geolocation</label>
+          <div class="col-sm-8">
+            <input class="form-check-input d-block" formControlName="geolocation" data-test="geolocation"
+                   type="checkbox" value=""
+                   id="geolocation">
+            <small class="form-text text-muted">
+              By enabling the "retrieve geolocation" option, the browser will prompt the user to allow location access.
+              You will notice discounts in the area of New York, Mumbai, Tokyo, Amsterdam and London.
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="d-block">
+          <button type="submit" class="btn btn-primary" data-test="settings-submit">Save</button>
+          <button type="button" (click)="clearStorage()" class="mx-3 btn btn-secondary" data-test="clear-storage">Clear
+            storage
+          </button>
+          <a href="#" routerLink="/admin/dashboard" class="link-secondary" data-test="back">Back</a>
+        </div>
+        <small class="form-text text-muted">
+          "Clear storage" will clear all settings, geolocation and cart items, but not the authentication token.
+        </small>
+        @if (isUpdated && !hideAlert) {
+          <div [ngClass]="fadeOutMessage()" class="alert alert-success mt-3"
+               role="alert">
+            Settings saved!
+          </div>
+        }
+        @if (error && !hideAlert) {
+          <div [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
+               role="alert">
+            {{ error }}
+          </div>
+        }
+      </div>
+    </div>
+  </form>
+</div>

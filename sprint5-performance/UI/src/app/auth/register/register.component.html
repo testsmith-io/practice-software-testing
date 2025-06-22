@@ -1,0 +1,332 @@
+<div class="container auth-container" *transloco="let t">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 auth-form">
+      <h3>{{ t('pages.register.title') }}</h3>
+      <form [formGroup]="register" (ngSubmit)="onSubmit()" data-test="register-form">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="first_name" class="form-label">{{ t('fields.first-name.label') }}</label>
+              <input formControlName="first_name"
+                     id="first_name"
+                     data-test="first-name"
+                     class="form-control"
+                     [ngClass]="{ 'is-invalid': submitted && f['first_name'].errors }"
+                     type="text"
+                     placeholder="{{ t('fields.first-name.label') }} *"
+                     value=""/>
+            </div>
+            @if (f['first_name'].invalid && submitted) {
+              <div data-test="first-name-error"
+                   class="alert alert-danger">
+                @if (f['first_name'].errors?.['required']) {
+                  <div>
+                    {{ t('fields.first-name.errors.required') }}
+                  </div>
+                }
+              </div>
+            }
+          </div>
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="last_name" class="form-label">{{ t('fields.last-name.label') }}</label>
+              <input formControlName="last_name"
+                     id="last_name"
+                     data-test="last-name"
+                     class="form-control"
+                     [ngClass]="{ 'is-invalid': submitted && f['last_name'].errors }" type="text"
+                     placeholder="{{ t('fields.last-name.placeholder') }} *"
+                     value=""/>
+            </div>
+            @if (f['last_name'].invalid && submitted) {
+              <div data-test="last-name-error"
+                   class="alert alert-danger">
+                @if (f['last_name'].errors?.['required']) {
+                  <div>
+                    {{ t('fields.last-name.errors.required') }}
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="dob" class="form-label">{{ t('fields.dob.label') }} *</label>
+            <input formControlName="dob"
+                   id="dob"
+                   data-test="dob"
+                   class="form-control"
+                   type="date"
+                   [ngClass]="{ 'is-invalid': submitted && f['dob'].errors }"
+                   placeholder="{{ t('fields.dob.placeholder') }} *"
+                   value=""/>
+            @if (f['dob'].invalid && submitted) {
+              <div data-test="dob-error"
+                   class="alert alert-danger mt-3">
+                @if (f['dob'].errors?.['required']) {
+                  <div>
+                    {{ t('fields.dob.errors.required') }}
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="street" class="form-label">{{ t('fields.street.label') }}</label>
+            <input formControlName="street"
+                   id="street"
+                   data-test="street"
+                   class="form-control"
+                   [ngClass]="{ 'is-invalid': submitted && f['street'].errors }" type="text"
+                   placeholder="{{ t('fields.street.placeholder') }} *"
+                   value=""/>
+            @if (f['street'].invalid && submitted) {
+              <div data-test="street-error"
+                   class="alert alert-danger mt-3">
+                @if (f['street'].errors?.['required']) {
+                  <div>
+                    {{ t('fields.street.errors.required') }}
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group mb-3">
+              <label for="postal_code" class="form-label">{{ t('fields.postal_code.label') }}</label>
+              <input formControlName="postal_code"
+                     id="postal_code"
+                     data-test="postal_code"
+                     class="form-control"
+                     [ngClass]="{ 'is-invalid': submitted && f['postal_code'].errors }" type="text"
+                     placeholder="{{ t('fields.postal_code.placeholder') }} *"
+                     value=""/>
+            </div>
+            @if (f['postal_code'].invalid && submitted) {
+              <div data-test="postal_code-error"
+                   class="alert alert-danger">
+                @if (f['postal_code'].errors?.['required']) {
+                  <div>
+                    {{ t('fields.postal_code.errors.required') }}
+                  </div>
+                }
+                @if (f['postal_code'].errors?.['pattern']) {
+                  <div>
+                    {{ t('fields.postal_code.errors.format') }}
+                  </div>
+                }
+              </div>
+            }
+          </div>
+          <div class="col-md-8">
+            <div class="form-group mb-3">
+              <label for="city" class="form-label">{{ t('fields.city.label') }}</label>
+              <input formControlName="city"
+                     id="city"
+                     data-test="city"
+                     class="form-control"
+                     [ngClass]="{ 'is-invalid': submitted && f['city'].errors }" type="text"
+                     placeholder="{{ t('fields.city.placeholder') }} *"
+                     value=""/>
+            </div>
+            @if (f['city'].invalid && submitted) {
+              <div data-test="city-error"
+                   class="alert alert-danger">
+                @if (f['city'].errors?.['required']) {
+                  <div>
+                    {{ t('fields.city.errors.required') }}
+                  </div>
+                }
+              </div>
+            }
+          </div>
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="state" class="form-label">{{ t('fields.state.label') }}</label>
+              <input formControlName="state"
+                     id="state"
+                     data-test="state"
+                     class="form-control"
+                     [ngClass]="{ 'is-invalid': submitted && f['state'].errors }" type="text"
+                     placeholder="{{ t('fields.state.placeholder') }} *"
+                     value=""/>
+            </div>
+            @if (f['state'].invalid && submitted) {
+              <div data-test="state-error"
+                   class="alert alert-danger">
+                @if (f['state'].errors?.['required']) {
+                  <div>
+                    {{ t('fields.state.errors.required') }}
+                  </div>
+                }
+              </div>
+            }
+          </div>
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="country" class="form-label">{{ t('fields.country.label') }}</label>
+              <select id="country"
+                      data-test="country"
+                      formControlName="country"
+                      [ngClass]="{ 'is-invalid': submitted && f['country'].errors }" class="form-select">
+                <option value="" disabled selected hidden>{{ t('fields.country.placeholder') }} *</option>
+                @for (country of countries; track country) {
+                  <option value="{{country.code}}">{{ country.name }}</option>
+                }
+              </select>
+            </div>
+            @if (f['country'].invalid && submitted) {
+              <div data-test="country-error"
+                   class="alert alert-danger">
+                @if (f['country'].errors?.['required']) {
+                  <div>
+                    {{ t('fields.country.errors.required') }}
+                  </div>
+                }
+              </div>
+            }
+          </div>
+          <div class="form-group mb-3">
+            <label for="phone" class="form-label">{{ t('fields.phone.label') }}</label>
+            <input formControlName="phone"
+                   id="phone"
+                   data-test="phone"
+                   class="form-control"
+                   [ngClass]="{ 'is-invalid': submitted && f['phone'].errors }" type="text"
+                   placeholder="{{ t('fields.phone.placeholder') }} *"
+                   value=""/>
+            @if (f['phone'].invalid && submitted) {
+              <div data-test="phone-error"
+                   class="alert alert-danger mt-3">
+                @if (f['phone'].errors?.['required']) {
+                  <div>
+                    {{ t('fields.phone.errors.required') }}
+                  </div>
+                }
+                @if (f['phone'].errors?.['pattern']) {
+                  <div>
+                    {{ t('fields.phone.errors.format') }}
+                  </div>
+                }
+              </div>
+            }
+          </div>
+          <div class="form-group mb-3">
+            <label for="email" class="form-label">{{ t('fields.email.label') }}</label>
+            <input formControlName="email"
+                   id="email"
+                   data-test="email"
+                   class="form-control"
+                   [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" type="text"
+                   placeholder="{{ t('fields.email.placeholder') }} *"
+                   value=""/>
+            @if (f['email'].invalid && submitted) {
+              <div data-test="email-error"
+                   class="alert alert-danger mt-3">
+                @if (f['email'].errors?.['required']) {
+                  <div>
+                    {{ t('fields.email.errors.required') }}
+                  </div>
+                }
+                @if (f['email'].errors?.['email']) {
+                  <div>
+                    {{ t('fields.email.errors.format') }}
+                  </div>
+                }
+              </div>
+            }
+          </div>
+          <div class="form-group mb-3">
+            <label for="password" class="form-label">{{ t('fields.password.label') }}</label>
+            <app-password-input
+              formControlName="password"
+              id="password"
+              placeholder="{{ t('fields.password.placeholder') }}"
+              (input)="passwordStrengthIndicator = passwordStrength(f['password'].value)"
+              [isInvalid]="submitted && f['password'].errors"
+              [ariaDescribedBy]="(f['password'].invalid && submitted) ? 'password-error' : null"
+              [ariaInvalid]="f['password'].invalid && submitted ? 'true' : 'false'"
+            ></app-password-input>
+            <div id="passwordHelp" class="form-text mt-2">
+              Your password must:
+              <ul>
+                <ul>
+                  <li [class.text-success]="!f['password']?.hasError('minLength')">
+                    Be at least 8 characters long
+                  </li>
+                  <li [class.text-success]="!f['password']?.hasError('mixedCase')">
+                    Contain both uppercase and lowercase letters
+                  </li>
+                  <li [class.text-success]="!f['password']?.hasError('hasNumber')">
+                    Include at least one number
+                  </li>
+                  <li [class.text-success]="!f['password']?.hasError('hasSymbol')">
+                    Have at least one special symbol (e.g., &#64;, #, $, etc.)
+                  </li>
+                </ul>
+              </ul>
+            </div>
+
+            <div class="password-strength mt-2">
+              Password strength:
+              <div class="strength-labels">
+                <span [ngClass]="{'active': passwordStrengthIndicator === 'Weak'}">Weak</span>
+                <span [ngClass]="{'active': passwordStrengthIndicator === 'Moderate'}">Moderate</span>
+                <span [ngClass]="{'active': passwordStrengthIndicator === 'Strong'}">Strong</span>
+                <span [ngClass]="{'active': passwordStrengthIndicator === 'Very Strong'}">Very Strong</span>
+                <span [ngClass]="{'active': passwordStrengthIndicator === 'Excellent'}">Excellent</span>
+              </div>
+              <div class="strength-bar">
+                <div class="fill" [ngClass]="{
+                  'weak': passwordStrengthIndicator === 'Weak',
+                  'moderate': passwordStrengthIndicator === 'Moderate',
+                  'strong': passwordStrengthIndicator === 'Strong',
+                  'very-strong': passwordStrengthIndicator === 'Very Strong',
+                  'excellent': passwordStrengthIndicator === 'Excellent'
+                  }" [style.width]="getStrengthWidth(passwordStrengthIndicator)">
+                </div>
+              </div>
+            </div>
+
+            @if (f['password'].invalid && submitted) {
+              <div data-test="password-error"
+                   class="alert alert-danger mt-3">
+                @if (f['password'].errors?.['required']) {
+                  <div>
+                    {{ t('fields.password.errors.required') }}
+                  </div>
+                }
+                @if (f['password']?.hasError('minLength')) {
+                  <div>
+                    {{ t('fields.password.errors.minlength') }}
+                  </div>
+                }
+                @if (f['password'].errors?.['maxlength']) {
+                  <div>
+                    {{ t('fields.password.errors.maxlength') }}
+                  </div>
+                }
+                @if (f['password']?.hasError('mixedCase') || f['password']?.hasError('hasNumber') || f['password']?.hasError('hasSymbol')) {
+                  <div>
+                    {{ t('fields.password.errors.pattern') }}
+                  </div>
+                }
+              </div>
+            }
+          </div>
+          <button type="submit" data-test="register-submit" class="btnSubmit mb-3">{{ t('pages.register.btn') }}
+          </button>
+          @if (error) {
+            <div data-test="register-error" class="alert alert-danger">
+              <div>
+                <div class="help-block" style="white-space:pre-wrap">{{ error }}</div>
+              </div>
+            </div>
+          }
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
