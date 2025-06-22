@@ -1,0 +1,40 @@
+<h1 data-test="page-title">Categories</h1>
+
+<form [formGroup]="searchForm" class="col-lg-6 mb-3" data-test="category-search-form">
+  <div class="input-group">
+    <a routerLink="add" class="btn btn-success" data-test="category-add">Add Category</a>
+    <input type="text" class="form-control" formControlName="query" data-test="category-search-query">
+    <button class="btn btn-warning" (click)="search()" type="submit" data-test="category-search-submit">Search</button>
+    <button class="btn btn-secondary" (click)="reset()" type="reset" data-test="category-search-reset">Reset</button>
+  </div>
+</form>
+
+<table class="table table-hover">
+  <thead>
+  <tr>
+    <th scope="col">Id</th>
+    <th scope="col">Parent_id</th>
+    <th scope="col">Name</th>
+    <th scope="col">Slug</th>
+    <th class="col-md-2" scope="col"></th>
+  </tr>
+  </thead>
+  <tbody>
+    @for (category of categories;track category) {
+      <tr>
+        <td>{{ category.id }}</td>
+        <td>{{ category.parent_id }}</td>
+        <td>{{ category.name }}</td>
+        <td>{{ category.slug }}</td>
+        <td style="white-space: nowrap">
+          <a routerLink="edit/{{category.id}}" attr.data-test="category-edit-{{category.id}}"
+             class="btn btn-sm btn-primary mx-2">Edit</a>
+          <button (click)="deleteCategory(category.id)" attr.data-test="category-delete-{{category.id}}"
+                  class="btn btn-sm btn-danger">
+            <span>Delete</span>
+          </button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

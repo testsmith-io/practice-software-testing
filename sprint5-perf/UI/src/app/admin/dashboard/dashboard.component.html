@@ -1,0 +1,46 @@
+<h1 data-test="page-title">Sales over the years</h1>
+
+<canvas
+  baseChart
+  class="chart"
+  [data]="data"
+  [options]="barChartOptions"
+  [plugins]="barChartPlugins"
+  [type]="barChartType"
+></canvas>
+
+<h2>Latest orders</h2>
+@if (!results?.data.length) {
+  <div>
+    No recent invoices.
+  </div>
+} @else {
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th scope="col">Invoice Number</th>
+      <th scope="col">Billing Address</th>
+      <th scope="col">Invoice Date</th>
+      <th scope="col">Status</th>
+      <th scope="col">Total</th>
+      <th class="col-md-2" scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (item of results.data; track item) {
+        <tr>
+          <td>{{ item.invoice_number }}</td>
+          <td>{{ item.billing_street }}</td>
+          <td>{{ item.invoice_date }}</td>
+          <td>{{ item.status }}</td>
+          <td>${{ item.total.toFixed(2) }}</td>
+          <td style="white-space: nowrap">
+            <a routerLink="/admin/orders/edit/{{item.id}}" class="btn btn-sm btn-primary mx-2">Edit</a>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  <app-pagination [currentPage]="currentPage" [lastPage]="results.last_page"
+                  (pageChange)="onPageChange($event)"></app-pagination>
+}

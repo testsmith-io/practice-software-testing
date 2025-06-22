@@ -1,0 +1,38 @@
+<h1 data-test="page-title">Brands</h1>
+
+<form [formGroup]="searchForm" class="col-lg-6 mb-3" data-test="brand-search-form">
+  <div class="input-group">
+    <a routerLink="add" class="btn btn-success" data-test="brand-add">Add Brand</a>
+    <input type="text" class="form-control" formControlName="query" data-test="brand-search-query">
+    <button class="btn btn-warning" (click)="search()" type="submit" data-test="brand-search-submit">Search</button>
+    <button class="btn btn-secondary" (click)="reset()" type="reset" data-test="brand-search-reset">Reset</button>
+  </div>
+</form>
+
+<table class="table table-hover">
+  <thead>
+  <tr>
+    <th scope="col">Id</th>
+    <th scope="col">Name</th>
+    <th scope="col">Slug</th>
+    <th class="col-md-2" scope="col"></th>
+  </tr>
+  </thead>
+  <tbody>
+    @for (brand of brands;track brand) {
+      <tr>
+        <td>{{ brand.id }}</td>
+        <td>{{ brand.name }}</td>
+        <td>{{ brand.slug }}</td>
+        <td style="white-space: nowrap">
+          <a routerLink="edit/{{brand.id}}" attr.data-test="brand-{{brand.id}}-edit"
+             class="btn btn-sm btn-primary mx-2">Edit</a>
+          <button (click)="deleteBrand(brand.id)" attr.data-test="brand-{{brand.id}}-delete"
+                  class="btn btn-sm btn-danger">
+            <span>Delete</span>
+          </button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

@@ -1,0 +1,31 @@
+<h1 data-test="page-title" *transloco="let t">{{ t('pages.my-account.invoices.title') }}</h1>
+
+@if (results) {
+  <table class="table table-hover" *transloco="let t">
+    <thead>
+    <tr>
+      <th scope="col">{{ t('pages.my-account.invoices.invoice-number') }}</th>
+      <th scope="col">{{ t('pages.my-account.invoices.billing-address') }}</th>
+      <th scope="col">{{ t('pages.my-account.invoices.invoice-date') }}</th>
+      <th scope="col">{{ t('pages.my-account.invoices.total') }}</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (item of results.data; track item) {
+        <tr>
+          <td>{{ item.invoice_number }}</td>
+          <td>{{ item.billing_street }}</td>
+          <td>{{ item.invoice_date }}</td>
+          <td>${{ item.total.toFixed(2) }}</td>
+          <td style="white-space: nowrap">
+            <a routerLink="{{item.id}}"
+               class="btn btn-sm btn-primary mr-1">{{ t('pages.my-account.invoices.details') }}</a>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  <app-pagination [currentPage]="currentPage" [lastPage]="results.last_page"
+                  (pageChange)="onPageChange($event)"></app-pagination>
+}

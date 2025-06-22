@@ -1,0 +1,342 @@
+{
+  "title": "Practice Software Testing",
+  "buttons": {
+  },
+  "fields": {
+    "email": {
+      "label": "Adresse email",
+      "placeholder": "Votre email",
+      "errors": {
+        "required": "L'email est requis",
+        "format": "Le format de l'email est invalide"
+      }
+    },
+    "password": {
+      "label": "Mot de passe",
+      "placeholder": "Votre mot de passe",
+      "errors": {
+        "required": "Le mot de passe est requis",
+        "length": "La longueur du mot de passe est invalide",
+        "minlength": "Le mot de passe doit comporter au moins 6 caractères.",
+        "maxlength": "Le mot de passe ne peut pas dépasser 40 caractères.",
+        "pattern" : "Le mot de passe ne peut pas inclure de caractères invalides."
+      }
+    },
+    "first-name": {
+      "label": "Prénom",
+      "placeholder": "Votre prénom",
+      "errors": {
+        "required": "Le prénom est requis"
+      }
+    },
+    "last-name": {
+      "label": "Nom de famille",
+      "placeholder": "Votre nom de famille",
+      "errors": {
+        "required": "Le nom de famille est requis"
+      }
+    },
+    "address": {
+      "label": "Adresse",
+      "placeholder": "Votre adresse",
+      "errors": {
+        "required": "L'adresse est requise"
+      }
+    },
+    "postal_code": {
+      "label": "Code postal",
+      "placeholder": "Votre code postal",
+      "errors": {
+        "required": "Le code postal est requis",
+        "format": "Seulement 5 chiffres sont autorisés."
+      }
+    },
+    "city": {
+      "label": "Ville",
+      "placeholder": "Votre ville",
+      "errors": {
+        "required": "La ville est requise"
+      }
+    },
+    "state": {
+      "label": "État",
+      "placeholder": "Votre état",
+      "errors": {
+        "required": "L'état est requis"
+      }
+    },
+    "country": {
+      "label": "Pays",
+      "placeholder": "Votre pays",
+      "errors": {
+        "required": "Le pays est requis"
+      }
+    },
+    "dob": {
+      "label": "Date de naissance",
+      "placeholder": "Votre date de naissance",
+      "errors": {
+        "required": "La date de naissance est requise"
+      }
+    },
+    "phone": {
+      "label": "Téléphone",
+      "placeholder": "Votre téléphone",
+      "errors": {
+        "required": "Le téléphone est requis.",
+        "format": "Seuls les chiffres sont autorisés."
+      }
+    }
+  },
+  "header": {
+    "menu": {
+      "home": "Accueil",
+      "categories": "Catégories",
+      "hand-tools": "Outils manuels",
+      "power-tools": "Outils électriques",
+      "other": "Autres",
+      "special-tools": "Outils spéciaux",
+      "rentals": "Locations",
+      "contact": "Contact",
+      "sign-in": "Se connecter",
+      "my-account": "Mon compte",
+      "my-favorites": "Mes favoris",
+      "my-profile": "Mon profil",
+      "my-invoices": "Mes factures",
+      "my-messages": "Mes messages",
+      "sign-out": "Se déconnecter"
+    }
+  },
+  "footer": {
+    "demo-app": "Ceci est une application de démonstration",
+    "demo-purpose": "utilisée à des fins de formation aux tests logiciels."
+  },
+  "pages": {
+    "overview": {
+      "filters": "Filtres",
+      "sort": "Trier",
+      "sort-options": {
+        "name-asc": "Nom (A - Z)",
+        "name-desc": "Nom (Z - A)",
+        "price-desc": "Prix (Élevé - Bas)",
+        "price-asc": "Prix (Bas - Élevé)"
+      },
+      "price-range": "Fourchette de prix",
+      "search": "Rechercher",
+      "categories": "Catégories",
+      "by-category": "Par catégorie",
+      "category": "Catégorie",
+      "brands": "Marques",
+      "by-brand": "Par marque",
+      "no-results": "Aucun produit trouvé.",
+      "no-stock": "Rupture de stock"
+    },
+    "product-detail": {
+      "photo-by": "Photo de",
+      "on": "le",
+      "add-to-cart-btn": "Ajouter au panier",
+      "add-to-favorites-btn": "Ajouter aux favoris",
+      "per-hour": "par heure",
+      "increase-quantity": "Augmenter la quantité",
+      "decrease-quantity": "Diminuer la quantité",
+      "quantity": "Quantité",
+      "total": "Total",
+      "duration": "Durée",
+      "hours": "heure(s)",
+      "related-products": "Produits connexes",
+      "more-information": "Plus d'informations"
+    },
+    "rentals": {
+      "title": "Locations"
+    },
+    "login": {
+      "title": "Connexion",
+      "alternative": "ou utiliser",
+      "btn": "Connexion",
+      "generic-error": "Email ou mot de passe invalide",
+      "no-account": "Pas encore de compte ?",
+      "register": "Enregistrez votre compte",
+      "forgot-password": "Mot de passe oublié ?",
+      "verify_totp": "Vérifier le TOTP",
+      "totp_code": "Code TOTP"
+    },
+    "register": {
+      "title": "Enregistrement client",
+      "email-in-use": "L'email est déjà utilisé.",
+      "btn": "S'enregistrer"
+    },
+    "forgot-password": {
+      "title": "Mot de passe oublié",
+      "btn": "Définir un nouveau mot de passe",
+      "confirm": "Votre mot de passe a été <strong>mis à jour</strong> avec succès !"
+    },
+    "contact": {
+      "title": "Contact",
+      "btn": "Envoyer",
+      "subject": {
+        "label": "Sujet",
+        "options": {
+          "select": "Sélectionner un sujet *",
+          "customer-service": "Service client",
+          "webmaster": "Webmaster",
+          "return": "Retour",
+          "payments": "Paiements",
+          "warranty": "Garantie",
+          "status-of-order": "Statut de ma commande"
+        },
+        "errors": {
+          "required": "Le sujet est requis"
+        }
+      },
+      "message": {
+        "label": "Message",
+        "errors": {
+          "required": "Le message est requis",
+          "minlength": "Le message doit comporter au moins 50 caractères"
+        }
+      },
+      "attachment": {
+        "label": "Pièce jointe",
+        "help": "Seuls les fichiers avec l'extension <strong>txt</strong> sont autorisés, et les fichiers doivent être de 0ko.",
+        "errors": {
+          "incorrect-type": "Le fichier doit avoir une extension txt.",
+          "incorrect-size": "Le fichier doit être vide."
+        }
+      },
+      "known-user": "Bonjour {{ name }}, veuillez remplir ce formulaire pour soumettre votre message.",
+      "confirm": "Merci pour votre message ! Nous vous contacterons sous peu."
+    },
+    "checkout": {
+      "btn": "Passer à la caisse",
+      "cart": {
+        "title": "Panier",
+        "empty": "Le panier est vide. Rien à afficher.",
+        "rental-explainer": "Article à louer, prix par heure",
+        "item-header": "Article",
+        "quantity-header": "Quantité",
+        "price-header": "Prix",
+        "subtotal": "Sous-total",
+        "discount": "Remise",
+        "total": "Total"
+      },
+      "sign-in": {
+        "title": "Se connecter",
+        "already": "Bonjour {{ first_name }} {{ last_name }}, vous êtes déjà connecté. Vous pouvez passer à la caisse."
+      },
+      "address": {
+        "title": "Adresse de facturation"
+      },
+      "payment": {
+        "title": "Paiement",
+        "confirm-btn": "Confirmer",
+        "confirm": "Merci pour votre commande ! Votre numéro de facture est <span id=\"invoice-number\">{{ invoice_number }}</span>.",
+        "method-label": "Méthode de paiement",
+        "method-required": "La méthode de paiement est requise.",
+        "options": {
+          "select": "Choisissez votre méthode de paiement",
+          "bank-transfer": "Virement bancaire",
+          "cash-on-delivery": "Paiement à la livraison",
+          "credit-card": "Carte de crédit",
+          "buy-now-pay-later": "Achetez maintenant, payez plus tard",
+          "gift-card": "Carte cadeau"
+        },
+        "bank-transfer": {
+          "bank-name": "Nom de la banque",
+          "bank-name-error-format": "Le nom de la banque ne peut contenir que des lettres et des espaces.",
+          "account-name": "Nom du compte",
+          "account-name-error-format": "Le nom du compte peut contenir des lettres, des chiffres, des espaces, des points et des apostrophes.",
+          "account-number": "Numéro de compte",
+          "account-number-help": "Veuillez entrer votre numéro de compte bancaire tel qu'il apparaît sur votre relevé bancaire. Il s'agit d'une série unique de chiffres utilisée pour identifier votre compte individuel. Évitez d'inclure des espaces ou des tirets.",
+          "account-number-error-format": "Le numéro de compte doit être numérique."
+        },
+        "credit-card": {
+          "number": "Numéro de carte de crédit",
+          "number-help": "Entrez votre numéro de carte de crédit à 16 chiffres tel qu'il apparaît sur la carte, au format 0000-0000-0000-0000. Assurez-vous d'inclure les tirets pour un formatage correct.",
+          "number-error-format": "Format de numéro de carte invalide.",
+          "expiration-date": "Date d'expiration",
+          "date-error-format": "Format de date invalide. Utilisez MM/AAAA.",
+          "date-error-past": "La date d'expiration doit être dans le futur.",
+          "cvv": "CVV",
+          "cvv-help": "Le CVV est un numéro à 3 ou 4 chiffres. Il est utilisé pour plus de sécurité lors des transactions sans carte.",
+          "cvv-error-format": "Le CVV doit comporter 3 ou 4 chiffres.",
+          "name": "Nom du titulaire de la carte",
+          "name-required": "Seules les lettres et les espaces sont autorisés."
+        },
+        "bnpl": {
+          "monthly-installments": "Versements mensuels",
+          "monthly-installments-choose": "Choisissez vos versements mensuels",
+          "monthly-installments-help": "Cette option vous permet d'étaler le coût de votre achat sur plusieurs mois.",
+          "monthly-installments-error-required": "Veuillez sélectionner le nombre de versements mensuels."
+        },
+        "gift-card": {
+          "number": "Numéro de carte cadeau",
+          "number-help": "Entrez le numéro unique figurant sur votre carte cadeau. Ce numéro se trouve généralement au dos de la carte et peut être composé de chiffres et/ou de lettres.",
+          "number-error-format": "Le numéro de la carte cadeau doit être alphanumérique.",
+          "validation-code": "Code de validation",
+          "validation-code-help": "Le code de validation est une caractéristique de sécurité figurant sur votre carte cadeau, souvent situé près du numéro de la carte cadeau. Entrez ce code exactement tel qu'il apparaît sur votre carte.",
+          "validation-code-error-format": "Le code de validation doit être alphanumérique."
+        }
+      }
+    },
+    "my-account": {
+      "overview": {
+        "title": "Mon compte",
+        "description": "Ici, vous pouvez gérer votre profil, vos favoris et vos commandes.",
+        "favorites": "Favoris",
+        "profile": "Profil",
+        "invoices": "Factures",
+        "messages": "Messages"
+      },
+      "profile": {
+        "title": "Profil",
+        "update-profile-btn": "Mettre à jour le profil",
+        "update-profile-success": "Votre profil a été <strong>mis à jour</strong> avec succès !",
+        "password-section": "Mot de passe",
+        "current-password": "Mot de passe actuel",
+        "new-password": "Nouveau mot de passe",
+        "confirm-new-password": "Confirmer le nouveau mot de passe",
+        "change-password-btn": "Changer le mot de passe",
+        "change-password-success": "Votre mot de passe a été <strong>mis à jour</strong> avec succès !",
+        "two_factor_authentication_enabled": "L'authentification à deux facteurs est déjà activée.",
+        "verify_totp": "Vérifier le TOTP",
+        "enter_totp_code": "Saisir le code TOTP",
+        "manually_enter_key": "Ou saisissez cette clé manuellement dans votre application :",
+        "scan_qr_code": "Scannez le code QR ci-dessous avec votre application d'authentification (par ex. Google Authenticator, Authy) :",
+        "setup_two_factor_authentication": "Configurer l'authentification à deux facteurs",
+        "totp_verified": "TOTP vérifié et activé avec succès.",
+        "invalid_totp_code": "Code TOTP invalide. Veuillez réessayer."
+      },
+      "messages": {
+        "title": "Messages",
+        "no-messages": "Il n'y a pas encore de messages. Naviguez vers le <a class=\"link-primary\" id=\"contact-link\">formulaire de contact</a> et remplissez le formulaire.",
+        "subject": "Sujet",
+        "message": "Message",
+        "status": "Statut",
+        "date": "Date",
+        "details": "Détails",
+        "back-btn": "Retour",
+        "replies": "Réponses",
+        "reply-btn": "Répondre",
+        "add-reply": "Ajouter une réponse"
+      },
+      "favorites": {
+        "title": "Favoris",
+        "no-favorites": "Il n'y a pas encore de favoris. Pour ajouter des favoris, allez à la liste des produits et marquez certains produits comme vos favoris."
+      },
+      "invoices": {
+        "title": "Factures",
+        "invoice-number": "Numéro de facture",
+        "billing-address": "Adresse de facturation",
+        "invoice-date": "Date de la facture",
+        "total": "Total",
+        "details": "Détails",
+        "not-exist": "Cette facture n'existe pas.",
+        "download-pdf": "Télécharger le PDF",
+        "general-information": "Informations générales",
+        "payment-information": "Informations de paiement",
+        "products": "Produits",
+        "product": "Produit"
+      }
+    }
+  }
+}

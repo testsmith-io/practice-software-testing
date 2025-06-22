@@ -1,0 +1,71 @@
+<div class="container mt-5">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off" data-test="brand-form">
+    <div class="row">
+      @if (isAddMode) {
+        <h2 data-test="page-title">Add Brand</h2>
+      }
+      @if (!isAddMode) {
+        <h2 data-test="page-title">Edit Brand</h2>
+      }
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        @if (!isAddMode) {
+          <div class="row mb-3">
+            <label for="id" class="col-sm-3 col-form-label">Id</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" formControlName="id" id="id" data-test="id" readonly>
+            </div>
+          </div>
+        }
+        <div class="row mb-3">
+          <label for="name" class="col-sm-3 col-form-label">Name</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" formControlName="name" id="name" data-test="name">
+          </div>
+          @if (submitted && f['name'].errors) {
+            <div data-test="name-error" class="alert alert-danger mt-3 p-2" role="alert">
+              @if (f['name'].errors['required']) {
+                <div>Name is required</div>
+              }
+            </div>
+          }
+        </div>
+        <div class="row mb-3">
+          <label for="slug" class="col-sm-3 col-form-label">Slug</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" formControlName="slug" id="slug" data-test="slug">
+          </div>
+          @if (submitted && f['slug'].errors) {
+            <div data-test="slug-error" class="alert alert-danger mt-3 p-2" role="alert">
+              @if (f['slug'].errors['required']) {
+                <div>Slug is required</div>
+              }
+              @if (f['slug'].errors['pattern']) {
+                <div>Slug cannot contain spaces</div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary" data-test="brand-submit">Save</button>
+        <a routerLink="/admin/brands" class="mx-3 link-secondary" data-test="back">Back</a>
+        @if (isUpdated && !hideAlert) {
+          <div data-test="brand-saved" [ngClass]="fadeOutMessage()" class="alert alert-success mt-3"
+               role="alert">
+            Brand saved!
+          </div>
+        }
+        @if (error && !hideAlert) {
+          <div data-test="brand-error" [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
+               role="alert">
+            {{ error }}
+          </div>
+        }
+      </div>
+    </div>
+  </form>
+</div>

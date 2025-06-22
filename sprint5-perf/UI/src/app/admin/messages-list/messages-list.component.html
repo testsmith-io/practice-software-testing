@@ -1,0 +1,33 @@
+<h1 data-test="page-title">Messages</h1>
+
+@if (results?.data) {
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Subject</th>
+      <th scope="col">Status</th>
+      <th scope="col">Date</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (item of results.data;track item) {
+        <tr
+        >
+          <td>{{ (item.user) ? item.user.first_name + ' ' + item.user.last_name : item.name }}</td>
+          <td>{{ item.subject }}</td>
+          <td><span class="badge rounded-pill"
+                    [ngClass]="{'bg-info': item.status === 'NEW', 'bg-warning': item.status === 'IN_PROGRESS', 'bg-success': item.status === 'RESOLVED'}">{{ item.status }}</span>
+          </td>
+          <td>{{ item.created_at }}</td>
+          <td style="white-space: nowrap">
+            <a routerLink="{{item.id}}" attr.data-test="message-details-{{item.id}}"
+               class="btn btn-sm btn-primary mr-1">Details</a>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  <app-pagination [currentPage]="currentPage" [lastPage]="results.last_page"
+                  (pageChange)="onPageChange($event)"></app-pagination>
+}

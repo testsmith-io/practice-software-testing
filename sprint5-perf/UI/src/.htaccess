@@ -1,0 +1,24 @@
+# Check if mod_rewrite module is available
+<IfModule mod_rewrite.c>
+
+  # BEGIN Cache-Control-Headers
+  <ifmodule mod_headers.c>
+    <filesmatch "(gif|ico|jpeg|jpe|jpg|svg|png|css|js)$">
+      Header set Cache-Control "max-age=604800, public"
+    </filesmatch>
+  </ifmodule>
+  # END Cache-Control-Headers
+
+  # Turn the rewrite engine on and set URI base
+  RewriteEngine On
+  RewriteBase /
+
+  # Serve files when they are found
+  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+  RewriteRule ^ - [L]
+
+  # When file is not found, serve index.html instead
+  RewriteRule ^ /index.html
+
+</IfModule>

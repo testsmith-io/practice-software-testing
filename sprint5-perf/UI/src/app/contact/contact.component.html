@@ -1,0 +1,186 @@
+<div class="container auth-container" *transloco="let t">
+  <div class="row justify-content-center">
+    <div class="col-md-8 auth-form">
+      <h3>{{ t('pages.contact.title') }}</h3>
+
+      @if (showConfirmation) {
+        <div class="alert alert-success mt-3"
+             role="alert">
+          {{ t('pages.contact.confirm') }}
+        </div>
+      }
+      @if (!showConfirmation) {
+        <form [formGroup]="contact" (ngSubmit)="onSubmit()">
+          <div class="row">
+            @if (name) {
+              <div class="row mb-3">
+                {{ t('pages.contact.known-user', {name}) }}
+              </div>
+            }
+            @if (!name) {
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group mb-3">
+                    <label for="first_name" class="form-label">{{ t('fields.first-name.label') }}</label>
+                    <input formControlName="first_name"
+                           id="first_name"
+                           data-test="first-name"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && f['first_name'].errors }"
+                           type="text"
+                           placeholder="{{ t('fields.first-name.placeholder') }} *"
+                           value=""/>
+                  </div>
+                  @if (submitted && f['first_name'].errors) {
+                    <div id="first_name_alert" data-test="first-name-error"
+                         class="alert alert-danger mt-3 p-2"
+                         role="alert">
+                      @if (f['first_name'].errors['required']) {
+                        <div>{{ t('fields.first-name.errors.required') }}</div>
+                      }
+                    </div>
+                  }
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group mb-3">
+                    <label for="last_name" class="form-label">{{ t('fields.last-name.label') }}</label>
+                    <input formControlName="last_name"
+                           id="last_name"
+                           data-test="last-name"
+                           class="form-control"
+                           [ngClass]="{ 'is-invalid': submitted && f['last_name'].errors}"
+                           type="text"
+                           placeholder="{{ t('fields.last-name.placeholder') }} *"
+                           value=""/>
+                  </div>
+                  @if (submitted && f['last_name'].errors) {
+                    <div id="last_name_alert" data-test="last-name-error"
+                         class="alert alert-danger mt-3 p-2"
+                         role="alert">
+                      @if (f['last_name'].errors['required']) {
+                        <div>{{ t('fields.last-name.errors.required') }}</div>
+                      }
+                    </div>
+                  }
+                </div>
+                <div class="form-group mb-3">
+                  <label for="email" class="form-label">{{ t('fields.email.label') }}</label>
+                  <input formControlName="email"
+                         data-test="email"
+                         id="email"
+                         class="form-control"
+                         [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
+                         type="email"
+                         placeholder="{{ t('fields.email.placeholder') }} *"
+                         value=""/>
+                  @if (submitted && f['email'].errors) {
+                    <div id="email_alert" data-test="email-error"
+                         class="alert alert-danger mt-3 p-2"
+                         role="alert">
+                      @if (f['email'].errors['required']) {
+                        <div>{{ t('fields.email.errors.required') }}</div>
+                      }
+                      @if (f['email'].errors['email']) {
+                        <div>{{ t('fields.email.errors.format') }}</div>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group mb-3">
+                  <label for="subject" class="form-label">{{ t('pages.contact.subject.label') }}</label>
+                  <select data-test="subject" id="subject" formControlName="subject"
+                          [ngClass]="{ 'is-invalid': submitted && f['subject'].errors}"
+                          class="form-select">
+                    <option value="" disabled selected hidden>{{ t('pages.contact.subject.options.select') }}</option>
+                    <option value="customer-service">{{ t('pages.contact.subject.options.customer-service') }}</option>
+                    <option value="webmaster">{{ t('pages.contact.subject.options.webmaster') }}</option>
+                    <option value="return">{{ t('pages.contact.subject.options.return') }}</option>
+                    <option value="payments">{{ t('pages.contact.subject.options.payments') }}</option>
+                    <option value="warranty">{{ t('pages.contact.subject.options.warranty') }}</option>
+                    <option value="status-of-order">{{ t('pages.contact.subject.options.status-of-order') }}</option>
+                  </select>
+                </div>
+                @if (submitted && f['subject'].errors) {
+                  <div id="subject_alert" data-test="subject-error"
+                       class="alert alert-danger mt-3 p-2"
+                       role="alert">
+                    @if (f['subject'].errors['required']) {
+                      <div>{{ t('pages.contact.subject.errors.required') }}</div>
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="form-group mb-3">
+                <label for="message" class="form-label">{{ t('pages.contact.message.label') }} *</label>
+                <div class="col-sm-12">
+              <textarea class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f['message'].errors }"
+                        formControlName="message"
+                        id="message"
+                        data-test="message"
+                        rows="5">
+              </textarea>
+                </div>
+                @if (submitted && f['message'].errors) {
+                  <div id="message_alert" data-test="message-error"
+                       class="alert alert-danger mt-3 p-2"
+                       role="alert">
+                    @if (f['message'].errors['required']) {
+                      <div>{{ t('pages.contact.message.errors.required') }}</div>
+                    }
+                    @if (f['message'].errors['minlength']) {
+                      <div>{{ t('pages.contact.message.errors.minlength') }}</div>
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="form-group mb-3">
+                <label for="attachment" class="form-label">{{ t('pages.contact.attachment.label') }}</label>
+                <div class="col-sm-12">
+                  <input class="form-control"
+                         [ngClass]="{ 'is-invalid': submitted && f['attachment'].errors }"
+                         formControlName="attachment"
+                         id="attachment"
+                         data-test="attachment"
+                         (change)="changeFile($event)"
+                         accept=".txt"
+                         type="file">
+                  <small id="attachmentHelp" class="form-text text-muted" [innerHTML]="t('pages.contact.attachment.help')"></small>
+                </div>
+                @if (submitted && f['attachment'].errors) {
+                  <div id="attachment_alert" data-test="attachment-error"
+                       class="alert alert-danger mt-3 p-2"
+                       role="alert">
+                    @if (f['attachment'].errors['incorrectType']) {
+                      <div>{{ t('pages.contact.attachment.errors.incorrect-type') }}</div>
+                    }
+                    @if (f['attachment'].errors['incorrectSize']) {
+                      <div>{{ t('pages.contact.attachment.errors.incorrect-size') }}</div>
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="input-group mb-3">
+                <input type="submit" class="btnSubmit" data-test="contact-submit" value="{{ t('pages.contact.btn') }}"/>
+              </div>
+              @if (error) {
+                <div class="alert alert-danger">
+                  <div>
+                    <div class="help-block">{{ error }}</div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </form>
+      }
+    </div>
+  </div>
+</div>
