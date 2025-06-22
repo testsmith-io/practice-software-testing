@@ -1,0 +1,32 @@
+<div class="col" *transloco="let t">
+  <h1 data-test="page-title">{{ t('pages.my-account.favorites.title') }}</h1>
+  @if (!favorites?.length) {
+    <div>
+      {{ t('pages.my-account.favorites.no-favorites') }}
+    </div>
+  }
+  @for (favorite of favorites; track favorite) {
+    <div appRenderDelay [delayRandomRange]="[500, 2000]">
+      <div attr.data-test="favorite-{{favorite.id}}" class="card mb-3">
+        <div class="row no-gutters">
+          <div class="col-md-3 text-center">
+            <img src="assets/img/products/{{favorite.product.product_image.file_name}}" class="card-img"
+                 alt="{{favorite.product.name}}">
+          </div>
+          <div class="col-md-7">
+            <div class="card-body">
+              <h5 data-test="product-name" class="card-title">{{ favorite.product.name }}</h5>
+              <p data-test="product-description"
+                 class="card-text">{{ favorite.product.description | truncate: 250 }}</p>
+            </div>
+          </div>
+          <div class="col-md-2 align-self-center text-center mx-auto">
+            <button class="btn-danger btn mb-3" data-test="delete" (click)="deleteFavorite(favorite)">
+              <fa-icon [icon]="['fas', 'remove']"></fa-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

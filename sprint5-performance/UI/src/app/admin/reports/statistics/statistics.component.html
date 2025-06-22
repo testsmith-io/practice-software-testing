@@ -1,0 +1,104 @@
+<h1 data-test="page-title">Statistics</h1>
+
+<div class="row mb-5">
+  <div class="col-md-6">
+    <h4>Top 10 Best Selling Categories</h4>
+    @if (top10BestSellingCategories) {
+      <div appRenderDelay [delayRandomRange]="[500, 2000]">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th scope="col">Category Name</th>
+            <th scope="col">Total Earned</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (item of top10BestSellingCategories; track item) {
+              <tr>
+                <td>{{ item.category_name }}</td>
+                <td>${{ item.total_earned }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+
+  <div class="col-md-6">
+    <h4>Top 10 Most Purchased Products</h4>
+    @if (top10PurchasedProducts) {
+      <div appRenderDelay [delayRandomRange]="[500, 2000]">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th scope="col">Product Name</th>
+            <th scope="col">Amount</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (item of top10PurchasedProducts; track item) {
+              <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.count }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <h4>Customers By Country</h4>
+    @if (customerByCountry) {
+      <div appRenderDelay [delayRandomRange]="[500, 2000]">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th scope="col">Country</th>
+            <th scope="col">Amount</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (item of customerByCountry; track item) {
+              <tr>
+                <td>{{ item.country }}</td>
+                <td>{{ item.amount }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+
+  <div class="col-md-6">
+    <h4>Total Sales Per Country</h4>
+    @if (totalSalesPerCountry) {
+      <div appRenderDelay [delayRandomRange]="[500, 2000]">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th scope="col">Country</th>
+            <th scope="col">Total Earned</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (item of totalSalesPerCountry; track item) {
+              <tr>
+                <td>{{ item.billing_country }}</td>
+                <td>${{ item.total_sales }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>
+
+
+
