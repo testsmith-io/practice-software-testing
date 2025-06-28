@@ -7,7 +7,7 @@ import {Pagination} from "../../models/pagination";
 @Component({
   selector: 'app-messages-list',
   templateUrl: './messages-list.component.html',
-  styleUrls: ['./messages-list.component.css']
+  styleUrls: []
 })
 export class MessagesListComponent implements OnInit {
 

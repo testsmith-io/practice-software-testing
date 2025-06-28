@@ -8,7 +8,7 @@ import {CustomerAccountService} from "../../shared/customer-account.service";
 @Component({
   selector: 'app-invoices',
   templateUrl: './invoices.component.html',
-  styleUrls: ['./invoices.component.css']
+  styleUrls: []
 })
 export class InvoicesComponent implements OnInit {
   p: number = 1;

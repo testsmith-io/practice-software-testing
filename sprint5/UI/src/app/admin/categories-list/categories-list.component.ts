@@ -8,7 +8,7 @@ import {ToastrService} from "ngx-toastr";
 @Component({
   selector: 'app-list',
   templateUrl: './categories-list.component.html',
-  styleUrls: ['./categories-list.component.css']
+  styleUrls: []
 })
 export class CategoriesListComponent implements OnInit {
   categories!: Category[];

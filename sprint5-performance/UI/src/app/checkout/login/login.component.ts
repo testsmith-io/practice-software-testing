@@ -8,7 +8,7 @@ import {environment} from "../../../environments/environment";
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: []
 })
 export class LoginComponent implements OnInit {
 

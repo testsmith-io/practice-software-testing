@@ -7,7 +7,7 @@ import {first} from "rxjs/operators";
 @Component({
   selector: 'app-brands-add-edit',
   templateUrl: './brands-add-edit.component.html',
-  styleUrls: ['./brands-add-edit.component.css']
+  styleUrls: []
 })
 export class BrandsAddEditComponent implements OnInit {
   form: FormGroup;

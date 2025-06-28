@@ -72,7 +72,7 @@ export class DetailComponent implements OnInit {
     });
   }
 
-  addToFavorites(product: any) {
+  addToFavorites(product: Product) {
     let payload = {product_id: product.id}
     this.favoriteService.addFavorite(payload).subscribe(() => {
       this.toastr.success('Product added to your favorites list.', null, {progressBar: true});

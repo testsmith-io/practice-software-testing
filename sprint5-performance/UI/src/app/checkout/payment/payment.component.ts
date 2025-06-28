@@ -9,7 +9,7 @@ import {InvoiceService} from "../../_services/invoice.service";
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
-  styleUrl: './payment.component.css'
+  styleUrls: []
 })
 export class PaymentComponent implements OnInit {
 

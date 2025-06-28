@@ -7,7 +7,7 @@ import {User} from "../../models/user.model";
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: []
 })
 export class LoginComponent implements OnInit {
   form: FormGroup | any;

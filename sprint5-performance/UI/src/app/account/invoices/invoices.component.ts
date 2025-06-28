@@ -8,7 +8,7 @@ import {NavigationService} from "../../_services/navigation.service";
 @Component({
   selector: 'app-invoices',
   templateUrl: './invoices.component.html',
-  styleUrls: ['./invoices.component.css']
+  styleUrls: []
 })
 export class InvoicesComponent implements OnInit {
   currentPage: number = 1;

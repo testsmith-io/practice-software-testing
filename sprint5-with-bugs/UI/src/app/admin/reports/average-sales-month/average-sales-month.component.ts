@@ -4,7 +4,7 @@ import {ReportService} from "../../../_services/report.service";
 @Component({
   selector: 'app-average-sales-month',
   templateUrl: './average-sales-month.component.html',
-  styleUrls: ['./average-sales-month.component.css']
+  styleUrls: []
 })
 export class AverageSalesMonthComponent implements OnInit {
   type = 'bar';

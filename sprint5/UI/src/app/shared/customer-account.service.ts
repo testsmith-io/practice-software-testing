@@ -53,7 +53,7 @@ export class CustomerAccountService {
       );
   }
 
-  register(payload: any): Observable<any> {
+  register(payload: User): Observable<any> {
     return this.http.post(this.apiURL + '/users/register', payload)
       .pipe(
         map(res => res),

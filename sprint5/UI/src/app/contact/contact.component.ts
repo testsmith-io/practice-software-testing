@@ -8,7 +8,7 @@ import {BrowserDetectorService} from "../_services/browser-detector.service";
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.css']
+  styleUrls: []
 })
 export class ContactComponent implements OnInit {
   contact: FormGroup | any;

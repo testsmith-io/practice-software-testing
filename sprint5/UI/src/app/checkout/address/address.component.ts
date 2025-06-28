@@ -6,7 +6,7 @@ import {Subscription} from "rxjs";
 @Component({
   selector: 'app-address',
   templateUrl: './address.component.html',
-  styleUrls: ['./address.component.css'] // Corrected 'styleUrl' to 'styleUrls'
+  styleUrls: []
 })
 export class AddressComponent implements OnInit, OnDestroy {
 

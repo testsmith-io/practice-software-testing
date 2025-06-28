@@ -6,7 +6,7 @@ import {BrowserDetectorService} from "../../_services/browser-detector.service";
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.component.html',
-  styleUrls: ['./forgot-password.component.css']
+  styleUrls: []
 })
 export class ForgotPasswordComponent implements OnInit {
   form: FormGroup | any;

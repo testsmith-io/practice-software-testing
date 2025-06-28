@@ -8,7 +8,7 @@ import {first} from "rxjs/operators";
 @Component({
   selector: 'app-message-detail',
   templateUrl: './message-detail.component.html',
-  styleUrls: ['./message-detail.component.css']
+  styleUrls: []
 })
 export class MessageDetailComponent implements OnInit {
   statuses = ["NEW", "IN_PROGRESS", "RESOLVED"];

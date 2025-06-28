@@ -8,7 +8,7 @@ import {Category} from "../../models/category";
 @Component({
   selector: 'app-categories-add-edit',
   templateUrl: './categories-add-edit.component.html',
-  styleUrls: ['./categories-add-edit.component.css']
+  styleUrls: []
 })
 export class CategoriesAddEditComponent implements OnInit {
   form: FormGroup;
