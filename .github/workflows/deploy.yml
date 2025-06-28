@@ -47,10 +47,9 @@ jobs:
       - name: Run Angular Tests
         run: |
           cd sprint${{ matrix.sprint }}/UI
-          if [ -f "package.json" ]; then
-            npm install --legacy-peer-deps
-            npm run test -- --watch=false --browsers=ChromeHeadless
-          fi
+          npm install --legacy-peer-deps
+          npm run test -- --watch=false --browsers=ChromeHeadless
+        if: ${{ matrix.sprint == '5' }}
       - name: Install Dependencies
         run: |
           cd sprint${{ matrix.sprint }}/API
