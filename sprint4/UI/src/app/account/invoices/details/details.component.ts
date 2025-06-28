@@ -7,7 +7,7 @@ import {ActivatedRoute} from "@angular/router";
 @Component({
   selector: 'app-details',
   templateUrl: './details.component.html',
-  styleUrls: ['./details.component.css']
+  styleUrls: []
 })
 export class DetailsComponent implements OnInit {
   invoice!: Invoice;

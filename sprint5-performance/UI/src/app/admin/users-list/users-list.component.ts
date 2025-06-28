@@ -9,7 +9,7 @@ import {ToastrService} from "ngx-toastr";
 @Component({
   selector: 'app-users-list',
   templateUrl: './users-list.component.html',
-  styleUrls: ['./users-list.component.css']
+  styleUrls: []
 })
 export class UsersListComponent implements OnInit {
   currentPage: number = 1;

@@ -6,7 +6,7 @@ import DataLabelsPlugin from "chartjs-plugin-datalabels";
 @Component({
   selector: 'app-average-sales-week',
   templateUrl: './average-sales-week.component.html',
-  styleUrls: ['./average-sales-week.component.css']
+  styleUrls: []
 })
 export class AverageSalesWeekComponent implements OnInit {
 

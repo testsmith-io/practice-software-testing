@@ -8,7 +8,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 @Component({
   selector: 'app-list',
   templateUrl: './brands-list.component.html',
-  styleUrls: ['./brands-list.component.css']
+  styleUrls: []
 })
 export class BrandsListComponent implements OnInit {
   brands!: Brand[];

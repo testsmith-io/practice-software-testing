@@ -4,7 +4,7 @@ import {ReportService} from "../../../_services/report.service";
 @Component({
   selector: 'app-statistics',
   templateUrl: './statistics.component.html',
-  styleUrls: ['./statistics.component.css']
+  styleUrls: []
 })
 export class StatisticsComponent implements OnInit {
   top10BestSellingCategories: any;

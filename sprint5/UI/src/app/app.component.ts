@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {Router, NavigationEnd, ActivatedRoute} from '@angular/router';
 import {Title} from '@angular/platform-browser';
-import {filter, map, mergeMap, switchMap} from 'rxjs/operators';
+import {filter, map} from 'rxjs/operators';
 import {GaService} from "./_services/ga.service";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: []
 })
 export class AppComponent implements OnInit {
   title = 'Toolshop';

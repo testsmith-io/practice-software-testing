@@ -8,7 +8,7 @@ import {ToastrService} from "ngx-toastr";
 @Component({
   selector: 'app-list',
   templateUrl: './brands-list.component.html',
-  styleUrls: ['./brands-list.component.css']
+  styleUrls: []
 })
 export class BrandsListComponent implements OnInit {
   brands!: Brand[];

@@ -8,7 +8,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 @Component({
   selector: 'app-list',
   templateUrl: './orders-list.component.html',
-  styleUrls: ['./orders-list.component.css']
+  styleUrls: []
 })
 export class OrdersListComponent implements OnInit {
 

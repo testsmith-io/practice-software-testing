@@ -9,7 +9,7 @@ import {OrderState} from "../../models/order-state";
 @Component({
   selector: 'app-orders-add-edit',
   templateUrl: './orders-add-edit.component.html',
-  styleUrls: ['./orders-add-edit.component.css']
+  styleUrls: []
 })
 export class OrdersAddEditComponent implements OnInit {
   statuses = ["AWAITING_FULFILLMENT", "ON_HOLD", "AWAITING_SHIPMENT", "SHIPPED", "COMPLETED"];

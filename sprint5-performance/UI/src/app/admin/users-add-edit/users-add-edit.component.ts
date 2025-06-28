@@ -9,7 +9,7 @@ import {UserService} from "../../_services/user.service";
 @Component({
   selector: 'app-users-add-edit',
   templateUrl: './users-add-edit.component.html',
-  styleUrls: ['./users-add-edit.component.css']
+  styleUrls: []
 })
 export class UsersAddEditComponent implements OnInit {
 

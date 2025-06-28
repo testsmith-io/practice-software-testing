@@ -7,7 +7,7 @@ import {Pagination} from "../../models/pagination";
 @Component({
   selector: 'app-invoices',
   templateUrl: './invoices.component.html',
-  styleUrls: ['./invoices.component.css']
+  styleUrls: []
 })
 export class InvoicesComponent implements OnInit {
   p: number = 1;

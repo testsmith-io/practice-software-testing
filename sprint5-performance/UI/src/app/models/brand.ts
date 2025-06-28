@@ -1,5 +1,5 @@
-export class Brand {
-  id!: string;
-  name!: string;
-  slug!: string;
+export interface Brand {
+  id?: string;
+  name?: string;
+  slug?: string;
 }

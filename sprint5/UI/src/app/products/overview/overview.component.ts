@@ -25,7 +25,7 @@ export class OverviewComponent implements OnInit {
   results: Pagination<Product>;
   itemsToLoad = new Array(9);
   brands: Brand[];
-  categories: any;
+  categories: Category[];
   private brandsFilter: Array<number> = [];
   private categoriesFilter: Array<number> = [];
   private sorting: string = '';
