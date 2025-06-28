@@ -1,14 +1,18 @@
 name: deploy
 
 on:
-  push:
-    branches: [ main ]
+  workflow_run:
+    workflows: ["Run Playwright Tests 🎭"]
+    types:
+      - completed
+    branches: [main]
 
 concurrency: production_environment
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     strategy:
       matrix:
         sprint: [1, 2, 3, 4, 5, '5-with-bugs']
@@ -28,11 +32,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-#      - name: Install Deployer globally
-#        run: |
-#          composer global require deployer/deployer:6.9.0
-#          echo "${{ runner.tool_cache }}/composer/vendor/bin" >> $GITHUB_PATH
-
       - name: Install (dev) Dependencies
         run: |
           cd sprint${{ matrix.sprint }}/API
@@ -44,6 +43,13 @@ jobs:
             ./vendor/bin/pest
           else
             ./vendor/bin/phpunit
+          fi
+      - name: Run Angular Tests
+        run: |
+          cd sprint${{ matrix.sprint }}/UI
+          if [ -f "package.json" ]; then
+            npm install
+            npm run test -- --watch=false --browsers=ChromeHeadless
           fi
       - name: Install Dependencies
         run: |
