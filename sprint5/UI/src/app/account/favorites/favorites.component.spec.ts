@@ -5,13 +5,14 @@ import { FavoriteService } from '../../_services/favorite.service';
 import { Favorite } from '../../models/favorite';
 import { Product } from '../../models/product';
 import { RedirectService } from '../../_services/redirect.service';
+import { TokenStorageService } from 'src/app/_services/token-storage.service';
 
 describe('FavoritesComponent', () => {
   let component: FavoritesComponent;
   let fixture: ComponentFixture<FavoritesComponent>;
   let favoriteService: jasmine.SpyObj<FavoriteService>;
   let redirectService: jasmine.SpyObj<RedirectService>;
-  let removeItemSpy: jasmine.Spy;
+  let tokenStorageService: jasmine.SpyObj<TokenStorageService>;
 
   const mockProduct: Product = {
     id: '1',
@@ -23,7 +24,6 @@ describe('FavoritesComponent', () => {
     is_rental: false
   };
 
-
   const mockFavorites: Favorite[] = [
     { id: '1', product: { ...mockProduct, id: '1', name: 'Product 1' } },
     { id: '2', product: { ...mockProduct, id: '2', name: 'Product 2' } },
@@ -33,12 +33,14 @@ describe('FavoritesComponent', () => {
   beforeEach(async () => {
     const favoriteServiceSpy = jasmine.createSpyObj('FavoriteService', ['getFavorites', 'deleteFavorite']);
     const redirectServiceSpy = jasmine.createSpyObj('RedirectService', ['redirectTo']);
+    const tokenStorageServiceSpy = jasmine.createSpyObj('TokenStorageService', ['removeToken']);
 
     await TestBed.configureTestingModule({
       declarations: [FavoritesComponent],
       providers: [
         { provide: FavoriteService, useValue: favoriteServiceSpy },
-        { provide: RedirectService, useValue: redirectServiceSpy }
+        { provide: RedirectService, useValue: redirectServiceSpy },
+        { provide: TokenStorageService, useValue: tokenStorageServiceSpy }
       ]
     }).compileComponents();
 
@@ -46,15 +48,14 @@ describe('FavoritesComponent', () => {
     component = fixture.componentInstance;
     favoriteService = TestBed.inject(FavoriteService) as jasmine.SpyObj<FavoriteService>;
     redirectService = TestBed.inject(RedirectService) as jasmine.SpyObj<RedirectService>;
-
-    removeItemSpy = spyOn(localStorage, 'removeItem');
+    tokenStorageService = TestBed.inject(TokenStorageService) as jasmine.SpyObj<TokenStorageService>;
   });
 
   beforeEach(() => {
     favoriteService.getFavorites.calls.reset();
     favoriteService.deleteFavorite.calls.reset();
     redirectService.redirectTo.calls.reset();
-    removeItemSpy.calls.reset();
+    tokenStorageService.removeToken.calls.reset();
   });
 
   it('should create', () => {
@@ -113,7 +114,7 @@ describe('FavoritesComponent', () => {
 
       component.deleteFavorite(favoriteToDelete);
 
-      expect(removeItemSpy).toHaveBeenCalledWith('TOKEN_KEY');
+      expect(tokenStorageService.removeToken).toHaveBeenCalled();
       expect(redirectService.redirectTo).toHaveBeenCalledWith('/auth/login');
     });
 
@@ -123,7 +124,7 @@ describe('FavoritesComponent', () => {
 
       component.deleteFavorite(favoriteToDelete);
 
-      expect(removeItemSpy).toHaveBeenCalledWith('TOKEN_KEY');
+      expect(tokenStorageService.removeToken).toHaveBeenCalled();
       expect(redirectService.redirectTo).toHaveBeenCalledWith('/auth/login');
     });
 
@@ -133,7 +134,7 @@ describe('FavoritesComponent', () => {
 
       component.deleteFavorite(favoriteToDelete);
 
-      expect(removeItemSpy).not.toHaveBeenCalled();
+      expect(tokenStorageService.removeToken).not.toHaveBeenCalled();
       expect(redirectService.redirectTo).not.toHaveBeenCalled();
     });
   });
@@ -153,7 +154,7 @@ describe('FavoritesComponent', () => {
 
       component['loadFavorites']();
 
-      expect(removeItemSpy).toHaveBeenCalledWith('TOKEN_KEY');
+      expect(tokenStorageService.removeToken).toHaveBeenCalled();
       expect(redirectService.redirectTo).toHaveBeenCalledWith('/auth/login');
     });
 
@@ -162,7 +163,7 @@ describe('FavoritesComponent', () => {
 
       component['loadFavorites']();
 
-      expect(removeItemSpy).toHaveBeenCalledWith('TOKEN_KEY');
+      expect(tokenStorageService.removeToken).toHaveBeenCalled();
       expect(redirectService.redirectTo).toHaveBeenCalledWith('/auth/login');
     });
 
@@ -171,7 +172,7 @@ describe('FavoritesComponent', () => {
 
       component['loadFavorites']();
 
-      expect(removeItemSpy).not.toHaveBeenCalled();
+      expect(tokenStorageService.removeToken).not.toHaveBeenCalled();
       expect(redirectService.redirectTo).not.toHaveBeenCalled();
     });
   });
@@ -180,21 +181,21 @@ describe('FavoritesComponent', () => {
     it('should handle 401 error', () => {
       component['handleError']({ status: 401 });
 
-      expect(removeItemSpy).toHaveBeenCalledWith('TOKEN_KEY');
+      expect(tokenStorageService.removeToken).toHaveBeenCalled();
       expect(redirectService.redirectTo).toHaveBeenCalledWith('/auth/login');
     });
 
     it('should handle 403 error', () => {
       component['handleError']({ status: 403 });
 
-      expect(removeItemSpy).toHaveBeenCalledWith('TOKEN_KEY');
+      expect(tokenStorageService.removeToken).toHaveBeenCalled();
       expect(redirectService.redirectTo).toHaveBeenCalledWith('/auth/login');
     });
 
     it('should not redirect for other error statuses', () => {
       component['handleError']({ status: 500 });
 
-      expect(removeItemSpy).not.toHaveBeenCalled();
+      expect(tokenStorageService.removeToken).not.toHaveBeenCalled();
       expect(redirectService.redirectTo).not.toHaveBeenCalled();
     });
   });
