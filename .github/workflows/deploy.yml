@@ -48,7 +48,7 @@ jobs:
         run: |
           cd sprint${{ matrix.sprint }}/UI
           if [ -f "package.json" ]; then
-            npm install
+            npm install --legacy-peer-deps
             npm run test -- --watch=false --browsers=ChromeHeadless
           fi
       - name: Install Dependencies
