@@ -1,5 +1,5 @@
-import {Component, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, ElementRef, inject, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Brand} from "../../models/brand";
 import {BrandService} from "../../_services/brand.service";
 import {CategoryService} from "../../_services/category.service";
@@ -9,13 +9,34 @@ import {Pagination} from "../../models/pagination";
 import {ProductService} from "../../_services/product.service";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
 import {Category} from "../../models/category";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {NgClass, NgTemplateOutlet} from "@angular/common";
+import {PaginationComponent} from "../../pagination/pagination.component";
+import {RouterLink} from "@angular/router";
+import {NgxSliderModule} from "@angular-slider/ngx-slider";
+import {TranslocoDirective} from "@jsverse/transloco";
 
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
+  imports: [
+    FaIconComponent,
+    NgClass,
+    PaginationComponent,
+    RouterLink,
+    ReactiveFormsModule,
+    NgxSliderModule,
+    NgTemplateOutlet,
+    TranslocoDirective
+  ],
   styleUrls: ['./overview.component.css']
 })
 export class OverviewComponent implements OnInit {
+  private productService = inject(ProductService);
+  private formBuilder = inject(FormBuilder);
+  private brandService = inject(BrandService);
+  private categoryService = inject(CategoryService);
+  public browserDetect = inject(BrowserDetectorService);
 
   @ViewChildren("checkboxes") checkboxes: QueryList<ElementRef>;
 
@@ -36,13 +57,6 @@ export class OverviewComponent implements OnInit {
     floor: 0,
     ceil: 200
   };
-
-  constructor(private productService: ProductService,
-              private formBuilder: FormBuilder,
-              private brandService: BrandService,
-              private categoryService: CategoryService,
-              public browserDetect: BrowserDetectorService) {
-  }
 
   ngOnInit(): void {
     this.getProducts();
@@ -71,7 +85,7 @@ export class OverviewComponent implements OnInit {
   getProducts() {
     this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), this.currentPage).subscribe(res => {
       this.results = res;
-      this.results.data.map((item: Product) => {
+      this.results.data.forEach((item: Product) => {
         if (item.is_location_offer) {
           item.discount_price = DiscountUtil.calculateDiscount(item.price);
         }
@@ -90,7 +104,7 @@ export class OverviewComponent implements OnInit {
       this.resultState = 'filter_completed';
       this.currentPage = 1;
       this.results = res;
-      this.results.data.map((item: Product) => {
+      this.results.data.forEach((item: Product) => {
         if (item.is_location_offer) {
           item.discount_price = DiscountUtil.calculateDiscount(item.price);
         }
@@ -135,7 +149,7 @@ export class OverviewComponent implements OnInit {
       this.resultState = 'filter_completed';
       this.currentPage = 1;
       this.results = res;
-      this.results.data.map((item: Product) => {
+      this.results.data.forEach((item: Product) => {
         if (item.is_location_offer) {
           item.discount_price = DiscountUtil.calculateDiscount(item.price);
         }
@@ -154,7 +168,7 @@ export class OverviewComponent implements OnInit {
       this.resultState = 'filter_completed';
       this.currentPage = 1;
       this.results = res;
-      this.results.data.map((item: Product) => {
+      this.results.data.forEach((item: Product) => {
         if (item.is_location_offer) {
           item.discount_price = DiscountUtil.calculateDiscount(item.price);
         }
@@ -208,7 +222,7 @@ export class OverviewComponent implements OnInit {
     this.resultState = 'sorting_started';
     this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0).subscribe(res => {
       this.results = res;
-      this.results.data.map((item: Product) => {
+      this.results.data.forEach((item: Product) => {
         this.resultState = 'sorting_completed';
         if (item.is_location_offer) {
           item.discount_price = DiscountUtil.calculateDiscount(item.price);

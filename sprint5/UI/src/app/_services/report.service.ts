@@ -1,15 +1,14 @@
-import { Injectable } from '@angular/core';
-import { environment } from "../../environments/environment";
-import { Observable } from "rxjs";
-import { HttpClient } from "@angular/common/http";
+import {inject, Injectable} from '@angular/core';
+import {environment} from "../../environments/environment";
+import {Observable} from "rxjs";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReportService {
+  private readonly httpClient = inject(HttpClient);
   private readonly apiURL = `${environment.apiUrl}/reports`;
-
-  constructor(private httpClient: HttpClient) {}
 
   getTotalSalesPerYear(): Observable<any[]> {
     return this.httpClient.get<any[]>(`${this.apiURL}/total-sales-of-years?years=5`);

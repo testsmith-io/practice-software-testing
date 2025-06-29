@@ -1,19 +1,18 @@
-import { Injectable } from '@angular/core';
-import { environment } from "../../environments/environment";
-import { Observable, throwError } from "rxjs";
-import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
-import { catchError } from "rxjs/operators";
-import { Product } from "../models/product";
-import { Pagination } from "../models/pagination";
+import {inject, Injectable} from '@angular/core';
+import {environment} from "../../environments/environment";
+import {Observable, throwError} from "rxjs";
+import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
+import {catchError} from "rxjs/operators";
+import {Product} from "../models/product";
+import {Pagination} from "../models/pagination";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
+  private readonly httpClient = inject(HttpClient);
   private readonly apiURL = `${environment.apiUrl}/products`;
   private readonly jsonHeaders = { 'Content-Type': 'application/json' };
-
-  constructor(private httpClient: HttpClient) {}
 
   getProducts(page: number): Observable<Pagination<Product>> {
     const params = new HttpParams().set('page', page.toString());

@@ -1,18 +1,34 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {CustomerAccountService} from "../../shared/customer-account.service";
-import {first} from "rxjs/operators";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {catchError, first, tap} from "rxjs/operators";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {PasswordValidators} from "../../_helpers/password.validators";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
-import { Profile } from 'src/app/models/profile';
+import {Profile} from 'src/app/models/profile';
+import {NgClass} from "@angular/common";
+import {PasswordInputComponent} from "../../shared/password-input/password-input.component";
+import {QRCodeComponent} from "angularx-qrcode";
+import {TranslocoDirective} from "@jsverse/transloco";
+import {of} from "rxjs";
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
+  imports: [
+    ReactiveFormsModule,
+    NgClass,
+    PasswordInputComponent,
+    QRCodeComponent,
+    TranslocoDirective
+  ],
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  private readonly customerAccountService = inject(CustomerAccountService);
+  private readonly auth = inject(CustomerAccountService);
+  private readonly http = inject(HttpClient);
+
   profile!: Profile;
   profileForm!: FormGroup;
   passwordForm!: FormGroup;
@@ -32,21 +48,20 @@ export class ProfileComponent implements OnInit {
   totpCode: string = '';
   errorMessage: string = '';
   successMessage: string = '';
-  constructor(private customerAccountService: CustomerAccountService,
-              private auth: CustomerAccountService,
-              private http: HttpClient) {
-  }
 
   ngOnInit(): void {
     this.customerAccountService.getDetails()
       .pipe(first())
-      .subscribe((profile) => {
-        this.profile = profile;
-        this.profileForm.patchValue(profile);
-      }, (error) => {
-        if (error.status === 401 || error.status === 403) {
-          window.localStorage.removeItem('TOKEN_KEY');
-          window.location.href = '/auth/login';
+      .subscribe({
+        next: (profile) => {
+          this.profile = profile;
+          this.profileForm.patchValue(profile);
+        },
+        error: (error) => {
+          if (error.status === 401 || error.status === 403) {
+            window.localStorage.removeItem('TOKEN_KEY');
+            window.location.href = '/auth/login';
+          }
         }
       });
 
@@ -180,31 +195,37 @@ export class ProfileComponent implements OnInit {
   }
 
   getTotpSetup(): void {
-    this.http.post(this.apiURL +'/totp/setup', {}).subscribe(
-      (response: any) => {
-        this.qrCodeUrl = response.qrCodeUrl;
-        this.secret = response.secret;
-      },
-      (error) => {
-        if (error.status === 403) {
-          this.errorMessage = 'Access denied: If you want to configure TOTP, please create your own account.';
-        } else {
-          this.errorMessage = 'Failed to load TOTP setup details.';
-        }
-      }
-    );
+    this.http.post<any>(this.apiURL + '/totp/setup', {})
+      .pipe(
+        tap((response) => {
+          this.qrCodeUrl = response.qrCodeUrl;
+          this.secret = response.secret;
+        }),
+        catchError((error) => {
+          this.errorMessage = (error.status === 403)
+            ? 'Access denied: If you want to configure TOTP, please create your own account.'
+            : 'Failed to load TOTP setup details.';
+          return of(null); // Return a safe fallback to complete the observable
+        })
+      )
+      .subscribe(); // no arguments – logic is in `tap()`/`catchError`
   }
 
   verifyTotp(): void {
-    this.http.post(this.apiURL +'/totp/verify', { totp: this.totpForm.get('totpCode').value }).subscribe(
-      () => {
-        this.successMessage = 'TOTP verified and enabled successfully.';
-        this.errorMessage = '';
-      },
-      (error) => {
-        this.errorMessage = 'Invalid TOTP code. Please try again.';
-        this.successMessage = '';
-      }
-    );
+    this.http.post(this.apiURL + '/totp/verify', {
+      totp: this.totpForm.get('totpCode')?.value
+    })
+      .pipe(
+        tap(() => {
+          this.successMessage = 'TOTP verified and enabled successfully.';
+          this.errorMessage = '';
+        }),
+        catchError((error) => {
+          this.errorMessage = 'Invalid TOTP code. Please try again.';
+          this.successMessage = '';
+          return of(null); // Ensure observable completes
+        })
+      )
+      .subscribe();
   }
 }

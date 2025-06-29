@@ -23,18 +23,18 @@ import {NgHttpLoaderModule} from "ng-http-loader";
 import {NgxSliderModule} from "@angular-slider/ngx-slider";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    FooterComponent,
-    ProductDetailComponent,
-    CheckoutComponent,
-    ContactComponent,
-    ToastsComponent,
-    CategoryComponent,
-    OverviewComponent,
-    ProductOverviewComponent
-  ],
+    declarations: [
+        AppComponent,
+        HeaderComponent,
+        FooterComponent,
+        ProductDetailComponent,
+        CheckoutComponent,
+        ContactComponent,
+        ToastsComponent,
+        CategoryComponent,
+        OverviewComponent,
+        ProductOverviewComponent
+    ],
     imports: [
         BrowserModule,
         NgbModule,
@@ -49,12 +49,15 @@ import {NgxSliderModule} from "@angular-slider/ngx-slider";
         NgxSliderModule,
         RouterLink
     ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: ContentTypeInterceptor,
-    multi: true
-  }],
-  bootstrap: [AppComponent]
+    providers: [{
+        provide: HTTP_INTERCEPTORS,
+        useClass: ContentTypeInterceptor,
+        multi: true
+    }],
+    exports: [
+        HeaderComponent
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 }
