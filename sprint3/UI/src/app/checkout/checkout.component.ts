@@ -5,8 +5,8 @@ import {CartService} from "../_services/cart.service";
 import {InvoiceService} from "../_services/invoice.service";
 import {PaymentService} from "../_services/payment.service";
 import {environment} from "../../environments/environment";
-import {ArchwizardModule} from "angular-archwizard";
 import {DecimalPipe, NgClass} from "@angular/common";
+import { ArchwizardModule } from '@y3krulez/angular-archwizard';
 
 @Component({
   selector: 'app-checkout',
