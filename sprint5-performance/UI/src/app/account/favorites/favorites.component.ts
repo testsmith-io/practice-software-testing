@@ -1,22 +1,32 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
-import { FavoriteService } from "../../_services/favorite.service";
-import { Favorite } from "../../models/favorite";
-import { RedirectService } from "../../_services/redirect.service";
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Subject, takeUntil} from 'rxjs';
+import {FavoriteService} from "../../_services/favorite.service";
+import {Favorite} from "../../models/favorite";
+import {RedirectService} from "../../_services/redirect.service";
+import {RenderDelayDirective} from "../../render-delay-directive.directive";
+import {TruncatePipe} from "../../_helpers/truncate.pipe";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {TranslocoDirective} from "@jsverse/transloco";
+import {TokenStorageService} from "../../_services/token-storage.service";
 
 @Component({
   selector: 'app-favorites',
   templateUrl: './favorites.component.html',
+  imports: [
+    RenderDelayDirective,
+    TruncatePipe,
+    FaIconComponent,
+    TranslocoDirective
+  ],
   styleUrls: ['./favorites.component.css']
 })
 export class FavoritesComponent implements OnInit, OnDestroy {
+  private readonly favoriteService = inject(FavoriteService);
+  private readonly redirectService = inject(RedirectService);
+  private readonly tokenStorage = inject(TokenStorageService);
+
   favorites: Favorite[] = [];
   private readonly destroy$ = new Subject<void>();
-
-  constructor(
-    private readonly favoriteService: FavoriteService,
-    private readonly redirectService: RedirectService
-  ) {}
 
   ngOnInit(): void {
     this.loadFavorites();
@@ -47,7 +57,7 @@ export class FavoritesComponent implements OnInit, OnDestroy {
 
   private handleError(error: any): void {
     if (error.status === 401 || error.status === 403) {
-      localStorage.removeItem('TOKEN_KEY');
+      this.tokenStorage.removeToken();
       this.redirectService.redirectTo('/auth/login');
     }
   }

@@ -157,7 +157,7 @@
       </div>
     } @else {
       <div class="container">
-        @for (loader of itemsToLoad; track loader) {
+        @for (loader of itemsToLoad; track loader.id) {
           <div class="card skeleton">
             <div class="card-img-wrapper">
             </div>

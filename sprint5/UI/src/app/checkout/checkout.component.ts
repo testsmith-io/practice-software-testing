@@ -12,8 +12,6 @@ import {TranslocoDirective} from "@jsverse/transloco";
   templateUrl: './checkout.component.html',
   imports: [
     ArchwizardModule,
-    ArchwizardModule,
-    ArchwizardModule,
     CartComponent,
     LoginComponent,
     AddressComponent,

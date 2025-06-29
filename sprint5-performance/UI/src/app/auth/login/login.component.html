@@ -2,19 +2,6 @@
   <div class="row justify-content-md-center">
     <div class="col-lg-6 auth-form">
       <h3>{{ t('pages.login.title') }}</h3>
-      @if (environment.production) {
-        <div class="text-center my-4">
-          <button (click)="socialLogin('google')" type="button" aria-label="Sign in with Google"
-                  class="google-sign-in-button">
-            Sign in with Google
-          </button>
-        </div>
-      }
-
-      @if (environment.production) {
-        <div class="separator" aria-label="Alternative login methods">{{ t('pages.login.alternative') }}</div>
-      }
-
       @if (!showTotpInput) {
         <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off" data-test="login-form">
           <div class="mb-3">

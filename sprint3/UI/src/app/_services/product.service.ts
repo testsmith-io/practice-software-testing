@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {map, Observable, throwError} from "rxjs";
 import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
@@ -10,10 +10,8 @@ import {Pagination} from "../models/pagination";
   providedIn: 'root'
 })
 export class ProductService {
+  private httpClient = inject(HttpClient);
   private apiURL = environment.apiUrl;
-
-  constructor(private httpClient: HttpClient) {
-  }
 
   getProducts(page: any): Observable<Pagination<Product>> {
     let params = new HttpParams().set('page', page);

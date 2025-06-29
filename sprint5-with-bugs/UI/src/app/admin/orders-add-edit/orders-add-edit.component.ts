@@ -1,17 +1,28 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {Invoice} from "../../models/invoice";
 import {InvoiceService} from "../../_services/invoice.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, RouterLink} from "@angular/router";
 import {first} from "rxjs/operators";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {OrderState} from "../../models/order-state";
+import {DecimalPipe, NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-orders-add-edit',
   templateUrl: './orders-add-edit.component.html',
+  imports: [
+    RouterLink,
+    ReactiveFormsModule,
+    NgClass,
+    DecimalPipe
+  ],
   styleUrls: []
 })
 export class OrdersAddEditComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly invoiceService = inject(InvoiceService);
+  private readonly route = inject(ActivatedRoute);
+
   statuses = ["AWAITING_FULFILLMENT", "ON_HOLD", "AWAITING_SHIPMENT", "SHIPPED", "COMPLETED"];
   invoiceForm: FormGroup | any;
   invoice!: Invoice;
@@ -19,11 +30,6 @@ export class OrdersAddEditComponent implements OnInit {
   hideAlert: boolean = false;
   error: string;
   orderState: any = OrderState;
-
-  constructor(private formBuilder: FormBuilder,
-              private invoiceService: InvoiceService,
-              private route: ActivatedRoute) {
-  }
 
   ngOnInit(): void {
     this.invoiceForm = this.formBuilder.group(

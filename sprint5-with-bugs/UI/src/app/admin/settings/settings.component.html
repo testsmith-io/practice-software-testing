@@ -22,7 +22,7 @@
           <label for="geolocation" class="col-sm-4 col-form-label">Retrieve geolocation</label>
           <div class="col-sm-8">
             <input class="form-check-input d-block" formControlName="geolocation" data-test="geolocation" type="checkbox" value=""
-                   id="geolocation">
+              id="geolocation">
             <small class="form-text text-muted">
               By enabling the "retrieve geolocation" option, the browser will prompt the user to allow location access. You will notice discounts in the area of New York, Mumbai, Tokyo, Amsterdam and London.
             </small>
@@ -40,14 +40,18 @@
         <small class="form-text text-muted">
           "Clear storage" will clear all settings, geolocation and cart items, but not the authentication token.
         </small>
-        <div *ngIf="isUpdated && !hideAlert" [ngClass]="fadeOutMessage()" class="alert alert-success mt-3"
-             role="alert">
-          Settings saved!
-        </div>
-        <div *ngIf="error && !hideAlert" [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
-             role="alert">
-          {{error}}
-        </div>
+        @if (isUpdated && !hideAlert) {
+          <div [ngClass]="fadeOutMessage()" class="alert alert-success mt-3"
+            role="alert">
+            Settings saved!
+          </div>
+        }
+        @if (error && !hideAlert) {
+          <div [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
+            role="alert">
+            {{error}}
+          </div>
+        }
       </div>
     </div>
   </form>

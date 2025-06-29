@@ -1,27 +1,32 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, inject, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import {TokenStorageService} from "../../_services/token-storage.service";
 import {User} from "../../models/user.model";
+import {NgClass} from "@angular/common";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
+  imports: [
+    ReactiveFormsModule,
+    NgClass,
+    RouterLink
+],
   styleUrls: []
 })
 export class LoginComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly accountService = inject(CustomerAccountService);
+  private readonly tokenStorage = inject(TokenStorageService);
+
   form: FormGroup | any;
   submitted = false;
   error: string | undefined;
-
   isLoggedIn = false;
   isLoginFailed = false;
   roles: string[] = [];
-
-  constructor(private formBuilder: FormBuilder,
-              private accountService: CustomerAccountService,
-              private tokenStorage: TokenStorageService) {
-  }
 
   ngOnInit(): void {
     if (this.tokenStorage.getToken()) {

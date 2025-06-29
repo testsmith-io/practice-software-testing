@@ -1,17 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { Observable, Subject, of, throwError } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import {inject, Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment';
+import {Observable, of, Subject, throwError} from 'rxjs';
+import {catchError, map, switchMap, tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
+  private readonly httpClient = inject(HttpClient);
   private readonly apiURL = `${environment.apiUrl}/carts`;
   public storageSub = new Subject<string>();
-
-  constructor(private readonly httpClient: HttpClient) {}
 
   private createCartAndStoreId(): Observable<string> {
     const location = this.getGeoLocation();

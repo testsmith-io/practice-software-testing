@@ -1,17 +1,33 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from "@angular/forms";
+import {Component, inject, Input, OnInit} from '@angular/core';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators
+} from "@angular/forms";
 import {CartService} from "../../_services/cart.service";
 import {Observable, of} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {PaymentService} from "../../_services/payment.service";
 import {InvoiceService} from "../../_services/invoice.service";
+import {TranslocoDirective} from "@jsverse/transloco";
 
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
+  imports: [
+    ReactiveFormsModule,
+    TranslocoDirective
+  ],
   styleUrls: []
 })
 export class PaymentComponent implements OnInit {
+  private readonly cartService = inject(CartService);
+  private readonly paymentService = inject(PaymentService);
+  private readonly invoiceService = inject(InvoiceService);
+  private readonly formBuilder = inject(FormBuilder);
 
   selectedPaymentMethod: string = '';
 
@@ -25,12 +41,6 @@ export class PaymentComponent implements OnInit {
   paid: boolean = false;
   total: number;
   invoice_number: number;
-
-  constructor(private cartService: CartService,
-              private paymentService: PaymentService,
-              private invoiceService: InvoiceService,
-              private formBuilder: FormBuilder) {
-  }
 
   ngOnInit(): void {
     this.cusPayment = this.formBuilder.group({

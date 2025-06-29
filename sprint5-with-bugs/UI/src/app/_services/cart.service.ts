@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {Subject} from "rxjs";
 import {ToastService} from "./toast.service";
 
@@ -6,11 +6,8 @@ import {ToastService} from "./toast.service";
   providedIn: 'root'
 })
 export class CartService {
-
+  private toastService = inject(ToastService);
   public storageSub = new Subject<string>();
-
-  constructor(private toastService: ToastService) {
-  }
 
   getItems() {
     return JSON.parse(<string>sessionStorage.getItem('cart'))

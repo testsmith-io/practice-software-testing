@@ -1,255 +1,318 @@
 <aw-wizard [navBarLayout]="'large-filled-symbols'">
   <aw-wizard-step [awCompletedStep]="isLoggedIn" stepTitle="Cart" [navigationSymbol]="{ symbol: '1' }">
-    <div *ngIf="items; else elseBlock">
-      <table class="table table-hover">
-        <thead>
-        <tr>
-          <th class="col-md-3" scope="col">Item</th>
-          <th class="col-md-2" scope="col"></th>
-          <th class="col-md-2" scope="col">Quantity</th>
-          <th class="col-md-2" scope="col">Price</th>
-          <th class="col-md-2" scope="col">Total</th>
-          <th class="col-md-1" scope="col">Total</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let item of items">
-          <td class="col-md-4"><span class="product-title">{{item.name}}</span><br><small *ngIf="item.is_rental">Item for rent, price per hour</small></td>
-          <td class="col-md-2"></td>
-          <td class="col-md-2 align-middle">
-            <input type="number" min="1" max="99" class="form-control quantity" (change)="updateQuantity($event, item)"
-                   value="{{item.quantity}}">
-          </td>
-          <td class="col-md-2 align-middle">${{item.price | number: '1.2-2'}}</td>
-          <td class="col-md-2 align-middle">${{item.total | number: '1.2-2'}}</td>
-          <td class="col-md-1 align-middle"><a class="btn btn-danger" (click)="delete(item.id)"><i
-            class="fa fa-remove"></i></a></td>
-        </tr>
+    @if (items) {
+      <div>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th class="col-md-3" scope="col">Item</th>
+              <th class="col-md-2" scope="col"></th>
+              <th class="col-md-2" scope="col">Quantity</th>
+              <th class="col-md-2" scope="col">Price</th>
+              <th class="col-md-2" scope="col">Total</th>
+              <th class="col-md-1" scope="col">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of items; track item) {
+              <tr>
+                <td class="col-md-4"><span class="product-title">{{item.name}}</span><br>@if (item.is_rental) {
+                <small>Item for rent, price per hour</small>
+              }</td>
+              <td class="col-md-2"></td>
+              <td class="col-md-2 align-middle">
+                <input type="number" min="1" max="99" class="form-control quantity" (change)="updateQuantity($event, item)"
+                  value="{{item.quantity}}">
+              </td>
+              <td class="col-md-2 align-middle">${{item.price | number: '1.2-2'}}</td>
+              <td class="col-md-2 align-middle">${{item.total | number: '1.2-2'}}</td>
+              <td class="col-md-1 align-middle"><a class="btn btn-danger" (click)="delete(item.id)"><i
+              class="fa fa-remove"></i></a></td>
+            </tr>
+          }
         </tbody>
         <tfoot>
-        <tr>
-          <td class="col-md-3"></td>
-          <td class="col-md-2"></td>
-          <td class="col-md-2"></td>
-          <td class="col-md-2"><strong>Total</strong></td>
-          <td class="col-md-2">${{total | number: '1.2-2'}}</td>
-          <td class="col-md-1"></td>
-        </tr>
+          <tr>
+            <td class="col-md-3"></td>
+            <td class="col-md-2"></td>
+            <td class="col-md-2"></td>
+            <td class="col-md-2"><strong>Total</strong></td>
+            <td class="col-md-2">${{total | number: '1.2-2'}}</td>
+            <td class="col-md-1"></td>
+          </tr>
         </tfoot>
       </table>
-      <div *ngIf="items.length" class="float-end">
-        <button data-test="proceed-1" type="button" class="btn btn-success" awNextStep>Proceed to checkout</button>
-      </div>
+      @if (items.length) {
+        <div class="float-end">
+          <button data-test="proceed-1" type="button" class="btn btn-success" awNextStep>Proceed to checkout</button>
+        </div>
+      }
     </div>
-    <ng-template #elseBlock><p>The cart is empty. Nothing to display.</p></ng-template>
-  </aw-wizard-step>
-  <aw-wizard-step stepTitle="Name & Address" [navigationSymbol]="{ symbol: '3' }" [canExit]="cusAddress.valid">
-    <div class="container login-container">
-      <div class="row">
-        <div class="col-md-6 offset-md-3 login-form-1">
-          <form [formGroup]="cusAddress">
-            <h3>Name</h3>
-            <div class="input-group mb-3">
-              <input formControlName="first_name"
-                     data-test="first-name"
-                     class="form-control"
-                     id="first_name"
-                     [ngClass]="{ 'is-invalid': cusAddress && cusAddress.first_name?.errors }" type="text"
-                     placeholder="Your first name *"
-                     value=""/>
-            </div>
-            <div *ngIf="f['first_name'].invalid && (f['first_name'].dirty || f['first_name'].touched)"
-                 class="alert alert-danger">
-              <div *ngIf="f['first_name'].errors?.['required']">
-                First name is required.
-              </div>
-            </div>
-            <div class="input-group mb-3">
-              <input formControlName="last_name"
-                     data-test="last-name"
-                     class="form-control"
-                     id="last_name"
-                     [ngClass]="{ 'is-invalid': cusAddress && cusAddress.last_name?.errors }" type="text"
-                     placeholder="Your last name *"
-                     value=""/>
-            </div>
-            <div *ngIf="f['last_name'].invalid && (f['last_name'].dirty || f['last_name'].touched)"
-                 class="alert alert-danger">
-              <div *ngIf="f['last_name'].errors?.['required']">
-                Last name is required.
-              </div>
-            </div>
-            <div class="input-group mb-3">
-              <input formControlName="email"
-                     data-test="email"
-                     class="form-control"
-                     id="email"
-                     [ngClass]="{ 'is-invalid': cusAddress && cusAddress.email?.errors }"  type="email"
-                     placeholder="Your Email *"
-                     value=""/>
-            </div>
-            <div *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)"
-                 class="alert alert-danger">
-
-              <div *ngIf="f['email'].errors?.['required']">
-                Email is required.
-              </div>
-              <div *ngIf="f['email'].errors?.['pattern']">
-                Email format is invalid.
-              </div>
-            </div>
-            <h3>Billing Address</h3>
-            <div class="input-group mb-3">
-              <input formControlName="address"
-                     data-test="address"
-                     class="form-control"
-                     id="address"
-                     [ngClass]="{ 'is-invalid': cusAddress && cusAddress.address?.errors }" type="text"
-                     placeholder="Your Address *"
-                     value=""/>
-            </div>
-            <div *ngIf="f['address'].invalid && (f['address'].dirty || f['address'].touched)"
-                 class="alert alert-danger">
-              <div *ngIf="f['address'].errors?.['required']">
-                Address is required.
-              </div>
-            </div>
-            <div class="input-group mb-3">
-              <input formControlName="city"
-                     data-test="city"
-                     class="form-control"
-                     id="city"
-                     [ngClass]="{ 'is-invalid': cusAddress && cusAddress.city?.errors }" type="text"
-                     placeholder="Your City *"
-                     value=""/>
-            </div>
-            <div *ngIf="f['city'].invalid && (f['city'].dirty || f['city'].touched)"
-                 class="alert alert-danger">
-              <div *ngIf="f['city'].errors?.['required']">
-                City is required.
-              </div>
-              <div *ngIf="f['city'].errors?.['minlength']">
-                City must be minimal 3 characters long.
-              </div>
-              <div *ngIf="f['city'].errors?.['maxlength']">
-                City can not be more than 40 characters long.
-              </div>
-            </div>
-            <div class="input-group mb-3">
-              <input formControlName="state"
-                     data-test="state"
-                     class="form-control"
-                     id="state"
-                     [ngClass]="{ 'is-invalid': cusAddress && cusAddress.state?.errors }" type="text"
-                     placeholder="Your State *"
-                     value=""/>
-            </div>
-            <div *ngIf="f['state'].invalid && (f['state'].dirty || f['state'].touched)"
-                 class="alert alert-danger">
-              <div *ngIf="f['state'].errors?.['required']">
-                State is required.
-              </div>
-            </div>
-            <div class="input-group mb-3">
-              <input formControlName="country"
-                     data-test="country"
-                     class="form-control"
-                     id="country"
-                     [ngClass]="{ 'is-invalid': cusAddress && cusAddress.country?.errors }" type="text"
-                     placeholder="Your Country *"
-                     value=""/>
-            </div>
-            <div *ngIf="f['country'].invalid && (f['country'].dirty || f['country'].touched)"
-                 class="alert alert-danger">
-              <div *ngIf="f['country'].errors?.['required']">
-                Country is required.
-              </div>
-            </div>
-            <div class="input-group mb-3">
-              <input formControlName="postcode"
-                     data-test="postcode"
-                     class="form-control"
-                     id="postcode"
-                     [ngClass]="{ 'is-invalid': cusAddress && cusAddress.postcode?.errors }" type="text"
-                     placeholder="Your Postcode *"
-                     value=""/>
-            </div>
-            <div *ngIf="f['postcode'].invalid && (f['postcode'].dirty || f['postcode'].touched)"
-                 class="alert alert-danger">
-
-              <div *ngIf="f['postcode'].errors?.['required']">
-                Postalcode is required.
-              </div>
-            </div>
-          </form>
-          <div class="float-end">
-            <button data-test="proceed-3" [disabled]="!cusAddress.valid" type="button" class="btn btn-success" awNextStep>Proceed to checkout
-            </button>
+  } @else {
+    <p>The cart is empty. Nothing to display.</p>
+  }
+</aw-wizard-step>
+<aw-wizard-step stepTitle="Name & Address" [navigationSymbol]="{ symbol: '3' }" [canExit]="cusAddress.valid">
+  <div class="container login-container">
+    <div class="row">
+      <div class="col-md-6 offset-md-3 login-form-1">
+        <form [formGroup]="cusAddress">
+          <h3>Name</h3>
+          <div class="input-group mb-3">
+            <input formControlName="first_name"
+              data-test="first-name"
+              class="form-control"
+              id="first_name"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.first_name?.errors }" type="text"
+              placeholder="Your first name *"
+              value=""/>
           </div>
+          @if (f['first_name'].invalid && (f['first_name'].dirty || f['first_name'].touched)) {
+            <div
+              class="alert alert-danger">
+              @if (f['first_name'].errors?.['required']) {
+                <div>
+                  First name is required.
+                </div>
+              }
+            </div>
+          }
+          <div class="input-group mb-3">
+            <input formControlName="last_name"
+              data-test="last-name"
+              class="form-control"
+              id="last_name"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.last_name?.errors }" type="text"
+              placeholder="Your last name *"
+              value=""/>
+          </div>
+          @if (f['last_name'].invalid && (f['last_name'].dirty || f['last_name'].touched)) {
+            <div
+              class="alert alert-danger">
+              @if (f['last_name'].errors?.['required']) {
+                <div>
+                  Last name is required.
+                </div>
+              }
+            </div>
+          }
+          <div class="input-group mb-3">
+            <input formControlName="email"
+              data-test="email"
+              class="form-control"
+              id="email"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.email?.errors }"  type="email"
+              placeholder="Your Email *"
+              value=""/>
+          </div>
+          @if (f['email'].invalid && (f['email'].dirty || f['email'].touched)) {
+            <div
+              class="alert alert-danger">
+              @if (f['email'].errors?.['required']) {
+                <div>
+                  Email is required.
+                </div>
+              }
+              @if (f['email'].errors?.['pattern']) {
+                <div>
+                  Email format is invalid.
+                </div>
+              }
+            </div>
+          }
+          <h3>Billing Address</h3>
+          <div class="input-group mb-3">
+            <input formControlName="address"
+              data-test="address"
+              class="form-control"
+              id="address"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.address?.errors }" type="text"
+              placeholder="Your Address *"
+              value=""/>
+          </div>
+          @if (f['address'].invalid && (f['address'].dirty || f['address'].touched)) {
+            <div
+              class="alert alert-danger">
+              @if (f['address'].errors?.['required']) {
+                <div>
+                  Address is required.
+                </div>
+              }
+            </div>
+          }
+          <div class="input-group mb-3">
+            <input formControlName="city"
+              data-test="city"
+              class="form-control"
+              id="city"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.city?.errors }" type="text"
+              placeholder="Your City *"
+              value=""/>
+          </div>
+          @if (f['city'].invalid && (f['city'].dirty || f['city'].touched)) {
+            <div
+              class="alert alert-danger">
+              @if (f['city'].errors?.['required']) {
+                <div>
+                  City is required.
+                </div>
+              }
+              @if (f['city'].errors?.['minlength']) {
+                <div>
+                  City must be minimal 3 characters long.
+                </div>
+              }
+              @if (f['city'].errors?.['maxlength']) {
+                <div>
+                  City can not be more than 40 characters long.
+                </div>
+              }
+            </div>
+          }
+          <div class="input-group mb-3">
+            <input formControlName="state"
+              data-test="state"
+              class="form-control"
+              id="state"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.state?.errors }" type="text"
+              placeholder="Your State *"
+              value=""/>
+          </div>
+          @if (f['state'].invalid && (f['state'].dirty || f['state'].touched)) {
+            <div
+              class="alert alert-danger">
+              @if (f['state'].errors?.['required']) {
+                <div>
+                  State is required.
+                </div>
+              }
+            </div>
+          }
+          <div class="input-group mb-3">
+            <input formControlName="country"
+              data-test="country"
+              class="form-control"
+              id="country"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.country?.errors }" type="text"
+              placeholder="Your Country *"
+              value=""/>
+          </div>
+          @if (f['country'].invalid && (f['country'].dirty || f['country'].touched)) {
+            <div
+              class="alert alert-danger">
+              @if (f['country'].errors?.['required']) {
+                <div>
+                  Country is required.
+                </div>
+              }
+            </div>
+          }
+          <div class="input-group mb-3">
+            <input formControlName="postcode"
+              data-test="postcode"
+              class="form-control"
+              id="postcode"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.postcode?.errors }" type="text"
+              placeholder="Your Postcode *"
+              value=""/>
+          </div>
+          @if (f['postcode'].invalid && (f['postcode'].dirty || f['postcode'].touched)) {
+            <div
+              class="alert alert-danger">
+              @if (f['postcode'].errors?.['required']) {
+                <div>
+                  Postalcode is required.
+                </div>
+              }
+            </div>
+          }
+        </form>
+        <div class="float-end">
+          <button data-test="proceed-3" [disabled]="!cusAddress.valid" type="button" class="btn btn-success" awNextStep>Proceed to checkout
+          </button>
         </div>
       </div>
     </div>
-  </aw-wizard-step>
-  <aw-wizard-completion-step stepTitle="Payment" [navigationSymbol]="{ symbol: '4' }" [canExit]="cusPayment.valid">
-    <div class="container">
-      <div class="row">
-        <div id="order-confirmation" *ngIf="paid" class="col-md-6 offset-md-3 login-form-1">
+  </div>
+</aw-wizard-step>
+<aw-wizard-completion-step stepTitle="Payment" [navigationSymbol]="{ symbol: '4' }" [canExit]="cusPayment.valid">
+  <div class="container">
+    <div class="row">
+      @if (paid) {
+        <div id="order-confirmation" class="col-md-6 offset-md-3 login-form-1">
           Thanks for your order! Your invoice number is <span id="invoice-number">{{invoice_number}}</span>.
         </div>
-        <div *ngIf="!paid" class="col-md-6 offset-md-3 login-form-1">
+      }
+      @if (!paid) {
+        <div class="col-md-6 offset-md-3 login-form-1">
           <h3>Payment</h3>
           <form [formGroup]="cusPayment">
             <div class="input-group mb-3">
               <select data-test="payment-method" id="payment-method" class="form-select" formControlName="payment_method">
                 <option value="" disabled>Choose your payment method</option>
-                <option *ngFor="let method of PaymentMethods" [ngValue]="method">{{method}}</option>
+                @for (method of PaymentMethods; track method) {
+                  <option [ngValue]="method">{{method}}</option>
+                }
               </select>
             </div>
-            <div *ngIf="p['payment_method'].invalid && (p['payment_method'].dirty || p['payment_method'].touched)"
-                 class="alert alert-danger">
-
-              <div *ngIf="p['payment_method'].errors?.['required']">
-                Payment method is required.
+            @if (p['payment_method'].invalid && (p['payment_method'].dirty || p['payment_method'].touched)) {
+              <div
+                class="alert alert-danger">
+                @if (p['payment_method'].errors?.['required']) {
+                  <div>
+                    Payment method is required.
+                  </div>
+                }
               </div>
-            </div>
+            }
             <div class="input-group mb-3">
               <input formControlName="account_name"
-                     data-test="account-name"
-                     class="form-control"
-                     id="account-name"
-                     [ngClass]="{ 'is-invalid': cusPayment && cusPayment['account_name']?.errors }" type="text"
-                     placeholder="Your Account name *"
-                     value=""/>
+                data-test="account-name"
+                class="form-control"
+                id="account-name"
+                [ngClass]="{ 'is-invalid': cusPayment && cusPayment['account_name']?.errors }" type="text"
+                placeholder="Your Account name *"
+                value=""/>
             </div>
-            <div *ngIf="p['account_name'].invalid && (p['account_name'].dirty || p['account_name'].touched)"
-                 class="alert alert-danger">
-
-              <div *ngIf="p['account_name'].errors?.['required']">
-                Account name is required.
+            @if (p['account_name'].invalid && (p['account_name'].dirty || p['account_name'].touched)) {
+              <div
+                class="alert alert-danger">
+                @if (p['account_name'].errors?.['required']) {
+                  <div>
+                    Account name is required.
+                  </div>
+                }
               </div>
-            </div>
+            }
             <div class="input-group mb-3">
               <input formControlName="account_number"
-                     data-test="account-number"
-                     class="form-control"
-                     id="account-number"
-                     [ngClass]="{ 'is-invalid': cusPayment && cusPayment['account_number']?.errors }" type="text"
-                     placeholder="Your Account number *"
-                     value=""/>
+                data-test="account-number"
+                class="form-control"
+                id="account-number"
+                [ngClass]="{ 'is-invalid': cusPayment && cusPayment['account_number']?.errors }" type="text"
+                placeholder="Your Account number *"
+                value=""/>
             </div>
-            <div *ngIf="p['account_number'].invalid && (p['account_number'].dirty || p['account_number'].touched)"
-                 class="alert alert-danger">
-
-              <div *ngIf="p['account_number'].errors?.['required']">
-                Account number is required.
+            @if (p['account_number'].invalid && (p['account_number'].dirty || p['account_number'].touched)) {
+              <div
+                class="alert alert-danger">
+                @if (p['account_number'].errors?.['required']) {
+                  <div>
+                    Account number is required.
+                  </div>
+                }
               </div>
-            </div>
-            <div *ngIf="paymentError" class="alert alert-danger">
-              <div class="help-block">{{paymentError}}</div>
-            </div>
-            <div *ngIf="paymentMessage" class="alert alert-success">
-              <div class="help-block">{{paymentMessage}}</div>
-            </div>
+            }
+            @if (paymentError) {
+              <div class="alert alert-danger">
+                <div class="help-block">{{paymentError}}</div>
+              </div>
+            }
+            @if (paymentMessage) {
+              <div class="alert alert-success">
+                <div class="help-block">{{paymentMessage}}</div>
+              </div>
+            }
           </form>
           <div class="float-end">
             <button data-test="finish" [disabled]="!cusPayment.valid" type="button" class="btn btn-success" (click)="finishFunction()">
@@ -257,7 +320,8 @@
             </button>
           </div>
         </div>
-      </div>
+      }
     </div>
-  </aw-wizard-completion-step>
+  </div>
+</aw-wizard-completion-step>
 </aw-wizard>

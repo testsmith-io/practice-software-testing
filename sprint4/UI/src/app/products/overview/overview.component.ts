@@ -1,5 +1,5 @@
-import {Component, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, ElementRef, inject, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Brand} from "../../models/brand";
 import {BrandService} from "../../_services/brand.service";
 import {CategoryService} from "../../_services/category.service";
@@ -7,13 +7,28 @@ import {Product} from "../../models/product";
 import {Pagination} from "../../models/pagination";
 import {ProductService} from "../../_services/product.service";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
+import {NgClass, NgTemplateOutlet} from "@angular/common";
+import {NgxPaginationModule} from "ngx-pagination";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
+  imports: [
+    ReactiveFormsModule,
+    NgTemplateOutlet,
+    NgxPaginationModule,
+    RouterLink,
+    NgClass
+],
   styleUrls: ['./overview.component.css']
 })
 export class OverviewComponent implements OnInit {
+  private readonly productService = inject(ProductService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly brandService = inject(BrandService);
+  private readonly categoryService = inject(CategoryService);
+  public readonly browserDetect = inject(BrowserDetectorService);
 
   @ViewChildren("checkboxes") checkboxes: QueryList<ElementRef>;
 
@@ -26,13 +41,6 @@ export class OverviewComponent implements OnInit {
   private brandsFilter: Array<number> = [];
   private categoriesFilter: Array<number> = [];
   private sorting: string = '';
-
-  constructor(private productService: ProductService,
-              private formBuilder: FormBuilder,
-              private brandService: BrandService,
-              private categoryService: CategoryService,
-              public browserDetect: BrowserDetectorService) {
-  }
 
   ngOnInit(): void {
     this.getProducts();

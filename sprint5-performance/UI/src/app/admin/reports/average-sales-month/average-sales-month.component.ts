@@ -1,14 +1,21 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {ReportService} from "../../../_services/report.service";
 import {ChartConfiguration, ChartType} from "chart.js";
 import DataLabelsPlugin from "chartjs-plugin-datalabels";
+import {RenderDelayDirective} from "../../../render-delay-directive.directive";
+import {BaseChartDirective} from "ng2-charts";
 
 @Component({
   selector: 'app-average-sales-month',
   templateUrl: './average-sales-month.component.html',
+  imports: [
+    RenderDelayDirective,
+    BaseChartDirective
+  ],
   styleUrls: []
 })
 export class AverageSalesMonthComponent implements OnInit {
+  private reportService = inject(ReportService);
 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -70,9 +77,6 @@ export class AverageSalesMonthComponent implements OnInit {
       }]
     }
   };
-
-  constructor(private reportService: ReportService) {
-  }
 
   ngOnInit(): void {
     this.getData('2025')

@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Component, inject, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {ActivatedRoute, RouterLink} from "@angular/router";
 import {first} from "rxjs/operators";
 import {Product} from "../../models/product";
 import {ProductService} from "../../_services/product.service";
@@ -10,13 +10,25 @@ import {BrandService} from "../../_services/brand.service";
 import {CategoryService} from "../../_services/category.service";
 import {Image} from "../../models/image";
 import {ImageService} from "../../_services/image.service";
+import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-products-add-edit',
   templateUrl: './products-add-edit.component.html',
+  imports: [
+    ReactiveFormsModule,
+    NgClass,
+    RouterLink
+  ],
   styleUrls: ['./products-add-edit.component.css']
 })
 export class ProductsAddEditComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
+  private readonly productService = inject(ProductService);
+  private readonly brandService = inject(BrandService);
+  private readonly categoryService = inject(CategoryService);
+  private readonly imageService = inject(ImageService);
 
   form: FormGroup;
   products!: Product[];
@@ -31,17 +43,6 @@ export class ProductsAddEditComponent implements OnInit {
   isUpdated: boolean = false;
   hideAlert: boolean = false;
   error: string;
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private productService: ProductService,
-    private brandService: BrandService,
-    private categoryService: CategoryService,
-    private imageService: ImageService
-  ) {
-  }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];

@@ -1,13 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { of, throwError, Subject } from 'rxjs';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
+import {of, Subject, throwError} from 'rxjs';
 
-import { LoginComponent } from './login.component';
-import { CustomerAccountService } from '../../shared/customer-account.service';
-import { TokenStorageService } from '../../_services/token-storage.service';
-import { TotpAuthService } from '../../_services/totp-auth.service';
-import { BrowserService } from '../../_services/browser.service';
+import {LoginComponent} from './login.component';
+import {CustomerAccountService} from '../../shared/customer-account.service';
+import {TokenStorageService} from '../../_services/token-storage.service';
+import {TotpAuthService} from '../../_services/totp-auth.service';
+import {BrowserService} from '../../_services/browser.service';
+import {TranslocoTestingModule} from "@jsverse/transloco";
+import en from "../../../assets/i18n/en.json";
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -46,8 +48,13 @@ describe('LoginComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [LoginComponent],
-      imports: [ReactiveFormsModule],
+      imports: [ReactiveFormsModule, LoginComponent, TranslocoTestingModule.forRoot({
+        langs: {en},
+        translocoConfig: {
+          availableLangs: ['en'],
+          defaultLang: 'en',
+        },
+      })],
       providers: [
         FormBuilder,
         { provide: CustomerAccountService, useValue: mockCustomerAccountService },

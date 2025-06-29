@@ -1,6 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CheckoutComponent } from './checkout.component';
+import {CheckoutComponent} from './checkout.component';
+import {TranslocoTestingModule} from "@jsverse/transloco";
+import en from "../../assets/i18n/en.json";
 
 describe('CheckoutComponent', () => {
   let component: CheckoutComponent;
@@ -8,10 +10,16 @@ describe('CheckoutComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CheckoutComponent]
+      imports: [CheckoutComponent,TranslocoTestingModule.forRoot({
+        langs: {en},
+        translocoConfig: {
+          availableLangs: ['en'],
+          defaultLang: 'en',
+        },
+      })]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(CheckoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -1,17 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { environment } from '../../environments/environment';
-import { Category } from '../models/category';
+import {inject, Injectable} from '@angular/core';
+import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
+import {Observable, throwError} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+import {environment} from '../../environments/environment';
+import {Category} from '../models/category';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
+  private readonly httpClient = inject(HttpClient);
   private readonly apiURL = `${environment.apiUrl}/categories`;
-
-  constructor(private readonly httpClient: HttpClient) {}
 
   searchCategories(query: string): Observable<any> {
     const params = new HttpParams().set('q', query);

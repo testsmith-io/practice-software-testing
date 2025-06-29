@@ -1,28 +1,28 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {ToastService} from "../../_services/toast.service";
+import {Component, inject, OnInit} from '@angular/core';
+import {ActivatedRoute, RouterLink} from "@angular/router";
 import {Product} from "../../models/product";
 import {ProductService} from "../../_services/product.service";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
 
+
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
+  imports: [
+    RouterLink
+],
   styleUrls: ['./detail.component.css']
 })
 export class DetailComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly productService = inject(ProductService);
+  public readonly browserDetect = inject(BrowserDetectorService);
+
   product: Product;
   quantity: number = 1;
   relatedProducts: Product[];
   private sub: any;
   private id: number;
-
-  constructor(private route: ActivatedRoute,
-              private toastService: ToastService,
-              private productService: ProductService,
-              public browserDetect: BrowserDetectorService) {
-
-  }
 
   ngOnInit(): void {
     this.sub = this.route.params.subscribe(params => {

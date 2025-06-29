@@ -1,27 +1,34 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {CartService} from "../../_services/cart.service";
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import {ToastrService} from "ngx-toastr";
+import {TranslocoDirective} from "@jsverse/transloco";
+import {DecimalPipe, NgClass} from "@angular/common";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {ArchwizardModule} from "@y3krulez/angular-archwizard";
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
+  imports: [
+    TranslocoDirective,
+    NgClass,
+    DecimalPipe,
+    FaIconComponent,
+    ArchwizardModule
+  ],
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
+  private readonly cartService = inject(CartService);
+  private readonly toastr = inject(ToastrService);
+  private readonly customerAccountService = inject(CustomerAccountService);
 
   cart: any;
   isLoggedIn: boolean = false;
   discount: number = 0;
   total: number = 0;
   subtotal: number = 0;
-
-  constructor(
-    private cartService: CartService,
-    private toastr: ToastrService,
-    private customerAccountService: CustomerAccountService
-  ) {
-  }
 
   ngOnInit(): void {
     this.fetchCartItems();

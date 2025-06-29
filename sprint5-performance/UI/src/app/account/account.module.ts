@@ -16,7 +16,7 @@ import {SharedModule} from "../shared/shared.module";
 import {TranslocoDirective} from "@jsverse/transloco";
 import {FaIconComponent, FaIconLibrary, FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {faAddressCard, faCommentDots, faList, faRemove, faStar} from "@fortawesome/free-solid-svg-icons";
-import { QRCodeComponent } from 'angularx-qrcode';
+import {QRCodeComponent} from 'angularx-qrcode';
 import {RenderDelayDirective} from "../render-delay-directive.directive";
 
 const routes: Routes = [
@@ -30,17 +30,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    declarations: [
-        OverviewComponent,
-        FavoritesComponent,
-        InvoicesComponent,
-        ProfileComponent,
-        InvoiceDetails,
-        TruncatePipe,
-        MessagesComponent,
-        MessageDetailComponent,
-        RenderDelayDirective
-    ],
   imports: [
     ReactiveFormsModule,
     CommonModule,
@@ -50,7 +39,16 @@ const routes: Routes = [
     TranslocoDirective,
     FaIconComponent,
     FontAwesomeModule,
-    QRCodeComponent
+    QRCodeComponent,
+    OverviewComponent,
+    FavoritesComponent,
+    InvoicesComponent,
+    ProfileComponent,
+    InvoiceDetails,
+    TruncatePipe,
+    MessagesComponent,
+    MessageDetailComponent,
+    RenderDelayDirective
   ],
   exports: [RouterModule, RenderDelayDirective]
 })

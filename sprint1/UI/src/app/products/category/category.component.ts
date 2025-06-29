@@ -1,24 +1,27 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder} from "@angular/forms";
-import {ActivatedRoute} from "@angular/router";
+import {Component, inject, OnInit} from '@angular/core';
+import {ActivatedRoute, RouterLink} from "@angular/router";
 import {Product} from "../../models/product";
 import {ProductService} from "../../_services/product.service";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
+import {NgClass, TitleCasePipe} from "@angular/common";
 
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
+  imports: [
+    TitleCasePipe,
+    RouterLink,
+    NgClass
+],
   styleUrls: ['./category.component.css']
 })
 export class CategoryComponent implements OnInit {
+  private readonly productService = inject(ProductService);
+  private readonly route = inject(ActivatedRoute);
+  public readonly browserDetect = inject(BrowserDetectorService);
+
   results: Product[];
   slug: string;
-
-  constructor(private productService: ProductService,
-              private formBuilder: FormBuilder,
-              private route: ActivatedRoute,
-              public browserDetect: BrowserDetectorService) {
-  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {

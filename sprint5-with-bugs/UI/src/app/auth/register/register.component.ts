@@ -1,26 +1,33 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, inject, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import countriesList from '../../../assets/countries.json';
 import {User} from "../../models/user.model";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
+import {NgClass, NgStyle} from "@angular/common";
+import {PasswordInputComponent} from "../../shared/password-input/password-input.component";
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
+  imports: [
+    ReactiveFormsModule,
+    NgClass,
+    NgStyle,
+    PasswordInputComponent
+  ],
   styleUrls: []
 })
 export class RegisterComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly accountService = inject(CustomerAccountService);
+  public readonly browserDetect = inject(BrowserDetectorService);
+
   register: FormGroup | any;
   submitted: boolean;
 
   countries = countriesList;
   error: string;
-
-  constructor(private formBuilder: FormBuilder,
-              private accountService: CustomerAccountService,
-              public browserDetect: BrowserDetectorService) {
-  }
 
   ngOnInit(): void {
     this.register = this.formBuilder.group(

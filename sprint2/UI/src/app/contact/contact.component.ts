@@ -1,24 +1,27 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ContactMessage} from "../models/contact-message";
+import {Component, inject, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {BrowserDetectorService} from "../_services/browser-detector.service";
+import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
+  imports: [
+    ReactiveFormsModule,
+    NgClass
+],
   styleUrls: []
 })
 export class ContactComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  public readonly browserDetect = inject(BrowserDetectorService);
+
   contact: FormGroup | any;
   submitted: boolean;
   error: string;
   showConfirmation: boolean = false;
   role: string = '';
   name: string = '';
-
-  constructor(private formBuilder: FormBuilder,
-              public browserDetect: BrowserDetectorService) {
-  }
 
   ngOnInit(): void {
     this.contact = this.formBuilder.group(

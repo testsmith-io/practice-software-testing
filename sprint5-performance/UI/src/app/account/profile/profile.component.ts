@@ -1,18 +1,35 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import {first} from "rxjs/operators";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {PasswordValidators} from "../../_helpers/password.validators";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
-import { Profile } from 'src/app/models/profile';
+import {Profile} from 'src/app/models/profile';
+import {RenderDelayDirective} from "../../render-delay-directive.directive";
+import {PasswordInputComponent} from "../../shared/password-input/password-input.component";
+import {NgClass} from "@angular/common";
+import {QRCodeComponent} from "angularx-qrcode";
+import {TranslocoDirective} from "@jsverse/transloco";
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
+  imports: [
+    RenderDelayDirective,
+    ReactiveFormsModule,
+    PasswordInputComponent,
+    NgClass,
+    QRCodeComponent,
+    TranslocoDirective
+  ],
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  private readonly customerAccountService = inject(CustomerAccountService);
+  private readonly auth = inject(CustomerAccountService);
+  private readonly http = inject(HttpClient);
+
   profile!: Profile;
   profileForm!: FormGroup;
   passwordForm!: FormGroup;
@@ -32,11 +49,6 @@ export class ProfileComponent implements OnInit {
   totpCode: string = '';
   errorMessage: string = '';
   successMessage: string = '';
-  constructor(private customerAccountService: CustomerAccountService,
-              private auth: CustomerAccountService,
-              private http: HttpClient) {
-  }
-
   ngOnInit(): void {
     this.customerAccountService.getDetails()
       .pipe(first())

@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 import {OverviewComponent as ProductOverviewComponent} from './overview/overview.component';
 import {DetailComponent as ProductDetailComponent} from './detail/detail.component';
 import {OverviewComponent as RentalOverviewComponent} from './rentals/overview/overview.component';

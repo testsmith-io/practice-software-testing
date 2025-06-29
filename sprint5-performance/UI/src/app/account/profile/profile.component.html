@@ -10,7 +10,7 @@
             <label for="first_name" class="col-sm-3 col-form-label">{{ t('fields.first-name.label') }}</label>
             <div class="col-sm-9">
               <input type="text" class="form-control" formControlName="first_name" data-test="first-name"
-                     id="first_name">
+                id="first_name">
             </div>
           </div>
           <div class="row mb-3">
@@ -43,7 +43,7 @@
             <label for="postal_code" class="col-sm-3 col-form-label">{{ t('fields.postal_code.label') }}</label>
             <div class="col-sm-9">
               <input type="text" class="form-control" data-test="postal_code" id="postal_code"
-                     formControlName="postal_code">
+                formControlName="postal_code">
             </div>
           </div>
           <div class="row mb-3">
@@ -69,16 +69,16 @@
       <div class="row">
         <div class="col-12">
           <button type="submit" class="btn btn-primary"
-                  data-test="update-profile-submit">{{ t('pages.my-account.profile.update-profile-btn') }}
+            data-test="update-profile-submit">{{ t('pages.my-account.profile.update-profile-btn') }}
           </button>
           @if (isProfileUpdated && !hideProfileAlert) {
             <div [ngClass]="fadeOutMessage()" class="alert alert-success mt-3"
-                 role="alert" [innerHTML]="t('pages.my-account.profile.update-profile-success')">
+              role="alert" [innerHTML]="t('pages.my-account.profile.update-profile-success')">
             </div>
           }
           @if (profileError && !hideProfileAlert) {
             <div [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
-                 role="alert" style="white-space:pre-wrap">{{ profileError }}
+              role="alert" style="white-space:pre-wrap">{{ profileError }}
             </div>
           }
         </div>
@@ -92,16 +92,16 @@
         <div class="col-lg-6">
           <div class="row mb-3">
             <label for="current-password"
-                   class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.current-password') }}</label>
+            class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.current-password') }}</label>
             <div class="col-sm-9">
               <input type="password" class="form-control" formControlName="current_password"
-                     data-test="current-password"
-                     id="current-password">
+                data-test="current-password"
+                id="current-password">
             </div>
           </div>
           <div class="row mb-3">
             <label for="new-password"
-                   class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.new-password') }}</label>
+            class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.new-password') }}</label>
             <div class="col-sm-9">
               <app-password-input
                 formControlName="new_password"
@@ -156,7 +156,7 @@
           </div>
           <div class="row mb-3">
             <label for="new-password-confirm"
-                   class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.confirm-new-password') }}</label>
+            class="col-sm-3 col-form-label">{{ t('pages.my-account.profile.confirm-new-password') }}</label>
             <div class="col-sm-9">
               <app-password-input
                 formControlName="new_password_confirmation"
@@ -167,9 +167,11 @@
                 [ariaDescribedBy]="(p['new_password_confirmation'].invalid && isPasswordUpdated) ? 'password-error' : null"
                 [ariaInvalid]="p['new_password_confirmation'].invalid && isPasswordUpdated ? 'true' : 'false'"
               ></app-password-input>
-              <div *ngIf="passwordForm.hasError('passwordsMismatch')" class="text-danger">
-                Passwords do not match.
-              </div>
+              @if (passwordForm.hasError('passwordsMismatch')) {
+                <div class="text-danger">
+                  Passwords do not match.
+                </div>
+              }
             </div>
           </div>
         </div>
@@ -177,17 +179,17 @@
       <div class="row">
         <div class="col-12">
           <button type="submit" class="btn btn-primary"
-                  data-test="change-password-submit">{{ t('pages.my-account.profile.change-password-btn') }}
+            data-test="change-password-submit">{{ t('pages.my-account.profile.change-password-btn') }}
           </button>
           @if (isPasswordUpdated && !hidePasswordAlert) {
             <div [ngClass]="fadeOutMessage()"
-                 class="alert alert-success mt-3" role="alert"
-                 [innerHTML]="t('pages.my-account.profile.change-password-success')">
+              class="alert alert-success mt-3" role="alert"
+              [innerHTML]="t('pages.my-account.profile.change-password-success')">
             </div>
           }
           @if (passwordError && !hidePasswordAlert) {
             <div [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
-                 role="alert">
+              role="alert">
               {{ passwordError }}
             </div>
           }
@@ -211,9 +213,9 @@
               <div class="row mb-3">
                 <div class="col-sm-9">
                   <input type="text" class="form-control" data-test="totp-code"
-                         placeholder="{{t('pages.my-account.profile.enter_totp_code')}}" formControlName="totpCode"/>
+                    placeholder="{{t('pages.my-account.profile.enter_totp_code')}}" formControlName="totpCode"/>
                   <button type="submit" class="btn btn-primary"
-                          data-test="verify-totp">{{ t('pages.my-account.profile.verify_totp') }}
+                    data-test="verify-totp">{{ t('pages.my-account.profile.verify_totp') }}
                   </button>
                 </div>
               </div>
@@ -224,8 +226,12 @@
       } @else if (profile.totp_enabled) {
         <p>{{ t('pages.my-account.profile.two_factor_authentication_enabled') }}</p>
       }
-      <p *ngIf="errorMessage" data-test="totp-error" style="color: red;">{{ errorMessage }}</p>
-      <p *ngIf="successMessage" data-test="totp-success" style="color: green;">{{ successMessage }}</p>
+      @if (errorMessage) {
+        <p data-test="totp-error" style="color: red;">{{ errorMessage }}</p>
+      }
+      @if (successMessage) {
+        <p data-test="totp-success" style="color: green;">{{ successMessage }}</p>
+      }
     </div>
   </div>
 </div>

@@ -5,11 +5,7 @@ import {Subject} from "rxjs";
   providedIn: 'root'
 })
 export class CartService {
-
   public storageSub = new Subject<string>();
-
-  constructor() {
-  }
 
   getItems() {
     return JSON.parse(<string>sessionStorage.getItem('cart'))

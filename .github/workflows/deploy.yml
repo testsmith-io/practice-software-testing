@@ -17,7 +17,7 @@ jobs:
       matrix:
         sprint: [1, 2, 3, 4, 5, '5-with-bugs']
     env:
-      NODE_VERSION: ${{ matrix.sprint == '5' && '22.17.0' || '16' }}
+      NODE_VERSION: '22.17.0'
       SECRET_GOOGLE_ID: ${{ matrix.sprint == '5' && secrets.SECRET_GOOGLE_ID || '' }}
       SECRET_GOOGLE_SECRET: ${{ matrix.sprint == '5' && secrets.SECRET_GOOGLE_SECRET || '' }}
       SECRET_GITHUB_ID: ${{ matrix.sprint == '5' && secrets.SECRET_GITHUB_ID || '' }}
@@ -49,7 +49,6 @@ jobs:
           cd sprint${{ matrix.sprint }}/UI
           npm install --legacy-peer-deps
           npm run test -- --watch=false --browsers=ChromeHeadless
-        if: ${{ matrix.sprint == '5' }}
       - name: Install Dependencies
         run: |
           cd sprint${{ matrix.sprint }}/API

@@ -1,12 +1,24 @@
-import {enableProdMode} from '@angular/core';
-import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import {enableProdMode, importProvidersFrom} from '@angular/core';
+import {bootstrapApplication} from '@angular/platform-browser';
+import {AppComponent} from './app/app.component';
+import {AppRoutingModule} from './app/app-routing.module';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ContentTypeInterceptor} from './app/_helpers/contenttype.interceptor';
 
-import {AppModule} from './app/app.module';
 import {environment} from './environments/environment';
 
 if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));
+bootstrapApplication(AppComponent, {
+  providers: [
+    importProvidersFrom(
+      AppRoutingModule,
+      HttpClientModule,
+      BrowserAnimationsModule,
+    ),
+    { provide: HTTP_INTERCEPTORS, useClass: ContentTypeInterceptor, multi: true },
+  ]
+});

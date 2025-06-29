@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {map, Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
@@ -8,10 +8,8 @@ import {Image} from "../models/image";
   providedIn: 'root'
 })
 export class ReportService {
+  private httpClient = inject(HttpClient);
   private apiURL = environment.apiUrl;
-
-  constructor(private httpClient: HttpClient) {
-  }
 
   getTotalSalesPerYear(): Observable<any[]> {
     return this.httpClient.get<Image[]>(this.apiURL + `/reports/total-sales-of-years?years=5`)

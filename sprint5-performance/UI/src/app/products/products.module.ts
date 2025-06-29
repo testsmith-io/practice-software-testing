@@ -16,17 +16,13 @@ import {
   faFilter,
   faMinus,
   faPlus,
-  faSearch, faShoppingCart, faStar
+  faSearch,
+  faShoppingCart,
+  faStar
 } from "@fortawesome/free-solid-svg-icons";
 
 
 @NgModule({
-  declarations: [
-    ProductDetailComponent,
-    CategoryComponent,
-    OverviewComponent,
-    ProductOverviewComponent,
-  ],
   imports: [
     CommonModule,
     ProductsRoutingModule,
@@ -36,7 +32,11 @@ import {
     NgxSliderModule,
     TranslocoDirective,
     FaIconComponent,
-    FontAwesomeModule
+    FontAwesomeModule,
+    ProductDetailComponent,
+    CategoryComponent,
+    OverviewComponent,
+    ProductOverviewComponent,
   ]
 })
 export class ProductsModule {

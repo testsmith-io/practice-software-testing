@@ -8,9 +8,6 @@ export class CartService {
 
   public storageSub = new Subject<string>();
 
-  constructor() {
-  }
-
   getItems() {
     return JSON.parse(<string>sessionStorage.getItem('cart'))
   }

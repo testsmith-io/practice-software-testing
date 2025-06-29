@@ -1,22 +1,28 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, inject, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CustomerAccountService} from "../../shared/customer-account.service";
+import {TranslocoDirective} from "@jsverse/transloco";
+import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.component.html',
+  imports: [
+    ReactiveFormsModule,
+    TranslocoDirective,
+    NgClass
+  ],
   styleUrls: []
 })
 export class ForgotPasswordComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private accountService = inject(CustomerAccountService);
+
   form: FormGroup | any;
   isUpdated: boolean = false;
   hideAlert: boolean = false;
   submitted = false;
   error: string | undefined;
-
-  constructor(private formBuilder: FormBuilder,
-              private accountService: CustomerAccountService) {
-  }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group(
