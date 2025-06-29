@@ -16,7 +16,6 @@ import {MessageDetailComponent} from './message-detail/message-detail.component'
 import {UsersAddEditComponent} from './users-add-edit/users-add-edit.component';
 import {ProductsAddEditComponent} from './products-add-edit/products-add-edit.component';
 import {OrdersAddEditComponent} from './orders-add-edit/orders-add-edit.component';
-import {ChartModule} from "angular2-chartjs";
 import {SettingsComponent} from './settings/settings.component';
 import {NgxPaginationModule} from "ngx-pagination";
 import {AverageSalesMonthComponent} from './reports/average-sales-month/average-sales-month.component';
@@ -49,7 +48,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    RouterModule.forChild(routes),
+    NgxPaginationModule,
+    ReactiveFormsModule,
     DashboardComponent,
     BrandsListComponent,
     BrandsAddEditComponent,
@@ -67,15 +71,7 @@ const routes: Routes = [
     MessagesListComponent,
     MessageDetailComponent,
     StatisticsComponent
-  ],
-    imports: [
-        ReactiveFormsModule,
-        CommonModule,
-        ChartModule,
-        RouterModule.forChild(routes),
-        NgxPaginationModule,
-        ReactiveFormsModule
-    ]
+  ]
 })
 export class AdminModule {
 }

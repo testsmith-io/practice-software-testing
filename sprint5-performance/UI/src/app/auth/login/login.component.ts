@@ -1,19 +1,36 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-import { CustomerAccountService } from '../../shared/customer-account.service';
-import { TokenStorageService } from '../../_services/token-storage.service';
-import { ActivatedRoute } from '@angular/router';
-import { TotpAuthService } from '../../_services/totp-auth.service';
-import { BrowserService } from '../../_services/browser.service';
-import { environment } from '../../../environments/environment';
+import {Component, inject, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {CustomerAccountService} from '../../shared/customer-account.service';
+import {TokenStorageService} from '../../_services/token-storage.service';
+import {ActivatedRoute, RouterLink} from '@angular/router';
+import {TotpAuthService} from '../../_services/totp-auth.service';
+import {BrowserService} from '../../_services/browser.service';
+import {environment} from '../../../environments/environment';
+import {TranslocoDirective} from "@jsverse/transloco";
+import {NgClass} from "@angular/common";
+import {PasswordInputComponent} from "../../shared/password-input/password-input.component";
 
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
+  imports: [
+    ReactiveFormsModule,
+    TranslocoDirective,
+    NgClass,
+    PasswordInputComponent,
+    RouterLink
+  ],
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly accountService = inject(CustomerAccountService);
+  private readonly tokenStorage = inject(TokenStorageService);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly totpAuthService = inject(TotpAuthService);
+  private readonly browser = inject(BrowserService);
+
   form: FormGroup;
   submitted = false;
   error?: string;
@@ -22,15 +39,6 @@ export class LoginComponent implements OnInit {
   showTotpInput = false;
   accessToken = '';
   protected readonly environment = environment;
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private accountService: CustomerAccountService,
-    private tokenStorage: TokenStorageService,
-    private activatedRoute: ActivatedRoute,
-    private totpAuthService: TotpAuthService,
-    private browser: BrowserService
-  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {

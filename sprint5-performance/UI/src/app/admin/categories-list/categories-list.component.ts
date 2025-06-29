@@ -1,23 +1,29 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {first} from "rxjs/operators";
 import {CategoryService} from "../../_services/category.service";
 import {Category} from "../../models/category";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
+import {RenderDelayDirective} from "../../render-delay-directive.directive";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-list',
   templateUrl: './categories-list.component.html',
+  imports: [
+    ReactiveFormsModule,
+    RenderDelayDirective,
+    RouterLink
+  ],
   styleUrls: []
 })
 export class CategoriesListComponent implements OnInit {
+  private readonly categoryService = inject(CategoryService);
+  private readonly toastr = inject(ToastrService);
+  private readonly formBuilder = inject(FormBuilder);
+
   categories!: Category[];
   searchForm: FormGroup | any;
-
-  constructor(private categoryService: CategoryService,
-              private toastr: ToastrService,
-              private formBuilder: FormBuilder) {
-  }
 
   ngOnInit(): void {
     this.getCategories();

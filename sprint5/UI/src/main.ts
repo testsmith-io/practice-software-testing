@@ -1,20 +1,19 @@
-import { enableProdMode, importProvidersFrom } from '@angular/core';
-import { bootstrapApplication } from '@angular/platform-browser';
-import { AppComponent } from './app/app.component';
-import { AppRoutingModule } from './app/app-routing.module';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ToastrModule } from 'ngx-toastr';
-import { TranslocoRootModule } from './app/transloco-root.module';
-import { AuthInterceptor } from './app/_helpers/auth.interceptor';
-import { ContentTypeInterceptor } from './app/_helpers/contenttype.interceptor';
-import { GaService } from './app/_services/ga.service';
-import { UserAuthGuard } from './app/UserAuthGuard';
-import { AdminAuthGuard } from './app/AdminAuthGuard';
-import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faGlobe, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import {enableProdMode, importProvidersFrom} from '@angular/core';
+import {bootstrapApplication} from '@angular/platform-browser';
+import {AppComponent} from './app/app.component';
+import {AppRoutingModule} from './app/app-routing.module';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ToastrModule} from 'ngx-toastr';
+import {TranslocoRootModule} from './app/transloco-root.module';
+import {AuthInterceptor} from './app/_helpers/auth.interceptor';
+import {ContentTypeInterceptor} from './app/_helpers/contenttype.interceptor';
+import {GaService} from './app/_services/ga.service';
+import {UserAuthGuard} from './app/UserAuthGuard';
+import {AdminAuthGuard} from './app/AdminAuthGuard';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 
-import { environment } from './environments/environment';
+import {environment} from './environments/environment';
 
 if (environment.production) {
   enableProdMode();

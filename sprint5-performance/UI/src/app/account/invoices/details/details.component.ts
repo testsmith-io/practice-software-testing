@@ -1,31 +1,42 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Invoice} from "../../../models/invoice";
 import {InvoiceService} from "../../../_services/invoice.service";
-import {catchError, concatMap, first, startWith, tap} from "rxjs/operators";
+import {catchError, concatMap, first, startWith, switchMap, takeWhile, tap} from "rxjs/operators";
 import {ActivatedRoute} from "@angular/router";
 import {HttpResponse} from "@angular/common/http";
 import {interval, of, Subscription} from 'rxjs';
-import {switchMap, takeWhile} from 'rxjs/operators';
-import {TranslocoService} from "@jsverse/transloco";
+import {TranslocoDirective, TranslocoService} from "@jsverse/transloco";
 import {Title} from "@angular/platform-browser";
+import {RenderDelayDirective} from "../../../render-delay-directive.directive";
+import {DecimalPipe, KeyValuePipe, NgClass} from "@angular/common";
+import {ReplaceUnderscoresPipe} from "../../../shared/replaceunderscores.pipe";
+import {TitleCasePipe} from "../../../shared/titlecase.pipe";
 
 @Component({
   selector: 'app-details',
   templateUrl: './details.component.html',
+  imports: [
+    RenderDelayDirective,
+    TranslocoDirective,
+    NgClass,
+    KeyValuePipe,
+    ReplaceUnderscoresPipe,
+    TitleCasePipe,
+    DecimalPipe
+  ],
   styleUrls: ['./details.component.css']
 })
 export class DetailsComponent implements OnInit, OnDestroy {
+  private readonly invoiceService = inject(InvoiceService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly titleService = inject(Title);
+  private readonly translocoService = inject(TranslocoService);
+
   invoice!: Invoice;
   error: string;
   hideAlert: boolean = false;
   isDownloadReady = false;
   private pollingSubscription?: Subscription;
-
-  constructor(private invoiceService: InvoiceService,
-              private route: ActivatedRoute,
-              private titleService: Title,
-              private translocoService: TranslocoService) {
-  }
 
   ngOnInit(): void {
     this.invoiceService.getInvoice(this.route.snapshot.params["id"])

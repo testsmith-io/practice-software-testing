@@ -1,14 +1,22 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import {first} from "rxjs/operators";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
+  imports: [
+    ReactiveFormsModule,
+    NgClass
+  ],
   styleUrls: []
 })
 export class ProfileComponent implements OnInit {
+  private readonly customerAccountService = inject(CustomerAccountService);
+  private readonly auth = inject(CustomerAccountService);
+
   id!: number;
   profileForm!: FormGroup;
   passwordForm!: FormGroup;
@@ -18,10 +26,6 @@ export class ProfileComponent implements OnInit {
   profileError: string;
   hideProfileAlert: boolean = false;
   hidePasswordAlert: boolean = false;
-
-  constructor(private customerAccountService: CustomerAccountService,
-              private auth: CustomerAccountService) {
-  }
 
   ngOnInit(): void {
     this.customerAccountService.getDetails()

@@ -1,28 +1,38 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {first} from "rxjs/operators";
 import {ContactMessage} from "../../models/contact-message";
 import {ContactService} from "../../_services/contact.service";
 import {Pagination} from "../../models/pagination";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
-import {TranslocoService} from "@jsverse/transloco";
-import {Router} from "@angular/router";
+import {TranslocoDirective, TranslocoService} from "@jsverse/transloco";
+import {Router, RouterLink} from "@angular/router";
+import {RenderDelayDirective} from "../../render-delay-directive.directive";
+import {TruncatePipe} from "../../_helpers/truncate.pipe";
+import {NgClass} from "@angular/common";
+import {PaginationComponent} from "../../pagination/pagination.component";
 
 @Component({
   selector: 'app-messages',
   templateUrl: './messages.component.html',
+  imports: [
+    RenderDelayDirective,
+    TruncatePipe,
+    NgClass,
+    RouterLink,
+    PaginationComponent,
+    TranslocoDirective
+  ],
   styleUrls: []
 })
 export class MessagesComponent implements OnInit {
+  private readonly messageService = inject(ContactService);
+  private readonly translocoService = inject(TranslocoService);
+  private readonly sanitizer = inject(DomSanitizer);
+  private readonly router = inject(Router);
 
   currentPage: number = 1;
   results: Pagination<ContactMessage>;
   noMessagesHtml: SafeHtml;
-
-  constructor(private messageService: ContactService,
-              private translocoService: TranslocoService,
-              private sanitizer: DomSanitizer,
-              private router: Router) {
-  }
 
   ngOnInit(): void {
     this.translocoService.selectTranslate('pages.my-account.messages.no-messages').subscribe((translation: string) => {

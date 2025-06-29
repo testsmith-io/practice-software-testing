@@ -1,15 +1,28 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {CartService} from "../_services/cart.service";
 import {CustomerAccountService} from "../shared/customer-account.service";
 import {Subscription} from "rxjs";
-import {TranslocoService} from "@jsverse/transloco";
+import {TranslocoDirective, TranslocoService} from "@jsverse/transloco";
+import {RouterLink} from "@angular/router";
+import {UpperCasePipe} from "@angular/common";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
+  imports: [
+    RouterLink,
+    UpperCasePipe,
+    FaIconComponent,
+    TranslocoDirective
+  ],
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnDestroy, OnInit {
+  private readonly auth = inject(CustomerAccountService);
+  private readonly cartService = inject(CartService);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly translocoService = inject(TranslocoService);
 
   activeLanguage: string;
   items: any;
@@ -18,10 +31,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
   isLoggedIn: boolean;
   subscription: Subscription;
 
-  constructor(private auth: CustomerAccountService,
-              private cartService: CartService,
-              private changeDetectorRef: ChangeDetectorRef,
-              private translocoService: TranslocoService) {
+  constructor() {
     this.cartService.storageSub.subscribe(() => {
       this.items = this.getCartItems();
       this.changeDetectorRef.detectChanges();

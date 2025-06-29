@@ -16,15 +16,15 @@
             <label for="invoice_date" class="col-sm-3 col-form-label">Invoice Number</label>
             <div class="col-sm-9">
               <input type="text" readonly class="form-control-plaintext" data-test="invoice-number" id="invoice_number"
-                     value="{{invoice.invoice_number}}">
+                value="{{invoice.invoice_number}}">
             </div>
           </div>
           <div class="form-group row">
             <label for="invoice_date" class="col-sm-3 col-form-label">Invoice Date</label>
             <div class="col-sm-9">
               <input type="text" readonly class="form-control-plaintext" id="invoice_date"
-                     data-test="invoice-date"
-                     value="{{invoice.invoice_date}}">
+                data-test="invoice-date"
+                value="{{invoice.invoice_date}}">
             </div>
           </div>
           @if(invoice.additional_discount_percentage) {
@@ -32,14 +32,14 @@
               <label for="total" class="col-sm-3 col-form-label">Subtotal</label>
               <div class="col-sm-9">
                 <input type="text" readonly class="form-control-plaintext" data-test="total" id="subtotal"
-                       value="$ {{invoice.subtotal.toFixed(2)}}">
+                  value="$ {{invoice.subtotal.toFixed(2)}}">
               </div>
             </div>
             <div class="form-group row">
               <label for="total" class="col-sm-3 col-form-label">Discount ({{invoice.additional_discount_percentage}}%)</label>
               <div class="col-sm-9">
                 <input type="text" readonly class="form-control-plaintext" data-test="total" id="additional_discount_percentage"
-                       value="$ {{invoice.additional_discount_amount.toFixed(2)}}">
+                  value="$ {{invoice.additional_discount_amount.toFixed(2)}}">
               </div>
             </div>
           }
@@ -47,8 +47,8 @@
             <label for="total" class="col-sm-3 col-form-label">Total</label>
             <div class="col-sm-9">
               <input type="text" readonly class="form-control-plaintext" id="total"
-                     data-test="invoice-total"
-                     value="$ {{invoice.total.toFixed(2)}}">
+                data-test="invoice-total"
+                value="$ {{invoice.total.toFixed(2)}}">
             </div>
           </div>
           <div class="form-group row">
@@ -58,25 +58,25 @@
                 <select id="status" data-test="order-status" formControlName="status" class="form-select">
                   @for (status of statuses;track status) {
                     <option [disabled]="orderState[status] <= orderState[invoice.status]"
-                            value="{{status}}">{{ status }}
+                      value="{{status}}">{{ status }}
                     </option>
                   }
                 </select>
                 <div class="input-group-append">
                   <button class="btn btn-warning" (click)="updateStatus()" type="button"
-                          data-test="update-status-submit">Update status
+                    data-test="update-status-submit">Update status
                   </button>
                 </div>
               </div>
               @if (isUpdated && !hideAlert) {
                 <div [ngClass]="fadeOutMessage()" class="alert alert-success mt-3"
-                     role="alert">
+                  role="alert">
                   Status updated!
                 </div>
               }
               @if (error && !hideAlert) {
                 <div [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
-                     role="alert">
+                  role="alert">
                   {{ error }}
                 </div>
               }
@@ -87,7 +87,7 @@
               <label for="status_message" class="col-sm-3 col-form-label">Status Message</label>
               <div class="col-sm-9">
                 <input type="text" class="form-control" [readOnly]="invoice.status_message"
-                       formControlName="status_message" data-test="status-message" id="status_message">
+                  formControlName="status_message" data-test="status-message" id="status_message">
               </div>
             </div>
           }
@@ -100,35 +100,35 @@
             <label for="street" class="col-sm-3 col-form-label">Street</label>
             <div class="col-sm-9">
               <input type="text" readonly class="form-control-plaintext" id="street" data-test="street"
-                     value="{{invoice.billing_street}}">
+                value="{{invoice.billing_street}}">
             </div>
           </div>
           <div class="form-group row">
             <label for="postal_code" class="col-sm-3 col-form-label">Postal code</label>
             <div class="col-sm-9">
               <input type="text" readonly class="form-control-plaintext" id="postal_code" data-test="postal_code"
-                     value="{{invoice.billing_postal_code}}">
+                value="{{invoice.billing_postal_code}}">
             </div>
           </div>
           <div class="form-group row">
             <label for="city" class="col-sm-3 col-form-label">City</label>
             <div class="col-sm-9">
               <input type="text" readonly class="form-control-plaintext" id="city" data-test="city"
-                     value="{{invoice.billing_city}}">
+                value="{{invoice.billing_city}}">
             </div>
           </div>
           <div class="form-group row">
             <label for="state" class="col-sm-3 col-form-label">State</label>
             <div class="col-sm-9">
               <input type="text" readonly class="form-control-plaintext" data-test="state" id="state"
-                     value="{{invoice.billing_state}}">
+                value="{{invoice.billing_state}}">
             </div>
           </div>
           <div class="form-group row">
             <label for="country" class="col-sm-3 col-form-label">Country</label>
             <div class="col-sm-9">
               <input type="text" readonly class="form-control-plaintext" data-test="country" id="country"
-                     value="{{invoice.billing_country}}">
+                value="{{invoice.billing_country}}">
             </div>
           </div>
         </form>
@@ -140,18 +140,20 @@
             <label for="payment_method" class="col-sm-3 col-form-label">Payment Method</label>
             <div class="col-sm-9">
               <input type="text" readonly class="form-control-plaintext" data-test="payment-method" id="payment_method"
-                     value="{{ getPaymentMethodTranslation(invoice.payment.payment_method) }}">
+                value="{{ getPaymentMethodTranslation(invoice.payment.payment_method) }}">
             </div>
           </div>
-          <div *ngFor="let detail of invoice.payment.payment_details | keyvalue">
-            <div class="form-group row">
-              <label for="{{detail.key}}"
-                     class="col-sm-3 col-form-label">{{ detail.key | replaceUnderscores | titleCase }}</label>
-              <div class="col-sm-9">
-                <input type="text" readonly class="form-control-plaintext" [id]="detail.key" value="{{detail.value}}">
+          @for (detail of invoice.payment.payment_details | keyvalue; track detail) {
+            <div>
+              <div class="form-group row">
+                <label for="{{detail.key}}"
+                class="col-sm-3 col-form-label">{{ detail.key | replaceUnderscores | titleCase }}</label>
+                <div class="col-sm-9">
+                  <input type="text" readonly class="form-control-plaintext" [id]="detail.key" value="{{detail.value}}">
+                </div>
               </div>
             </div>
-          </div>
+          }
         </form>
       </div>
     </div>
@@ -160,12 +162,12 @@
         <h3>Products</h3>
         <table class="table table-hover">
           <thead>
-          <tr>
-            <th scope="col">Quantity</th>
-            <th scope="col">Product</th>
-            <th class="text-end" scope="col">Price</th>
-            <th class="text-end" scope="col">Total</th>
-          </tr>
+            <tr>
+              <th scope="col">Quantity</th>
+              <th scope="col">Product</th>
+              <th class="text-end" scope="col">Price</th>
+              <th class="text-end" scope="col">Total</th>
+            </tr>
           </thead>
           <tbody>
             @for (invoiceline of invoice.invoicelines;track invoiceline) {
@@ -173,33 +175,33 @@
                 <td>{{ invoiceline.quantity }}</td>
                 <td>{{ invoiceline.product.name }}@if (invoiceline.product.is_rental) {
                   <small> (Item for rent, price per
-                    hour)</small>
+                  hour)</small>
                 }</td>
                 <td class="col-md-2 text-end"><span
-                  [ngClass]="{'discounted' : invoiceline.discount_percentage}">${{ invoiceline.product.price | number: '1.2-2' }}</span>@if (invoiceline.discounted_price) {
-                  <br
+                [ngClass]="{'discounted' : invoiceline.discount_percentage}">${{ invoiceline.product.price | number: '1.2-2' }}</span>@if (invoiceline.discounted_price) {
+                <br
                   />
-                }
-                  @if (invoiceline.discount_percentage) {
-                    <span
-                      data-test="offer-price">$<span
-                      id="discount-price">{{ invoiceline.discounted_price }}</span></span>
-                  }</td>
-                <td class="col-md-2 text-end"><span
-                  [ngClass]="{'discounted' : invoiceline.discount_percentage}">${{ invoiceline.quantity * invoiceline.product.price | number: '1.2-2' }}</span>@if (invoiceline.discounted_price) {
-                  <br
-                  />
-                }
-                  @if (invoiceline.discount_percentage) {
-                    <span
-                      data-test="offer-price">$<span
-                      id="discount-total-price">{{ invoiceline.quantity * invoiceline.discounted_price | number: '1.2-2' }}</span></span>
-                  }</td>
-              </tr>
+              }
+              @if (invoiceline.discount_percentage) {
+                <span
+                  data-test="offer-price">$<span
+                id="discount-price">{{ invoiceline.discounted_price }}</span></span>
+              }</td>
+              <td class="col-md-2 text-end"><span
+              [ngClass]="{'discounted' : invoiceline.discount_percentage}">${{ invoiceline.quantity * invoiceline.product.price | number: '1.2-2' }}</span>@if (invoiceline.discounted_price) {
+              <br
+                />
             }
-          </tbody>
-        </table>
-      </div>
-    </div>
+            @if (invoiceline.discount_percentage) {
+              <span
+                data-test="offer-price">$<span
+              id="discount-total-price">{{ invoiceline.quantity * invoiceline.discounted_price | number: '1.2-2' }}</span></span>
+            }</td>
+          </tr>
+        }
+      </tbody>
+    </table>
   </div>
+</div>
+</div>
 }

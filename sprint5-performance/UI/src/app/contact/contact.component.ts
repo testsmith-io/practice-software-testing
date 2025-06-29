@@ -1,16 +1,28 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, inject, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ContactService} from "../_services/contact.service";
 import {ContactMessage} from "../models/contact-message";
 import {CustomerAccountService} from "../shared/customer-account.service";
 import {BrowserDetectorService} from "../_services/browser-detector.service";
+import {NgClass} from "@angular/common";
+import {TranslocoDirective} from "@jsverse/transloco";
 
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
+  imports: [
+    ReactiveFormsModule,
+    NgClass,
+    TranslocoDirective
+  ],
   styleUrls: []
 })
 export class ContactComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly contactService = inject(ContactService);
+  private readonly auth = inject(CustomerAccountService);
+  public readonly browserDetect = inject(BrowserDetectorService);
+
   contact: FormGroup | any;
   submitted: boolean;
   error: string;
@@ -18,12 +30,6 @@ export class ContactComponent implements OnInit {
   role: string = '';
   name: string = '';
   private file: File = null;
-
-  constructor(private formBuilder: FormBuilder,
-              private contactService: ContactService,
-              private auth: CustomerAccountService,
-              public browserDetect: BrowserDetectorService) {
-  }
 
   ngOnInit(): void {
     this.contact = this.formBuilder.group(

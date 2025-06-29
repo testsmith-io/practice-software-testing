@@ -1,15 +1,25 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Component, inject, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {ActivatedRoute, RouterLink} from "@angular/router";
 import {BrandService} from "../../_services/brand.service";
 import {first} from "rxjs/operators";
+import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-brands-add-edit',
   templateUrl: './brands-add-edit.component.html',
+  imports: [
+    ReactiveFormsModule,
+    NgClass,
+    RouterLink
+  ],
   styleUrls: []
 })
 export class BrandsAddEditComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
+  private readonly brandService = inject(BrandService);
+
   form: FormGroup;
   id: string;
   isAddMode: boolean;
@@ -17,14 +27,6 @@ export class BrandsAddEditComponent implements OnInit {
   isUpdated: boolean = false;
   hideAlert: boolean = false;
   error: string;
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private brandService: BrandService
-  ) {
-  }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];

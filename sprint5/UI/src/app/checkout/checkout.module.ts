@@ -12,7 +12,6 @@ import {TranslocoDirective} from "@jsverse/transloco";
 import {FaIconComponent, FaIconLibrary, FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {faRemove} from "@fortawesome/free-solid-svg-icons";
 
-
 @NgModule({
   imports: [
     CommonModule,

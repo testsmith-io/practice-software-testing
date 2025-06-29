@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, inject, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Observable, of} from "rxjs";
 import {CartService} from "../_services/cart.service";
 import {CustomerAccountService} from "../shared/customer-account.service";
@@ -7,13 +7,27 @@ import {TokenStorageService} from "../_services/token-storage.service";
 import {InvoiceService} from "../_services/invoice.service";
 import {PaymentService} from "../_services/payment.service";
 import {environment} from "../../environments/environment";
+import {ArchwizardModule} from "angular-archwizard";
+import {DecimalPipe, NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
+  imports: [
+    ArchwizardModule,
+    DecimalPipe,
+    ReactiveFormsModule,
+    NgClass
+],
   styleUrls: ['./checkout.component.css']
 })
 export class CheckoutComponent implements OnInit {
+  private readonly paymentService = inject(PaymentService);
+  private readonly invoiceService = inject(InvoiceService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly cartService = inject(CartService);
+  private readonly customerAccountService = inject(CustomerAccountService);
+  private readonly tokenStorage = inject(TokenStorageService);
 
   PaymentMethods: any = ['Bank Transfer', 'Cash on Delivery', 'Credit Card', 'Buy Now Pay Later', 'Gift Card'];
   cusAddress: FormGroup | any;
@@ -38,12 +52,9 @@ export class CheckoutComponent implements OnInit {
   total: number;
   invoice_number: number;
 
-  constructor(private paymentService: PaymentService,
-              private invoiceService: InvoiceService,
-              private formBuilder: FormBuilder,
-              private cartService: CartService,
-              private customerAccountService: CustomerAccountService,
-              private tokenStorage: TokenStorageService) {
+
+
+  constructor() {
   }
 
   ngOnInit(): void {

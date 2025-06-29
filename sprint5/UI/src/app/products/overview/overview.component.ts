@@ -44,7 +44,7 @@ export class OverviewComponent implements OnInit {
   resultState: string = '';
   currentPage: number = 1;
   results: Pagination<Product>;
-  itemsToLoad = new Array(9);
+  itemsToLoad = Array.from({ length: 8 }, (_, i) => ({ id: i }));
   brands: Brand[];
   categories: Category[];
   private brandsFilter: Array<number> = [];

@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {map, Observable, throwError} from "rxjs";
 import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
@@ -9,11 +9,9 @@ import {catchError} from "rxjs/operators";
   providedIn: 'root'
 })
 export class BrandService {
+  private httpClient = inject(HttpClient);
 
   private apiURL = environment.apiUrl;
-
-  constructor(private httpClient: HttpClient) {
-  }
 
   searchBrands(query: string): Observable<any> {
     let params = new HttpParams()

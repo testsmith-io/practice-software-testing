@@ -1,11 +1,4 @@
-import {
-  Directive,
-  ElementRef,
-  Input,
-  Renderer2,
-  AfterViewInit,
-  OnDestroy
-} from '@angular/core';
+import {AfterViewInit, Directive, ElementRef, Input, OnDestroy, Renderer2} from '@angular/core';
 
 @Directive({
   selector: '[appRenderDelay]'

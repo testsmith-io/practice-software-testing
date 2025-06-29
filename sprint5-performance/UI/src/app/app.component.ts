@@ -1,23 +1,32 @@
-import {Component, OnInit} from '@angular/core';
-import {Router, NavigationEnd, ActivatedRoute} from '@angular/router';
+import {Component, inject, OnInit} from '@angular/core';
+import {ActivatedRoute, NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {Title} from '@angular/platform-browser';
-import {filter, map, mergeMap, switchMap} from 'rxjs/operators';
-import {GaService} from "./_services/ga.service";
+import {filter, map} from 'rxjs/operators';
+import {HeaderComponent} from "./header/header.component";
+import {FooterComponent} from "./footer/footer.component";
+import {faGlobe, faShoppingCart} from '@fortawesome/free-solid-svg-icons';
+import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
+  imports: [
+    HeaderComponent,
+    RouterOutlet,
+    FooterComponent
+  ],
   styleUrls: []
 })
 export class AppComponent implements OnInit {
+  private readonly library = inject(FaIconLibrary);
+  private readonly titleService = inject(Title);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
   title = 'Toolshop';
 
-  constructor(private gaService: GaService,
-              private titleService: Title,
-              private router: Router,
-              private activatedRoute: ActivatedRoute) {
+  constructor() {
+    this.library.addIcons(faGlobe, faShoppingCart);
   }
-
   ngOnInit(): void {
     if (!window.localStorage.getItem('GEO_LOCATION') &&
       window.localStorage.getItem('RETRIEVE_GEOLOCATION')) {

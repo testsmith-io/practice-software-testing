@@ -1,18 +1,34 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {Invoice} from "../../models/invoice";
 import {InvoiceService} from "../../_services/invoice.service";
 import {ActivatedRoute} from "@angular/router";
 import {first} from "rxjs/operators";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {OrderState} from "../../models/order-state";
 import {TranslocoService} from "@jsverse/transloco";
+import {DecimalPipe, KeyValuePipe, NgClass} from "@angular/common";
+import {ReplaceUnderscoresPipe} from "../../shared/replaceunderscores.pipe";
+import {TitleCasePipe} from "../../shared/titlecase.pipe";
 
 @Component({
   selector: 'app-orders-add-edit',
   templateUrl: './orders-add-edit.component.html',
+  imports: [
+    ReactiveFormsModule,
+    NgClass,
+    ReplaceUnderscoresPipe,
+    KeyValuePipe,
+    TitleCasePipe,
+    DecimalPipe
+  ],
   styleUrls: ['./orders-add-edit.component.css']
 })
 export class OrdersAddEditComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly invoiceService = inject(InvoiceService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly translocoService = inject(TranslocoService);
+
   statuses = ["AWAITING_FULFILLMENT", "ON_HOLD", "AWAITING_SHIPMENT", "SHIPPED", "COMPLETED"];
   invoiceForm: FormGroup | any;
   invoice!: Invoice;
@@ -20,12 +36,6 @@ export class OrdersAddEditComponent implements OnInit {
   hideAlert: boolean = false;
   error: string;
   orderState: any = OrderState;
-
-  constructor(private formBuilder: FormBuilder,
-              private invoiceService: InvoiceService,
-              private route: ActivatedRoute,
-              private translocoService: TranslocoService) {
-  }
 
   ngOnInit(): void {
     this.invoiceForm = this.formBuilder.group(

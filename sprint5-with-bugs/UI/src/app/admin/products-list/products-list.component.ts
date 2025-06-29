@@ -1,26 +1,33 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {ToastService} from "../../_services/toast.service";
 import {first} from "rxjs/operators";
 import {ProductService} from "../../_services/product.service";
 import {Product} from "../../models/product";
 import {Pagination} from "../../models/pagination";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {RouterLink} from "@angular/router";
+import {NgxPaginationModule} from "ngx-pagination";
+import {DecimalPipe} from "@angular/common";
 
 @Component({
   selector: 'app-products-list',
   templateUrl: './products-list.component.html',
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    NgxPaginationModule,
+    DecimalPipe
+  ],
   styleUrls: []
 })
 export class ProductsListComponent implements OnInit {
+  private readonly productService = inject(ProductService);
+  private readonly toastService = inject(ToastService);
+  private readonly formBuilder = inject(FormBuilder);
 
   p: number = 1;
   products!: Pagination<Product>;
   searchForm: FormGroup | any;
-
-  constructor(private productService: ProductService,
-              private toastService: ToastService,
-              private formBuilder: FormBuilder) {
-  }
 
   ngOnInit(): void {
     this.getProducts();

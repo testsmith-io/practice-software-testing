@@ -1,11 +1,13 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ContactComponent } from './contact.component';
-import { ContactService } from '../_services/contact.service';
-import { CustomerAccountService } from '../shared/customer-account.service';
-import { BrowserDetectorService } from '../_services/browser-detector.service';
-import { of } from 'rxjs';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {ContactComponent} from './contact.component';
+import {ContactService} from '../_services/contact.service';
+import {CustomerAccountService} from '../shared/customer-account.service';
+import {BrowserDetectorService} from '../_services/browser-detector.service';
+import {of} from 'rxjs';
+import {TranslocoTestingModule} from "@jsverse/transloco";
+import en from "../../assets/i18n/en.json";
 
 describe('ContactComponent', () => {
   let component: ContactComponent;
@@ -15,8 +17,13 @@ describe('ContactComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ContactComponent],
-      imports: [ReactiveFormsModule, FormsModule, HttpClientTestingModule],
+      imports: [ContactComponent, ReactiveFormsModule, FormsModule, HttpClientTestingModule, TranslocoTestingModule.forRoot({
+        langs: {en},
+        translocoConfig: {
+          availableLangs: ['en'],
+          defaultLang: 'en',
+        }
+      })],
       providers: [
         ContactService,
         CustomerAccountService,

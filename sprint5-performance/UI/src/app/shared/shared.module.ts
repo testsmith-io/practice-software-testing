@@ -9,17 +9,15 @@ import {TitleCasePipe} from "./titlecase.pipe";
 import {ReplaceUnderscoresPipe} from "./replaceunderscores.pipe";
 
 @NgModule({
-  declarations: [
-    PasswordInputComponent,
-    TitleCasePipe,
-    ReplaceUnderscoresPipe
-  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     TranslocoDirective,
     FaIconComponent,
-    FontAwesomeModule
+    FontAwesomeModule,
+    PasswordInputComponent,
+    TitleCasePipe,
+    ReplaceUnderscoresPipe
   ],
   exports: [
     PasswordInputComponent,

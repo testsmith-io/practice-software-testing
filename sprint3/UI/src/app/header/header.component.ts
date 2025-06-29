@@ -1,14 +1,20 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {CartService} from "../_services/cart.service";
 import {Subscription} from "rxjs";
+import {RouterLink} from "@angular/router";
+
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
+  imports: [
+    RouterLink
+],
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnDestroy, OnInit {
-
+  private readonly cartService = inject(CartService);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   items: any;
   role: string = '';
@@ -16,8 +22,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
   isLoggedIn: boolean;
   subscription: Subscription;
 
-  constructor(private cartService: CartService,
-              private changeDetectorRef: ChangeDetectorRef) {
+  constructor() {
     this.cartService.storageSub.subscribe(() => {
       this.items = this.getCartItems();
       this.changeDetectorRef.detectChanges();

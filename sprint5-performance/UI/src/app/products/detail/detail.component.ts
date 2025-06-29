@@ -1,21 +1,41 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {CartService} from "../../_services/cart.service";
 import {FavoriteService} from "../../_services/favorite.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, RouterLink} from "@angular/router";
 import {Product} from "../../models/product";
 import DiscountUtil from "../../_helpers/discount.util";
 import {ProductService} from "../../_services/product.service";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
 import {Title} from "@angular/platform-browser";
-import {Options} from "@angular-slider/ngx-slider";
+import {NgxSliderModule, Options} from "@angular-slider/ngx-slider";
 import {ToastrService} from "ngx-toastr";
+import {NgClass} from "@angular/common";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {FormsModule} from "@angular/forms";
+import {TranslocoDirective} from "@jsverse/transloco";
 
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
+  imports: [
+    NgClass,
+    FaIconComponent,
+    NgxSliderModule,
+    FormsModule,
+    RouterLink,
+    TranslocoDirective
+  ],
   styleUrls: ['./detail.component.css']
 })
 export class DetailComponent implements OnInit {
+  private readonly cartService = inject(CartService);
+  private readonly favoriteService = inject(FavoriteService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly toastr = inject(ToastrService);
+  private readonly productService = inject(ProductService);
+  public readonly browserDetect = inject(BrowserDetectorService);
+  private readonly titleService = inject(Title);
+
   product: Product;
   discount_percentage: any;
   quantity: number = 1;
@@ -26,15 +46,6 @@ export class DetailComponent implements OnInit {
     floor: 1,
     ceil: 10
   };
-
-  constructor(private cartService: CartService,
-              private favoriteService: FavoriteService,
-              private route: ActivatedRoute,
-              private toastr: ToastrService,
-              private productService: ProductService,
-              public browserDetect: BrowserDetectorService,
-              private titleService: Title) {
-  }
 
   ngOnInit(): void {
     this.sub = this.route.params.subscribe(params => {

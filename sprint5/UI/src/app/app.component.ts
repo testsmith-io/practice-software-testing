@@ -5,8 +5,8 @@ import {filter, map} from 'rxjs/operators';
 import {GaService} from "./_services/ga.service";
 import {HeaderComponent} from "./header/header.component";
 import {FooterComponent} from "./footer/footer.component";
-import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faGlobe, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
+import {faGlobe, faShoppingCart} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-root',

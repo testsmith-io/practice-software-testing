@@ -1,16 +1,32 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {CustomerAccountService} from "../../shared/customer-account.service";
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {TokenStorageService} from "../../_services/token-storage.service";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
+import {NgClass} from "@angular/common";
+import {RouterLink} from "@angular/router";
+import {ArchwizardModule} from "@y3krulez/angular-archwizard";
+import {TranslocoDirective} from "@jsverse/transloco";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
+  imports: [
+    ReactiveFormsModule,
+    NgClass,
+    RouterLink,
+    ArchwizardModule,
+    ArchwizardModule,
+    TranslocoDirective
+  ],
   styleUrls: []
 })
 export class LoginComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly tokenStorage = inject(TokenStorageService);
+  private readonly accountService = inject(CustomerAccountService);
+  private readonly http = inject(HttpClient);
 
   isLoggedIn: boolean = false;
   cusForm: FormGroup | any;
@@ -24,11 +40,6 @@ export class LoginComponent implements OnInit {
   canExitStep2 = true;
   apiURL = environment.apiUrl;
 
-  constructor(private formBuilder: FormBuilder,
-              private tokenStorage: TokenStorageService,
-              private accountService: CustomerAccountService,
-              private http: HttpClient) {
-  }
   ngOnInit(): void {
     this.getCustomerInfo();
     this.isLoggedIn = this.accountService.isLoggedIn();

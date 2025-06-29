@@ -1,4 +1,4 @@
-import {ComponentFixture, TestBed, fakeAsync, tick} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {InvoicesComponent} from './invoices.component';
 import {InvoiceService} from '../../_services/invoice.service';
 import {of, throwError} from 'rxjs';
@@ -9,6 +9,7 @@ import {Invoice} from "../../models/invoice";
 import {NavigationService} from "../../_services/navigation.service";
 import {TranslocoTestingModule} from '@jsverse/transloco';
 import en from '../../../assets/i18n/en.json';
+import {RouterTestingModule} from "@angular/router/testing";
 
 // Mock data
 const mockInvoices: Pagination<Invoice> = {
@@ -130,8 +131,9 @@ describe('InvoicesComponent', () => {
     const navSpy = jasmine.createSpyObj('NavigationService', ['redirectToLogin']);
 
     await TestBed.configureTestingModule({
-      declarations: [InvoicesComponent],
       imports: [
+        RouterTestingModule,
+        InvoicesComponent,
         TranslocoTestingModule.forRoot({
           langs: {en},
           translocoConfig: {
@@ -179,22 +181,32 @@ describe('InvoicesComponent', () => {
     expect(navigationServiceSpy.redirectToLogin).toHaveBeenCalled(); // ✅ Use service spy
   }));
 
-  it('should render invoice data in the template', fakeAsync(() => {
-    fixture.detectChanges();
-    tick();
+  it('should render invoice data in the template', async () => {
+    // Arrange
+    invoiceServiceSpy.getInvoices.and.returnValue(of(mockInvoices));
 
-    component.results = mockInvoices; // manually set it
+    // Act
+    fixture.detectChanges();
+    await fixture.whenStable();
+    await fixture.whenRenderingDone();
     fixture.detectChanges();
 
+    // Debug output (optional)
+    const html = fixture.nativeElement.innerHTML;
+    console.log('Rendered HTML:', html);
+
+    // Assert
     const rows = fixture.debugElement.queryAll(By.css('tbody tr'));
+    expect(rows.length).withContext('No <tr> rows rendered').toBeGreaterThan(0);
 
-    expect(rows.length).toBeGreaterThan(0);
-    const rowText = rows[0].nativeElement.textContent;
+    const rowText = rows[0]?.nativeElement?.textContent || '';
     expect(rowText).toContain('INV-20250000011');
     expect(rowText).toContain('Test street 12');
     expect(rowText).toContain('2025-03-19');
     expect(rowText).toContain('855.58');
-  }));
+  });
+
+
 
   it('should handle page change and fetch invoices again', fakeAsync(() => {
     invoiceServiceSpy.getInvoices.and.returnValue(of(mockInvoices));
