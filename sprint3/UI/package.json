@@ -23,7 +23,7 @@
     "@auth0/angular-jwt": "5.2.0",
     "@ng-bootstrap/ng-bootstrap": "19.0.0",
     "@popperjs/core": "2.11.8",
-    "angular-archwizard": "7.0.0",
+    "@y3krulez/angular-archwizard": "8.0.0-develop",
     "bootstrap": "5.3.7",
     "jquery": "3.7.1",
     "ng-http-loader": "18.0.0",
