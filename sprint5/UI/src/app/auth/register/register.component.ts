@@ -1,16 +1,28 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, inject, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import countriesList from '../../../assets/countries.json';
 import {User} from "../../models/user.model";
 import {PasswordValidators} from "../../_helpers/password.validators";
+import {NgClass} from "@angular/common";
+import {PasswordInputComponent} from "../../shared/password-input/password-input.component";
+import {TranslocoDirective} from "@jsverse/transloco";
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
+  imports: [
+    ReactiveFormsModule,
+    NgClass,
+    PasswordInputComponent,
+    TranslocoDirective
+  ],
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private accountService = inject(CustomerAccountService);
+
   register: FormGroup | any;
   submitted: boolean;
 
@@ -18,9 +30,6 @@ export class RegisterComponent implements OnInit {
   error: string;
 
   passwordStrengthIndicator: string;
-
-  constructor(private formBuilder: FormBuilder, private accountService: CustomerAccountService) {
-  }
 
   ngOnInit(): void {
     this.register = this.formBuilder.group(

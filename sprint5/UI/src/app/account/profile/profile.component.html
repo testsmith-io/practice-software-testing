@@ -164,9 +164,11 @@
               [ariaDescribedBy]="(p['new_password_confirmation'].invalid && isPasswordUpdated) ? 'password-error' : null"
               [ariaInvalid]="p['new_password_confirmation'].invalid && isPasswordUpdated ? 'true' : 'false'"
             ></app-password-input>
-            <div *ngIf="passwordForm.hasError('passwordsMismatch')" class="text-danger">
-              Passwords do not match.
-            </div>
+            @if (passwordForm.hasError('passwordsMismatch')) {
+              <div class="text-danger">
+                Passwords do not match.
+              </div>
+            }
           </div>
         </div>
       </div>
@@ -221,7 +223,11 @@
     } @else if (profile.totp_enabled) {
       <p>{{ t('pages.my-account.profile.two_factor_authentication_enabled') }}</p>
     }
-    <p *ngIf="errorMessage" data-test="totp-error" style="color: red;">{{ errorMessage }}</p>
-    <p *ngIf="successMessage" data-test="totp-success" style="color: green;">{{ successMessage }}</p>
+    @if (errorMessage) {
+      <p data-test="totp-error" style="color: red;">{{ errorMessage }}</p>
+    }
+    @if (successMessage) {
+      <p data-test="totp-success" style="color: green;">{{ successMessage }}</p>
+    }
   </div>
 </div>

@@ -1,11 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of, throwError } from 'rxjs';
-import { FavoritesComponent } from './favorites.component';
-import { FavoriteService } from '../../_services/favorite.service';
-import { Favorite } from '../../models/favorite';
-import { Product } from '../../models/product';
-import { RedirectService } from '../../_services/redirect.service';
-import { TokenStorageService } from 'src/app/_services/token-storage.service';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {of, throwError} from 'rxjs';
+import {FavoritesComponent} from './favorites.component';
+import {FavoriteService} from '../../_services/favorite.service';
+import {Favorite} from '../../models/favorite';
+import {Product} from '../../models/product';
+import {RedirectService} from '../../_services/redirect.service';
+import {TokenStorageService} from 'src/app/_services/token-storage.service';
+import {TranslocoTestingModule} from "@jsverse/transloco";
 
 describe('FavoritesComponent', () => {
   let component: FavoritesComponent;
@@ -36,7 +37,12 @@ describe('FavoritesComponent', () => {
     const tokenStorageServiceSpy = jasmine.createSpyObj('TokenStorageService', ['removeToken']);
 
     await TestBed.configureTestingModule({
-      declarations: [FavoritesComponent],
+      imports: [FavoritesComponent,TranslocoTestingModule.forRoot({
+        translocoConfig: {
+          availableLangs: ['en'],
+          defaultLang: 'en',
+        }
+      })],
       providers: [
         { provide: FavoriteService, useValue: favoriteServiceSpy },
         { provide: RedirectService, useValue: redirectServiceSpy },

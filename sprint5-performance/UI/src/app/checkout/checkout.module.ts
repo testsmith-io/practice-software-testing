@@ -14,23 +14,26 @@ import {faRemove} from "@fortawesome/free-solid-svg-icons";
 
 
 @NgModule({
-  declarations: [
-    CheckoutComponent,
-    CartComponent,
-    LoginComponent,
-    AddressComponent,
-    PaymentComponent
-  ],
-  imports: [
-    CommonModule,
-    CheckoutRoutingModule,
-    FormsModule,
-    ArchwizardModule,
-    ReactiveFormsModule,
-    TranslocoDirective,
-    FaIconComponent,
-    FontAwesomeModule
-  ]
+    declarations: [
+        CheckoutComponent,
+        CartComponent,
+        LoginComponent,
+        AddressComponent,
+        PaymentComponent
+    ],
+    exports: [
+        AddressComponent
+    ],
+    imports: [
+        CommonModule,
+        CheckoutRoutingModule,
+        FormsModule,
+        ArchwizardModule,
+        ReactiveFormsModule,
+        TranslocoDirective,
+        FaIconComponent,
+        FontAwesomeModule
+    ]
 })
 export class CheckoutModule {
   constructor(library: FaIconLibrary) {

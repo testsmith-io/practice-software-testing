@@ -1,10 +1,16 @@
 import {booleanAttribute, Component, forwardRef, HostBinding, Input} from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {NgClass} from "@angular/common";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 
 @Component({
   selector: 'app-password-input',
   templateUrl: './password-input.component.html',
   styleUrls: [],
+  imports: [
+    NgClass,
+    FaIconComponent
+  ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

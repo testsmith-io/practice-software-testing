@@ -1,25 +1,31 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {first} from "rxjs/operators";
 import {UserService} from "../../_services/user.service";
 import {User} from "../../models/user.model";
 import {Pagination} from "../../models/pagination";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
+import {RouterLink} from "@angular/router";
+import {PaginationComponent} from "../../pagination/pagination.component";
 
 @Component({
   selector: 'app-users-list',
   templateUrl: './users-list.component.html',
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    PaginationComponent
+  ],
   styleUrls: []
 })
 export class UsersListComponent implements OnInit {
+  private userService = inject(UserService);
+  private toastr = inject(ToastrService);
+  private formBuilder = inject(FormBuilder);
+
   currentPage: number = 1;
   results: Pagination<User>;
   searchForm: FormGroup | any;
-
-  constructor(private userService: UserService,
-              private toastr: ToastrService,
-              private formBuilder: FormBuilder) {
-  }
 
   ngOnInit(): void {
     this.getUsers();

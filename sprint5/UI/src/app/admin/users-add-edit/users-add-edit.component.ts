@@ -1,17 +1,27 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, inject, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Product} from "../../models/product";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {first} from "rxjs/operators";
 import countriesList from "../../../assets/countries.json";
 import {UserService} from "../../_services/user.service";
+import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-users-add-edit',
   templateUrl: './users-add-edit.component.html',
+  imports: [
+    ReactiveFormsModule,
+    NgClass,
+    RouterLink
+  ],
   styleUrls: []
 })
 export class UsersAddEditComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly userService = inject(UserService);
 
   form: FormGroup;
   products!: Product[];
@@ -22,13 +32,6 @@ export class UsersAddEditComponent implements OnInit {
   isUpdated: boolean = false;
   hideAlert: boolean = false;
   error: string;
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private userService: UserService) {
-  }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];

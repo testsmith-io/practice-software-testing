@@ -1,25 +1,30 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import {Subscription} from "rxjs";
+import {TranslocoDirective} from "@jsverse/transloco";
+import {NgClass} from "@angular/common";
+import {ArchwizardModule} from "@y3krulez/angular-archwizard";
 
 @Component({
   selector: 'app-address',
   templateUrl: './address.component.html',
+  imports: [
+    ReactiveFormsModule,
+    TranslocoDirective,
+    NgClass,
+    ArchwizardModule
+  ],
   styleUrls: []
 })
 export class AddressComponent implements OnInit, OnDestroy {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly customerAccountService = inject(CustomerAccountService);
 
   @Output() cusAddressChange = new EventEmitter<FormGroup>();
   @Input() address: FormGroup;
   cusAddress: FormGroup | any;
   private subscription: Subscription = new Subscription();
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private customerAccountService: CustomerAccountService
-  ) {
-  }
 
   ngOnInit(): void {
     this.initializeForm();

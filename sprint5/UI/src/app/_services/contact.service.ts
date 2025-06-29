@@ -1,18 +1,17 @@
-import { Injectable } from '@angular/core';
-import { environment } from "../../environments/environment";
-import { Observable, of, switchMap, throwError } from "rxjs";
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from "@angular/common/http";
-import { catchError } from "rxjs/operators";
-import { ContactMessage } from "../models/contact-message";
+import {inject, Injectable} from '@angular/core';
+import {environment} from "../../environments/environment";
+import {Observable, of, switchMap, throwError} from "rxjs";
+import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
+import {catchError} from "rxjs/operators";
+import {ContactMessage} from "../models/contact-message";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContactService {
+  private readonly httpClient = inject(HttpClient);
   private readonly apiURL = `${environment.apiUrl}/messages`;
   private readonly jsonHeaders = { 'Content-Type': 'application/json' };
-
-  constructor(private httpClient: HttpClient) {}
 
   getMessages(page: number): Observable<any> {
     const params = new HttpParams().set('page', page.toString());

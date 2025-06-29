@@ -1,17 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { catchError, Observable, throwError } from 'rxjs';
-import { environment } from "../../environments/environment";
-import { User } from "../models/user.model";
-import { Pagination } from "../models/pagination";
+import {inject, Injectable} from '@angular/core';
+import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
+import {catchError, Observable, throwError} from 'rxjs';
+import {environment} from "../../environments/environment";
+import {User} from "../models/user.model";
+import {Pagination} from "../models/pagination";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  private readonly httpClient = inject(HttpClient);
   private readonly apiURL = environment.apiUrl;
-
-  constructor(private readonly httpClient: HttpClient) {}
 
   getUsers(page: number): Observable<Pagination<User>> {
     const params = new HttpParams().set('page', page.toString());

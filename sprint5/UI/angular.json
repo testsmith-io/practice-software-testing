@@ -1,8 +1,7 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "cli": {
-    "analytics": "9c9fc27a-e921-48a6-ba50-93ca2a6564dd",
-    "defaultCollection": "@angular-eslint/schematics"
+    "analytics": "9c9fc27a-e921-48a6-ba50-93ca2a6564dd"
   },
   "version": 1,
   "newProjectRoot": "projects",
@@ -92,10 +91,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "Toolshop:build:production"
+              "buildTarget": "Toolshop:build:production"
             },
             "development": {
-              "browserTarget": "Toolshop:build:development"
+              "buildTarget": "Toolshop:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -103,7 +102,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Toolshop:build"
+            "buildTarget": "Toolshop:build"
           }
         },
         "test": {

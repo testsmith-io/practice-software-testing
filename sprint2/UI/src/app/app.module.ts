@@ -19,33 +19,36 @@ import {DetailComponent as ProductDetailComponent} from './products/detail/detai
 import {NgHttpLoaderModule} from "ng-http-loader";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    FooterComponent,
-    ProductDetailComponent,
-    ContactComponent,
-    ToastsComponent,
-    CategoryComponent,
-    ProductOverviewComponent
-  ],
-  imports: [
-    BrowserModule,
-    NgbModule,
-    HttpClientModule,
-    NgHttpLoaderModule.forRoot(),
-    RouterModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxPaginationModule,
-  ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: ContentTypeInterceptor,
-    multi: true
-  }],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        HeaderComponent,
+        FooterComponent,
+        ProductDetailComponent,
+        ContactComponent,
+        ToastsComponent,
+        CategoryComponent,
+        ProductOverviewComponent
+    ],
+    imports: [
+        BrowserModule,
+        NgbModule,
+        HttpClientModule,
+        NgHttpLoaderModule.forRoot(),
+        RouterModule,
+        AppRoutingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgxPaginationModule,
+    ],
+    providers: [{
+        provide: HTTP_INTERCEPTORS,
+        useClass: ContentTypeInterceptor,
+        multi: true
+    }],
+    exports: [
+        FooterComponent
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 }

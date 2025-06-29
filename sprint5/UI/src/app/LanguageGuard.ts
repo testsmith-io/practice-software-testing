@@ -1,12 +1,12 @@
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from "@angular/router";
-import {Injectable} from "@angular/core";
+import {inject, Injectable} from "@angular/core";
 
 @Injectable({ providedIn: 'root' })
 export class LanguageGuard implements CanActivate {
+  private readonly router = inject(Router);
+
   defaultLang = 'en';
   supportedLangs = ['en', 'fr', 'de', 'es'];
-
-  constructor(private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const lang = route.params['lang'];

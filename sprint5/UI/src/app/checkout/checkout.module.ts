@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { CheckoutRoutingModule } from './checkout-routing.module';
-import { CheckoutComponent } from './checkout.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {CheckoutRoutingModule} from './checkout-routing.module';
+import {CheckoutComponent} from './checkout.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ArchwizardModule} from "@y3krulez/angular-archwizard";
 import {CartComponent} from "./cart/cart.component";
@@ -14,13 +14,6 @@ import {faRemove} from "@fortawesome/free-solid-svg-icons";
 
 
 @NgModule({
-  declarations: [
-    CheckoutComponent,
-    CartComponent,
-    LoginComponent,
-    AddressComponent,
-    PaymentComponent
-  ],
   imports: [
     CommonModule,
     CheckoutRoutingModule,
@@ -29,7 +22,12 @@ import {faRemove} from "@fortawesome/free-solid-svg-icons";
     ReactiveFormsModule,
     TranslocoDirective,
     FaIconComponent,
-    FontAwesomeModule
+    FontAwesomeModule,
+    CheckoutComponent,
+    CartComponent,
+    LoginComponent,
+    AddressComponent,
+    PaymentComponent
   ]
 })
 export class CheckoutModule {

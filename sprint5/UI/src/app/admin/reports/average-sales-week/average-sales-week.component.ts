@@ -2,10 +2,14 @@ import {Component, OnInit} from '@angular/core';
 import {ReportService} from "../../../_services/report.service";
 import {ChartConfiguration, ChartType} from "chart.js";
 import DataLabelsPlugin from "chartjs-plugin-datalabels";
+import {BaseChartDirective} from "ng2-charts";
 
 @Component({
   selector: 'app-average-sales-week',
   templateUrl: './average-sales-week.component.html',
+  imports: [
+    BaseChartDirective
+  ],
   styleUrls: []
 })
 export class AverageSalesWeekComponent implements OnInit {

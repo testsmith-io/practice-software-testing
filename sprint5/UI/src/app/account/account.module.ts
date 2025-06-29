@@ -16,7 +16,7 @@ import {SharedModule} from "../shared/shared.module";
 import {TranslocoDirective} from "@jsverse/transloco";
 import {FaIconComponent, FaIconLibrary, FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {faAddressCard, faCommentDots, faList, faRemove, faStar} from "@fortawesome/free-solid-svg-icons";
-import { QRCodeComponent } from 'angularx-qrcode';
+import {QRCodeComponent} from 'angularx-qrcode';
 
 const routes: Routes = [
   {path: '', component: OverviewComponent, canActivate: [UserAuthGuard], data: {title: 'Overview'}},
@@ -29,16 +29,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    OverviewComponent,
-    FavoritesComponent,
-    InvoicesComponent,
-    ProfileComponent,
-    InvoiceDetails,
-    TruncatePipe,
-    MessagesComponent,
-    MessageDetailComponent
-  ],
   imports: [
     ReactiveFormsModule,
     CommonModule,
@@ -48,7 +38,15 @@ const routes: Routes = [
     TranslocoDirective,
     FaIconComponent,
     FontAwesomeModule,
-    QRCodeComponent
+    QRCodeComponent,
+    OverviewComponent,
+    FavoritesComponent,
+    InvoicesComponent,
+    ProfileComponent,
+    InvoiceDetails,
+    TruncatePipe,
+    MessagesComponent,
+    MessageDetailComponent
   ],
   exports: [RouterModule]
 })

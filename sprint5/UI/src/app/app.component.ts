@@ -1,21 +1,34 @@
-import {Component, OnInit} from '@angular/core';
-import {Router, NavigationEnd, ActivatedRoute} from '@angular/router';
+import {Component, inject, OnInit} from '@angular/core';
+import {ActivatedRoute, NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {filter, map} from 'rxjs/operators';
 import {GaService} from "./_services/ga.service";
+import {HeaderComponent} from "./header/header.component";
+import {FooterComponent} from "./footer/footer.component";
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faGlobe, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
+  imports: [
+    HeaderComponent,
+    RouterOutlet,
+    FooterComponent
+  ],
   styleUrls: []
 })
 export class AppComponent implements OnInit {
-  title = 'Toolshop';
+  private readonly library = inject(FaIconLibrary);
 
-  constructor(private gaService: GaService,
-              private titleService: Title,
-              private router: Router,
-              private activatedRoute: ActivatedRoute) {
+  title = 'Toolshop';
+  private gaService = inject(GaService);
+  private titleService = inject(Title);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+
+  constructor() {
+    this.library.addIcons(faGlobe, faShoppingCart);
   }
 
   ngOnInit(): void {
