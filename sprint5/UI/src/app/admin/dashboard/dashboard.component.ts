@@ -4,7 +4,16 @@ import {Invoice} from "../../models/invoice";
 import {InvoiceService} from "../../_services/invoice.service";
 import {first} from "rxjs/operators";
 import {Pagination} from "../../models/pagination";
-import {ChartConfiguration, ChartType} from 'chart.js';
+import {
+  BarController,
+  BarElement,
+  CategoryScale,
+  Chart,
+  ChartConfiguration,
+  ChartType, Legend,
+  LinearScale,
+  Tooltip
+} from 'chart.js';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 import {BaseChartDirective} from "ng2-charts";
 import {PaginationComponent} from "../../pagination/pagination.component";
@@ -69,6 +78,15 @@ export class DashboardComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    Chart.register(
+      CategoryScale,
+      LinearScale,
+      BarElement,
+      BarController,
+      Tooltip,
+      Legend,
+      DataLabelsPlugin
+    );
    this.getNewInvoices();
 
     this.reportService.getTotalSalesPerYear().subscribe(res => {
