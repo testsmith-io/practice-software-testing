@@ -7,7 +7,17 @@ import {Pagination} from "../../models/pagination";
 import {RouterLink} from "@angular/router";
 import {BaseChartDirective} from "ng2-charts";
 import DataLabelsPlugin from "chartjs-plugin-datalabels";
-import {ChartConfiguration, ChartType} from "chart.js";
+import {
+  BarController,
+  BarElement,
+  CategoryScale,
+  Chart,
+  ChartConfiguration,
+  ChartType,
+  Legend,
+  LinearScale,
+  Tooltip
+} from "chart.js";
 import {NgxPaginationModule} from "ngx-pagination";
 
 @Component({
@@ -69,6 +79,15 @@ export class DashboardComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    Chart.register(
+      CategoryScale,
+      LinearScale,
+      BarElement,
+      BarController,
+      Tooltip,
+      Legend,
+      DataLabelsPlugin
+    );
    this.getNewInvoices();
 
     this.reportService.getTotalSalesPerYear().subscribe(res => {

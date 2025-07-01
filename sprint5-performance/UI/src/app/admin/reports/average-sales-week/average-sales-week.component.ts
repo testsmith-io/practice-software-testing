@@ -1,6 +1,15 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ReportService} from "../../../_services/report.service";
-import {ChartConfiguration, ChartType} from "chart.js";
+import {
+  BarController,
+  BarElement,
+  CategoryScale,
+  Chart,
+  ChartConfiguration,
+  ChartType, Legend,
+  LinearScale,
+  Tooltip
+} from "chart.js";
 import DataLabelsPlugin from "chartjs-plugin-datalabels";
 import {RenderDelayDirective} from "../../../render-delay-directive.directive";
 import {BaseChartDirective} from "ng2-charts";
@@ -79,6 +88,15 @@ export class AverageSalesWeekComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    Chart.register(
+      CategoryScale,
+      LinearScale,
+      BarElement,
+      BarController,
+      Tooltip,
+      Legend,
+      DataLabelsPlugin
+    );
     this.getData('2025')
   }
 

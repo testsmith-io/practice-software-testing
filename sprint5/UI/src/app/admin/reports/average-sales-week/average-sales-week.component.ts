@@ -1,6 +1,15 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {ReportService} from "../../../_services/report.service";
-import {ChartConfiguration, ChartType} from "chart.js";
+import {
+  BarController,
+  BarElement,
+  CategoryScale,
+  Chart,
+  ChartConfiguration,
+  ChartType, Legend,
+  LinearScale,
+  Tooltip
+} from "chart.js";
 import DataLabelsPlugin from "chartjs-plugin-datalabels";
 import {BaseChartDirective} from "ng2-charts";
 
@@ -13,6 +22,7 @@ import {BaseChartDirective} from "ng2-charts";
   styleUrls: []
 })
 export class AverageSalesWeekComponent implements OnInit {
+  private readonly reportService = inject(ReportService);
 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -75,10 +85,16 @@ export class AverageSalesWeekComponent implements OnInit {
     }
   };
 
-  constructor(private reportService: ReportService) {
-  }
-
   ngOnInit(): void {
+    Chart.register(
+      CategoryScale,
+      LinearScale,
+      BarElement,
+      BarController,
+      Tooltip,
+      Legend,
+      DataLabelsPlugin
+    );
     this.getData('2025')
   }
 
