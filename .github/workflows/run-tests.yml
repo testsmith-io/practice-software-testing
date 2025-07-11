@@ -13,7 +13,55 @@ jobs:
       - name: Checkout ⚙️
         uses: actions/checkout@v4
 
-      - name: Set up Node.js and install dependencies ⚙️
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Cache Docker layers 🧱
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-docker-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-docker-
+
+      - name: Build Laravel API image 🐘
+        run: |
+          docker buildx build \
+            --cache-from=type=local,src=/tmp/.buildx-cache \
+            --cache-to=type=local,dest=/tmp/.buildx-cache,mode=max \
+            --load \
+            -f _docker/app.docker \
+            -t my-laravel-api ./_docker
+
+      - name: Build Angular UI image 🧱
+        run: |
+          docker buildx build \
+            --cache-from=type=local,src=/tmp/.buildx-cache \
+            --cache-to=type=local,dest=/tmp/.buildx-cache,mode=max \
+            --load \
+            -f _docker/ui.docker \
+            -t my-angular-ui ./_docker
+
+      - name: Start Docker containers 🐳
+        run: |
+          export DISABLE_LOGGING=true
+          docker compose -f docker-compose.yml up -d
+
+      - name: Sleep for 60 seconds
+        run: sleep 60s
+        shell: bash
+
+      - name: Create & Seed database 🌱
+        run: |
+          docker compose exec -T laravel-api php artisan migrate:refresh --seed
+
+      - name: POST login (verify auth flow)
+        run: |
+          curl -v -X POST 'http://localhost:8091/users/login' \
+          -H 'Content-Type: application/json' \
+          --data-raw '{"email":"customer@practicesoftwaretesting.com","password":"welcome01"}'
+
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -40,25 +88,6 @@ jobs:
           else
             npx playwright install --with-deps
           fi
-
-      - name: Start Docker containers 🐳
-        run: |
-          export DISABLE_LOGGING=true
-          docker compose -f docker-compose.yml up -d
-
-      - name: Sleep for 60 seconds
-        run: sleep 60s
-        shell: bash
-
-      - name: Create & Seed database 🌱
-        run: |
-          docker compose exec -T laravel-api php artisan migrate:refresh --seed
-
-      - name: POST login (verify auth flow)
-        run: |
-          curl -v -X POST 'http://localhost:8091/users/login' \
-          -H 'Content-Type: application/json' \
-          --data-raw '{"email":"customer@practicesoftwaretesting.com","password":"welcome01"}'
 
       - name: Run Playwright tests 🧪
         run: npx playwright test
