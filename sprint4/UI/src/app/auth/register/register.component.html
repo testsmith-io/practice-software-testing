@@ -52,17 +52,23 @@
 
           <div class="form-group mb-3">
             <label for="dob" class="form-label">Date of birth</label>
-            <input formControlName="dob"
+            <input
+              formControlName="dob"
               id="dob"
               data-test="dob"
               class="form-control"
               type="text"
+              placeholder="YYYY-MM-DD"
               [ngClass]="{ 'is-invalid': submitted && f['dob'].errors }"
-              placeholder="Your Date of birth *"
-              value=""/>
+            />
             @if (f['dob'].invalid && submitted) {
               <div data-test="dob-error"
                 class="alert alert-danger mt-3">
+                @if (f['dob'].errors?.['invalidDate']) {
+                  <div>
+                    Please enter a valid date in YYYY-MM-DD format.
+                  </div>
+                }
                 @if (f['dob'].errors?.['required']) {
                   <div>
                     Date of Birth is required.

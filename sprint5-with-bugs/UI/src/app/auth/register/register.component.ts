@@ -6,16 +6,18 @@ import {User} from "../../models/user.model";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
 import {NgClass, NgStyle} from "@angular/common";
 import {PasswordInputComponent} from "../../shared/password-input/password-input.component";
+import {DateValidators} from "../../shared/validators/date.validators";
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  imports: [
-    ReactiveFormsModule,
-    NgClass,
-    NgStyle,
-    PasswordInputComponent
-  ],
+    imports: [
+        ReactiveFormsModule,
+        NgClass,
+        NgStyle,
+        PasswordInputComponent,
+        ReactiveFormsModule
+    ],
   styleUrls: []
 })
 export class RegisterComponent implements OnInit {
@@ -34,7 +36,7 @@ export class RegisterComponent implements OnInit {
       {
         first_name: ['', [Validators.required, Validators.pattern(/^[a-zA-Z]+$/)]],
         last_name: ['', [Validators.required, Validators.pattern(/^[a-zA-Z]+$/)]],
-        dob: ['', [Validators.required]],
+        dob: ['', [Validators.required, DateValidators.isoDate]],
         address: ['', [Validators.required]],
         city: ['', [Validators.required]],
         state: ['', [Validators.required]],

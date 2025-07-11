@@ -4,6 +4,7 @@ import {CustomerAccountService} from "../../shared/customer-account.service";
 import countriesList from '../../../assets/countries.json';
 import {User} from "../../models/user.model";
 import {NgClass} from "@angular/common";
+import {DateValidators} from "../../shared/validators/date.validators";
 
 @Component({
   selector: 'app-register',
@@ -28,7 +29,7 @@ export class RegisterComponent implements OnInit {
       {
         first_name: ['', [Validators.required]],
         last_name: ['', [Validators.required]],
-        dob: ['', [Validators.required]],
+        dob: ['', [Validators.required, DateValidators.isoDate]],
         address: ['', [Validators.required]],
         city: ['', [Validators.required]],
         state: ['', [Validators.required]],
