@@ -46,18 +46,9 @@ jobs:
           export DISABLE_LOGGING=true
           docker compose -f docker-compose.yml up -d
 
-      - name: Wait for Laravel API to become ready ⏳
-        run: |
-          echo "Waiting for Laravel to be ready..."
-          for i in {1..30}; do
-            if curl -sf http://localhost:8091/status > /dev/null; then
-              echo "Laravel is up!"
-              break
-            fi
-            echo "Still waiting... ($i)"
-            sleep 2
-          done
-          curl -X GET http://localhost:8091/status
+      - name: Sleep for 60 seconds
+        run: sleep 60s
+        shell: bash
 
       - name: Create & Seed database 🌱
         run: |
