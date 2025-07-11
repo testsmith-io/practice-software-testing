@@ -7,6 +7,7 @@ import {PasswordValidators} from "../../_helpers/password.validators";
 import {NgClass} from "@angular/common";
 import {PasswordInputComponent} from "../../shared/password-input/password-input.component";
 import {TranslocoDirective} from "@jsverse/transloco";
+import {DateValidators} from "../../shared/validators/date.validators";
 
 @Component({
   selector: 'app-register',
@@ -15,7 +16,8 @@ import {TranslocoDirective} from "@jsverse/transloco";
     ReactiveFormsModule,
     NgClass,
     PasswordInputComponent,
-    TranslocoDirective
+    TranslocoDirective,
+    ReactiveFormsModule
   ],
   styleUrls: ['./register.component.css']
 })
@@ -36,7 +38,7 @@ export class RegisterComponent implements OnInit {
       {
         first_name: ['', [Validators.required]],
         last_name: ['', [Validators.required]],
-        dob: ['', [Validators.required]],
+        dob: ['', [Validators.required, DateValidators.isoDate]],
         street: ['', [Validators.required]],
         city: ['', [Validators.required]],
         state: ['', [Validators.required]],
