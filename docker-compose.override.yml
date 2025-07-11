@@ -1,0 +1,41 @@
+version: '2'
+services:
+
+  web:
+    volumes:
+      - ./_docker/vhost.dev.conf:/etc/nginx/conf.d/default.conf
+  cron:
+    build:
+      context: ./_docker/cron
+      dockerfile: Dockerfile
+    working_dir: /var/www
+    container_name: cron
+    restart: always
+    command: crond -f -l 8
+    volumes_from:
+      - laravel-api
+    environment:
+      - "PHP_OPCACHE_VALIDATE_TIMESTAMPS=1"
+      - "DB_PORT=3306"
+      - "DB_HOST=mariadb"
+      - "host=localhost"
+      - DISABLE_LOGGING=${DISABLE_LOGGING}
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:fpm-alpine
+    links:
+      - mariadb:db
+    environment:
+      MYSQL_USERNAME: root
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - phpmyadmindata:/var/www/html
+
+  mailcatcher:
+    image: dockage/mailcatcher:0.9.0
+    ports:
+      - 1025:1025 # smtp server
+      - 1080:1080 # web ui
+
+volumes:
+  phpmyadmindata:
