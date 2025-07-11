@@ -15,6 +15,7 @@ import {NgxSliderModule} from "@angular-slider/ngx-slider";
 import {PaginationComponent} from "../../pagination/pagination.component";
 import {NgClass, NgTemplateOutlet} from "@angular/common";
 import {RouterLink} from "@angular/router";
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-overview',
@@ -69,13 +70,20 @@ export class OverviewComponent implements OnInit {
       this.categories = response;
     });
 
-    this.search = this.formBuilder.group(
-      {
-        query: ['', [Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(40)]],
-      });
+    this.search = this.formBuilder.group({
+      query: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
+    });
+    
+    this.search.get('query')?.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      filter((value: string) => value.length >= 2)
+    ).subscribe((query: string) => {
+      this.triggerSearch(query);
+    });
+
   }
+
 
   onPageChange(page: number) {
     this.currentPage = page;
@@ -176,14 +184,11 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  onSearchSubmit() {
-    if (this.search.invalid) {
-      return;
-    }
-
+  triggerSearch(query: string): void {
     this.resultState = 'search_started';
-    this.searchQuery = this.search.value.query;
-    this.productService.searchProducts(this.searchQuery).subscribe(res => {
+    this.searchQuery = query;
+
+    this.productService.searchProducts(query).subscribe(res => {
       this.resultState = 'search_completed';
       this.minPrice = 1;
       this.maxPrice = 100;
@@ -193,8 +198,6 @@ export class OverviewComponent implements OnInit {
       this.uncheckAll();
       this.results = res;
     });
-    this.search.reset();
-    this.uncheckAll();
   }
 
   changePriceRange() {

@@ -47,15 +47,13 @@
       {{ t('pages.overview.search') }}
     </h4>
     <hr>
-    <form [formGroup]="search" (ngSubmit)="onSearchSubmit()" autocomplete=off>
+    <form [formGroup]="search" autocomplete="off">
       <div class="input-group mb-3">
         <label for="search-query" class="visually-hidden">{{ t('pages.overview.search') }}</label>
         <input formControlName="query" id="search-query" data-test="search-query" type="text"
                placeholder="{{ t('pages.overview.search') }}" class="form-control">
-        <button (click)="reset()" class="btn btn-warning" type="reset"
+        <button (click)="reset()" class="btn btn-warning" type="button"
                 data-test="search-reset">X
-        </button>
-        <button class="btn btn-secondary" type="submit" data-test="search-submit">{{ t('pages.overview.search') }}
         </button>
       </div>
     </form>
