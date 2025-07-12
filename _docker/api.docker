@@ -18,8 +18,8 @@ RUN apk add --no-cache --virtual build-essentials \
     apk del build-essentials && rm -rf /usr/src/php*
 
 # Copy configuration
-COPY ./_docker/opcache.ini $PHP_INI_DIR/conf.d/
-COPY ./_docker/php-ini-overrides.ini $PHP_INI_DIR/conf.d/
+COPY ./opcache.ini $PHP_INI_DIR/conf.d/
+COPY ./php-ini-overrides.ini $PHP_INI_DIR/conf.d/
 
 RUN usermod -u 1000 www-data
 
