@@ -36,6 +36,44 @@ time. Any subsequent `docker-compose up -d` will take seconds.
 
 All images together are less than 1,5 GB.
 
+## 🐳 Docker Compose Setup
+
+This project includes multiple Docker Compose configurations to support development, testing, and production usage.
+
+### 🔧 Local Development (with live-reloading, source-mounted volumes)
+
+Use this when actively working on the application:
+
+```bash
+docker compose up -d
+```
+
+This will:
+
+* Build the containers from local source (`docker-compose.yml`)
+* Mount the source code for live changes
+* Automatically include `docker-compose.override.yml` (mailcatcher, cron, phpmyadmin)
+
+### 🧪 Development + Excluding Optional Services
+
+To start the bare minimum:
+
+```bash
+docker compose -f docker-compose.yml up -d
+```
+This will:
+
+* Use only what's defined in docker-compose.yml
+* Ignore docker-compose.override.yml completely
+* Skip optional services like cron, phpmyadmin, mailcatcher
+
+
+### 🚀 Production Setup (with prebuilt Docker images)
+
+```bash
+docker compose -f docker-compose.prod.yml up --pull missing
+```
+
 ## URL's (local version)
 
 | URL                                                                                | Description           |
