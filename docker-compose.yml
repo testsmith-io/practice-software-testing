@@ -1,10 +1,11 @@
-version: '2'
+version: '3.8'
 services:
   # The Application
   laravel-api:
     build:
       context: ./_docker
       dockerfile: api.docker
+      target: development
     working_dir: /var/www
     volumes:
       - ./${SPRINT_FOLDER}/API:/var/www:cached
@@ -19,6 +20,7 @@ services:
     build:
       context: ./_docker
       dockerfile: ui.docker
+      target: development
     working_dir: /app
     volumes:
       - ./${SPRINT_FOLDER}/UI:/app:cached
