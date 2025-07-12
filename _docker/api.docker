@@ -40,7 +40,7 @@ COPY ./_docker/php-ini-overrides.ini $PHP_INI_DIR/conf.d/
 WORKDIR /var/www
 
 # Copy composer files first (for better caching)
-COPY composer.json composer.lock ./
+COPY composer.json ./
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
