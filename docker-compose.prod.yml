@@ -1,13 +1,7 @@
 version: '2'
 services:
-  # The Application
   laravel-api:
-    build:
-      context: ./_docker
-      dockerfile: api.docker
-    working_dir: /var/www
-    volumes:
-      - ./${SPRINT_FOLDER}/API:/var/www:cached
+    image: testsmith/practice-software-testing-sprint5-api
     environment:
       - "PHP_OPCACHE_VALIDATE_TIMESTAMPS=1"
       - "DB_PORT=3306"
@@ -16,16 +10,11 @@ services:
       - DISABLE_LOGGING=${DISABLE_LOGGING}
 
   angular-ui:
-    build:
-      context: ./_docker
-      dockerfile: ui.docker
-    working_dir: /app
-    volumes:
-      - ./${SPRINT_FOLDER}/UI:/app:cached
+    image: testsmith/practice-software-testing-sprint5-ui
     ports:
       - 4200:4200
     command: >
-      bash -c "npm install --force && ng serve --host 0.0.0.0 --port 4200"
+      bash -c "ng serve --host 0.0.0.0 --port 4200"
 
   # The Web Server
   web:
@@ -33,22 +22,12 @@ services:
       context: ./_docker
       dockerfile: web.docker
     working_dir: /var/www
-    volumes:
-      - laravel-api:/var/www
     ports:
       - 8091:80
       - 8000:81
     depends_on:
       - laravel-api
 
-  composer:
-    image: composer:2.6.6
-    command: install --no-dev --optimize-autoloader --ignore-platform-req=ext-ffi && chown -R www-data /var/www && chmod 777 /var/www
-    volumes_from:
-      - laravel-api
-    working_dir: /var/www
-
-  # The Database
   mariadb:
     image: yobasystems/alpine-mariadb:10.6.11
     ports:
@@ -60,6 +39,3 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: root
       MYSQL_DATABASE: toolshop
-
-volumes:
-  laravel-api:
