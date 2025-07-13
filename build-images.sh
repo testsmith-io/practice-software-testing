@@ -37,7 +37,7 @@ print_help() {
   echo "Examples:"
   echo "  $0                      # Build all sprints"
   echo "  $0 -s sprint1           # Build only sprint1"
-  echo "  $0 --tag v1.2.0         # Build all with version tag"
+  echo "  $0 --tag v1.2.0         # Build all with version tag and also push latest"
   exit 0
 }
 
@@ -57,7 +57,8 @@ build_image() {
   local component_lc=$(echo "$component" | tr '[:upper:]' '[:lower:]')
 
   local base_image="$DOCKER_USER/practice-software-testing-${sprint_lc}-${component_lc}"
-  local image_tag="${base_image}${TAG:+:$TAG}"
+  local version_tag="${base_image}${TAG:+:$TAG}"
+  local latest_tag="${base_image}:latest"
 
   local context_dir="./$sprint/$component"
   local dockerfile="./_docker/${component_lc}.docker"
@@ -67,7 +68,7 @@ build_image() {
     return
   fi
 
-  echo "📦 Building: $image_tag"
+  echo "📦 Building: $version_tag"
   echo "🔍 Context: $context_dir"
   echo "📝 Dockerfile: $dockerfile"
 
@@ -80,11 +81,11 @@ build_image() {
   fi
 
   if [ "$DRY_RUN" = false ]; then
-    docker build -t "$image_tag" \
+    docker build -t "$version_tag" \
       --target production \
       -f "$dockerfile" "$context_dir"
   else
-    echo "💡 Dry run: docker build -t \"$image_tag\" --target production -f \"$dockerfile\" \"$context_dir\""
+    echo "💡 Dry run: docker build -t \"$version_tag\" --target production -f \"$dockerfile\" \"$context_dir\""
   fi
 
   if [ "$component_lc" = "api" ]; then
@@ -93,10 +94,18 @@ build_image() {
   fi
 
   if [ "$SKIP_PUSH" = false ] && [ "$DRY_RUN" = false ]; then
-    echo "📤 Pushing: $image_tag"
-    docker push "$image_tag"
+    echo "📤 Pushing: $version_tag"
+    docker push "$version_tag"
+
+    if [ -n "$TAG" ]; then
+      echo "🏷  Tagging also as latest: $latest_tag"
+      docker tag "$version_tag" "$latest_tag"
+      echo "📤 Pushing: $latest_tag"
+      docker push "$latest_tag"
+    fi
   elif [ "$SKIP_PUSH" = false ]; then
-    echo "💡 Dry run: docker push \"$image_tag\""
+    echo "💡 Dry run: docker push \"$version_tag\""
+    [ -n "$TAG" ] && echo "💡 Dry run: docker tag \"$version_tag\" \"$latest_tag\" && docker push \"$latest_tag\""
   fi
 
   echo ""
