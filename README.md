@@ -71,7 +71,7 @@ This will:
 ### 🚀 Production Setup (with prebuilt Docker images)
 
 ```bash
-docker compose -f docker-compose.prod.yml up --pull missing
+docker compose -f docker-compose.prod.yml up --pull missing -d
 ```
 
 ## URL's (local version)
