@@ -1,7 +1,7 @@
 version: '2'
 services:
   laravel-api:
-    image: testsmith/practice-software-testing-sprint5-api
+    image: testsmith/practice-software-testing-${SPRINT}-api
     environment:
       - "PHP_OPCACHE_VALIDATE_TIMESTAMPS=1"
       - "DB_PORT=3306"
@@ -10,7 +10,7 @@ services:
       - DISABLE_LOGGING=${DISABLE_LOGGING}
 
   angular-ui:
-    image: testsmith/practice-software-testing-sprint5-ui
+    image: testsmith/practice-software-testing-${SPRINT}-ui
     ports:
       - 4200:4200
     command: >

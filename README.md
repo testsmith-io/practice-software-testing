@@ -86,7 +86,7 @@ docker compose -f docker-compose.prod.yml up --pull missing
 
 ## Switch sprint
 
-Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belongs to the sprint.
+Update the `SPRINT` in [.env](.env) to use the proper version that belongs to the sprint.
 
 ## Roll Back - Run Migrations - Seed Database
 

@@ -8,7 +8,7 @@ services:
       target: development
     working_dir: /var/www
     volumes:
-      - ./${SPRINT_FOLDER}/API:/var/www:cached
+      - ./${SPRINT}/API:/var/www:cached
     environment:
       - "PHP_OPCACHE_VALIDATE_TIMESTAMPS=1"
       - "DB_PORT=3306"
@@ -23,7 +23,7 @@ services:
       target: development
     working_dir: /app
     volumes:
-      - ./${SPRINT_FOLDER}/UI:/app:cached
+      - ./${SPRINT}/UI:/app:cached
     ports:
       - 4200:4200
     command: >
