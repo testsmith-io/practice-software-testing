@@ -8,6 +8,8 @@ services:
       - "DB_HOST=mariadb"
       - "host=localhost"
       - DISABLE_LOGGING=${DISABLE_LOGGING}
+    volumes:
+      - laravel-app-code:/var/www
 
   angular-ui:
     image: testsmith/practice-software-testing-${SPRINT}-ui
@@ -28,6 +30,23 @@ services:
     depends_on:
       - laravel-api
 
+  cron:
+    image: testsmith/practice-software-testing-cron
+    restart: always
+    depends_on:
+      - mariadb
+      - laravel-api
+    volumes:
+      - laravel-app-code:/var/www
+    working_dir: /var/www
+    command: sh -c "crond -f -l 8"
+    environment:
+      - "PHP_OPCACHE_VALIDATE_TIMESTAMPS=1"
+      - "DB_PORT=3306"
+      - "DB_HOST=mariadb"
+      - "host=localhost"
+      - DISABLE_LOGGING=${DISABLE_LOGGING}
+
   mariadb:
     image: yobasystems/alpine-mariadb:10.6.11
     ports:
@@ -39,3 +58,6 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: root
       MYSQL_DATABASE: toolshop
+
+volumes:
+  laravel-app-code:
