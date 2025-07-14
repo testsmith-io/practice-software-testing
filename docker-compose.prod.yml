@@ -20,10 +20,7 @@ services:
 
   # The Web Server
   web:
-    build:
-      context: ./_docker
-      dockerfile: web.docker
-    working_dir: /var/www
+    image: testsmith/practice-software-testing-web
     ports:
       - 8091:80
       - 8000:81
