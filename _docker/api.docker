@@ -1,0 +1,62 @@
+# Stage 1: Base image
+FROM php:8.3-fpm-alpine as base
+
+RUN apk add --no-cache mysql-client msmtp perl wget procps shadow libzip libpng libjpeg-turbo libwebp freetype icu
+
+RUN apk add --no-cache --virtual build-essentials \
+    icu-dev icu-libs zlib-dev g++ make automake autoconf libffi-dev libzip-dev \
+    libpng-dev libwebp-dev libjpeg-turbo-dev freetype-dev && \
+    docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp && \
+    docker-php-ext-configure ffi --with-ffi && \
+    docker-php-ext-install gd && \
+    docker-php-ext-install pdo_mysql && \
+    docker-php-ext-install ffi && \
+    docker-php-ext-install intl && \
+    docker-php-ext-install opcache && \
+    docker-php-ext-install exif && \
+    docker-php-ext-install zip && \
+    apk del build-essentials && rm -rf /usr/src/php*
+
+RUN usermod -u 1000 www-data
+
+# Stage 2: Development (no code copy)
+FROM base as development
+
+# Copy configuration
+COPY ./opcache.ini $PHP_INI_DIR/conf.d/
+COPY ./php-ini-overrides.ini $PHP_INI_DIR/conf.d/
+
+RUN chown -R www-data:www-data /var/www
+
+USER www-data
+
+# Stage 3: Production (with code copy)
+FROM base as production
+
+# Copy configuration
+COPY ./_docker/opcache.ini $PHP_INI_DIR/conf.d/
+COPY ./_docker/php-ini-overrides.ini $PHP_INI_DIR/conf.d/
+
+WORKDIR /var/www
+
+# Copy composer files first (for better caching)
+COPY composer.json ./
+
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Install dependencies as www-data user
+USER www-data
+
+# Copy application code
+COPY --chown=www-data:www-data . .
+
+# Set proper permissions
+USER root
+RUN chown -R www-data:www-data /var/www && \
+    chmod -R 755 /var/www && \
+    chmod -R 777 /var/www/storage /var/www/bootstrap/cache
+
+RUN composer install --no-dev --optimize-autoloader --ignore-platform-req=ext-ffi
+
+USER www-data

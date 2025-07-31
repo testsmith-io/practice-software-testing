@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 
@@ -6,11 +6,9 @@ import {Observable} from "rxjs";
   providedIn: 'root'
 })
 export class PaymentService {
-
-  constructor(private http: HttpClient) {
-  }
+  private httpClient = inject(HttpClient);
 
   validate(api_url: any, payload: any): Observable<any> {
-    return this.http.post(api_url, payload, {responseType: 'json'});
+    return this.httpClient.post(api_url, payload, {responseType: 'json'});
   }
 }

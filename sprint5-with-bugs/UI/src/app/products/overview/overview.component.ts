@@ -1,5 +1,5 @@
-import {Component, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, ElementRef, inject, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Brand} from "../../models/brand";
 import {BrandService} from "../../_services/brand.service";
 import {CategoryService} from "../../_services/category.service";
@@ -8,14 +8,30 @@ import DiscountUtil from "../../_helpers/discount.util";
 import {Pagination} from "../../models/pagination";
 import {ProductService} from "../../_services/product.service";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
-import {Options} from "@angular-slider/ngx-slider";
+import {NgxSliderModule, Options} from "@angular-slider/ngx-slider";
+import {NgxPaginationModule} from "ngx-pagination";
+import {RouterLink} from "@angular/router";
+import {NgClass, NgTemplateOutlet} from "@angular/common";
 
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
+  imports: [
+    NgxSliderModule,
+    ReactiveFormsModule,
+    NgxPaginationModule,
+    RouterLink,
+    NgClass,
+    NgTemplateOutlet
+  ],
   styleUrls: ['./overview.component.css']
 })
 export class OverviewComponent implements OnInit {
+  private readonly productService = inject(ProductService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly brandService = inject(BrandService);
+  private readonly categoryService = inject(CategoryService);
+  public readonly browserDetect = inject(BrowserDetectorService);
 
   @ViewChildren("checkboxes") checkboxes: QueryList<ElementRef>;
 
@@ -36,13 +52,6 @@ export class OverviewComponent implements OnInit {
     ceil: 200
   };
   protected readonly Math = Math;
-
-  constructor(private productService: ProductService,
-              private formBuilder: FormBuilder,
-              private brandService: BrandService,
-              private categoryService: CategoryService,
-              public browserDetect: BrowserDetectorService) {
-  }
 
   ngOnInit(): void {
     this.getProducts();
@@ -66,7 +75,7 @@ export class OverviewComponent implements OnInit {
   getProducts() {
     this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), this.p).subscribe(res => {
       this.results = res;
-      this.results.data.map((item: Product) => {
+      this.results.data.forEach((item: Product) => {
         if (item.is_location_offer) {
           item.discount_price = DiscountUtil.calculateDiscount(item.price);
         }
@@ -85,7 +94,7 @@ export class OverviewComponent implements OnInit {
       this.resultState = 'filter_completed';
       this.p = 1;
       this.results = res;
-      this.results.data.map((item: Product) => {
+      this.results.data.forEach((item: Product) => {
         if (item.is_location_offer) {
           item.discount_price = DiscountUtil.calculateDiscount(item.price);
         }
@@ -104,7 +113,7 @@ export class OverviewComponent implements OnInit {
       this.resultState = 'filter_completed';
       this.p = 1;
       this.results = res;
-      this.results.data.map((item: Product) => {
+      this.results.data.forEach((item: Product) => {
         if (item.is_location_offer) {
           item.discount_price = DiscountUtil.calculateDiscount(item.price);
         }
@@ -163,7 +172,7 @@ export class OverviewComponent implements OnInit {
     this.resultState = 'sorting_started';
     this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0).subscribe(res => {
       this.results = res;
-      this.results.data.map((item: Product) => {
+      this.results.data.forEach((item: Product) => {
         this.resultState = 'sorting_completed';
         if (item.is_location_offer) {
           item.discount_price = DiscountUtil.calculateDiscount(item.price);

@@ -1,0 +1,219 @@
+<div class="container" *transloco="let t">
+  <div class="row">
+    @if (paid) {
+      <div id="order-confirmation" class="col-md-6 offset-md-3 login-form-1" [innerHTML]="t('pages.checkout.payment.confirm', {invoice_number})">
+      </div>
+    }
+    @if (!paid) {
+      <div class="col-md-6 offset-md-3 login-form-1">
+        <h3>{{t('pages.checkout.payment.title')}}</h3>
+        <form [formGroup]="cusPayment">
+          <div class="input-group mb-3">
+            <label for="payment-method" class="visually-hidden">{{t('pages.checkout.payment.method-label')}}</label>
+            <select data-test="payment-method" id="payment-method" class="form-select" formControlName="payment_method">
+              <option value="" disabled>{{t('pages.checkout.payment.options.select')}}</option>
+              <option value="bank-transfer">{{t('pages.checkout.payment.options.bank-transfer')}}</option>
+              <option value="cash-on-delivery">{{t('pages.checkout.payment.options.cash-on-delivery')}}</option>
+              <option value="credit-card">{{t('pages.checkout.payment.options.credit-card')}}</option>
+              <option value="buy-now-pay-later">{{t('pages.checkout.payment.options.buy-now-pay-later')}}</option>
+              <option value="gift-card">{{t('pages.checkout.payment.options.gift-card')}}</option>
+            </select>
+          </div>
+          @if (p['payment_method'].invalid && (p['payment_method'].dirty || p['payment_method'].touched)) {
+            <div
+              class="alert alert-danger">
+
+              @if (p['payment_method'].errors?.['required']) {
+                <div>
+                  {{t('pages.checkout.payment.method-required')}}
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Bank Transfer Fields -->
+          @if (cusPayment.get('payment_method').value === 'bank-transfer') {
+            <div>
+              <label for="bank_name" class="visually-hidden">{{t('pages.checkout.payment.bank-transfer.bank-name')}}</label>
+              <input class="form-control mb-3" id="bank_name" formControlName="bank_name" data-test="bank_name" placeholder="{{t('pages.checkout.payment.bank-transfer.bank-name')}}">
+              @if (p['bank_name'].invalid && (p['bank_name'].dirty || p['bank_name'].touched)) {
+                <div class="alert alert-danger">
+                  @if (p['bank_name'].errors?.['pattern'] || p['bank_name'].errors?.['required']) {
+                    <div>
+                      {{t('pages.checkout.payment.bank-transfer.bank-name-error-format')}}
+                    </div>
+                  }
+                </div>
+              }
+              <label for="account_name" class="visually-hidden">{{t('pages.checkout.payment.bank-transfer.account-name')}}</label>
+              <input class="form-control mb-3" id="account_name" formControlName="account_name" data-test="account_name"
+                placeholder="{{t('pages.checkout.payment.bank-transfer.account-name')}}">
+              @if (p['account_name'].invalid && (p['account_name'].dirty || p['account_name'].touched)) {
+                <div class="alert alert-danger">
+                  @if (p['account_name'].errors?.['pattern'] || p['account_name'].errors?.['required']) {
+                    <div>
+                      {{t('pages.checkout.payment.bank-transfer.account-name-error-format')}}
+                    </div>
+                  }
+                </div>
+              }
+              <label for="account_number" class="visually-hidden">{{t('pages.checkout.payment.bank-transfer.account-number')}}</label>
+              <input class="form-control" id="account_number" formControlName="account_number" data-test="account_number"
+                aria-describedby="account_number_help"
+                placeholder="Account Number">
+              <small id="account_number_help" class="form-text text-muted d-block mb-3">{{t('pages.checkout.payment.bank-transfer.account-number-help')}}</small>
+              @if (p['account_number'].invalid && (p['account_number'].dirty || p['account_number'].touched)) {
+                <div class="alert alert-danger">
+                  @if (p['account_number'].errors?.['pattern'] || p['account_number'].errors?.['required']) {
+                    <div>
+                      {{t('pages.checkout.payment.bank-transfer.account-number-error-format')}}
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Gift Card Fields -->
+          @if (selectedPaymentMethod === 'gift-card') {
+            <div>
+              <label for="gift_card_number" class="visually-hidden">{{t('pages.checkout.payment.gift-card.number')}}</label>
+              <input class="form-control" id="gift_card_number" formControlName="gift_card_number" data-test="gift_card_number"
+                aria-describedby="gift_card_number_help"
+                placeholder="{{t('pages.checkout.payment.gift-card.number')}}">
+              <small id="gift_card_number_help" class="form-text text-muted d-block mb-3">{{t('pages.checkout.payment.gift-card.number-help')}}</small>
+              @if (p['gift_card_number'].invalid && (p['gift_card_number'].dirty || p['gift_card_number'].touched)) {
+                <div class="alert alert-danger">
+                  @if (p['gift_card_number'].errors?.['pattern'] || p['gift_card_number'].errors?.['required']) {
+                    <div>
+                      {{t('pages.checkout.payment.gift-card.number-error-format')}}
+                    </div>
+                  }
+                </div>
+              }
+              <label for="validation_code" class="visually-hidden">{{t('pages.checkout.payment.gift-card.validation-code')}}</label>
+              <input class="form-control" id="validation_code" formControlName="validation_code" data-test="validation_code"
+                aria-describedby="validation_code_help"
+                placeholder="Validation Code">
+              <small id="validation_code_help" class="form-text text-muted d-block mb-3">{{t('pages.checkout.payment.gift-card.validation-code-help')}}</small>
+              @if (p['validation_code'].invalid && (p['validation_code'].dirty || p['validation_code'].touched)) {
+                <div class="alert alert-danger">
+                  @if (p['validation_code'].errors?.['pattern'] || p['validation_code'].errors?.['required']) {
+                    <div>
+                      {{t('pages.checkout.payment.gift-card.validation-code-error-format')}}
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Credit Card Fields -->
+          @if (selectedPaymentMethod === 'credit-card') {
+            <div>
+              <label for="credit_card_number" class="visually-hidden">{{t('pages.checkout.payment.credit-card.number')}}</label>
+              <input class="form-control" id="credit_card_number" formControlName="credit_card_number" data-test="credit_card_number"
+                aria-describedby="credit_card_number_help"
+                placeholder="{{t('pages.checkout.payment.credit-card.number')}}">
+              <small id="credit_card_number_help" class="form-text text-muted d-block mb-3">{{t('pages.checkout.payment.credit-card.number-help')}}</small>
+              @if (p['credit_card_number'].invalid && (p['credit_card_number'].dirty || p['credit_card_number'].touched)) {
+                <div class="alert alert-danger">
+                  @if (p['credit_card_number'].errors?.['pattern']) {
+                    <div>
+                      {{t('pages.checkout.payment.credit-card.number-error-format')}}
+                    </div>
+                  }
+                </div>
+              }
+              <label for="expiration_date" class="visually-hidden">{{t('pages.checkout.payment.credit-card.expiration-date')}}</label>
+              <input class="form-control mb-3" id="expiration_date" formControlName="expiration_date" data-test="expiration_date"
+                placeholder="{{t('pages.checkout.payment.credit-card.expiration-date')}}">
+              @if (p['expiration_date'].invalid && (p['expiration_date'].dirty || p['expiration_date'].touched)) {
+                <div class="alert alert-danger">
+                  @if (p['expiration_date'].errors?.['dateFormat'] || p['expiration_date'].errors?.['required']) {
+                    <div>
+                      {{t('pages.checkout.payment.credit-card.date-error-format')}}
+                    </div>
+                  }
+                  @if (p['expiration_date'].errors?.['datePast']) {
+                    <div>
+                      {{t('pages.checkout.payment.credit-card.date-error-past')}}
+                    </div>
+                  }
+                </div>
+              }
+              <label for="cvv" class="visually-hidden">{{t('pages.checkout.payment.credit-card.cvv')}}</label>
+              <input class="form-control" id="cvv" formControlName="cvv" data-test="cvv" aria-describedby="cvv_help"
+                placeholder="{{t('pages.checkout.payment.credit-card.cvv')}}">
+              <small id="cvv_help" class="form-text text-muted d-block mb-3">{{t('pages.checkout.payment.credit-card.cvv-help')}}</small>
+              @if (p['cvv'].invalid && (p['cvv'].dirty || p['cvv'].touched)) {
+                <div class="alert alert-danger">
+                  @if (p['cvv'].errors?.['pattern'] || p['cvv'].errors?.['required']) {
+                    <div>
+                      {{t('pages.checkout.payment.credit-card.cvv-error-format')}}
+                    </div>
+                  }
+                </div>
+              }
+              <label for="card_holder_name" class="visually-hidden">{{t('pages.checkout.payment.credit-card.name')}}</label>
+              <input class="form-control mb-3" id="card_holder_name" formControlName="card_holder_name" data-test="card_holder_name"
+                placeholder="{{t('pages.checkout.payment.credit-card.name')}}">
+              @if (p['card_holder_name'].invalid && (p['card_holder_name'].dirty || p['card_holder_name'].touched)) {
+                <div class="alert alert-danger">
+                  @if (p['card_holder_name'].errors?.['required']) {
+                    <div>
+                      {{t('pages.checkout.payment.credit-card.name-required')}}
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Buy Now Pay Later Fields -->
+          @if (selectedPaymentMethod === 'buy-now-pay-later') {
+            <div>
+              <label for="monthly_installments" class="visually-hidden">{{t('pages.checkout.payment.bnpl.monthly-installments')}}</label>
+              <select data-test="monthly_installments" id="monthly_installments"
+                aria-describedby="monthly_installments_help" class="form-select"
+                formControlName="monthly_installments">
+                <option value="" disabled>{{t('pages.checkout.payment.bnpl.monthly-installments-choose')}}</option>
+                <option value="3">3 {{t('pages.checkout.payment.bnpl.monthly-installments')}}</option>
+                <option value="6">6 {{t('pages.checkout.payment.bnpl.monthly-installments')}}</option>
+                <option value="9">9 {{t('pages.checkout.payment.bnpl.monthly-installments')}}</option>
+                <option value="12">12 {{t('pages.checkout.payment.bnpl.monthly-installments')}}</option>
+              </select>
+              <small id="monthly_installments_help" class="form-text text-muted d-block mb-3">{{t('pages.checkout.payment.bnpl.monthly-installments-help')}}</small>
+              @if (p['monthly_installments'].invalid && (p['monthly_installments'].dirty || p['monthly_installments'].touched)) {
+                <div class="alert alert-danger">
+                  @if (p['monthly_installments'].errors?.['required']) {
+                    <div>
+                      {{t('pages.checkout.payment.bnpl.monthly-installments-error-required')}}
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+
+          @if (paymentError) {
+            <div class="alert alert-danger">
+              <div class="help-block" data-test="payment-error-message">{{ paymentError }}</div>
+            </div>
+          }
+          @if (paymentMessage) {
+            <div class="alert alert-success">
+              <div class="help-block" data-test="payment-success-message">{{ paymentMessage }}</div>
+            </div>
+          }
+        </form>
+        <div class="float-end">
+          <button data-test="finish" [disabled]="!cusPayment.valid" type="button" class="btn btn-success"
+            (click)="finishFunction()">
+            {{t('pages.checkout.payment.confirm-btn')}}
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

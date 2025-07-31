@@ -1,27 +1,34 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {CartService} from "../../_services/cart.service";
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import {ToastrService} from "ngx-toastr";
+import {DecimalPipe, NgClass} from "@angular/common";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {ArchwizardModule} from "@y3krulez/angular-archwizard";
+import {TranslocoDirective} from "@jsverse/transloco";
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.css'] // Corrected 'styleUrl' to 'styleUrls'
+  imports: [
+    NgClass,
+    DecimalPipe,
+    FaIconComponent,
+    ArchwizardModule,
+    TranslocoDirective
+  ],
+  styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
+  private cartService = inject(CartService);
+  private toastr = inject(ToastrService);
+  private customerAccountService = inject(CustomerAccountService);
 
   cart: any;
   isLoggedIn: boolean = false;
   discount: number = 0;
   total: number = 0;
   subtotal: number = 0;
-
-  constructor(
-    private cartService: CartService,
-    private toastr: ToastrService,
-    private customerAccountService: CustomerAccountService
-  ) {
-  }
 
   ngOnInit(): void {
     this.fetchCartItems();
@@ -42,11 +49,14 @@ export class CartComponent implements OnInit {
     const quantity = Math.max(1, parseInt(target.value, 10));
 
     if (quantity >= 1) {
-      this.cartService.replaceQuantity(item.product.id, quantity).subscribe(() => {
-        this.fetchCartItems();
-        this.toastr.success('Product quantity updated.', null, {progressBar: true});
-      }, (response) => {
-        this.toastr.error(response.error.message, null, {progressBar: true});
+      this.cartService.replaceQuantity(item.product.id, quantity).subscribe({
+        next: () => {
+          this.fetchCartItems();
+          this.toastr.success('Product quantity updated.', null, { progressBar: true });
+        },
+        error: (response) => {
+          this.toastr.error(response.error.message, null, { progressBar: true });
+        }
       });
     }
   }

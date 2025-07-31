@@ -1,16 +1,31 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup} from "@angular/forms";
+import {Component, inject, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import {TokenStorageService} from "../../_services/token-storage.service";
 import {User} from "../../models/user.model";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
+import {NgClass, NgStyle} from "@angular/common";
+import {PasswordInputComponent} from "../../shared/password-input/password-input.component";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  imports: [
+    ReactiveFormsModule,
+    NgClass,
+    NgStyle,
+    PasswordInputComponent,
+    RouterLink
+  ],
+  styleUrls: []
 })
 export class LoginComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly accountService = inject(CustomerAccountService);
+  private readonly tokenStorage = inject(TokenStorageService);
+  public readonly browserDetect = inject(BrowserDetectorService);
+
   form: FormGroup | any;
   submitted = false;
   error: string | undefined;
@@ -18,12 +33,6 @@ export class LoginComponent implements OnInit {
   isLoggedIn = false;
   isLoginFailed = false;
   roles: string[] = [];
-
-  constructor(private formBuilder: FormBuilder,
-              private accountService: CustomerAccountService,
-              private tokenStorage: TokenStorageService,
-              public browserDetect: BrowserDetectorService) {
-  }
 
   ngOnInit(): void {
     if (this.tokenStorage.getToken()) {

@@ -1,17 +1,29 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, inject, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Observable, of} from "rxjs";
 import {CartService} from "../_services/cart.service";
 import {InvoiceService} from "../_services/invoice.service";
 import {PaymentService} from "../_services/payment.service";
 import {environment} from "../../environments/environment";
+import {DecimalPipe, NgClass} from "@angular/common";
+import { ArchwizardModule } from '@y3krulez/angular-archwizard';
 
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
+  imports: [
+    ArchwizardModule,
+    DecimalPipe,
+    NgClass,
+    ReactiveFormsModule
+],
   styleUrls: ['./checkout.component.css']
 })
 export class CheckoutComponent implements OnInit {
+  private paymentService = inject(PaymentService);
+  private invoiceService = inject(InvoiceService);
+  private formBuilder = inject(FormBuilder);
+  private cartService = inject(CartService);
 
   PaymentMethods: any = ['Bank Transfer', 'Cash on Delivery', 'Credit Card', 'Buy Now Pay Later', 'Gift Card'];
   cusAddress: FormGroup | any;
@@ -30,12 +42,6 @@ export class CheckoutComponent implements OnInit {
   paid: boolean = false;
   total: number;
   invoice_number: number;
-
-  constructor(private paymentService: PaymentService,
-              private invoiceService: InvoiceService,
-              private formBuilder: FormBuilder,
-              private cartService: CartService) {
-  }
 
   ngOnInit(): void {
     this.items = this.cartService.getItems();

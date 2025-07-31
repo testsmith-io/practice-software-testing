@@ -1,0 +1,110 @@
+@if (product) {
+  <div class="row my-3" *transloco="let t">
+    <div class="col-md-6">
+      <figure class="figure">
+        <div class="card-img-wrapper">
+          <img src="assets/img/products/{{product.product_image.file_name}}" class="figure-img img-fluid"
+               alt="{{product.name}}">
+        </div>
+        <figcaption class="figure-caption">{{ t('pages.product-detail.photo-by') }} <a target="_blank"
+                                                       href="{{product.product_image.by_url}}">{{ product.product_image.by_name }}</a>
+          {{ t('pages.product-detail.on') }} <a target="_blank"
+                href="{{product.product_image.source_url}}">{{ product.product_image.source_name }}</a>.
+        </figcaption>
+      </figure>
+    </div>
+    <div class="col-md-6">
+      <h1 data-test="product-name">{{ product.name }}</h1>
+      <p><span aria-label="category"
+               class="badge rounded-pill bg-secondary me-1">{{ product.category.name }}</span><span
+        aria-label="brand" class="badge rounded-pill bg-secondary me-1">{{ product.brand.name }}
+    </span>@if (product.discount_price) {
+        <span
+          class="badge rounded-pill bg-danger me-1">-{{ discount_percentage }}%</span>
+      }</p>
+      <span [ngClass]="{'discounted' : product.discount_price}">$<span
+        aria-label="unit-price" data-test="unit-price">{{ product.price.toFixed(2) }}</span></span>
+      @if (product.discount_price) {
+        <span data-test="offer-price"
+              class="ms-1">$<span id="discount-price">{{ product.discount_price }}</span></span>
+      }
+      @if (product.is_rental) {
+        <span
+          class="ms-1">{{ t('pages.product-detail.per-hour') }}</span>
+      }
+      @if (product.is_rental) {
+        <small
+          class="ms-1"> / ({{ t('pages.product-detail.total') }} $@if (!product.discount_price) {
+          <span
+            id="total-price">{{ (product.price * quantity).toFixed(2) }}</span>
+        }
+          @if (product.discount_price) {
+            <span
+              id="total-price">{{ (product.discount_price * quantity).toFixed(2) }}</span>
+          })</small>
+      }
+      <p data-test="product-description" id="description">
+        {{ product.description }}</p>
+      @if (!product.is_rental) {
+        <div class="input-group quantity">
+          <!-- Button to decrease quantity -->
+          <button [disabled]="!product.in_stock" class="btn btn-secondary" data-test="decrease-quantity"
+                  id="btn-decrease-quantity" (click)="minus()" attr.aria-label="{{ t('pages.product-detail.decrease-quantity') }}"><fa-icon [icon]="['fas', 'minus']"></fa-icon>
+          </button>
+          <!-- Quantity input field with associated label -->
+          <!-- Label for the input, visually hidden but accessible to screen readers -->
+          <label for="quantity-input" class="visually-hidden">Quantity</label>
+          <input [disabled]="!product.in_stock" type="number" min="1" class="form-control" data-test="quantity"
+                 [(ngModel)]="quantity" id="quantity-input" attr.aria-labelledby="{{ t('pages.product-detail.quantity') }}">
+          <!-- Button to increase quantity -->
+          <button [disabled]="!product.in_stock" class="btn btn-secondary" data-test="increase-quantity"
+                  id="btn-increase-quantity" (click)="plus()" attr.aria-label="{{ t('pages.product-detail.increase-quantity') }}"><fa-icon [icon]="['fas', 'plus']"></fa-icon>
+          </button>
+        </div>
+      }
+      @if (product.is_rental) {
+        <div>
+          <label class="form-label">{{ t('pages.product-detail.duration') }} (<span id="duration">{{ quantity }}</span> {{ t('pages.product-detail.hours') }})</label>
+          <ngx-slider [(value)]="quantity" [options]="sliderOptions"></ngx-slider>
+        </div>
+      }
+      @if (!product.in_stock && !product.is_rental) {
+        <p class="text-danger mt-3" data-test="out-of-stock">{{ t('pages.overview.no-stock') }}</p>
+      }
+      <div class="btn-group mt-2">
+        <button class="btn-success btn" [disabled]="!product.in_stock && !product.is_rental" data-test="add-to-cart"
+                id="btn-add-to-cart" (click)="addToCart(product)">
+          <fa-icon [icon]="['fas', 'shopping-cart']" class="px-1"></fa-icon>{{ t('pages.product-detail.add-to-cart-btn') }}
+        </button>
+        <button class="btn btn-warning"
+                data-test="add-to-favorites" id="btn-add-to-favorites" (click)="addToFavorites(product)"><fa-icon [icon]="['fas', 'star']" class="px-1"></fa-icon> {{ t('pages.product-detail.add-to-favorites-btn') }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<hr/>
+
+<div class="row" *transloco="let t">
+  <h2>{{ t('pages.product-detail.related-products') }}</h2>
+  <div class="col">
+    <div class="container">
+      @for (item of relatedProducts; track item) {
+        <a routerLink="/product/{{item.id}}" class="card"
+           style="text-decoration: none; color: black;">
+          <div class="card-img-wrapper">
+            <img class="card-img-top" alt="{{item.name}}" src="assets/img/products/{{item.product_image.file_name}}">
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">
+              {{ item.name }}
+            </h5>
+            <a href="#" large>{{ t('pages.product-detail.more-information') }}</a>
+          </div>
+
+        </a>
+      }
+    </div>
+  </div>
+</div>

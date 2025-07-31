@@ -1,18 +1,37 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {ReportService} from "../../_services/report.service";
 import {Invoice} from "../../models/invoice";
 import {InvoiceService} from "../../_services/invoice.service";
 import {first} from "rxjs/operators";
 import {Pagination} from "../../models/pagination";
-import { ChartConfiguration, ChartType } from 'chart.js';
+import {
+  BarController,
+  BarElement,
+  CategoryScale,
+  Chart,
+  ChartConfiguration,
+  ChartType, Legend,
+  LinearScale,
+  Tooltip
+} from 'chart.js';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
+import {BaseChartDirective} from "ng2-charts";
+import {PaginationComponent} from "../../pagination/pagination.component";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  imports: [
+    BaseChartDirective,
+    PaginationComponent,
+    RouterLink
+  ],
+  styleUrls: []
 })
 export class DashboardComponent implements OnInit {
+  private readonly invoiceService = inject(InvoiceService);
+  private readonly reportService = inject(ReportService);
 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -58,11 +77,16 @@ export class DashboardComponent implements OnInit {
     }
   };
 
-  constructor(private invoiceService: InvoiceService,
-              private reportService: ReportService) {
-  }
-
   ngOnInit(): void {
+    Chart.register(
+      CategoryScale,
+      LinearScale,
+      BarElement,
+      BarController,
+      Tooltip,
+      Legend,
+      DataLabelsPlugin
+    );
    this.getNewInvoices();
 
     this.reportService.getTotalSalesPerYear().subscribe(res => {

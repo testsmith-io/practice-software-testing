@@ -1,20 +1,27 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {InvoiceService} from "../../_services/invoice.service";
 import {Invoice} from "../../models/invoice";
 import {first} from "rxjs/operators";
 import {Pagination} from "../../models/pagination";
+import {RouterLink} from "@angular/router";
+import {NgxPaginationModule} from "ngx-pagination";
+import {DecimalPipe} from "@angular/common";
 
 @Component({
   selector: 'app-invoices',
   templateUrl: './invoices.component.html',
-  styleUrls: ['./invoices.component.css']
+  imports: [
+    RouterLink,
+    NgxPaginationModule,
+    DecimalPipe
+],
+  styleUrls: []
 })
 export class InvoicesComponent implements OnInit {
+  private readonly invoiceService = inject(InvoiceService);
+
   p: number = 1;
   results: Pagination<Invoice>;
-
-  constructor(private invoiceService: InvoiceService) {
-  }
 
   ngOnInit(): void {
     this.getInvoices();

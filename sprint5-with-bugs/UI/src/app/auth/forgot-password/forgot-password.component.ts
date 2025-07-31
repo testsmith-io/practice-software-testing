@@ -1,24 +1,29 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup} from "@angular/forms";
+import {Component, inject, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
+import {NgClass, NgStyle} from "@angular/common";
 
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.component.html',
-  styleUrls: ['./forgot-password.component.css']
+  imports: [
+    ReactiveFormsModule,
+    NgClass,
+    NgStyle
+  ],
+  styleUrls: []
 })
 export class ForgotPasswordComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly accountService = inject(CustomerAccountService);
+  public readonly browserDetect = inject(BrowserDetectorService);
+
   form: FormGroup | any;
   isUpdated: boolean = false;
   hideAlert: boolean = false;
   submitted = false;
   error: string | undefined;
-
-  constructor(private formBuilder: FormBuilder,
-              private accountService: CustomerAccountService,
-              public browserDetect: BrowserDetectorService) {
-  }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group(

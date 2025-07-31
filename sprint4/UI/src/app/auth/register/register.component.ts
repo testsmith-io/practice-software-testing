@@ -1,30 +1,35 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, inject, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import countriesList from '../../../assets/countries.json';
 import {User} from "../../models/user.model";
+import {NgClass} from "@angular/common";
+import {DateValidators} from "../../shared/validators/date.validators";
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  imports: [
+    ReactiveFormsModule,
+    NgClass
+],
+  styleUrls: []
 })
 export class RegisterComponent implements OnInit {
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly accountService = inject(CustomerAccountService);
+
   register: FormGroup | any;
   submitted: boolean;
-
   countries = countriesList;
   error: string;
-
-  constructor(private formBuilder: FormBuilder, private accountService: CustomerAccountService) {
-  }
 
   ngOnInit(): void {
     this.register = this.formBuilder.group(
       {
         first_name: ['', [Validators.required]],
         last_name: ['', [Validators.required]],
-        dob: ['', [Validators.required]],
+        dob: ['', [Validators.required, DateValidators.isoDate]],
         address: ['', [Validators.required]],
         city: ['', [Validators.required]],
         state: ['', [Validators.required]],

@@ -1,17 +1,27 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {ContactMessage} from "../../models/contact-message";
 import {ContactService} from "../../_services/contact.service";
 import {first} from "rxjs/operators";
-import {ActivatedRoute} from "@angular/router";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ActivatedRoute, RouterLink} from "@angular/router";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MessageState} from "../../models/message-state";
+import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-message-detail',
   templateUrl: './message-detail.component.html',
-  styleUrls: ['./message-detail.component.css']
+  imports: [
+    NgClass,
+    RouterLink,
+    ReactiveFormsModule
+  ],
+  styleUrls: []
 })
 export class MessageDetailComponent implements OnInit {
+  private readonly messageService = inject(ContactService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly formBuilder = inject(FormBuilder);
+
   statuses = ["NEW", "IN_PROGRESS", "RESOLVED"];
   message!: ContactMessage;
   form: FormGroup;
@@ -22,11 +32,6 @@ export class MessageDetailComponent implements OnInit {
   error: string;
   messageState: any = MessageState;
   id: string;
-
-  constructor(private messageService: ContactService,
-              private route: ActivatedRoute,
-              private formBuilder: FormBuilder) {
-  }
 
   ngOnInit(): void {
     this.statusForm = this.formBuilder.group(

@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
+import {Injectable} from '@angular/core';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,12 +15,13 @@ export class GaService {
   }
 
   private injectGaScript(gaCode: string): void {
-    const script = document.createElement('script');
-    script.defer = true;
+    // Inject GA external script
+    const script = this.createScript();
     script.src = `https://www.googletagmanager.com/gtag/js?id=${gaCode}`;
     document.head.appendChild(script);
 
-    const scriptText = document.createElement('script');
+    // Inject GA initialization script
+    const scriptText = this.createScript();
     scriptText.innerHTML = `
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -30,10 +31,8 @@ export class GaService {
     document.head.appendChild(scriptText);
   }
 
-
   private injectGtmScript(gtmId: string): void {
-    const script = document.createElement('script');
-    script.defer = true;
+    const script = this.createScript();
     script.innerHTML = `
       (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
       new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -51,5 +50,11 @@ export class GaService {
       height="0" width="0" style="display:none;visibility:hidden"></iframe>
     `;
     document.body.insertBefore(noscript, document.body.firstChild);
+  }
+
+  private createScript(): HTMLScriptElement {
+    const script = document.createElement('script');
+    script.defer = true;
+    return script;
   }
 }

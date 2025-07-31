@@ -1,0 +1,96 @@
+<div class="container login-container" *transloco="let t">
+  <div class="row">
+    <div class="col-md-6 offset-md-3 login-form-1">
+      @if (!isLoggedIn) {
+        <div><h3>{{t('pages.login.title')}}</h3>
+          @if (!showTotpInput) {
+          <form [formGroup]="cusForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="email" class="form-label">{{t('fields.email.label')}} *</label>
+              <input formControlName="email"
+                     class="form-control"
+                     id="email"
+                     data-test="email"
+                     [ngClass]="{ 'is-invalid': cusSubmitted && cf['email'].errors }" type="email"
+                     placeholder="{{t('fields.email.placeholder')}}"
+                     aria-required="true"
+                     [attr.aria-describedby]="(cus_email.invalid && cusSubmitted) ? 'email-error' : null"
+                     [attr.aria-invalid]="cus_email.invalid && cusSubmitted ? 'true' : 'false'"/>
+            </div>
+            @if (cus_email.invalid && cusSubmitted) {
+              <div id="email-error" data-test="email-error" class="alert alert-danger">
+                @if (cus_email.errors?.required) {
+                  <div>{{t('fields.email.errors.required')}}</div>
+                }
+                @if (cus_email.errors?.['email']) {
+                  <div>{{t('fields.email.errors.format')}}</div>
+                }
+              </div>
+            }
+            <div class="mb-3">
+              <label for="password">{{t('fields.password.label')}} *</label>
+              <input formControlName="password"
+                     class="form-control"
+                     id="password"
+                     data-test="password"
+                     [ngClass]="{ 'is-invalid': cusSubmitted && cf['password'].errors }" type="password"
+                     placeholder="{{t('fields.password.placeholder')}}"
+                     aria-required="true"
+                     [attr.aria-describedby]="(cus_password.invalid && cusSubmitted) ? 'password-error' : null"
+                     [attr.aria-invalid]="cus_password.invalid && cusSubmitted ? 'true' : 'false'"/>
+            </div>
+            @if (cus_password.invalid && cusSubmitted) {
+              <div id="password-error" data-test="password-error" class="alert alert-danger">
+                @if (cus_password.errors?.required) {
+                  <div>{{t('fields.password.errors.required')}}</div>
+                }
+                @if (cus_password.errors?.['minlength'] || cus_password.errors?.['maxlength']) {
+                  <div>{{t('fields.password.errors.length')}}</div>
+                }
+              </div>
+            }
+            <div class="input-group mb-3">
+              <input type="submit" class="btnSubmit" data-test="login-submit" value="{{t('pages.login.btn')}}"/>
+            </div>
+            <div class="input-group mb-3">
+              <p>{{t('pages.login.no-account')}} <a data-test="register-link" routerLink="/auth/register">{{t('pages.login.register')}}</a><br/>
+                <a data-test="forgot-password-link" routerLink="/auth/forgot-password" class="ForgetPwd">{{t('pages.login.forgot-password')}}</a></p>
+            </div>
+          </form>
+          }
+          @if (showTotpInput) {
+            <form [formGroup]="cusForm" (ngSubmit)="verifyTotp()">
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="row mb-3">
+                    <label for="totp" class="form-label">{{ t('pages.login.totp_code') }}</label>
+                    <div class="col-sm-9">
+                      <input id="totp" class="form-control" type="text" data-test="totp-code" formControlName="totp"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <input type="submit" [disabled]="cusSubmitted && cusForm.invalid" data-test="verify-totp" class="btnSubmit"
+                     value="{{ t('pages.login.verify_totp') }}"
+                     [attr.aria-label]="t('pages.login.verify_totp')"/>
+            </form>
+          }
+          @if (customerError) {
+            <div data-test="login-error" class="alert alert-danger" aria-live="assertive">
+              <div class="help-block">{{ customerError }}</div>
+            </div>
+          }
+        </div>
+      } @else {
+        <p>{{t('pages.checkout.sign-in.already', {first_name: customer.first_name, last_name: customer.last_name})}}</p>
+        <div class="float-end">
+          <button data-test="proceed-2" [disabled]="!canExitStep2" type="button" class="btn btn-success" awNextStep>
+            {{t('pages.checkout.btn')}}
+          </button>
+        </div>
+
+      }
+
+    </div>
+  </div>
+</div>

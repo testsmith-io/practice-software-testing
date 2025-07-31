@@ -1,0 +1,187 @@
+@if (!invoice?.invoice_date) {
+  <div class="container mt-5" *transloco="let t">
+    <p>{{ t('pages.my-account.invoices.not-exist') }}</p>
+  </div>
+}
+@if (invoice?.invoice_date) {
+  <div appRenderDelay [delayRandomRange]="[500, 2000]">
+    <div class="container mt-5" *transloco="let t">
+      <div class="row mb-3">
+        <div class="input-group">
+          <button class="btn btn-warning" [disabled]="!isDownloadReady" (click)="downloadPDF()" type="submit"
+            data-test="download-invoice">{{ t('pages.my-account.invoices.download-pdf') }}
+          </button>
+        </div>
+        @if (error && !hideAlert) {
+          <div [ngClass]="fadeOutMessage()" class="alert alert-danger mt-3"
+            role="alert">
+            {{ error }}
+          </div>
+        }
+      </div>
+      <div class="row">
+        <div class="col">
+          <h3>{{ t('pages.my-account.invoices.general-information') }}</h3>
+          <form>
+            <div class="form-group row">
+              <label for="invoice_date"
+              class="col-sm-3 col-form-label">{{ t('pages.my-account.invoices.invoice-number') }}</label>
+              <div class="col-sm-9">
+                <input type="text" readonly class="form-control-plaintext" data-test="invoice-number"
+                  id="invoice_number"
+                  value="{{invoice.invoice_number}}">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="invoice_date"
+              class="col-sm-3 col-form-label">{{ t('pages.my-account.invoices.invoice-date') }}</label>
+              <div class="col-sm-9">
+                <input type="text" readonly class="form-control-plaintext" data-test="invoice-date" id="invoice_date"
+                  value="{{invoice.invoice_date}}">
+              </div>
+            </div>
+            @if (invoice.additional_discount_percentage) {
+              <div class="form-group row">
+                <label for="total" class="col-sm-3 col-form-label">{{ t('pages.checkout.cart.subtotal') }}</label>
+                <div class="col-sm-9">
+                  <input type="text" readonly class="form-control-plaintext" data-test="total" id="subtotal"
+                    value="$ {{invoice.subtotal.toFixed(2)}}">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="total" class="col-sm-3 col-form-label">{{ t('pages.checkout.cart.discount') }}
+                ({{ invoice.additional_discount_percentage }}%)</label>
+                <div class="col-sm-9">
+                  <input type="text" readonly class="form-control-plaintext" data-test="total"
+                    id="additional_discount_percentage"
+                    value="$ {{invoice.additional_discount_amount.toFixed(2)}}">
+                </div>
+              </div>
+            }
+            <div class="form-group row">
+              <label for="total" class="col-sm-3 col-form-label">{{ t('pages.checkout.cart.total') }}</label>
+              <div class="col-sm-9">
+                <input type="text" readonly class="form-control-plaintext" data-test="total" id="total"
+                  value="$ {{invoice.total.toFixed(2)}}">
+              </div>
+            </div>
+          </form>
+          <div class="mb-3"></div>
+
+          <h3>{{ t('pages.my-account.invoices.billing-address') }}</h3>
+          <form>
+            <div class="form-group row">
+              <label for="street" class="col-sm-3 col-form-label">{{ t('fields.street.label') }}</label>
+              <div class="col-sm-9">
+                <input type="text" readonly class="form-control-plaintext" data-test="street" id="street"
+                  value="{{invoice.billing_street}}">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="postal_code" class="col-sm-3 col-form-label">{{ t('fields.postal_code.label') }}</label>
+              <div class="col-sm-9">
+                <input type="text" readonly class="form-control-plaintext" data-test="postal_code" id="postal_code"
+                  value="{{invoice.billing_postal_code}}">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="city" class="col-sm-3 col-form-label">{{ t('fields.city.label') }}</label>
+              <div class="col-sm-9">
+                <input type="text" readonly class="form-control-plaintext" data-test="city" id="city"
+                  value="{{invoice.billing_city}}">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="state" class="col-sm-3 col-form-label">{{ t('fields.state.label') }}</label>
+              <div class="col-sm-9">
+                <input type="text" readonly class="form-control-plaintext" data-test="state" id="state"
+                  value="{{invoice.billing_state}}">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="country" class="col-sm-3 col-form-label">{{ t('fields.country.label') }}</label>
+              <div class="col-sm-9">
+                <input type="text" readonly class="form-control-plaintext" data-test="country" id="country"
+                  value="{{invoice.billing_country}}">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col">
+          <h3>{{ t('pages.my-account.invoices.payment-information') }}</h3>
+          <form>
+            <div class="form-group row">
+              <label for="payment_method"
+              class="col-sm-3 col-form-label">{{ t('pages.checkout.payment.method-label') }}</label>
+              <div class="col-sm-9">
+                <input type="text" readonly class="form-control-plaintext" data-test="payment-method"
+                  id="payment_method"
+                  value="{{ getPaymentMethodTranslation(invoice.payment.payment_method) }}">
+              </div>
+            </div>
+            @for (detail of invoice.payment.payment_details | keyvalue; track detail) {
+              <div>
+                <div class="form-group row">
+                  <label for="{{detail.key}}"
+                  class="col-sm-3 col-form-label">{{ detail.key | replaceUnderscores | titleCase }}</label>
+                  <div class="col-sm-9">
+                    <input type="text" readonly class="form-control-plaintext" [id]="detail.key" value="{{detail.value}}">
+                  </div>
+                </div>
+              </div>
+            }
+          </form>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col">
+          <h3>{{ t('pages.my-account.invoices.products') }}</h3>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">{{ t('pages.checkout.cart.quantity-header') }}</th>
+                <th scope="col">{{ t('pages.my-account.invoices.product') }}</th>
+                <th class="text-end" scope="col">{{ t('pages.checkout.cart.price-header') }}</th>
+                <th class="text-end" scope="col">{{ t('pages.checkout.cart.total') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (invoiceline of invoice.invoicelines; track invoiceline) {
+                <tr>
+                  <td>{{ invoiceline.quantity }}</td>
+                  <td>{{ invoiceline.product.name }}&nbsp;@if (invoiceline.discount_percentage) {
+                    <span
+
+                    class="badge rounded-pill bg-warning me-1">-{{ invoiceline.discount_percentage }}%</span>
+                    }<br/>@if (invoiceline.product.is_rental) {
+                    <small> ({{ t('pages.checkout.cart.rental-explainer') }})</small>
+                  }</td>
+                  <td class="col-md-2 text-end"><span
+                  [ngClass]="{'discounted' : invoiceline.discount_percentage}">${{ invoiceline.product.price | number: '1.2-2' }}</span>@if (invoiceline.discounted_price) {
+                  <br
+                    />
+                }
+                @if (invoiceline.discount_percentage) {
+                  <span
+                    data-test="offer-price">$<span
+                  id="discount-price">{{ invoiceline.discounted_price }}</span></span>
+                }</td>
+                <td class="col-md-2 text-end"><span
+                [ngClass]="{'discounted' : invoiceline.discount_percentage}">${{ invoiceline.quantity * invoiceline.product.price | number: '1.2-2' }}</span>@if (invoiceline.discounted_price) {
+                <br
+                  />
+              }
+              @if (invoiceline.discount_percentage) {
+                <span
+                  data-test="offer-price">$<span
+                id="discount-total-price">{{ invoiceline.quantity * invoiceline.discounted_price | number: '1.2-2' }}</span></span>
+              }</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+}

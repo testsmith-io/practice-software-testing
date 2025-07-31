@@ -1,17 +1,33 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from "@angular/forms";
+import {Component, inject, Input, OnInit} from '@angular/core';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators
+} from "@angular/forms";
 import {CartService} from "../../_services/cart.service";
 import {Observable, of} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {PaymentService} from "../../_services/payment.service";
 import {InvoiceService} from "../../_services/invoice.service";
+import {TranslocoDirective} from "@jsverse/transloco";
 
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
-  styleUrl: './payment.component.css'
+  imports: [
+    ReactiveFormsModule,
+    TranslocoDirective,
+  ],
+  styleUrls: []
 })
 export class PaymentComponent implements OnInit {
+  private cartService = inject(CartService);
+  private paymentService = inject(PaymentService);
+  private invoiceService = inject(InvoiceService);
+  private formBuilder = inject(FormBuilder);
 
   selectedPaymentMethod: string = '';
 
@@ -25,12 +41,6 @@ export class PaymentComponent implements OnInit {
   paid: boolean = false;
   total: number;
   invoice_number: number;
-
-  constructor(private cartService: CartService,
-              private paymentService: PaymentService,
-              private invoiceService: InvoiceService,
-              private formBuilder: FormBuilder) {
-  }
 
   ngOnInit(): void {
     this.cusPayment = this.formBuilder.group({
@@ -168,11 +178,15 @@ export class PaymentComponent implements OnInit {
 
     this.checkPayment(payloadPayload).subscribe(result => {
       if (result === true) {
-        this.invoiceService.createInvoice(payload).subscribe(res => {
-          this.paid = true;
-          this.invoice_number = res['invoice_number'];
-          this.cartService.emptyCart();
-        }, () => {
+        this.invoiceService.createInvoice(payload).subscribe({
+          next: (res) => {
+            this.paid = true;
+            this.invoice_number = res['invoice_number'];
+            this.cartService.emptyCart();
+          },
+          error: () => {
+            // handle error if needed
+          }
         });
       }
     })
@@ -184,14 +198,17 @@ export class PaymentComponent implements OnInit {
   checkPayment(paymentPayload: any): Observable<boolean> {
     if (!this.state) {
       const endpoint = (window.localStorage.getItem('PAYMENT_ENDPOINT')) ? window.localStorage.getItem('PAYMENT_ENDPOINT') : environment.apiUrl + '/payment/check';
-      this.paymentService.validate(endpoint, paymentPayload).subscribe(res => {
-        this.paymentError = null;
-        this.paymentMessage = res.message;
-        this.state = true;
-      }, err => {
-        this.state = null;
-        this.paymentError = err.error.error;
-        this.state = false;
+      this.paymentService.validate(endpoint, paymentPayload).subscribe({
+        next: (res) => {
+          this.paymentError = null;
+          this.paymentMessage = res.message;
+          this.state = true;
+        },
+        error: (err) => {
+          this.state = null;
+          this.paymentError = err.error?.error || 'Unknown error';
+          this.state = false;
+        }
       });
     }
     return of(this.state);

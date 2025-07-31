@@ -4,12 +4,10 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {PasswordInputComponent} from "../shared/password-input/password-input.component";
 
 @NgModule({
-  declarations: [
-    PasswordInputComponent,
-  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    PasswordInputComponent
   ],
   exports: [
     PasswordInputComponent,

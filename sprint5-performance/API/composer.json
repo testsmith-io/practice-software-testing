@@ -1,0 +1,82 @@
+{
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "The Laravel Framework.",
+    "keywords": ["framework", "laravel"],
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "barryvdh/laravel-dompdf": "v3.1.1",
+        "darkaonline/l5-swagger": "9.0.1",
+        "guzzlehttp/guzzle": "7.9.3",
+        "haruncpi/laravel-id-generator": "1.1",
+        "laravel/framework": "v12.13.0",
+        "laravel/sanctum": "v4.1.1",
+        "laravel/socialite": "v5.20.0",
+        "laravel/tinker": "v2.10.1",
+        "mehradsadeghi/laravel-filter-querystring": "1.1.10",
+        "pact-foundation/pact-php": "10.1.1",
+        "pragmarx/google2fa": "v8.0.3",
+        "predis/predis": "3.0.0",
+        "spatie/array-to-xml": "3.4.0",
+        "tymon/jwt-auth": "2.2.1",
+        "zircote/swagger-php": "5.1.1"
+    },
+    "require-dev": {
+        "deployer/deployer": "^7.4",
+        "fakerphp/faker": "^1.9.1",
+        "laravel/pint": "^1.0",
+        "laravel/sail": "^1.18",
+        "mockery/mockery": "^1.4.4",
+        "pestphp/pest": "3.8.2",
+        "pestphp/pest-plugin-drift": "^3.0",
+        "spatie/laravel-ignition": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        },
+        "files": [
+            "app/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pact-foundation/composer-downloads-plugin": true,
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

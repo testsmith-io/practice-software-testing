@@ -1,19 +1,23 @@
 name: deploy
 
 on:
-  push:
-    branches: [ main ]
+  workflow_run:
+    workflows: ["Run Playwright Tests 🎭"]
+    types:
+      - completed
+    branches: [main]
 
 concurrency: production_environment
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     strategy:
       matrix:
         sprint: [1, 2, 3, 4, 5, '5-with-bugs']
     env:
-      NODE_VERSION: ${{ matrix.sprint == '5' && '22.2.0' || '16' }}
+      NODE_VERSION: '22.17.0'
       SECRET_GOOGLE_ID: ${{ matrix.sprint == '5' && secrets.SECRET_GOOGLE_ID || '' }}
       SECRET_GOOGLE_SECRET: ${{ matrix.sprint == '5' && secrets.SECRET_GOOGLE_SECRET || '' }}
       SECRET_GITHUB_ID: ${{ matrix.sprint == '5' && secrets.SECRET_GITHUB_ID || '' }}
@@ -28,11 +32,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-#      - name: Install Deployer globally
-#        run: |
-#          composer global require deployer/deployer:6.9.0
-#          echo "${{ runner.tool_cache }}/composer/vendor/bin" >> $GITHUB_PATH
-
       - name: Install (dev) Dependencies
         run: |
           cd sprint${{ matrix.sprint }}/API
@@ -45,6 +44,11 @@ jobs:
           else
             ./vendor/bin/phpunit
           fi
+      - name: Run Angular Tests
+        run: |
+          cd sprint${{ matrix.sprint }}/UI
+          npm install --legacy-peer-deps
+          npm run test -- --watch=false --browsers=ChromeHeadless
       - name: Install Dependencies
         run: |
           cd sprint${{ matrix.sprint }}/API

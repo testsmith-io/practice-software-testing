@@ -1,52 +1,65 @@
-<div *ngIf="product" class="row my-3" xmlns="http://www.w3.org/1999/html">
-  <div class="col-md-6">
-    <figure class="figure">
-      <div class="card-img-wrapper">
-        <img src="assets/img/products/{{product.product_image.file_name}}" class="figure-img img-fluid"
-             alt="A generic square placeholder image with rounded corners in a figure.">
-      </div>
-      <figcaption class="figure-caption">Photo by <a target="_blank"
-                                                     href="{{product.product_image.by_url}}">{{product.product_image.by_name}}</a>
+@if (product) {
+  <div class="row my-3" xmlns="http://www.w3.org/1999/html">
+    <div class="col-md-6">
+      <figure class="figure">
+        <div class="card-img-wrapper">
+          <img src="assets/img/products/{{product.product_image.file_name}}" class="figure-img img-fluid"
+            alt="A generic square placeholder image with rounded corners in a figure.">
+        </div>
+        <figcaption class="figure-caption">Photo by <a target="_blank"
+        href="{{product.product_image.by_url}}">{{product.product_image.by_name}}</a>
         on <a target="_blank"
-              href="{{product.product_image.source_url}}">{{product.product_image.source_name}}</a>.
-      </figcaption>
-    </figure>
-  </div>
-  <div class="col-md-6">
-    <h1 data-test="product-name">{{product.name}}</h1>
-    <p><span aria-label="category" class="badge rounded-pill bg-secondary me-1">{{product.category.name}}</span><span
-      aria-label="brand" class="badge rounded-pill bg-secondary me-1">{{product.brand.name}}
-    </span></p>
-    <span>$<span
-      aria-label="unit-price" data-test="unit-price">{{product.price.toFixed(2)}}</span></span>
-    <span
-      *ngIf="product.is_rental" class="ms-1">per hour</span> <small *ngIf="product.is_rental"
-                                                                    class="ms-1"> / (total $<span
-    *ngIf="!product.discount_price"
-    id="total-price">{{(product.price * quantity).toFixed(2)}}</span><span *ngIf="product.discount_price"
-                                                                           id="total-price">{{(product.discount_price * quantity).toFixed(2)}}</span>)</small>
-    <p data-test="product-description" id="description">
-      {{product.description}}</p>
-    <div *ngIf="!product.is_rental" class="input-group quantity">
-      <button class="btn btn-secondary" data-test="decrease-quantity" id="btn-decrease-quantity" (click)="minus()"><i
-        class="fa fa-minus"></i>
-      </button>
-      <input type="number" min="1" class="form-control" data-test="quantity" [(ngModel)]="quantity">
-      <button class="btn btn-secondary" data-test="increase-quantity" id="btn-increase-quantity" (click)="plus()"><i
-        class="fa fa-plus"></i></button>
-    </div>
-    <div *ngIf="product.is_rental">
-      <label class="form-label">Duration (<span id="duration">{{quantity}}</span> hour(s))</label>
-      <ngx-slider [(value)]="quantity" [options]="sliderOptions"></ngx-slider>
-    </div>
-    <div class="btn-group mt-2">
-      <button class="btn-success btn" data-test="add-to-cart" id="btn-add-to-cart" (click)="addToCart(product)">
-        <i
-          class="fa fa-shopping-cart px-1"></i>Add to cart
-      </button>
-    </div>
-  </div>
+      href="{{product.product_image.source_url}}">{{product.product_image.source_name}}</a>.
+    </figcaption>
+  </figure>
 </div>
+<div class="col-md-6">
+  <h1 data-test="product-name">{{product.name}}</h1>
+  <p><span aria-label="category" class="badge rounded-pill bg-secondary me-1">{{product.category.name}}</span><span
+  aria-label="brand" class="badge rounded-pill bg-secondary me-1">{{product.brand.name}}
+</span></p>
+<span>$<span
+aria-label="unit-price" data-test="unit-price">{{product.price.toFixed(2)}}</span></span>
+@if (product.is_rental) {
+  <span
+  class="ms-1">per hour</span>
+  } @if (product.is_rental) {
+  <small
+    class="ms-1"> / (total $@if (!product.discount_price) {
+    <span
+    id="total-price">{{(product.price * quantity).toFixed(2)}}</span>
+    }@if (product.discount_price) {
+    <span
+    id="total-price">{{(product.discount_price * quantity).toFixed(2)}}</span>
+  })</small>
+}
+<p data-test="product-description" id="description">
+{{product.description}}</p>
+@if (!product.is_rental) {
+  <div class="input-group quantity">
+    <button class="btn btn-secondary" data-test="decrease-quantity" id="btn-decrease-quantity" (click)="minus()"><i
+    class="fa fa-minus"></i>
+  </button>
+  <input type="number" min="1" class="form-control" data-test="quantity" [(ngModel)]="quantity">
+  <button class="btn btn-secondary" data-test="increase-quantity" id="btn-increase-quantity" (click)="plus()"><i
+  class="fa fa-plus"></i></button>
+</div>
+}
+@if (product.is_rental) {
+  <div>
+    <label class="form-label">Duration (<span id="duration">{{quantity}}</span> hour(s))</label>
+    <ngx-slider [(value)]="quantity" [options]="sliderOptions"></ngx-slider>
+  </div>
+}
+<div class="btn-group mt-2">
+  <button class="btn-success btn" data-test="add-to-cart" id="btn-add-to-cart" (click)="addToCart(product)">
+    <i
+    class="fa fa-shopping-cart px-1"></i>Add to cart
+  </button>
+</div>
+</div>
+</div>
+}
 
 <hr/>
 
@@ -54,19 +67,20 @@
   <h1>Related products</h1>
   <div class="col">
     <div class="container">
-      <a routerLink="/product/{{item.id}}" *ngFor="let item of relatedProducts" class="card"
-         style="text-decoration: none; color: black;">
-        <div class="card-img-wrapper">
-          <img class="card-img-top" src="assets/img/products/{{item.product_image.file_name}}">
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">
-            {{item.name}}
-          </h5>
-          <a href="#" large>More information</a>
-        </div>
-
-      </a>
+      @for (item of relatedProducts; track item) {
+        <a routerLink="/product/{{item.id}}" class="card"
+          style="text-decoration: none; color: black;">
+          <div class="card-img-wrapper">
+            <img class="card-img-top" src="assets/img/products/{{item.product_image.file_name}}">
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">
+              {{item.name}}
+            </h5>
+            <a href="#" large>More information</a>
+          </div>
+        </a>
+      }
     </div>
   </div>
 </div>

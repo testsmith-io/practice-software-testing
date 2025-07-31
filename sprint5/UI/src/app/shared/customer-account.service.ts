@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {Observable, of, Subject, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
@@ -13,13 +13,11 @@ import {ChangePassword} from "../models/change-password.model";
   providedIn: 'root'
 })
 export class CustomerAccountService {
+  private readonly http = inject(HttpClient);
+  private readonly tokenStorage = inject(TokenStorageService);
 
   public authSub = new Subject<string>();
   apiURL = environment.apiUrl;
-
-  constructor(private http: HttpClient,
-              private tokenStorage: TokenStorageService) {
-  }
 
   login(payload: any): Observable<Token> {
     return this.http.post<Token>(this.apiURL + '/users/login', payload)
@@ -53,7 +51,7 @@ export class CustomerAccountService {
       );
   }
 
-  register(payload: any): Observable<any> {
+  register(payload: User): Observable<any> {
     return this.http.post(this.apiURL + '/users/register', payload)
       .pipe(
         map(res => res),

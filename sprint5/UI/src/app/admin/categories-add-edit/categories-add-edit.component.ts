@@ -1,16 +1,26 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Component, inject, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {ActivatedRoute, RouterLink} from "@angular/router";
 import {first} from "rxjs/operators";
 import {CategoryService} from "../../_services/category.service";
 import {Category} from "../../models/category";
+import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-categories-add-edit',
   templateUrl: './categories-add-edit.component.html',
-  styleUrls: ['./categories-add-edit.component.css']
+  imports: [
+    ReactiveFormsModule,
+    NgClass,
+    RouterLink
+  ],
+  styleUrls: []
 })
 export class CategoriesAddEditComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private route = inject(ActivatedRoute);
+  private categoryService = inject(CategoryService);
+
   form: FormGroup;
   categories!: Category[];
   id: string;
@@ -19,14 +29,6 @@ export class CategoriesAddEditComponent implements OnInit {
   isUpdated: boolean = false;
   hideAlert: boolean = false;
   error: string;
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private categoryService: CategoryService
-  ) {
-  }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];

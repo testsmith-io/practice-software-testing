@@ -24,7 +24,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    RouterModule.forChild(routes),
+    NgxPaginationModule,
     OverviewComponent,
     FavoritesComponent,
     InvoicesComponent,
@@ -34,13 +38,7 @@ const routes: Routes = [
     MessagesComponent,
     MessageDetailComponent
   ],
-    imports: [
-        ReactiveFormsModule,
-        CommonModule,
-        RouterModule.forChild(routes),
-        NgxPaginationModule
-    ],
-  exports: [RouterModule]
+  exports: [RouterModule, TruncatePipe]
 })
 export class AccountModule {
 }

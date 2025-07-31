@@ -1,28 +1,36 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {first} from "rxjs/operators";
 import {ContactMessage} from "../../models/contact-message";
 import {ContactService} from "../../_services/contact.service";
 import {Pagination} from "../../models/pagination";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
-import {TranslocoService} from "@jsverse/transloco";
-import {Router} from "@angular/router";
+import {TranslocoDirective, TranslocoService} from "@jsverse/transloco";
+import {Router, RouterLink} from "@angular/router";
+import {NgClass} from "@angular/common";
+import {TruncatePipe} from "../../_helpers/truncate.pipe";
+import {PaginationComponent} from "../../pagination/pagination.component";
 
 @Component({
   selector: 'app-messages',
   templateUrl: './messages.component.html',
-  styleUrls: ['./messages.component.css']
+  imports: [
+    NgClass,
+    TruncatePipe,
+    RouterLink,
+    PaginationComponent,
+    TranslocoDirective
+  ],
+  styleUrls: []
 })
 export class MessagesComponent implements OnInit {
+  private messageService = inject(ContactService);
+  private translocoService = inject(TranslocoService);
+  private sanitizer = inject(DomSanitizer);
+  private router = inject(Router);
 
   currentPage: number = 1;
   results: Pagination<ContactMessage>;
   noMessagesHtml: SafeHtml;
-
-  constructor(private messageService: ContactService,
-              private translocoService: TranslocoService,
-              private sanitizer: DomSanitizer,
-              private router: Router) {
-  }
 
   ngOnInit(): void {
     this.translocoService.selectTranslate('pages.my-account.messages.no-messages').subscribe((translation: string) => {
@@ -34,17 +42,17 @@ export class MessagesComponent implements OnInit {
   getMessages() {
     this.messageService.getMessages(this.currentPage)
       .pipe(first())
-      .subscribe(
-        (messages) => {
-          this.results = messages
+      .subscribe({
+        next: (messages) => {
+          this.results = messages;
         },
-        (error) => {
+        error: (error) => {
           if (error.status === 401 || error.status === 403) {
             window.localStorage.removeItem('TOKEN_KEY');
             window.location.href = '/auth/login';
           }
         }
-      );
+      });
   }
 
   onPageChange(page: number) {

@@ -1,0 +1,179 @@
+<div class="jumbotron my-4">
+  <p class="lead">
+    <img fetchpriority="high" class="img-fluid" alt="Banner" src="../assets/img/barn-2400x1600.avif"/>
+  </p>
+  <hr class="my-4">
+</div>
+<div class="row">
+
+</div>
+<div class="row" *transloco="let t">
+  <a class="btn btn-secondary d-block d-md-none btn-block mb-3" data-bs-toggle="collapse" data-test="filters"
+     href="#filters"
+     role="button" aria-expanded="false" aria-controls="collapseExample">
+    <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+    {{ t('pages.overview.filters') }}
+  </a>
+  <div data-test="filters" id="filters" class="collapse d-md-block col-md-3 mb-3">
+    <h4 class="grid-title">
+      <fa-icon [icon]="['fas', 'arrows-up-down']"></fa-icon>
+      {{ t('pages.overview.sort') }}
+    </h4>
+    <hr>
+    <form autocomplete=off>
+      <div class="input-group mb-3">
+        <select aria-label="sort" data-test="sort" (change)="changeSorting($event)" class="form-select">
+          <option value=""></option>
+          <option value="name,asc">{{ t('pages.overview.sort-options.name-asc') }}</option>
+          <option value="name,desc">{{ t('pages.overview.sort-options.name-desc') }}</option>
+          <option value="price,desc">{{ t('pages.overview.sort-options.price-desc') }}</option>
+          <option value="price,asc">{{ t('pages.overview.sort-options.price-asc') }}</option>
+        </select>
+      </div>
+    </form>
+
+    <h4 class="grid-title">
+      <fa-icon [icon]="['fas', 'arrows-left-right']"></fa-icon>
+      {{ t('pages.overview.price-range') }}
+    </h4>
+    <hr>
+    <div class="input-group mb-3">
+      <ngx-slider (userChangeEnd)="changePriceRange()" [(value)]="minPrice" [(highValue)]="maxPrice"
+                  [options]="sliderOptions"></ngx-slider>
+    </div>
+
+    <h4 class="grid-title">
+      <fa-icon [icon]="['fas', 'search']"></fa-icon>
+      {{ t('pages.overview.search') }}
+    </h4>
+    <hr>
+    <form [formGroup]="search" autocomplete="off">
+      <div class="input-group mb-3">
+        <label for="search-query" class="visually-hidden">{{ t('pages.overview.search') }}</label>
+        <input formControlName="query" id="search-query" data-test="search-query" type="text"
+               placeholder="{{ t('pages.overview.search') }}" class="form-control">
+        <button (click)="reset()" class="btn btn-warning" type="button"
+                data-test="search-reset">X
+        </button>
+      </div>
+    </form>
+
+    <h4 class="grid-title">
+      <fa-icon [icon]="['fas', 'filter']"></fa-icon>
+      {{ t('pages.overview.filters') }}
+    </h4>
+    <hr>
+    <h4>{{ t('pages.overview.by-category') }}:</h4>
+    <ng-template #recursiveList let-list>
+      <fieldset>
+        <legend class="visually-hidden">{{ t('pages.overview.categories') }}</legend>
+        @for (category of list; track category) {
+          <div class="checkbox">
+            <label>
+              <!-- Parent category checkbox -->
+              @if (!category.parent_id) {
+                <input type="checkbox" class="icheck"
+                       attr.data-test="category-{{category.id}}" name="category_id"
+                       value="{{category.id}}"
+                       [checked]="isCategorySelected(category)"
+                       (change)="selectParentWithSubcategories(category, $event)"/>
+              } @else {
+                <input type="checkbox" class="icheck"
+                       attr.data-test="category-{{category.id}}" name="category_id"
+                       value="{{category.id}}"
+                       [checked]="isCategorySelected(category)"
+                       (change)="filterByCategory($event)"/>
+              }
+              {{ category.name }}
+            </label>
+            <!-- Subcategories -->
+            @if (category.sub_categories.length > 0) {
+              <ul>
+                <ng-container
+                  *ngTemplateOutlet="recursiveList; context:{ $implicit: category.sub_categories }"></ng-container>
+              </ul>
+            }
+          </div>
+        }
+      </fieldset>
+    </ng-template>
+    <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: categories }"></ng-container>
+
+    <div class="py-2"></div>
+
+    <h4>{{ t('pages.overview.by-brand') }}:</h4>
+    <fieldset>
+      <legend class="visually-hidden">{{ t('pages.overview.brands') }}</legend>
+      @for (brand of brands; track brand.id) {
+        <div class="checkbox">
+          <label><input #checkboxes type="checkbox" class="icheck" name="brand_id" attr.data-test="brand-{{brand.id}}"
+                        value="{{brand.id}}"
+                        (change)="filterByBrand($event)"/>
+            {{ brand.name }}</label>
+        </div>
+      }
+    </fieldset>
+
+  </div>
+  <div class="col-md-9" *transloco="let t">
+    @if (searchQuery) {
+      <h3 data-test="search-caption">Searched for: <span data-test="search-term">{{ searchQuery }}</span></h3>
+    }
+    @if (results) {
+      <div class="container" attr.data-test="{{resultState}}">
+        @if (!results.data.length) {
+          <div data-test="no-results">{{ t('pages.overview.no-results') }}</div>
+        }
+        @for (item of results.data; track item.id) {
+          <a attr.data-test="product-{{item.id}}" routerLink="/product/{{item.id}}"
+             class="card" style="text-decoration: none; color: black;">
+            <div class="card-img-wrapper">
+              <img class="card-img-top" alt="{{ item.name }}"
+                   loading="lazy"
+                   src="assets/img/products/{{item.product_image.file_name}}">
+            </div>
+            <div class="card-body">
+              <h5 data-test="product-name" class="card-title">
+                {{ item.name }}
+              </h5>
+            </div>
+            <div class="card-footer">
+              @if (!item.in_stock) {
+                <span class="float-start text-danger" data-test="out-of-stock">{{ t('pages.overview.no-stock') }}</span>
+              }
+              <span class="float-end text-muted">
+                        <span data-test="product-price"
+                              [ngClass]="{'discounted' : item.discount_price}">${{ item.price.toFixed(2) }}</span> @if (item.discount_price) {
+                <span
+                  data-test="product-discount-price"> ${{ item.discount_price.toFixed(2) }}</span>
+              }
+                    </span>
+            </div>
+
+          </a>
+        }
+      </div>
+    } @else {
+      <div class="container">
+        @for (loader of itemsToLoad; track loader.id) {
+          <div class="card skeleton">
+            <div class="card-img-wrapper">
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">
+              </h5>
+            </div>
+            <div class="card-footer">
+                    <span class="float-end text-muted">
+                    </span>
+            </div>
+          </div>
+        }
+      </div>
+    }
+    <div class="mt-3">
+      <app-pagination [currentPage]="currentPage" [lastPage]="results?.last_page"
+                      (pageChange)="onPageChange($event)"></app-pagination>
+    </div>
+  </div>
+</div>

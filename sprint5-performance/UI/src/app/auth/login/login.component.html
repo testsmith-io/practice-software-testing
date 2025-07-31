@@ -1,0 +1,88 @@
+<div class="container auth-container" *transloco="let t">
+  <div class="row justify-content-md-center">
+    <div class="col-lg-6 auth-form">
+      <h3>{{ t('pages.login.title') }}</h3>
+      @if (!showTotpInput) {
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off" data-test="login-form">
+          <div class="mb-3">
+            <label for="email" class="form-label">{{ t('fields.email.label') }} *</label>
+            <input formControlName="email"
+                   class="form-control"
+                   id="email"
+                   data-test="email"
+                   [ngClass]="{ 'is-invalid': submitted && cf['email'].errors }" type="email"
+                   placeholder="{{ t('fields.email.placeholder') }}"
+                   aria-required="true"
+                   [attr.aria-describedby]="(email.invalid && submitted) ? 'email-error' : null"
+                   [attr.aria-invalid]="email.invalid && submitted ? 'true' : 'false'"/>
+          </div>
+          @if (email.invalid && submitted) {
+            <div id="email-error" data-test="email-error" class="alert alert-danger">
+              @if (email.errors?.['required']) {
+                <div>{{ t('fields.email.errors.required') }}</div>
+              }
+              @if (email.errors?.['email']) {
+                <div>{{ t('fields.email.errors.format') }}</div>
+              }
+            </div>
+          }
+          <div class="mb-3">
+            <label for="password">{{ t('fields.password.label') }} *</label>
+            <app-password-input
+              formControlName="password"
+              id="password"
+              placeholder="{{ t('fields.password.placeholder') }}"
+              [isInvalid]="submitted && cf['password'].errors"
+              [ariaDescribedBy]="(password.invalid && submitted) ? 'password-error' : null"
+              [ariaInvalid]="password.invalid && submitted ? 'true' : 'false'"
+            ></app-password-input>
+          </div>
+          @if (password.invalid && submitted) {
+            <div id="password-error" data-test="password-error" class="alert alert-danger">
+              @if (password.errors?.['required']) {
+                <div>{{ t('fields.password.errors.required') }}</div>
+              }
+              @if (password.errors?.['minlength'] || password.errors?.['maxlength']) {
+                <div>{{ t('fields.password.errors.length') }}</div>
+              }
+            </div>
+          }
+          <div class="input-group mb-3">
+            <input type="submit" data-test="login-submit" class="btnSubmit" value="{{ t('pages.login.btn') }}"
+                   aria-label="Login"/>
+          </div>
+
+        </form>
+        <div class="input-group mb-3">
+          <p>{{ t('pages.login.no-account') }} <a data-test="register-link" routerLink="/auth/register"
+                                                  aria-label="Register your account">{{ t('pages.login.register') }}</a><br/>
+            <a data-test="forgot-password-link" routerLink="/auth/forgot-password" class="ForgetPwd"
+               aria-label="Forgot your Password?">{{ t('pages.login.forgot-password') }}</a></p>
+        </div>
+      }
+
+      @if (showTotpInput) {
+        <form [formGroup]="form" (ngSubmit)="verifyTotp()">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="row mb-3">
+                <label for="totp" class="form-label">{{ t('pages.login.totp_code') }}</label>
+                <div class="col-sm-9">
+                  <input id="totp" class="form-control" type="text" data-test="totp-code" formControlName="totp"/>
+                </div>
+              </div>
+            </div>
+          </div>
+          <input type="submit" [disabled]="submitted && form.invalid" data-test="verify-totp" class="btnSubmit"
+                 value="{{ t('pages.login.verify_totp') }}"
+                 [attr.aria-label]="t('pages.login.verify_totp')"/>
+        </form>
+      }
+      @if (error) {
+        <div data-test="login-error" class="alert alert-danger" aria-live="assertive">
+          <div class="help-block">{{ error }}</div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

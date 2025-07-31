@@ -8,208 +8,265 @@
             <div class="form-group mb-3">
               <label for="first_name" class="form-label">First name</label>
               <input formControlName="first_name"
-                     id="first_name"
-                     data-test="first-name"
-                     class="form-control"
-                     [ngClass]="{ 'is-invalid': submitted && f['first_name'].errors }"
-                     type="text"
-                     placeholder="Your first name *"
-                     [attr.tabindex]="browserDetect.isChrome() ? '1' : '1'"
-                     value=""/>
+                id="first_name"
+                data-test="first-name"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f['first_name'].errors }"
+                type="text"
+                placeholder="Your first name *"
+                [attr.tabindex]="browserDetect.isChrome() ? '1' : '1'"
+                value=""/>
             </div>
-            <div data-test="first-name-error" *ngIf="f['first_name'].invalid && submitted"
-                 class="alert alert-danger">
-              <div *ngIf="f['first_name'].errors?.['required']">
-                First name is required.
+            @if (f['first_name'].invalid && submitted) {
+              <div data-test="first-name-error"
+                class="alert alert-danger">
+                @if (f['first_name'].errors?.['required']) {
+                  <div>
+                    First name is required.
+                  </div>
+                }
+                @if (f['first_name'].errors?.['pattern']) {
+                  <div>
+                    Invalid character.
+                  </div>
+                }
               </div>
-              <div *ngIf="f['first_name'].errors?.['pattern']">
-                Invalid character.
-              </div>
-            </div>
+            }
           </div>
           <div class="col-md-6">
             <div class="form-group mb-3">
               <label for="last_name" class="form-label">Last name</label>
               <input formControlName="last_name"
-                     id="last_name"
-                     data-test="last-name"
-                     class="form-control"
-                     [ngClass]="{ 'is-invalid': submitted && f['last_name'].errors }" type="text"
-                     placeholder="Your last name *"
-                     [attr.tabindex]="browserDetect.isChrome() ? '2' : '2'"
-                     value=""/>
+                id="last_name"
+                data-test="last-name"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f['last_name'].errors }" type="text"
+                placeholder="Your last name *"
+                [attr.tabindex]="browserDetect.isChrome() ? '2' : '2'"
+                value=""/>
             </div>
-            <div data-test="last-name-error" *ngIf="f['last_name'].invalid && submitted"
-                 class="alert alert-danger">
-              <div *ngIf="f['last_name'].errors?.['required']">
-                Last name is required.
+            @if (f['last_name'].invalid && submitted) {
+              <div data-test="last-name-error"
+                class="alert alert-danger">
+                @if (f['last_name'].errors?.['required']) {
+                  <div>
+                    Last name is required.
+                  </div>
+                }
+                @if (f['last_name'].errors?.['pattern']) {
+                  <div>
+                    Invalid character.
+                  </div>
+                }
               </div>
-              <div *ngIf="f['last_name'].errors?.['pattern']">
-                Invalid character.
-              </div>
-            </div>
+            }
           </div>
 
           <div class="form-group mb-3">
             <label for="dob" class="form-label">Date of birth</label>
-            <input formControlName="dob"
-                   id="dob"
-                   data-test="dob"
-                   class="form-control"
-                   type="date"
-                   [ngClass]="{ 'is-invalid': submitted && f['dob'].errors }"
-                   placeholder="Your Date of birth *"
-                   [attr.tabindex]="browserDetect.isChrome() ? '3' : '3'"
-                   value=""/>
-            <div data-test="dob-error" *ngIf="f['dob'].invalid && submitted"
-                 class="alert alert-danger mt-3">
-              <div *ngIf="f['dob'].errors?.['required']">
-                Date of Birth is required.
+            <input
+              formControlName="dob"
+              id="dob"
+              data-test="dob"
+              class="form-control"
+              type="text"
+              placeholder="YYYY-MM-DD"
+              [ngClass]="{ 'is-invalid': submitted && f['dob'].errors }"
+            />
+            @if (f['dob'].invalid && submitted) {
+              <div data-test="dob-error"
+                class="alert alert-danger mt-3">
+                @if (f['dob'].errors?.['invalidDate']) {
+                  <div>
+                    Please enter a valid date in YYYY-MM-DD format.
+                  </div>
+                }
+                @if (f['dob'].errors?.['required']) {
+                  <div>
+                    Date of Birth is required.
+                  </div>
+                }
               </div>
-            </div>
+            }
           </div>
 
           <div class="form-group mb-3">
             <label for="address" class="form-label">Address</label>
             <input formControlName="address"
-                   id="address"
-                   data-test="address"
-                   class="form-control"
-                   [ngClass]="{ 'is-invalid': submitted && f['address'].errors }" type="text"
-                   placeholder="Your address *"
-                   [attr.tabindex]="browserDetect.isChrome() ? '5' : '4'"
-                   value=""/>
-            <div data-test="address-error" *ngIf="f['address'].invalid && submitted"
-                 class="alert alert-danger mt-3">
-              <div *ngIf="f['address'].errors?.['required']">
-                Address is required.
+              id="address"
+              data-test="address"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f['address'].errors }" type="text"
+              placeholder="Your address *"
+              [attr.tabindex]="browserDetect.isChrome() ? '5' : '4'"
+              value=""/>
+            @if (f['address'].invalid && submitted) {
+              <div data-test="address-error"
+                class="alert alert-danger mt-3">
+                @if (f['address'].errors?.['required']) {
+                  <div>
+                    Address is required.
+                  </div>
+                }
               </div>
-            </div>
+            }
           </div>
 
           <div class="col-md-4">
             <div class="form-group mb-3">
               <label for="postcode" class="form-label">Postcode</label>
               <input formControlName="postcode"
-                     id="postcode"
-                     data-test="postcode"
-                     class="form-control"
-                     [ngClass]="{ 'is-invalid': submitted && f['postcode'].errors }" type="text"
-                     placeholder="Your postcode *"
-                     [attr.tabindex]="browserDetect.isChrome() ? '6' : '5'"
-                     value=""/>
+                id="postcode"
+                data-test="postcode"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f['postcode'].errors }" type="text"
+                placeholder="Your postcode *"
+                [attr.tabindex]="browserDetect.isChrome() ? '6' : '5'"
+                value=""/>
             </div>
-            <div data-test="postcode-error" *ngIf="f['postcode'].invalid && submitted"
-                 class="alert alert-danger">
-              <div *ngIf="f['postcode'].errors?.['required']">
-                Postcode is required.
+            @if (f['postcode'].invalid && submitted) {
+              <div data-test="postcode-error"
+                class="alert alert-danger">
+                @if (f['postcode'].errors?.['required']) {
+                  <div>
+                    Postcode is required.
+                  </div>
+                }
+                @if (f['postcode'].errors?.['pattern']) {
+                  <div>
+                    Only 5 numbers are allowed.
+                  </div>
+                }
               </div>
-              <div *ngIf="f['postcode'].errors?.['pattern']">
-                Only 5 numbers are allowed.
-              </div>
-            </div>
+            }
           </div>
           <div class="col-md-8">
             <div class="form-group mb-3">
               <label for="city" [ngStyle]="(browserDetect.isFirefox()) ? {'position': 'absolute'}: {}"
-                     class="form-label">City</label>
+              class="form-label">City</label>
               <input formControlName="city"
-                     id="city"
-                     data-test="city"
-                     class="form-control"
-                     [ngClass]="{ 'is-invalid': submitted && f['city'].errors }" type="text"
-                     placeholder="Your city *"
-                     [attr.tabindex]="browserDetect.isChrome() ? '7' : '6'"
-                     value=""/>
+                id="city"
+                data-test="city"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f['city'].errors }" type="text"
+                placeholder="Your city *"
+                [attr.tabindex]="browserDetect.isChrome() ? '7' : '6'"
+                value=""/>
             </div>
-            <div data-test="city-error" *ngIf="f['city'].invalid && submitted"
-                 class="alert alert-danger">
-              <div *ngIf="f['city'].errors?.['required']">
-                City is required.
+            @if (f['city'].invalid && submitted) {
+              <div data-test="city-error"
+                class="alert alert-danger">
+                @if (f['city'].errors?.['required']) {
+                  <div>
+                    City is required.
+                  </div>
+                }
               </div>
-            </div>
+            }
           </div>
           <div class="col-md-6">
             <div class="form-group mb-3">
               <label for="state" class="form-label">Country</label>
               <input formControlName="state"
-                     id="state"
-                     data-test="state"
-                     class="form-control"
-                     [ngClass]="{ 'is-invalid': submitted && f['state'].errors }" type="text"
-                     placeholder="Your state *"
-                     [attr.tabindex]="browserDetect.isChrome() ? '8' : '7'"
-                     value=""/>
+                id="state"
+                data-test="state"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f['state'].errors }" type="text"
+                placeholder="Your state *"
+                [attr.tabindex]="browserDetect.isChrome() ? '8' : '7'"
+                value=""/>
             </div>
-            <div data-test="state-error" *ngIf="f['state'].invalid && submitted"
-                 class="alert alert-danger">
-              <div *ngIf="f['state'].errors?.['required']">
-                State is required.
+            @if (f['state'].invalid && submitted) {
+              <div data-test="state-error"
+                class="alert alert-danger">
+                @if (f['state'].errors?.['required']) {
+                  <div>
+                    State is required.
+                  </div>
+                }
               </div>
-            </div>
+            }
           </div>
           <div class="col-md-6">
             <div class="form-group mb-3">
               <label for="country" class="form-label">State</label>
               <select id="country"
-                      data-test="country"
-                      formControlName="country"
-                      [ngClass]="{ 'is-invalid': submitted && f['country'].errors }"
-                      [attr.tabindex]="browserDetect.isChrome() ? '9' : '8'" class="form-select">
+                data-test="country"
+                formControlName="country"
+                [ngClass]="{ 'is-invalid': submitted && f['country'].errors }"
+                [attr.tabindex]="browserDetect.isChrome() ? '9' : '8'" class="form-select">
                 <option value="" disabled selected hidden>Select your country *</option>
-                <option *ngFor="let country of countries"
-                        [ngStyle]="(country.code === 'AT' || country.code === 'NL') ? {'font-size': 'smaller'} : {}"
-                        value="{{country.code}}">{{ country.name }}
-                </option>
+                @for (country of countries; track country) {
+                  <option
+                    [ngStyle]="(country.code === 'AT' || country.code === 'NL') ? {'font-size': 'smaller'} : {}"
+                    value="{{country.code}}">{{ country.name }}
+                  </option>
+                }
               </select>
             </div>
-            <div data-test="country-error" *ngIf="f['country'].invalid && submitted"
-                 class="alert alert-danger">
-              <div *ngIf="f['country'].errors?.['required']">
-                Country is required.
+            @if (f['country'].invalid && submitted) {
+              <div data-test="country-error"
+                class="alert alert-danger">
+                @if (f['country'].errors?.['required']) {
+                  <div>
+                    Country is required.
+                  </div>
+                }
               </div>
-            </div>
+            }
           </div>
           <div class="form-group mb-3">
             <label for="phone" class="form-label">Phone</label>
             <input formControlName="phone"
-                   id="phone"
-                   data-test="phone"
-                   class="form-control"
-                   [ngClass]="{ 'is-invalid': submitted && f['phone'].errors }" type="text"
-                   [ngStyle]="(browserDetect.isFirefox()) ? {'padding-left': '0px'}: {}"
-                   [attr.tabindex]="browserDetect.isChrome() ? '10' : '9'"
-                   placeholder="Your phone *"
-                   value=""/>
-            <div data-test="phone-error" *ngIf="f['phone'].invalid && submitted"
-                 class="alert alert-danger mt-3">
-              <div *ngIf="f['phone'].errors?.['required']">
-                Phone is required.
+              id="phone"
+              data-test="phone"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f['phone'].errors }" type="text"
+              [ngStyle]="(browserDetect.isFirefox()) ? {'padding-left': '0px'}: {}"
+              [attr.tabindex]="browserDetect.isChrome() ? '10' : '9'"
+              placeholder="Your phone *"
+              value=""/>
+            @if (f['phone'].invalid && submitted) {
+              <div data-test="phone-error"
+                class="alert alert-danger mt-3">
+                @if (f['phone'].errors?.['required']) {
+                  <div>
+                    Phone is required.
+                  </div>
+                }
+                @if (f['phone'].errors?.['pattern']) {
+                  <div>
+                    Only numbers are allowed.
+                  </div>
+                }
               </div>
-              <div *ngIf="f['phone'].errors?.['pattern']">
-                Only numbers are allowed.
-              </div>
-            </div>
+            }
           </div>
           <div class="form-group mb-3">
             <label for="email" class="form-label">E-mail address</label>
             <input formControlName="email"
-                   id="email"
-                   data-test="email"
-                   class="form-control"
-                   [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" type="text"
-                   placeholder="Your e-mail *"
-                   [attr.tabindex]="browserDetect.isChrome() ? '11' : '10'"
-                   value=""/>
-            <div data-test="email-error" *ngIf="f['email'].invalid && submitted"
-                 class="alert alert-danger mt-3">
-              <div *ngIf="f['email'].errors?.['required']">
-                E-mail is required.
+              id="email"
+              data-test="email"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" type="text"
+              placeholder="Your e-mail *"
+              [attr.tabindex]="browserDetect.isChrome() ? '11' : '10'"
+              value=""/>
+            @if (f['email'].invalid && submitted) {
+              <div data-test="email-error"
+                class="alert alert-danger mt-3">
+                @if (f['email'].errors?.['required']) {
+                  <div>
+                    E-mail is required.
+                  </div>
+                }
+                @if (f['email'].errors?.['pattern']) {
+                  <div>
+                    E-mail format is invalid.
+                  </div>
+                }
               </div>
-              <div *ngIf="f['email'].errors?.['pattern']">
-                E-mail format is invalid.
-              </div>
-            </div>
+            }
           </div>
           <div class="form-group mb-3">
             <label for="password" class="form-label">Password</label>
@@ -221,31 +278,41 @@
               [ariaDescribedBy]="(f['password'].invalid && submitted) ? 'password-error' : null"
               [ariaInvalid]="f['password'].invalid && submitted ? true : false"
             ></app-password-input>
-            <div data-test="password-error" *ngIf="f['password'].invalid && submitted"
-                 class="alert alert-danger mt-3">
-              <div *ngIf="f['password'].errors?.['required']">
-                Password is required.
+            @if (f['password'].invalid && submitted) {
+              <div data-test="password-error"
+                class="alert alert-danger mt-3">
+                @if (f['password'].errors?.['required']) {
+                  <div>
+                    Password is required.
+                  </div>
+                }
+                @if (f['password'].errors?.['minlength']) {
+                  <div>
+                    Password must be minimal 10 characters long.
+                  </div>
+                }
+                @if (f['password'].errors?.['maxlength']) {
+                  <div>
+                    Password can not be more than 40 characters long.
+                  </div>
+                }
               </div>
-              <div *ngIf="f['password'].errors?.['minlength']">
-                Password must be minimal 10 characters long.
-              </div>
-              <div *ngIf="f['password'].errors?.['maxlength']">
-                Password can not be more than 40 characters long.
-              </div>
-            </div>
+            }
           </div>
           <button type="submit" data-test="register-submit"
-                  [ngStyle]="(browserDetect.isChrome()) ? {'width': 'unset'}: {}"
-                  [attr.tabindex]="browserDetect.isChrome() ? '12' : '12'"
-                  class="btnSubmit mb-3">Register
+            [ngStyle]="(browserDetect.isChrome()) ? {'width': 'unset'}: {}"
+            [attr.tabindex]="browserDetect.isChrome() ? '12' : '12'"
+            class="btnSubmit mb-3">Register
           </button>
-          <div data-test="register-error" *ngIf="error" class="alert alert-danger">
-            <div>
-              <div class="help-block"
-                   [ngStyle]="(browserDetect.isEdge() || browserDetect.isChrome()) ? {'font-family': 'Comic Sans'} : {}">{{ error }}
+          @if (error) {
+            <div data-test="register-error" class="alert alert-danger">
+              <div>
+                <div class="help-block"
+                  [ngStyle]="(browserDetect.isEdge() || browserDetect.isChrome()) ? {'font-family': 'Comic Sans'} : {}">{{ error }}
+                </div>
               </div>
             </div>
-          </div>
+          }
         </div>
       </form>
     </div>

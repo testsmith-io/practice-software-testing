@@ -12,6 +12,7 @@ docker-compose exec laravel-api php artisan migrate:fresh --seed
 | John       | Doe       | admin  | admin@practicesoftwaretesting.com     | welcome01  |
 | Jane       | Doe       | user   | customer@practicesoftwaretesting.com  | welcome01  |
 | Jack       | Howe      | user   | customer2@practicesoftwaretesting.com | welcome01  |
+| Bob        | Smith     | user   | customer3@practicesoftwaretesting.com | pass123    |
 
 # URLs (hosted versions)
 
@@ -34,10 +35,48 @@ The mobile app is fully integrated with version 4 of Practice Software Testing, 
 
 # Using the docker containers
 
-I will take up to 5 minutes (depending on your internet connection speed), if you run `docker-compose up -d` for the first
-time. Any subsequent `docker-compose up -d` will take seconds.
+I will take up to 5 minutes (depending on your internet connection speed), if you run `docker compose up -d` for the first
+time. Any subsequent `docker compose up -d` will take seconds. You may need to add sudo before the docker command `sudo docker compose up -d`
 
 All images together are less than 1,5 GB.
+
+## 🐳 Docker Compose Setup
+
+This project includes multiple Docker Compose configurations to support development, testing, and production usage.
+
+### 🔧 Local Development (with live-reloading, source-mounted volumes)
+
+Use this when actively working on the application:
+
+```bash
+docker compose up -d
+```
+
+This will:
+
+* Build the containers from local source (`docker-compose.yml`)
+* Mount the source code for live changes
+* Automatically include `docker-compose.override.yml` (mailcatcher, cron, phpmyadmin)
+
+### 🧪 Development + Excluding Optional Services
+
+To start the bare minimum:
+
+```bash
+docker compose -f docker-compose.yml up -d
+```
+This will:
+
+* Use only what's defined in docker-compose.yml
+* Ignore docker-compose.override.yml completely
+* Skip optional services like cron, phpmyadmin, mailcatcher
+
+
+### 🚀 Production Setup (with prebuilt Docker images)
+
+```bash
+docker compose -f docker-compose.prod.yml up --pull missing -d
+```
 
 ## URL's (local version)
 
@@ -51,19 +90,19 @@ All images together are less than 1,5 GB.
 
 ## Switch sprint
 
-Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belongs to the sprint.
+Update the `SPRINT` in [.env](.env) to use the proper version that belongs to the sprint.
 
 ## Roll Back - Run Migrations - Seed Database
 
-`docker-compose exec laravel-api php artisan migrate:fresh --seed`
+`docker compose exec laravel-api php artisan migrate:fresh --seed`
 
 ## Migrate database schema
 
-`docker-compose exec laravel-api php artisan migrate`
+`docker compose exec laravel-api php artisan migrate`
 
 ## Seed database
 
-`docker-compose exec laravel-api php artisan db:seed`
+`docker compose exec laravel-api php artisan db:seed`
 
 ## Access to the Laravel Logs
 
@@ -71,19 +110,19 @@ Update the `SPRINT_FOLDER` in [.env](.env) to use the proper version that belong
 
 ## Generate Swagger documentation
 
-`docker-compose exec laravel-api php artisan l5-swagger:generate`
+`docker compose exec laravel-api php artisan l5-swagger:generate`
 
 ## Update order status
 
-`docker-compose exec laravel-api php artisan order:update`
+`docker compose exec laravel-api php artisan order:update`
 
 ## Remove PDF documents
 
-`docker-compose exec laravel-api php artisan invoice:remove`
+`docker compose exec laravel-api php artisan invoice:remove`
 
 ## Generate PDF documents
 
-`docker-compose exec laravel-api php artisan invoice:generate`
+`docker compose exec laravel-api php artisan invoice:generate`
 
 ## Execute unit tests (sprint 1 to sprint 4)
 

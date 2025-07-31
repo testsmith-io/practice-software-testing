@@ -1,23 +1,27 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {Brand} from "../../models/brand";
 import {BrandService} from "../../_services/brand.service";
 import {first} from 'rxjs/operators';
 import {ToastService} from "../../_services/toast.service";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-list',
   templateUrl: './brands-list.component.html',
-  styleUrls: ['./brands-list.component.css']
+  imports: [
+    ReactiveFormsModule,
+    RouterLink
+  ],
+  styleUrls: []
 })
 export class BrandsListComponent implements OnInit {
+  private readonly brandService = inject(BrandService);
+  private readonly toastService = inject(ToastService);
+  private readonly formBuilder = inject(FormBuilder);
+
   brands!: Brand[];
   searchForm: FormGroup | any;
-
-  constructor(private brandService: BrandService,
-              private toastService: ToastService,
-              private formBuilder: FormBuilder) {
-  }
 
   ngOnInit(): void {
     this.getBrands();

@@ -1,16 +1,26 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {ContactMessage} from "../../../models/contact-message";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {ContactService} from "../../../_services/contact.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, RouterLink} from "@angular/router";
 import {first} from "rxjs/operators";
+import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-message-detail',
   templateUrl: './message-detail.component.html',
-  styleUrls: ['./message-detail.component.css']
+  imports: [
+    RouterLink,
+    NgClass,
+    ReactiveFormsModule
+  ],
+  styleUrls: []
 })
 export class MessageDetailComponent implements OnInit {
+  private readonly messageService = inject(ContactService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly formBuilder = inject(FormBuilder);
+
   statuses = ["NEW", "IN_PROGRESS", "RESOLVED"];
   message!: ContactMessage;
   form: FormGroup;
@@ -20,10 +30,6 @@ export class MessageDetailComponent implements OnInit {
   error: string;
 
   id: string;
-
-  constructor(private messageService: ContactService,
-              private route: ActivatedRoute,
-              private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -37,7 +43,7 @@ export class MessageDetailComponent implements OnInit {
   getMessage() {
     this.messageService.getMessage(this.id)
       .pipe(first())
-      .subscribe((message)=> {
+      .subscribe((message) => {
         this.message = message;
       });
   }
@@ -61,7 +67,8 @@ export class MessageDetailComponent implements OnInit {
     let messageId = this.message.id;
 
     const payload: ContactMessage = {
-      message: this.form.value.message};
+      message: this.form.value.message
+    };
 
     this.messageService.addReply(payload, String(messageId))
       .pipe(first())
