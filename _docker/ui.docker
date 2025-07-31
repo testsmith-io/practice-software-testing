@@ -1,27 +1,7 @@
-FROM node:18.19.0-alpine
+FROM node:22.12.0-alpine
 
 RUN apk update && \
     apk add bash && \
-    npm install -g npm@8.3.0
+    npm install -g npm@10.2.4
 
-RUN npm install -s -g @angular/cli
-#    && \
-#    mkdir -p /app # Create a directory where our app will be placed
-
-# Change directory so that our commands run inside this new directory
-#WORKDIR /app
-
-# Copy dependency definitions
-#COPY package*.json /app/
-
-# Install dependencies
-# RUN npm install
-
-# Get all the code needed to run the app
-#COPY . /app/
-
-# Expose the port the app runs in
-EXPOSE 4200
-
-# Serve the app
-CMD ["npm", "install --dev --legacy-peer-deps --force", "start"]
+RUN npm install -s -g @angular/cli@latest
