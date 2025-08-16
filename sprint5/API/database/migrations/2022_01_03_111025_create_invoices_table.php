@@ -31,6 +31,8 @@ class CreateInvoicesTable extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
             $table->foreignUlid('user_id')->references('id')->on('users');
+            $table->index(['user_id', 'invoice_date'], 'idx_invoices_user_date');
+            $table->index(['invoice_date'], 'idx_invoices_date');
         });
     }
 
