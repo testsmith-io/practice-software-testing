@@ -1,28 +1,7 @@
-# Stage 1: Base image
-FROM node:20.19-alpine as base
+FROM node:22.12.0-alpine
 
 RUN apk update && \
     apk add bash && \
-    npm install -g npm@10.9.2
+    npm install -g npm@10.2.4
 
-RUN npm install -g @angular/cli@latest
-
-WORKDIR /app
-
-# Stage 2: Development (no code copy)
-FROM base as development
-EXPOSE 4200
-CMD ["ng", "serve", "--host", "0.0.0.0", "--port", "4200"]
-
-# Stage 3: Production (with code copy)
-FROM base as production
-
-# Copy package files and install dependencies
-COPY package*.json ./
-RUN npm install --legacy-peer-deps --force
-
-# Copy application code
-COPY . ./
-
-EXPOSE 4200
-CMD ["ng", "serve", "--host", "0.0.0.0", "--port", "4200"]
+RUN npm install -s -g @angular/cli@latest
