@@ -36,6 +36,9 @@ class CreateUsersTable extends Migration
             $table->timestamp('totp_verified_at')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
+            $table->index(['email'], 'idx_invoices_users_email');
+            $table->index(['email', 'failed_login_attempts'], 'idx_invoices_users_failed_login_attempts');
+            $table->index(['email', 'enabled'], 'idx_invoices_users_enabled');
         });
     }
 
