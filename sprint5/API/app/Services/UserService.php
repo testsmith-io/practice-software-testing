@@ -51,7 +51,10 @@ class UserService
         Log::info("Login attempt with email: " . ($credentials['email'] ?? '[access_token]'));
 
         if (isset($credentials['email']) && isset($credentials['password'])) {
-            $user = User::where('email', $credentials['email'])->first();
+            $user = User::select([
+            'id', 'email', 'password', 'enabled', 'role', 
+            'failed_login_attempts', 'totp_enabled', 'totp_secret'
+        ])->where('email', $credentials['email'])->first();
 
             if ($user && $user->role != "admin" && $user->failed_login_attempts >= self::MAX_LOGIN_ATTEMPTS) {
                 Log::warning("Account locked for user: {$user->email}");
