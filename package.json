@@ -6,10 +6,10 @@
   "scripts": {
     "test": "playwright test",
     "api:test:all": "npm run api:test:auth && npm run api:test:brands && npm run api:test:categories && npm run api:test:invoices",
-    "api:test:auth": "newman run Authentication.postman_collection.json -e Local-Toolshop.postman_environment.json --reporters cli,htmlextra --reporter-htmlextra-export reports/authentication-report.html",
-    "api:test:brands": "newman run API1-Brands-Search.postman_collection.json -e Local-Toolshop.postman_environment.json --reporters cli,htmlextra --reporter-htmlextra-export reports/brands-report.html",
-    "api:test:categories": "newman run API2-Categories-Search.postman_collection.json -e Local-Toolshop.postman_environment.json --reporters cli,htmlextra --reporter-htmlextra-export reports/categories-report.html",
-    "api:test:invoices": "newman run API3-Invoice-Status.postman_collection.json -e Local-Toolshop.postman_environment.json --reporters cli,htmlextra --reporter-htmlextra-export reports/invoices-report.html",
+    "api:test:auth": "newman run collections/Authentication.postman_collection.json -e environments/Local-Toolshop.postman_environment.json --reporters cli,htmlextra --reporter-htmlextra-export reports/authentication-report.html",
+    "api:test:brands": "newman run collections/API1-Brands-Search.postman_collection.json -e environments/Local-Toolshop.postman_environment.json --reporters cli,htmlextra --reporter-htmlextra-export reports/brands-report.html",
+    "api:test:categories": "newman run collections/API2-Categories-Search.postman_collection.json -e environments/Local-Toolshop.postman_environment.json --reporters cli,htmlextra --reporter-htmlextra-export reports/categories-report.html",
+    "api:test:invoices": "newman run collections/API3-Invoice-Status.postman_collection.json -e environments/Local-Toolshop.postman_environment.json --reporters cli,htmlextra --reporter-htmlextra-export reports/invoices-report.html",
     "api:setup": "mkdir -p reports",
     "api:clean": "rm -rf reports && npm run api:setup"
   },
