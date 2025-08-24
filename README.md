@@ -2,20 +2,19 @@
 
 > **🎓 CS423 Assignment**: This repository includes comprehensive API testing implementation with 110+ test cases, CI/CD integration, and automated reporting. See [API-Testing-README.md](API-Testing-README.md) for details.
 
-
 # Default accounts
 
-| First name | Last name | Role   | E-mail                                | Password   |
-|------------|-----------|--------|---------------------------------------|------------|
-| John       | Doe       | admin  | admin@practicesoftwaretesting.com     | welcome01  |
-| Jane       | Doe       | user   | customer@practicesoftwaretesting.com  | welcome01  |
-| Jack       | Howe      | user   | customer2@practicesoftwaretesting.com | welcome01  |
-| Bob        | Smith     | user   | customer3@practicesoftwaretesting.com | pass123    |
+| First name | Last name | Role  | E-mail                                | Password  |
+| ---------- | --------- | ----- | ------------------------------------- | --------- |
+| John       | Doe       | admin | admin@practicesoftwaretesting.com     | welcome01 |
+| Jane       | Doe       | user  | customer@practicesoftwaretesting.com  | welcome01 |
+| Jack       | Howe      | user  | customer2@practicesoftwaretesting.com | welcome01 |
+| Bob        | Smith     | user  | customer3@practicesoftwaretesting.com | pass123   |
 
 # URLs (hosted versions)
 
 | Description          | Application                                                                                    | API                                                                                                           | Swagger                                                                                                                  |
-|----------------------|------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| -------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | Sprint 1             | [https://v1.practicesoftwaretesting.com](https://v1.practicesoftwaretesting.com)               | [https://api-v1.practicesoftwaretesting.com](https://api-v1.practicesoftwaretesting.com/status)               | [https://api-v1.practicesoftwaretesting.com](https://api-v1.practicesoftwaretesting.com/api/documentation)               |
 | Sprint 2             | [https://v2.practicesoftwaretesting.com](https://v2.practicesoftwaretesting.com)               | [https://api-v2.practicesoftwaretesting.com](https://api-v2.practicesoftwaretesting.com/status)               | [https://api-v2.practicesoftwaretesting.com](https://api-v2.practicesoftwaretesting.com/api/documentation)               |
 | Sprint 3             | [https://v3.practicesoftwaretesting.com](https://v3.practicesoftwaretesting.com)               | [https://api-v3.practicesoftwaretesting.com](https://api-v3.practicesoftwaretesting.com/status)               | [https://api-v3.practicesoftwaretesting.com](https://api-v3.practicesoftwaretesting.com/api/documentation)               |
@@ -52,9 +51,9 @@ docker compose up -d
 
 This will:
 
-* Build the containers from local source (`docker-compose.yml`)
-* Mount the source code for live changes
-* Automatically include `docker-compose.override.yml` (mailcatcher, cron, phpmyadmin)
+- Build the containers from local source (`docker-compose.yml`)
+- Mount the source code for live changes
+- Automatically include `docker-compose.override.yml` (mailcatcher, cron, phpmyadmin)
 
 ### 🧪 Development + Excluding Optional Services
 
@@ -63,12 +62,12 @@ To start the bare minimum:
 ```bash
 docker compose -f docker-compose.yml up -d
 ```
+
 This will:
 
-* Use only what's defined in docker-compose.yml
-* Ignore docker-compose.override.yml completely
-* Skip optional services like cron, phpmyadmin, mailcatcher
-
+- Use only what's defined in docker-compose.yml
+- Ignore docker-compose.override.yml completely
+- Skip optional services like cron, phpmyadmin, mailcatcher
 
 ### 🚀 Production Setup (with prebuilt Docker images)
 
@@ -79,7 +78,7 @@ docker compose -f docker-compose.prod.yml up --pull missing -d
 ## URL's (local version)
 
 | URL                                                                                | Description           |
-|------------------------------------------------------------------------------------|-----------------------|
+| ---------------------------------------------------------------------------------- | --------------------- |
 | [http://localhost:8091](http://localhost:8091)                                     | (REST) API            |
 | [http://localhost:8091/api/documentation](http://localhost:8091/api/documentation) | Swagger               |
 | [http://localhost:1080](http://localhost:1080)                                     | MailCatcher           |
