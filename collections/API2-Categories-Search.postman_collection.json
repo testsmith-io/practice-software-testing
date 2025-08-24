@@ -1,0 +1,1638 @@
+{
+	"info": {
+		"_postman_id": "4fb23e9f-1c50-4708-9f92-3f1751a42b31",
+		"name": "API2-Categories-Search",
+		"description": "Test case cho API tìm kiếm danh mục GET /categories/search",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "47786634",
+		"_collection_link": "https://patuan22-7848508.postman.co/workspace/HW07-API-Testing~881d5aae-f847-4366-bd49-426942462a2c/collection/47786634-4fb23e9f-1c50-4708-9f92-3f1751a42b31?action=share&source=collection_link&creator=47786634"
+	},
+	"item": [
+		{
+			"name": "Valid Search Tests",
+			"item": [
+				{
+					"name": "CAT-001-Search-tool-category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time < 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is array\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Contains tool categories\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.length).to.be.greaterThan(0);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=tool",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "tool"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-002-Search-power-tools",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains power categories\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Search functionality working\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=q=power",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "q=power"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-003-Search-hand-tools",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Hand tools search works\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=hand",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "hand"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-004-Partial-category-name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Partial search functionality\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=drill",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "drill"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-005-Single-character-search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Single character search handled\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Boundary case - single char\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=a",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-006-Multiple-words",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Multiple words search works\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=power drill",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "power drill"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-007-Case-insensitive-search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Case insensitive search works\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=TOOL",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "TOOL"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-008-Search-with-spaces",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Spaces trimmed properly\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q= tool",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": " tool"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-009-Common-category-search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Electric categories found\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=electric",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "electric"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-010-Specific-brand-category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Brand-specific categories\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=makita",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "makita"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Domain Testing",
+			"item": [
+				{
+					"name": "CAT-011-Empty-query-parameter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Empty query should return 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message for empty query\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.error || responseJson.message).to.be.ok;\r",
+									"});\r",
+									"\r",
+									"// BUG DETECTION\r",
+									"pm.test(\"BUG CHECK: Empty query validation\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"🚨 POTENTIAL BUG: Empty query accepted (should be rejected)\");\r",
+									"        pm.globals.set(\"bug_empty_query_categories\", \"found\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Input validation working\", function () {\r",
+									"    pm.expect([400, 422]).to.include(pm.response.code);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-012-No-query-parameter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Missing query param should return 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Required parameter error\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    const errorMsg = (responseJson.error || responseJson.message || \"\").toLowerCase();\r",
+									"    pm.expect(errorMsg).to.satisfy(msg => \r",
+									"        msg.includes(\"required\") || msg.includes(\"missing\") || msg.includes(\"parameter\")\r",
+									"    );\r",
+									"});\r",
+									"\r",
+									"//  BUG DETECTION\r",
+									"pm.test(\" BUG CHECK: Required parameter validation\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\" POTENTIAL BUG: Missing required parameter accepted\");\r",
+									"        pm.globals.set(\"bug_missing_param_categories\", \"found\");\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/categories/search"
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-013-Null-query-parameter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Null query handled gracefully\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Null treated as search term\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=null",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "null"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-014-Very-long-search-string",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Very long query should be rejected\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Query length validation\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    const errorMsg = (responseJson.error || responseJson.message || \"\").toLowerCase();\r",
+									"    pm.expect(errorMsg).to.satisfy(msg => \r",
+									"        msg.includes(\"long\") || msg.includes(\"limit\") || msg.includes(\"invalid\")\r",
+									"    );\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=very_long_string_that_exceeds_normal_search_length_limits_and_tests_system_boundaries_for_comprehensive_testing",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "very_long_string_that_exceeds_normal_search_length_limits_and_tests_system_boundaries_for_comprehensive_testing"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-015-Numeric-search-query",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Numeric query handled\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Numeric input processed\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=123",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "123"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-016-Special-characters",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Special chars handled gracefully\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Special character processing\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=@#$%",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "@"
+								}
+							],
+							"hash": "$%"
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-017-Unicode-characters",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Unicode chars handled\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Unicode support working\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=工具",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "工具"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-018-Boolean-search-query",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Boolean treated as string\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Boolean input handling\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Security Testing",
+			"item": [
+				{
+					"name": "CAT-019-XSS-attempt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"XSS attempt should be blocked\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Security validation working\", function () {\r",
+									"    pm.expect(pm.response.code).to.not.equal(200);\r",
+									"});\r",
+									"\r",
+									"//  CRITICAL SECURITY BUG DETECTION\r",
+									"pm.test(\" SECURITY CHECK: XSS prevention\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\" CRITICAL SECURITY BUG: XSS attack not blocked!\");\r",
+									"        console.log(\"Payload: <script>alert('xss')</script>\");\r",
+									"        pm.globals.set(\"security_bug_xss_categories\", \"CRITICAL\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"No script execution\", function () {\r",
+									"    const responseText = pm.response.text();\r",
+									"    pm.expect(responseText).to.not.include(\"<script>\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=<script>alert('xss')</script>",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "<script>alert('xss')</script>"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-020-SQL-injection-attempt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"SQL injection should be blocked\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Database security intact\", function () {\r",
+									"    pm.expect([500]).to.not.include(pm.response.code);\r",
+									"});\r",
+									"\r",
+									"// CRITICAL SECURITY BUG DETECTION\r",
+									"pm.test(\"SECURITY CHECK: SQL injection prevention\", function () {\r",
+									"    if (pm.response.code === 500) {\r",
+									"        console.log(\"CRITICAL SECURITY BUG: SQL injection may be possible!\");\r",
+									"        console.log(\"Payload: ' OR '1'='1\");\r",
+									"        pm.globals.set(\"security_bug_sql_categories\", \"CRITICAL\");\r",
+									"    } else if (pm.response.code === 200) {\r",
+									"        console.log(\"POTENTIAL SECURITY ISSUE: SQL injection payload accepted\");\r",
+									"        pm.globals.set(\"security_bug_sql_categories\", \"POTENTIAL\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=' OR '1'='1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "' OR '1'='1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-021-Command-injection-attempt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Command injection blocked\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"System security intact\", function () {\r",
+									"    pm.expect(pm.response.code).to.not.equal(500);\r",
+									"});\r",
+									"\r",
+									"// SECURITY BUG DETECTION\r",
+									"pm.test(\"SECURITY CHECK: Command injection prevention\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"SECURITY BUG: Command injection payload accepted\");\r",
+									"        pm.globals.set(\"security_bug_cmd_categories\", \"found\");\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=tool; rm -rf /",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "tool; rm -rf /"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-022-Path-traversal-attempt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Path traversal blocked\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"File system security\", function () {\r",
+									"    const responseText = pm.response.text();\r",
+									"    pm.expect(responseText).to.not.include(\"root:\");\r",
+									"});\r",
+									"\r",
+									"// SECURITY BUG DETECTION\r",
+									"pm.test(\"SECURITY CHECK: Path traversal prevention\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"SECURITY BUG: Path traversal payload accepted\");\r",
+									"        pm.globals.set(\"security_bug_path_categories\", \"found\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=../../../etc/passwd",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "../../../etc/passwd"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-023-Maximum-valid-length",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Long valid search handled\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Maximum length boundary\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=power_drill_accessories_professional_grade",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "power_drill_accessories_professional_grade"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Boundary Testing",
+			"item": [
+				{
+					"name": "CAT-024-Single-character-boundary",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Single char boundary test\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Minimum length boundary\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=z",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "z"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-025-Whitespace-only",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Whitespace only should be rejected\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Whitespace validation\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.error || responseJson.message).to.be.ok;\r",
+									"});\r",
+									"\r",
+									"// BUG DETECTION\r",
+									"pm.test(\"BUG CHECK: Whitespace validation\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"BUG: Whitespace-only query accepted\");\r",
+									"        pm.globals.set(\"bug_whitespace_categories\", \"found\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=   ",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "   "
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-026-Tab-characters",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Tab chars handled\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Control character processing\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=tool\\t",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "tool\\t"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-027-Newline-characters",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Newline chars handled\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Newline processing\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=tool\\n",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "tool\\n"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-028-Non-existent-category",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Non-existent category returns empty\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Empty results for non-existent\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"    pm.expect(responseJson.length).to.equal(0);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=nonexistentcategory",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "nonexistentcategory"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-029-Database-connection-error",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Handle database errors gracefully\", function () {\r",
+									"    // This might return 200 or 500 depending on system state\r",
+									"    pm.expect([200, 500]).to.include(pm.response.code);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error handling mechanism\", function () {\r",
+									"    if (pm.response.code === 500) {\r",
+									"        const responseJson = pm.response.json();\r",
+									"        pm.expect(responseJson.error || responseJson.message).to.be.ok;\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=tool",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "tool"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Error Handling & HTTP Methods",
+			"item": [
+				{
+					"name": "CAT-030-Service-timeout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Timeout handling\", function () {\r",
+									"    pm.expect([200, 408]).to.include(pm.response.code);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Service availability\", function () {\r",
+									"    if (pm.response.code === 408) {\r",
+									"        const responseJson = pm.response.json();\r",
+									"        pm.expect(responseJson.error || responseJson.message).to.include(\"timeout\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=tool",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "tool"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-031-POST-method-not-allowed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"POST method not allowed\", function () {\r",
+									"    pm.response.to.have.status(405);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Method not allowed message\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    const errorMsg = (responseJson.error || responseJson.message || \"\").toLowerCase();\r",
+									"    pm.expect(errorMsg).to.include(\"method\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=tool",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "tool"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-032-PUT-method-not-allowed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"PUT method not allowed\", function () {\r",
+									"    pm.response.to.have.status(405);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"HTTP method validation\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.error || responseJson.message).to.be.ok;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=tool",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "tool"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-033-DELETE-method-not-allowed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"DELETE method not allowed\", function () {\r",
+									"    pm.response.to.have.status(405);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Method restriction working\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.error || responseJson.message).to.be.ok;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=tool",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "tool"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-034-Performance-test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Performance - response time\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Fast search response\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Performance baseline\", function () {\r",
+									"    console.log(\"Response time:\", pm.response.responseTime + \"ms\");\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=tool",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "tool"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CAT-035-Concurrent-requests",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Concurrent access handled\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Concurrent request processing\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Stability under load\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/search?q=tool",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "tool"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,3450 @@
+{
+	"info": {
+		"_postman_id": "9e328e18-fcdf-475d-9859-7927f3b09457",
+		"name": "API3-Invoice-Status",
+		"description": "Test case cho API cập nhật trạng thái hóa đơn PUT /invoices/{id}/status",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "47786634",
+		"_collection_link": "https://patuan22-7848508.postman.co/workspace/HW07-API-Testing~881d5aae-f847-4366-bd49-426942462a2c/collection/47786634-9e328e18-fcdf-475d-9859-7927f3b09457?action=share&source=collection_link&creator=47786634"
+	},
+	"item": [
+		{
+			"name": "Authentication Tests",
+			"item": [
+				{
+					"name": "INV-001-Valid-admin-token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Valid admin token access\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status updated successfully\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.success || responseJson.message).to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Authentication working\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"PAID\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{valid_invoice_id}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-002-No-authorization-header",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 401 Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Authentication required message\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message || responseJson.error).to.include(\"Unauthorized\");\r",
+									"});\r",
+									"\r",
+									"// CRITICAL BUG DETECTION\r",
+									"pm.test(\"CRITICAL SECURITY CHECK: Authentication bypass\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"CRITICAL SECURITY BUG: No authentication required!\");\r",
+									"        console.log(\"Invoice status can be changed without authentication!\");\r",
+									"        pm.globals.set(\"critical_security_bug_no_auth\", \"FOUND\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Security mechanism active\", function () {\r",
+									"    pm.expect(pm.response.code).to.not.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"PAID\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{valid_invoice_id}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-003-Empty-token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Empty token should return 401\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Empty token validation\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message || responseJson.error).to.be.ok;\r",
+									"});\r",
+									"\r",
+									"// BUG DETECTION\r",
+									"pm.test(\"BUG CHECK: Empty token validation\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"SECURITY BUG: Empty token accepted!\");\r",
+									"        pm.globals.set(\"security_bug_empty_token\", \"found\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": ""
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"PAID\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{valid_invoice_id}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-004-Invalid-token-format",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Invalid token format rejected\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Token format validation\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    const errorMsg = (responseJson.error || responseJson.message || \"\").toLowerCase();\r",
+									"    pm.expect(errorMsg).to.include(\"invalid\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "invalid-token-format"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"PAID\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{valid_invoice_id}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-005-Expired-token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Expired token rejected\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Token expiry validation\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    const errorMsg = (responseJson.error || responseJson.message || \"\").toLowerCase();\r",
+									"    pm.expect(errorMsg).to.satisfy(msg => \r",
+									"        msg.includes(\"expired\") || msg.includes(\"invalid\")\r",
+									"    );\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{expired_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"PAID\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{valid_invoice_id}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-006-User-without-admin-permissions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get request name safely\r",
+									"const requestName = pm.info.requestName || \"\";\r",
+									"\r",
+									"// Test authentication and authorization\r",
+									"pm.test(\"Authentication check\", function () {\r",
+									"    const hasAuth = pm.request.headers.get(\"Authorization\");\r",
+									"    \r",
+									"    if (requestName.includes(\"No-Auth\")) {\r",
+									"        pm.expect(pm.response.code).to.equal(401);\r",
+									"    } else if (!hasAuth) {\r",
+									"        pm.expect(pm.response.code).to.not.equal(401);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Test expected status codes\r",
+									"pm.test(\"Status code validation\", function () {\r",
+									"    const expectedStatus = requestName.includes(\"No-Auth\") ? 401 :\r",
+									"                          requestName.includes(\"Non-Existent\") ? 404 :\r",
+									"                          requestName.includes(\"Invalid-Status\") ? 422 :\r",
+									"                          200;\r",
+									"    \r",
+									"    pm.response.to.have.status(expectedStatus);\r",
+									"});\r",
+									"\r",
+									"// Test successful updates\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Successful update response format\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('success');\r",
+									"        pm.expect(jsonData.success).to.be.true;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test error responses\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"401 has unauthorized message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"        pm.expect(jsonData.message.toLowerCase()).to.include('unauthorized');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"404 has not found message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 422) {\r",
+									"    pm.test(\"422 has validation error message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test response time\r",
+									"pm.test(\"Response time acceptable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"// Test content type\r",
+									"pm.test(\"Content-Type is JSON\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{user_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "pm.test(\"User without permission denied\", function () {\r\n    pm.response.to.have.status(403);\r\n});\r\n\r\npm.test(\"Permission validation\", function () {\r\n    const responseJson = pm.response.json();\r\n    const errorMsg = (responseJson.error || responseJson.message || \"\").toLowerCase();\r\n    pm.expect(errorMsg).to.satisfy(msg => \r\n        msg.includes(\"permission\") || msg.includes(\"forbidden\") || msg.includes(\"access\")\r\n    );\r\n});\r\n\r\n// BUG DETECTION\r\npm.test(\"SECURITY CHECK: Permission enforcement\", function () {\r\n    if (pm.response.code === 200) {\r\n        console.log(\"SECURITY BUG: Regular user can change invoice status!\");\r\n        pm.globals.set(\"security_bug_permission\", \"found\");\r\n    }\r\n});",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{valid_invoice_id}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-007-User-accessing-own-invoice",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"User can access own invoice\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Own invoice access allowed\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.success || responseJson.message).to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"User authorization working\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{user_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"PAID\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{user_invoice_id}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-008-User-accessing-other-user-invoice",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"User cannot access other user invoice\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Access control working\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    const errorMsg = (responseJson.error || responseJson.message || \"\").toLowerCase();\r",
+									"    pm.expect(errorMsg).to.include(\"access\");\r",
+									"});\r",
+									"\r",
+									"// CRITICAL SECURITY BUG DETECTION\r",
+									"pm.test(\"CRITICAL SECURITY CHECK: Access control\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"CRITICAL SECURITY BUG: User can access other user's invoices!\");\r",
+									"        console.log(\"This is a major security vulnerability - authorization bypass!\");\r",
+									"        pm.globals.set(\"critical_security_bug_access_control\", \"FOUND\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{user_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"PAID\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{other_user_invoice}}/status"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "State Transition Testing",
+			"item": [
+				{
+					"name": "INV-009-PENDING-to-PAID-Valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Valid transition PENDING->PAID succeeds\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status updated successfully\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message || responseJson.success).to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Business logic - valid transition\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"State transition working\", function () {\r",
+									"    console.log(\"✅ VALID TRANSITION: PENDING → PAID successful\");\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Ensure invoice is in PENDING state first\r",
+									"const setPendingRequest = {\r",
+									"    url: pm.environment.get(\"base_url\") + \"/invoices/\" + pm.environment.get(\"pending_invoice\") + \"/status\",\r",
+									"    method: \"PUT\",\r",
+									"    header: {\r",
+									"        \"Authorization\": \"Bearer \" + pm.environment.get(\"admin_token\"),\r",
+									"        \"Content-Type\": \"application/json\"\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: \"raw\",\r",
+									"        raw: JSON.stringify({\"status\": \"PENDING\"})\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(setPendingRequest, function(err, response) {\r",
+									"    if (!err && response.code === 200) {\r",
+									"        console.log(\"✅ Pre-condition: Invoice set to PENDING state\");\r",
+									"    } else {\r",
+									"        console.log(\"⚠️ Pre-condition failed: Could not set PENDING state\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"PAID\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{pending_invoice}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-010-PENDING-to-CANCELLED-Valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Valid transition PENDING->CANCELLED\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Cancellation allowed from pending\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message || responseJson.success).to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Business rule - pending can be cancelled\", function () {\r",
+									"    console.log(\"✅ VALID TRANSITION: PENDING → CANCELLED successful\");\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set to PENDING first\r",
+									"const setPendingRequest = {\r",
+									"    url: pm.environment.get(\"base_url\") + \"/invoices/\" + pm.environment.get(\"pending_invoice\") + \"/status\",\r",
+									"    method: \"PUT\",\r",
+									"    header: {\r",
+									"        \"Authorization\": \"Bearer \" + pm.environment.get(\"admin_token\"),\r",
+									"        \"Content-Type\": \"application/json\"\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: \"raw\",\r",
+									"        raw: JSON.stringify({\"status\": \"PENDING\"})\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(setPendingRequest, function(err, response) {\r",
+									"    if (!err) {\r",
+									"        console.log(\"✅ Pre-condition: Invoice set to PENDING state\");\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"CANCELLED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{pending_invoice}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-011-PENDING-to-OVERDUE-Valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Valid transition PENDING->OVERDUE\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Overdue transition allowed\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message || responseJson.success).to.be.ok;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set to PENDING first\r",
+									"const setPendingRequest = {\r",
+									"    url: pm.environment.get(\"base_url\") + \"/invoices/\" + pm.environment.get(\"pending_invoice\") + \"/status\",\r",
+									"    method: \"PUT\",\r",
+									"    header: {\r",
+									"        \"Authorization\": \"Bearer \" + pm.environment.get(\"admin_token\"),\r",
+									"        \"Content-Type\": \"application/json\"\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: \"raw\",\r",
+									"        raw: JSON.stringify({\"status\": \"PENDING\"})\r",
+									"    }\r",
+									"};\r",
+									"pm.sendRequest(setPendingRequest);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"OVERDUE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{pending_invoice}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-012-PAID-to-REFUNDED-Valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Valid transition PAID->REFUNDED\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Refund from paid allowed\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message || responseJson.success).to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Refund business logic\", function () {\r",
+									"    console.log(\"✅ VALID TRANSITION: PAID → REFUNDED successful\");\r",
+									"    pm.expect(pm.response.code).to.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set to PAID first\r",
+									"const setPaidRequest = {\r",
+									"    url: pm.environment.get(\"base_url\") + \"/invoices/\" + pm.environment.get(\"paid_invoice\") + \"/status\",\r",
+									"    method: \"PUT\",\r",
+									"    header: {\r",
+									"        \"Authorization\": \"Bearer \" + pm.environment.get(\"admin_token\"),\r",
+									"        \"Content-Type\": \"application/json\"\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: \"raw\",\r",
+									"        raw: JSON.stringify({\"status\": \"PAID\"})\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(setPaidRequest, function(err, response) {\r",
+									"    if (!err) {\r",
+									"        console.log(\"✅ Pre-condition: Invoice set to PAID state\");\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"REFUNDED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{paid_invoice}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-013-PAID-to-SHIPPED-Valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Valid transition PAID->SHIPPED\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Shipping from paid allowed\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message || responseJson.success).to.be.ok;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set to PAID first\r",
+									"const setPaidRequest = {\r",
+									"    url: pm.environment.get(\"base_url\") + \"/invoices/\" + pm.environment.get(\"paid_invoice\") + \"/status\",\r",
+									"    method: \"PUT\",\r",
+									"    header: {\r",
+									"        \"Authorization\": \"Bearer \" + pm.environment.get(\"admin_token\"),\r",
+									"        \"Content-Type\": \"application/json\"\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: \"raw\",\r",
+									"        raw: JSON.stringify({\"status\": \"PAID\"})\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(setPaidRequest);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"SHIPPED\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{paid_invoice}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-014-OVERDUE-to-PAID-Valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Valid transition OVERDUE->PAID\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Payment from overdue allowed\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message || responseJson.success).to.be.ok;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set to OVERDUE first\r",
+									"const setOverdueRequest = {\r",
+									"    url: pm.environment.get(\"base_url\") + \"/invoices/\" + pm.environment.get(\"overdue_invoice\") + \"/status\",\r",
+									"    method: \"PUT\",\r",
+									"    header: {\r",
+									"        \"Authorization\": \"Bearer \" + pm.environment.get(\"admin_token\"),\r",
+									"        \"Content-Type\": \"application/json\"\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: \"raw\",\r",
+									"        raw: JSON.stringify({\"status\": \"OVERDUE\"})\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(setOverdueRequest);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"PAID\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{overdue_invoice}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-015-PROCESSING-to-SHIPPED-Valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Valid transition PROCESSING->SHIPPED\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Shipping from processing allowed\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message || responseJson.success).to.be.ok;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set to PROCESSING first\r",
+									"const setProcessingRequest = {\r",
+									"    url: pm.environment.get(\"base_url\") + \"/invoices/\" + pm.environment.get(\"processing_invoice\") + \"/status\",\r",
+									"    method: \"PUT\",\r",
+									"    header: {\r",
+									"        \"Authorization\": \"Bearer \" + pm.environment.get(\"admin_token\"),\r",
+									"        \"Content-Type\": \"application/json\"\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: \"raw\",\r",
+									"        raw: JSON.stringify({\"status\": \"PROCESSING\"})\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(setProcessingRequest);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"SHIPPED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{processing_invoice}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-016-DRAFT-to-PENDING-Valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Valid transition DRAFT->PENDING\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Draft to pending workflow\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.message || responseJson.success).to.be.ok;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set to DRAFT first\r",
+									"const setDraftRequest = {\r",
+									"    url: pm.environment.get(\"base_url\") + \"/invoices/\" + pm.environment.get(\"draft_invoice\") + \"/status\",\r",
+									"    method: \"PUT\",\r",
+									"    header: {\r",
+									"        \"Authorization\": \"Bearer \" + pm.environment.get(\"admin_token\"),\r",
+									"        \"Content-Type\": \"application/json\"\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: \"raw\",\r",
+									"        raw: JSON.stringify({\"status\": \"DRAFT\"})\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(setDraftRequest);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"PENDING\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{draft_invoice}}/status"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Invalid State Transitions",
+			"item": [
+				{
+					"name": "INV-017-PAID-to-PENDING-Invalid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Invalid transition PAID->PENDING should be blocked\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Business rule violation error\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    const errorMsg = (responseJson.error || responseJson.message || \"\").toLowerCase();\r",
+									"    pm.expect(errorMsg).to.satisfy(msg => \r",
+									"        msg.includes(\"invalid\") || msg.includes(\"cannot\") || msg.includes(\"not allowed\")\r",
+									"    );\r",
+									"});\r",
+									"\r",
+									"// 🚨 CRITICAL BUG DETECTION\r",
+									"pm.test(\"🚨 CRITICAL BUG CHECK: Business logic enforcement\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"🚨🚨🚨 CRITICAL BUG FOUND: PAID INVOICE CAN BE REVERTED TO PENDING! 🚨🚨🚨\");\r",
+									"        console.log(\"This violates core business logic - paid invoices should be immutable!\");\r",
+									"        console.log(\"Business Rule Violation: Once paid, invoice status cannot be reverted\");\r",
+									"        pm.globals.set(\"critical_bug_paid_revert\", \"FOUND\");\r",
+									"        pm.environment.set(\"bug_report_needed\", \"CRITICAL: Paid invoice state reversion allowed\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"State machine integrity\", function () {\r",
+									"    // This should NEVER pass - it's a business rule violation\r",
+									"    pm.expect(pm.response.code).to.not.equal(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Financial integrity maintained\", function () {\r",
+									"    // Paid invoices represent completed financial transactions\r",
+									"    pm.expect(pm.response.code).to.equal(400);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Ensure invoice is in PAID state first\r",
+									"const setPaidRequest = {\r",
+									"    url: pm.environment.get(\"base_url\") + \"/invoices/\" + pm.environment.get(\"paid_invoice\") + \"/status\",\r",
+									"    method: \"PUT\",\r",
+									"    header: {\r",
+									"        \"Authorization\": \"Bearer \" + pm.environment.get(\"admin_token\"),\r",
+									"        \"Content-Type\": \"application/json\"\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: \"raw\",\r",
+									"        raw: JSON.stringify({\"status\": \"PAID\"})\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(setPaidRequest, function(err, response) {\r",
+									"    if (!err && response.code === 200) {\r",
+									"        console.log(\"✅ Pre-condition: Invoice set to PAID state\");\r",
+									"    } else {\r",
+									"        console.log(\"⚠️ Pre-condition may have failed\");\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"PENDING\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{paid_invoice}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-018-PAID-to-DRAFT-Invalid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Invalid transition PAID->DRAFT blocked\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Cannot revert paid to draft\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    const errorMsg = (responseJson.error || responseJson.message || \"\").toLowerCase();\r",
+									"    pm.expect(errorMsg).to.include(\"invalid\");\r",
+									"});\r",
+									"\r",
+									"// 🚨 CRITICAL BUG DETECTION\r",
+									"pm.test(\"🚨 CRITICAL BUG CHECK: Paid to draft prevention\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"🚨 CRITICAL BUG: PAID invoice can be reverted to DRAFT!\");\r",
+									"        pm.globals.set(\"critical_bug_paid_to_draft\", \"FOUND\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set to PAID first\r",
+									"const setPaidRequest = {\r",
+									"    url: pm.environment.get(\"base_url\") + \"/invoices/\" + pm.environment.get(\"paid_invoice\") + \"/status\",\r",
+									"    method: \"PUT\",\r",
+									"    header: {\r",
+									"        \"Authorization\": \"Bearer \" + pm.environment.get(\"admin_token\"),\r",
+									"        \"Content-Type\": \"application/json\"\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: \"raw\",\r",
+									"        raw: JSON.stringify({\"status\": \"PAID\"})\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(setPaidRequest);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"DRAFT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{paid_invoice}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-020-CANCELLED-to-PROCESSING-Invalid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Invalid transition CANCELLED->PAID blocked\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Cannot pay cancelled invoice\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    const errorMsg = (responseJson.error || responseJson.message || \"\").toLowerCase();\r",
+									"    pm.expect(errorMsg).to.satisfy(msg => \r",
+									"        msg.includes(\"cannot\") || msg.includes(\"invalid\") || msg.includes(\"cancelled\")\r",
+									"    );\r",
+									"});\r",
+									"\r",
+									"// 🚨 CRITICAL BUG DETECTION  \r",
+									"pm.test(\"🚨 CRITICAL BUG CHECK: Cancelled invoice payment prevention\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"🚨🚨🚨 CRITICAL BUG FOUND: CANCELLED INVOICE CAN BE PAID! 🚨🚨🚨\");\r",
+									"        console.log(\"Business Rule Violation: Cancelled invoices should not accept payment\");\r",
+									"        pm.globals.set(\"critical_bug_cancelled_to_paid\", \"FOUND\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Business integrity - cancelled immutable\", function () {\r",
+									"    pm.expect(pm.response.code).to.not.equal(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set to CANCELLED first\r",
+									"const setCancelledRequest = {\r",
+									"    url: pm.environment.get(\"base_url\") + \"/invoices/\" + pm.environment.get(\"cancelled_invoice\") + \"/status\",\r",
+									"    method: \"PUT\",\r",
+									"    header: {\r",
+									"        \"Authorization\": \"Bearer \" + pm.environment.get(\"admin_token\"),\r",
+									"        \"Content-Type\": \"application/json\"\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: \"raw\",\r",
+									"        raw: JSON.stringify({\"status\": \"CANCELLED\"})\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(setCancelledRequest, function(err, response) {\r",
+									"    if (!err) {\r",
+									"        console.log(\"✅ Pre-condition: Invoice set to CANCELLED state\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"PAID\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{cancelled_invoice}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-021-REFUNDED-to-PAID-Invalid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get request name safely\r",
+									"const requestName = pm.info.requestName || \"\";\r",
+									"\r",
+									"// Test authentication and authorization\r",
+									"pm.test(\"Authentication check\", function () {\r",
+									"    const hasAuth = pm.request.headers.get(\"Authorization\");\r",
+									"    \r",
+									"    if (requestName.includes(\"No-Auth\")) {\r",
+									"        pm.expect(pm.response.code).to.equal(401);\r",
+									"    } else if (!hasAuth) {\r",
+									"        pm.expect(pm.response.code).to.not.equal(401);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Test expected status codes\r",
+									"pm.test(\"Status code validation\", function () {\r",
+									"    const expectedStatus = requestName.includes(\"No-Auth\") ? 401 :\r",
+									"                          requestName.includes(\"Non-Existent\") ? 404 :\r",
+									"                          requestName.includes(\"Invalid-Status\") ? 422 :\r",
+									"                          200;\r",
+									"    \r",
+									"    pm.response.to.have.status(expectedStatus);\r",
+									"});\r",
+									"\r",
+									"// Test successful updates\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Successful update response format\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('success');\r",
+									"        pm.expect(jsonData.success).to.be.true;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test error responses\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"401 has unauthorized message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"        pm.expect(jsonData.message.toLowerCase()).to.include('unauthorized');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"404 has not found message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 422) {\r",
+									"    pm.test(\"422 has validation error message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test response time\r",
+									"pm.test(\"Response time acceptable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"// Test content type\r",
+									"pm.test(\"Content-Type is JSON\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"SHIPPED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{valid_invoice_id}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-022-REFUNDED-to-PENDING-Invalid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get request name safely\r",
+									"const requestName = pm.info.requestName || \"\";\r",
+									"\r",
+									"// Test authentication and authorization\r",
+									"pm.test(\"Authentication check\", function () {\r",
+									"    const hasAuth = pm.request.headers.get(\"Authorization\");\r",
+									"    \r",
+									"    if (requestName.includes(\"No-Auth\")) {\r",
+									"        pm.expect(pm.response.code).to.equal(401);\r",
+									"    } else if (!hasAuth) {\r",
+									"        pm.expect(pm.response.code).to.not.equal(401);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Test expected status codes\r",
+									"pm.test(\"Status code validation\", function () {\r",
+									"    const expectedStatus = requestName.includes(\"No-Auth\") ? 401 :\r",
+									"                          requestName.includes(\"Non-Existent\") ? 404 :\r",
+									"                          requestName.includes(\"Invalid-Status\") ? 422 :\r",
+									"                          200;\r",
+									"    \r",
+									"    pm.response.to.have.status(expectedStatus);\r",
+									"});\r",
+									"\r",
+									"// Test successful updates\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Successful update response format\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('success');\r",
+									"        pm.expect(jsonData.success).to.be.true;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test error responses\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"401 has unauthorized message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"        pm.expect(jsonData.message.toLowerCase()).to.include('unauthorized');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"404 has not found message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 422) {\r",
+									"    pm.test(\"422 has validation error message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test response time\r",
+									"pm.test(\"Response time acceptable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"// Test content type\r",
+									"pm.test(\"Content-Type is JSON\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"SHIPPED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{valid_invoice_id}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-023-SHIPPED-to-DRAFT-Invalid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Invalid transition SHIPPED->DRAFT blocked\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Cannot revert shipped invoice\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.error || responseJson.message).to.be.ok;\r",
+									"});\r",
+									"\r",
+									"// 🚨 BUG DETECTION\r",
+									"pm.test(\"🚨 BUG CHECK: Shipped invoice reversion prevention\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"🚨 BUG: SHIPPED invoice can be reverted to DRAFT!\");\r",
+									"        pm.globals.set(\"bug_shipped_to_draft\", \"found\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set to SHIPPED first (via PAID -> SHIPPED)\r",
+									"const setPaidFirst = {\r",
+									"    url: pm.environment.get(\"base_url\") + \"/invoices/\" + pm.environment.get(\"shipped_invoice\") + \"/status\",\r",
+									"    method: \"PUT\",\r",
+									"    header: {\r",
+									"        \"Authorization\": \"Bearer \" + pm.environment.get(\"admin_token\"),\r",
+									"        \"Content-Type\": \"application/json\"\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: \"raw\",\r",
+									"        raw: JSON.stringify({\"status\": \"PAID\"})\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(setPaidFirst, function(err, response) {\r",
+									"    const setShippedRequest = {\r",
+									"        url: pm.environment.get(\"base_url\") + \"/invoices/\" + pm.environment.get(\"shipped_invoice\") + \"/status\",\r",
+									"        method: \"PUT\",\r",
+									"        header: {\r",
+									"            \"Authorization\": \"Bearer \" + pm.environment.get(\"admin_token\"),\r",
+									"            \"Content-Type\": \"application/json\"\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: \"raw\",\r",
+									"            raw: JSON.stringify({\"status\": \"SHIPPED\"})\r",
+									"        }\r",
+									"    };\r",
+									"    pm.sendRequest(setShippedRequest);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"DRAFT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{shipped_invoice}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-024-Same-status-idempotency",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Invalid transition SHIPPED->DRAFT blocked\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Cannot revert shipped invoice\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.error || responseJson.message).to.be.ok;\r",
+									"});\r",
+									"\r",
+									"// 🚨 BUG DETECTION\r",
+									"pm.test(\"🚨 BUG CHECK: Shipped invoice reversion prevention\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"🚨 BUG: SHIPPED invoice can be reverted to DRAFT!\");\r",
+									"        pm.globals.set(\"bug_shipped_to_draft\", \"found\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Set to SHIPPED first (via PAID -> SHIPPED)\r",
+									"const setPaidFirst = {\r",
+									"    url: pm.environment.get(\"base_url\") + \"/invoices/\" + pm.environment.get(\"shipped_invoice\") + \"/status\",\r",
+									"    method: \"PUT\",\r",
+									"    header: {\r",
+									"        \"Authorization\": \"Bearer \" + pm.environment.get(\"admin_token\"),\r",
+									"        \"Content-Type\": \"application/json\"\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: \"raw\",\r",
+									"        raw: JSON.stringify({\"status\": \"PAID\"})\r",
+									"    }\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest(setPaidFirst, function(err, response) {\r",
+									"    const setShippedRequest = {\r",
+									"        url: pm.environment.get(\"base_url\") + \"/invoices/\" + pm.environment.get(\"shipped_invoice\") + \"/status\",\r",
+									"        method: \"PUT\",\r",
+									"        header: {\r",
+									"            \"Authorization\": \"Bearer \" + pm.environment.get(\"admin_token\"),\r",
+									"            \"Content-Type\": \"application/json\"\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: \"raw\",\r",
+									"            raw: JSON.stringify({\"status\": \"SHIPPED\"})\r",
+									"        }\r",
+									"    };\r",
+									"    pm.sendRequest(setShippedRequest);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"DRAFT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{shipped_invoice}}/status"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Domain Testing",
+			"item": [
+				{
+					"name": "INV-025-Invalid-status-value",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get request name safely\r",
+									"const requestName = pm.info.requestName || \"\";\r",
+									"\r",
+									"// Test authentication and authorization\r",
+									"pm.test(\"Authentication check\", function () {\r",
+									"    const hasAuth = pm.request.headers.get(\"Authorization\");\r",
+									"    \r",
+									"    if (requestName.includes(\"No-Auth\")) {\r",
+									"        pm.expect(pm.response.code).to.equal(401);\r",
+									"    } else if (!hasAuth) {\r",
+									"        pm.expect(pm.response.code).to.not.equal(401);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Test expected status codes\r",
+									"pm.test(\"Status code validation\", function () {\r",
+									"    const expectedStatus = requestName.includes(\"No-Auth\") ? 401 :\r",
+									"                          requestName.includes(\"Non-Existent\") ? 404 :\r",
+									"                          requestName.includes(\"Invalid-Status\") ? 422 :\r",
+									"                          200;\r",
+									"    \r",
+									"    pm.response.to.have.status(expectedStatus);\r",
+									"});\r",
+									"\r",
+									"// Test successful updates\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Successful update response format\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('success');\r",
+									"        pm.expect(jsonData.success).to.be.true;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test error responses\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"401 has unauthorized message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"        pm.expect(jsonData.message.toLowerCase()).to.include('unauthorized');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"404 has not found message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 422) {\r",
+									"    pm.test(\"422 has validation error message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test response time\r",
+									"pm.test(\"Response time acceptable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"// Test content type\r",
+									"pm.test(\"Content-Type is JSON\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"SHIPPED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{valid_invoice_id}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-026-Empty-status-value",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get request name safely\r",
+									"const requestName = pm.info.requestName || \"\";\r",
+									"\r",
+									"// Test authentication and authorization\r",
+									"pm.test(\"Authentication check\", function () {\r",
+									"    const hasAuth = pm.request.headers.get(\"Authorization\");\r",
+									"    \r",
+									"    if (requestName.includes(\"No-Auth\")) {\r",
+									"        pm.expect(pm.response.code).to.equal(401);\r",
+									"    } else if (!hasAuth) {\r",
+									"        pm.expect(pm.response.code).to.not.equal(401);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Test expected status codes\r",
+									"pm.test(\"Status code validation\", function () {\r",
+									"    const expectedStatus = requestName.includes(\"No-Auth\") ? 401 :\r",
+									"                          requestName.includes(\"Non-Existent\") ? 404 :\r",
+									"                          requestName.includes(\"Invalid-Status\") ? 422 :\r",
+									"                          200;\r",
+									"    \r",
+									"    pm.response.to.have.status(expectedStatus);\r",
+									"});\r",
+									"\r",
+									"// Test successful updates\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Successful update response format\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('success');\r",
+									"        pm.expect(jsonData.success).to.be.true;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test error responses\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"401 has unauthorized message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"        pm.expect(jsonData.message.toLowerCase()).to.include('unauthorized');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"404 has not found message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 422) {\r",
+									"    pm.test(\"422 has validation error message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test response time\r",
+									"pm.test(\"Response time acceptable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"// Test content type\r",
+									"pm.test(\"Content-Type is JSON\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"SHIPPED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{valid_invoice_id}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-027-Null-status-value",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get request name safely\r",
+									"const requestName = pm.info.requestName || \"\";\r",
+									"\r",
+									"// Test authentication and authorization\r",
+									"pm.test(\"Authentication check\", function () {\r",
+									"    const hasAuth = pm.request.headers.get(\"Authorization\");\r",
+									"    \r",
+									"    if (requestName.includes(\"No-Auth\")) {\r",
+									"        pm.expect(pm.response.code).to.equal(401);\r",
+									"    } else if (!hasAuth) {\r",
+									"        pm.expect(pm.response.code).to.not.equal(401);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Test expected status codes\r",
+									"pm.test(\"Status code validation\", function () {\r",
+									"    const expectedStatus = requestName.includes(\"No-Auth\") ? 401 :\r",
+									"                          requestName.includes(\"Non-Existent\") ? 404 :\r",
+									"                          requestName.includes(\"Invalid-Status\") ? 422 :\r",
+									"                          200;\r",
+									"    \r",
+									"    pm.response.to.have.status(expectedStatus);\r",
+									"});\r",
+									"\r",
+									"// Test successful updates\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Successful update response format\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('success');\r",
+									"        pm.expect(jsonData.success).to.be.true;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test error responses\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"401 has unauthorized message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"        pm.expect(jsonData.message.toLowerCase()).to.include('unauthorized');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"404 has not found message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 422) {\r",
+									"    pm.test(\"422 has validation error message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test response time\r",
+									"pm.test(\"Response time acceptable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"// Test content type\r",
+									"pm.test(\"Content-Type is JSON\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"SHIPPED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{valid_invoice_id}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-028-Numeric-status-value",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get request name safely\r",
+									"const requestName = pm.info.requestName || \"\";\r",
+									"\r",
+									"// Test authentication and authorization\r",
+									"pm.test(\"Authentication check\", function () {\r",
+									"    const hasAuth = pm.request.headers.get(\"Authorization\");\r",
+									"    \r",
+									"    if (requestName.includes(\"No-Auth\")) {\r",
+									"        pm.expect(pm.response.code).to.equal(401);\r",
+									"    } else if (!hasAuth) {\r",
+									"        pm.expect(pm.response.code).to.not.equal(401);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Test expected status codes\r",
+									"pm.test(\"Status code validation\", function () {\r",
+									"    const expectedStatus = requestName.includes(\"No-Auth\") ? 401 :\r",
+									"                          requestName.includes(\"Non-Existent\") ? 404 :\r",
+									"                          requestName.includes(\"Invalid-Status\") ? 422 :\r",
+									"                          200;\r",
+									"    \r",
+									"    pm.response.to.have.status(expectedStatus);\r",
+									"});\r",
+									"\r",
+									"// Test successful updates\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Successful update response format\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('success');\r",
+									"        pm.expect(jsonData.success).to.be.true;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test error responses\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"401 has unauthorized message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"        pm.expect(jsonData.message.toLowerCase()).to.include('unauthorized');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"404 has not found message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 422) {\r",
+									"    pm.test(\"422 has validation error message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test response time\r",
+									"pm.test(\"Response time acceptable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"// Test content type\r",
+									"pm.test(\"Content-Type is JSON\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"SHIPPED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{valid_invoice_id}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-029-Boolean-status-value",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get request name safely\r",
+									"const requestName = pm.info.requestName || \"\";\r",
+									"\r",
+									"// Test authentication and authorization\r",
+									"pm.test(\"Authentication check\", function () {\r",
+									"    const hasAuth = pm.request.headers.get(\"Authorization\");\r",
+									"    \r",
+									"    if (requestName.includes(\"No-Auth\")) {\r",
+									"        pm.expect(pm.response.code).to.equal(401);\r",
+									"    } else if (!hasAuth) {\r",
+									"        pm.expect(pm.response.code).to.not.equal(401);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Test expected status codes\r",
+									"pm.test(\"Status code validation\", function () {\r",
+									"    const expectedStatus = requestName.includes(\"No-Auth\") ? 401 :\r",
+									"                          requestName.includes(\"Non-Existent\") ? 404 :\r",
+									"                          requestName.includes(\"Invalid-Status\") ? 422 :\r",
+									"                          200;\r",
+									"    \r",
+									"    pm.response.to.have.status(expectedStatus);\r",
+									"});\r",
+									"\r",
+									"// Test successful updates\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Successful update response format\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('success');\r",
+									"        pm.expect(jsonData.success).to.be.true;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test error responses\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"401 has unauthorized message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"        pm.expect(jsonData.message.toLowerCase()).to.include('unauthorized');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"404 has not found message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 422) {\r",
+									"    pm.test(\"422 has validation error message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test response time\r",
+									"pm.test(\"Response time acceptable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"// Test content type\r",
+									"pm.test(\"Content-Type is JSON\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"SHIPPED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/99999/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-030-Array-status-value",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get request name safely\r",
+									"const requestName = pm.info.requestName || \"\";\r",
+									"\r",
+									"// Test authentication and authorization\r",
+									"pm.test(\"Authentication check\", function () {\r",
+									"    const hasAuth = pm.request.headers.get(\"Authorization\");\r",
+									"    \r",
+									"    if (requestName.includes(\"No-Auth\")) {\r",
+									"        pm.expect(pm.response.code).to.equal(401);\r",
+									"    } else if (!hasAuth) {\r",
+									"        pm.expect(pm.response.code).to.not.equal(401);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Test expected status codes\r",
+									"pm.test(\"Status code validation\", function () {\r",
+									"    const expectedStatus = requestName.includes(\"No-Auth\") ? 401 :\r",
+									"                          requestName.includes(\"Non-Existent\") ? 404 :\r",
+									"                          requestName.includes(\"Invalid-Status\") ? 422 :\r",
+									"                          200;\r",
+									"    \r",
+									"    pm.response.to.have.status(expectedStatus);\r",
+									"});\r",
+									"\r",
+									"// Test successful updates\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Successful update response format\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('success');\r",
+									"        pm.expect(jsonData.success).to.be.true;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test error responses\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"401 has unauthorized message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"        pm.expect(jsonData.message.toLowerCase()).to.include('unauthorized');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"404 has not found message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 422) {\r",
+									"    pm.test(\"422 has validation error message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test response time\r",
+									"pm.test(\"Response time acceptable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"// Test content type\r",
+									"pm.test(\"Content-Type is JSON\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"INVALID_STATUS_VALUE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{valid_invoice_id}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-031-Case-sensitivity-lowercase",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get request name safely\r",
+									"const requestName = pm.info.requestName || \"\";\r",
+									"\r",
+									"// Test authentication and authorization\r",
+									"pm.test(\"Authentication check\", function () {\r",
+									"    const hasAuth = pm.request.headers.get(\"Authorization\");\r",
+									"    \r",
+									"    if (requestName.includes(\"No-Auth\")) {\r",
+									"        pm.expect(pm.response.code).to.equal(401);\r",
+									"    } else if (!hasAuth) {\r",
+									"        pm.expect(pm.response.code).to.not.equal(401);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Test expected status codes\r",
+									"pm.test(\"Status code validation\", function () {\r",
+									"    const expectedStatus = requestName.includes(\"No-Auth\") ? 401 :\r",
+									"                          requestName.includes(\"Non-Existent\") ? 404 :\r",
+									"                          requestName.includes(\"Invalid-Status\") ? 422 :\r",
+									"                          200;\r",
+									"    \r",
+									"    pm.response.to.have.status(expectedStatus);\r",
+									"});\r",
+									"\r",
+									"// Test successful updates\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Successful update response format\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('success');\r",
+									"        pm.expect(jsonData.success).to.be.true;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test error responses\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"401 has unauthorized message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"        pm.expect(jsonData.message.toLowerCase()).to.include('unauthorized');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"404 has not found message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 422) {\r",
+									"    pm.test(\"422 has validation error message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test response time\r",
+									"pm.test(\"Response time acceptable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"// Test content type\r",
+									"pm.test(\"Content-Type is JSON\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"SHIPPED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/99999/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-032-Case-sensitivity-mixed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get request name safely\r",
+									"const requestName = pm.info.requestName || \"\";\r",
+									"\r",
+									"// Test authentication and authorization\r",
+									"pm.test(\"Authentication check\", function () {\r",
+									"    const hasAuth = pm.request.headers.get(\"Authorization\");\r",
+									"    \r",
+									"    if (requestName.includes(\"No-Auth\")) {\r",
+									"        pm.expect(pm.response.code).to.equal(401);\r",
+									"    } else if (!hasAuth) {\r",
+									"        pm.expect(pm.response.code).to.not.equal(401);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Test expected status codes\r",
+									"pm.test(\"Status code validation\", function () {\r",
+									"    const expectedStatus = requestName.includes(\"No-Auth\") ? 401 :\r",
+									"                          requestName.includes(\"Non-Existent\") ? 404 :\r",
+									"                          requestName.includes(\"Invalid-Status\") ? 422 :\r",
+									"                          200;\r",
+									"    \r",
+									"    pm.response.to.have.status(expectedStatus);\r",
+									"});\r",
+									"\r",
+									"// Test successful updates\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Successful update response format\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('success');\r",
+									"        pm.expect(jsonData.success).to.be.true;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test error responses\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"401 has unauthorized message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"        pm.expect(jsonData.message.toLowerCase()).to.include('unauthorized');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"404 has not found message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 422) {\r",
+									"    pm.test(\"422 has validation error message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test response time\r",
+									"pm.test(\"Response time acceptable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"// Test content type\r",
+									"pm.test(\"Content-Type is JSON\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"INVALID_STATUS_VALUE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{valid_invoice_id}}/status"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Boundary Testing",
+			"item": [
+				{
+					"name": "INV-033-Very-long-status-string",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get request name safely\r",
+									"const requestName = pm.info.requestName || \"\";\r",
+									"\r",
+									"// Test authentication and authorization\r",
+									"pm.test(\"Authentication check\", function () {\r",
+									"    const hasAuth = pm.request.headers.get(\"Authorization\");\r",
+									"    \r",
+									"    if (requestName.includes(\"No-Auth\")) {\r",
+									"        pm.expect(pm.response.code).to.equal(401);\r",
+									"    } else if (!hasAuth) {\r",
+									"        pm.expect(pm.response.code).to.not.equal(401);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Test expected status codes\r",
+									"pm.test(\"Status code validation\", function () {\r",
+									"    const expectedStatus = requestName.includes(\"No-Auth\") ? 401 :\r",
+									"                          requestName.includes(\"Non-Existent\") ? 404 :\r",
+									"                          requestName.includes(\"Invalid-Status\") ? 422 :\r",
+									"                          200;\r",
+									"    \r",
+									"    pm.response.to.have.status(expectedStatus);\r",
+									"});\r",
+									"\r",
+									"// Test successful updates\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Successful update response format\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('success');\r",
+									"        pm.expect(jsonData.success).to.be.true;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test error responses\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"401 has unauthorized message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"        pm.expect(jsonData.message.toLowerCase()).to.include('unauthorized');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"404 has not found message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 422) {\r",
+									"    pm.test(\"422 has validation error message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test response time\r",
+									"pm.test(\"Response time acceptable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"// Test content type\r",
+									"pm.test(\"Content-Type is JSON\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"SHIPPED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{valid_invoice_id}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-034-Status-with-special-characters",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get request name safely\r",
+									"const requestName = pm.info.requestName || \"\";\r",
+									"\r",
+									"// Test authentication and authorization\r",
+									"pm.test(\"Authentication check\", function () {\r",
+									"    const hasAuth = pm.request.headers.get(\"Authorization\");\r",
+									"    \r",
+									"    if (requestName.includes(\"No-Auth\")) {\r",
+									"        pm.expect(pm.response.code).to.equal(401);\r",
+									"    } else if (!hasAuth) {\r",
+									"        pm.expect(pm.response.code).to.not.equal(401);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Test expected status codes\r",
+									"pm.test(\"Status code validation\", function () {\r",
+									"    const expectedStatus = requestName.includes(\"No-Auth\") ? 401 :\r",
+									"                          requestName.includes(\"Non-Existent\") ? 404 :\r",
+									"                          requestName.includes(\"Invalid-Status\") ? 422 :\r",
+									"                          200;\r",
+									"    \r",
+									"    pm.response.to.have.status(expectedStatus);\r",
+									"});\r",
+									"\r",
+									"// Test successful updates\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Successful update response format\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('success');\r",
+									"        pm.expect(jsonData.success).to.be.true;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test error responses\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"401 has unauthorized message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"        pm.expect(jsonData.message.toLowerCase()).to.include('unauthorized');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"404 has not found message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 422) {\r",
+									"    pm.test(\"422 has validation error message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test response time\r",
+									"pm.test(\"Response time acceptable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"// Test content type\r",
+									"pm.test(\"Content-Type is JSON\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"SHIPPED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{valid_invoice_id}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-035-Invoice-ID-zero",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get request name safely\r",
+									"const requestName = pm.info.requestName || \"\";\r",
+									"\r",
+									"// Test authentication and authorization\r",
+									"pm.test(\"Authentication check\", function () {\r",
+									"    const hasAuth = pm.request.headers.get(\"Authorization\");\r",
+									"    \r",
+									"    if (requestName.includes(\"No-Auth\")) {\r",
+									"        pm.expect(pm.response.code).to.equal(401);\r",
+									"    } else if (!hasAuth) {\r",
+									"        pm.expect(pm.response.code).to.not.equal(401);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Test expected status codes\r",
+									"pm.test(\"Status code validation\", function () {\r",
+									"    const expectedStatus = requestName.includes(\"No-Auth\") ? 401 :\r",
+									"                          requestName.includes(\"Non-Existent\") ? 404 :\r",
+									"                          requestName.includes(\"Invalid-Status\") ? 422 :\r",
+									"                          200;\r",
+									"    \r",
+									"    pm.response.to.have.status(expectedStatus);\r",
+									"});\r",
+									"\r",
+									"// Test successful updates\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Successful update response format\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('success');\r",
+									"        pm.expect(jsonData.success).to.be.true;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test error responses\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"401 has unauthorized message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"        pm.expect(jsonData.message.toLowerCase()).to.include('unauthorized');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"404 has not found message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 422) {\r",
+									"    pm.test(\"422 has validation error message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test response time\r",
+									"pm.test(\"Response time acceptable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"// Test content type\r",
+									"pm.test(\"Content-Type is JSON\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"SHIPPED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{valid_invoice_id}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-036-Negative-invoice-ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"{\r",
+									"  \"status\": \"PAID\"\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"PAID\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/-1/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-037-Very-large-invoice-ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get request name safely\r",
+									"const requestName = pm.info.requestName || \"\";\r",
+									"\r",
+									"// Test authentication and authorization\r",
+									"pm.test(\"Authentication check\", function () {\r",
+									"    const hasAuth = pm.request.headers.get(\"Authorization\");\r",
+									"    \r",
+									"    if (requestName.includes(\"No-Auth\")) {\r",
+									"        pm.expect(pm.response.code).to.equal(401);\r",
+									"    } else if (!hasAuth) {\r",
+									"        pm.expect(pm.response.code).to.not.equal(401);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Test expected status codes\r",
+									"pm.test(\"Status code validation\", function () {\r",
+									"    const expectedStatus = requestName.includes(\"No-Auth\") ? 401 :\r",
+									"                          requestName.includes(\"Non-Existent\") ? 404 :\r",
+									"                          requestName.includes(\"Invalid-Status\") ? 422 :\r",
+									"                          200;\r",
+									"    \r",
+									"    pm.response.to.have.status(expectedStatus);\r",
+									"});\r",
+									"\r",
+									"// Test successful updates\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Successful update response format\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('success');\r",
+									"        pm.expect(jsonData.success).to.be.true;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test error responses\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"401 has unauthorized message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"        pm.expect(jsonData.message.toLowerCase()).to.include('unauthorized');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"404 has not found message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 422) {\r",
+									"    pm.test(\"422 has validation error message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test response time\r",
+									"pm.test(\"Response time acceptable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"// Test content type\r",
+									"pm.test(\"Content-Type is JSON\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"SHIPPED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/99999/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-038-Non-numeric-invoice-ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get request name safely\r",
+									"const requestName = pm.info.requestName || \"\";\r",
+									"\r",
+									"// Test authentication and authorization\r",
+									"pm.test(\"Authentication check\", function () {\r",
+									"    const hasAuth = pm.request.headers.get(\"Authorization\");\r",
+									"    \r",
+									"    if (requestName.includes(\"No-Auth\")) {\r",
+									"        pm.expect(pm.response.code).to.equal(401);\r",
+									"    } else if (!hasAuth) {\r",
+									"        pm.expect(pm.response.code).to.not.equal(401);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Test expected status codes\r",
+									"pm.test(\"Status code validation\", function () {\r",
+									"    const expectedStatus = requestName.includes(\"No-Auth\") ? 401 :\r",
+									"                          requestName.includes(\"Non-Existent\") ? 404 :\r",
+									"                          requestName.includes(\"Invalid-Status\") ? 422 :\r",
+									"                          200;\r",
+									"    \r",
+									"    pm.response.to.have.status(expectedStatus);\r",
+									"});\r",
+									"\r",
+									"// Test successful updates\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Successful update response format\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('success');\r",
+									"        pm.expect(jsonData.success).to.be.true;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test error responses\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"401 has unauthorized message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"        pm.expect(jsonData.message.toLowerCase()).to.include('unauthorized');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"404 has not found message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 422) {\r",
+									"    pm.test(\"422 has validation error message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test response time\r",
+									"pm.test(\"Response time acceptable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"// Test content type\r",
+									"pm.test(\"Content-Type is JSON\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"INVALID_STATUS_VALUE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{valid_invoice_id}}/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-039-SQL-injection-in-invoice-ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get request name safely\r",
+									"const requestName = pm.info.requestName || \"\";\r",
+									"\r",
+									"// Test authentication and authorization\r",
+									"pm.test(\"Authentication check\", function () {\r",
+									"    const hasAuth = pm.request.headers.get(\"Authorization\");\r",
+									"    \r",
+									"    if (requestName.includes(\"No-Auth\")) {\r",
+									"        pm.expect(pm.response.code).to.equal(401);\r",
+									"    } else if (!hasAuth) {\r",
+									"        pm.expect(pm.response.code).to.not.equal(401);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Test expected status codes\r",
+									"pm.test(\"Status code validation\", function () {\r",
+									"    const expectedStatus = requestName.includes(\"No-Auth\") ? 401 :\r",
+									"                          requestName.includes(\"Non-Existent\") ? 404 :\r",
+									"                          requestName.includes(\"Invalid-Status\") ? 422 :\r",
+									"                          200;\r",
+									"    \r",
+									"    pm.response.to.have.status(expectedStatus);\r",
+									"});\r",
+									"\r",
+									"// Test successful updates\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Successful update response format\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('success');\r",
+									"        pm.expect(jsonData.success).to.be.true;\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test error responses\r",
+									"if (pm.response.code === 401) {\r",
+									"    pm.test(\"401 has unauthorized message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"        pm.expect(jsonData.message.toLowerCase()).to.include('unauthorized');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"404 has not found message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"if (pm.response.code === 422) {\r",
+									"    pm.test(\"422 has validation error message\", function () {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property('message');\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Test response time\r",
+									"pm.test(\"Response time acceptable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"// Test content type\r",
+									"pm.test(\"Content-Type is JSON\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"SHIPPED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/99999/status"
+					},
+					"response": []
+				},
+				{
+					"name": "INV-040-XSS-attempt-in-status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"XSS in status field blocked\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"XSS prevention active\", function () {\r",
+									"    const responseText = pm.response.text();\r",
+									"    pm.expect(responseText).to.not.include(\"<script>\");\r",
+									"});\r",
+									"\r",
+									"// 🚨 CRITICAL SECURITY BUG DETECTION\r",
+									"pm.test(\"🚨 SECURITY CHECK: XSS prevention in status field\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"🚨 CRITICAL SECURITY BUG: XSS payload accepted in status field!\");\r",
+									"        pm.globals.set(\"security_bug_xss_status\", \"CRITICAL\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Input sanitization working\", function () {\r",
+									"    pm.expect(pm.response.code).to.not.equal(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{auth_token}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"<script>alert('xss')</script>\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/invoices/{{valid_invoice_id}}/status"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": {
+			"token": "{{auth_token}}"
+		}
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

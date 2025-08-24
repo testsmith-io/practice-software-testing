@@ -1,0 +1,160 @@
+{
+	"info": {
+		"_postman_id": "695c9e06-5880-4f89-95c1-668bc856f63c",
+		"name": "Authentication",
+		"description": "Các yêu cầu đăng nhập để lấy token xác thực",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "47786634",
+		"_collection_link": "https://patuan22-7848508.postman.co/workspace/HW07-API-Testing~881d5aae-f847-4366-bd49-426942462a2c/collection/47786634-695c9e06-5880-4f89-95c1-668bc856f63c?action=share&source=collection_link&creator=47786634"
+	},
+	"item": [
+		{
+			"name": "Admin Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test 1: Kiểm tra login thành công\r",
+							"pm.test(\"Đăng nhập thành công\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Test 2: Kiểm tra response có access token\r",
+							"pm.test(\"Response chứa access token\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('access_token');\r",
+							"});\r",
+							"\r",
+							"// Test 3: Kiểm tra response có thông tin cần thiết\r",
+							"pm.test(\"Response có đầy đủ thông tin\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('token_type');\r",
+							"    pm.expect(jsonData.token_type).to.equal('bearer');\r",
+							"});\r",
+							"\r",
+							"// Test 4: Tự động lưu token vào environment\r",
+							"pm.test(\"Lưu auth token vào environment\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    if (jsonData.access_token) {\r",
+							"        // Lưu token vào environment variable\r",
+							"        pm.environment.set(\"auth_token\", jsonData.access_token);\r",
+							"        \r",
+							"        // Log để debug (optional)\r",
+							"        console.log(\"Token đã được lưu:\", jsonData.access_token.substring(0, 20) + \"...\");\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"// Test 5: Kiểm tra token có format đúng không  \r",
+							"pm.test(\"Token có format JWT hợp lệ\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    if (jsonData.access_token) {\r",
+							"        // JWT token có 3 phần cách nhau bởi dấu chấm\r",
+							"        const tokenParts = jsonData.access_token.split('.');\r",
+							"        pm.expect(tokenParts).to.have.length(3);\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"{{admin_email}}\",\r\n  \"password\": \"{{admin_password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}/users/login"
+			},
+			"response": []
+		},
+		{
+			"name": "User Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test 1: Kiểm tra login thành công\r",
+							"pm.test(\"Đăng nhập thành công\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Test 2: Kiểm tra response có access token\r",
+							"pm.test(\"Response chứa access token\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('access_token');\r",
+							"});\r",
+							"\r",
+							"// Test 3: Kiểm tra response có thông tin cần thiết\r",
+							"pm.test(\"Response có đầy đủ thông tin\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('token_type');\r",
+							"    pm.expect(jsonData.token_type).to.equal('bearer');\r",
+							"});\r",
+							"\r",
+							"// Test 4: Tự động lưu token vào environment\r",
+							"pm.test(\"Lưu user token vào environment\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    if (jsonData.access_token) {\r",
+							"        // Lưu token vào environment variable\r",
+							"        pm.environment.set(\"user_token\", jsonData.access_token);\r",
+							"        \r",
+							"        // Log để debug (optional)\r",
+							"        console.log(\"Token đã được lưu:\", jsonData.access_token.substring(0, 20) + \"...\");\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"// Test 5: Kiểm tra token có format đúng không  \r",
+							"pm.test(\"Token có format JWT hợp lệ\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    if (jsonData.access_token) {\r",
+							"        // JWT token có 3 phần cách nhau bởi dấu chấm\r",
+							"        const tokenParts = jsonData.access_token.split('.');\r",
+							"        pm.expect(tokenParts).to.have.length(3);\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"{{user_email}}\",\r\n  \"password\": \"{{user_password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}/users/login"
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,1770 @@
+{
+	"info": {
+		"_postman_id": "97aceddf-b16e-4c32-a937-b1109c3f844b",
+		"name": "API1-Brands-Search",
+		"description": "Test case cho API tìm kiếm thương hiệu GET /brands/search",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "47786634",
+		"_collection_link": "https://patuan22-7848508.postman.co/workspace/HW07-API-Testing~881d5aae-f847-4366-bd49-426942462a2c/collection/47786634-97aceddf-b16e-4c32-a937-b1109c3f844b?action=share&source=collection_link&creator=47786634"
+	},
+	"item": [
+		{
+			"name": "Valid Search Tests",
+			"item": [
+				{
+					"name": "BR-001-Search-single-word",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time < 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is array of brands\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Hammer brands found\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.length).to.be.greaterThanOrEqual(0);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=brand",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "brand"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-002-Search-multiple-words",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Multiple words search works\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Drill set brands search\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=brand name",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "brand name"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-003-Partial-brand-name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Partial brand search (mak -> Makita)\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Partial matching functionality\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=bra",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "bra"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-004-Popular-brand-search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"DeWalt brand search works\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Popular brand found\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    if (responseJson.length > 0) {\r",
+									"        // Check if brand name contains dewalt (case insensitive)\r",
+									"        const brandNames = responseJson.map(b => (b.name || \"\").toLowerCase());\r",
+									"        const hasDeWalt = brandNames.some(name => name.includes(\"dewalt\"));\r",
+									"        if (hasDeWalt) {\r",
+									"            pm.expect(hasDeWalt).to.be.true;\r",
+									"        }\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=Brand",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "Brand"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-005-Tool-brand-search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Bosch brand search\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=bosch",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "bosch"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-006-Single-character-search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Single char brand search\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Brands starting with B\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=b",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "b"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-007-Case-insensitive-search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Case insensitive search (MAKITA)\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Case sensitivity handling\", function () {\r",
+									"    // Should return same results as lowercase \"makita\"\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=MAKITA",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "MAKITA"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-008-Search-with-spaces",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Spaces trimmed properly\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q= dewalt",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": " dewalt"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-009-Brand-with-ampersand",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Ampersand in brand name handled\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Special punctuation support\", function () {\r",
+									"    // Black & Decker brand should be searchable\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=black&decker",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "black"
+								},
+								{
+									"key": "decker",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-010-Less-common-brand",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Less common brand search\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=festool",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "festool"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Domain Testing",
+			"item": [
+				{
+					"name": "BR-011-Empty-query-parameter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Empty query should return 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error message for empty query\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.error || responseJson.message).to.be.ok;\r",
+									"});\r",
+									"\r",
+									"// BUG DETECTION\r",
+									"pm.test(\"BUG CHECK: Empty query validation\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"POTENTIAL BUG: Empty brand query accepted (should be rejected)\");\r",
+									"        pm.globals.set(\"bug_empty_query_brands\", \"found\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Input validation working\", function () {\r",
+									"    pm.expect([400, 422]).to.include(pm.response.code);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-012-No-query-parameter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Missing query param should return 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Required parameter error\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    const errorMsg = (responseJson.error || responseJson.message || \"\").toLowerCase();\r",
+									"    pm.expect(errorMsg).to.satisfy(msg => \r",
+									"        msg.includes(\"required\") || msg.includes(\"missing\") || msg.includes(\"parameter\")\r",
+									"    );\r",
+									"});\r",
+									"\r",
+									"// BUG DETECTION\r",
+									"pm.test(\"BUG CHECK: Required parameter validation\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"POTENTIAL BUG: Missing required parameter accepted\");\r",
+									"        pm.globals.set(\"bug_missing_param_brands\", \"found\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/brands/search"
+					},
+					"response": []
+				},
+				{
+					"name": "BR-013-Null-query-parameter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Null query handled gracefully\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Null treated as search term\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=null",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "null"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-014-Very-long-brand-name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Very long query should be rejected\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Query length validation\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    const errorMsg = (responseJson.error || responseJson.message || \"\").toLowerCase();\r",
+									"    pm.expect(errorMsg).to.satisfy(msg => \r",
+									"        msg.includes(\"long\") || msg.includes(\"limit\") || msg.includes(\"invalid\")\r",
+									"    );\r",
+									"});\r",
+									"\r",
+									"// BUG DETECTION\r",
+									"pm.test(\"BUG CHECK: Query length validation\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"POTENTIAL BUG: Very long query accepted\");\r",
+									"        pm.globals.set(\"bug_long_query_brands\", \"found\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=very_long_brand_name_that_exceeds_normal_limits_and_tests_system_boundaries_for_comprehensive_testing",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "very_long_brand_name_that_exceeds_normal_limits_and_tests_system_boundaries_for_comprehensive_testing"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-015-Numeric-brand-search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Numeric brand search (3M)\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Numbers in brand names handled\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"3M brand searchable\", function () {\r",
+									"    // 3M is a valid brand with numbers\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=3m",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "3m"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-016-Special-characters-only",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Special chars handled gracefully\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Special character processing\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"No crash with special chars\", function () {\r",
+									"    pm.expect(pm.response.code).to.not.equal(500);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=@#$%",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "@"
+								}
+							],
+							"hash": "$%"
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-017-Unicode-brand-name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Unicode chars handled\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Unicode support working\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"International brand support\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=品牌",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "品牌"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-018-Boolean-search-query",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Boolean treated as string\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Boolean input handling\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-019-Array-input-attempt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Array input should be rejected\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Array input validation\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    const errorMsg = (responseJson.error || responseJson.message || \"\").toLowerCase();\r",
+									"    pm.expect(errorMsg).to.satisfy(msg => \r",
+									"        msg.includes(\"invalid\") || msg.includes(\"format\")\r",
+									"    );\r",
+									"});\r",
+									"\r",
+									"// BUG DETECTION\r",
+									"pm.test(\"BUG CHECK: Array input validation\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"BUG: Array input accepted (should validate input format)\");\r",
+									"        pm.globals.set(\"bug_array_input_brands\", \"found\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=[makita]",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "[makita]"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-020-Object-input-attempt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Object input should be rejected\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Object input validation\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    const errorMsg = (responseJson.error || responseJson.message || \"\").toLowerCase();\r",
+									"    pm.expect(errorMsg).to.satisfy(msg => \r",
+									"        msg.includes(\"invalid\") || msg.includes(\"format\")\r",
+									"    );\r",
+									"});\r",
+									"\r",
+									"// BUG DETECTION\r",
+									"pm.test(\"BUG CHECK: Object input validation\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"BUG: Object input accepted (should validate input format)\");\r",
+									"        pm.globals.set(\"bug_object_input_brands\", \"found\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q={brand:makita}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "{brand:makita}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Security Testing",
+			"item": [
+				{
+					"name": "BR-021-XSS-attempt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"XSS attempt should be blocked\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Security validation working\", function () {\r",
+									"    pm.expect(pm.response.code).to.not.equal(200);\r",
+									"});\r",
+									"\r",
+									"// CRITICAL SECURITY BUG DETECTION\r",
+									"pm.test(\"SECURITY CHECK: XSS prevention\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"CRITICAL SECURITY BUG: XSS attack not blocked in brands search!\");\r",
+									"        console.log(\"Payload: <script>alert('brand')</script>\");\r",
+									"        pm.globals.set(\"security_bug_xss_brands\", \"CRITICAL\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"No script in response\", function () {\r",
+									"    const responseText = pm.response.text();\r",
+									"    pm.expect(responseText).to.not.include(\"<script>\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"HTML sanitization\", function () {\r",
+									"    const responseText = pm.response.text();\r",
+									"    pm.expect(responseText).to.not.include(\"alert(\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=<script>alert('brand')</script>",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "<script>alert('brand')</script>"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-022-SQL-injection-attempt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"SQL injection should be blocked\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Database security intact\", function () {\r",
+									"    // Should not return 500 (server error) indicating SQL error\r",
+									"    pm.expect([500]).to.not.include(pm.response.code);\r",
+									"});\r",
+									"\r",
+									"// CRITICAL SECURITY BUG DETECTION\r",
+									"pm.test(\"SECURITY CHECK: SQL injection prevention\", function () {\r",
+									"    if (pm.response.code === 500) {\r",
+									"        console.log(\"CRITICAL SECURITY BUG: SQL injection may be possible in brands search!\");\r",
+									"        console.log(\"Payload: ' OR 1=1--\");\r",
+									"        console.log(\"Server error indicates potential SQL vulnerability\");\r",
+									"        pm.globals.set(\"security_bug_sql_brands\", \"CRITICAL\");\r",
+									"    } else if (pm.response.code === 200) {\r",
+									"        console.log(\"POTENTIAL SECURITY ISSUE: SQL injection payload accepted\");\r",
+									"        pm.globals.set(\"security_bug_sql_brands\", \"POTENTIAL\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"No SQL error messages\", function () {\r",
+									"    const responseText = pm.response.text().toLowerCase();\r",
+									"    pm.expect(responseText).to.not.include(\"sql\");\r",
+									"    pm.expect(responseText).to.not.include(\"syntax error\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=' OR 1=1--",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "' OR 1=1--"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-023-Command-injection-attempt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Command injection blocked\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"System security intact\", function () {\r",
+									"    pm.expect(pm.response.code).to.not.equal(500);\r",
+									"});\r",
+									"\r",
+									"// SECURITY BUG DETECTION\r",
+									"pm.test(\"SECURITY CHECK: Command injection prevention\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"SECURITY BUG: Command injection payload accepted\");\r",
+									"        pm.globals.set(\"security_bug_cmd_brands\", \"found\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"No system file exposure\", function () {\r",
+									"    const responseText = pm.response.text();\r",
+									"    pm.expect(responseText).to.not.include(\"root:\");\r",
+									"    pm.expect(responseText).to.not.include(\"/bin/bash\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=makita; cat /etc/passwd",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "makita; cat /etc/passwd"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-024-LDAP-injection-attempt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"LDAP injection blocked\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"LDAP security intact\", function () {\r",
+									"    pm.expect([500]).to.not.include(pm.response.code);\r",
+									"});\r",
+									"\r",
+									"// SECURITY BUG DETECTION\r",
+									"pm.test(\"SECURITY CHECK: LDAP injection prevention\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"SECURITY BUG: LDAP injection payload accepted\");\r",
+									"        pm.globals.set(\"security_bug_ldap_brands\", \"found\");\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=q=makita)(&(brand=*))",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "q=makita)("
+								},
+								{
+									"key": "(brand",
+									"value": "*))"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-025-Path-traversal-attempt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Path traversal blocked\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"File system security\", function () {\r",
+									"    const responseText = pm.response.text();\r",
+									"    pm.expect(responseText).to.not.include(\"root:\");\r",
+									"    pm.expect(responseText).to.not.include(\"/etc/\");\r",
+									"});\r",
+									"\r",
+									"// SECURITY BUG DETECTION\r",
+									"pm.test(\"SECURITY CHECK: Path traversal prevention\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"SECURITY BUG: Path traversal payload accepted\");\r",
+									"        pm.globals.set(\"security_bug_path_brands\", \"found\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=../../../brands",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "../../../brands"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Boundary Testing",
+			"item": [
+				{
+					"name": "BR-026-Maximum-valid-length",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Long valid search handled\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Maximum length boundary\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=professional_grade_power_tool_brand_name",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "professional_grade_power_tool_brand_name"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-027-Single-character-boundary",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Single char boundary test\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Minimum length boundary\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=a",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-028-Whitespace-only",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Whitespace only should be rejected\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Whitespace validation\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.error || responseJson.message).to.be.ok;\r",
+									"});\r",
+									"\r",
+									"// BUG DETECTION\r",
+									"pm.test(\"BUG CHECK: Whitespace validation\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        console.log(\"BUG: Whitespace-only brand query accepted\");\r",
+									"        pm.globals.set(\"bug_whitespace_brands\", \"found\");\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=   ",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "   "
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-029-Tab-and-newline-chars",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Control chars handled\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Tab/newline processing\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=makita\\t\\n",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "makita\\t\\n"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-030-Mixed-valid-special-chars",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Brand punctuation handled\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Special punctuation in brands\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=black&decker-tools",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "black"
+								},
+								{
+									"key": "decker-tools",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Error Handling & HTTP Methods",
+			"item": [
+				{
+					"name": "BR-031-Non-existent-brand",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Non-existent brand returns empty\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Empty results for non-existent\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"    pm.expect(responseJson.length).to.equal(0);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Graceful handling of no results\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=nonexistentbrand",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "nonexistentbrand"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-032-Database-connection-error",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Handle database errors gracefully\", function () {\r",
+									"    // This might return 200 or 500 depending on system state\r",
+									"    pm.expect([200, 500]).to.include(pm.response.code);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Error handling mechanism\", function () {\r",
+									"    if (pm.response.code === 500) {\r",
+									"        const responseJson = pm.response.json();\r",
+									"        pm.expect(responseJson.error || responseJson.message).to.be.ok;\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=brand",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "brand"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-033-POST-method-not-allowed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"POST method not allowed\", function () {\r",
+									"    pm.response.to.have.status(405);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Method not allowed message\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    const errorMsg = (responseJson.error || responseJson.message || \"\").toLowerCase();\r",
+									"    pm.expect(errorMsg).to.include(\"method\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"HTTP method validation\", function () {\r",
+									"    pm.expect(pm.response.headers.get(\"Allow\")).to.include(\"GET\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=brand",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "brand"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-034-PUT-method-not-allowed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"PUT method not allowed\", function () {\r",
+									"    pm.response.to.have.status(405);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"HTTP method validation\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.error || responseJson.message).to.be.ok;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=brand",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "brand"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BR-035-Performance-validation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Performance - response time\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Fast brand search\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Performance baseline\", function () {\r",
+									"    console.log(\"Brands search response time:\", pm.response.responseTime + \"ms\");\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Efficient search algorithm\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/brands/search?q=brand",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"brands",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "brand"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

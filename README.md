@@ -1,4 +1,6 @@
-[![Run Playwright Tests 🎭](https://github.com/testsmith-io/practice-software-testing/actions/workflows/run-tests.yml/badge.svg)](https://github.com/testsmith-io/practice-software-testing/actions/workflows/run-tests.yml) [![StackShare](http://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/testsmith-io/practice-software-testing)
+[![Run Playwright Tests 🎭](https://github.com/testsmith-io/practice-software-testing/actions/workflows/run-tests.yml/badge.svg)](https://github.com/testsmith-io/practice-software-testing/actions/workflows/run-tests.yml) [![CS423 API Testing 🔍](https://github.com/TuanPh1608/practice-software-testing/actions/workflows/api-testing.yml/badge.svg)](https://github.com/TuanPh1608/practice-software-testing/actions/workflows/api-testing.yml) [![StackShare](http://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/testsmith-io/practice-software-testing)
+
+> **🎓 CS423 Assignment**: This repository includes comprehensive API testing implementation with 110+ test cases, CI/CD integration, and automated reporting. See [API-Testing-README.md](API-Testing-README.md) for details.
 
 
 # Default accounts

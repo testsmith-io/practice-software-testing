@@ -1,14 +1,25 @@
 {
   "name": "practicesoftwaretesting-playwright",
   "version": "1.0.0",
-  "description": "",
+  "description": "Practice Software Testing - CS423 API Testing Assignment",
   "main": "index.js",
-  "scripts": {},
-  "keywords": [],
-  "author": "",
+  "scripts": {
+    "test": "playwright test",
+    "api:test:all": "npm run api:test:auth && npm run api:test:brands && npm run api:test:categories && npm run api:test:invoices",
+    "api:test:auth": "newman run Authentication.postman_collection.json -e Local-Toolshop.postman_environment.json --reporters cli,htmlextra --reporter-htmlextra-export reports/authentication-report.html",
+    "api:test:brands": "newman run API1-Brands-Search.postman_collection.json -e Local-Toolshop.postman_environment.json --reporters cli,htmlextra --reporter-htmlextra-export reports/brands-report.html",
+    "api:test:categories": "newman run API2-Categories-Search.postman_collection.json -e Local-Toolshop.postman_environment.json --reporters cli,htmlextra --reporter-htmlextra-export reports/categories-report.html",
+    "api:test:invoices": "newman run API3-Invoice-Status.postman_collection.json -e Local-Toolshop.postman_environment.json --reporters cli,htmlextra --reporter-htmlextra-export reports/invoices-report.html",
+    "api:setup": "mkdir -p reports",
+    "api:clean": "rm -rf reports && npm run api:setup"
+  },
+  "keywords": ["api-testing", "postman", "newman", "cs423"],
+  "author": "CS423 Student",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.53.1",
-    "@types/node": "^24.0.7"
+    "@types/node": "^24.0.7",
+    "newman": "^6.1.3",
+    "newman-reporter-htmlextra": "^1.23.1"
   }
 }

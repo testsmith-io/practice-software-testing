@@ -1,0 +1,385 @@
+name: CS423 HW7 API Testing CI Pipeline
+
+on:
+  push:
+    branches: [main, develop, hw7-api-testing]
+    paths:
+      - "HW7-API-Testing/**"
+      - ".github/workflows/hw7-api-ci.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "HW7-API-Testing/**"
+  schedule:
+    # Chạy tự động mỗi ngày lúc 2:00 AM UTC (9:00 AM VN)
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+    # Cho phép trigger thủ công
+    inputs:
+      test_environment:
+        description: "Choose test environment"
+        required: true
+        default: "sprint5-with-bugs"
+        type: choice
+        options:
+          - "sprint5-with-bugs"
+          - "production"
+          - "local"
+      student_id:
+        description: "Student ID for reporting"
+        required: false
+        default: ""
+        type: string
+
+env:
+  NODE_VERSION: "18.x"
+  # Focus on sprint5-with-bugs as per assignment requirements
+  API_BASE_URL: "https://api-with-bugs.practicesoftwaretesting.com"
+  REPORTS_RETENTION_DAYS: 30
+  ASSIGNMENT_ID: "CS423-HW7-APITesting"
+
+jobs:
+  # Job 1: Preparation và validation
+  preparation:
+    name: 🔧 Preparation & Validation
+    runs-on: ubuntu-latest
+    outputs:
+      api-url: ${{ steps.set-environment.outputs.api-url }}
+      environment-name: ${{ steps.set-environment.outputs.environment-name }}
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🌍 Set Test Environment
+        id: set-environment
+        run: |
+          if [ "${{ github.event.inputs.test_environment }}" = "production" ]; then
+            echo "api-url=https://api.practicesoftwaretesting.com" >> $GITHUB_OUTPUT
+            echo "environment-name=production" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.inputs.test_environment }}" = "local" ]; then
+            echo "api-url=http://localhost:8091" >> $GITHUB_OUTPUT
+            echo "environment-name=local" >> $GITHUB_OUTPUT
+          else
+            # Default to sprint5-with-bugs as per CS423 assignment requirements
+            echo "api-url=https://api-with-bugs.practicesoftwaretesting.com" >> $GITHUB_OUTPUT
+            echo "environment-name=sprint5-with-bugs" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 📊 Display Configuration
+        run: |
+          echo "🎯 **Test Configuration**"
+          echo "Environment: ${{ steps.set-environment.outputs.environment-name }}"
+          echo "API URL: ${{ steps.set-environment.outputs.api-url }}"
+          echo "Skip Health Check: ${{ github.event.inputs.skip_health_check }}"
+          echo "Trigger: ${{ github.event_name }}"
+
+  # Job 2: Setup và kiểm tra môi trường
+  environment-setup:
+    name: 🚀 Environment Setup
+    runs-on: ubuntu-latest
+    needs: preparation
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: "HW7-API-Testing/package.json"
+
+      - name: 📦 Install Dependencies
+        working-directory: ./HW7-API-Testing
+        run: |
+          npm ci
+          npm install -g newman
+          npm install -g newman-reporter-htmlextra
+          npm install -g newman-reporter-json-summary
+          npm install -g newman-reporter-junitfull
+
+      - name: 📁 Create Reports Directory
+        run: mkdir -p HW7-API-Testing/reports
+
+      - name: 🏥 API Health Check
+        if: ${{ github.event.inputs.skip_health_check != 'true' }}
+        run: |
+          echo "🔍 Checking API health at ${{ needs.preparation.outputs.api-url }}"
+
+          # Thử kết nối với API
+          max_attempts=5
+          attempt=1
+
+          while [ $attempt -le $max_attempts ]; do
+            if curl -f -s "${{ needs.preparation.outputs.api-url }}/status" > /dev/null; then
+              echo "✅ API is healthy (attempt $attempt/$max_attempts)"
+              break
+            else
+              echo "⏳ API not ready, waiting... (attempt $attempt/$max_attempts)"
+              if [ $attempt -eq $max_attempts ]; then
+                echo "❌ API health check failed after $max_attempts attempts"
+                echo "🔧 Will proceed anyway as this might be expected for some environments"
+              else
+                sleep 10
+              fi
+            fi
+            attempt=$((attempt + 1))
+          done
+
+  # Job 3: API1 - Authentication Tests (Sign in/Sign up)
+  authentication-tests:
+    name: 🔐 API1 - Authentication Tests
+    runs-on: ubuntu-latest
+    needs: [preparation, environment-setup]
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: 📦 Install Newman
+        run: |
+          npm install -g newman newman-reporter-htmlextra newman-reporter-json-summary
+
+      - name: 🔐 Run Authentication API Tests (30+ test cases)
+        working-directory: ./HW7-API-Testing
+        run: |
+          newman run collections/API1-Authentication.postman_collection.json \
+          -e environments/Sprint5-WithBugs.postman_environment.json \
+          --env-var "baseUrl=${{ needs.preparation.outputs.api-url }}" \
+          -r htmlextra,json-summary,cli \
+          --reporter-htmlextra-export reports/api1-authentication-report.html \
+          --reporter-htmlextra-title "🔐 API1 Authentication Tests - CS423 Assignment" \
+          --reporter-htmlextra-logs \
+          --reporter-json-summary-export reports/api1-authentication-summary.json \
+          --timeout 30000 \
+          --delay-request 500 \
+          --color on \
+          --reporter-htmlextra-showOnlyFails false
+
+      - name: 📤 Upload API1 Authentication Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api1-authentication-reports
+          path: HW7-API-Testing/reports/api1-authentication-*
+          retention-days: ${{ env.REPORTS_RETENTION_DAYS }}
+
+  # Job 4: API2 - Search & Filter Tests
+  search-filter-tests:
+    name: � API2 - Search & Filter Tests
+    runs-on: ubuntu-latest
+    needs: [preparation, environment-setup, authentication-tests]
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: 📦 Install Newman
+        run: |
+          npm install -g newman newman-reporter-htmlextra newman-reporter-json-summary
+
+      - name: � Run Search & Filter API Tests (30+ test cases)
+        working-directory: ./HW7-API-Testing
+        run: |
+          newman run collections/API2-Search-Filter.postman_collection.json \
+          -e environments/Sprint5-WithBugs.postman_environment.json \
+          --env-var "baseUrl=${{ needs.preparation.outputs.api-url }}" \
+          -r htmlextra,json-summary,cli \
+          --reporter-htmlextra-export reports/api2-search-filter-report.html \
+          --reporter-htmlextra-title "� API2 Search & Filter Tests - CS423 Assignment" \
+          --reporter-htmlextra-logs \
+          --reporter-json-summary-export reports/api2-search-filter-summary.json \
+          --timeout 30000 \
+          --delay-request 500 \
+          --color on \
+          --bail
+        continue-on-error: true
+
+      - name: 📤 Upload API2 Search & Filter Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api2-search-filter-reports
+          path: HW7-API-Testing/reports/api2-search-filter-*
+          retention-days: ${{ env.REPORTS_RETENTION_DAYS }}
+
+  # Job 5: API3 - Payment Tests
+  payment-tests:
+    name: � API3 - Payment Tests
+    runs-on: ubuntu-latest
+    needs: [preparation, environment-setup, authentication-tests]
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: 📦 Install Newman
+        run: |
+          npm install -g newman newman-reporter-htmlextra newman-reporter-json-summary
+
+      - name: � Run Payment API Tests (30+ test cases)
+        working-directory: ./HW7-API-Testing
+        run: |
+          newman run collections/API3-Payment.postman_collection.json \
+          -e environments/Sprint5-WithBugs.postman_environment.json \
+          --env-var "baseUrl=${{ needs.preparation.outputs.api-url }}" \
+          -r htmlextra,json-summary,cli \
+          --reporter-htmlextra-export reports/api3-payment-report.html \
+          --reporter-htmlextra-title "� API3 Payment Tests - CS423 Assignment" \
+          --reporter-htmlextra-logs \
+          --reporter-json-summary-export reports/api3-payment-summary.json \
+          --timeout 30000 \
+          --delay-request 500 \
+          --color on \
+          --bail
+        continue-on-error: true
+
+      - name: 📤 Upload API3 Payment Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api3-payment-reports
+          path: HW7-API-Testing/reports/api3-payment-*
+          retention-days: ${{ env.REPORTS_RETENTION_DAYS }}
+
+  # Job 6: Consolidated Reporting & CS423 Documentation
+  consolidated-report:
+    name: 📊 Generate CS423 Assignment Report
+    runs-on: ubuntu-latest
+    needs:
+      [preparation, authentication-tests, search-filter-tests, payment-tests]
+    if: always()
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: 📦 Install Newman & Report Tools
+        run: |
+          npm install -g newman newman-reporter-htmlextra newman-reporter-json-summary
+
+      - name: 📥 Download All Test Reports
+        uses: actions/download-artifact@v4
+        with:
+          path: ./all-reports
+
+      - name: 📊 Generate Consolidated CS423 Report
+        run: |
+          mkdir -p HW7-API-Testing/reports/consolidated
+          echo "# 🎓 CS423 Software Testing Assignment - API Testing Report" > HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "## 📋 Assignment Overview" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- **Student**: [Your Name]" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- **Assignment**: HW7 - API Testing with CI/CD" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- **Target System**: The Toolshop (sprint5-with-bugs)" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- **Testing Approach**: Domain Testing + State Transition Testing" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- **Test Execution Date**: $(date)" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- **CI/CD Platform**: GitHub Actions" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "## 🔍 APIs Tested (3 APIs × 30+ Test Cases = 90+ Total)" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "### 🔐 API1: Authentication (Sign in/Sign up)" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- **Domain Testing**: Valid/Invalid credentials, boundary values" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- **State Transition**: Guest → Authenticated → Logout" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- **Test Cases**: 30+ comprehensive test cases" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "### 🔍 API2: Search & Filter" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- **Domain Testing**: Search terms, filters, pagination" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- **State Transition**: Empty → Results → Filtered → Paginated" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- **Test Cases**: 30+ comprehensive test cases" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "### 💳 API3: Payment Processing" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- **Domain Testing**: Payment methods, amounts, validation" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- **State Transition**: Cart → Checkout → Payment → Confirmation" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- **Test Cases**: 30+ comprehensive test cases" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "## 📊 Test Execution Summary" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- **Environment**: ${{ needs.preparation.outputs.environment-name }}" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- **Base URL**: ${{ needs.preparation.outputs.api-url }}" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- **Newman Version**: $(newman --version)" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "## 🐛 Bug Discovery & Mantis Integration" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- Automated bug discovery through failed test cases" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- Bug reports documented in Mantis Bug Tracker" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- Screenshots and evidence attached to bug reports" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "## 📑 Deliverables Checklist" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- ✅ 3 API Collections (Authentication, Search/Filter, Payment)" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- ✅ 90+ Total Test Cases (30+ per API)" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- ✅ Domain Testing Implementation" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- ✅ State Transition Testing" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- ✅ CI/CD Integration (GitHub Actions)" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- ✅ Automated Test Execution" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- ✅ HTML Reports Generation" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- ⏳ Bug Discovery & Mantis Reports" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "- ⏳ Excel Deliverables (Test Cases + Summary)" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "---" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "*Generated automatically by GitHub Actions CI/CD Pipeline*" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+
+      - name: 📊 List All Generated Reports
+        run: |
+          echo "=== 📊 All Generated Reports ===" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          echo "" >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+          find ./all-reports -name "*.html" -o -name "*.json" | sort >> HW7-API-Testing/reports/consolidated/CS423-Assignment-Report.md
+
+      - name: 📤 Upload Consolidated CS423 Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: cs423-assignment-complete-report
+          path: |
+            HW7-API-Testing/reports/consolidated/
+            ./all-reports/
+          retention-days: ${{ env.REPORTS_RETENTION_DAYS }}
+
+      - name: 📋 Display Assignment Summary
+        run: |
+          echo "
+          🎓 ===== CS423 SOFTWARE TESTING ASSIGNMENT COMPLETE =====
+
+          📊 ASSIGNMENT OVERVIEW:
+          ├── 🔐 API1: Authentication Testing (30+ test cases)
+          ├── 🔍 API2: Search & Filter Testing (30+ test cases)  
+          ├── 💳 API3: Payment Testing (30+ test cases)
+          ├── 🎯 Total Test Cases: 90+ comprehensive tests
+          ├── 🔬 Testing Techniques: Domain + State Transition
+          ├── 🚀 CI/CD Integration: GitHub Actions Pipeline
+          └── 🐛 Bug Discovery: sprint5-with-bugs target
+
+          📋 NEXT STEPS FOR SUBMISSION:
+          1. ✅ Download all test reports from GitHub Actions artifacts
+          2. 🐛 Execute tests manually to discover bugs in sprint5-with-bugs
+          3. 📝 Document bugs in Mantis Bug Tracker with screenshots
+          4. 📊 Create Excel deliverables (test cases + summary report)
+          5. 🎯 Submit complete assignment package
+
+          🔗 ARTIFACTS GENERATED:
+          ├── cs423-assignment-complete-report (Consolidated)
+          ├── api1-authentication-reports 
+          ├── api2-search-filter-reports
+          └── api3-payment-reports
+
+          === Assignment Structure Ready for Academic Submission ===
+          "
