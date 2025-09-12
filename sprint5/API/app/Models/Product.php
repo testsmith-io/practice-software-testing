@@ -130,7 +130,7 @@ class Product extends BaseModel
     public function scopeWithEagerLoading($query)
     {
         return $query->with([
-            'product_image:id,by_name,by_url',
+            'product_image:id,by_name,by_url,source_name,source_url,file_name,title',
             'category:id,name,slug',
             'brand:id,name'
         ]);
