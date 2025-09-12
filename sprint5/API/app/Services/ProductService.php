@@ -24,7 +24,8 @@ class ProductService
         Log::debug("Fetching all products with filters", ['filters' => $filters, 'cacheKey' => $cacheKey]);
 
         return Cache::tags(['products', 'product-lists'])->remember($cacheKey, 60 * 60, function () use ($filters) {
-            $query = Product::withEagerLoading();
+            $query = Product::withEagerLoading()
+                ->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id', 'is_location_offer', 'is_rental', 'stock');
 
             if (!empty($filters['by_category_slug'])) {
                 $categorySlug = $filters['by_category_slug'];
@@ -106,7 +107,7 @@ class ProductService
                 'category:id,name', 
                 'brand:id,name'
             ])
-            ->select('id', 'name', 'price', 'category_id', 'brand_id', 'product_image_id', 'is_location_offer', 'is_rental', 'stock')
+            ->select('id', 'name', 'description', 'price', 'category_id', 'brand_id', 'product_image_id', 'is_location_offer', 'is_rental', 'stock')
             ->where('category_id', $categoryId)
             ->where('id', '!=', $id)
             ->limit(10)
@@ -125,10 +126,14 @@ class ProductService
         Log::debug("Searching products", ['query' => $query, 'page' => $page]);
 
         return Cache::tags(['product-search'])->remember($cacheKey, 60 * 60, function () use ($query) {
-            $results = Product::with('product_image:id,by_name,by_url')
-                ->select('id', 'name', 'description', 'price', 'product_image_id', 'is_location_offer', 'is_rental', 'stock')
-                ->where('name', 'like', "%{$query}%")
-                ->paginate(9);
+            $results = Product::with([
+                'product_image:id,by_name,by_url',
+                'category:id,name',
+                'brand:id,name'
+            ])
+            ->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id', 'is_location_offer', 'is_rental', 'stock')
+            ->where('name', 'like', "%{$query}%")
+            ->paginate(9);
 
             Log::debug("Search results found", ['total' => $results->total()]);
             return $results;
