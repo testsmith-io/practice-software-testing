@@ -31,10 +31,12 @@ class InvoiceService
     {
         Log::info('Fetching invoices', ['is_admin' => $isAdmin]);
 
-        $query = Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')->orderBy('invoice_date', 'DESC');
+        $query = Invoice::withOptimizedRelations()
+                       ->withBasicInfo()
+                       ->orderByDate();
 
         if (!$isAdmin) {
-            $query->where('user_id', Auth::user()->id);
+            $query->forUser(Auth::id());
         }
 
         return $query->paginate();
@@ -151,10 +153,26 @@ class InvoiceService
     {
         Log::info('Fetching invoice', ['invoice_id' => $id, 'is_admin' => $isAdmin]);
 
-        $query = Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details');
+        $query = Invoice::with([
+            'invoicelines' => function ($query) {
+                $query->select('id', 'invoice_id', 'product_id', 'unit_price', 'quantity', 'discount_percentage', 'discounted_price');
+            },
+            'invoicelines.product' => function ($query) {
+                $query->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id')
+                      ->with([
+                          'product_image:id,by_name,by_url',
+                          'category:id,name',
+                          'brand:id,name'
+                      ]);
+            },
+            'payment' => function ($query) {
+                $query->select('id', 'invoice_id', 'payment_method', 'payment_details_id', 'payment_details_type');
+            },
+            'payment.payment_details'
+        ]);
 
         if (!$isAdmin) {
-            $query->where('user_id', Auth::user()->id);
+            $query->forUser(Auth::user()->id);
         }
 
         return $query->findOrFail($id);
@@ -181,27 +199,26 @@ class InvoiceService
         return Invoice::where('id', $id)->update($data);
     }
 
-    public function searchInvoices($query, $isAdmin)
+    public function searchInvoices($searchTerm, $isAdmin)
     {
-        Log::info('Searching invoices', ['query' => $query, 'is_admin' => $isAdmin]);
+        Log::info('Searching invoices', ['query' => $searchTerm, 'is_admin' => $isAdmin]);
 
-        $baseQuery = Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details')
-            ->where('invoice_number', 'like', "%$query%")
-            ->orWhere('billing_street', 'like', "%$query%")
-            ->orWhere('status', 'like', "%$query%")
-            ->orderBy('invoice_date', 'DESC');
+        $query = Invoice::withOptimizedRelations()
+                       ->withBasicInfo()
+                       ->search($searchTerm)
+                       ->orderByDate();
 
         if (!$isAdmin) {
-            $baseQuery->where('user_id', Auth::user()->id);
+            $query->forUser(Auth::user()->id);
         }
 
-        return $baseQuery->paginate();
+        return $query->paginate();
     }
 
     public function deleteInvoice($id)
     {
         Log::info('Deleting invoice', ['invoice_id' => $id]);
-        return Invoice::find($id)->where('user_id', Auth::user()->id)->delete();
+        return Invoice::where('id', $id)->where('user_id', Auth::user()->id)->delete();
     }
 
     public function getPDFStatus($invoiceNumber)

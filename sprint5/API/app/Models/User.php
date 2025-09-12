@@ -9,7 +9,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use Tymon\JWTAuth\Exceptions\JWTException;
 
 /** @OA\Schema(
  *     schema="UserRequest",
@@ -154,33 +153,16 @@ class User extends Authenticatable implements JWTSubject
     {
         $array = parent::toArray();
 
-        try {
-            $role = app('auth')->parseToken()->getPayload()->get('role');
-            if ($role == "admin") {
-                // Directly add the attributes to the root of the array
-                $array['enabled'] = $this->enabled;
-                $array['role'] = $this->role;
-                $array['failed_login_attempts'] = $this->failed_login_attempts;
-            }
-        } catch (JWTException $e) {
+        $currentUser = auth('users')->user();
+        
+        // Only show admin data if current user has permission
+        if ($currentUser && $currentUser->can('viewAdminData', $this)) {
+            $array['enabled'] = $this->enabled;
+            $array['role'] = $this->role;
+            $array['failed_login_attempts'] = $this->failed_login_attempts;
         }
 
         return $array;
     }
 
-//    public function getAdminDetailsAttribute()
-//    {
-//        try {
-//            $role = app('auth')->parseToken()->getPayload()->get('role');
-//            if ($role == "admin") {
-//                return [
-//                    'enabled' => $this->enabled,
-//                    'failed_login_attempts' => $this->failed_login_attempts,
-//                ];
-//            }
-//        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-//        }
-//
-//        return null;
-//    }
 }
