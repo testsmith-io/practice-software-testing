@@ -257,7 +257,7 @@ function createsNewInvoiceSuccessfully(TestCase $testCase, string $paymentMethod
 
     $user = User::factory()->create(['role' => 'user']);
     $cart = Cart::factory()->create();
-    $product = addProduct();
+    $product = $testCase->addProduct();
     CartItem::factory()->create([
         'cart_id' => $cart->id,
         'product_id' => $product->id,

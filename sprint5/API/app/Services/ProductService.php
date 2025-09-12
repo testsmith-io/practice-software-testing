@@ -79,7 +79,7 @@ class ProductService
 
         return Cache::tags(['products'])->remember($cacheKey, 60 * 60, function () use ($id) {
             return Product::with([
-                'product_image:id,by_name,by_url',
+                'product_image:id,by_name,by_url,source_name,source_url,file_name,title',
                 'category:id,name,slug,parent_id', 
                 'brand:id,name'
             ])->findOrFail($id);
@@ -103,7 +103,7 @@ class ProductService
             $categoryId = $product->category_id;
 
             $related = Product::with([
-                'product_image:id,by_name,by_url',
+                'product_image:id,by_name,by_url,source_name,source_url,file_name,title',
                 'category:id,name', 
                 'brand:id,name'
             ])
@@ -127,7 +127,7 @@ class ProductService
 
         return Cache::tags(['product-search'])->remember($cacheKey, 60 * 60, function () use ($query) {
             $results = Product::with([
-                'product_image:id,by_name,by_url',
+                'product_image:id,by_name,by_url,source_name,source_url,file_name,title',
                 'category:id,name',
                 'brand:id,name'
             ])

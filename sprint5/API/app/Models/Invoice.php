@@ -153,7 +153,7 @@ class Invoice extends BaseModel
                 $q->select('id', 'invoice_id', 'product_id', 'unit_price', 'quantity', 'discount_percentage', 'discounted_price');
             },
             'invoicelines.product:id,name,price,product_image_id',
-            'invoicelines.product.product_image:id,by_name,by_url',
+            'invoicelines.product.product_image:id,by_name,by_url,source_name,source_url,file_name,title',
             'payment:id,invoice_id,payment_method,payment_details_id,payment_details_type'
         ]);
     }
