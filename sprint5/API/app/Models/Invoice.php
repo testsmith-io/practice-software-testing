@@ -145,4 +145,51 @@ class Invoice extends BaseModel
         return $this->hasOne(Payment::class);
     }
 
+    // Query Scopes for better performance
+    public function scopeWithOptimizedRelations($query)
+    {
+        return $query->with([
+            'invoicelines' => function ($q) {
+                $q->select('id', 'invoice_id', 'product_id', 'unit_price', 'quantity', 'discount_percentage', 'discounted_price');
+            },
+            'invoicelines.product:id,name,price,product_image_id',
+            'invoicelines.product.product_image:id,by_name,by_url',
+            'payment:id,invoice_id,payment_method,payment_details_id,payment_details_type'
+        ]);
+    }
+
+    public function scopeForUser($query, $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
+
+    public function scopeByStatus($query, $status)
+    {
+        return $query->where('status', $status);
+    }
+
+    public function scopeSearch($query, $searchTerm)
+    {
+        return $query->where(function ($q) use ($searchTerm) {
+            $q->where('invoice_number', 'like', "%{$searchTerm}%")
+              ->orWhere('billing_street', 'like', "%{$searchTerm}%")
+              ->orWhere('status', 'like', "%{$searchTerm}%");
+        });
+    }
+
+    public function scopeOrderByDate($query, $direction = 'desc')
+    {
+        return $query->orderBy('invoice_date', $direction);
+    }
+
+    public function scopeWithBasicInfo($query)
+    {
+        return $query->select([
+            'id', 'user_id', 'invoice_number', 'invoice_date', 'status', 
+            'total', 'subtotal', 'billing_street', 'billing_city', 
+            'billing_state', 'billing_country', 'billing_postal_code',
+            'additional_discount_percentage', 'additional_discount_amount'
+        ]);
+    }
+
 }

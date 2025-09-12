@@ -23,8 +23,8 @@ class ProductService
 
         Log::debug("Fetching all products with filters", ['filters' => $filters, 'cacheKey' => $cacheKey]);
 
-        return Cache::remember($cacheKey, 60 * 60, function () use ($filters) {
-            $query = Product::with('product_image', 'category', 'brand');
+        return Cache::tags(['products', 'product-lists'])->remember($cacheKey, 60 * 60, function () use ($filters) {
+            $query = Product::withEagerLoading();
 
             if (!empty($filters['by_category_slug'])) {
                 $categorySlug = $filters['by_category_slug'];
@@ -39,28 +39,11 @@ class ProductService
                     })
                     ->pluck('id');
 
-                $query->whereIn('category_id', $categoryIds);
+                $query->byCategory($categoryIds->toArray());
             }
 
-            if (!empty($filters['by_category'])) {
-                Log::debug("Filtering by category IDs", ['ids' => $filters['by_category']]);
-                $query->whereIn('category_id', explode(',', $filters['by_category']));
-            }
-
-            if (!empty($filters['by_brand'])) {
-                Log::debug("Filtering by brand IDs", ['ids' => $filters['by_brand']]);
-                $query->whereIn('brand_id', explode(',', $filters['by_brand']));
-            }
-
-            if (!empty($filters['q'])) {
-                Log::debug("Applying search query", ['query' => $filters['q']]);
-                $query->where('name', 'like', '%' . $filters['q'] . '%');
-            }
-
-            if (isset($filters['is_rental'])) {
-                $query->where('is_rental', '=', $filters['is_rental']);
-                Log::debug("Filtering by is_rental", ['is_rental' => $filters['is_rental']]);
-            }
+            // Apply filters using scopes
+            $query->withFilters($filters);
 
             $results = $query->filter()->paginate(9);
             Log::debug("Product query executed", ['result_count' => $results->total()]);
@@ -93,8 +76,12 @@ class ProductService
 
         Log::debug("Fetching product by ID", ['id' => $id]);
 
-        return Cache::remember($cacheKey, 60 * 60, function () use ($id) {
-            return Product::with('product_image', 'category', 'brand')->findOrFail($id);
+        return Cache::tags(['products'])->remember($cacheKey, 60 * 60, function () use ($id) {
+            return Product::with([
+                'product_image:id,by_name,by_url',
+                'category:id,name,slug,parent_id', 
+                'brand:id,name'
+            ])->findOrFail($id);
         });
     }
 
@@ -104,8 +91,8 @@ class ProductService
 
         Log::debug("Fetching related products", ['id' => $id]);
 
-        return Cache::remember($cacheKey, 60 * 60, function () use ($id) {
-            $product = Product::find($id);
+        return Cache::tags(['products'])->remember($cacheKey, 60 * 60, function () use ($id) {
+            $product = Product::select('id', 'category_id')->find($id);
 
             if (!$product) {
                 Log::error("Related products fetch failed — product not found", ['id' => $id]);
@@ -114,10 +101,16 @@ class ProductService
 
             $categoryId = $product->category_id;
 
-            $related = Product::with('product_image', 'category', 'brand')
-                ->where('category_id', $categoryId)
-                ->where('id', '!=', $id)
-                ->get();
+            $related = Product::with([
+                'product_image:id,by_name,by_url',
+                'category:id,name', 
+                'brand:id,name'
+            ])
+            ->select('id', 'name', 'price', 'category_id', 'brand_id', 'product_image_id', 'is_location_offer', 'is_rental', 'stock')
+            ->where('category_id', $categoryId)
+            ->where('id', '!=', $id)
+            ->limit(10)
+            ->get();
 
             Log::debug("Related products fetched", ['count' => $related->count()]);
 
@@ -131,8 +124,9 @@ class ProductService
 
         Log::debug("Searching products", ['query' => $query, 'page' => $page]);
 
-        return Cache::remember($cacheKey, 60 * 60, function () use ($query) {
-            $results = Product::with('product_image')
+        return Cache::tags(['product-search'])->remember($cacheKey, 60 * 60, function () use ($query) {
+            $results = Product::with('product_image:id,by_name,by_url')
+                ->select('id', 'name', 'description', 'price', 'product_image_id', 'is_location_offer', 'is_rental', 'stock')
                 ->where('name', 'like', "%{$query}%")
                 ->paginate(9);
 
@@ -166,9 +160,14 @@ class ProductService
     {
         Log::debug("Clearing cache", ['id' => $id]);
 
-        Cache::forget('products.index.*');
+        // Clear all product list caches by using cache tags
+        Cache::tags(['products', 'product-lists'])->flush();
+        
         if ($id) {
             Cache::forget("products.{$id}");
+            Cache::forget("products.{$id}.related");
+            // Clear any search caches that might include this product
+            Cache::tags(['product-search'])->flush();
         }
     }
 }

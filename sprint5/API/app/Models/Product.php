@@ -75,14 +75,65 @@ class Product extends BaseModel
 
     public function getInStockAttribute()
     {
-        try {
-            $role = app('auth')->parseToken()->getPayload()->get('role');
-            if ($role == "admin") {
-                return $this->stock;
-            }
-        } catch (JWTException $e) {
+        $user = auth('users')->user();
+        
+        // If user can view stock details (admin), return actual stock number
+        if ($user && $user->can('viewStock', $this)) {
+            return $this->stock;
         }
+        
+        // For regular users and guests, return boolean stock status
         return $this->stock > 0;
+    }
+
+    // Query Scopes for better performance and reusability
+    public function scopeWithFilters($query, array $filters)
+    {
+        return $query->when($filters['by_category'] ?? null, function ($q, $categories) {
+            return $q->whereIn('category_id', is_array($categories) ? $categories : explode(',', $categories));
+        })->when($filters['by_brand'] ?? null, function ($q, $brands) {
+            return $q->whereIn('brand_id', is_array($brands) ? $brands : explode(',', $brands));
+        })->when(isset($filters['is_rental']), function ($q) use ($filters) {
+            return $q->where('is_rental', $filters['is_rental']);
+        })->when($filters['q'] ?? null, function ($q, $search) {
+            return $q->where('name', 'like', "%{$search}%");
+        });
+    }
+
+    public function scopeInStock($query)
+    {
+        return $query->where('stock', '>', 0);
+    }
+
+    public function scopeByCategory($query, $categoryIds)
+    {
+        $ids = is_array($categoryIds) ? $categoryIds : explode(',', $categoryIds);
+        return $query->whereIn('category_id', $ids);
+    }
+
+    public function scopeByBrand($query, $brandIds)
+    {
+        $ids = is_array($brandIds) ? $brandIds : explode(',', $brandIds);
+        return $query->whereIn('brand_id', $ids);
+    }
+
+    public function scopeRentals($query, $isRental = true)
+    {
+        return $query->where('is_rental', $isRental);
+    }
+
+    public function scopeSearch($query, $searchTerm)
+    {
+        return $query->where('name', 'like', "%{$searchTerm}%");
+    }
+
+    public function scopeWithEagerLoading($query)
+    {
+        return $query->with([
+            'product_image:id,by_name,by_url',
+            'category:id,name,slug',
+            'brand:id,name'
+        ]);
     }
 
 }
