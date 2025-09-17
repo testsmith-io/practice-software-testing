@@ -23,7 +23,7 @@ class ProductService
 
         Log::debug("Fetching all products with filters", ['filters' => $filters, 'cacheKey' => $cacheKey]);
 
-        return Cache::tags(['products', 'product-lists'])->remember($cacheKey, 60 * 60, function () use ($filters) {
+        return Cache::remember($cacheKey, 60 * 60, function () use ($filters) {
             $query = Product::withEagerLoading()
                 ->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id', 'is_location_offer', 'is_rental', 'stock');
 
@@ -77,10 +77,10 @@ class ProductService
 
         Log::debug("Fetching product by ID", ['id' => $id]);
 
-        return Cache::tags(['products'])->remember($cacheKey, 60 * 60, function () use ($id) {
+        return Cache::remember($cacheKey, 60 * 60, function () use ($id) {
             return Product::with([
                 'product_image:id,by_name,by_url,source_name,source_url,file_name,title',
-                'category:id,name,slug,parent_id', 
+                'category:id,name,slug,parent_id',
                 'brand:id,name'
             ])->findOrFail($id);
         });
@@ -92,7 +92,7 @@ class ProductService
 
         Log::debug("Fetching related products", ['id' => $id]);
 
-        return Cache::tags(['products'])->remember($cacheKey, 60 * 60, function () use ($id) {
+        return Cache::remember($cacheKey, 60 * 60, function () use ($id) {
             $product = Product::select('id', 'category_id')->find($id);
 
             if (!$product) {
@@ -104,7 +104,7 @@ class ProductService
 
             $related = Product::with([
                 'product_image:id,by_name,by_url,source_name,source_url,file_name,title',
-                'category:id,name', 
+                'category:id,name',
                 'brand:id,name'
             ])
             ->select('id', 'name', 'description', 'price', 'category_id', 'brand_id', 'product_image_id', 'is_location_offer', 'is_rental', 'stock')
@@ -125,7 +125,7 @@ class ProductService
 
         Log::debug("Searching products", ['query' => $query, 'page' => $page]);
 
-        return Cache::tags(['product-search'])->remember($cacheKey, 60 * 60, function () use ($query) {
+        return Cache::remember($cacheKey, 60 * 60, function () use ($query) {
             $results = Product::with([
                 'product_image:id,by_name,by_url,source_name,source_url,file_name,title',
                 'category:id,name',
@@ -166,13 +166,13 @@ class ProductService
         Log::debug("Clearing cache", ['id' => $id]);
 
         // Clear all product list caches by using cache tags
-        Cache::tags(['products', 'product-lists'])->flush();
-        
+        Cache::flush();
+
         if ($id) {
             Cache::forget("products.{$id}");
             Cache::forget("products.{$id}.related");
             // Clear any search caches that might include this product
-            Cache::tags(['product-search'])->flush();
+            Cache::flush();
         }
     }
 }
