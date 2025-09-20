@@ -25,19 +25,19 @@
     <h4 class="grid-title"><fa-icon [icon]="['fas', 'filter']"></fa-icon> {{ t('pages.overview.filters') }}</h4>
     <hr>
     <h4>{{ t('pages.overview.by-category') }}:</h4>
-    <ng-template #recursiveList let-list>
+    <ng-template #recursiveList let-list let-parentId="parentId">
       @for (category of list;track category) {
         <div class="checkbox">
-          <label>@if (category.parent_id) {
+          <label>
             <input type="checkbox" class="icheck"
                    attr.data-test="category-{{category.id}}" name="category_id"
-                   value="{{category.id}}" (change)="filterByCategory($event)"/>
-          }
+                   [checked]="isCategoryChecked(category.id)"
+                   value="{{category.id}}" (change)="filterByCategory($event, category.id, parentId)"/>
             {{ category.name }}</label>
           @if (category.sub_categories.length > 0) {
             <ul>
               <ng-container
-                *ngTemplateOutlet="recursiveList; context:{ $implicit: category.sub_categories }"></ng-container>
+                *ngTemplateOutlet="recursiveList; context:{ $implicit: category.sub_categories, parentId: category.id }"></ng-container>
             </ul>
           }
         </div>

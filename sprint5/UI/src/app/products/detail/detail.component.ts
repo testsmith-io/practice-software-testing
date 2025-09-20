@@ -56,13 +56,30 @@ export class DetailComponent implements OnInit {
 
 
   plus() {
-    this.quantity = this.quantity + 1;
+    if (this.quantity < 999999999) {
+      this.quantity = this.quantity + 1;
+    }
   }
 
   minus() {
-    if (this.quantity != 1) {
+    if (this.quantity > 1) {
       this.quantity = this.quantity - 1;
     }
+  }
+
+  validateQuantity(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    let value = parseInt(target.value, 10);
+
+    // Check if value is NaN or exceeds maximum
+    if (isNaN(value) || value < 1) {
+      value = 1;
+    } else if (value > 999999999) {
+      value = 999999999;
+    }
+
+    this.quantity = value;
+    target.value = value.toString();
   }
 
   getProduct(id: string) {
