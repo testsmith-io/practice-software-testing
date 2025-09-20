@@ -44,11 +44,34 @@ export class CartComponent implements OnInit {
     });
   }
 
+  validateQuantityInput(event: Event, item: any): void {
+    const target = event.target as HTMLInputElement;
+    let value = parseInt(target.value, 10);
+
+    // Check if value is NaN or exceeds maximum
+    if (isNaN(value) || value < 1) {
+      value = 1;
+    } else if (value > 999999999) {
+      value = 999999999;
+    }
+
+    target.value = value.toString();
+  }
+
   updateQuantity(event: Event, item: any): void {
     const target = event.target as HTMLInputElement;
-    const quantity = Math.max(1, parseInt(target.value, 10));
+    let quantity = parseInt(target.value, 10);
 
-    if (quantity >= 1) {
+    // Validate the quantity
+    if (isNaN(quantity) || quantity < 1) {
+      quantity = 1;
+    } else if (quantity > 999999999) {
+      quantity = 999999999;
+    }
+
+    target.value = quantity.toString();
+
+    if (quantity >= 1 && quantity <= 999999999) {
       this.cartService.replaceQuantity(item.product.id, quantity).subscribe({
         next: () => {
           this.fetchCartItems();

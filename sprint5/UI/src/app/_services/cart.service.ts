@@ -72,15 +72,18 @@ export class CartService {
   }
 
   addItem(item: any): Observable<any> {
+    // Validate quantity before sending to API
+    const validatedQuantity = Math.min(Math.max(1, item.quantity), 999999999);
+
     return this.getOrCreateCartId().pipe(
       switchMap(cartId =>
         this.httpClient.post(`${this.apiURL}/${cartId}`, {
           product_id: item.id,
-          quantity: item.quantity
+          quantity: validatedQuantity
         }).pipe(
           tap(() => {
             const current = this.getQuantity();
-            sessionStorage.setItem('cart_quantity', JSON.stringify(current + item.quantity));
+            sessionStorage.setItem('cart_quantity', JSON.stringify(current + validatedQuantity));
             this.storageSub.next('changed');
           })
         )
@@ -91,7 +94,11 @@ export class CartService {
   replaceQuantity(productId: number, quantity: number): Observable<any> {
     const cartId = sessionStorage.getItem('cart_id');
     if (!cartId) return throwError(() => new Error('No cart ID'));
-    return this.httpClient.put(`${this.apiURL}/${cartId}/product/quantity`, { product_id: productId, quantity });
+
+    // Validate quantity before sending to API
+    const validatedQuantity = Math.min(Math.max(1, quantity), 999999999);
+
+    return this.httpClient.put(`${this.apiURL}/${cartId}/product/quantity`, { product_id: productId, quantity: validatedQuantity });
   }
 
   deleteItem(productId: number): Observable<any> {

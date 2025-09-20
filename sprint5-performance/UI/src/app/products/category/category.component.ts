@@ -48,6 +48,7 @@ export class CategoryComponent implements OnInit {
   private brandsFilter: Array<number> = [];
   private categoriesFilter: Array<number> = [];
   private sorting: string = '';
+  categoryCheckboxState: Map<number, boolean> = new Map();
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -101,13 +102,44 @@ export class CategoryComponent implements OnInit {
     });
   }
 
-  filterByCategory(event: any) {
+  filterByCategory(event: any, categoryId: number, parentId?: number) {
     this.resultState = 'filter_started';
-    if (event.target.checked) {
-      this.categoriesFilter.push(event.target.value);
+    const isChecked = event.target.checked;
+
+    // Update the checkbox state
+    this.categoryCheckboxState.set(categoryId, isChecked);
+
+    // Update the filter array
+    if (isChecked) {
+      if (!this.categoriesFilter.includes(categoryId)) {
+        this.categoriesFilter.push(categoryId);
+      }
+
+      // If this is a child being checked and has a parent, check if all siblings are checked
+      if (parentId) {
+        this.checkParentIfAllChildrenChecked(parentId);
+      }
+
+      // If this is a parent being checked, check all children
+      const category = this.findCategoryById(categoryId, this.categories);
+      if (category && category.sub_categories && category.sub_categories.length > 0) {
+        this.checkAllChildren(category);
+      }
     } else {
-      this.categoriesFilter = this.categoriesFilter.filter(item => item !== event.target.value);
+      this.categoriesFilter = this.categoriesFilter.filter(item => item !== categoryId);
+
+      // If this is a child being unchecked, check if parent should be unchecked
+      if (parentId) {
+        this.uncheckParentIfNoChildrenChecked(parentId);
+      }
+
+      // If this is a parent being unchecked, uncheck all children
+      const category = this.findCategoryById(categoryId, this.categories);
+      if (category && category.sub_categories && category.sub_categories.length > 0) {
+        this.uncheckAllChildren(category);
+      }
     }
+
     this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug).subscribe(res => {
       this.resultState = 'filter_completed';
       this.results = res;
@@ -142,6 +174,80 @@ export class CategoryComponent implements OnInit {
 
   private updateTitle(categoryName: string) {
     this.titleService.setTitle(`${categoryName} - Practice Software Testing - Toolshop - v5.0`);
+  }
+
+  private findCategoryById(id: number, categories: any[]): any {
+    for (const category of categories) {
+      if (category.id === id) {
+        return category;
+      }
+      if (category.sub_categories && category.sub_categories.length > 0) {
+        const found = this.findCategoryById(id, category.sub_categories);
+        if (found) return found;
+      }
+    }
+    return null;
+  }
+
+  private checkAllChildren(category: any) {
+    if (category.sub_categories) {
+      category.sub_categories.forEach((child: any) => {
+        this.categoryCheckboxState.set(child.id, true);
+        if (!this.categoriesFilter.includes(child.id)) {
+          this.categoriesFilter.push(child.id);
+        }
+        this.checkAllChildren(child);
+      });
+    }
+  }
+
+  private uncheckAllChildren(category: any) {
+    if (category.sub_categories) {
+      category.sub_categories.forEach((child: any) => {
+        this.categoryCheckboxState.set(child.id, false);
+        this.categoriesFilter = this.categoriesFilter.filter(item => item !== child.id);
+        this.uncheckAllChildren(child);
+      });
+    }
+  }
+
+  private checkParentIfAllChildrenChecked(parentId: number) {
+    const parent = this.findCategoryById(parentId, this.categories);
+    if (parent && parent.sub_categories) {
+      const allChildrenChecked = parent.sub_categories.every((child: any) =>
+        this.categoryCheckboxState.get(child.id) === true
+      );
+
+      if (allChildrenChecked) {
+        this.categoryCheckboxState.set(parentId, true);
+        if (!this.categoriesFilter.includes(parentId)) {
+          this.categoriesFilter.push(parentId);
+        }
+      }
+    }
+  }
+
+  private uncheckParentIfNoChildrenChecked(parentId: number) {
+    const parent = this.findCategoryById(parentId, this.categories);
+    if (parent && parent.sub_categories) {
+      const anyChildChecked = parent.sub_categories.some((child: any) =>
+        this.categoryCheckboxState.get(child.id) === true
+      );
+
+      if (!anyChildChecked) {
+        this.categoryCheckboxState.set(parentId, false);
+        this.categoriesFilter = this.categoriesFilter.filter(item => item !== parentId);
+
+        // Also check if this parent has a parent (grandparent)
+        if (parent.parent_id) {
+          this.uncheckParentIfNoChildrenChecked(parent.parent_id);
+        }
+      }
+    }
+  }
+
+  isCategoryChecked(categoryId: number): boolean {
+    return this.categoryCheckboxState.get(categoryId) || false;
   }
 
 }
