@@ -16,6 +16,8 @@ declare global {
 export class GaService {
   private router = inject(Router);
   private isInitialized = false;
+  private isReady = false;
+  private eventQueue: Array<() => void> = [];
 
   constructor() {
     if (environment.production && environment.gaCode && !this.isInitialized) {
@@ -60,6 +62,13 @@ export class GaService {
         // Enable enhanced measurement
         enhanced_measurements: true
       });
+
+      // Mark as ready for tracking
+      this.isReady = true;
+      console.log('Google Analytics 4 ready for tracking');
+
+      // Process any queued events
+      this.processEventQueue();
 
       // Send initial page view
       this.trackPageView();
@@ -106,18 +115,41 @@ export class GaService {
     window.gtag('event', eventName, parameters);
   }
 
+  private processEventQueue(): void {
+    while (this.eventQueue.length > 0) {
+      const event = this.eventQueue.shift();
+      if (event) {
+        event();
+      }
+    }
+  }
+
+  private executeOrQueue(eventFunction: () => void): void {
+    if (!environment.production) {
+      return; // Debug logging already handled in individual methods
+    }
+
+    if (this.isReady && window.gtag && environment.gaCode) {
+      eventFunction();
+    } else {
+      console.log('GA not ready, queuing event');
+      this.eventQueue.push(eventFunction);
+    }
+  }
+
   trackPurchase(transactionId: string, value: number, currency: string = 'USD', items?: any[]): void {
     if (!environment.production) {
       console.log(`[GA Debug] Purchase: ${transactionId}, Value: ${value} ${currency}`, items);
       return;
     }
-    if (!window.gtag || !environment.gaCode || !this.isInitialized) return;
 
-    window.gtag('event', 'purchase', {
-      transaction_id: transactionId,
-      value: value,
-      currency: currency,
-      items: items
+    this.executeOrQueue(() => {
+      window.gtag('event', 'purchase', {
+        transaction_id: transactionId,
+        value: value,
+        currency: currency,
+        items: items
+      });
     });
   }
 
@@ -126,12 +158,13 @@ export class GaService {
       console.log(`[GA Debug] Add to Cart: Value: ${value} ${currency}`, items);
       return;
     }
-    if (!window.gtag || !environment.gaCode || !this.isInitialized) return;
 
-    window.gtag('event', 'add_to_cart', {
-      currency: currency,
-      value: value,
-      items: items
+    this.executeOrQueue(() => {
+      window.gtag('event', 'add_to_cart', {
+        currency: currency,
+        value: value,
+        items: items
+      });
     });
   }
 
@@ -140,12 +173,13 @@ export class GaService {
       console.log(`[GA Debug] View Item: Value: ${value} ${currency}`, items);
       return;
     }
-    if (!window.gtag || !environment.gaCode || !this.isInitialized) return;
 
-    window.gtag('event', 'view_item', {
-      currency: currency,
-      value: value,
-      items: items
+    this.executeOrQueue(() => {
+      window.gtag('event', 'view_item', {
+        currency: currency,
+        value: value,
+        items: items
+      });
     });
   }
 
@@ -154,12 +188,13 @@ export class GaService {
       console.log(`[GA Debug] Begin Checkout: Value: ${value} ${currency}`, items);
       return;
     }
-    if (!window.gtag || !environment.gaCode || !this.isInitialized) return;
 
-    window.gtag('event', 'begin_checkout', {
-      currency: currency,
-      value: value,
-      items: items
+    this.executeOrQueue(() => {
+      window.gtag('event', 'begin_checkout', {
+        currency: currency,
+        value: value,
+        items: items
+      });
     });
   }
 }
