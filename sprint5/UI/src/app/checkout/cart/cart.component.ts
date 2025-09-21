@@ -6,6 +6,7 @@ import {DecimalPipe, NgClass} from "@angular/common";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {ArchwizardModule} from "@y3krulez/angular-archwizard";
 import {TranslocoDirective} from "@jsverse/transloco";
+import {GaService} from "../../_services/ga.service";
 
 @Component({
   selector: 'app-cart',
@@ -23,6 +24,7 @@ export class CartComponent implements OnInit {
   private cartService = inject(CartService);
   private toastr = inject(ToastrService);
   private customerAccountService = inject(CustomerAccountService);
+  private gaService = inject(GaService);
 
   cart: any;
   isLoggedIn: boolean = false;
@@ -107,5 +109,20 @@ export class CartComponent implements OnInit {
     this.total = this.total - discountAmount;
 
     return discountAmount;
+  }
+
+  beginCheckout(): void {
+    if (!this.cart?.cart_items?.length) return;
+
+    const items = this.cart.cart_items.map((cartItem: any) => ({
+      item_id: cartItem.product.id,
+      item_name: cartItem.product.name,
+      item_category: cartItem.product.category?.name || 'Unknown',
+      item_brand: cartItem.product.brand?.name || 'Unknown',
+      price: cartItem.discount_percentage ? cartItem.discounted_price : cartItem.product.price,
+      quantity: cartItem.quantity
+    }));
+
+    this.gaService.trackBeginCheckout('USD', this.total, items);
   }
 }
