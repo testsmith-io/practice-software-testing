@@ -67,9 +67,6 @@ export class GaService {
       this.isReady = true;
       console.log('Google Analytics 4 ready for tracking');
 
-      // Process any queued events
-      this.processEventQueue();
-
       // Send initial page view
       this.trackPageView();
     };
