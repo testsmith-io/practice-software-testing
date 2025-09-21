@@ -82,7 +82,7 @@
     </table>
     @if (cart.cart_items.length) {
       <div class="float-end">
-        <button data-test="proceed-1" type="button" class="btn btn-success" awNextStep>{{t('pages.checkout.btn')}}</button>
+        <button data-test="proceed-1" type="button" class="btn btn-success" awNextStep (click)="beginCheckout()">{{t('pages.checkout.btn')}}</button>
       </div>
     }
   </div>

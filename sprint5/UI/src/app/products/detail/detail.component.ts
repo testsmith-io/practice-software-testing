@@ -13,6 +13,7 @@ import {NgClass} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {TranslocoDirective} from "@jsverse/transloco";
+import {GaService} from "../../_services/ga.service";
 
 @Component({
   selector: 'app-detail',
@@ -35,6 +36,7 @@ export class DetailComponent implements OnInit {
   private productService = inject(ProductService);
   public browserDetect = inject(BrowserDetectorService);
   private titleService = inject(Title);
+  private gaService = inject(GaService);
   product: Product;
   discount_percentage: any;
   quantity: number = 1;
@@ -89,6 +91,9 @@ export class DetailComponent implements OnInit {
       if (this.product.is_location_offer) {
         this.product.discount_price = DiscountUtil.calculateDiscount(this.product.price);
       }
+
+      // Track product view
+      this.trackProductView();
     });
     this.discount_percentage = DiscountUtil.getDiscountPercentage();
   }
@@ -128,6 +133,9 @@ export class DetailComponent implements OnInit {
       this.cartService.addItem(item).subscribe({
         next: () => {
           this.toastr.success('Product added to shopping cart.', undefined, { progressBar: true });
+
+          // Track add to cart event
+          this.trackAddToCart();
         },
         error: (response) => {
           this.toastr.error(response.error.message, undefined, { progressBar: true });
@@ -138,6 +146,39 @@ export class DetailComponent implements OnInit {
 
   private updateTitle(productName: string) {
     this.titleService.setTitle(`${productName} - Practice Software Testing - Toolshop - v5.0`);
+  }
+
+  private trackProductView(): void {
+    if (!this.product) return;
+
+    const price = this.product.discount_price || this.product.price;
+    const items = [{
+      item_id: this.product.id,
+      item_name: this.product.name,
+      item_category: this.product.category?.name || 'Unknown',
+      item_brand: this.product.brand?.name || 'Unknown',
+      price: price,
+      quantity: 1
+    }];
+
+    this.gaService.trackViewItem('USD', price, items);
+  }
+
+  private trackAddToCart(): void {
+    if (!this.product) return;
+
+    const price = this.product.discount_price || this.product.price;
+    const items = [{
+      item_id: this.product.id,
+      item_name: this.product.name,
+      item_category: this.product.category?.name || 'Unknown',
+      item_brand: this.product.brand?.name || 'Unknown',
+      price: price,
+      quantity: this.quantity
+    }];
+
+    const totalValue = price * this.quantity;
+    this.gaService.trackAddToCart('USD', totalValue, items);
   }
 
 }
