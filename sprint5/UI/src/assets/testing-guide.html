@@ -995,37 +995,52 @@
     },
     {
       title: "Category Page",
-      userStory: "As a customer, I want to browse products by category so that I can shop within my area of interest.",
+      userStory: "As a customer, I want to browse products by category with sorting and filtering options so that I can find relevant products efficiently.",
       acceptanceCriteria: [
-        "Same as Product Listing but scoped to a single category."
+        "Products are listed from a specific category only.",
+        "Sorting works for name (A-Z), name (Z-A), price (High-Low), price (Low-High).",
+        "Filtering works by sub category and brand.",
+        "All filters and sorts can be combined."
       ],
       testingGuidance: [
-        "Verify page shows only category products.",
-        "Test sort + filter combinations.",
-        "Test pagination if many products."
+        "Verify page shows only products from the selected category.",
+        "Test each sorting option: name A-Z, name Z-A, price High-Low, price Low-High.",
+        "Apply sub category filter → verify only matching products appear.",
+        "Apply brand filter → verify only matching products appear.",
+        "Combine sorting + filtering → verify results are both sorted and filtered correctly.",
+        "Test pagination if many products in category."
       ],
       techniques: [
-        "Decision Table: filter/sort combos.",
-        "State Transition: navigating category → product detail → back."
+        "Decision Table: combinations of sorting (4 options) and filtering (sub category + brand).",
+        "EP: valid category vs invalid category, valid filters vs invalid filters.",
+        "State Transition: navigating category → filtered results → product detail → back.",
+        "Error Guessing: URL manipulation for invalid category IDs, combining incompatible filters."
       ]
     },
     {
       title: "Product Detail Page",
-      userStory: "As a customer, I want to view product details, set rental duration or quantity, and add to cart or favorites.",
+      userStory: "As a customer, I want to view product details, configure rental duration or quantity, and add items to cart or favorites.",
       acceptanceCriteria: [
-        "Duration selector calculates correct price.",
-        "Add to cart adds correct product and quantity.",
-        "Add to favorites requires login (error otherwise)."
+        "For rental products: Duration in hours selector is available, total price is calculated based on selected duration, add to cart and add to favorites buttons work correctly.",
+        "For regular products: Quantity field is available, add to cart and add to favorites buttons work correctly.",
+        "Add to favorites requires user to be logged in, otherwise shows error.",
+        "All calculations and interactions work as expected."
       ],
       testingGuidance: [
-        "Change duration → verify price changes linearly or per rules.",
-        "Add product with quantity 1, 0 (should fail), max allowed.",
-        "Try favorite while logged out → expect error."
+        "Rental Products: Test duration selector with different hour values → verify total price calculation is correct.",
+        "Rental Products: Test add to cart with various durations → verify correct item and price added to cart.",
+        "Rental Products: Test add to favorites while logged in → verify success, while logged out → verify error message.",
+        "Regular Products: Test quantity field with values like 1, 5, maximum allowed → verify quantity is respected.",
+        "Regular Products: Test add to cart with different quantities → verify correct quantity added.",
+        "Regular Products: Test add to favorites while logged in → verify success, while logged out → verify error message.",
+        "Test boundary cases: minimum/maximum duration hours, minimum/maximum quantity values.",
+        "Test error scenarios: invalid duration, invalid quantity, network errors."
       ],
       techniques: [
-        "BVA: quantity min/max, duration min/max.",
-        "EP: logged-in vs logged-out for favorites.",
-        "Error Guessing: rapidly click 'add to cart' multiple times."
+        "BVA: duration hours (minimum, maximum, boundary values), quantity (0, 1, maximum allowed).",
+        "EP: logged-in vs logged-out users for favorites, rental vs regular products, valid vs invalid input values.",
+        "Decision Table: combinations of product type (rental/regular), user state (logged-in/out), action (add to cart/favorites).",
+        "Error Guessing: rapidly clicking buttons, invalid input values, browser back/forward during selection."
       ]
     },
     {
@@ -1052,36 +1067,50 @@
       title: "Checkout + Payment",
       userStory: "As a customer, I want to checkout with different payment methods so that I can complete my purchase securely.",
       acceptanceCriteria: [
-        "Guest checkout requires all fields.",
-        "Each payment method validates its inputs according to rules (regex/format).",
-        "Credit card date must be future.",
-        "Invalid fields prevent order creation."
+        "Guest checkout requires all billing fields (street, city, country, etc.).",
+        "Bank Transfer: Bank Name (letters/spaces only), Account Name (alphanumeric + spaces/dots/apostrophes/hyphens), Account Number (digits only).",
+        "Credit Card: Number (####-####-####-#### format), Expiration (MM/YYYY, future date), CVV (3-4 digits), Card Holder Name (letters/spaces only).",
+        "Buy Now Pay Later: Must select 3, 6, 9, or 12 installments.",
+        "Gift Card: Card Number (alphanumeric), Validation Code (alphanumeric).",
+        "Cash on Delivery: No additional fields required."
       ],
       testingGuidance: [
-        "Leave each field empty one at a time → check error message.",
-        "Enter invalid card number format, expired date, CVV length.",
-        "Test each payment method end-to-end."
+        "Bank Transfer: Test invalid bank name (with numbers), account name (with symbols), account number (with letters).",
+        "Credit Card: Test wrong format (spaces instead of hyphens), past expiration date, 2-digit CVV, card holder name with numbers.",
+        "Buy Now Pay Later: Test invalid installment numbers (1, 5, 15), non-numeric values.",
+        "Gift Card: Test card number/validation code with special characters.",
+        "Test boundary values: exactly at max length vs one character over."
       ],
       techniques: [
-        "Decision Table: cover combinations of valid/invalid fields for each payment method.",
-        "BVA: date (today vs tomorrow), CVV min/max digits.",
-        "EP: valid vs invalid account number, gift card codes."
+        "Decision Table: combinations of valid/invalid fields for each payment method (5 methods × multiple fields = extensive matrix).",
+        "BVA: field lengths at max (255 chars), expiration date (today, tomorrow, yesterday), CVV digits (2, 3, 4, 5).",
+        "EP: valid formats vs invalid formats, required vs optional fields, different payment method categories.",
+        "Error Guessing: special characters in numeric fields, different date formats, mixed case in regex patterns."
       ]
     },
     {
       title: "Geolocation Discount",
       userStory: "As a visitor, I want location-based discounts to apply automatically so that I get the correct pricing for my region.",
       acceptanceCriteria: [
-        "Visiting from specified cities applies correct percentage.",
-        "Visiting from other city → no discount."
+        "New York (lat: 41, lng: 74) → 5% discount.",
+        "Mumbai (lat: 19, lng: 73) → 10% discount.",
+        "Tokyo (lat: 35, lng: 139) → 15% discount.",
+        "Amsterdam (lat: 52, lng: 5) → 20% discount.",
+        "London (lat: 51, lng: 0) → 25% discount.",
+        "Any other location → no discount applied."
       ],
       testingGuidance: [
-        "Simulate location for each city → check discount value.",
-        "Simulate location near boundary → confirm correct behavior."
+        "Test exact coordinates for each city → verify correct discount percentage.",
+        "Test coordinates slightly off (±1 degree) → confirm no discount.",
+        "Test invalid coordinates (lat > 90, lng > 180) → handle gracefully.",
+        "Test edge case coordinates (lat: 0, lng: 0) → no discount.",
+        "Test decimal coordinates vs integer coordinates → behavior consistency."
       ],
       techniques: [
-        "BVA: location close to coordinate boundaries.",
-        "EP: known vs unknown locations."
+        "BVA: coordinates at exact values (41,74) vs nearby values (40,74), (41,75).",
+        "EP: valid city coordinates vs invalid coordinates vs edge coordinates.",
+        "Decision Table: combinations of valid lat/lng for each city vs invalid combinations.",
+        "Error Guessing: negative coordinates, coordinates as strings, missing coordinates, extreme values."
       ]
     },
     {
