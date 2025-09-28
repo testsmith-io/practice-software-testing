@@ -6,6 +6,7 @@ import {DecimalPipe, NgClass} from "@angular/common";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {ArchwizardModule} from "@y3krulez/angular-archwizard";
 import {TranslocoDirective} from "@jsverse/transloco";
+import {Router} from "@angular/router";
 import {GaService} from "../../_services/ga.service";
 
 @Component({
@@ -24,6 +25,7 @@ export class CartComponent implements OnInit {
   private cartService = inject(CartService);
   private toastr = inject(ToastrService);
   private customerAccountService = inject(CustomerAccountService);
+  private router = inject(Router);
   private gaService = inject(GaService);
 
   cart: any;
@@ -109,6 +111,11 @@ export class CartComponent implements OnInit {
     this.total = this.total - discountAmount;
 
     return discountAmount;
+  }
+
+
+  continueShopping(): void {
+    this.router.navigate(['/']);
   }
 
   beginCheckout(): void {

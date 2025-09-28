@@ -217,11 +217,18 @@
         "price-header": "Prix",
         "subtotal": "Sous-total",
         "discount": "Remise",
-        "total": "Total"
+        "total": "Total",
+        "continue-shopping": "Continuer les achats"
       },
       "sign-in": {
         "title": "Se connecter",
         "already": "Bonjour {{ first_name }} {{ last_name }}, vous êtes déjà connecté. Vous pouvez passer à la caisse."
+      },
+      "guest": {
+        "title": "Continuer en tant qu'invité",
+        "description": "Payer sans créer de compte",
+        "btn": "Continuer en tant qu'invité",
+        "proceed": "Continuer en tant qu'invité: {{ first_name }} {{ last_name }} ({{ email }})"
       },
       "address": {
         "title": "Adresse de facturation"

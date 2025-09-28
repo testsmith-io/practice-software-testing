@@ -1,8 +1,21 @@
 <div class="container login-container" *transloco="let t">
   <div class="row">
     <div class="col-md-6 offset-md-3 login-form-1">
-      @if (!isLoggedIn) {
-        <div><h3>{{t('pages.login.title')}}</h3>
+      @if (!isLoggedIn && !isGuestCheckout) {
+        <div>
+          <div class="mb-3">
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#signin-tab" role="tab">{{t('pages.checkout.sign-in.title')}}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#guest-tab" role="tab">{{t('pages.checkout.guest.title')}}</a>
+              </li>
+            </ul>
+          </div>
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="signin-tab" role="tabpanel">
+          <h3>{{t('pages.login.title')}}</h3>
           @if (!showTotpInput) {
           <form [formGroup]="cusForm" (ngSubmit)="onSubmit()">
             <div class="mb-3">
@@ -80,15 +93,92 @@
               <div class="help-block">{{ customerError }}</div>
             </div>
           }
+            </div>
+            <div class="tab-pane fade" id="guest-tab" role="tabpanel">
+              <h3>{{t('pages.checkout.guest.title')}}</h3>
+              <p>{{t('pages.checkout.guest.description')}}</p>
+              <form [formGroup]="guestForm" (ngSubmit)="continueAsGuest()">
+                <div class="mb-3">
+                  <label for="guest-email" class="form-label">{{t('fields.email.label')}} *</label>
+                  <input formControlName="email"
+                         class="form-control"
+                         id="guest-email"
+                         data-test="guest-email"
+                         [ngClass]="{ 'is-invalid': guestSubmitted && gf['email'].errors }" type="email"
+                         placeholder="{{t('fields.email.placeholder')}}"
+                         aria-required="true"
+                         [attr.aria-describedby]="(guest_email.invalid && guestSubmitted) ? 'guest-email-error' : null"
+                         [attr.aria-invalid]="guest_email.invalid && guestSubmitted ? 'true' : 'false'"/>
+                </div>
+                @if (guest_email.invalid && guestSubmitted) {
+                  <div id="guest-email-error" data-test="guest-email-error" class="alert alert-danger">
+                    @if (guest_email.errors?.required) {
+                      <div>{{t('fields.email.errors.required')}}</div>
+                    }
+                    @if (guest_email.errors?.['email']) {
+                      <div>{{t('fields.email.errors.format')}}</div>
+                    }
+                  </div>
+                }
+                <div class="mb-3">
+                  <label for="guest-first-name" class="form-label">{{t('fields.first-name.label')}} *</label>
+                  <input formControlName="first_name"
+                         class="form-control"
+                         id="guest-first-name"
+                         data-test="guest-first-name"
+                         [ngClass]="{ 'is-invalid': guestSubmitted && gf['first_name'].errors }" type="text"
+                         placeholder="{{t('fields.first-name.placeholder')}}"
+                         aria-required="true"
+                         [attr.aria-describedby]="(guest_first_name.invalid && guestSubmitted) ? 'guest-first-name-error' : null"
+                         [attr.aria-invalid]="guest_first_name.invalid && guestSubmitted ? 'true' : 'false'"/>
+                </div>
+                @if (guest_first_name.invalid && guestSubmitted) {
+                  <div id="guest-first-name-error" data-test="guest-first-name-error" class="alert alert-danger">
+                    @if (guest_first_name.errors?.required) {
+                      <div>{{t('fields.first-name.errors.required')}}</div>
+                    }
+                  </div>
+                }
+                <div class="mb-3">
+                  <label for="guest-last-name" class="form-label">{{t('fields.last-name.label')}} *</label>
+                  <input formControlName="last_name"
+                         class="form-control"
+                         id="guest-last-name"
+                         data-test="guest-last-name"
+                         [ngClass]="{ 'is-invalid': guestSubmitted && gf['last_name'].errors }" type="text"
+                         placeholder="{{t('fields.last-name.placeholder')}}"
+                         aria-required="true"
+                         [attr.aria-describedby]="(guest_last_name.invalid && guestSubmitted) ? 'guest-last-name-error' : null"
+                         [attr.aria-invalid]="guest_last_name.invalid && guestSubmitted ? 'true' : 'false'"/>
+                </div>
+                @if (guest_last_name.invalid && guestSubmitted) {
+                  <div id="guest-last-name-error" data-test="guest-last-name-error" class="alert alert-danger">
+                    @if (guest_last_name.errors?.required) {
+                      <div>{{t('fields.last-name.errors.required')}}</div>
+                    }
+                  </div>
+                }
+                <div class="input-group mb-3">
+                  <input type="submit" class="btnSubmit" data-test="guest-submit" value="{{t('pages.checkout.guest.btn')}}"/>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-      } @else {
+      } @else if (isLoggedIn) {
         <p>{{t('pages.checkout.sign-in.already', {first_name: customer.first_name, last_name: customer.last_name})}}</p>
         <div class="float-end">
           <button data-test="proceed-2" [disabled]="!canExitStep2" type="button" class="btn btn-success" awNextStep>
             {{t('pages.checkout.btn')}}
           </button>
         </div>
-
+      } @else if (isGuestCheckout) {
+        <p>{{t('pages.checkout.guest.proceed', {first_name: customer.first_name, last_name: customer.last_name, email: customer.email})}}</p>
+        <div class="float-end">
+          <button data-test="proceed-2-guest" [disabled]="!canExitStep2" type="button" class="btn btn-success" awNextStep>
+            {{t('pages.checkout.btn')}}
+          </button>
+        </div>
       }
 
     </div>

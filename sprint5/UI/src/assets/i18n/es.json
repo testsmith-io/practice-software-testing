@@ -217,11 +217,18 @@
         "price-header": "Precio",
         "subtotal": "Subtotal",
         "discount": "Descuento",
-        "total": "Total"
+        "total": "Total",
+        "continue-shopping": "Seguir comprando"
       },
       "sign-in": {
         "title": "Iniciar sesión",
         "already": "Hola {{ first_name }} {{ last_name }}, ya has iniciado sesión. Puedes proceder al pago."
+      },
+      "guest": {
+        "title": "Continuar como invitado",
+        "description": "Pagar sin crear una cuenta",
+        "btn": "Continuar como invitado",
+        "proceed": "Continuando como invitado: {{ first_name }} {{ last_name }} ({{ email }})"
       },
       "address": {
         "title": "Dirección de facturación"

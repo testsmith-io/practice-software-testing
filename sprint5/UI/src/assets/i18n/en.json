@@ -217,11 +217,18 @@
         "price-header": "Price",
         "subtotal": "Subtotal",
         "discount": "Discount",
-        "total": "Total"
+        "total": "Total",
+        "continue-shopping": "Continue Shopping"
       },
       "sign-in": {
         "title": "Sign in",
         "already": "Hello {{ first_name }} {{ last_name }}, you are already logged in. You can proceed to checkout."
+      },
+      "guest": {
+        "title": "Continue as Guest",
+        "description": "Checkout without creating an account",
+        "btn": "Continue as Guest",
+        "proceed": "Continuing as guest: {{ first_name }} {{ last_name }} ({{ email }})"
       },
       "address": {
         "title": "Billing Address"

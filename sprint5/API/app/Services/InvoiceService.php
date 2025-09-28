@@ -99,6 +99,64 @@ class InvoiceService
         return $invoice;
     }
 
+    public function createGuestInvoice(array $data, $cartId)
+    {
+        Log::info('Creating guest invoice', ['cart_id' => $cartId]);
+
+        // Guest invoices don't have a user_id
+        $data['user_id'] = null;
+        $data['invoice_date'] = now();
+        $data['invoice_number'] = $this->invoiceNumberGenerator->generate([
+            'table' => 'invoices',
+            'field' => 'invoice_number',
+            'length' => 14,
+            'prefix' => 'INV-' . now()->year
+        ]);
+
+        $invoice = Invoice::create($data);
+        Log::debug('Guest invoice created', ['invoice_id' => $invoice->id]);
+
+        $cart = Cart::with('cartItems', 'cartItems.product')->findOrFail($cartId);
+
+        $subTotalPrice = 0;
+
+        foreach ($cart->cartItems as $cartItem) {
+            $quantity = $cartItem['quantity'];
+            $unitPrice = $cartItem['product']->price;
+
+            $discountedPrice = $cartItem->discount_percentage !== null
+                ? round($cartItem->product->price * (1 - ($cartItem->discount_percentage / 100)), 2)
+                : null;
+
+            UpdateProductInventory::dispatch($cartItem['product']->id, $quantity);
+            Log::debug('Dispatched inventory update', ['product_id' => $cartItem['product']->id, 'quantity' => $quantity]);
+
+            $invoice->invoicelines()->create([
+                'product_id' => $cartItem['product']->id,
+                'unit_price' => $unitPrice,
+                'quantity' => $quantity,
+                'discount_percentage' => $cartItem->discount_percentage,
+                'discounted_price' => $discountedPrice
+            ]);
+
+            $subTotalPrice += $discountedPrice ? $quantity * $discountedPrice : $quantity * $unitPrice;
+        }
+
+        $discountAmount = $subTotalPrice * ($cart->additional_discount_percentage / 100);
+        $totalPrice = $subTotalPrice - $discountAmount;
+
+        $invoice->update([
+            'subtotal' => $subTotalPrice,
+            'total' => $totalPrice,
+            'additional_discount_percentage' => $cart->additional_discount_percentage,
+            'additional_discount_amount' => $discountAmount,
+        ]);
+
+        Log::info('Guest invoice finalized', ['invoice_id' => $invoice->id, 'total' => $totalPrice]);
+
+        return $invoice;
+    }
+
     public function handlePayment($invoiceId, $paymentMethod, array $details)
     {
         Log::info('Handling payment', ['invoice_id' => $invoiceId, 'method' => $paymentMethod]);
