@@ -6,6 +6,7 @@ import {DecimalPipe, NgClass} from "@angular/common";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {ArchwizardModule} from "@y3krulez/angular-archwizard";
 import {TranslocoDirective} from "@jsverse/transloco";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-cart',
@@ -23,6 +24,7 @@ export class CartComponent implements OnInit {
   private cartService = inject(CartService);
   private toastr = inject(ToastrService);
   private customerAccountService = inject(CustomerAccountService);
+  private router = inject(Router);
 
   cart: any;
   isLoggedIn: boolean = false;
@@ -84,5 +86,9 @@ export class CartComponent implements OnInit {
     this.total = this.total - discountAmount;
 
     return discountAmount;
+  }
+
+  continueShopping(): void {
+    this.router.navigate(['/']);
   }
 }

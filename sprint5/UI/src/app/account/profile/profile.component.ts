@@ -134,6 +134,11 @@ export class ProfileComponent implements OnInit {
         if (res.success) {
           this.isPasswordUpdated = true;
           this.hidePasswordAlert = false;
+          // Logout immediately after successful password change
+          setTimeout(() => {
+            this.auth.logout();
+            window.location.href = '/auth/login';
+          }, 2000); // Brief delay to show success message
         }
       }, error: (err) => {
         this.hidePasswordAlert = false;
@@ -146,10 +151,6 @@ export class ProfileComponent implements OnInit {
     setTimeout(() => {
       this.hideProfileAlert = true;
       this.hidePasswordAlert = true;
-      if (this.isPasswordUpdated) {
-        this.auth.logout();
-        window.location.reload();
-      }
     }, 5000);
   }
 

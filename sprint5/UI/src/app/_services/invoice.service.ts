@@ -45,6 +45,10 @@ export class InvoiceService {
   }
 
   createInvoice(payload: any): Observable<any> {
+    // Check if this is a guest checkout
+    if (payload.guest_email) {
+      return this.httpClient.post(`${this.apiUrl}/guest`, payload);
+    }
     return this.httpClient.post(this.apiUrl, payload);
   }
 

@@ -19,7 +19,7 @@ class InvoiceController extends Controller
     public function __construct(InvoiceService $invoiceService)
     {
         $this->invoiceService = $invoiceService;
-        $this->middleware('auth:users');
+        $this->middleware('auth:users')->except(['storeGuest']);
     }
 
     /**
@@ -93,6 +93,58 @@ class InvoiceController extends Controller
     public function store(StoreInvoice $request)
     {
         $invoice = $this->invoiceService->createInvoice($request->except(['cart_id']), $request->input('cart_id'));
+        $this->invoiceService->handlePayment($invoice->id, $request->input('payment_method'), Arr::except($request->input('payment_details'), ['@type']) ?? []);
+
+        return $this->preferredFormat($invoice, ResponseAlias::HTTP_CREATED);
+    }
+
+    /**
+     * @OA\Post(
+     *      path="/invoices/guest",
+     *      operationId="storeGuestInvoice",
+     *      tags={"Invoice"},
+     *      summary="Store new guest invoice",
+     *      description="Store new invoice for guest checkout",
+     *      @OA\RequestBody(
+     *           required=true,
+     *           description="Guest invoice request object",
+     *           @OA\JsonContent(
+     *               allOf={
+     *                   @OA\Schema(ref="#/components/schemas/InvoiceRequest"),
+     *                   @OA\Schema(
+     *                       @OA\Property(property="guest_email", type="string", format="email", description="Guest email address"),
+     *                       @OA\Property(property="guest_first_name", type="string", description="Guest first name"),
+     *                       @OA\Property(property="guest_last_name", type="string", description="Guest last name")
+     *                   )
+     *               }
+     *           )
+     *       ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/InvoiceResponse")
+     *      ),
+     *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse")
+     * )
+     */
+    public function storeGuest(Request $request)
+    {
+        $request->validate([
+            'payment_method' => ['required', Rule::in(['bank-transfer', 'cash-on-delivery', 'credit-card', 'buy-now-pay-later', 'gift-card'])],
+            "payment_details" => ['present'],
+            'invoice_date' => 'date_format:Y-m-d',
+            'billing_street' => ['required', 'string', 'max:70'],
+            'billing_city' => ['required', 'string', 'max:40'],
+            'billing_state' => ['string', 'max:40'],
+            'billing_country' => ['required', 'string', 'max:40'],
+            'billing_postal_code' => ['string', 'max:10'],
+            'cart_id' => 'required',
+            'guest_email' => ['required', 'email', 'max:255'],
+            'guest_first_name' => ['required', 'string', 'max:255'],
+            'guest_last_name' => ['required', 'string', 'max:255']
+        ]);
+
+        $invoice = $this->invoiceService->createGuestInvoice($request->except(['cart_id']), $request->input('cart_id'));
         $this->invoiceService->handlePayment($invoice->id, $request->input('payment_method'), Arr::except($request->input('payment_details'), ['@type']) ?? []);
 
         return $this->preferredFormat($invoice, ResponseAlias::HTTP_CREATED);

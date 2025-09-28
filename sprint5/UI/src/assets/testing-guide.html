@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Testing Guide</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      background: #f8f9fa;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .guide-container {
+      padding: 20px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header h1 {
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    .header p {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .progress-bar {
+      background: rgba(255,255,255,0.3);
+      height: 6px;
+      border-radius: 3px;
+      margin-top: 15px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      background: white;
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.3s;
+    }
+
+    .features-list {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .feature-section {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-left: 4px solid #667eea;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .feature-section.completed {
+      border-left-color: #28a745;
+      opacity: 0.8;
+    }
+
+    .feature-section.active {
+      border-left-color: #ffc107;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .feature-section h2 {
+      color: #333;
+      font-size: 16px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-number {
+      background: #667eea;
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .completed .step-number {
+      background: #28a745;
+    }
+
+    .active .step-number {
+      background: #ffc107;
+      color: #333;
+    }
+
+    .user-story {
+      background: #f8f9ff;
+      border-left: 4px solid #667eea;
+      padding: 15px 20px;
+      margin: 15px 0;
+      font-style: italic;
+      color: #5a67d8;
+      border-radius: 0 8px 8px 0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .section {
+      margin: 15px 0;
+    }
+
+    .section h3 {
+      color: #4a5568;
+      font-size: 13px;
+      margin-bottom: 10px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .section-box {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 10px;
+    }
+
+    .acceptance-criteria {
+      background: #e8f5e8;
+      border: 1px solid #4caf50;
+    }
+
+    .testing-guidance {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+    }
+
+    .techniques-box {
+      background: #f8d7da;
+      border: 1px solid #dc3545;
+    }
+
+    .section-box h4 {
+      color: #333;
+      font-size: 12px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .acceptance-criteria h4 {
+      color: #2e7d32;
+    }
+
+    .testing-guidance h4 {
+      color: #e65100;
+    }
+
+    .techniques-box h4 {
+      color: #721c24;
+    }
+
+    .criteria-list, .guidance-list, .techniques-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .criteria-list li, .guidance-list li, .techniques-list li {
+      margin: 6px 0;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #555;
+    }
+
+    .criteria-list li::before {
+      content: '✓';
+      color: #48bb78;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+
+    .guidance-list li::before {
+      content: '→';
+      color: #667eea;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+
+    .techniques-list li::before {
+      content: '◆';
+      color: #dc3545;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .checkbox-container input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .checkbox-container label {
+      color: #555;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .navigation {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      bottom: 0;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+
+    .nav-button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-button.prev {
+      background: white;
+      color: #667eea;
+      border: 1px solid #667eea;
+    }
+
+    .nav-button.next {
+      background: #667eea;
+      color: white;
+    }
+
+    .nav-button:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .nav-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .step-indicator {
+      color: #666;
+      font-size: 12px;
+    }
+
+    .completion-section {
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .completion-status {
+      margin-top: 10px;
+    }
+
+    .intro-section {
+      padding: 10px 0;
+    }
+
+    .intro-section h3 {
+      color: #667eea;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    .intro-section p {
+      color: #555;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .technique-card {
+      background: #f8f9fa;
+      border-left: 4px solid #667eea;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .technique-card h4 {
+      color: #2c3e50;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .technique-card p {
+      font-size: 12px;
+      margin: 8px 0;
+    }
+
+    .technique-card ul {
+      margin: 5px 0 0 20px;
+      font-size: 12px;
+      color: #555;
+    }
+
+    .technique-card ul li {
+      margin: 3px 0;
+    }
+
+    .best-practices {
+      background: #e8f5e8;
+      border: 1px solid #4caf50;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 20px;
+    }
+
+    .best-practices h4 {
+      color: #2e7d32;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .best-practices ul {
+      margin: 0 0 0 20px;
+      font-size: 12px;
+    }
+
+    .best-practices ul li {
+      margin: 5px 0;
+      color: #555;
+      line-height: 1.5;
+    }
+
+    .decision-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 11px;
+    }
+
+    .decision-table th {
+      background: #2c3e50;
+      color: white;
+      padding: 8px 4px;
+      text-align: center;
+      border: 1px solid #34495e;
+    }
+
+    .decision-table td {
+      padding: 6px 4px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    .decision-table .condition-row td:first-child {
+      background: #ecf0f1;
+      text-align: left;
+      padding-left: 8px;
+    }
+
+    .decision-table .condition-row td {
+      background: #f8f9fa;
+    }
+
+    .decision-table .result-row td:first-child {
+      background: #34495e;
+      color: white;
+      text-align: left;
+      padding-left: 8px;
+    }
+
+    .decision-table .result-row .success {
+      background: #d4edda;
+      color: #155724;
+      font-weight: bold;
+    }
+
+    .decision-table .result-row .error {
+      background: #f8d7da;
+      color: #721c24;
+      font-size: 10px;
+    }
+
+    .visual-diagram {
+      margin: 15px 0;
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .partition-container {
+      display: flex;
+      gap: 2px;
+      margin: 10px 0;
+    }
+
+    .partition {
+      flex: 1;
+      padding: 15px 10px;
+      text-align: center;
+      border-radius: 6px;
+    }
+
+    .invalid-partition {
+      background: #ffebee;
+      border: 2px solid #ef5350;
+    }
+
+    .valid-partition {
+      background: #e8f5e9;
+      border: 2px solid #66bb6a;
+    }
+
+    .partition-label {
+      font-size: 11px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .partition-range {
+      font-size: 14px;
+      font-weight: bold;
+      color: #2c3e50;
+      margin: 8px 0;
+    }
+
+    .partition-test {
+      font-size: 11px;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .bva-container {
+      position: relative;
+      padding: 20px 10px 40px 10px;
+      margin: 10px 0;
+    }
+
+    .boundary-line {
+      position: relative;
+      height: 60px;
+      background: linear-gradient(to right, #ffcdd2 0%, #ffcdd2 30%, #c8e6c9 30%, #c8e6c9 70%, #ffcdd2 70%, #ffcdd2 100%);
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+
+    .valid-range {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      background: #4caf50;
+      opacity: 0.3;
+    }
+
+    .boundary-marker {
+      position: absolute;
+      top: -10px;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .marker-value {
+      background: white;
+      border: 2px solid #666;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .boundary-exact .marker-value {
+      border-color: #ff9800;
+      background: #fff3e0;
+    }
+
+    .marker-label {
+      font-size: 16px;
+      margin-top: 4px;
+    }
+
+    .bva-legend {
+      text-align: center;
+      font-size: 11px;
+      color: #666;
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    @media (max-height: 600px) {
+      .guide-container {
+        padding: 10px;
+      }
+      .header {
+        padding: 15px;
+      }
+      .feature-section {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="guide-container">
+  <div class="header">
+    <h1>📋 Testing Guide</h1>
+    <p>Testing guide for Practice Software Testing</p>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 6%"></div>
+    </div>
+  </div>
+
+  <div class="features-list" id="featuresList">
+    <!-- Single feature will be shown here -->
+  </div>
+
+  <div class="navigation">
+    <button class="nav-button prev" id="prevBtn" onclick="previousStep()" disabled>
+      ← Previous
+    </button>
+    <span class="step-indicator" id="stepIndicator">Step 1 of 18</span>
+    <button class="nav-button next" id="nextBtn" onclick="nextStep()">
+      Next →
+    </button>
+  </div>
+</div>
+
+<script>
+  const features = [
+    {
+      title: "Introduction to Black-Box Testing Techniques",
+      isIntroduction: true,
+      content: `
+        <div class="intro-section">
+          <h3>🎯 Overview</h3>
+          <p>Black-box testing focuses on testing software functionality without knowledge of internal code structure. This guide uses five fundamental techniques to ensure comprehensive test coverage.</p>
+
+          <div class="technique-card">
+            <h4>📊 Equivalence Partitioning (EP)</h4>
+            <p><strong>What it is:</strong> Divides input data into groups (partitions) where all values in a group should be processed the same way.</p>
+            <p><strong>When to use:</strong> When you have ranges of valid/invalid inputs or different categories of data.</p>
+            <p><strong>Visual Example:</strong> Age field accepting 18-75</p>
+            <div class="visual-diagram">
+              <div class="partition-container">
+                <div class="partition invalid-partition">
+                  <div class="partition-label">Invalid (Too Young)</div>
+                  <div class="partition-range">0 — 17</div>
+                  <div class="partition-test">Test: 10 ✗</div>
+                </div>
+                <div class="partition valid-partition">
+                  <div class="partition-label">Valid Age Range</div>
+                  <div class="partition-range">18 — 75</div>
+                  <div class="partition-test">Test: 45 ✓</div>
+                </div>
+                <div class="partition invalid-partition">
+                  <div class="partition-label">Invalid (Too Old)</div>
+                  <div class="partition-range">76 — ∞</div>
+                  <div class="partition-test">Test: 80 ✗</div>
+                </div>
+              </div>
+            </div>
+            <p><strong>Why it works:</strong> Reduces test cases while maintaining coverage - if one value in a partition works, others likely will too.</p>
+          </div>
+
+          <div class="technique-card">
+            <h4>🔍 Boundary Value Analysis (BVA)</h4>
+            <p><strong>What it is:</strong> Tests values at the edges of input ranges, where errors frequently occur.</p>
+            <p><strong>When to use:</strong> Whenever there are numeric ranges, length limits, or date ranges.</p>
+
+            <p><strong>2-Value BVA:</strong> Tests boundary value and just outside boundary</p>
+            <div class="visual-diagram">
+              <div class="bva-container">
+                <div class="boundary-line">
+                  <div class="boundary-marker" style="left: 25%;">
+                    <div class="marker-value">17</div>
+                    <div class="marker-label">✗</div>
+                  </div>
+                  <div class="boundary-marker boundary-exact" style="left: 30%;">
+                    <div class="marker-value">18</div>
+                    <div class="marker-label">✓</div>
+                  </div>
+                  <div class="valid-range" style="left: 30%; width: 40%;"></div>
+                  <div class="boundary-marker boundary-exact" style="left: 70%;">
+                    <div class="marker-value">75</div>
+                    <div class="marker-label">✓</div>
+                  </div>
+                  <div class="boundary-marker" style="left: 75%;">
+                    <div class="marker-value">76</div>
+                    <div class="marker-label">✗</div>
+                  </div>
+                </div>
+                <div class="bva-legend">Test Points: 17, 18, 75, 76 (4 test cases)</div>
+              </div>
+            </div>
+
+            <p><strong>3-Value BVA:</strong> Tests boundary value, just inside, and just outside</p>
+            <div class="visual-diagram">
+              <div class="bva-container">
+                <div class="boundary-line">
+                  <div class="boundary-marker" style="left: 20%;">
+                    <div class="marker-value">17</div>
+                    <div class="marker-label">✗</div>
+                  </div>
+                  <div class="boundary-marker boundary-exact" style="left: 25%;">
+                    <div class="marker-value">18</div>
+                    <div class="marker-label">✓</div>
+                  </div>
+                  <div class="boundary-marker" style="left: 30%;">
+                    <div class="marker-value">19</div>
+                    <div class="marker-label">✓</div>
+                  </div>
+                  <div class="valid-range" style="left: 25%; width: 45%;"></div>
+                  <div class="boundary-marker" style="left: 65%;">
+                    <div class="marker-value">74</div>
+                    <div class="marker-label">✓</div>
+                  </div>
+                  <div class="boundary-marker boundary-exact" style="left: 70%;">
+                    <div class="marker-value">75</div>
+                    <div class="marker-label">✓</div>
+                  </div>
+                  <div class="boundary-marker" style="left: 75%;">
+                    <div class="marker-value">76</div>
+                    <div class="marker-label">✗</div>
+                  </div>
+                </div>
+                <div class="bva-legend">Test Points: 17, 18, 19, 74, 75, 76 (6 test cases)</div>
+              </div>
+            </div>
+
+            <p><strong>Key Difference:</strong> 2-value BVA is more efficient (fewer tests), while 3-value BVA is more thorough (tests the "just inside" values too).</p>
+            <p><strong>Why it works:</strong> Off-by-one errors and boundary condition bugs are extremely common in software.</p>
+          </div>
+
+          <div class="technique-card">
+            <h4>🔄 State Transition Testing</h4>
+            <p><strong>What it is:</strong> Models the system as states and transitions, testing valid and invalid state changes.</p>
+            <p><strong>When to use:</strong> For features with different states like login/logout, cart states, order processing.</p>
+            <p><strong>Example:</strong> Account states: Active → (3 failed logins) → Locked → (admin unlock) → Active</p>
+            <p><strong>Why it works:</strong> Ensures the system behaves correctly as it moves through different states and handles invalid transitions properly.</p>
+          </div>
+
+          <div class="technique-card">
+            <h4>📋 Decision Table Testing</h4>
+            <p><strong>What it is:</strong> Creates a table of conditions and actions to test all logical combinations systematically.</p>
+            <p><strong>When to use:</strong> When multiple conditions affect the outcome, especially with complex business rules.</p>
+            <p><strong>Example:</strong> Login functionality with three conditions:</p>
+            <table class="decision-table">
+              <thead>
+                <tr>
+                  <th>Test Case</th>
+                  <th>1</th>
+                  <th>2</th>
+                  <th>3</th>
+                  <th>4</th>
+                  <th>5</th>
+                  <th>6</th>
+                  <th>7</th>
+                  <th>8</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="condition-row">
+                  <td><strong>Valid Email</strong></td>
+                  <td>Y</td>
+                  <td>Y</td>
+                  <td>Y</td>
+                  <td>Y</td>
+                  <td>N</td>
+                  <td>N</td>
+                  <td>N</td>
+                  <td>N</td>
+                </tr>
+                <tr class="condition-row">
+                  <td><strong>Valid Password</strong></td>
+                  <td>Y</td>
+                  <td>Y</td>
+                  <td>N</td>
+                  <td>N</td>
+                  <td>Y</td>
+                  <td>Y</td>
+                  <td>N</td>
+                  <td>N</td>
+                </tr>
+                <tr class="condition-row">
+                  <td><strong>Account Active</strong></td>
+                  <td>Y</td>
+                  <td>N</td>
+                  <td>Y</td>
+                  <td>N</td>
+                  <td>Y</td>
+                  <td>N</td>
+                  <td>Y</td>
+                  <td>N</td>
+                </tr>
+                <tr class="result-row">
+                  <td><strong>Result</strong></td>
+                  <td class="success">✓ Login</td>
+                  <td class="error">✗ Locked</td>
+                  <td class="error">✗ Wrong PW</td>
+                  <td class="error">✗ Wrong PW</td>
+                  <td class="error">✗ No User</td>
+                  <td class="error">✗ No User</td>
+                  <td class="error">✗ No User</td>
+                  <td class="error">✗ No User</td>
+                </tr>
+              </tbody>
+            </table>
+            <p><strong>Why it works:</strong> Ensures no combination of conditions is missed and makes complex logic testable.</p>
+          </div>
+
+          <div class="technique-card">
+            <h4>💡 Error Guessing</h4>
+            <p><strong>What it is:</strong> Uses experience and intuition to predict where errors might occur.</p>
+            <p><strong>When to use:</strong> After systematic testing, to find edge cases and unusual scenarios.</p>
+            <p><strong>Common targets:</strong>
+              <ul>
+                <li>Empty/null values</li>
+                <li>Special characters and emojis</li>
+                <li>Very long inputs</li>
+                <li>SQL injection attempts</li>
+                <li>Concurrent operations</li>
+                <li>Network interruptions</li>
+              </ul>
+            </p>
+            <p><strong>Why it works:</strong> Leverages tester knowledge to find bugs that systematic approaches might miss.</p>
+          </div>
+
+          <div class="best-practices">
+            <h4>✅ Best Practices</h4>
+            <ul>
+              <li><strong>Combine techniques:</strong> Use EP for initial partitions, then apply BVA to boundaries</li>
+              <li><strong>Document everything:</strong> Record test cases, expected results, and actual results</li>
+              <li><strong>Think negative:</strong> Don't just test happy paths - test what shouldn't work</li>
+              <li><strong>Consider combinations:</strong> Real bugs often appear when multiple conditions interact</li>
+              <li><strong>Start systematic, then explore:</strong> Use structured techniques first, then error guessing</li>
+            </ul>
+          </div>
+        </div>
+      `
+    },
+    {
+      title: "Register",
+      userStory: "As a visitor, I want to register an account so that I can log in and use personalized features.",
+      acceptanceCriteria: [
+        "Age must be between 18 and 75 inclusive.",
+        "Email must be unique and in valid format.",
+        "All mandatory fields (first name, last name, email, password, confirm password) must be filled.",
+        "Name/address/phone fields respect max lengths and validation rules.",
+        "Password must be at least 8 characters, contain upper, lower, digit, and symbol, not be compromised, and match confirm password."
+      ],
+      testingGuidance: [
+        "Age: Test 17, 18, 75, 76 (boundary values).",
+        "Email: Test valid email, invalid formats, already-used email.",
+        "Mandatory Fields: Leave one field empty, then multiple fields, confirm messages appear correctly.",
+        "Max Lengths: Test exactly at max length, and one character over.",
+        "Password Strength: Try missing each character class, too short, and a compromised password (if system supports it)."
+      ],
+      techniques: [
+        "BVA → for age and password length (bugs usually hide at edges).",
+        "EP → for valid/invalid email, password character rules, mandatory fields filled/missing.",
+        "Decision Table → for combinations of missing fields.",
+        "Error Guessing → try SQL injection, emoji, spaces in fields."
+      ]
+    },
+    {
+      title: "Login",
+      userStory: "As a registered user, I want to log in using my email and password so that I can access my account.",
+      acceptanceCriteria: [
+        "User can log in with valid credentials.",
+        "Login fails with incorrect password, unknown email, or disabled account.",
+        "Error messages are clear and specific."
+      ],
+      testingGuidance: [
+        "Valid login: expect redirect to dashboard.",
+        "Invalid password: expect error message, no login.",
+        "Invalid email: error message, no login.",
+        "Disabled account: error message."
+      ],
+      techniques: [
+        "EP: valid vs invalid credentials.",
+        "State Transition Testing: check transition from 'logged out' → 'logged in' and back after logout.",
+        "Error Guessing: try case sensitivity, leading/trailing spaces, SQL injection attempt in email field."
+      ]
+    },
+    {
+      title: "Forgot Password",
+      userStory: "As a user who forgot my password, I want to reset it using my email so that I can log back in.",
+      acceptanceCriteria: [
+        "Email must exist in the system.",
+        "New password is set to 'welcome02' (for demo).",
+        "User can log in with the new password immediately."
+      ],
+      testingGuidance: [
+        "Provide existing email → expect success message, receive new password (or notification).",
+        "Provide unknown email → expect clear error.",
+        "Try logging in with new password."
+      ],
+      techniques: [
+        "EP: email exists vs doesn't exist.",
+        "State Transition Testing: user state should change from 'cannot log in' → 'can log in'."
+      ]
+    },
+    {
+      title: "Customer Profile",
+      userStory: "As a logged-in user, I want to update my profile information and reset my password so that my account details remain correct and secure.",
+      acceptanceCriteria: [
+        "First name, last name, phone, address fields can be updated.",
+        "Password reset cannot reuse the current password.",
+        "After password reset, user is logged out automatically."
+      ],
+      testingGuidance: [
+        "Update each field individually → confirm persistence after reload.",
+        "Attempt password reset with same password → expect rejection.",
+        "Reset with new password → confirm logout, then log in with new password."
+      ],
+      techniques: [
+        "EP: for valid vs invalid phone, postal code, max lengths.",
+        "State Transition Testing: after password reset, user session state changes to logged out.",
+        "BVA: for field length max (e.g., 40 chars for city)."
+      ]
+    },
+    {
+      title: "Customer Favorites",
+      userStory: "As a logged-in customer, I want to favorite products so that I can quickly find them later.",
+      acceptanceCriteria: [
+        "User can add a product to favorites from product listing or detail page.",
+        "Favorited products appear in the Favorites list.",
+        "User can remove a favorite from the list and it no longer appears."
+      ],
+      testingGuidance: [
+        "Add multiple products → check they all appear.",
+        "Remove one → confirm only that product is removed.",
+        "Try adding same product twice → check for duplicates or error.",
+        "Log out & log back in → favorites should persist."
+      ],
+      techniques: [
+        "State Transition Testing: product state changes from 'not favorite' → 'favorite' → 'not favorite'.",
+        "Equivalence Partitioning: valid product vs unavailable product.",
+        "Error Guessing: try to favorite when logged out → expect proper error."
+      ]
+    },
+    {
+      title: "Customer Invoices",
+      userStory: "As a customer, I want to view and download my invoices so that I can track my purchases.",
+      acceptanceCriteria: [
+        "List of invoices is shown for logged-in user.",
+        "Clicking invoice shows detail page.",
+        "Download button provides correct PDF file."
+      ],
+      testingGuidance: [
+        "Verify invoices belong to logged-in customer only.",
+        "Check invoice detail matches data on list (dates, totals).",
+        "Download PDF → open file, verify correct content."
+      ],
+      techniques: [
+        "EP: logged-in vs logged-out (should not see invoices).",
+        "State Transition Testing: selecting invoice transitions from list view → detail view.",
+        "Error Guessing: try direct URL access for another customer's invoice → expect 403/404."
+      ]
+    },
+    {
+      title: "Customer Messages",
+      userStory: "As a customer, I want to view and reply to my contact messages so that I can continue conversations with support.",
+      acceptanceCriteria: [
+        "All past messages appear chronologically.",
+        "Reply field is available and messages send successfully."
+      ],
+      testingGuidance: [
+        "Open message thread, check ordering.",
+        "Send reply → verify it appears instantly or after refresh.",
+        "Try empty reply → expect validation error."
+      ],
+      techniques: [
+        "EP: valid message vs empty/too long message.",
+        "Decision Table: combinations of message + attachment (if supported).",
+        "Error Guessing: attempt sending reply while offline → expect graceful error."
+      ]
+    },
+    {
+      title: "Locked Account",
+      userStory: "As a user, I want my account to lock after repeated failed logins so that my account is protected against brute-force attacks.",
+      acceptanceCriteria: [
+        "After 3 failed password attempts, account is locked.",
+        "Lock message is shown: 'Account locked, too many failed attempts. Please contact the administrator.'",
+        "Admin can unlock account; user can log in again after unlock."
+      ],
+      testingGuidance: [
+        "Try 3 wrong passwords → verify lock and message.",
+        "Attempt login after lock → still blocked.",
+        "Unlock account (simulate admin action) → login works again."
+      ],
+      techniques: [
+        "State Transition Testing: state: active → locked → active (after unlock).",
+        "BVA: 2 wrong attempts still allow login, 3rd locks.",
+        "Error Guessing: attempt concurrent logins from multiple devices."
+      ]
+    },
+    {
+      title: "Multi-Factor Authentication (MFA)",
+      userStory: "As a security-conscious customer, I want to set up MFA so that I have extra protection when logging in.",
+      acceptanceCriteria: [
+        "Customer can enable MFA by scanning QR code.",
+        "System verifies TOTP.",
+        "After enablement, each new login requires TOTP."
+      ],
+      testingGuidance: [
+        "Enable MFA → test with valid/invalid TOTP.",
+        "Login again → confirm prompt for TOTP.",
+        "Provide wrong TOTP → expect rejection."
+      ],
+      techniques: [
+        "State Transition Testing: state: MFA-disabled → enabled.",
+        "EP: valid vs invalid TOTP.",
+        "Error Guessing: test expired TOTP, reused TOTP."
+      ]
+    },
+    {
+      title: "Contact Form",
+      userStory: "As a logged-in user, I want to contact support and attach files so that I can report issues effectively.",
+      acceptanceCriteria: [
+        "Name (≤120 chars), subject (≤120), message (≤250) are required.",
+        "Email required if not inferred from user profile.",
+        "File upload: Must allow only txt, pdf, jpg. Must reject >500KB or 0KB. Show descriptive error for invalid file."
+      ],
+      testingGuidance: [
+        "Test valid message with each allowed file type.",
+        "Test empty message → expect error.",
+        "Upload invalid file type (.exe) → error shown.",
+        "Upload file slightly >500KB → error shown.",
+        "Upload file exactly 500KB → accepted."
+      ],
+      techniques: [
+        "BVA: file size just below, at, just above 500KB.",
+        "EP: valid/invalid file types.",
+        "Decision Table: combinations of file/no file, message filled/empty.",
+        "Error Guessing: try filename with special characters."
+      ]
+    },
+    {
+      title: "Product Listing",
+      userStory: "As a customer, I want to filter, sort, and search products so that I can find what I need quickly.",
+      acceptanceCriteria: [
+        "Filtering by category/brand shows matching products only.",
+        "Sorting by name/price works in both directions.",
+        "Price range filters products correctly.",
+        "Reset search clears filters and shows all products."
+      ],
+      testingGuidance: [
+        "Apply filter → check results match criteria.",
+        "Apply sort → check order.",
+        "Combine filter + sort → still correct.",
+        "Reset → all products visible again."
+      ],
+      techniques: [
+        "Decision Table: combinations of filters and sorts.",
+        "EP: valid category vs invalid category (URL tampering).",
+        "Error Guessing: combine multiple filters + no results scenario."
+      ]
+    },
+    {
+      title: "Category Page",
+      userStory: "As a customer, I want to browse products by category so that I can shop within my area of interest.",
+      acceptanceCriteria: [
+        "Same as Product Listing but scoped to a single category."
+      ],
+      testingGuidance: [
+        "Verify page shows only category products.",
+        "Test sort + filter combinations.",
+        "Test pagination if many products."
+      ],
+      techniques: [
+        "Decision Table: filter/sort combos.",
+        "State Transition: navigating category → product detail → back."
+      ]
+    },
+    {
+      title: "Product Detail Page",
+      userStory: "As a customer, I want to view product details, set rental duration or quantity, and add to cart or favorites.",
+      acceptanceCriteria: [
+        "Duration selector calculates correct price.",
+        "Add to cart adds correct product and quantity.",
+        "Add to favorites requires login (error otherwise)."
+      ],
+      testingGuidance: [
+        "Change duration → verify price changes linearly or per rules.",
+        "Add product with quantity 1, 0 (should fail), max allowed.",
+        "Try favorite while logged out → expect error."
+      ],
+      techniques: [
+        "BVA: quantity min/max, duration min/max.",
+        "EP: logged-in vs logged-out for favorites.",
+        "Error Guessing: rapidly click 'add to cart' multiple times."
+      ]
+    },
+    {
+      title: "Shopping Cart",
+      userStory: "As a customer, I want to manage my cart so that I can control what I purchase.",
+      acceptanceCriteria: [
+        "Show empty cart message when empty.",
+        "Add product → appears in cart.",
+        "Remove product → disappears.",
+        "Discount price shown if applicable."
+      ],
+      testingGuidance: [
+        "Add/remove multiple items.",
+        "Check discount calculation correctness.",
+        "Refresh page → cart persists."
+      ],
+      techniques: [
+        "State Transition: cart empty → has items → empty.",
+        "EP: with/without discount.",
+        "Error Guessing: remove product while in checkout."
+      ]
+    },
+    {
+      title: "Checkout + Payment",
+      userStory: "As a customer, I want to checkout with different payment methods so that I can complete my purchase securely.",
+      acceptanceCriteria: [
+        "Guest checkout requires all fields.",
+        "Each payment method validates its inputs according to rules (regex/format).",
+        "Credit card date must be future.",
+        "Invalid fields prevent order creation."
+      ],
+      testingGuidance: [
+        "Leave each field empty one at a time → check error message.",
+        "Enter invalid card number format, expired date, CVV length.",
+        "Test each payment method end-to-end."
+      ],
+      techniques: [
+        "Decision Table: cover combinations of valid/invalid fields for each payment method.",
+        "BVA: date (today vs tomorrow), CVV min/max digits.",
+        "EP: valid vs invalid account number, gift card codes."
+      ]
+    },
+    {
+      title: "Geolocation Discount",
+      userStory: "As a visitor, I want location-based discounts to apply automatically so that I get the correct pricing for my region.",
+      acceptanceCriteria: [
+        "Visiting from specified cities applies correct percentage.",
+        "Visiting from other city → no discount."
+      ],
+      testingGuidance: [
+        "Simulate location for each city → check discount value.",
+        "Simulate location near boundary → confirm correct behavior."
+      ],
+      techniques: [
+        "BVA: location close to coordinate boundaries.",
+        "EP: known vs unknown locations."
+      ]
+    },
+    {
+      title: "Combined Product Discount",
+      userStory: "As a shopper, I want to receive a discount when I buy a regular + rental product together so that I save money.",
+      acceptanceCriteria: [
+        "When cart contains both types → 15% discount applied.",
+        "When only one type → no extra discount."
+      ],
+      testingGuidance: [
+        "Add regular + rental → check discount calculation.",
+        "Remove one → discount disappears."
+      ],
+      techniques: [
+        "Decision Table: cart with combinations of product types.",
+        "EP: both present vs only one."
+      ]
+    }
+  ];
+
+  let currentStep = 0;
+
+  function initializeGuide() {
+    loadCurrentStep();
+    loadProgress();
+    renderCurrentFeature();
+    updateProgress();
+    updateNavigation();
+  }
+
+  function renderCurrentFeature() {
+    const container = document.getElementById('featuresList');
+    const feature = features[currentStep];
+
+    if (feature.isIntroduction) {
+      container.innerHTML = `
+        <div class="feature-section active" id="feature-${currentStep}">
+          <h2>
+            <span class="step-number">${currentStep + 1}</span>
+            ${feature.title}
+          </h2>
+          ${feature.content}
+          <div class="completion-section">
+            <div class="checkbox-container">
+              <input type="checkbox" id="complete-${currentStep}" onchange="markComplete(${currentStep})" ${isCompleted(currentStep) ? 'checked' : ''}>
+              <label for="complete-${currentStep}">Mark as read</label>
+            </div>
+            <div class="completion-status" id="completion-status">
+              ${getCompletionSummary()}
+            </div>
+          </div>
+        </div>
+      `;
+    } else {
+      container.innerHTML = `
+        <div class="feature-section active" id="feature-${currentStep}">
+          <h2>
+            <span class="step-number">${currentStep + 1}</span>
+            ${feature.title}
+          </h2>
+
+          <div class="user-story">
+            <blockquote>
+              <em>${feature.userStory}</em>
+            </blockquote>
+          </div>
+
+          <div class="section-box acceptance-criteria">
+            <h4>✅ Acceptance Criteria</h4>
+            <ul class="criteria-list">
+              ${feature.acceptanceCriteria.map(criteria => `<li>${criteria}</li>`).join('')}
+            </ul>
+          </div>
+
+          <div class="section-box testing-guidance">
+            <h4>🧪 Testing Guidance</h4>
+            <ul class="guidance-list">
+              ${feature.testingGuidance.map(guidance => `<li>${guidance}</li>`).join('')}
+            </ul>
+          </div>
+
+          <div class="section-box techniques-box">
+            <h4>🔧 Testing Techniques</h4>
+            <ul class="techniques-list">
+              ${feature.techniques.map(technique => `<li>${technique}</li>`).join('')}
+            </ul>
+          </div>
+
+          <div class="completion-section">
+            <div class="checkbox-container">
+              <input type="checkbox" id="complete-${currentStep}" onchange="markComplete(${currentStep})" ${isCompleted(currentStep) ? 'checked' : ''}>
+              <label for="complete-${currentStep}">Mark as completed</label>
+            </div>
+            <div class="completion-status" id="completion-status">
+              ${getCompletionSummary()}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  function updateProgress() {
+    const progress = ((currentStep + 1) / features.length) * 100;
+    document.getElementById('progressFill').style.width = `${progress}%`;
+    document.getElementById('stepIndicator').textContent = `Step ${currentStep + 1} of ${features.length}`;
+  }
+
+  function updateNavigation() {
+    document.getElementById('prevBtn').disabled = currentStep === 0;
+    document.getElementById('nextBtn').disabled = currentStep === features.length - 1;
+  }
+
+  function nextStep() {
+    if (currentStep < features.length - 1) {
+      currentStep++;
+      saveCurrentStep();
+      renderCurrentFeature();
+      updateProgress();
+      updateNavigation();
+    }
+  }
+
+  function previousStep() {
+    if (currentStep > 0) {
+      currentStep--;
+      saveCurrentStep();
+      renderCurrentFeature();
+      updateProgress();
+      updateNavigation();
+    }
+  }
+
+  function isCompleted(index) {
+    const saved = localStorage.getItem('testing-guide-progress');
+    if (saved) {
+      const progress = JSON.parse(saved);
+      return progress.completed && progress.completed[index];
+    }
+    return false;
+  }
+
+  function getCompletionSummary() {
+    const completed = features.filter((_, index) => isCompleted(index)).length;
+    const total = features.length;
+    const percentage = Math.round((completed / total) * 100);
+
+    if (completed === total) {
+      return `<div style="color: #28a745; font-size: 12px; margin-top: 10px;">🎉 All features tested! (${completed}/${total})</div>`;
+    } else if (completed > 0) {
+      return `<div style="color: #667eea; font-size: 12px; margin-top: 10px;">Progress: ${completed}/${total} features tested (${percentage}%)</div>`;
+    } else {
+      return `<div style="color: #666; font-size: 12px; margin-top: 10px;">Start testing your first feature to track progress</div>`;
+    }
+  }
+
+  function saveCurrentStep() {
+    localStorage.setItem('testing-guide-current-step', currentStep.toString());
+  }
+
+  function loadCurrentStep() {
+    const saved = localStorage.getItem('testing-guide-current-step');
+    if (saved) {
+      currentStep = parseInt(saved, 10) || 0;
+    }
+  }
+
+  function markComplete(index) {
+    const section = document.getElementById(`feature-${index}`);
+    const checkbox = document.getElementById(`complete-${index}`);
+
+    if (checkbox.checked) {
+      section.classList.add('completed');
+      // Auto-advance to next step if not the last one
+      if (index === currentStep && currentStep < features.length - 1) {
+        setTimeout(() => nextStep(), 500);
+      }
+    } else {
+      section.classList.remove('completed');
+    }
+
+    // Store progress in localStorage
+    const saved = localStorage.getItem('testing-guide-progress');
+    const progress = saved ? JSON.parse(saved) : { completed: new Array(features.length).fill(false) };
+
+    progress.completed[index] = checkbox.checked;
+    localStorage.setItem('testing-guide-progress', JSON.stringify(progress));
+
+    // Update completion summary
+    document.getElementById('completion-status').innerHTML = getCompletionSummary();
+  }
+
+  // Load saved progress
+  function loadProgress() {
+    const saved = localStorage.getItem('testing-guide-progress');
+    if (saved) {
+      const progress = JSON.parse(saved);
+      progress.completed.forEach((isCompleted, index) => {
+        const checkbox = document.getElementById(`complete-${index}`);
+        if (checkbox && isCompleted) {
+          checkbox.checked = true;
+          document.getElementById(`feature-${index}`).classList.add('completed');
+        }
+      });
+    }
+  }
+
+  // Initialize on load
+  document.addEventListener('DOMContentLoaded', () => {
+    initializeGuide();
+  });
+
+  // Listen for messages from parent window
+  window.addEventListener('message', (event) => {
+    if (event.data === 'focus-guide') {
+      window.focus();
+    }
+  });
+</script>
+</body>
+</html>

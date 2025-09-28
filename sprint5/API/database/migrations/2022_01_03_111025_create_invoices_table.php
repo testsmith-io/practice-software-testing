@@ -14,7 +14,7 @@ class CreateInvoicesTable extends Migration
     public function up()
     {
         Schema::create('invoices', function (Blueprint $table) {
-            $table->ulid('id')->primary();
+            $table->ulid('id')->nullable()->primary();
             $table->dateTime('invoice_date');
             $table->ulid('additional_discount_percentage')->nullable();
             $table->ulid('additional_discount_amount')->nullable();
@@ -28,6 +28,10 @@ class CreateInvoicesTable extends Migration
             $table->decimal('total', 10, 2)->nullable();
             $table->enum('status', ['AWAITING_FULFILLMENT', 'ON_HOLD', 'AWAITING_SHIPMENT', 'SHIPPED', 'COMPLETED'])->default('AWAITING_FULFILLMENT');
             $table->string('status_message', 255)->nullable();
+            $table->boolean('is_guest')->default(false);
+            $table->string('customer_email')->nullable();
+            $table->string('customer_first_name')->nullable();
+            $table->string('customer_last_name')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
             $table->foreignUlid('user_id')->references('id')->on('users');

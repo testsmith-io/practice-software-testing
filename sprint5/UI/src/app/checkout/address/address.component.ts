@@ -57,6 +57,16 @@ export class AddressComponent implements OnInit, OnDestroy {
     if (this.address) {
       this.cusAddress.patchValue(this.address.value);
     } else {
+      // Check if guest checkout info exists
+      const guestInfo = sessionStorage.getItem('guestCheckout');
+      if (guestInfo) {
+        const guest = JSON.parse(guestInfo);
+        // For guest users, we only have email, first_name, last_name
+        // They need to fill in the address manually
+        return;
+      }
+
+      // For logged-in users, fetch their saved address
       this.subscription.add(
         this.customerAccountService.getDetails().subscribe(customer => {
           this.cusAddress.patchValue(customer);
