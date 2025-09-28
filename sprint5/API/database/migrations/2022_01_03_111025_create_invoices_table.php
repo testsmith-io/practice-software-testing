@@ -14,7 +14,7 @@ class CreateInvoicesTable extends Migration
     public function up()
     {
         Schema::create('invoices', function (Blueprint $table) {
-            $table->ulid('id')->nullable()->primary();
+            $table->ulid('id')->primary();
             $table->dateTime('invoice_date');
             $table->ulid('additional_discount_percentage')->nullable();
             $table->ulid('additional_discount_amount')->nullable();
@@ -34,7 +34,7 @@ class CreateInvoicesTable extends Migration
             $table->string('customer_last_name')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
-            $table->foreignUlid('user_id')->references('id')->on('users');
+            $table->foreignUlid('user_id')->nullable()->references('id')->on('users');
             $table->index(['user_id', 'invoice_date'], 'idx_invoices_user_date');
             $table->index(['invoice_date'], 'idx_invoices_date');
         });
