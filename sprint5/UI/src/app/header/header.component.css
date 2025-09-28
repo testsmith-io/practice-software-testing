@@ -74,7 +74,7 @@
 }
 
 .testing-notification-bar {
-  background: linear-gradient(90deg, #007bff 0%, #0056b3 100%);
+  background: linear-gradient(90deg, #205d96 0%, #1a4f7f 100%);
   color: white;
   padding: 10px 0;
   text-align: center;
@@ -95,7 +95,7 @@
 
 .testing-guide-btn {
   background: white;
-  color: #007bff;
+  color: #205d96;
   border: none;
   padding: 6px 16px;
   border-radius: 20px;
