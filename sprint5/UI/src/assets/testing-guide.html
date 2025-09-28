@@ -476,7 +476,7 @@
     .boundary-line {
       position: relative;
       height: 60px;
-      background: linear-gradient(to right, #ffcdd2 0%, #ffcdd2 30%, #c8e6c9 30%, #c8e6c9 70%, #ffcdd2 70%, #ffcdd2 100%);
+      background: linear-gradient(to right, #ffcdd2 0%, #ffcdd2 20%, #c8e6c9 20%, #c8e6c9 70%, #ffcdd2 70%, #ffcdd2 100%);
       border-radius: 4px;
       margin: 10px 0;
     }
@@ -575,17 +575,17 @@
             <h4>📊 Equivalence Partitioning (EP)</h4>
             <p><strong>What it is:</strong> Divides input data into groups (partitions) where all values in a group should be processed the same way.</p>
             <p><strong>When to use:</strong> When you have ranges of valid/invalid inputs or different categories of data.</p>
-            <p><strong>Visual Example:</strong> Age field accepting 18-75</p>
+            <p><strong>Visual Example:</strong> Age field accepting 17-75</p>
             <div class="visual-diagram">
               <div class="partition-container">
                 <div class="partition invalid-partition">
                   <div class="partition-label">Invalid (Too Young)</div>
-                  <div class="partition-range">0 — 17</div>
+                  <div class="partition-range">0 — 16</div>
                   <div class="partition-test">Test: 10 ✗</div>
                 </div>
                 <div class="partition valid-partition">
                   <div class="partition-label">Valid Age Range</div>
-                  <div class="partition-range">18 — 75</div>
+                  <div class="partition-range">17 — 75</div>
                   <div class="partition-test">Test: 45 ✓</div>
                 </div>
                 <div class="partition invalid-partition">
@@ -607,15 +607,15 @@
             <div class="visual-diagram">
               <div class="bva-container">
                 <div class="boundary-line">
-                  <div class="boundary-marker" style="left: 25%;">
-                    <div class="marker-value">17</div>
+                  <div class="boundary-marker" style="left: 15%;">
+                    <div class="marker-value">16</div>
                     <div class="marker-label">✗</div>
                   </div>
-                  <div class="boundary-marker boundary-exact" style="left: 30%;">
-                    <div class="marker-value">18</div>
+                  <div class="boundary-marker boundary-exact" style="left: 20%;">
+                    <div class="marker-value">17</div>
                     <div class="marker-label">✓</div>
                   </div>
-                  <div class="valid-range" style="left: 30%; width: 40%;"></div>
+                  <div class="valid-range" style="left: 20%; width: 50%;"></div>
                   <div class="boundary-marker boundary-exact" style="left: 70%;">
                     <div class="marker-value">75</div>
                     <div class="marker-label">✓</div>
@@ -625,7 +625,7 @@
                     <div class="marker-label">✗</div>
                   </div>
                 </div>
-                <div class="bva-legend">Test Points: 17, 18, 75, 76 (4 test cases)</div>
+                <div class="bva-legend">Test Points: 16, 17, 75, 76 (4 test cases)</div>
               </div>
             </div>
 
@@ -633,19 +633,19 @@
             <div class="visual-diagram">
               <div class="bva-container">
                 <div class="boundary-line">
-                  <div class="boundary-marker" style="left: 20%;">
-                    <div class="marker-value">17</div>
+                  <div class="boundary-marker" style="left: 15%;">
+                    <div class="marker-value">16</div>
                     <div class="marker-label">✗</div>
                   </div>
-                  <div class="boundary-marker boundary-exact" style="left: 25%;">
+                  <div class="boundary-marker boundary-exact" style="left: 20%;">
+                    <div class="marker-value">17</div>
+                    <div class="marker-label">✓</div>
+                  </div>
+                  <div class="boundary-marker" style="left: 25%;">
                     <div class="marker-value">18</div>
                     <div class="marker-label">✓</div>
                   </div>
-                  <div class="boundary-marker" style="left: 30%;">
-                    <div class="marker-value">19</div>
-                    <div class="marker-label">✓</div>
-                  </div>
-                  <div class="valid-range" style="left: 25%; width: 45%;"></div>
+                  <div class="valid-range" style="left: 20%; width: 50%;"></div>
                   <div class="boundary-marker" style="left: 65%;">
                     <div class="marker-value">74</div>
                     <div class="marker-label">✓</div>
@@ -659,7 +659,7 @@
                     <div class="marker-label">✗</div>
                   </div>
                 </div>
-                <div class="bva-legend">Test Points: 17, 18, 19, 74, 75, 76 (6 test cases)</div>
+                <div class="bva-legend">Test Points: 16, 17, 18, 74, 75, 76 (6 test cases)</div>
               </div>
             </div>
 
@@ -778,14 +778,14 @@
       title: "Register",
       userStory: "As a visitor, I want to register an account so that I can log in and use personalized features.",
       acceptanceCriteria: [
-        "Age must be between 18 and 75 inclusive.",
+        "Age must be between 17 and 75 inclusive.",
         "Email must be unique and in valid format.",
         "All mandatory fields (first name, last name, email, password, confirm password) must be filled.",
         "Name/address/phone fields respect max lengths and validation rules.",
         "Password must be at least 8 characters, contain upper, lower, digit, and symbol, not be compromised, and match confirm password."
       ],
       testingGuidance: [
-        "Age: Test 17, 18, 75, 76 (boundary values).",
+        "Age: Test 16, 17, 75, 76 (boundary values).",
         "Email: Test valid email, invalid formats, already-used email.",
         "Mandatory Fields: Leave one field empty, then multiple fields, confirm messages appear correctly.",
         "Max Lengths: Test exactly at max length, and one character over.",
