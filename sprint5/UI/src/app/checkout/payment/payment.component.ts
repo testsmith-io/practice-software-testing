@@ -13,6 +13,7 @@ import {environment} from "../../../environments/environment";
 import {PaymentService} from "../../_services/payment.service";
 import {InvoiceService} from "../../_services/invoice.service";
 import {TranslocoDirective} from "@jsverse/transloco";
+import {GaService} from "../../_services/ga.service";
 
 @Component({
   selector: 'app-payment',
@@ -28,6 +29,7 @@ export class PaymentComponent implements OnInit {
   private paymentService = inject(PaymentService);
   private invoiceService = inject(InvoiceService);
   private formBuilder = inject(FormBuilder);
+  private gaService = inject(GaService);
 
   selectedPaymentMethod: string = '';
 
@@ -41,6 +43,7 @@ export class PaymentComponent implements OnInit {
   paid: boolean = false;
   total: number;
   invoice_number: number;
+  cart: any;
 
   ngOnInit(): void {
     this.cusPayment = this.formBuilder.group({
@@ -60,6 +63,12 @@ export class PaymentComponent implements OnInit {
     this.cusPayment.get('payment_method').valueChanges.subscribe((value: string) => {
       this.selectedPaymentMethod = value;
       this.updateValidation(value);
+    });
+
+    // Get cart data for purchase tracking
+    this.cartService.getCart().subscribe(cart => {
+      this.cart = cart;
+      this.total = this.calculateTotal(cart.cart_items);
     });
   }
 
@@ -191,6 +200,10 @@ export class PaymentComponent implements OnInit {
           next: (res) => {
             this.paid = true;
             this.invoice_number = res['invoice_number'];
+
+            // Track purchase completion
+            this.trackPurchase(res['invoice_number']);
+
             this.cartService.emptyCart();
           },
           error: () => {
@@ -221,6 +234,29 @@ export class PaymentComponent implements OnInit {
       });
     }
     return of(this.state);
+  }
+
+  private calculateTotal(items: any[]): number {
+    return items.reduce((sum, cartItem) => {
+      const quantity = cartItem.quantity || 0;
+      const price = cartItem.discount_percentage ? cartItem.discounted_price : cartItem.product?.price || 0;
+      return sum + (quantity * price);
+    }, 0);
+  }
+
+  private trackPurchase(transactionId: string): void {
+    if (!this.cart?.cart_items?.length) return;
+
+    const items = this.cart.cart_items.map((cartItem: any) => ({
+      item_id: cartItem.product.id,
+      item_name: cartItem.product.name,
+      item_category: cartItem.product.category?.name || 'Unknown',
+      item_brand: cartItem.product.brand?.name || 'Unknown',
+      price: cartItem.discount_percentage ? cartItem.discounted_price : cartItem.product.price,
+      quantity: cartItem.quantity
+    }));
+
+    this.gaService.trackPurchase(transactionId, this.total, 'USD', items);
   }
 
   protected readonly JSON = JSON;

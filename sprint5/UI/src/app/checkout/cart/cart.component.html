@@ -24,8 +24,9 @@
             }</td>
             <td class="col-md-2 align-middle">
               <label for="quantity-{{item.id}}" class="visually-hidden">Quantity for {{item.product.name}}</label>
-              <input type="number" id="quantity-{{item.id}}" data-test="product-quantity" min="1" max="99" class="form-control quantity"
+              <input type="number" id="quantity-{{item.id}}" data-test="product-quantity" min="1" max="999999999" class="form-control quantity"
                      (change)="updateQuantity($event, item)"
+                     (input)="validateQuantityInput($event, item)"
                      [value]="item.quantity">
             </td>
 
@@ -82,7 +83,7 @@
     @if (cart.cart_items.length) {
       <div class="d-flex justify-content-between">
         <button data-test="continue-shopping" type="button" class="btn btn-secondary" (click)="continueShopping()">{{t('pages.checkout.cart.continue-shopping')}}</button>
-        <button data-test="proceed-1" type="button" class="btn btn-success" awNextStep>{{t('pages.checkout.btn')}}</button>
+        <button data-test="proceed-1" type="button" class="btn btn-success" awNextStep (click)="beginCheckout()>{{t('pages.checkout.btn')}}</button>
       </div>
     }
   </div>

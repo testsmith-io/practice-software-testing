@@ -50,6 +50,7 @@ export class OverviewComponent implements OnInit {
   private brandsFilter: Array<number> = [];
   private categoriesFilter: Array<number> = [];
   private sorting: string = '';
+  categoryCheckboxState: Map<number, boolean> = new Map();
   searchQuery: string;
   minPrice: number = 1;
   maxPrice: number = 100;
@@ -115,6 +116,7 @@ export class OverviewComponent implements OnInit {
   selectParentWithSubcategories(parentCategory: any, event: any) {
     const isChecked = event.target.checked;
 
+    this.categoryCheckboxState.set(parentCategory.id, isChecked);
     this.updateCategoryFilter(parentCategory.id, isChecked);
     this.updateSubcategories(parentCategory, isChecked);
 
@@ -123,6 +125,7 @@ export class OverviewComponent implements OnInit {
 
   updateSubcategories(category: Category, isChecked: boolean) {
     category.sub_categories.forEach((subCat: Category) => {
+      this.categoryCheckboxState.set(subCat.id, isChecked);
       this.updateCategoryFilter(subCat.id, isChecked);
       if (subCat.sub_categories && subCat.sub_categories.length > 0) {
         this.updateSubcategories(subCat, isChecked);
@@ -141,7 +144,7 @@ export class OverviewComponent implements OnInit {
   }
 
   isCategorySelected(category: Category): boolean {
-    return this.categoriesFilter.includes(category.id);
+    return this.categoryCheckboxState.get(category.id) || this.categoriesFilter.includes(category.id);
   }
 
   filterProducts() {
@@ -157,13 +160,43 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  filterByCategory(event: any) {
+  filterByCategory(event: any, categoryId?: number, parentId?: number) {
     this.resultState = 'filter_started';
-    if (event.target.checked) {
-      this.categoriesFilter.push(event.target.value);
+    const isChecked = event.target.checked;
+    const catId = categoryId || Number(event.target.value);
+
+    this.categoryCheckboxState.set(catId, isChecked);
+
+    if (isChecked) {
+      if (!this.categoriesFilter.includes(catId)) {
+        this.categoriesFilter.push(catId);
+      }
+
+      // If this is a child being checked, check if all siblings are checked to check parent
+      if (parentId) {
+        this.checkParentIfAllChildrenChecked(parentId);
+      }
+
+      // If this is a parent being checked, check all children
+      const category = this.findCategoryById(catId);
+      if (category && category.sub_categories && category.sub_categories.length > 0) {
+        this.updateSubcategories(category, true);
+      }
     } else {
-      this.categoriesFilter = this.categoriesFilter.filter(item => item !== event.target.value);
+      this.categoriesFilter = this.categoriesFilter.filter(item => item !== catId);
+
+      // If this is a child being unchecked, check if parent should be unchecked
+      if (parentId) {
+        this.uncheckParentIfNoChildrenChecked(parentId);
+      }
+
+      // If this is a parent being unchecked, uncheck all children
+      const category = this.findCategoryById(catId);
+      if (category && category.sub_categories && category.sub_categories.length > 0) {
+        this.updateSubcategories(category, false);
+      }
     }
+
     this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0).subscribe(res => {
       this.resultState = 'filter_completed';
       this.currentPage = 1;
@@ -235,6 +268,56 @@ export class OverviewComponent implements OnInit {
     this.checkboxes.forEach((element) => {
       element.nativeElement.checked = false;
     });
+    this.categoryCheckboxState.clear();
+  }
+
+  private findCategoryById(id: number, categories?: Category[]): Category | null {
+    const searchCategories = categories || this.categories;
+    for (const category of searchCategories) {
+      if (category.id === id) {
+        return category;
+      }
+      if (category.sub_categories && category.sub_categories.length > 0) {
+        const found = this.findCategoryById(id, category.sub_categories);
+        if (found) return found;
+      }
+    }
+    return null;
+  }
+
+  private checkParentIfAllChildrenChecked(parentId: number) {
+    const parent = this.findCategoryById(parentId);
+    if (parent && parent.sub_categories) {
+      const allChildrenChecked = parent.sub_categories.every((child: Category) =>
+        this.categoryCheckboxState.get(child.id) === true
+      );
+
+      if (allChildrenChecked) {
+        this.categoryCheckboxState.set(parentId, true);
+        if (!this.categoriesFilter.includes(parentId)) {
+          this.categoriesFilter.push(parentId);
+        }
+      }
+    }
+  }
+
+  private uncheckParentIfNoChildrenChecked(parentId: number) {
+    const parent = this.findCategoryById(parentId);
+    if (parent && parent.sub_categories) {
+      const anyChildChecked = parent.sub_categories.some((child: Category) =>
+        this.categoryCheckboxState.get(child.id) === true
+      );
+
+      if (!anyChildChecked) {
+        this.categoryCheckboxState.set(parentId, false);
+        this.categoriesFilter = this.categoriesFilter.filter(item => item !== parentId);
+
+        // Also check if this parent has a parent (grandparent)
+        if (parent.parent_id) {
+          this.uncheckParentIfNoChildrenChecked(parent.parent_id);
+        }
+      }
+    }
   }
 
 }

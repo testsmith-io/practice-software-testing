@@ -7,6 +7,7 @@ import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {ArchwizardModule} from "@y3krulez/angular-archwizard";
 import {TranslocoDirective} from "@jsverse/transloco";
 import {Router} from "@angular/router";
+import {GaService} from "../../_services/ga.service";
 
 @Component({
   selector: 'app-cart',
@@ -25,6 +26,7 @@ export class CartComponent implements OnInit {
   private toastr = inject(ToastrService);
   private customerAccountService = inject(CustomerAccountService);
   private router = inject(Router);
+  private gaService = inject(GaService);
 
   cart: any;
   isLoggedIn: boolean = false;
@@ -46,11 +48,34 @@ export class CartComponent implements OnInit {
     });
   }
 
+  validateQuantityInput(event: Event, item: any): void {
+    const target = event.target as HTMLInputElement;
+    let value = parseInt(target.value, 10);
+
+    // Check if value is NaN or exceeds maximum
+    if (isNaN(value) || value < 1) {
+      value = 1;
+    } else if (value > 999999999) {
+      value = 999999999;
+    }
+
+    target.value = value.toString();
+  }
+
   updateQuantity(event: Event, item: any): void {
     const target = event.target as HTMLInputElement;
-    const quantity = Math.max(1, parseInt(target.value, 10));
+    let quantity = parseInt(target.value, 10);
 
-    if (quantity >= 1) {
+    // Validate the quantity
+    if (isNaN(quantity) || quantity < 1) {
+      quantity = 1;
+    } else if (quantity > 999999999) {
+      quantity = 999999999;
+    }
+
+    target.value = quantity.toString();
+
+    if (quantity >= 1 && quantity <= 999999999) {
       this.cartService.replaceQuantity(item.product.id, quantity).subscribe({
         next: () => {
           this.fetchCartItems();
@@ -88,7 +113,23 @@ export class CartComponent implements OnInit {
     return discountAmount;
   }
 
+
   continueShopping(): void {
     this.router.navigate(['/']);
+  }
+
+  beginCheckout(): void {
+    if (!this.cart?.cart_items?.length) return;
+
+    const items = this.cart.cart_items.map((cartItem: any) => ({
+      item_id: cartItem.product.id,
+      item_name: cartItem.product.name,
+      item_category: cartItem.product.category?.name || 'Unknown',
+      item_brand: cartItem.product.brand?.name || 'Unknown',
+      price: cartItem.discount_percentage ? cartItem.discounted_price : cartItem.product.price,
+      quantity: cartItem.quantity
+    }));
+
+    this.gaService.trackBeginCheckout('USD', this.total, items);
   }
 }

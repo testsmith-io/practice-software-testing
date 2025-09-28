@@ -1,60 +1,171 @@
-import {Injectable} from '@angular/core';
+import {Injectable, inject} from '@angular/core';
+import {Router, NavigationEnd} from '@angular/router';
+import {filter} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
+
+declare global {
+  interface Window {
+    gtag: (...args: any[]) => void;
+    dataLayer: any[];
+  }
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class GaService {
+  private router = inject(Router);
+  private isInitialized = false;
+  private isReady = false;
+  private eventQueue: Array<() => void> = [];
 
   constructor() {
-    if (environment.gaCode) {
-      this.injectGaScript(environment.gaCode);
-      this.injectGtmScript(environment.gtmCode);
-      this.injectGtmNoScript(environment.gtmCode);
+    if (environment.production && environment.gaCode && !this.isInitialized) {
+      console.log('Initializing Google Analytics 4:', environment.gaCode);
+      this.initializeGA4(environment.gaCode);
+      this.setupNavigationTracking();
+      this.isInitialized = true;
+    } else if (!environment.production) {
+      console.log('Google Analytics disabled in development mode');
     }
   }
 
-  private injectGaScript(gaCode: string): void {
-    // Inject GA external script
-    const script = this.createScript();
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${gaCode}`;
-    document.head.appendChild(script);
+  private initializeGA4(gaCode: string): void {
+    // Check if GA script already exists
+    if (document.querySelector(`script[src*="googletagmanager.com/gtag/js?id=${gaCode}"]`)) {
+      console.warn('Google Analytics script already loaded');
+      return;
+    }
 
-    // Inject GA initialization script
-    const scriptText = this.createScript();
-    scriptText.innerHTML = `
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '${gaCode}');
-    `;
-    document.head.appendChild(scriptText);
-  }
+    // Initialize dataLayer only once
+    if (!window.dataLayer) {
+      window.dataLayer = [];
+    }
 
-  private injectGtmScript(gtmId: string): void {
-    const script = this.createScript();
-    script.innerHTML = `
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','${gtmId}');
-    `;
-    document.head.appendChild(script);
-  }
+    // Define gtag function only once
+    if (!window.gtag) {
+      window.gtag = function() {
+        window.dataLayer.push(arguments);
+      };
+    }
 
-  private injectGtmNoScript(gtmId: string): void {
-    const noscript = document.createElement('noscript');
-    noscript.innerHTML = `
-      <iframe src="https://www.googletagmanager.com/ns.html?id=${gtmId}"
-      height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    `;
-    document.body.insertBefore(noscript, document.body.firstChild);
-  }
-
-  private createScript(): HTMLScriptElement {
+    // Load GA4 script
     const script = document.createElement('script');
-    script.defer = true;
-    return script;
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${gaCode}`;
+    script.onload = () => {
+      // Configure GA4 after script loads
+      window.gtag('js', new Date());
+      window.gtag('config', gaCode, {
+        // Disable automatic page view tracking for SPA
+        send_page_view: false,
+        // Enable enhanced measurement
+        enhanced_measurements: true
+      });
+
+      // Mark as ready for tracking
+      this.isReady = true;
+      console.log('Google Analytics 4 ready for tracking');
+
+      // Send initial page view
+      this.trackPageView();
+    };
+
+    script.onerror = () => {
+      console.error('Failed to load Google Analytics script');
+    };
+
+    document.head.appendChild(script);
+  }
+
+  private setupNavigationTracking(): void {
+    // Track page views on navigation for SPA
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      if (environment.production && window.gtag && this.isInitialized) {
+        this.trackPageView(event.urlAfterRedirects);
+      }
+    });
+  }
+
+  private trackPageView(url?: string): void {
+    if (!environment.production || !window.gtag || !environment.gaCode) return;
+
+    const page_location = url ? `${window.location.origin}${url}` : window.location.href;
+    const page_path = url || window.location.pathname;
+
+    window.gtag('config', environment.gaCode, {
+      page_path: page_path,
+      page_location: page_location
+    });
+  }
+
+  // Public methods for tracking events
+  trackEvent(eventName: string, parameters?: any): void {
+    if (!environment.production) {
+      console.log(`[GA Debug] Event: ${eventName}`, parameters);
+      return;
+    }
+    if (!window.gtag || !environment.gaCode || !this.isInitialized) return;
+
+    window.gtag('event', eventName, parameters);
+  }
+
+  trackPurchase(transactionId: string, value: number, currency: string = 'USD', items?: any[]): void {
+    if (!environment.production) {
+      console.log(`[GA Debug] Purchase: ${transactionId}, Value: ${value} ${currency}`, items);
+      return;
+    }
+    if (!window.gtag || !environment.gaCode || !this.isInitialized) return;
+
+    window.gtag('event', 'purchase', {
+      transaction_id: transactionId,
+      value: value,
+      currency: currency,
+      items: items
+    });
+  }
+
+  trackAddToCart(currency: string, value: number, items: any[]): void {
+    if (!environment.production) {
+      console.log(`[GA Debug] Add to Cart: Value: ${value} ${currency}`, items);
+      return;
+    }
+    if (!window.gtag || !environment.gaCode || !this.isInitialized) return;
+
+    window.gtag('event', 'add_to_cart', {
+      currency: currency,
+      value: value,
+      items: items
+    });
+  }
+
+  trackViewItem(currency: string, value: number, items: any[]): void {
+    if (!environment.production) {
+      console.log(`[GA Debug] View Item: Value: ${value} ${currency}`, items);
+      return;
+    }
+    if (!window.gtag || !environment.gaCode || !this.isInitialized) return;
+
+    window.gtag('event', 'view_item', {
+      currency: currency,
+      value: value,
+      items: items
+    });
+  }
+
+  trackBeginCheckout(currency: string, value: number, items: any[]): void {
+    if (!environment.production) {
+      console.log(`[GA Debug] Begin Checkout: Value: ${value} ${currency}`, items);
+      return;
+    }
+    if (!window.gtag || !environment.gaCode || !this.isInitialized) return;
+
+    window.gtag('event', 'begin_checkout', {
+      currency: currency,
+      value: value,
+      items: items
+    });
   }
 }

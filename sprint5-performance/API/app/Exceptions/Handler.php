@@ -113,16 +113,30 @@ class Handler extends ExceptionHandler
 
         if ($e instanceof QueryException) {
             $errorCode = $e->errorInfo[1] ?? null;
+            $sqlState = $e->errorInfo[0] ?? null;
+
             Log::error('QueryException', [
                 'route' => $route,
                 'code' => $errorCode,
+                'sqlState' => $sqlState,
                 'message' => $e->getMessage(),
             ]);
+
+            // Check SQLSTATE code first (more standard across databases)
+            if ($sqlState === '22003' || $sqlState === 'HY000') {
+                // Numeric value out of range
+                return response()->json([
+                    'message' => 'Something went wrong'
+                ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+            }
 
             return match ($errorCode) {
                 1062 => response([
                     'message' => 'Duplicate Entry'
                 ], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY),
+                1264 => response()->json([
+                    'message' => 'Something went wrong'
+                ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR),
                 1364 => response([
                     'message' => 'Something went wrong'
                 ], ResponseAlias::HTTP_NOT_FOUND),

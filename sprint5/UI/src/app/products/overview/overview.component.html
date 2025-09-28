@@ -66,25 +66,27 @@
     </h4>
     <hr>
     <h4>{{ t('pages.overview.by-category') }}:</h4>
-    <ng-template #recursiveList let-list>
+    <ng-template #recursiveList let-list let-parentId="parentId">
       <fieldset>
         <legend class="visually-hidden">{{ t('pages.overview.categories') }}</legend>
         @for (category of list; track category) {
           <div class="checkbox">
             <label>
-              <!-- Parent category checkbox -->
+              <!-- Category checkbox -->
               @if (!category.parent_id) {
+                <!-- Top-level parent -->
                 <input type="checkbox" class="icheck"
                        attr.data-test="category-{{category.id}}" name="category_id"
                        value="{{category.id}}"
                        [checked]="isCategorySelected(category)"
                        (change)="selectParentWithSubcategories(category, $event)"/>
               } @else {
+                <!-- Child category -->
                 <input type="checkbox" class="icheck"
                        attr.data-test="category-{{category.id}}" name="category_id"
                        value="{{category.id}}"
                        [checked]="isCategorySelected(category)"
-                       (change)="filterByCategory($event)"/>
+                       (change)="filterByCategory($event, category.id, parentId)"/>
               }
               {{ category.name }}
             </label>
@@ -92,7 +94,7 @@
             @if (category.sub_categories.length > 0) {
               <ul>
                 <ng-container
-                  *ngTemplateOutlet="recursiveList; context:{ $implicit: category.sub_categories }"></ng-container>
+                  *ngTemplateOutlet="recursiveList; context:{ $implicit: category.sub_categories, parentId: category.id }"></ng-container>
               </ul>
             }
           </div>
