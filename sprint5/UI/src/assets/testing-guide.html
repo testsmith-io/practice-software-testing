@@ -162,8 +162,8 @@
     }
 
     .techniques-box {
-      background: #f8d7da;
-      border: 1px solid #dc3545;
+      background: #f8f9fa;
+      border: 1px solid #6c757d;
     }
 
     .section-box h4 {
@@ -183,7 +183,7 @@
     }
 
     .techniques-box h4 {
-      color: #721c24;
+      color: #495057;
     }
 
     .criteria-list, .guidance-list, .techniques-list {
@@ -214,7 +214,7 @@
 
     .techniques-list li::before {
       content: '◆';
-      color: #dc3545;
+      color: #6c757d;
       font-weight: bold;
       margin-right: 8px;
     }
@@ -1172,10 +1172,13 @@
             ${feature.title}
           </h2>
 
-          <div class="user-story">
-            <blockquote>
-              <em>${feature.userStory}</em>
-            </blockquote>
+          <div class="section">
+            <h3>📖 User Story</h3>
+            <div class="user-story">
+              <blockquote>
+                <em>${feature.userStory}</em>
+              </blockquote>
+            </div>
           </div>
 
           <div class="section-box acceptance-criteria">
