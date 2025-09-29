@@ -573,8 +573,12 @@
 
           <div class="technique-card">
             <h4>📊 Equivalence Partitioning (EP)</h4>
-            <p><strong>What it is:</strong> Divides input data into groups (partitions) where all values in a group should be processed the same way.</p>
+            <p><strong>What it is:</strong> Divides input data into groups (partitions) where all values in a group should be processed the same way. Each partition represents a set of inputs that trigger the same behavior in the system.</p>
+
+            <p><strong>Core Principle:</strong> If the system handles one value from a partition correctly, it should handle all values in that partition correctly. This allows you to test just one representative value per partition instead of testing every possible input.</p>
+
             <p><strong>When to use:</strong> When you have ranges of valid/invalid inputs or different categories of data.</p>
+
             <p><strong>Visual Example:</strong> Age field accepting 17-75</p>
             <div class="visual-diagram">
               <div class="partition-container">
@@ -595,13 +599,36 @@
                 </div>
               </div>
             </div>
-            <p><strong>Why it works:</strong> Reduces test cases while maintaining coverage - if one value in a partition works, others likely will too.</p>
+
+            <p><strong>Additional Examples:</strong></p>
+            <ul>
+              <li><strong>Email validation:</strong> Valid partition (user@domain.com), invalid partitions (missing @, missing domain, special chars)</li>
+              <li><strong>File upload:</strong> Valid partition (txt, pdf, jpg), invalid partition (exe, zip, dmg)</li>
+              <li><strong>Discount codes:</strong> Valid code, expired code, already-used code, non-existent code</li>
+              <li><strong>Payment amount:</strong> Negative values, zero, valid positive values, exceeds max limit</li>
+            </ul>
+
+            <p><strong>How to apply it:</strong></p>
+            <ul>
+              <li>1. Identify the input parameter (e.g., age, email, file type)</li>
+              <li>2. Determine valid and invalid partitions based on requirements</li>
+              <li>3. Select one representative test value from each partition</li>
+              <li>4. Create test cases using these representative values</li>
+              <li>5. Document expected behavior for each partition</li>
+            </ul>
+
+            <p><strong>Why it works:</strong> Reduces test cases dramatically while maintaining coverage. Instead of testing 100 different ages, you test 3 values (one per partition). This is based on the assumption that if one value in a partition works, others likely will too - and bugs typically occur at partition boundaries, not within partitions.</p>
+
+            <p><strong>Pro Tip:</strong> Always combine EP with BVA for maximum effectiveness. EP identifies the partitions, BVA tests the boundaries between them.</p>
           </div>
 
           <div class="technique-card">
             <h4>🔍 Boundary Value Analysis (BVA)</h4>
-            <p><strong>What it is:</strong> Tests values at the edges of input ranges, where errors frequently occur.</p>
-            <p><strong>When to use:</strong> Whenever there are numeric ranges, length limits, or date ranges.</p>
+            <p><strong>What it is:</strong> Tests values at the edges of input ranges, where errors frequently occur. This technique is based on the empirical observation that most defects cluster around boundaries rather than in the middle of ranges.</p>
+
+            <p><strong>Why boundaries matter:</strong> Programmers commonly make mistakes with comparison operators (< vs <=, > vs >=), array indices (off-by-one errors), and edge conditions. Testing at boundaries catches these issues.</p>
+
+            <p><strong>When to use:</strong> Whenever there are numeric ranges, length limits, date ranges, array indices, file sizes, or any constrained input domain.</p>
 
             <p><strong>2-Value BVA:</strong> Tests boundary value and just outside boundary</p>
             <div class="visual-diagram">
@@ -664,22 +691,125 @@
             </div>
 
             <p><strong>Key Difference:</strong> 2-value BVA is more efficient (fewer tests), while 3-value BVA is more thorough (tests the "just inside" values too).</p>
-            <p><strong>Why it works:</strong> Off-by-one errors and boundary condition bugs are extremely common in software.</p>
+
+            <p><strong>Real-world Examples:</strong></p>
+            <ul>
+              <li><strong>File size limit 500KB:</strong> Test 499KB, 500KB, 501KB</li>
+              <li><strong>Character limit 120:</strong> Test strings of length 119, 120, 121</li>
+              <li><strong>Date range Jan 1-Dec 31, 2024:</strong> Test Dec 31 2023, Jan 1 2024, Dec 31 2024, Jan 1 2025</li>
+              <li><strong>Quantity 1-100:</strong> Test 0, 1, 100, 101</li>
+              <li><strong>Discount 0-100%:</strong> Test -1%, 0%, 100%, 101%</li>
+            </ul>
+
+            <p><strong>Special Cases:</strong></p>
+            <ul>
+              <li><strong>Null/Empty:</strong> For strings, test empty string ("") and null</li>
+              <li><strong>Zero:</strong> For numeric fields, always test 0 as a special boundary</li>
+              <li><strong>Negative boundaries:</strong> Test -1 when minimum is 0</li>
+              <li><strong>Maximum values:</strong> Test MAX_INT or system limits for numeric types</li>
+            </ul>
+
+            <p><strong>How to apply it:</strong></p>
+            <ul>
+              <li>1. Identify all input boundaries from requirements (min, max values)</li>
+              <li>2. For each boundary, select test values: boundary value, just inside, just outside</li>
+              <li>3. Test both upper and lower boundaries</li>
+              <li>4. Consider both valid and invalid sides of each boundary</li>
+              <li>5. Don't forget special values like 0, null, empty, MAX/MIN</li>
+            </ul>
+
+            <p><strong>Why it works:</strong> Studies show that 60-70% of software defects occur at boundaries. Off-by-one errors (using < instead of <=) are among the most common programming mistakes. BVA targets exactly where bugs hide.</p>
+
+            <p><strong>Pro Tip:</strong> When combining with EP, use EP to identify partitions, then apply BVA specifically to the boundaries between partitions for comprehensive coverage.</p>
           </div>
 
           <div class="technique-card">
             <h4>🔄 State Transition Testing</h4>
-            <p><strong>What it is:</strong> Models the system as states and transitions, testing valid and invalid state changes.</p>
-            <p><strong>When to use:</strong> For features with different states like login/logout, cart states, order processing.</p>
-            <p><strong>Example:</strong> Account states: Active → (3 failed logins) → Locked → (admin unlock) → Active</p>
-            <p><strong>Why it works:</strong> Ensures the system behaves correctly as it moves through different states and handles invalid transitions properly.</p>
+            <p><strong>What it is:</strong> Models the system as a finite state machine with defined states and transitions between them. This technique tests both valid transitions (that should work) and invalid transitions (that should be blocked).</p>
+
+            <p><strong>Core Concepts:</strong></p>
+            <ul>
+              <li><strong>States:</strong> Discrete conditions or modes the system can be in (e.g., Logged Out, Logged In, Locked)</li>
+              <li><strong>Transitions:</strong> Events or actions that move the system from one state to another (e.g., login, logout, failed password)</li>
+              <li><strong>Guards:</strong> Conditions that must be met for a transition to occur</li>
+              <li><strong>Actions:</strong> Side effects that occur during a transition</li>
+            </ul>
+
+            <p><strong>When to use:</strong> For features with different states like login/logout, cart states, order processing, account status, workflow systems, game states, or any system with distinct behavioral modes.</p>
+
+            <p><strong>Example: Account States</strong></p>
+            <ul>
+              <li>Active → (3 failed logins) → Locked</li>
+              <li>Locked → (admin unlock) → Active</li>
+              <li>Active → (user delete request) → Pending Deletion → (7 days pass) → Deleted</li>
+              <li>Invalid: Locked → (user login attempt) → Locked (stays locked)</li>
+            </ul>
+
+            <p><strong>Example: Shopping Cart States</strong></p>
+            <ul>
+              <li>Empty → (add item) → Has Items</li>
+              <li>Has Items → (remove last item) → Empty</li>
+              <li>Has Items → (checkout) → Checked Out</li>
+              <li>Checked Out → (payment success) → Order Placed</li>
+              <li>Checked Out → (payment failed) → Has Items</li>
+              <li>Invalid: Empty → (checkout) → Should show error, stay Empty</li>
+            </ul>
+
+            <p><strong>Example: Order Processing</strong></p>
+            <ul>
+              <li>Pending → (payment received) → Processing → (shipped) → Shipped → (delivered) → Completed</li>
+              <li>Pending → (payment failed after 24h) → Cancelled</li>
+              <li>Processing → (out of stock) → Cancelled</li>
+              <li>Invalid: Completed → (cancel) → Should be blocked</li>
+            </ul>
+
+            <p><strong>How to apply it:</strong></p>
+            <ul>
+              <li>1. Identify all possible states the system can be in</li>
+              <li>2. List all events/actions that trigger transitions</li>
+              <li>3. Create a state transition diagram or table</li>
+              <li>4. Test all valid transitions (expected paths)</li>
+              <li>5. Test invalid transitions (should be rejected)</li>
+              <li>6. Test sequences of transitions (paths through multiple states)</li>
+              <li>7. Verify the system is in the correct state after each transition</li>
+            </ul>
+
+            <p><strong>Coverage Criteria:</strong></p>
+            <ul>
+              <li><strong>All States:</strong> Visit every state at least once</li>
+              <li><strong>All Transitions:</strong> Execute every valid transition at least once</li>
+              <li><strong>All Transition Pairs:</strong> Test sequences of two consecutive transitions</li>
+              <li><strong>Invalid Transitions:</strong> Attempt transitions that should be blocked</li>
+            </ul>
+
+            <p><strong>Common Bugs Found:</strong></p>
+            <ul>
+              <li>Transitions allowed when they shouldn't be (missing validation)</li>
+              <li>System stuck in a state with no way out (missing transitions)</li>
+              <li>Wrong state after transition (incorrect state assignment)</li>
+              <li>Data inconsistency after state change (side effects not applied)</li>
+              <li>Race conditions in concurrent state changes</li>
+            </ul>
+
+            <p><strong>Why it works:</strong> Many systems have implicit state machines in their logic. Explicitly modeling and testing these states ensures the system behaves correctly as it moves through different states, handles invalid transitions properly, and maintains data consistency throughout the state lifecycle.</p>
+
+            <p><strong>Pro Tip:</strong> Draw a state diagram first! Visual representation makes it easier to spot missing transitions, unreachable states, and edge cases. Test not just individual transitions, but also paths through multiple states.</p>
           </div>
 
           <div class="technique-card">
             <h4>📋 Decision Table Testing</h4>
-            <p><strong>What it is:</strong> Creates a table of conditions and actions to test all logical combinations systematically.</p>
-            <p><strong>When to use:</strong> When multiple conditions affect the outcome, especially with complex business rules.</p>
-            <p><strong>Example:</strong> Login functionality with three conditions:</p>
+            <p><strong>What it is:</strong> Creates a table of conditions (inputs) and actions (outputs) to systematically test all logical combinations. Each column represents a unique test case covering a specific combination of conditions.</p>
+
+            <p><strong>Structure of a Decision Table:</strong></p>
+            <ul>
+              <li><strong>Conditions (Input rows):</strong> Boolean or enumerated factors that influence the outcome</li>
+              <li><strong>Actions (Output rows):</strong> Results or behaviors that occur for each combination</li>
+              <li><strong>Rules (Columns):</strong> Each column is a test case with specific condition values and expected actions</li>
+            </ul>
+
+            <p><strong>When to use:</strong> When multiple conditions affect the outcome, especially with complex business rules, eligibility checks, discount calculations, access control, or any logic with AND/OR conditions.</p>
+
+            <p><strong>Example: Login functionality with three conditions</strong></p>
             <table class="decision-table">
               <thead>
                 <tr>
@@ -741,24 +871,174 @@
                 </tr>
               </tbody>
             </table>
-            <p><strong>Why it works:</strong> Ensures no combination of conditions is missed and makes complex logic testable.</p>
+
+            <p><strong>Formula:</strong> For N conditions with 2 values each (Y/N), you get 2^N combinations. Example: 3 conditions = 2³ = 8 test cases.</p>
+
+            <p><strong>Additional Examples:</strong></p>
+
+            <p><strong>Discount Eligibility:</strong> Member status (Y/N), Purchase > $100 (Y/N), First Purchase (Y/N) → Different discount percentages</p>
+
+            <p><strong>File Upload Validation:</strong> Valid type (Y/N), Size OK (Y/N), Virus-free (Y/N) → Accept/Reject with specific error messages</p>
+
+            <p><strong>Shipping Calculator:</strong> Weight class (Light/Medium/Heavy), Destination (Domestic/International), Express (Y/N) → Different shipping costs</p>
+
+            <p><strong>How to apply it:</strong></p>
+            <ul>
+              <li>1. Identify all conditions that influence the decision</li>
+              <li>2. Determine possible values for each condition (usually Y/N or enumerated values)</li>
+              <li>3. Calculate total combinations: 2^N for binary conditions</li>
+              <li>4. Create table with all combinations (each column = one test case)</li>
+              <li>5. For each combination, determine the expected action/outcome</li>
+              <li>6. Convert each column into a test case</li>
+              <li>7. Execute tests and verify actual results match expected actions</li>
+            </ul>
+
+            <p><strong>Optimization Techniques:</strong></p>
+            <ul>
+              <li><strong>Collapse equivalent rules:</strong> If multiple columns have same outcome, they can sometimes be combined</li>
+              <li><strong>Don't care values:</strong> Use "-" when a condition doesn't affect the outcome for certain combinations</li>
+              <li><strong>Limited-entry tables:</strong> Conditions are Y/N only (easier to create)</li>
+              <li><strong>Extended-entry tables:</strong> Conditions can have multiple values (more complex but flexible)</li>
+            </ul>
+
+            <p><strong>Common Use Cases:</strong></p>
+            <ul>
+              <li>Business rule validation (discount eligibility, loan approval)</li>
+              <li>Access control (role + permission + resource type → allowed/denied)</li>
+              <li>Form validation (multiple required fields + format checks)</li>
+              <li>Pricing logic (product type + quantity + customer tier → price)</li>
+              <li>Notification triggers (event type + user preference + time → send/don't send)</li>
+            </ul>
+
+            <p><strong>Pitfalls to Avoid:</strong></p>
+            <ul>
+              <li>Too many conditions → combinatorial explosion (8 conditions = 256 test cases!)</li>
+              <li>Missing combinations → incomplete table leads to missed bugs</li>
+              <li>Incorrect expected outcomes → test passes but requirement is wrong</li>
+              <li>Not considering impossible combinations → waste testing effort on scenarios that can't occur</li>
+            </ul>
+
+            <p><strong>Why it works:</strong> Complex business logic often involves multiple interacting conditions. Decision tables ensure no combination of conditions is missed and make complex logic testable and traceable. They also serve as excellent documentation of business rules.</p>
+
+            <p><strong>Pro Tip:</strong> Start with exhaustive combinations, then optimize by removing impossible or redundant cases. Decision tables work great alongside EP and BVA - use decision tables for the logical combinations, then apply EP/BVA to the actual values within each condition.</p>
           </div>
 
           <div class="technique-card">
             <h4>💡 Error Guessing</h4>
-            <p><strong>What it is:</strong> Uses experience and intuition to predict where errors might occur.</p>
-            <p><strong>When to use:</strong> After systematic testing, to find edge cases and unusual scenarios.</p>
-            <p><strong>Common targets:</strong>
-              <ul>
-                <li>Empty/null values</li>
-                <li>Special characters and emojis</li>
-                <li>Very long inputs</li>
-                <li>SQL injection attempts</li>
-                <li>Concurrent operations</li>
-                <li>Network interruptions</li>
-              </ul>
-            </p>
-            <p><strong>Why it works:</strong> Leverages tester knowledge to find bugs that systematic approaches might miss.</p>
+            <p><strong>What it is:</strong> An experience-based technique where testers use their knowledge, intuition, and past bug patterns to predict where errors might occur. Unlike systematic techniques, this relies on the tester's expertise and creative thinking.</p>
+
+            <p><strong>Core Philosophy:</strong> Experienced testers develop a "nose for bugs" - they recognize patterns and antipatterns that frequently cause problems. This technique complements systematic approaches by finding the unusual, edge, and adversarial cases.</p>
+
+            <p><strong>When to use:</strong> After systematic testing (EP, BVA, Decision Tables) to supplement coverage. Best used by experienced testers who understand common failure patterns. Also crucial for security testing and adversarial scenarios.</p>
+
+            <p><strong>Common Attack Vectors & Targets:</strong></p>
+
+            <p><strong>1. Input Validation & Injection:</strong></p>
+            <ul>
+              <li><strong>SQL Injection:</strong> ' OR '1'='1, '; DROP TABLE users;--, admin'--</li>
+              <li><strong>XSS attempts:</strong> &lt;script&gt;alert('XSS')&lt;/script&gt;, &lt;img src=x onerror=alert(1)&gt;</li>
+              <li><strong>Path traversal:</strong> ../../../etc/passwd, ..\\..\\windows\\system32</li>
+              <li><strong>Command injection:</strong> ; ls -la, | cat /etc/passwd</li>
+              <li><strong>LDAP injection:</strong> *)(uid=*))(|(uid=*</li>
+            </ul>
+
+            <p><strong>2. Boundary & Extreme Values:</strong></p>
+            <ul>
+              <li><strong>Empty/null:</strong> "", null, undefined, None</li>
+              <li><strong>Whitespace variants:</strong> " ", "\t", "\n", "\r\n", multiple spaces</li>
+              <li><strong>Zero:</strong> 0, 0.0, -0, +0</li>
+              <li><strong>Negative numbers:</strong> -1, -999999, MIN_INT</li>
+              <li><strong>Very large numbers:</strong> MAX_INT, 999999999999, Infinity</li>
+              <li><strong>Very long strings:</strong> 10,000 character inputs, 1MB text fields</li>
+              <li><strong>Very small values:</strong> 0.0000001, scientific notation</li>
+            </ul>
+
+            <p><strong>3. Special Characters & Encoding:</strong></p>
+            <ul>
+              <li><strong>Unicode characters:</strong> 你好, مرحبا, Здравствуй</li>
+              <li><strong>Emojis:</strong> 😀🎉💻, emoji-only input</li>
+              <li><strong>Special symbols:</strong> @#$%^&*()_+-=[]{}|;':",.<>?/\`~</li>
+              <li><strong>Control characters:</strong> \x00 (null byte), \x08 (backspace), \x7F (delete)</li>
+              <li><strong>Right-to-left marks:</strong> ‏‎ (RTL override)</li>
+              <li><strong>Zero-width characters:</strong> ​ (zero-width space)</li>
+            </ul>
+
+            <p><strong>4. Format & Structure:</strong></p>
+            <ul>
+              <li><strong>Invalid emails:</strong> user@, @domain.com, user@@domain.com, user@domain</li>
+              <li><strong>Invalid URLs:</strong> javascript:alert(1), file:///, http://</li>
+              <li><strong>Invalid dates:</strong> 2024-02-30, 13/13/2024, 1900-01-01</li>
+              <li><strong>Mismatched types:</strong> Strings in number fields, objects where strings expected</li>
+            </ul>
+
+            <p><strong>5. State & Timing Issues:</strong></p>
+            <ul>
+              <li><strong>Race conditions:</strong> Rapid clicking, concurrent requests to same resource</li>
+              <li><strong>Session issues:</strong> Expired tokens, logged out mid-operation</li>
+              <li><strong>Double submissions:</strong> Submit form twice quickly</li>
+              <li><strong>Stale data:</strong> Using cached data after updates</li>
+              <li><strong>Timeout scenarios:</strong> Slow network, interrupted operations</li>
+            </ul>
+
+            <p><strong>6. Browser & Environment:</strong></p>
+            <ul>
+              <li><strong>Browser quirks:</strong> Different behavior in Chrome vs Firefox vs Safari</li>
+              <li><strong>Cache issues:</strong> Stale cached resources, cache poisoning</li>
+              <li><strong>Cookie manipulation:</strong> Deleted cookies, modified session data</li>
+              <li><strong>JavaScript disabled:</strong> Does the app degrade gracefully?</li>
+              <li><strong>Network conditions:</strong> Offline mode, slow 3G, packet loss</li>
+            </ul>
+
+            <p><strong>7. Business Logic Exploitation:</strong></p>
+            <ul>
+              <li><strong>Negative quantities:</strong> -1 items in cart → refund?</li>
+              <li><strong>Discount stacking:</strong> Apply same coupon multiple times</li>
+              <li><strong>Price manipulation:</strong> Change price in POST request</li>
+              <li><strong>Privilege escalation:</strong> Access admin features as regular user</li>
+              <li><strong>Order of operations:</strong> Delete account mid-checkout, change shipping after payment</li>
+            </ul>
+
+            <p><strong>Knowledge Sources for Error Guessing:</strong></p>
+            <ul>
+              <li>Past bugs in similar applications or features</li>
+              <li>OWASP Top 10 and common vulnerability lists</li>
+              <li>Bug bounty reports and CVE databases</li>
+              <li>Developer mistakes you've observed</li>
+              <li>Edge cases from support tickets</li>
+              <li>Technology-specific quirks (e.g., JavaScript type coercion)</li>
+            </ul>
+
+            <p><strong>How to apply it:</strong></p>
+            <ul>
+              <li>1. Review the feature and think "How would I break this?"</li>
+              <li>2. Consider common bug patterns you've seen before</li>
+              <li>3. Think adversarially - what would a malicious user try?</li>
+              <li>4. Look for assumptions in the code/requirements</li>
+              <li>5. Test the "weird" inputs that systematic techniques don't cover</li>
+              <li>6. Document successful attacks for future reference</li>
+              <li>7. Build a personal checklist from your experience</li>
+            </ul>
+
+            <p><strong>Documenting Error Guessing:</strong></p>
+            <ul>
+              <li>Create checklists of common vulnerabilities for each feature type</li>
+              <li>Build test data files with malicious/edge case inputs</li>
+              <li>Maintain a bug pattern library from previous projects</li>
+              <li>Share findings with team to build collective knowledge</li>
+            </ul>
+
+            <p><strong>Limitations:</strong></p>
+            <ul>
+              <li>Not systematic - coverage is unpredictable</li>
+              <li>Quality depends heavily on tester experience</li>
+              <li>Hard to measure completeness</li>
+              <li>May miss bugs that don't fit expected patterns</li>
+              <li>Results vary between different testers</li>
+            </ul>
+
+            <p><strong>Why it works:</strong> Systematic techniques are excellent but predictable. Attackers and real users don't follow test plans - they do unexpected things. Error guessing leverages human creativity and pattern recognition to find the bugs that fall through the cracks of formal techniques. It's especially valuable for security testing and finding subtle business logic flaws.</p>
+
+            <p><strong>Pro Tip:</strong> Keep a "bug diary" of interesting bugs you find. Over time, patterns emerge. Also, review security advisories and CVEs for your technology stack - they're goldmines of error guessing ideas. Make error guessing systematic by building checklists, but stay creative!</p>
           </div>
 
           <div class="best-practices">

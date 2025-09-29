@@ -257,11 +257,11 @@ export class HeaderComponent implements OnDestroy, OnInit {
       background: #000;
     `;
 
-    // Create the guide panel (20% width, left side)
+    // Create the guide panel (25% width, left side)
     const guidePanel = document.createElement('div');
     guidePanel.id = 'guide-panel';
     guidePanel.style.cssText = `
-      width: 20%;
+      width: 25%;
       height: 100%;
       background: white;
       border-right: 2px solid #007bff;
@@ -360,11 +360,11 @@ export class HeaderComponent implements OnDestroy, OnInit {
         guideContent.innerHTML = '<p style="color: red; padding: 20px;">Failed to load testing guide content.</p>';
       });
 
-    // Create the application panel (80% width, right side)
+    // Create the application panel (75% width, right side)
     const appPanel = document.createElement('div');
     appPanel.id = 'app-panel';
     appPanel.style.cssText = `
-      width: 80%;
+      width: 75%;
       height: 100%;
       background: white;
       position: relative;
@@ -466,11 +466,11 @@ export class HeaderComponent implements OnDestroy, OnInit {
     // Create resize handle
     const resizeHandle = document.createElement('div');
     resizeHandle.style.cssText = `
-      position: absolute;
+      position: fixed;
       top: 0;
-      right: -5px;
+      left: calc(25% - 5px);
       width: 10px;
-      height: 100%;
+      height: 100vh;
       background: #007bff;
       cursor: ew-resize;
       z-index: 10002;
@@ -549,6 +549,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
         if (guidePanel && appPanel) {
           guidePanel.style.width = percentage + '%';
           appPanel.style.width = (100 - percentage) + '%';
+          resizeHandle.style.left = `calc(${percentage}% - 5px)`;
         }
       });
     };
@@ -599,6 +600,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
 
       guidePanel.style.width = percentage + '%';
       appPanel.style.width = (100 - percentage) + '%';
+      resizeHandle.style.left = `calc(${percentage}% - 5px)`;
 
       e.preventDefault();
     };
@@ -616,7 +618,6 @@ export class HeaderComponent implements OnDestroy, OnInit {
 
     // Assemble the split screen WITHOUT iframes
     guidePanel.appendChild(guideContent);
-    guidePanel.appendChild(resizeHandle);
     appPanel.appendChild(appContent); // Use div content instead of iframe
     splitContainer.appendChild(guidePanel);
     splitContainer.appendChild(appPanel);
@@ -635,6 +636,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
     document.body.innerHTML = '';
     document.body.style.cssText = 'margin: 0; padding: 0; overflow: hidden;';
     document.body.appendChild(splitContainer);
+    document.body.appendChild(resizeHandle); // Add resize handle to body (fixed position)
     document.body.appendChild(closeButton); // Add close button to body
 
     // Handle escape key to close
@@ -689,11 +691,11 @@ export class HeaderComponent implements OnDestroy, OnInit {
       background: #000;
     `;
 
-    // Create the guide panel (20% width, left side) - red theme
+    // Create the guide panel (25% width, left side) - red theme
     const guidePanel = document.createElement('div');
     guidePanel.id = 'bug-guide-panel';
     guidePanel.style.cssText = `
-      width: 20%;
+      width: 25%;
       height: 100%;
       background: white;
       border-right: 2px solid #dc3545;
@@ -790,11 +792,11 @@ export class HeaderComponent implements OnDestroy, OnInit {
         guideContent.innerHTML = '<p style="color: red; padding: 20px;">Failed to load bug hunting guide content.</p>';
       });
 
-    // Create the application panel (80% width, right side)
+    // Create the application panel (75% width, right side)
     const appPanel = document.createElement('div');
     appPanel.id = 'bug-app-panel';
     appPanel.style.cssText = `
-      width: 80%;
+      width: 75%;
       height: 100%;
       background: white;
       position: relative;
@@ -923,11 +925,11 @@ export class HeaderComponent implements OnDestroy, OnInit {
     // Create resize handle - red theme
     const resizeHandle = document.createElement('div');
     resizeHandle.style.cssText = `
-      position: absolute;
+      position: fixed;
       top: 0;
-      right: -5px;
+      left: calc(25% - 5px);
       width: 10px;
-      height: 100%;
+      height: 100vh;
       background: #dc3545;
       cursor: ew-resize;
       z-index: 10002;
@@ -1001,6 +1003,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
         if (guidePanel && appPanel) {
           guidePanel.style.width = percentage + '%';
           appPanel.style.width = (100 - percentage) + '%';
+          resizeHandle.style.left = `calc(${percentage}% - 5px)`;
         }
       });
     };
@@ -1031,7 +1034,6 @@ export class HeaderComponent implements OnDestroy, OnInit {
 
     // Assemble the split screen WITHOUT iframes for guide
     guidePanel.appendChild(guideContent);
-    guidePanel.appendChild(resizeHandle);
     appPanel.appendChild(appContent); // Use content container
     splitContainer.appendChild(guidePanel);
     splitContainer.appendChild(appPanel);
@@ -1050,6 +1052,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
     document.body.innerHTML = '';
     document.body.style.cssText = 'margin: 0; padding: 0; overflow: hidden;';
     document.body.appendChild(splitContainer);
+    document.body.appendChild(resizeHandle); // Add resize handle to body (fixed position)
     document.body.appendChild(closeButton); // Add close button to body
 
     // Handle escape key to close
