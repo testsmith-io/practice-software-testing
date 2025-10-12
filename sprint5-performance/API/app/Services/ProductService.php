@@ -62,6 +62,11 @@ class ProductService
                 Log::debug("Filtering by is_rental", ['is_rental' => $filters['is_rental']]);
             }
 
+            if (!empty($filters['eco_friendly'])) {
+                Log::debug("Filtering by eco_friendly", ['eco_friendly' => $filters['eco_friendly']]);
+                $query->withFilters($filters);
+            }
+
             $results = $query->filter()->paginate(9);
             Log::debug("Product query executed", ['result_count' => $results->total()]);
 

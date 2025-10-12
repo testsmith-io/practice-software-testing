@@ -31,7 +31,8 @@ class UpdateProduct extends BaseFormRequest
             'category_id' => '',
             'brand_id' => '',
             'is_location_offer' => 'boolean',
-            'is_rental' => 'boolean'
+            'is_rental' => 'boolean',
+            'co2_rating' => 'nullable|in:A,B,C,D,E'
         ];
     }
 }

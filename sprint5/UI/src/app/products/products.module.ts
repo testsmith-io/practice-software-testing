@@ -14,6 +14,7 @@ import {
   faArrowsLeftRight,
   faArrowsUpDown,
   faFilter,
+  faLeaf,
   faMinus,
   faPlus,
   faSearch,
@@ -41,6 +42,6 @@ import {
 })
 export class ProductsModule {
   constructor(library: FaIconLibrary) {
-    library.addIcons(faFilter, faArrowsLeftRight, faArrowsUpDown, faSearch, faMinus, faPlus, faShoppingCart, faStar);
+    library.addIcons(faFilter, faArrowsLeftRight, faArrowsUpDown, faSearch, faMinus, faPlus, faShoppingCart, faStar, faLeaf);
   }
 }

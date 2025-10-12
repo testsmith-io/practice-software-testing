@@ -14,6 +14,10 @@
             <option value="name,asc">Name (Z - A)</option>
             <option value="price,asc">Price (High - Low)</option>
             <option value="price,desc">Price (Low - High)</option>
+            @if (isCo2ScaleEnabled()) {
+              <option value="co2_rating,asc">CO₂ Rating (Best First)</option>
+              <option value="co2_rating,desc">CO₂ Rating (Worst First)</option>
+            }
           </select>
         </div>
       </form>
@@ -53,6 +57,18 @@
         </div>
       }
 
+      <div class="py-2"></div>
+
+      @if (isCo2ScaleEnabled()) {
+        <h4>Sustainability:</h4>
+        <div class="checkbox">
+          <label><input type="checkbox" class="icheck" name="eco_friendly" data-test="eco-friendly-filter"
+                        (change)="filterByEcoFriendly($event)"/>
+            Show only eco-friendly products
+          </label>
+        </div>
+      }
+
     </div>
     <div class="col-md-9">
       <a class="btn btn-secondary d-block d-md-none btn-block mb-3" data-bs-toggle="collapse" data-test="filters"
@@ -68,12 +84,28 @@
               <div class="card-img-wrapper">
                 <img class="card-img-top"
                   src="assets/img/products/{{item.product_image.file_name}}">
+                @if (item.is_eco_friendly && isEcoBadgeEnabled()) {
+                  <span class="eco-badge position-absolute top-0 end-0 m-2" data-test="eco-badge">
+                    ECO
+                  </span>
+                }
                 </div>
                 <div class="card-body">
                   <h5 data-test="product-name" class="card-title"
                     [ngClass]="{'text-nowrap': browserDetect.isFirefox(), 'text-end': Math.floor(Math.random() * 100) % 2}">
                   {{item.name}}
                 </h5>
+                @if (item.co2_rating && isCo2ScaleEnabled()) {
+                  <div class="co2-rating-scale"
+                       title="Environmental impact rating (A=lowest, E=highest)"
+                       data-test="co2-rating-badge">
+                    <span class="co2-letter" [class.active]="item.co2_rating === 'A'" [class.rating-a]="item.co2_rating === 'A'">A</span>
+                    <span class="co2-letter" [class.active]="item.co2_rating === 'B'" [class.rating-b]="item.co2_rating === 'B'">B</span>
+                    <span class="co2-letter" [class.active]="item.co2_rating === 'C'" [class.rating-c]="item.co2_rating === 'C'">C</span>
+                    <span class="co2-letter" [class.active]="item.co2_rating === 'D'" [class.rating-d]="item.co2_rating === 'D'">D</span>
+                    <span class="co2-letter" [class.active]="item.co2_rating === 'E'" [class.rating-e]="item.co2_rating === 'E'">E</span>
+                  </div>
+                }
               </div>
               <div class="card-footer">
                 @if (item.stock <= 0) {

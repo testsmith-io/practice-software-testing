@@ -2,9 +2,14 @@
   <div class="row my-3" xmlns="http://www.w3.org/1999/html">
     <div class="col-md-6">
       <figure class="figure">
-        <div class="card-img-wrapper">
+        <div class="card-img-wrapper position-relative">
           <img src="assets/img/products/{{product.product_image.file_name}}" class="figure-img img-fluid"
             alt="A generic square placeholder image with rounded corners in a figure.">
+          @if (product.is_eco_friendly && isEcoBadgeEnabled()) {
+            <span class="eco-badge position-absolute top-0 end-0 m-2" data-test="eco-badge">
+              ECO
+            </span>
+          }
         </div>
         <figcaption class="figure-caption">Photo by <a target="_blank"
         href="{{product.product_image.by_url}}">{{product.product_image.by_name}}</a>
@@ -21,7 +26,19 @@
 </span>@if (product.discount_price) {
 <span
 class="badge rounded-pill bg-danger me-1">-{{discount_percentage}}%</span>
-}</p>
+}
+@if (product.co2_rating && isCo2ScaleEnabled()) {
+  <div class="co2-rating-scale d-inline-flex"
+       title="Environmental impact rating (A=lowest, E=highest)"
+       data-test="co2-rating-badge">
+    <span class="co2-letter" [class.active]="product.co2_rating === 'A'" [class.rating-a]="product.co2_rating === 'A'">A</span>
+    <span class="co2-letter" [class.active]="product.co2_rating === 'B'" [class.rating-b]="product.co2_rating === 'B'">B</span>
+    <span class="co2-letter" [class.active]="product.co2_rating === 'C'" [class.rating-c]="product.co2_rating === 'C'">C</span>
+    <span class="co2-letter" [class.active]="product.co2_rating === 'D'" [class.rating-d]="product.co2_rating === 'D'">D</span>
+    <span class="co2-letter" [class.active]="product.co2_rating === 'E'" [class.rating-e]="product.co2_rating === 'E'">E</span>
+  </div>
+}
+</p>
 <span [ngClass]="{'discounted' : product.discount_price}">$<span
 aria-label="unit-price" data-test="unit-price">{{product.price.toFixed(2)}}</span></span>
 @if (product.discount_price) {

@@ -32,7 +32,9 @@ class StoreProduct extends BaseFormRequest
             'brand_id' => 'required',
             'is_location_offer' => 'required|boolean',
             'is_rental' => 'required|boolean',
-            'product_image_id' => 'required|string'
+            'product_image_id' => 'required|string',
+            'stock' => 'nullable|integer|min:0',
+            'co2_rating' => 'nullable|string|in:A,B,C,D,E'
         ];
     }
 }

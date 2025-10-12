@@ -21,6 +21,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
  *         @OA\Property(property="product_image_id", type="string", example=1),
  *         @OA\Property(property="is_location_offer", type="boolean", example=1),
  *         @OA\Property(property="is_rental", type="boolean", example=0),
+ *         @OA\Property(property="co2_rating", type="string", enum={"A", "B", "C", "D", "E"}, example="B"),
  *     }
  * )
  *
@@ -36,6 +37,8 @@ use Tymon\JWTAuth\Exceptions\JWTException;
  *         @OA\Property(property="is_location_offer", type="boolean", example=1),
  *         @OA\Property(property="is_rental", type="boolean", example=0),
  *         @OA\Property(property="in_stock", type="boolean", example=0),
+ *         @OA\Property(property="co2_rating", type="string", enum={"A", "B", "C", "D", "E"}, example="B"),
+ *         @OA\Property(property="is_eco_friendly", type="boolean", example=true),
  *         @OA\Property(property="brand", ref="#/components/schemas/BrandResponse"),
  *         @OA\Property(property="category", ref="#/components/schemas/CategoryResponse"),
  *         @OA\Property(property="product_image", ref="#/components/schemas/ImageResponse")
@@ -47,9 +50,9 @@ class Product extends BaseModel
     use HasFactory, FilterQueryString, HasUlids;
 
     protected $table = 'products';
-    protected $fillable = ['name', 'description', 'category_id', 'brand_id', 'price', 'product_image_id', 'is_location_offer', 'is_rental', 'stock'];
+    protected $fillable = ['name', 'description', 'category_id', 'brand_id', 'price', 'product_image_id', 'is_location_offer', 'is_rental', 'stock', 'co2_rating'];
     protected $hidden = ['brand_id', 'category_id', 'product_image_id', 'stock', 'created_at', 'updated_at'];
-    protected $appends = ['in_stock'];
+    protected $appends = ['in_stock', 'is_eco_friendly'];
     protected $filters = ['between', 'sort'];
 
     protected $casts = array(
@@ -83,6 +86,26 @@ class Product extends BaseModel
         } catch (JWTException $e) {
         }
         return $this->stock > 0;
+    }
+
+    public function getIsEcoFriendlyAttribute()
+    {
+        return in_array(strtoupper($this->co2_rating ?? ''), ['A', 'B']);
+    }
+
+    public function scopeEcoFriendly($query)
+    {
+        return $query->whereIn('co2_rating', ['A', 'B', 'a', 'b']);
+    }
+
+    public function scopeWithFilters($query, array $filters)
+    {
+        return $query->when($filters['eco_friendly'] ?? null, function ($q, $ecoFriendly) {
+            if ($ecoFriendly == '1' || $ecoFriendly === true || $ecoFriendly === 'true') {
+                return $q->ecoFriendly();
+            }
+            return $q;
+        });
     }
 
 }

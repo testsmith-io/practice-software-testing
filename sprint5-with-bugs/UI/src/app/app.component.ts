@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {Spinkit} from "ng-http-loader";
-import {faShoppingCart} from '@fortawesome/free-solid-svg-icons';
+import {faShoppingCart, faLeaf} from '@fortawesome/free-solid-svg-icons';
 import {HeaderComponent} from "./header/header.component";
 import {FaIconLibrary} from "@fortawesome/angular-fontawesome";
 import {FooterComponent} from "./footer/footer.component";
@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
   title = 'Toolshop';
 
   constructor() {
-    this.library.addIcons(faShoppingCart);
+    this.library.addIcons(faShoppingCart, faLeaf);
   }
 
   ngOnInit(): void {

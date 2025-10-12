@@ -119,7 +119,9 @@
         "name-asc": "Naam (A - Z)",
         "name-desc": "Naam (Z - A)",
         "price-desc": "Prijs (Hoog - Laag)",
-        "price-asc": "Prijs (Laag - Hoog)"
+        "price-asc": "Prijs (Laag - Hoog)",
+        "co2-asc": "CO₂-Waardering (A - E)",
+        "co2-desc": "CO₂-Waardering (E - A)"
       },
       "price-range": "Prijsklasse",
       "search": "Zoeken",
@@ -128,6 +130,10 @@
       "category": "Categorie",
       "brands": "Merken",
       "by-brand": "Op merk",
+      "sustainability": "Duurzaamheid",
+      "eco-friendly": "Milieuvriendelijke Producten",
+      "show-eco-friendly": "Alleen milieuvriendelijke producten tonen",
+      "co2-tooltip": "A = meest milieuvriendelijk, E = hogere milieu-impact",
       "no-results": "Geen producten gevonden.",
       "no-stock": "Niet op voorraad"
     },

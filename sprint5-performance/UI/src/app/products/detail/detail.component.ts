@@ -117,4 +117,17 @@ export class DetailComponent implements OnInit {
     this.titleService.setTitle(`${productName} - Practice Software Testing - Toolshop - v5.0`);
   }
 
+  isCo2ScaleEnabled(): boolean {
+    const setting = window.localStorage.getItem('CO2_SCALE_ENABLED');
+    return setting === null || setting === 'true';
+  }
+
+  isEcoBadgeEnabled(): boolean {
+    if (!this.isCo2ScaleEnabled()) {
+      return false;
+    }
+    const setting = window.localStorage.getItem('ECO_BADGE_ENABLED');
+    return setting === null || setting === 'true';
+  }
+
 }
