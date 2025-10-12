@@ -10277,7 +10277,7 @@
                                 <span
                                     class="badge rounded-pill bg-warning me-1">-{{$invoiceline['discount_percentage']}}%</span>
                             @endif @if (isset($invoiceline['product']['co2_rating']))
-                                <span class="badge rounded-pill bg-success me-1">CO₂: {{$invoiceline['product']['co2_rating']}}</span>
+                                <span class="badge rounded-pill bg-success me-1">CO2: {{$invoiceline['product']['co2_rating']}}</span>
                             @endif
                             @if ($invoiceline['discount_percentage'] || isset($invoiceline['product']['co2_rating']))
                                 <br/>
