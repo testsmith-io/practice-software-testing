@@ -52,14 +52,31 @@ export class ProductsAddEditComponent implements OnInit {
       id: ['', []],
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      stock: ['', [Validators.required]],
+      stock: ['', []],
       price: ['', [Validators.required]],
       brand_id: ['', [Validators.required]],
       category_id: ['', [Validators.required]],
       product_image_id: ['', [Validators.required]],
       is_location_offer: ['', []],
-      is_rental: ['', []]
+      is_rental: ['', []],
+      co2_rating: ['', []]
     });
+
+    // Add conditional validation for stock based on is_rental
+    this.form.get('is_rental')?.valueChanges.subscribe(isRental => {
+      const stockControl = this.form.get('stock');
+      if (isRental) {
+        stockControl?.clearValidators();
+      } else {
+        stockControl?.setValidators([Validators.required]);
+      }
+      stockControl?.updateValueAndValidity();
+    });
+
+    // Set initial stock validation for add mode (non-rental by default)
+    if (this.isAddMode) {
+      this.form.get('stock')?.setValidators([Validators.required]);
+    }
 
     this.brandService.getBrands()
       .pipe(first())
@@ -77,10 +94,33 @@ export class ProductsAddEditComponent implements OnInit {
           this.productService.getById(this.id)
             .pipe(first())
             .subscribe(x => {
-              this.form.patchValue(x)
-              this.selectedImage = this.images.find((el: Image) => {
-                return el?.id == x.product_image_id;
+              this.form.patchValue({
+                id: x.id,
+                name: x.name,
+                description: x.description,
+                stock: x.stock,
+                price: x.price,
+                brand_id: x.brand?.id || x.brand_id,
+                category_id: x.category?.id || x.category_id,
+                product_image_id: x.product_image?.id || x.product_image_id,
+                is_location_offer: x.is_location_offer,
+                is_rental: x.is_rental,
+                co2_rating: x.co2_rating
               });
+
+              this.selectedImageId = x.product_image?.id || x.product_image_id;
+              this.selectedImage = this.images.find((el: Image) => {
+                return el?.id == this.selectedImageId;
+              });
+
+              // Set initial stock validation based on is_rental value
+              const stockControl = this.form.get('stock');
+              if (x.is_rental) {
+                stockControl?.clearValidators();
+              } else {
+                stockControl?.setValidators([Validators.required]);
+              }
+              stockControl?.updateValueAndValidity();
             });
         }
       });
@@ -113,7 +153,13 @@ export class ProductsAddEditComponent implements OnInit {
       this.form.get('is_location_offer')?.setValue(false);
     }
 
-    this.productService.create(this.form.value)
+    // For rental products, allow stock to be null
+    const formValue = {...this.form.value};
+    if (formValue.is_rental && !formValue.stock) {
+      formValue.stock = null;
+    }
+
+    this.productService.create(formValue)
       .pipe(first())
       .subscribe({
         next: () => {
@@ -128,7 +174,13 @@ export class ProductsAddEditComponent implements OnInit {
   }
 
   private updateProduct() {
-    this.productService.update(this.id, this.form.value)
+    // For rental products, allow stock to be null
+    const formValue = {...this.form.value};
+    if (formValue.is_rental && !formValue.stock) {
+      formValue.stock = null;
+    }
+
+    this.productService.update(this.id, formValue)
       .pipe(first())
       .subscribe({
         next: () => {

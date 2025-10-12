@@ -14,7 +14,12 @@
       </figure>
     </div>
     <div class="col-md-6">
-      <h1 data-test="product-name">{{ product.name }}</h1>
+      <h1 data-test="product-name">
+        {{ product.name }}
+        @if (product.is_eco_friendly && isEcoBadgeEnabled()) {
+          <span class="eco-badge ms-2" data-test="eco-badge"><fa-icon [icon]="['fas', 'leaf']"></fa-icon> ECO</span>
+        }
+      </h1>
       <p><span aria-label="category"
                class="badge rounded-pill bg-secondary me-1">{{ product.category.name }}</span><span
         aria-label="brand" class="badge rounded-pill bg-secondary me-1">{{ product.brand.name }}
@@ -22,26 +27,39 @@
         <span
           class="badge rounded-pill bg-danger me-1">-{{ discount_percentage }}%</span>
       }</p>
-      <span [ngClass]="{'discounted' : product.discount_price}">$<span
-        aria-label="unit-price" data-test="unit-price">{{ product.price.toFixed(2) }}</span></span>
-      @if (product.discount_price) {
-        <span data-test="offer-price"
-              class="ms-1">$<span id="discount-price">{{ product.discount_price }}</span></span>
-      }
-      @if (product.is_rental) {
-        <span
-          class="ms-1">{{ t('pages.product-detail.per-hour') }}</span>
-      }
-      @if (product.is_rental) {
-        <small
-          class="ms-1"> / ({{ t('pages.product-detail.total') }} $@if (!product.discount_price) {
-          <span
-            id="total-price">{{ (product.price * quantity).toFixed(2) }}</span>
+      <div class="price-section">
+        <span [ngClass]="{'discounted' : product.discount_price}">$<span
+          aria-label="unit-price" data-test="unit-price">{{ product.price.toFixed(2) }}</span></span>
+        @if (product.discount_price) {
+          <span data-test="offer-price"
+                class="ms-1">$<span id="discount-price">{{ product.discount_price }}</span></span>
         }
-          @if (product.discount_price) {
+        @if (product.is_rental) {
+          <span
+            class="ms-1">{{ t('pages.product-detail.per-hour') }}</span>
+        }
+        @if (product.is_rental) {
+          <small
+            class="ms-1"> / ({{ t('pages.product-detail.total') }} $@if (!product.discount_price) {
             <span
-              id="total-price">{{ (product.discount_price * quantity).toFixed(2) }}</span>
-          })</small>
+              id="total-price">{{ (product.price * quantity).toFixed(2) }}</span>
+          }
+            @if (product.discount_price) {
+              <span
+                id="total-price">{{ (product.discount_price * quantity).toFixed(2) }}</span>
+            })</small>
+        }
+      </div>
+      @if (product.co2_rating && isCo2ScaleEnabled()) {
+        <div class="co2-rating-scale mt-2"
+             [title]="t('pages.overview.co2-tooltip')"
+             data-test="co2-rating-badge">
+          <span class="co2-letter" [class.active]="product.co2_rating === 'A'" [class.rating-a]="product.co2_rating === 'A'">A</span>
+          <span class="co2-letter" [class.active]="product.co2_rating === 'B'" [class.rating-b]="product.co2_rating === 'B'">B</span>
+          <span class="co2-letter" [class.active]="product.co2_rating === 'C'" [class.rating-c]="product.co2_rating === 'C'">C</span>
+          <span class="co2-letter" [class.active]="product.co2_rating === 'D'" [class.rating-d]="product.co2_rating === 'D'">D</span>
+          <span class="co2-letter" [class.active]="product.co2_rating === 'E'" [class.rating-e]="product.co2_rating === 'E'">E</span>
+        </div>
       }
       <p data-test="product-description" id="description">
         {{ product.description }}</p>

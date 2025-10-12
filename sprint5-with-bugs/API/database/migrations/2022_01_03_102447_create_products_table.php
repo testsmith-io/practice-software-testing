@@ -22,6 +22,7 @@ class CreateProductsTable extends Migration
             $table->decimal('price', 10, 2);
             $table->boolean('is_location_offer');
             $table->boolean('is_rental');
+            $table->enum('co2_rating', ['A', 'B', 'C', 'D', 'E'])->nullable();
             $table->unsignedBigInteger('brand_id');
             $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('product_image_id')->nullable();

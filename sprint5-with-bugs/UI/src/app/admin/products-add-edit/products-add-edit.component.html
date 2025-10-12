@@ -51,8 +51,8 @@
           </div>
           @if (submitted && f['stock'].errors) {
             <div class="alert alert-danger mt-3 p-2" role="alert">
-              @if (f['price'].errors['required']) {
-                <div>Quantity is required</div>
+              @if (f['stock'].errors['required']) {
+                <div>Stock is required for non-rental products</div>
               }
             </div>
           }
@@ -104,6 +104,19 @@
               @for (category of categories; track category) {
                 <option value="{{category.id}}">{{category.name}}</option>
               }
+            </select>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <label for="co2_rating" class="col-sm-4 col-form-label">CO₂ Rating</label>
+          <div class="col-sm-8">
+            <select class="form-select" formControlName="co2_rating" data-test="co2-rating" id="co2_rating">
+              <option value="">None</option>
+              <option value="A">A (Lowest Impact)</option>
+              <option value="B">B (Low Impact)</option>
+              <option value="C">C (Moderate Impact)</option>
+              <option value="D">D (Higher Impact)</option>
+              <option value="E">E (Highest Impact)</option>
             </select>
           </div>
         </div>

@@ -32,7 +32,8 @@ class PatchProduct extends BaseFormRequest
             'brand_id' => 'sometimes',
             'is_location_offer' => 'sometimes|boolean',
             'is_rental' => 'sometimes|boolean',
-            'product_image_id' => 'sometimes|string'
+            'product_image_id' => 'sometimes|string',
+            'co2_rating' => 'sometimes|nullable|in:A,B,C,D,E'
         ];
     }
 }

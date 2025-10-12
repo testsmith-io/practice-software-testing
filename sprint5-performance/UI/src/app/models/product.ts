@@ -10,6 +10,8 @@ export interface Product {
   in_stock?: boolean;
   is_location_offer?: boolean;
   is_rental?: boolean;
+  co2_rating?: string;
+  is_eco_friendly?: boolean;
   discount_price?: number;
   product_image_id?: number;
   product_image?: Image;

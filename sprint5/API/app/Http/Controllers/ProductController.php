@@ -51,6 +51,13 @@ class ProductController extends Controller
      *          @OA\Schema(type="string")
      *      ),
      *      @OA\Parameter(
+     *          name="eco_friendly",
+     *          in="query",
+     *          description="Filter for eco-friendly products (CO₂ rating A or B)",
+     *          required=false,
+     *          @OA\Schema(type="string")
+     *      ),
+     *      @OA\Parameter(
      *          name="between",
      *          in="query",
      *          description="Can be used to define a price range, like: price,10,30",
@@ -60,7 +67,7 @@ class ProductController extends Controller
      *      @OA\Parameter(
      *          name="sort",
      *          in="query",
-     *          description="Can be used to sort based on specific column value, like: name,asc OR name,desc OR price,asc OR price,desc",
+     *          description="Can be used to sort based on specific column value, like: name,asc OR name,desc OR price,asc OR price,desc OR co2_rating,asc OR co2_rating,desc",
      *          required=false,
      *          @OA\Schema(type="string")
      *      ),

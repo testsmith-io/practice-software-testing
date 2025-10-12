@@ -48,3 +48,86 @@
   font-size: 80%;
 }
 
+.eco-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+  z-index: 10;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.eco-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.5);
+}
+
+.co2-rating-scale {
+  display: inline-flex;
+  gap: 2px;
+  padding: 4px;
+  background-color: #f3f4f6;
+  border-radius: 8px;
+  cursor: help;
+  align-items: center;
+}
+
+.co2-rating-scale::before {
+  content: 'CO₂:';
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin-right: 4px;
+}
+
+.co2-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  background-color: transparent;
+  color: #9ca3af;
+}
+
+.co2-letter.active {
+  transform: scale(1.15);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.co2-letter.active.rating-a {
+  background-color: #10b981;
+  color: white;
+}
+
+.co2-letter.active.rating-b {
+  background-color: #84cc16;
+  color: white;
+}
+
+.co2-letter.active.rating-c {
+  background-color: #facc15;
+  color: #1f2937;
+}
+
+.co2-letter.active.rating-d {
+  background-color: #f97316;
+  color: white;
+}
+
+.co2-letter.active.rating-e {
+  background-color: #ef4444;
+  color: white;
+}
+

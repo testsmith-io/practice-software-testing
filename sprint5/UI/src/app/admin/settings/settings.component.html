@@ -35,6 +35,38 @@
       </div>
     </div>
     <div class="row">
+      <div class="col-lg-6">
+        <div class="row mb-4">
+          <label for="co2Scale" class="col-sm-4 col-form-label">Display CO₂ sustainability features</label>
+          <div class="col-sm-8">
+            <input class="form-check-input d-block" formControlName="co2Scale" data-test="co2-scale-toggle"
+                   type="checkbox" value=""
+                   id="co2Scale">
+            <small class="form-text text-muted">
+              By enabling the "CO₂ sustainability features" option, products will display their CO₂ rating (A-E scale), eco-friendly filter will be available, and CO₂ sorting options will be shown. This setting is enabled by default.
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+    @if (isCo2ScaleEnabled()) {
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="row mb-4">
+            <label for="ecoBadge" class="col-sm-4 col-form-label">Display eco-friendly badge</label>
+            <div class="col-sm-8">
+              <input class="form-check-input d-block" formControlName="ecoBadge" data-test="eco-badge-toggle"
+                     type="checkbox" value=""
+                     id="ecoBadge">
+              <small class="form-text text-muted">
+                By enabling the "display eco-friendly badge" option, products with CO₂ rating A or B will display a green ECO badge. This setting is enabled by default.
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+    <div class="row">
       <div class="col-12">
         <div class="d-block">
           <button type="submit" class="btn btn-primary" data-test="settings-submit">Save</button>

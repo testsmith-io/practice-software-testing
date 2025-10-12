@@ -122,7 +122,7 @@ class ProductController extends Controller
                 $query->where('name', 'like', "%$q%");
             }
 
-            $results = $query->filter()->paginate(9);
+            $results = $query->withFilters($request->all())->filter()->paginate(9);
             Log::info('Filtered product results returned');
             return $this->preferredFormat($results);
         }
@@ -130,6 +130,7 @@ class ProductController extends Controller
         Log::debug('Fetching products without filters');
         $results = Product::where('is_rental', $request->get('is_rental') ? 1 : 0)
             ->with('product_image', 'category', 'brand')
+            ->withFilters($request->all())
             ->filter()
             ->paginate(9);
 

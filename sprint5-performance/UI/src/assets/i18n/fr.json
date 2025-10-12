@@ -119,7 +119,9 @@
         "name-asc": "Nom (A - Z)",
         "name-desc": "Nom (Z - A)",
         "price-desc": "Prix (Élevé - Bas)",
-        "price-asc": "Prix (Bas - Élevé)"
+        "price-asc": "Prix (Bas - Élevé)",
+        "co2-asc": "Évaluation CO₂ (A - E)",
+        "co2-desc": "Évaluation CO₂ (E - A)"
       },
       "price-range": "Fourchette de prix",
       "search": "Rechercher",
@@ -128,6 +130,10 @@
       "category": "Catégorie",
       "brands": "Marques",
       "by-brand": "Par marque",
+      "sustainability": "Durabilité",
+      "eco-friendly": "Produits Écologiques",
+      "show-eco-friendly": "Afficher uniquement les produits écologiques",
+      "co2-tooltip": "A = le plus respectueux de l'environnement, E = impact environnemental plus élevé",
       "no-results": "Aucun produit trouvé.",
       "no-stock": "Rupture de stock"
     },

@@ -28,6 +28,10 @@
           <option value="name,desc">{{ t('pages.overview.sort-options.name-desc') }}</option>
           <option value="price,desc">{{ t('pages.overview.sort-options.price-desc') }}</option>
           <option value="price,asc">{{ t('pages.overview.sort-options.price-asc') }}</option>
+          @if (isCo2ScaleEnabled()) {
+            <option value="co2_rating,asc">{{ t('pages.overview.sort-options.co2-asc') }}</option>
+            <option value="co2_rating,desc">{{ t('pages.overview.sort-options.co2-desc') }}</option>
+          }
         </select>
       </div>
     </form>
@@ -118,6 +122,20 @@
       }
     </fieldset>
 
+    <div class="py-2"></div>
+
+    @if (isCo2ScaleEnabled()) {
+      <h4>{{ t('pages.overview.sustainability') || 'Sustainability' }}:</h4>
+      <fieldset>
+        <legend class="visually-hidden">{{ t('pages.overview.eco-friendly') || 'Eco-Friendly Products' }}</legend>
+        <div class="checkbox">
+          <label><input #checkboxes type="checkbox" class="icheck" name="eco_friendly" data-test="eco-friendly-filter"
+                        (change)="filterByEcoFriendly($event)"/>
+            {{ t('pages.overview.show-eco-friendly') || 'Show only eco-friendly products' }}</label>
+        </div>
+      </fieldset>
+    }
+
   </div>
   <div class="col-md-9" *transloco="let t">
     @if (searchQuery) {
@@ -135,11 +153,27 @@
               <img class="card-img-top" alt="{{ item.name }}"
                    loading="lazy"
                    src="assets/img/products/{{item.product_image.file_name}}">
+              @if (item.is_eco_friendly && isEcoBadgeEnabled()) {
+                <span class="eco-badge position-absolute top-0 end-0 m-2" data-test="eco-badge">
+                  <fa-icon [icon]="['fas', 'leaf']"></fa-icon> ECO
+                </span>
+              }
             </div>
             <div class="card-body">
               <h5 data-test="product-name" class="card-title">
                 {{ item.name }}
               </h5>
+              @if (item.co2_rating && isCo2ScaleEnabled()) {
+                <div class="co2-rating-scale"
+                     [title]="t('pages.overview.co2-tooltip')"
+                     data-test="co2-rating-badge">
+                  <span class="co2-letter" [class.active]="item.co2_rating === 'A'" [class.rating-a]="item.co2_rating === 'A'">A</span>
+                  <span class="co2-letter" [class.active]="item.co2_rating === 'B'" [class.rating-b]="item.co2_rating === 'B'">B</span>
+                  <span class="co2-letter" [class.active]="item.co2_rating === 'C'" [class.rating-c]="item.co2_rating === 'C'">C</span>
+                  <span class="co2-letter" [class.active]="item.co2_rating === 'D'" [class.rating-d]="item.co2_rating === 'D'">D</span>
+                  <span class="co2-letter" [class.active]="item.co2_rating === 'E'" [class.rating-e]="item.co2_rating === 'E'">E</span>
+                </div>
+              }
             </div>
             <div class="card-footer">
               @if (!item.in_stock) {

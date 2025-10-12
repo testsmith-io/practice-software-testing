@@ -17,4 +17,6 @@ export interface Product {
   category_id?: number;
   brand: Brand;
   category: Category;
+  co2_rating?: string;
+  is_eco_friendly?: boolean;
 }
