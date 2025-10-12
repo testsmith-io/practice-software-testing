@@ -120,14 +120,16 @@ class Invoice extends BaseModel
 
     protected $filters = ['in', 'sort', 'starts_with'];
     protected $table = 'invoices';
-    protected $fillable = ['user_id', 'invoice_date', 'invoice_number', 'additional_discount_percentage', 'additional_discount_amount', 'billing_street', 'billing_city', 'billing_state', 'billing_country', 'billing_postal_code', 'subtotal', 'total'];
+    protected $fillable = ['user_id', 'invoice_date', 'invoice_number', 'additional_discount_percentage', 'additional_discount_amount', 'eco_discount_percentage', 'eco_discount_amount', 'billing_street', 'billing_city', 'billing_state', 'billing_country', 'billing_postal_code', 'subtotal', 'total'];
     protected $hidden = ['updated_at', 'document'];
 
     protected $casts = array(
         "total" => "double",
         "subtotal" => "double",
         "additional_discount_amount" => "double",
-        "additional_discount_percentage" => "double"
+        "additional_discount_percentage" => "double",
+        "eco_discount_amount" => "double",
+        "eco_discount_percentage" => "double"
     );
 
     public function user(): BelongsTo

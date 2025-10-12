@@ -120,14 +120,16 @@ class Invoice extends BaseModel
 
     protected $filters = ['in', 'sort', 'starts_with'];
     protected $table = 'invoices';
-    protected $fillable = ['user_id', 'invoice_date', 'invoice_number', 'additional_discount_percentage', 'additional_discount_amount', 'billing_street', 'billing_city', 'billing_state', 'billing_country', 'billing_postal_code', 'subtotal', 'total', 'is_guest', 'customer_email', 'customer_first_name', 'customer_last_name'];
+    protected $fillable = ['user_id', 'invoice_date', 'invoice_number', 'additional_discount_percentage', 'additional_discount_amount', 'eco_discount_percentage', 'eco_discount_amount', 'billing_street', 'billing_city', 'billing_state', 'billing_country', 'billing_postal_code', 'subtotal', 'total', 'is_guest', 'customer_email', 'customer_first_name', 'customer_last_name'];
     protected $hidden = ['updated_at', 'document'];
 
     protected $casts = array(
         "total" => "double",
         "subtotal" => "double",
         "additional_discount_amount" => "double",
-        "additional_discount_percentage" => "double"
+        "additional_discount_percentage" => "double",
+        "eco_discount_amount" => "double",
+        "eco_discount_percentage" => "double"
     );
 
     public function user(): BelongsTo
@@ -152,7 +154,7 @@ class Invoice extends BaseModel
             'invoicelines' => function ($q) {
                 $q->select('id', 'invoice_id', 'product_id', 'unit_price', 'quantity', 'discount_percentage', 'discounted_price');
             },
-            'invoicelines.product:id,name,price,product_image_id',
+            'invoicelines.product:id,name,price,product_image_id,co2_rating',
             'invoicelines.product.product_image:id,by_name,by_url,source_name,source_url,file_name,title',
             'payment:id,invoice_id,payment_method,payment_details_id,payment_details_type'
         ]);
