@@ -4,10 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Invoice\PatchInvoice;
 use App\Http\Requests\Invoice\StoreInvoice;
+use App\Mail\Checkout;
 use App\Models\PaymentzCreditCardDetails;
 use App\Services\InvoiceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -94,6 +99,14 @@ class InvoiceController extends Controller
     {
         $invoice = $this->invoiceService->createInvoice($request->except(['cart_id']), $request->input('cart_id'));
         $this->invoiceService->handlePayment($invoice->id, $request->input('payment_method'), Arr::except($request->input('payment_details'), ['@type']) ?? []);
+
+        // Send checkout email
+        if (App::environment('local')) {
+            $user = Auth::user();
+            Log::debug("Sending checkout email to: {$user->email}");
+            $invoiceWithLines = $this->invoiceService->getInvoice($invoice->id, false);
+            Mail::to([$user->email])->send(new Checkout("{$user->first_name} {$user->last_name}", $invoiceWithLines->invoicelines, $invoiceWithLines));
+        }
 
         return $this->preferredFormat($invoice, ResponseAlias::HTTP_CREATED);
     }

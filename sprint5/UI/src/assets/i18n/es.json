@@ -36,6 +36,13 @@
         "required": "El apellido es obligatorio"
       }
     },
+    "street": {
+      "label": "Calle",
+      "placeholder": "Tu calle",
+      "errors": {
+        "required": "La calle es obligatoria"
+      }
+    },
     "address": {
       "label": "Dirección",
       "placeholder": "Tu dirección",

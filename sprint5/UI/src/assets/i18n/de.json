@@ -36,6 +36,13 @@
         "required": "Nachname ist verpflichtend"
       }
     },
+    "street": {
+      "label": "Straße",
+      "placeholder": "Ihre Straße",
+      "errors": {
+        "required": "Straße ist verpflichtend"
+      }
+    },
     "address": {
       "label": "Adresse",
       "placeholder": "Ihre Adresse",

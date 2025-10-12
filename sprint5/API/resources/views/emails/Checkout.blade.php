@@ -61,7 +61,7 @@ Thanks for your order.
 | Amount       | Product         | Price | Total |
 | :--------- | :------------- | :------------- | :------------- |
 @foreach ($items as $item)
-| {{ $item['quantity'] }} | {{ $item['name'] }}{{ isset($item['product']['co2_rating']) ? ' [CO₂: ' . $item['product']['co2_rating'] . ']' : '' }} {{ ($item['is_rental'] === 1) ? " (For rent)": "" }} | $ {{ number_format($item['price'],2) }} | $ {{ number_format($item['total'],2) }} |
+| {{ $item['quantity'] }} | {{ $item['product']['name'] }}{{ isset($item['product']['co2_rating']) ? ' [CO2: ' . $item['product']['co2_rating'] . ']' : '' }} {{ ($item['product']['is_rental'] === 1) ? " (For rent)": "" }} | $ {{ number_format($item['product']['price'],2) }} | $ {{ number_format($item['quantity'] * ($item['discounted_price'] ?? $item['product']['price']),2) }} |
 @endforeach
 @if ($additional_discount_percentage)
 |  |  | Subtotal: | $ {{ number_format($subtotal,2) }} |

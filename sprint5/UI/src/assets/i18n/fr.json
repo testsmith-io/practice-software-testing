@@ -36,6 +36,13 @@
         "required": "Le nom de famille est requis"
       }
     },
+    "street": {
+      "label": "Rue",
+      "placeholder": "Votre rue",
+      "errors": {
+        "required": "La rue est requise"
+      }
+    },
     "address": {
       "label": "Adresse",
       "placeholder": "Votre adresse",

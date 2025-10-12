@@ -3,7 +3,7 @@ Hello {{ $name }},
 Thanks for your order.
 
 @foreach ($items as $item)
-{{ $item['quantity'] }} x {{ $item['name'] }}{{ isset($item['product']['co2_rating']) ? ' [CO₂: ' . $item['product']['co2_rating'] . ']' : '' }}{{ ($item['is_rental'] === 1) ? " (For rent)": "\t\t  " }}       $ {{ number_format($item['price'],2) }}      $ {{ number_format($item['total'],2) }}{{PHP_EOL}}
+{{ $item['quantity'] }} x {{ $item['product']['name'] }}{{ isset($item['product']['co2_rating']) ? ' [CO2: ' . $item['product']['co2_rating'] . ']' : '' }}{{ ($item['product']['is_rental'] === 1) ? " (For rent)": "\t\t  " }}       $ {{ number_format($item['product']['price'],2) }}      $ {{ number_format($item['quantity'] * ($item['discounted_price'] ?? $item['product']['price']),2) }}{{PHP_EOL}}
 @endforeach
 
 @if ($additional_discount_percentage)

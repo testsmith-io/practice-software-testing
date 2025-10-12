@@ -36,6 +36,13 @@
         "required": "Soyad gereklidir"
       }
     },
+    "street": {
+      "label": "Sokak",
+      "placeholder": "Sokağınız",
+      "errors": {
+        "required": "Sokak gereklidir"
+      }
+    },
     "address": {
       "label": "Adres",
       "placeholder": "Adresiniz",

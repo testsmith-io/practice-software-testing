@@ -36,6 +36,13 @@
         "required": "Achternaam is vereist"
       }
     },
+    "street": {
+      "label": "Straat",
+      "placeholder": "Uw straat",
+      "errors": {
+        "required": "Straat is vereist"
+      }
+    },
     "address": {
       "label": "Adres",
       "placeholder": "Uw adres",
