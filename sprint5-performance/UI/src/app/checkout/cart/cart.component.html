@@ -52,7 +52,7 @@
             <td class="col-md-1 align-middle"><a class="btn btn-danger" (click)="delete(item.product_id)"><fa-icon [icon]="['fas', 'remove']"></fa-icon></a></td>
           </tr>
         }
-        @if (cart.additional_discount_percentage) {
+        @if (cart.additional_discount_percentage || ecoDiscount > 0) {
           <tr>
             <td class="col-md-5"></td>
             <td class="col-md-2"></td>
@@ -60,11 +60,22 @@
             <td class="col-md-2 text-end" data-test="cart-subtotal">${{ subtotal | number: '1.2-2' }}</td>
             <td class="col-md-1"></td>
           </tr>
+        }
+        @if (cart.additional_discount_percentage) {
           <tr>
             <td class="col-md-5"></td>
             <td class="col-md-2"></td>
             <td class="col-md-2 text-end"><strong>{{t('pages.checkout.cart.discount')}} ({{cart.additional_discount_percentage}}%)</strong></td>
             <td class="col-md-2 text-end" data-test="cart-discount">- ${{ discount | number: '1.2-2' }}</td>
+            <td class="col-md-1"></td>
+          </tr>
+        }
+        @if (ecoDiscount > 0) {
+          <tr>
+            <td class="col-md-5"></td>
+            <td class="col-md-2"></td>
+            <td class="col-md-2 text-end"><strong>Eco-Friendly Discount (5%)</strong></td>
+            <td class="col-md-2 text-end text-success" data-test="cart-eco-discount">- ${{ ecoDiscount | number: '1.2-2' }}</td>
             <td class="col-md-1"></td>
           </tr>
         }

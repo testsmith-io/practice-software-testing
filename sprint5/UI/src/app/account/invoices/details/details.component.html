@@ -38,7 +38,7 @@
                      value="{{invoice.invoice_date}}">
             </div>
           </div>
-          @if (invoice.additional_discount_percentage) {
+          @if (invoice.additional_discount_percentage || (invoice.eco_discount_percentage && invoice.eco_discount_percentage > 0)) {
             <div class="form-group row">
               <label for="total" class="col-sm-3 col-form-label">{{ t('pages.checkout.cart.subtotal') }}</label>
               <div class="col-sm-9">
@@ -46,6 +46,8 @@
                        value="$ {{invoice.subtotal.toFixed(2)}}">
               </div>
             </div>
+          }
+          @if (invoice.additional_discount_percentage) {
             <div class="form-group row">
               <label for="total" class="col-sm-3 col-form-label">{{ t('pages.checkout.cart.discount') }}
                 ({{ invoice.additional_discount_percentage }}%)</label>
@@ -53,6 +55,17 @@
                 <input type="text" readonly class="form-control-plaintext" data-test="total"
                        id="additional_discount_percentage"
                        value="$ {{invoice.additional_discount_amount.toFixed(2)}}">
+              </div>
+            </div>
+          }
+          @if (invoice.eco_discount_percentage && invoice.eco_discount_percentage > 0) {
+            <div class="form-group row">
+              <label for="eco-discount" class="col-sm-3 col-form-label">Eco-Friendly Discount
+                ({{ invoice.eco_discount_percentage }}%)</label>
+              <div class="col-sm-9">
+                <input type="text" readonly class="form-control-plaintext text-success" data-test="eco-discount"
+                       id="eco_discount"
+                       value="$ {{invoice.eco_discount_amount.toFixed(2)}}">
               </div>
             </div>
           }
