@@ -31,6 +31,8 @@ class Checkout extends Mailable
                 'contactMessage' => $this->contactMessage,
                 'additional_discount_percentage' => $this->invoice->additional_discount_percentage,
                 'additional_discount_amount' => $this->invoice->additional_discount_amount,
+                'eco_discount_percentage' => $this->invoice->eco_discount_percentage,
+                'eco_discount_amount' => $this->invoice->eco_discount_amount,
                 'subtotal' => $this->invoice->subtotal,
                 'total' => $this->invoice->total])
             ->markdown('emails.Checkout')

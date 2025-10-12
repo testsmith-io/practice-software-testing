@@ -61,6 +61,8 @@ class InvoiceService
         $cart = Cart::with('cartItems', 'cartItems.product')->findOrFail($cartId);
 
         $subTotalPrice = 0;
+        $ecoFriendlyCount = 0;
+        $totalProductCount = 0;
 
         foreach ($cart->cartItems as $cartItem) {
             $quantity = $cartItem['quantity'];
@@ -82,16 +84,33 @@ class InvoiceService
             ]);
 
             $subTotalPrice += $discountedPrice ? $quantity * $discountedPrice : $quantity * $unitPrice;
+
+            // Count eco-friendly products (CO2 rating A or B)
+            $totalProductCount += $quantity;
+            if (isset($cartItem['product']->co2_rating) && in_array(strtoupper($cartItem['product']->co2_rating), ['A', 'B'])) {
+                $ecoFriendlyCount += $quantity;
+            }
         }
 
         $discountAmount = $subTotalPrice * ($cart->additional_discount_percentage / 100);
-        $totalPrice = $subTotalPrice - $discountAmount;
+
+        // Calculate eco-friendly discount (5% if more than 50% of products are eco-friendly)
+        $ecoDiscountPercentage = 0;
+        $ecoDiscountAmount = 0;
+        if ($totalProductCount > 0 && ($ecoFriendlyCount / $totalProductCount) > 0.5) {
+            $ecoDiscountPercentage = 5;
+            $ecoDiscountAmount = ($subTotalPrice - $discountAmount) * ($ecoDiscountPercentage / 100);
+        }
+
+        $totalPrice = $subTotalPrice - $discountAmount - $ecoDiscountAmount;
 
         $invoice->update([
             'subtotal' => $subTotalPrice,
             'total' => $totalPrice,
             'additional_discount_percentage' => $cart->additional_discount_percentage,
             'additional_discount_amount' => $discountAmount,
+            'eco_discount_percentage' => $ecoDiscountPercentage,
+            'eco_discount_amount' => $ecoDiscountAmount,
         ]);
 
         Log::info('Invoice finalized', ['invoice_id' => $invoice->id, 'total' => $totalPrice]);
@@ -119,6 +138,8 @@ class InvoiceService
         $cart = Cart::with('cartItems', 'cartItems.product')->findOrFail($cartId);
 
         $subTotalPrice = 0;
+        $ecoFriendlyCount = 0;
+        $totalProductCount = 0;
 
         foreach ($cart->cartItems as $cartItem) {
             $quantity = $cartItem['quantity'];
@@ -140,16 +161,33 @@ class InvoiceService
             ]);
 
             $subTotalPrice += $discountedPrice ? $quantity * $discountedPrice : $quantity * $unitPrice;
+
+            // Count eco-friendly products (CO2 rating A or B)
+            $totalProductCount += $quantity;
+            if (isset($cartItem['product']->co2_rating) && in_array(strtoupper($cartItem['product']->co2_rating), ['A', 'B'])) {
+                $ecoFriendlyCount += $quantity;
+            }
         }
 
         $discountAmount = $subTotalPrice * ($cart->additional_discount_percentage / 100);
-        $totalPrice = $subTotalPrice - $discountAmount;
+
+        // Calculate eco-friendly discount (5% if more than 50% of products are eco-friendly)
+        $ecoDiscountPercentage = 0;
+        $ecoDiscountAmount = 0;
+        if ($totalProductCount > 0 && ($ecoFriendlyCount / $totalProductCount) > 0.5) {
+            $ecoDiscountPercentage = 5;
+            $ecoDiscountAmount = ($subTotalPrice - $discountAmount) * ($ecoDiscountPercentage / 100);
+        }
+
+        $totalPrice = $subTotalPrice - $discountAmount - $ecoDiscountAmount;
 
         $invoice->update([
             'subtotal' => $subTotalPrice,
             'total' => $totalPrice,
             'additional_discount_percentage' => $cart->additional_discount_percentage,
             'additional_discount_amount' => $discountAmount,
+            'eco_discount_percentage' => $ecoDiscountPercentage,
+            'eco_discount_amount' => $ecoDiscountAmount,
         ]);
 
         Log::info('Guest invoice finalized', ['invoice_id' => $invoice->id, 'total' => $totalPrice]);
@@ -216,7 +254,7 @@ class InvoiceService
                 $query->select('id', 'invoice_id', 'product_id', 'unit_price', 'quantity', 'discount_percentage', 'discounted_price');
             },
             'invoicelines.product' => function ($query) {
-                $query->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id')
+                $query->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id', 'co2_rating', 'is_rental')
                       ->with([
                           'product_image:id,by_name,by_url',
                           'category:id,name',

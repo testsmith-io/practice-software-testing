@@ -10276,8 +10276,13 @@
                         <td>{{ $invoiceline['product']['name']}}&nbsp;@if ($invoiceline['discount_percentage'])
                                 <span
                                     class="badge rounded-pill bg-warning me-1">-{{$invoiceline['discount_percentage']}}%</span>
+                            @endif @if (isset($invoiceline['product']['co2_rating']))
+                                <span class="badge rounded-pill bg-success me-1">CO₂: {{$invoiceline['product']['co2_rating']}}</span>
+                            @endif
+                            @if ($invoiceline['discount_percentage'] || isset($invoiceline['product']['co2_rating']))
                                 <br/>
-                            @endif @if ($invoiceline['product']['is_rental'])
+                            @endif
+                            @if ($invoiceline['product']['is_rental'])
                                 <small> (Item for rent, price per hour)</small>
                             @endif</td>
 
@@ -10315,6 +10320,14 @@
                         <td></td>
                         <td><strong>Discount ({{$invoice['additional_discount_percentage']}}%)</strong></td>
                         <td>- ${{ number_format($invoice['additional_discount_amount'], 2) }}</td>
+                    </tr>
+                @endif
+                @if (isset($invoice['eco_discount_percentage']) && $invoice['eco_discount_percentage'] > 0)
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td><strong>Eco-Friendly Discount ({{$invoice['eco_discount_percentage']}}%)</strong></td>
+                        <td class="text-success">- ${{ number_format($invoice['eco_discount_amount'], 2) }}</td>
                     </tr>
                 @endif
                 </tbody>
