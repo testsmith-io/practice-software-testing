@@ -372,8 +372,8 @@ export class HeaderComponent implements OnDestroy, OnInit {
       contain: layout style;
     `;
 
-    // Store the original page content
-    const originalContent = document.body.innerHTML;
+    // Store references to original body children (actual DOM nodes, not HTML)
+    const originalBodyChildren = Array.from(document.body.children);
     const originalStyles = document.body.style.cssText;
     const originalBodyClasses = document.body.className;
 
@@ -387,8 +387,10 @@ export class HeaderComponent implements OnDestroy, OnInit {
       overflow: auto;
     `;
 
-    // Clone and move the existing Angular app content
-    appContent.innerHTML = originalContent;
+    // Move (not clone) the existing Angular app DOM nodes
+    originalBodyChildren.forEach(child => {
+      appContent.appendChild(child);
+    });
 
     // Apply any necessary styles to maintain the app appearance
     const appStyles = document.createElement('style');
@@ -402,6 +404,26 @@ export class HeaderComponent implements OnDestroy, OnInit {
       #app-panel router-outlet + * {
         display: block;
         height: 100%;
+      }
+      #app-content .row > .col > .container {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+      }
+      #app-content .row > .col > .container > .card {
+        display: block !important;
+        text-decoration: none !important;
+        height: auto !important;
+      }
+      #app-content .row > .col > .container > .card .card-img-wrapper {
+        width: 100% !important;
+        display: block !important;
+      }
+      #app-content .row > .col > .container > .card .card-body {
+        width: 100% !important;
+        display: block !important;
+      }
+      #app-content .row > .col > .container > .card img {
+        width: 100% !important;
+        display: block !important;
       }
     `;
     appPanel.appendChild(appStyles);
@@ -625,15 +647,14 @@ export class HeaderComponent implements OnDestroy, OnInit {
 
     // Store original state
     (window as any).testingSplitScreen = {
-      originalContent,
+      originalBodyChildren,
       originalStyles,
       originalBodyClasses,
       container: splitContainer,
       scriptId: guideScriptId
     };
 
-    // Hide original content and show split screen
-    document.body.innerHTML = '';
+    // Show split screen (body is already empty after moving children to appContent)
     document.body.style.cssText = 'margin: 0; padding: 0; overflow: hidden;';
     document.body.appendChild(splitContainer);
     document.body.appendChild(resizeHandle); // Add resize handle to body (fixed position)
@@ -804,8 +825,8 @@ export class HeaderComponent implements OnDestroy, OnInit {
       contain: layout style;
     `;
 
-    // Store the original page content
-    const originalContent = document.body.innerHTML;
+    // Store references to original body children (actual DOM nodes, not HTML)
+    const originalBodyChildren = Array.from(document.body.children);
     const originalStyles = document.body.style.cssText;
     const originalBodyClasses = document.body.className;
 
@@ -824,8 +845,10 @@ export class HeaderComponent implements OnDestroy, OnInit {
     const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
     if (isLocalDev) {
-      // Try to use local with-bugs version
-      appContent.innerHTML = originalContent;
+      // Move (not clone) the existing Angular app DOM nodes
+      originalBodyChildren.forEach(child => {
+        appContent.appendChild(child);
+      });
 
       // Apply styles to indicate this is the bug hunting version
       const bugStyles = document.createElement('style');
@@ -849,6 +872,26 @@ export class HeaderComponent implements OnDestroy, OnInit {
           font-size: 12px;
           z-index: 1000;
           font-weight: bold;
+        }
+        #bug-app-content .row > .col > .container {
+          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+        }
+        #bug-app-content .row > .col > .container > .card {
+          display: block !important;
+          text-decoration: none !important;
+          height: auto !important;
+        }
+        #bug-app-content .row > .col > .container > .card .card-img-wrapper {
+          width: 100% !important;
+          display: block !important;
+        }
+        #bug-app-content .row > .col > .container > .card .card-body {
+          width: 100% !important;
+          display: block !important;
+        }
+        #bug-app-content .row > .col > .container > .card img {
+          width: 100% !important;
+          display: block !important;
         }
       `;
       appPanel.appendChild(bugStyles);
@@ -1041,15 +1084,14 @@ export class HeaderComponent implements OnDestroy, OnInit {
 
     // Store original state
     (window as any).bugHuntingSplitScreen = {
-      originalContent,
+      originalBodyChildren,
       originalStyles,
       originalBodyClasses,
       container: splitContainer,
       scriptId: bugScriptId
     };
 
-    // Hide original content and show split screen
-    document.body.innerHTML = '';
+    // Show split screen (body is already empty after moving children to appContent)
     document.body.style.cssText = 'margin: 0; padding: 0; overflow: hidden;';
     document.body.appendChild(splitContainer);
     document.body.appendChild(resizeHandle); // Add resize handle to body (fixed position)
