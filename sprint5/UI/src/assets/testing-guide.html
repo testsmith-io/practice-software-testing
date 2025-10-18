@@ -542,7 +542,7 @@
     <h1>📋 Testing Guide</h1>
     <p>Testing guide for Practice Software Testing</p>
     <div class="progress-bar">
-      <div class="progress-fill" id="progressFill" style="width: 6%"></div>
+      <div class="progress-fill" id="progressFill" style="width: 2.86%"></div>
     </div>
   </div>
 
@@ -554,7 +554,7 @@
     <button class="nav-button prev" id="prevBtn" onclick="previousStep()" disabled>
       ← Previous
     </button>
-    <span class="step-indicator" id="stepIndicator">Step 1 of 18</span>
+    <span class="step-indicator" id="stepIndicator">Step 1 of 35</span>
     <button class="nav-button next" id="nextBtn" onclick="nextStep()">
       Next →
     </button>
@@ -1054,8 +1054,11 @@
         </div>
       `
     },
+    // Register - Page 1: User Story + Acceptance Criteria + Techniques Exercise
     {
-      title: "Register",
+      type: "techniquesExercise",
+      featureName: "Register",
+      title: "Register - Determine Test Techniques",
       userStory: "As a visitor, I want to register an account so that I can log in and use personalized features.",
       acceptanceCriteria: [
         "Age must be between 17 and 75 inclusive.",
@@ -1064,196 +1067,357 @@
         "Name/address/phone fields respect max lengths and validation rules.",
         "Password must be at least 8 characters, contain upper, lower, digit, and symbol, not be compromised, and match confirm password."
       ],
-      testingGuidance: [
-        "Age: Test 16, 17, 75, 76 (boundary values).",
-        "Email: Test valid email, invalid formats, already-used email.",
-        "Mandatory Fields: Leave one field empty, then multiple fields, confirm messages appear correctly.",
-        "Max Lengths: Test exactly at max length, and one character over.",
-        "Password Strength: Try missing each character class, too short, and a compromised password (if system supports it)."
+      exercisePrompt: "Looking at these acceptance criteria, which testing techniques would you apply?"
+    },
+    // Register - Page 2: Full Solution with Test Cases
+    {
+      type: "testCases",
+      featureName: "Register",
+      title: "Register - Testing Techniques & Test Cases",
+      userStory: "As a visitor, I want to register an account so that I can log in and use personalized features.",
+      acceptanceCriteria: [
+        "Age must be between 17 and 75 inclusive.",
+        "Email must be unique and in valid format.",
+        "All mandatory fields (first name, last name, email, password, confirm password) must be filled.",
+        "Name/address/phone fields respect max lengths and validation rules.",
+        "Password must be at least 8 characters, contain upper, lower, digit, and symbol, not be compromised, and match confirm password."
       ],
       techniques: [
         "BVA → for age and password length (bugs usually hide at edges).",
         "EP → for valid/invalid email, password character rules, mandatory fields filled/missing.",
         "Decision Table → for combinations of missing fields.",
         "Error Guessing → try SQL injection, emoji, spaces in fields."
+      ],
+      testCases: [
+        "Age: Test 16, 17, 75, 76 (boundary values).",
+        "Email: Test valid email, invalid formats, already-used email.",
+        "Mandatory Fields: Leave one field empty, then multiple fields, confirm messages appear correctly.",
+        "Max Lengths: Test exactly at max length, and one character over.",
+        "Password Strength: Try missing each character class, too short, and a compromised password (if system supports it)."
       ]
     },
+    // Login - Page 1: User Story + Acceptance Criteria + Techniques Exercise
     {
-      title: "Login",
+      type: "techniquesExercise",
+      featureName: "Login",
+      title: "Login - Determine Test Techniques",
       userStory: "As a registered user, I want to log in using my email and password so that I can access my account.",
       acceptanceCriteria: [
         "User can log in with valid credentials.",
         "Login fails with incorrect password, unknown email, or disabled account.",
         "Error messages are clear and specific."
       ],
-      testingGuidance: [
-        "Valid login: expect redirect to dashboard.",
-        "Invalid password: expect error message, no login.",
-        "Invalid email: error message, no login.",
-        "Disabled account: error message."
+      exercisePrompt: "Looking at these acceptance criteria, which testing techniques would you apply?"
+    },
+    // Login - Page 2: Full Solution with Test Cases
+    {
+      type: "testCases",
+      featureName: "Login",
+      title: "Login - Testing Techniques & Test Cases",
+      userStory: "As a registered user, I want to log in using my email and password so that I can access my account.",
+      acceptanceCriteria: [
+        "User can log in with valid credentials.",
+        "Login fails with incorrect password, unknown email, or disabled account.",
+        "Error messages are clear and specific."
       ],
       techniques: [
         "EP: valid vs invalid credentials.",
         "State Transition Testing: check transition from 'logged out' → 'logged in' and back after logout.",
         "Error Guessing: try case sensitivity, leading/trailing spaces, SQL injection attempt in email field."
+      ],
+      testCases: [
+        "Valid login: expect redirect to dashboard.",
+        "Invalid password: expect error message, no login.",
+        "Invalid email: error message, no login.",
+        "Disabled account: error message."
       ]
     },
+    // Forgot Password - Page 1: User Story + Acceptance Criteria + Techniques Exercise
     {
-      title: "Forgot Password",
+      type: "techniquesExercise",
+      featureName: "Forgot Password",
+      title: "Forgot Password - Determine Test Techniques",
       userStory: "As a user who forgot my password, I want to reset it using my email so that I can log back in.",
       acceptanceCriteria: [
         "Email must exist in the system.",
         "New password is set to 'welcome02' (for demo).",
         "User can log in with the new password immediately."
       ],
-      testingGuidance: [
-        "Provide existing email → expect success message, receive new password (or notification).",
-        "Provide unknown email → expect clear error.",
-        "Try logging in with new password."
+      exercisePrompt: "Which testing techniques are most appropriate for this password reset feature?"
+    },
+    // Forgot Password - Page 2: Full Solution with Test Cases
+    {
+      type: "testCases",
+      featureName: "Forgot Password",
+      title: "Forgot Password - Testing Techniques & Test Cases",
+      userStory: "As a user who forgot my password, I want to reset it using my email so that I can log back in.",
+      acceptanceCriteria: [
+        "Email must exist in the system.",
+        "New password is set to 'welcome02' (for demo).",
+        "User can log in with the new password immediately."
       ],
       techniques: [
         "EP: email exists vs doesn't exist.",
         "State Transition Testing: user state should change from 'cannot log in' → 'can log in'."
+      ],
+      testCases: [
+        "Provide existing email → expect success message, receive new password (or notification).",
+        "Provide unknown email → expect clear error.",
+        "Try logging in with new password."
       ]
     },
+    // Customer Profile - Page 1: User Story + Acceptance Criteria + Techniques Exercise
     {
-      title: "Customer Profile",
+      type: "techniquesExercise",
+      featureName: "Customer Profile",
+      title: "Customer Profile - Determine Test Techniques",
       userStory: "As a logged-in user, I want to update my profile information and reset my password so that my account details remain correct and secure.",
       acceptanceCriteria: [
         "First name, last name, phone, address fields can be updated.",
         "Password reset cannot reuse the current password.",
         "After password reset, user is logged out automatically."
       ],
-      testingGuidance: [
-        "Update each field individually → confirm persistence after reload.",
-        "Attempt password reset with same password → expect rejection.",
-        "Reset with new password → confirm logout, then log in with new password."
+      exercisePrompt: "Which testing techniques would best validate profile updates and password changes?"
+    },
+    // Customer Profile - Page 2: Full Solution with Test Cases
+    {
+      type: "testCases",
+      featureName: "Customer Profile",
+      title: "Customer Profile - Testing Techniques & Test Cases",
+      userStory: "As a logged-in user, I want to update my profile information and reset my password so that my account details remain correct and secure.",
+      acceptanceCriteria: [
+        "First name, last name, phone, address fields can be updated.",
+        "Password reset cannot reuse the current password.",
+        "After password reset, user is logged out automatically."
       ],
       techniques: [
         "EP: for valid vs invalid phone, postal code, max lengths.",
         "State Transition Testing: after password reset, user session state changes to logged out.",
         "BVA: for field length max (e.g., 40 chars for city)."
+      ],
+      testCases: [
+        "Update each field individually → confirm persistence after reload.",
+        "Attempt password reset with same password → expect rejection.",
+        "Reset with new password → confirm logout, then log in with new password."
       ]
     },
+    // Customer Favorites - Page 1: User Story + Acceptance Criteria + Techniques Exercise
     {
-      title: "Customer Favorites",
+      type: "techniquesExercise",
+      featureName: "Customer Favorites",
+      title: "Customer Favorites - Determine Test Techniques",
       userStory: "As a logged-in customer, I want to favorite products so that I can quickly find them later.",
       acceptanceCriteria: [
         "User can add a product to favorites from product listing or detail page.",
         "Favorited products appear in the Favorites list.",
         "User can remove a favorite from the list and it no longer appears."
       ],
-      testingGuidance: [
-        "Add multiple products → check they all appear.",
-        "Remove one → confirm only that product is removed.",
-        "Try adding same product twice → check for duplicates or error.",
-        "Log out & log back in → favorites should persist."
+      exercisePrompt: "What techniques would you use to test adding and removing favorites?"
+    },
+    // Customer Favorites - Page 2: Full Solution with Test Cases
+    {
+      type: "testCases",
+      featureName: "Customer Favorites",
+      title: "Customer Favorites - Testing Techniques & Test Cases",
+      userStory: "As a logged-in customer, I want to favorite products so that I can quickly find them later.",
+      acceptanceCriteria: [
+        "User can add a product to favorites from product listing or detail page.",
+        "Favorited products appear in the Favorites list.",
+        "User can remove a favorite from the list and it no longer appears."
       ],
       techniques: [
         "State Transition Testing: product state changes from 'not favorite' → 'favorite' → 'not favorite'.",
         "Equivalence Partitioning: valid product vs unavailable product.",
         "Error Guessing: try to favorite when logged out → expect proper error."
+      ],
+      testCases: [
+        "Add multiple products → check they all appear.",
+        "Remove one → confirm only that product is removed.",
+        "Try adding same product twice → check for duplicates or error.",
+        "Log out & log back in → favorites should persist."
       ]
     },
+    // Customer Invoices - Page 1: User Story + Acceptance Criteria + Techniques Exercise
     {
-      title: "Customer Invoices",
+      type: "techniquesExercise",
+      featureName: "Customer Invoices",
+      title: "Customer Invoices - Determine Test Techniques",
       userStory: "As a customer, I want to view and download my invoices so that I can track my purchases.",
       acceptanceCriteria: [
         "List of invoices is shown for logged-in user.",
         "Clicking invoice shows detail page.",
         "Download button provides correct PDF file."
       ],
-      testingGuidance: [
-        "Verify invoices belong to logged-in customer only.",
-        "Check invoice detail matches data on list (dates, totals).",
-        "Download PDF → open file, verify correct content."
+      exercisePrompt: "Which testing techniques would validate invoice viewing and security?"
+    },
+    // Customer Invoices - Page 2: Full Solution with Test Cases
+    {
+      type: "testCases",
+      featureName: "Customer Invoices",
+      title: "Customer Invoices - Testing Techniques & Test Cases",
+      userStory: "As a customer, I want to view and download my invoices so that I can track my purchases.",
+      acceptanceCriteria: [
+        "List of invoices is shown for logged-in user.",
+        "Clicking invoice shows detail page.",
+        "Download button provides correct PDF file."
       ],
       techniques: [
         "EP: logged-in vs logged-out (should not see invoices).",
         "State Transition Testing: selecting invoice transitions from list view → detail view.",
         "Error Guessing: try direct URL access for another customer's invoice → expect 403/404."
+      ],
+      testCases: [
+        "Verify invoices belong to logged-in customer only.",
+        "Check invoice detail matches data on list (dates, totals).",
+        "Download PDF → open file, verify correct content."
       ]
     },
+    // Customer Messages - Page 1: User Story + Acceptance Criteria + Techniques Exercise
     {
-      title: "Customer Messages",
+      type: "techniquesExercise",
+      featureName: "Customer Messages",
+      title: "Customer Messages - Determine Test Techniques",
       userStory: "As a customer, I want to view and reply to my contact messages so that I can continue conversations with support.",
       acceptanceCriteria: [
         "All past messages appear chronologically.",
         "Reply field is available and messages send successfully."
       ],
-      testingGuidance: [
-        "Open message thread, check ordering.",
-        "Send reply → verify it appears instantly or after refresh.",
-        "Try empty reply → expect validation error."
+      exercisePrompt: "Which testing techniques apply to message threading and replies?"
+    },
+    // Customer Messages - Page 2: Full Solution with Test Cases
+    {
+      type: "testCases",
+      featureName: "Customer Messages",
+      title: "Customer Messages - Testing Techniques & Test Cases",
+      userStory: "As a customer, I want to view and reply to my contact messages so that I can continue conversations with support.",
+      acceptanceCriteria: [
+        "All past messages appear chronologically.",
+        "Reply field is available and messages send successfully."
       ],
       techniques: [
         "EP: valid message vs empty/too long message.",
         "Decision Table: combinations of message + attachment (if supported).",
         "Error Guessing: attempt sending reply while offline → expect graceful error."
+      ],
+      testCases: [
+        "Open message thread, check ordering.",
+        "Send reply → verify it appears instantly or after refresh.",
+        "Try empty reply → expect validation error."
       ]
     },
+    // Locked Account - Page 1: User Story + Acceptance Criteria + Techniques Exercise
     {
-      title: "Locked Account",
+      type: "techniquesExercise",
+      featureName: "Locked Account",
+      title: "Locked Account - Determine Test Techniques",
       userStory: "As a user, I want my account to lock after repeated failed logins so that my account is protected against brute-force attacks.",
       acceptanceCriteria: [
         "After 3 failed password attempts, account is locked.",
         "Lock message is shown: 'Account locked, too many failed attempts. Please contact the administrator.'",
         "Admin can unlock account; user can log in again after unlock."
       ],
-      testingGuidance: [
-        "Try 3 wrong passwords → verify lock and message.",
-        "Attempt login after lock → still blocked.",
-        "Unlock account (simulate admin action) → login works again."
+      exercisePrompt: "Which techniques would test the account locking mechanism and state transitions?"
+    },
+    // Locked Account - Page 2: Full Solution with Test Cases
+    {
+      type: "testCases",
+      featureName: "Locked Account",
+      title: "Locked Account - Testing Techniques & Test Cases",
+      userStory: "As a user, I want my account to lock after repeated failed logins so that my account is protected against brute-force attacks.",
+      acceptanceCriteria: [
+        "After 3 failed password attempts, account is locked.",
+        "Lock message is shown: 'Account locked, too many failed attempts. Please contact the administrator.'",
+        "Admin can unlock account; user can log in again after unlock."
       ],
       techniques: [
         "State Transition Testing: state: active → locked → active (after unlock).",
         "BVA: 2 wrong attempts still allow login, 3rd locks.",
         "Error Guessing: attempt concurrent logins from multiple devices."
+      ],
+      testCases: [
+        "Try 3 wrong passwords → verify lock and message.",
+        "Attempt login after lock → still blocked.",
+        "Unlock account (simulate admin action) → login works again."
       ]
     },
+    // Multi-Factor Authentication (MFA) - Page 1: User Story + Acceptance Criteria + Techniques Exercise
     {
-      title: "Multi-Factor Authentication (MFA)",
+      type: "techniquesExercise",
+      featureName: "Multi-Factor Authentication (MFA)",
+      title: "Multi-Factor Authentication (MFA) - Determine Test Techniques",
       userStory: "As a security-conscious customer, I want to set up MFA so that I have extra protection when logging in.",
       acceptanceCriteria: [
         "Customer can enable MFA by scanning QR code.",
         "System verifies TOTP.",
         "After enablement, each new login requires TOTP."
       ],
-      testingGuidance: [
-        "Enable MFA → test with valid/invalid TOTP.",
-        "Login again → confirm prompt for TOTP.",
-        "Provide wrong TOTP → expect rejection."
+      exercisePrompt: "Which techniques test MFA enablement and TOTP verification?"
+    },
+    // Multi-Factor Authentication (MFA) - Page 2: Full Solution with Test Cases
+    {
+      type: "testCases",
+      featureName: "Multi-Factor Authentication (MFA)",
+      title: "Multi-Factor Authentication (MFA) - Testing Techniques & Test Cases",
+      userStory: "As a security-conscious customer, I want to set up MFA so that I have extra protection when logging in.",
+      acceptanceCriteria: [
+        "Customer can enable MFA by scanning QR code.",
+        "System verifies TOTP.",
+        "After enablement, each new login requires TOTP."
       ],
       techniques: [
         "State Transition Testing: state: MFA-disabled → enabled.",
         "EP: valid vs invalid TOTP.",
         "Error Guessing: test expired TOTP, reused TOTP."
+      ],
+      testCases: [
+        "Enable MFA → test with valid/invalid TOTP.",
+        "Login again → confirm prompt for TOTP.",
+        "Provide wrong TOTP → expect rejection."
       ]
     },
+    // Contact Form - Page 1: User Story + Acceptance Criteria + Techniques Exercise
     {
-      title: "Contact Form",
+      type: "techniquesExercise",
+      featureName: "Contact Form",
+      title: "Contact Form - Determine Test Techniques",
       userStory: "As a logged-in user, I want to contact support and attach files so that I can report issues effectively.",
       acceptanceCriteria: [
         "Name (≤120 chars), subject (≤120), message (≤250) are required.",
         "Email required if not inferred from user profile.",
         "File upload: Must allow only txt, pdf, jpg. Must reject >500KB or 0KB. Show descriptive error for invalid file."
       ],
-      testingGuidance: [
-        "Test valid message with each allowed file type.",
-        "Test empty message → expect error.",
-        "Upload invalid file type (.exe) → error shown.",
-        "Upload file slightly >500KB → error shown.",
-        "Upload file exactly 500KB → accepted."
+      exercisePrompt: "Which techniques test field validation and file upload constraints?"
+    },
+    // Contact Form - Page 2: Full Solution with Test Cases
+    {
+      type: "testCases",
+      featureName: "Contact Form",
+      title: "Contact Form - Testing Techniques & Test Cases",
+      userStory: "As a logged-in user, I want to contact support and attach files so that I can report issues effectively.",
+      acceptanceCriteria: [
+        "Name (≤120 chars), subject (≤120), message (≤250) are required.",
+        "Email required if not inferred from user profile.",
+        "File upload: Must allow only txt, pdf, jpg. Must reject >500KB or 0KB. Show descriptive error for invalid file."
       ],
       techniques: [
         "BVA: file size just below, at, just above 500KB.",
         "EP: valid/invalid file types.",
         "Decision Table: combinations of file/no file, message filled/empty.",
         "Error Guessing: try filename with special characters."
+      ],
+      testCases: [
+        "Test valid message with each allowed file type.",
+        "Test empty message → expect error.",
+        "Upload invalid file type (.exe) → error shown.",
+        "Upload file slightly >500KB → error shown.",
+        "Upload file exactly 500KB → accepted."
       ]
     },
+    // Product Listing - Page 1: User Story + Acceptance Criteria + Techniques Exercise
     {
-      title: "Product Listing",
+      type: "techniquesExercise",
+      featureName: "Product Listing",
+      title: "Product Listing - Determine Test Techniques",
       userStory: "As a customer, I want to filter, sort, and search products so that I can find what I need quickly.",
       acceptanceCriteria: [
         "Filtering by category/brand shows matching products only.",
@@ -1261,20 +1425,37 @@
         "Price range filters products correctly.",
         "Reset search clears filters and shows all products."
       ],
-      testingGuidance: [
-        "Apply filter → check results match criteria.",
-        "Apply sort → check order.",
-        "Combine filter + sort → still correct.",
-        "Reset → all products visible again."
+      exercisePrompt: "Which techniques test filter/sort combinations and reset functionality?"
+    },
+    // Product Listing - Page 2: Full Solution with Test Cases
+    {
+      type: "testCases",
+      featureName: "Product Listing",
+      title: "Product Listing - Testing Techniques & Test Cases",
+      userStory: "As a customer, I want to filter, sort, and search products so that I can find what I need quickly.",
+      acceptanceCriteria: [
+        "Filtering by category/brand shows matching products only.",
+        "Sorting by name/price works in both directions.",
+        "Price range filters products correctly.",
+        "Reset search clears filters and shows all products."
       ],
       techniques: [
         "Decision Table: combinations of filters and sorts.",
         "EP: valid category vs invalid category (URL tampering).",
         "Error Guessing: combine multiple filters + no results scenario."
+      ],
+      testCases: [
+        "Apply filter → check results match criteria.",
+        "Apply sort → check order.",
+        "Combine filter + sort → still correct.",
+        "Reset → all products visible again."
       ]
     },
+    // Category Page - Page 1: User Story + Acceptance Criteria + Techniques Exercise
     {
-      title: "Category Page",
+      type: "techniquesExercise",
+      featureName: "Category Page",
+      title: "Category Page - Determine Test Techniques",
       userStory: "As a customer, I want to browse products by category with sorting and filtering options so that I can find relevant products efficiently.",
       acceptanceCriteria: [
         "Products are listed from a specific category only.",
@@ -1282,23 +1463,40 @@
         "Filtering works by sub category and brand.",
         "All filters and sorts can be combined."
       ],
-      testingGuidance: [
-        "Verify page shows only products from the selected category.",
-        "Test each sorting option: name A-Z, name Z-A, price High-Low, price Low-High.",
-        "Apply sub category filter → verify only matching products appear.",
-        "Apply brand filter → verify only matching products appear.",
-        "Combine sorting + filtering → verify results are both sorted and filtered correctly.",
-        "Test pagination if many products in category."
+      exercisePrompt: "Which techniques would validate category filtering, sorting, and combinations?"
+    },
+    // Category Page - Page 2: Full Solution with Test Cases
+    {
+      type: "testCases",
+      featureName: "Category Page",
+      title: "Category Page - Testing Techniques & Test Cases",
+      userStory: "As a customer, I want to browse products by category with sorting and filtering options so that I can find relevant products efficiently.",
+      acceptanceCriteria: [
+        "Products are listed from a specific category only.",
+        "Sorting works for name (A-Z), name (Z-A), price (High-Low), price (Low-High).",
+        "Filtering works by sub category and brand.",
+        "All filters and sorts can be combined."
       ],
       techniques: [
         "Decision Table: combinations of sorting (4 options) and filtering (sub category + brand).",
         "EP: valid category vs invalid category, valid filters vs invalid filters.",
         "State Transition: navigating category → filtered results → product detail → back.",
         "Error Guessing: URL manipulation for invalid category IDs, combining incompatible filters."
+      ],
+      testCases: [
+        "Verify page shows only products from the selected category.",
+        "Test each sorting option: name A-Z, name Z-A, price High-Low, price Low-High.",
+        "Apply sub category filter → verify only matching products appear.",
+        "Apply brand filter → verify only matching products appear.",
+        "Combine sorting + filtering → verify results are both sorted and filtered correctly.",
+        "Test pagination if many products in category."
       ]
     },
+    // Product Detail Page - Page 1: User Story + Acceptance Criteria + Techniques Exercise
     {
-      title: "Product Detail Page",
+      type: "techniquesExercise",
+      featureName: "Product Detail Page",
+      title: "Product Detail Page - Determine Test Techniques",
       userStory: "As a customer, I want to view product details, configure rental duration or quantity, and add items to cart or favorites.",
       acceptanceCriteria: [
         "For rental products: Duration in hours selector is available, total price is calculated based on selected duration, add to cart and add to favorites buttons work correctly.",
@@ -1306,7 +1504,27 @@
         "Add to favorites requires user to be logged in, otherwise shows error.",
         "All calculations and interactions work as expected."
       ],
-      testingGuidance: [
+      exercisePrompt: "Which techniques test product configuration, calculations, and authentication requirements?"
+    },
+    // Product Detail Page - Page 2: Full Solution with Test Cases
+    {
+      type: "testCases",
+      featureName: "Product Detail Page",
+      title: "Product Detail Page - Testing Techniques & Test Cases",
+      userStory: "As a customer, I want to view product details, configure rental duration or quantity, and add items to cart or favorites.",
+      acceptanceCriteria: [
+        "For rental products: Duration in hours selector is available, total price is calculated based on selected duration, add to cart and add to favorites buttons work correctly.",
+        "For regular products: Quantity field is available, add to cart and add to favorites buttons work correctly.",
+        "Add to favorites requires user to be logged in, otherwise shows error.",
+        "All calculations and interactions work as expected."
+      ],
+      techniques: [
+        "BVA: duration hours (minimum, maximum, boundary values), quantity (0, 1, maximum allowed).",
+        "EP: logged-in vs logged-out users for favorites, rental vs regular products, valid vs invalid input values.",
+        "Decision Table: combinations of product type (rental/regular), user state (logged-in/out), action (add to cart/favorites).",
+        "Error Guessing: rapidly clicking buttons, invalid input values, browser back/forward during selection."
+      ],
+      testCases: [
         "Rental Products: Test duration selector with different hour values → verify total price calculation is correct.",
         "Rental Products: Test add to cart with various durations → verify correct item and price added to cart.",
         "Rental Products: Test add to favorites while logged in → verify success, while logged out → verify error message.",
@@ -1315,16 +1533,13 @@
         "Regular Products: Test add to favorites while logged in → verify success, while logged out → verify error message.",
         "Test boundary cases: minimum/maximum duration hours, minimum/maximum quantity values.",
         "Test error scenarios: invalid duration, invalid quantity, network errors."
-      ],
-      techniques: [
-        "BVA: duration hours (minimum, maximum, boundary values), quantity (0, 1, maximum allowed).",
-        "EP: logged-in vs logged-out users for favorites, rental vs regular products, valid vs invalid input values.",
-        "Decision Table: combinations of product type (rental/regular), user state (logged-in/out), action (add to cart/favorites).",
-        "Error Guessing: rapidly clicking buttons, invalid input values, browser back/forward during selection."
       ]
     },
+    // Shopping Cart - Page 1: User Story + Acceptance Criteria + Techniques Exercise
     {
-      title: "Shopping Cart",
+      type: "techniquesExercise",
+      featureName: "Shopping Cart",
+      title: "Shopping Cart - Determine Test Techniques",
       userStory: "As a customer, I want to manage my cart so that I can control what I purchase.",
       acceptanceCriteria: [
         "Show empty cart message when empty.",
@@ -1332,19 +1547,36 @@
         "Remove product → disappears.",
         "Discount price shown if applicable."
       ],
-      testingGuidance: [
-        "Add/remove multiple items.",
-        "Check discount calculation correctness.",
-        "Refresh page → cart persists."
+      exercisePrompt: "Which techniques test cart state transitions and discount calculations?"
+    },
+    // Shopping Cart - Page 2: Full Solution with Test Cases
+    {
+      type: "testCases",
+      featureName: "Shopping Cart",
+      title: "Shopping Cart - Testing Techniques & Test Cases",
+      userStory: "As a customer, I want to manage my cart so that I can control what I purchase.",
+      acceptanceCriteria: [
+        "Show empty cart message when empty.",
+        "Add product → appears in cart.",
+        "Remove product → disappears.",
+        "Discount price shown if applicable."
       ],
       techniques: [
         "State Transition: cart empty → has items → empty.",
         "EP: with/without discount.",
         "Error Guessing: remove product while in checkout."
+      ],
+      testCases: [
+        "Add/remove multiple items.",
+        "Check discount calculation correctness.",
+        "Refresh page → cart persists."
       ]
     },
+    // Checkout + Payment - Page 1: User Story + Acceptance Criteria + Techniques Exercise
     {
-      title: "Checkout + Payment",
+      type: "techniquesExercise",
+      featureName: "Checkout + Payment",
+      title: "Checkout + Payment - Determine Test Techniques",
       userStory: "As a customer, I want to checkout with different payment methods so that I can complete my purchase securely.",
       acceptanceCriteria: [
         "Guest checkout requires all billing fields (street, city, country, etc.).",
@@ -1354,22 +1586,41 @@
         "Gift Card: Card Number (alphanumeric), Validation Code (alphanumeric).",
         "Cash on Delivery: No additional fields required."
       ],
-      testingGuidance: [
-        "Bank Transfer: Test invalid bank name (with numbers), account name (with symbols), account number (with letters).",
-        "Credit Card: Test wrong format (spaces instead of hyphens), past expiration date, 2-digit CVV, card holder name with numbers.",
-        "Buy Now Pay Later: Test invalid installment numbers (1, 5, 15), non-numeric values.",
-        "Gift Card: Test card number/validation code with special characters.",
-        "Test boundary values: exactly at max length vs one character over."
+      exercisePrompt: "Which techniques validate complex payment method combinations and field formats?"
+    },
+    // Checkout + Payment - Page 2: Full Solution with Test Cases
+    {
+      type: "testCases",
+      featureName: "Checkout + Payment",
+      title: "Checkout + Payment - Testing Techniques & Test Cases",
+      userStory: "As a customer, I want to checkout with different payment methods so that I can complete my purchase securely.",
+      acceptanceCriteria: [
+        "Guest checkout requires all billing fields (street, city, country, etc.).",
+        "Bank Transfer: Bank Name (letters/spaces only), Account Name (alphanumeric + spaces/dots/apostrophes/hyphens), Account Number (digits only).",
+        "Credit Card: Number (####-####-####-#### format), Expiration (MM/YYYY, future date), CVV (3-4 digits), Card Holder Name (letters/spaces only).",
+        "Buy Now Pay Later: Must select 3, 6, 9, or 12 installments.",
+        "Gift Card: Card Number (alphanumeric), Validation Code (alphanumeric).",
+        "Cash on Delivery: No additional fields required."
       ],
       techniques: [
         "Decision Table: combinations of valid/invalid fields for each payment method (5 methods × multiple fields = extensive matrix).",
         "BVA: field lengths at max (255 chars), expiration date (today, tomorrow, yesterday), CVV digits (2, 3, 4, 5).",
         "EP: valid formats vs invalid formats, required vs optional fields, different payment method categories.",
         "Error Guessing: special characters in numeric fields, different date formats, mixed case in regex patterns."
+      ],
+      testCases: [
+        "Bank Transfer: Test invalid bank name (with numbers), account name (with symbols), account number (with letters).",
+        "Credit Card: Test wrong format (spaces instead of hyphens), past expiration date, 2-digit CVV, card holder name with numbers.",
+        "Buy Now Pay Later: Test invalid installment numbers (1, 5, 15), non-numeric values.",
+        "Gift Card: Test card number/validation code with special characters.",
+        "Test boundary values: exactly at max length vs one character over."
       ]
     },
+    // Geolocation Discount - Page 1: User Story + Acceptance Criteria + Techniques Exercise
     {
-      title: "Geolocation Discount",
+      type: "techniquesExercise",
+      featureName: "Geolocation Discount",
+      title: "Geolocation Discount - Determine Test Techniques",
       userStory: "As a visitor, I want location-based discounts to apply automatically so that I get the correct pricing for my region.",
       acceptanceCriteria: [
         "New York (lat: 41, lng: 74) → 5% discount.",
@@ -1379,34 +1630,65 @@
         "London (lat: 51, lng: 0) → 25% discount.",
         "Any other location → no discount applied."
       ],
-      testingGuidance: [
-        "Test exact coordinates for each city → verify correct discount percentage.",
-        "Test coordinates slightly off (±1 degree) → confirm no discount.",
-        "Test invalid coordinates (lat > 90, lng > 180) → handle gracefully.",
-        "Test edge case coordinates (lat: 0, lng: 0) → no discount.",
-        "Test decimal coordinates vs integer coordinates → behavior consistency."
+      exercisePrompt: "Which techniques test coordinate matching and discount calculations?"
+    },
+    // Geolocation Discount - Page 2: Full Solution with Test Cases
+    {
+      type: "testCases",
+      featureName: "Geolocation Discount",
+      title: "Geolocation Discount - Testing Techniques & Test Cases",
+      userStory: "As a visitor, I want location-based discounts to apply automatically so that I get the correct pricing for my region.",
+      acceptanceCriteria: [
+        "New York (lat: 41, lng: 74) → 5% discount.",
+        "Mumbai (lat: 19, lng: 73) → 10% discount.",
+        "Tokyo (lat: 35, lng: 139) → 15% discount.",
+        "Amsterdam (lat: 52, lng: 5) → 20% discount.",
+        "London (lat: 51, lng: 0) → 25% discount.",
+        "Any other location → no discount applied."
       ],
       techniques: [
         "BVA: coordinates at exact values (41,74) vs nearby values (40,74), (41,75).",
         "EP: valid city coordinates vs invalid coordinates vs edge coordinates.",
         "Decision Table: combinations of valid lat/lng for each city vs invalid combinations.",
         "Error Guessing: negative coordinates, coordinates as strings, missing coordinates, extreme values."
+      ],
+      testCases: [
+        "Test exact coordinates for each city → verify correct discount percentage.",
+        "Test coordinates slightly off (±1 degree) → confirm no discount.",
+        "Test invalid coordinates (lat > 90, lng > 180) → handle gracefully.",
+        "Test edge case coordinates (lat: 0, lng: 0) → no discount.",
+        "Test decimal coordinates vs integer coordinates → behavior consistency."
       ]
     },
+    // Combined Product Discount - Page 1: User Story + Acceptance Criteria + Techniques Exercise
     {
-      title: "Combined Product Discount",
+      type: "techniquesExercise",
+      featureName: "Combined Product Discount",
+      title: "Combined Product Discount - Determine Test Techniques",
       userStory: "As a shopper, I want to receive a discount when I buy a regular + rental product together so that I save money.",
       acceptanceCriteria: [
         "When cart contains both types → 15% discount applied.",
         "When only one type → no extra discount."
       ],
-      testingGuidance: [
-        "Add regular + rental → check discount calculation.",
-        "Remove one → discount disappears."
+      exercisePrompt: "Which techniques test cart composition and discount application?"
+    },
+    // Combined Product Discount - Page 2: Full Solution with Test Cases
+    {
+      type: "testCases",
+      featureName: "Combined Product Discount",
+      title: "Combined Product Discount - Testing Techniques & Test Cases",
+      userStory: "As a shopper, I want to receive a discount when I buy a regular + rental product together so that I save money.",
+      acceptanceCriteria: [
+        "When cart contains both types → 15% discount applied.",
+        "When only one type → no extra discount."
       ],
       techniques: [
         "Decision Table: cart with combinations of product types.",
         "EP: both present vs only one."
+      ],
+      testCases: [
+        "Add regular + rental → check discount calculation.",
+        "Remove one → discount disappears."
       ]
     }
   ];
@@ -1444,7 +1726,42 @@
           </div>
         </div>
       `;
-    } else {
+    } else if (feature.type === 'userStoryExercise') {
+      // Page 1: User Story + Exercise to write acceptance criteria
+      container.innerHTML = `
+        <div class="feature-section active" id="feature-${currentStep}">
+          <h2>
+            <span class="step-number">${currentStep + 1}</span>
+            ${feature.title}
+          </h2>
+
+          <div class="section">
+            <h3>📖 User Story</h3>
+            <div class="user-story">
+              <blockquote>
+                <em>${feature.userStory}</em>
+              </blockquote>
+            </div>
+          </div>
+
+          <div class="section-box testing-guidance">
+            <h4>📝 Exercise</h4>
+            <p style="margin: 0; color: #555; font-size: 13px; line-height: 1.6;">${feature.exercisePrompt}</p>
+          </div>
+
+          <div class="completion-section">
+            <div class="checkbox-container">
+              <input type="checkbox" id="complete-${currentStep}" onchange="markComplete(${currentStep})" ${isCompleted(currentStep) ? 'checked' : ''}>
+              <label for="complete-${currentStep}">Mark as completed</label>
+            </div>
+            <div class="completion-status" id="completion-status">
+              ${getCompletionSummary()}
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (feature.type === 'criteriaExercise' || feature.type === 'techniquesExercise') {
+      // Page 1 (2-page format): Acceptance Criteria + Exercise to determine techniques
       container.innerHTML = `
         <div class="feature-section active" id="feature-${currentStep}">
           <h2>
@@ -1469,16 +1786,57 @@
           </div>
 
           <div class="section-box testing-guidance">
-            <h4>🧪 Testing Guidance</h4>
-            <ul class="guidance-list">
-              ${feature.testingGuidance.map(guidance => `<li>${guidance}</li>`).join('')}
+            <h4>📝 Exercise</h4>
+            <p style="margin: 0; color: #555; font-size: 13px; line-height: 1.6;">${feature.exercisePrompt}</p>
+          </div>
+
+          <div class="completion-section">
+            <div class="checkbox-container">
+              <input type="checkbox" id="complete-${currentStep}" onchange="markComplete(${currentStep})" ${isCompleted(currentStep) ? 'checked' : ''}>
+              <label for="complete-${currentStep}">Mark as completed</label>
+            </div>
+            <div class="completion-status" id="completion-status">
+              ${getCompletionSummary()}
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (feature.type === 'testCases') {
+      // Page 3: Techniques + Test Cases
+      container.innerHTML = `
+        <div class="feature-section active" id="feature-${currentStep}">
+          <h2>
+            <span class="step-number">${currentStep + 1}</span>
+            ${feature.title}
+          </h2>
+
+          <div class="section">
+            <h3>📖 User Story</h3>
+            <div class="user-story">
+              <blockquote>
+                <em>${feature.userStory}</em>
+              </blockquote>
+            </div>
+          </div>
+
+          <div class="section-box acceptance-criteria">
+            <h4>✅ Acceptance Criteria</h4>
+            <ul class="criteria-list">
+              ${feature.acceptanceCriteria.map(criteria => `<li>${criteria}</li>`).join('')}
             </ul>
           </div>
 
           <div class="section-box techniques-box">
-            <h4>🔧 Testing Techniques</h4>
+            <h4>🔧 Testing Techniques to Apply</h4>
             <ul class="techniques-list">
               ${feature.techniques.map(technique => `<li>${technique}</li>`).join('')}
+            </ul>
+          </div>
+
+          <div class="section-box testing-guidance">
+            <h4>🧪 Test Cases (High Level)</h4>
+            <ul class="guidance-list">
+              ${feature.testCases.map(testCase => `<li>${testCase}</li>`).join('')}
             </ul>
           </div>
 
