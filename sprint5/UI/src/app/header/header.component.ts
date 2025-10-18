@@ -30,6 +30,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
   name: string = '';
   isLoggedIn: boolean;
   subscription: Subscription;
+  showBugHuntingButton: boolean = false;
 
   constructor() {
     this.cartService.storageSub.subscribe(() => {
@@ -52,6 +53,9 @@ export class HeaderComponent implements OnDestroy, OnInit {
     this.role = this.auth.getRole();
     this.activeLanguage = this.translocoService.getActiveLang();
     this.getSignedInUser();
+
+    // Check if Bug Hunting button should be shown (only on deployed version)
+    this.showBugHuntingButton = this.isDeployedVersion();
 
     // Check if we're coming from a split-screen reload and need to activate it
     this.checkAndRestoreSplitScreen();
@@ -130,18 +134,20 @@ export class HeaderComponent implements OnDestroy, OnInit {
   }
 
   openBugHuntingGuide(): void {
-    // Check if we're inside an iframe (already in split-screen)
-    if (window !== window.parent) {
-      // We're already in split-screen mode, don't create another
-      return;
-    }
+    // Open the with-bugs site with query parameter to control sidepanel
+    // Use hash routing format for Angular: #/?bug-hunting=true
+    const bugHuntingUrl = 'https://with-bugs.practicesoftwaretesting.com/#/?bug-hunting=true';
+    window.open(bugHuntingUrl, '_blank');
+  }
 
-    // Check if on mobile device
-    if (this.isMobileDevice()) {
-      this.showMobileWarning('Bug Hunting Guide');
-      return;
-    }
-    this.createBugHuntingSplitScreenMode();
+  private isDeployedVersion(): boolean {
+    // Check if running on deployed version vs Docker/localhost
+    const hostname = window.location.hostname;
+    const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '0.0.0.0';
+    const isDeployed = hostname.includes('practicesoftwaretesting.com');
+
+    // Show button only on deployed version, not on Docker/local
+    return isDeployed && !isLocal;
   }
 
   private isMobileDevice(): boolean {
