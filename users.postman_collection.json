@@ -1,0 +1,198 @@
+﻿{
+  "info": {
+    "name": "User API Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Register User",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/users/register",
+          "host": ["{{base_url}}"],
+          "path": ["users", "register"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 201) {",
+              "  pm.test(\"Register - Success\", function () {",
+              "    pm.response.to.have.status(201);",
+              "  });",
+              "} else {",
+              "  pm.test(\"Register - Failed\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([400, 401, 403]);",
+              "  });",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Login User",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/users/login",
+          "host": ["{{base_url}}"],
+          "path": ["users", "login"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "  var json = pm.response.json();",
+              "  pm.test(\"Login - Success\", function () {",
+              "    pm.expect(json).to.have.property(\"access_token\");",
+              "    pm.environment.set(\"authToken\", json.access_token);",
+              "    pm.expect(json).to.have.status(200);",
+              "  });",
+              "} else {",
+              "  pm.test(\"Login - Failed\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([400, 401]);",
+              "  });",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get User Info",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+        "url": {
+          "raw": "{{base_url}}/users/me",
+          "host": ["{{base_url}}"],
+          "path": ["users", "me"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "  var json = pm.response.json();",
+              "  pm.test(\"Get User Info - Success\", function () {",
+              "    pm.response.to.have.status(200);",
+              "  });",
+              "} else {",
+              "  pm.test(\"Get User Info - Failed\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([400, 401]);",
+              "  });",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Logout User",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+        "url": {
+          "raw": "{{base_url}}/users/logout",
+          "host": ["{{base_url}}"],
+          "path": ["users", "logout"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "  var json = pm.response.json();",
+              "  pm.test(\"Logout - Success\", function () {",
+              "    pm.expect(json).to.have.property(\"message\");",
+              "    pm.expect(json).to.have.status(200);",
+              "  });",
+              "} else {",
+              "  pm.test(\"Logout - Failed\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([400, 401]);",
+              "  });",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Search User",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+        "url": {
+          "raw": "{{base_url}}/users/search?term={{searchTerm}}",
+          "host": ["{{base_url}}"],
+          "path": ["users", "search"],
+          "query": [{ "key": "term", "value": "{{searchTerm}}" }]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Search User - Status OK/Unauthorized/NotFound\", function () {",
+              "  pm.expect(pm.response.code).to.be.oneOf([200, 401, 404]);",
+              "});",
+              "",
+              "if (pm.response.code === 200) {",
+              "  let jsonData = pm.response.json();",
+              "  ",
+              "  pm.test(\"Search User - Response is an array\", function () {",
+              "    pm.expect(Array.isArray(jsonData)).to.be.true;",
+              "  });",
+              "",
+              "  if (jsonData.length > 0) {",
+              "    const user = jsonData[0];",
+              "    pm.test(\"Search User - User object contains expected fields\", function () {",
+              "      pm.expect(user).to.have.property(\"first_name\");",
+              "      pm.expect(user).to.have.property(\"last_name\");",
+              "      pm.expect(user).to.have.property(\"city\");",
+              "      pm.expect(user).to.have.property(\"email\");",
+              "      pm.expect(user).to.have.property(\"id\");",
+              "    });",
+              "  }",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api-with-bugs.practicesoftwaretesting.com"
+    }
+  ]
+}
