@@ -14,11 +14,6 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 class BrandController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware('auth:users', ['only' => ['destroy']]);
-    }
-
     /**
      * @OA\Get(
      *      path="/brands",
@@ -218,7 +213,7 @@ class BrandController extends Controller
 
             // CTF Flag: Check if non-admin deleted the brand (BFLA vulnerability)
             $userRole = auth()->check() ? auth()->user()->role : null;
-            if ($userRole && $userRole !== 'admin') {
+            if (!isset($userRole) || $userRole !== 'admin') {
                 return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK, [
                     'X-CTF-Flag' => 'API5_2023_BROKEN_FUNCTION_LEVEL_AUTHORIZATION_BRAND',
                     'X-CTF-Vulnerability-Description' => 'Non-admin users can delete brands. This endpoint should require admin role but does not properly enforce it.',

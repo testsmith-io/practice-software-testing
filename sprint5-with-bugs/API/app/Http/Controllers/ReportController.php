@@ -55,13 +55,24 @@ class ReportController extends Controller
 
         Log::debug('Total sales per country retrieved', ['count' => $results->count()]);
 
-        // CTF Flag: Rate limiting is too strict on reports endpoints
-        return $this->preferredFormat($results, 200, [
-            'X-CTF-Flag' => 'API4_2019_LACK_OF_RESOURCES_RATE_LIMITING',
-            'X-CTF-Vulnerability-Description' => 'The reports endpoint has overly restrictive rate limiting that returns 429 Too Many Requests too frequently. This impacts legitimate users trying to access reports.',
-            'X-CTF-Sequence' => '7',
-            'X-CTF-Code' => '01111001 01101111 01110101 01110010'
-        ]);
+        // CTF Flag: Lack of rate limiting - track requests and show flag after 5 requests
+        $cacheKey = 'reports_request_count_' . request()->ip();
+        $requestCount = cache()->get($cacheKey, 0) + 1;
+        cache()->put($cacheKey, $requestCount, now()->addMinutes(5));
+
+        Log::debug('Report endpoint request count', ['ip' => request()->ip(), 'count' => $requestCount]);
+
+        // Show CTF flag if endpoint is requested more than 5 times (demonstrating lack of rate limiting)
+        if ($requestCount > 5) {
+            return $this->preferredFormat($results, 200, [
+                'X-CTF-Flag' => 'API4_2019_LACK_OF_RESOURCES_RATE_LIMITING',
+                'X-CTF-Vulnerability-Description' => 'The reports endpoint lacks proper rate limiting. An attacker could overwhelm the server with excessive requests to expensive database queries, leading to performance degradation or denial of service.',
+                'X-CTF-Sequence' => '7',
+                'X-CTF-Code' => '00100000'
+            ]);
+        }
+
+        return $this->preferredFormat($results);
     }
 
     /**
