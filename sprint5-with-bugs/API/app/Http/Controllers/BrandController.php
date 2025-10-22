@@ -214,7 +214,7 @@ class BrandController extends Controller
             // CTF Flag: Check if non-admin deleted the brand (BFLA vulnerability)
             $userRole = auth()->check() ? auth()->user()->role : null;
             if (!isset($userRole) || $userRole !== 'admin') {
-                return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK, [
+                return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_NO_CONTENT, [
                     'X-CTF-Flag' => 'API5_2023_BROKEN_FUNCTION_LEVEL_AUTHORIZATION_BRAND',
                     'X-CTF-Vulnerability-Description' => 'Non-admin users can delete brands. This endpoint should require admin role but does not properly enforce it.',
                     'X-CTF-Sequence' => '4',
