@@ -67,11 +67,11 @@ class InvoiceController extends Controller
         // CTF Flag: All invoices are returned, not filtered by user_id (BFLA vulnerability)
         $response = $invoices->toArray();
 
-        return response($this->preferredFormat($response))->withHeaders([
+        return $this->preferredFormat($response, 200, [
             'X-CTF-Flag' => 'API5_2023_BROKEN_FUNCTION_LEVEL_AUTHORIZATION_INVOICE',
             'X-CTF-Vulnerability-Description' => 'All invoices are returned regardless of the authenticated user. The endpoint should only return invoices belonging to the current user.',
             'X-CTF-Sequence' => '8',
-            'X-CTF-Binary-Code' => '01100001'
+            'X-CTF-Code' => '01100001'
         ]);
     }
 
@@ -174,11 +174,11 @@ class InvoiceController extends Controller
 
         // Add CTF flag headers if price was manipulated
         if ($priceManipulated) {
-            return response($this->preferredFormat($invoice, ResponseAlias::HTTP_CREATED))->withHeaders([
+            return $this->preferredFormat($invoice, ResponseAlias::HTTP_CREATED, [
                 'X-CTF-Flag' => 'A04_2021_INSECURE_DESIGN_PRICE_MANIPULATION',
                 'X-CTF-Vulnerability-Description' => 'The API accepts client-provided unit_price values in invoice_items. Prices should be validated server-side against actual product prices to prevent manipulation.',
                 'X-CTF-Sequence' => '11',
-                'X-CTF-Binary-Code' => '00100001'
+                'X-CTF-Code' => '00100001'
             ]);
         }
 

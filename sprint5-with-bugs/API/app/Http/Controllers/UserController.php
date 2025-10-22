@@ -73,11 +73,11 @@ class UserController extends Controller
         // These fields should only be visible to admins, but they're exposed to everyone
         $response = $users->toArray();
 
-        return response($this->preferredFormat($response))->withHeaders([
+        return $this->preferredFormat($response, 200, [
             'X-CTF-Flag' => 'API3_2023_BROKEN_OBJECT_PROPERTY_LEVEL_AUTHORIZATION_USERS',
             'X-CTF-Vulnerability-Description' => 'The enabled and failed_login_attempts fields are exposed in the response. These should only be visible to admins.',
             'X-CTF-Sequence' => '3',
-            'X-CTF-Binary-Code' => '01100011'
+            'X-CTF-Code' => '01100011'
         ]);
     }
 
@@ -294,7 +294,7 @@ class UserController extends Controller
             'X-CTF-Flag' => 'API2_2023_BROKEN_AUTHENTICATION_LONG_LIVED_TOKEN',
             'X-CTF-Vulnerability-Description' => 'Access token TTL is set to 260000 minutes (~180 days) and refresh token to 520000 minutes (~361 days). Tokens should expire much sooner for security.',
             'X-CTF-Sequence' => '2',
-            'X-CTF-Binary-Code' => '01100101'
+            'X-CTF-Code' => '01100101'
         ];
 
         // Add SQL injection flag headers if detected
@@ -302,7 +302,7 @@ class UserController extends Controller
             $headers['X-CTF-Flag-SQL'] = 'API8_2019_INJECTION_SQL';
             $headers['X-CTF-Vulnerability-Description-SQL'] = 'The login endpoint is vulnerable to SQL injection. Using \' -- in the email bypasses password verification.';
             $headers['X-CTF-Sequence-SQL'] = '9';
-            $headers['X-CTF-Binary-Code-SQL'] = '01110000';
+            $headers['X-CTF-Code-SQL'] = '01110000';
         }
 
         return response()->json($data, $response->status())->withHeaders($headers);
@@ -567,11 +567,11 @@ class UserController extends Controller
         // CTF Flag: Check if user is accessing another user's data (BOLA vulnerability)
         $response = $user->toArray();
         if (auth()->check() && auth()->id() != $id) {
-            return response($this->preferredFormat($response))->withHeaders([
+            return $this->preferredFormat($response, 200, [
                 'X-CTF-Flag' => 'API1_2023_BROKEN_OBJECT_LEVEL_AUTHORIZATION',
                 'X-CTF-Vulnerability-Description' => 'You can retrieve another user\'s details by changing the user ID. The API does not verify that the authenticated user has permission to access this specific user\'s data.',
                 'X-CTF-Sequence' => '1',
-                'X-CTF-Binary-Code' => '01110011'
+                'X-CTF-Code' => '01110011'
             ]);
         }
 
