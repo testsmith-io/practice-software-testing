@@ -55,7 +55,13 @@ class ReportController extends Controller
 
         Log::debug('Total sales per country retrieved', ['count' => $results->count()]);
 
-        return $this->preferredFormat($results);
+        // CTF Flag: Rate limiting is too strict on reports endpoints
+        return response($this->preferredFormat(['data' => $results]))->withHeaders([
+            'X-CTF-Flag' => 'API4_2019_LACK_OF_RESOURCES_RATE_LIMITING',
+            'X-CTF-Vulnerability-Description' => 'The reports endpoint has overly restrictive rate limiting that returns 429 Too Many Requests too frequently. This impacts legitimate users trying to access reports.',
+            'X-CTF-Sequence' => '7',
+            'X-CTF-Binary-Code' => '01111001 01101111 01110101 01110010'
+        ]);
     }
 
     /**
