@@ -112,8 +112,9 @@ class Controller extends BaseController
         if (strcmp(app('request')->headers->get('Accept'), 'text/xml') == 0) {
             return $this->makeXML($data, $status, array_merge($headers, ['Content-Type' => app('request')->headers->get('Accept')]), $xmlRoot);
         } else {
+            $defaultHeaders = ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'];
             return response()->json($data, $status,
-                ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+                array_merge($defaultHeaders, $headers), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
         }
     }
 

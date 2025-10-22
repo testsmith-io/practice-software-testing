@@ -213,11 +213,11 @@ class ProductController extends Controller
         // CTF Flag: Product shows stock information to non-admin users
         $response = $product->toArray();
 
-        return response($this->preferredFormat($response))->withHeaders([
+        return $this->preferredFormat($response, 200, [
             'X-CTF-Flag' => 'API3_2023_BROKEN_OBJECT_PROPERTY_LEVEL_AUTHORIZATION_STOCK',
             'X-CTF-Vulnerability-Description' => 'The product response exposes the stock quantity field. This sensitive inventory information should only be visible to admin users.',
             'X-CTF-Sequence' => '5',
-            'X-CTF-Binary-Code' => '01110010'
+            'X-CTF-Code' => '01110010'
         ]);
     }
 
@@ -385,11 +385,11 @@ class ProductController extends Controller
             // CTF Flag: Check if non-admin deleted the product (BFLA vulnerability)
             $userRole = auth()->check() ? auth()->user()->role : null;
             if ($userRole && $userRole !== 'admin') {
-                return response()->json(['success' => true], ResponseAlias::HTTP_OK)->withHeaders([
+                return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK, [
                     'X-CTF-Flag' => 'API5_2023_BROKEN_FUNCTION_LEVEL_AUTHORIZATION_PRODUCT',
                     'X-CTF-Vulnerability-Description' => 'Non-admin users can delete products. This endpoint should require admin role but does not properly enforce it.',
                     'X-CTF-Sequence' => '6',
-                    'X-CTF-Binary-Code' => '01100101'
+                    'X-CTF-Code' => '01100101'
                 ]);
             }
 
