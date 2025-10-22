@@ -129,14 +129,16 @@ class InvoiceController extends Controller
             'prefix' => 'INV-' . now()->year
         ]);
 
-        // CTF Flag: Detect if user manipulated unit_price in invoice_items
+        // CTF Flag: Detect if total doesn't match sum of invoice_items (quantity * unit_price)
         $priceManipulated = false;
+        $calculatedTotal = 0;
         foreach ($request->only(['invoice_items'])['invoice_items'] as $invoiceItem) {
-            $product = Product::find($invoiceItem['product_id']);
-            if ($product && isset($invoiceItem['unit_price']) && $invoiceItem['unit_price'] != $product->price) {
-                $priceManipulated = true;
-                break;
-            }
+            $calculatedTotal += $invoiceItem['quantity'] * $invoiceItem['unit_price'];
+        }
+
+        // Check if the provided total matches the calculated total
+        if ($request->total != $calculatedTotal) {
+            $priceManipulated = true;
         }
 
         $invoice = Invoice::create($input);
