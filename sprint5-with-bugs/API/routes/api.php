@@ -39,7 +39,13 @@ Route::get('/logs/laravel.log', function () {
         $logContents = 'Log file not found.';
     }
 
-    return nl2br(e($logContents));
+    // CTF Flag: Logs exposed vulnerability - add flag to headers
+    return response(nl2br(e($logContents)))->withHeaders([
+        'X-CTF-Flag' => 'FLAG{API8_2023_SECURITY_MISCONFIGURATION_LOG_EXPOSURE}',
+        'X-CTF-Vulnerability-Description' => 'Application logs are publicly accessible via the web. Logs may contain sensitive information like API keys, user data, and internal system details. This endpoint should be disabled or properly secured.',
+        'X-CTF-Sequence' => '10',
+        'X-CTF-Binary-Code' => '01101001'
+    ]);
 });
 
 Route::controller(BrandController::class)->prefix('brands')->group(function () {
