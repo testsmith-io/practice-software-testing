@@ -26,7 +26,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/status', function () {
-    return response()->json(['version' => config('app.version'), 'environment' => env('APP_ENV'), 'app_name' => env('APP_NAME')], 200,
+    return response()->json([
+        'version' => config('app.version'),
+        'laravel_version' => app()->version(),
+        'environment' => env('APP_ENV'),
+        'app_name' => env('APP_NAME')
+    ], 200,
         ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
 });
 
