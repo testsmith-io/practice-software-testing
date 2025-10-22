@@ -237,6 +237,7 @@ test('user can update own information', function () {
             'country' => 'Country'
         ],
         'email' => 'john@doe.example',
+        'failed_login_attempts' => 0,
     ];
 
     // Make a PUT request to update user information
@@ -284,6 +285,7 @@ test('admin can update any user information', function () {
             'country' => 'Country'
         ],
         'email' => 'john@doe.example',
+        'failed_login_attempts' => 0,
     ];
 
     // Make a PUT request to update the other user's information
@@ -309,6 +311,7 @@ test('user cannot update another users information', function () {
             'country' => 'Country'
         ],
         'email' => 'john@doe.example',
+        'failed_login_attempts' => 0,
     ];
 
     // Create two users
