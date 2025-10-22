@@ -44,7 +44,7 @@ Route::get('/logs/laravel.log', function () {
         'X-CTF-Flag' => 'API8_2023_SECURITY_MISCONFIGURATION_LOG_EXPOSURE',
         'X-CTF-Vulnerability-Description' => 'Application logs are publicly accessible via the web. Logs may contain sensitive information like API keys, user data, and internal system details. This endpoint should be disabled or properly secured.',
         'X-CTF-Sequence' => '10',
-        'X-CTF-Binary-Code' => '01101001'
+        'X-CTF-Code' => '01101001'
     ]);
 });
 
