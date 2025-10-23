@@ -15,7 +15,15 @@ VALUES (1, 'John', 'Doe', 'Test street 123', 'Utrecht', NULL, 'The Netherlands',
 /** Brand names **/
 INSERT INTO `brands` (`name`, `slug`)
 VALUES ("Brand name 1", "brand-name-1"),
-       ("Brand name 2", "brand-name-2");
+       ("Brand name 2", "brand-name-2"),
+       ("Brand name 3", "brand-name-3"),
+       ("Brand name 4", "brand-name-4"),
+       ("Brand name 5", "brand-name-5"),
+       ("Brand name 6", "brand-name-6"),
+       ("Brand name 7", "brand-name-7"),
+       ("Brand name 8", "brand-name-8"),
+       ("Brand name 9", "brand-name-9"),
+       ("Brand name 10", "brand-name-10");
 
 /** Category names **/
 INSERT INTO `categories` (`id`, `parent_id`, `name`, `slug`)
