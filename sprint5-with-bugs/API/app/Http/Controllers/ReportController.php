@@ -68,7 +68,7 @@ class ReportController extends Controller
                 'X-CTF-Flag' => 'API4_2019_LACK_OF_RESOURCES_RATE_LIMITING',
                 'X-CTF-Vulnerability-Description' => 'The reports endpoint lacks proper rate limiting. An attacker could overwhelm the server with excessive requests to expensive database queries, leading to performance degradation or denial of service.',
                 'X-CTF-Sequence' => '7',
-                'X-CTF-Code' => '00100000'
+                'X-CTF-Code' => '01111001 01101111 01110101 01110010'
             ]);
         }
 
