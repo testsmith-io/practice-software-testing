@@ -51,7 +51,7 @@ class UpdateCustomer extends BaseFormRequest
             'phone' => ['nullable', 'string', 'max:24', new SubscriptSuperscriptRule()],
             'dob' => ['date', 'date_format:Y-m-d', "before:{$before}"],
             'email' => ['required', 'string', 'max:256', new SubscriptSuperscriptRule()],
-            'failed_login_attempts' => ['required', 'numeric'],
+            'failed_login_attempts' => ['numeric'],
         ];
     }
 }
