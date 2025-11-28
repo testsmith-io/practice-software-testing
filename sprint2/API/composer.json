@@ -12,7 +12,6 @@
         "laravel/sanctum": "v4.1.1",
         "laravel/tinker": "v2.10.1",
         "mehradsadeghi/laravel-filter-querystring": "1.1.10",
-        "pact-foundation/pact-php": "10.1.1",
         "tymon/jwt-auth": "2.1.1",
         "zircote/swagger-php": "3.3.7"
     },
