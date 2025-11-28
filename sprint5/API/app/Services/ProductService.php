@@ -15,8 +15,10 @@ class ProductService
         if (isset($filters['is_rental'])) {
             $value = strtolower((string) $filters['is_rental']);
             $filters['is_rental'] = in_array($value, ['1', 'true'], true) ? 1 : 0;
+        } else {
+            // Default to excluding rentals when not specified
+            $filters['is_rental'] = 0;
         }
-        // Don't default is_rental - allow fetching all products when not specified
 
         $cacheKey = $this->generateCacheKey($filters);
 
