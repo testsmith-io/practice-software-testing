@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Console\Commands;
+namespace App\Console\Commands;
 
 use App\Models\Download;
 use Illuminate\Console\Command;
