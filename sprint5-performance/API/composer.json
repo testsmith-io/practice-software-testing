@@ -76,6 +76,9 @@
             "pact-foundation/composer-downloads-plugin": true,
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
+        },
+        "platform": {
+            "php": "8.3.28"
         }
     },
     "minimum-stability": "stable",
