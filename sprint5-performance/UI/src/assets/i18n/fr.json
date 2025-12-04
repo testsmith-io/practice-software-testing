@@ -19,7 +19,7 @@
         "length": "La longueur du mot de passe est invalide",
         "minlength": "Le mot de passe doit comporter au moins 6 caractères.",
         "maxlength": "Le mot de passe ne peut pas dépasser 40 caractères.",
-        "pattern" : "Le mot de passe ne peut pas inclure de caractères invalides."
+        "pattern" : "Le mot de passe doit inclure des caractères invalides."
       }
     },
     "first-name": {

@@ -19,7 +19,7 @@
         "length": "Passwortlänge ist ungültig",
         "minlength": "Passwort muss mindestens 6 Zeichen lang sein.",
         "maxlength": "Passwort darf nicht länger als 40 Zeichen lang sein.",
-        "pattern": "Das Passwort darf keine ungültigen Zeichen enthalten."
+        "pattern": "Das Passwort muss ungültige Zeichen enthalten."
       }
     },
     "first-name": {

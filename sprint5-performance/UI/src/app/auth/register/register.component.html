@@ -236,7 +236,7 @@
                     {{ t('fields.email.errors.required') }}
                   </div>
                 }
-                @if (f['email'].errors?.['email']) {
+                @if (f['email'].errors?.['pattern']) {
                   <div>
                     {{ t('fields.email.errors.format') }}
                   </div>
