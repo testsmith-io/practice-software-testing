@@ -19,7 +19,7 @@
         "length": "La longitud de la contraseña no es válida",
         "minlength": "La contraseña debe tener al menos 6 caracteres.",
         "maxlength": "La contraseña no puede tener más de 40 caracteres.",
-        "pattern": "La contraseña no puede incluir caracteres inválidos."
+        "pattern": "La contraseña debe incluir caracteres inválidos."
       }
     },
     "first-name": {

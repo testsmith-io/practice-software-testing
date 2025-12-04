@@ -19,7 +19,7 @@
         "length": "Şifre uzunluğu geçersiz",
         "minlength": "Şifre en az 6 karakter olmalıdır.",
         "maxlength": "Şifre 40 karakterden fazla olamaz.",
-        "pattern": "Şifre, geçersiz karakterler içermemelidir."
+        "pattern": "Şifre, geçersiz karakterler içermelidir."
       }
     },
     "first-name": {
