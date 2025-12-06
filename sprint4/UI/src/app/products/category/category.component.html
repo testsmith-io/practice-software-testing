@@ -56,6 +56,7 @@
         role="button" aria-expanded="false" aria-controls="collapseExample">
         <i class="fa fa-filter"></i> Filters
       </a>
+      <!-- Sprint 4: Full cards with images, hover effects and animations -->
       @if (results) {
         <div class="container" attr.data-test="{{resultState}}">
           @for (item of results.data  | paginate: { itemsPerPage: results.per_page, currentPage: p, totalItems: results.total }; track item) {

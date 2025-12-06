@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-light bg-light border-bottom">
   <div class="container">
     <a title="Practice Software Testing - Toolshop" class="navbar-brand" href="/">
       <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
@@ -51,32 +51,12 @@
 		"/>
 </svg>
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" data-test="nav-home" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" data-test="nav-categories" role="button"
-             data-bs-toggle="dropdown"
-             aria-expanded="false">
-            Categories
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="nav-categories">
-            <li><a class="dropdown-item" data-test="nav-hand-tools" routerLink="/category/hand-tools">Hand Tools</a>
-            </li>
-            <li><a class="dropdown-item" data-test="nav-power-tools" routerLink="/category/power-tools">Power Tools</a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" data-test="nav-contact" routerLink="/contact">Contact</a>
-        </li>
-      </ul>
+    <!-- Sprint 1: Simple text links, no hamburger menu -->
+    <div class="ms-auto">
+      <a class="text-decoration-none text-dark me-3" data-test="nav-home" href="#">Home</a>
+      <a class="text-decoration-none text-dark me-3" data-test="nav-hand-tools" routerLink="/category/hand-tools">Hand Tools</a>
+      <a class="text-decoration-none text-dark me-3" data-test="nav-power-tools" routerLink="/category/power-tools">Power Tools</a>
+      <a class="text-decoration-none text-dark" data-test="nav-contact" routerLink="/contact">Contact</a>
     </div>
   </div>
 </nav>

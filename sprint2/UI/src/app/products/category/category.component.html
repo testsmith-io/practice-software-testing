@@ -56,15 +56,12 @@
         role="button" aria-expanded="false" aria-controls="collapseExample">
         <i class="fa fa-filter"></i> Filters
       </a>
+      <!-- Sprint 2: Basic cards without images -->
       @if (results) {
         <div class="container" attr.data-test="{{resultState}}">
           @for (item of results.data  | paginate: { itemsPerPage: results.per_page, currentPage: p, totalItems: results.total }; track item) {
             <a attr.data-test="product-{{item.id}}" routerLink="/product/{{item.id}}"
               class="card" style="text-decoration: none; color: black;">
-              <div class="card-img-wrapper">
-                <img class="card-img-top"
-                  src="assets/img/products/{{item.product_image.file_name}}">
-                </div>
                 <div class="card-body">
                   <h5 data-test="product-name" class="card-title">
                     {{item.name}}
