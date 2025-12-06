@@ -1,16 +1,22 @@
-/* Sprint 1 - Basic product grid */
-/* No hover effects, no transitions */
+/* Sprint 1 - Flat product grid */
+/* No shadows, no hover effects, no transitions */
+/* Square corners, tight spacing */
 
 .container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  grid-gap: 15px;
+  grid-gap: 10px;
+}
+
+.card {
+  border-radius: 0;
 }
 
 .card-img-top {
   width: 100%;
   height: 15em;
   object-fit: cover;
+  border-radius: 0;
 }
 
 .card-img-wrapper {
@@ -18,9 +24,17 @@
   height: 15em;
 }
 
+.card-body {
+  padding: 0.75rem;
+}
+
+.card-footer {
+  padding: 0.5rem 0.75rem;
+}
+
 .discounted {
   text-decoration: line-through;
   font-style: italic;
-  color: #666;
+  color: red;
   font-size: 80%;
 }

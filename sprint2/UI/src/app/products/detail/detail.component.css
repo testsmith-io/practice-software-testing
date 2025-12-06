@@ -1,5 +1,5 @@
-/* Sprint 2 - Product detail with basic styling */
-/* Grayscale, no image zoom effects */
+/* Sprint 2 - Product detail with shadows */
+/* Subtle shadows, no hover effects yet */
 
 .quantity {
   width: 125px;
@@ -28,7 +28,7 @@
 .discounted {
   text-decoration: line-through;
   font-style: italic;
-  color: #666;
+  color: red;
   font-size: 80%;
 }
 

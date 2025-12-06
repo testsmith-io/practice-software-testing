@@ -1,20 +1,21 @@
-/* Sprint 3 - Introducing brand colors */
-/* Blue primary color, better shadows, minimal transitions */
+/* Sprint 3 - Shadows + hover effects */
+/* Better shadows, button hover states, no animations yet */
+/* Medium rounding (0.5rem), good spacing */
 
 html, body {
   height: 100%;
   scroll-behavior: auto !important;
 }
 
-/* Form styling with brand colors */
 .auth-container {
-  margin-top: 5%;
-  margin-bottom: 5%;
+  margin-top: 4.5%;
+  margin-bottom: 4.5%;
 }
 
 .auth-form {
-  padding: 3%;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
+  padding: 2.75%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 0.5rem;
 }
 
 .auth-form h3 {
@@ -23,7 +24,7 @@ html, body {
 }
 
 .auth-container form {
-  padding: 3% 10%;
+  padding: 2.75% 9.5%;
 }
 
 .btnSubmit {
@@ -67,5 +68,5 @@ input[type=number] {
 }
 
 a {
-  color: #1E6098;
+  color: #0000cc;
 }

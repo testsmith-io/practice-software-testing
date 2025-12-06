@@ -1,5 +1,5 @@
-/* Sprint 4 - Product detail with animations */
-/* Image zoom on hover, close to Sprint 5 */
+/* Sprint 4 - Full product detail with animations */
+/* Shadows, hover effects, image zoom transitions */
 
 .quantity {
   width: 125px;
@@ -15,8 +15,8 @@
   width: 100%;
   height: 15em;
   object-fit: cover;
-  -webkit-transition: 5s ease;
-  transition: 5s ease;
+  -webkit-transition: transform 5s ease;
+  transition: transform 5s ease;
 }
 
 .card-img-top:hover {
@@ -30,8 +30,8 @@
 }
 
 .figure img {
-  -webkit-transition: 5s ease;
-  transition: 5s ease;
+  -webkit-transition: transform 5s ease;
+  transition: transform 5s ease;
 }
 
 .figure img:hover {

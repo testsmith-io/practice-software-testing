@@ -1,5 +1,6 @@
-/* Sprint 4 - Full brand styling with animations */
-/* Close to final Sprint 5 design */
+/* Sprint 4 - Full design with animations */
+/* Shadows, hover effects, smooth transitions */
+/* Full rounding (1rem), generous spacing */
 
 html, body {
   height: 100%;
@@ -14,6 +15,7 @@ html, body {
 .auth-form {
   padding: 3%;
   box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 0.75rem;
 }
 
 .auth-form h3 {
@@ -37,6 +39,11 @@ html, body {
   font-weight: 600;
   color: #fff;
   background-color: #1E6098;
+  transition: background-color 0.2s ease;
+}
+
+.auth-form .btnSubmit:hover {
+  background-color: #175a8a;
 }
 
 .auth-form .ForgetPwd {

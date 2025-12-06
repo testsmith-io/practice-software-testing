@@ -1,10 +1,10 @@
-/* Sprint 1 - Basic header styling */
-/* Grayscale logo colors, no animations */
+/* Sprint 1 - Basic header */
+/* Colorful logo, no gear animation */
 
-.st0 { fill: #808080; }  /* Gray instead of green */
+.st0 { fill: #8DC12F; }
 .st1 { fill: #FFFFFF; }
-.st2 { fill: #999999; }  /* Gray instead of light green */
-.st3 { fill: #555555; }  /* Gray instead of blue */
+.st2 { fill: #9DC83D; }
+.st3 { fill: #1D6098; }
 .st4 { fill: #5A585D; }
 
 /* No gear animation in Sprint 1 */
@@ -16,14 +16,12 @@
 .badge {
   padding-left: 9px;
   padding-right: 9px;
-  -webkit-border-radius: 9px;
-  -moz-border-radius: 9px;
   border-radius: 9px;
 }
 
 .label-warning[href],
 .badge-warning[href] {
-  background-color: #6c757d;
+  background-color: #c67605;
 }
 
 #lblCartCount {

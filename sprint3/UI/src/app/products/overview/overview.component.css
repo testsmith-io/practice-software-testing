@@ -1,16 +1,28 @@
-/* Sprint 3 - Product grid with brand colors */
-/* Basic hover effects, no image zoom transitions yet */
+/* Sprint 3 - Product grid with shadows + hover */
+/* Card shadows and hover states, no image zoom animation yet */
+/* Medium rounding (0.5rem), good spacing */
 
 .container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  grid-gap: 15px;
+  grid-gap: 14px;
+}
+
+.card {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+}
+
+.card:hover {
+  background: #efefef;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .card-img-top {
   width: 100%;
   height: 15em;
   object-fit: cover;
+  border-radius: 0.5rem 0.5rem 0 0;
 }
 
 .card-img-wrapper {
@@ -18,13 +30,18 @@
   height: 15em;
 }
 
-.card:hover {
-  background: #efefef;
+.card-body {
+  padding: 0.95rem;
+}
+
+.card-footer {
+  padding: 0.7rem 0.95rem;
+  border-radius: 0 0 0.5rem 0.5rem;
 }
 
 .discounted {
   text-decoration: line-through;
   font-style: italic;
-  color: #dc3545;
+  color: red;
   font-size: 80%;
 }
