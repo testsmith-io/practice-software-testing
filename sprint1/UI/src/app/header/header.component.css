@@ -1,25 +1,16 @@
-.st0{fill:#8DC12F;}
-.st1{fill:#FFFFFF;}
-.st2{fill:#9DC83D;}
-.st3{fill:#1D6098;}
-.st4{fill:#5A585D;}
+/* Sprint 1 - Basic header styling */
+/* Grayscale logo colors, no animations */
 
+.st0 { fill: #808080; }  /* Gray instead of green */
+.st1 { fill: #FFFFFF; }
+.st2 { fill: #999999; }  /* Gray instead of light green */
+.st3 { fill: #555555; }  /* Gray instead of blue */
+.st4 { fill: #5A585D; }
+
+/* No gear animation in Sprint 1 */
 .gear {
   transform-origin: 50% 50%;
   transform-box: fill-box;
-  -webkit-animation: frames 10s infinite linear;
-  animation: frames 10s infinite linear;
-}
-
-@keyframes frames {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(359deg);
-    transform: rotate(359deg);
-  }
 }
 
 .badge {
@@ -32,13 +23,12 @@
 
 .label-warning[href],
 .badge-warning[href] {
-  background-color: #c67605;
+  background-color: #6c757d;
 }
+
 #lblCartCount {
   font-size: 10px;
-  /*background: #ff0000;*/
   color: #fff;
-  /*padding: 5px;*/
   vertical-align: top;
   margin-left: -10px;
   margin-top: -5px;
@@ -55,7 +45,7 @@
   top: -7px;
 }
 
-.dropdown-menu>li:hover>.dropdown-submenu {
+.dropdown-menu > li:hover > .dropdown-submenu {
   display: block;
 }
 

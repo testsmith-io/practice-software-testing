@@ -1,3 +1,6 @@
+/* Sprint 1 - Basic product grid */
+/* No hover effects, no transitions */
+
 .container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -8,14 +11,6 @@
   width: 100%;
   height: 15em;
   object-fit: cover;
-  -webkit-transition: 5s ease;
-  transition: 5s ease;
-}
-
-.card-img-top:hover {
-  background-color: lightgrey;
-  transform: scale(1.15);
-  -webkit-transform: scale(1.15);
 }
 
 .card-img-wrapper {
@@ -23,13 +18,9 @@
   height: 15em;
 }
 
-.card:hover {
-  background: #efefef;
-}
-
 .discounted {
   text-decoration: line-through;
   font-style: italic;
-  color: red;
+  color: #666;
   font-size: 80%;
 }

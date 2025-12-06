@@ -1,42 +1,43 @@
-/* You can add global styles to this file, and also import other style files */
+/* Sprint 1 - Basic, simplistic design */
+/* Plain Bootstrap defaults with grayscale color scheme, no animations or effects */
+
 html, body {
   height: 100%;
   scroll-behavior: auto !important;
 }
-.auth-container{
+
+/* Basic form styling - minimal */
+.auth-container {
   margin-top: 5%;
   margin-bottom: 5%;
 }
-.auth-form{
+
+.auth-form {
   padding: 3%;
-  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+  border: 1px solid #dee2e6;
 }
-.auth-form h3{
+
+.auth-form h3 {
   text-align: center;
   color: #333;
 }
 
-.auth-container form{
+.auth-container form {
   padding: 3% 10%;
 }
-.btnSubmit
-{
+
+.btnSubmit {
   width: 50%;
-  border-radius: 1rem;
   padding: 1.5%;
-  border: none;
+  border: 1px solid #333;
   cursor: pointer;
-}
-.auth-form .btnSubmit{
-  font-weight: 600;
+  background-color: #6c757d;
   color: #fff;
-  background-color: #1E6098;
 }
 
-.auth-form .ForgetPwd{
-  color: #1E6098;
-  font-weight: 600;
-  text-decoration: none;
+.auth-form .ForgetPwd {
+  color: #333;
+  text-decoration: underline;
 }
 
 .alert {
@@ -53,4 +54,8 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+a {
+  color: #333;
 }

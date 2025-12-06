@@ -1,39 +1,45 @@
-/* You can add global styles to this file, and also import other style files */
+/* Sprint 4 - Full brand styling with animations */
+/* Close to final Sprint 5 design */
+
 html, body {
   height: 100%;
   scroll-behavior: auto !important;
 }
-.auth-container{
+
+.auth-container {
   margin-top: 5%;
   margin-bottom: 5%;
 }
-.auth-form{
+
+.auth-form {
   padding: 3%;
   box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
 }
-.auth-form h3{
+
+.auth-form h3 {
   text-align: center;
   color: #333;
 }
 
-.auth-container form{
+.auth-container form {
   padding: 3% 10%;
 }
-.btnSubmit
-{
+
+.btnSubmit {
   width: 50%;
   border-radius: 1rem;
   padding: 1.5%;
   border: none;
   cursor: pointer;
 }
-.auth-form .btnSubmit{
+
+.auth-form .btnSubmit {
   font-weight: 600;
   color: #fff;
   background-color: #1E6098;
 }
 
-.auth-form .ForgetPwd{
+.auth-form .ForgetPwd {
   color: #1E6098;
   font-weight: 600;
   text-decoration: none;
@@ -53,4 +59,8 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+a {
+  color: #0000cc;
 }

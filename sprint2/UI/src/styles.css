@@ -1,42 +1,49 @@
-/* You can add global styles to this file, and also import other style files */
+/* Sprint 2 - Adding subtle shadows and basic structure */
+/* Still grayscale but with box shadows and better visual hierarchy */
+
 html, body {
   height: 100%;
   scroll-behavior: auto !important;
 }
-.auth-container{
+
+/* Form styling with subtle shadow */
+.auth-container {
   margin-top: 5%;
   margin-bottom: 5%;
 }
-.auth-form{
+
+.auth-form {
   padding: 3%;
-  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
 }
-.auth-form h3{
+
+.auth-form h3 {
   text-align: center;
   color: #333;
 }
 
-.auth-container form{
+.auth-container form {
   padding: 3% 10%;
 }
-.btnSubmit
-{
+
+.btnSubmit {
   width: 50%;
-  border-radius: 1rem;
+  border-radius: 0.25rem;
   padding: 1.5%;
   border: none;
   cursor: pointer;
-}
-.auth-form .btnSubmit{
-  font-weight: 600;
+  background-color: #6c757d;
   color: #fff;
-  background-color: #1E6098;
 }
 
-.auth-form .ForgetPwd{
-  color: #1E6098;
-  font-weight: 600;
-  text-decoration: none;
+.btnSubmit:hover {
+  background-color: #5a6268;
+}
+
+.auth-form .ForgetPwd {
+  color: #495057;
+  text-decoration: underline;
 }
 
 .alert {
@@ -53,4 +60,12 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+a {
+  color: #495057;
+}
+
+a:hover {
+  color: #333;
 }
