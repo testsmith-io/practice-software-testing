@@ -1,39 +1,50 @@
-/* You can add global styles to this file, and also import other style files */
+/* Sprint 3 - Introducing brand colors */
+/* Blue primary color, better shadows, minimal transitions */
+
 html, body {
   height: 100%;
   scroll-behavior: auto !important;
 }
-.auth-container{
+
+/* Form styling with brand colors */
+.auth-container {
   margin-top: 5%;
   margin-bottom: 5%;
 }
-.auth-form{
+
+.auth-form {
   padding: 3%;
-  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
 }
-.auth-form h3{
+
+.auth-form h3 {
   text-align: center;
   color: #333;
 }
 
-.auth-container form{
+.auth-container form {
   padding: 3% 10%;
 }
-.btnSubmit
-{
+
+.btnSubmit {
   width: 50%;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   padding: 1.5%;
   border: none;
   cursor: pointer;
 }
-.auth-form .btnSubmit{
+
+.auth-form .btnSubmit {
   font-weight: 600;
   color: #fff;
   background-color: #1E6098;
 }
 
-.auth-form .ForgetPwd{
+.auth-form .btnSubmit:hover {
+  background-color: #175a8a;
+}
+
+.auth-form .ForgetPwd {
   color: #1E6098;
   font-weight: 600;
   text-decoration: none;
@@ -53,4 +64,8 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+a {
+  color: #1E6098;
 }

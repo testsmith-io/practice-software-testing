@@ -1,3 +1,6 @@
+/* Sprint 4 - Full product grid with animations */
+/* Image zoom on hover, close to Sprint 5 */
+
 .container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));

@@ -1,3 +1,6 @@
+/* Sprint 3 - Product grid with brand colors */
+/* Basic hover effects, no image zoom transitions yet */
+
 .container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -8,14 +11,6 @@
   width: 100%;
   height: 15em;
   object-fit: cover;
-  -webkit-transition: 5s ease;
-  transition: 5s ease;
-}
-
-.card-img-top:hover {
-  background-color: lightgrey;
-  transform: scale(1.15);
-  -webkit-transform: scale(1.15);
 }
 
 .card-img-wrapper {
@@ -30,6 +25,6 @@
 .discounted {
   text-decoration: line-through;
   font-style: italic;
-  color: red;
+  color: #dc3545;
   font-size: 80%;
 }

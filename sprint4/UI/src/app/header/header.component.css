@@ -1,8 +1,11 @@
-.st0{fill:#8DC12F;}
-.st1{fill:#FFFFFF;}
-.st2{fill:#9DC83D;}
-.st3{fill:#1D6098;}
-.st4{fill:#5A585D;}
+/* Sprint 4 - Full brand styling with gear animation */
+/* Complete design, close to Sprint 5 */
+
+.st0 { fill: #8DC12F; }
+.st1 { fill: #FFFFFF; }
+.st2 { fill: #9DC83D; }
+.st3 { fill: #1D6098; }
+.st4 { fill: #5A585D; }
 
 .gear {
   transform-origin: 50% 50%;
@@ -34,11 +37,10 @@
 .badge-warning[href] {
   background-color: #c67605;
 }
+
 #lblCartCount {
   font-size: 10px;
-  /*background: #ff0000;*/
   color: #fff;
-  /*padding: 5px;*/
   vertical-align: top;
   margin-left: -10px;
   margin-top: -5px;
@@ -55,7 +57,7 @@
   top: -7px;
 }
 
-.dropdown-menu>li:hover>.dropdown-submenu {
+.dropdown-menu > li:hover > .dropdown-submenu {
   display: block;
 }
 
