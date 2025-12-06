@@ -1,5 +1,5 @@
-/* Sprint 4 - Full brand styling with gear animation */
-/* Complete design, close to Sprint 5 */
+/* Sprint 4 - Full header with gear animation */
+/* Colorful logo with rotating gear */
 
 .st0 { fill: #8DC12F; }
 .st1 { fill: #FFFFFF; }
@@ -7,6 +7,7 @@
 .st3 { fill: #1D6098; }
 .st4 { fill: #5A585D; }
 
+/* Gear animation enabled in Sprint 4 */
 .gear {
   transform-origin: 50% 50%;
   transform-box: fill-box;
@@ -28,8 +29,6 @@
 .badge {
   padding-left: 9px;
   padding-right: 9px;
-  -webkit-border-radius: 9px;
-  -moz-border-radius: 9px;
   border-radius: 9px;
 }
 

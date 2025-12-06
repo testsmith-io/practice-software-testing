@@ -1,5 +1,5 @@
-/* Sprint 1 - Basic product detail */
-/* No hover effects, no transitions */
+/* Sprint 1 - Flat product detail */
+/* No shadows, no hover effects, no transitions */
 
 .quantity {
   width: 125px;
@@ -28,7 +28,7 @@
 .discounted {
   text-decoration: line-through;
   font-style: italic;
-  color: #666;
+  color: red;
   font-size: 80%;
 }
 

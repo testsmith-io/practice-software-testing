@@ -1,21 +1,21 @@
-/* Sprint 2 - Adding subtle shadows and basic structure */
-/* Still grayscale but with box shadows and better visual hierarchy */
+/* Sprint 2 - Adding shadows */
+/* Subtle shadows on forms and cards, no hover effects yet */
+/* Slight rounding (0.25rem), moderate spacing */
 
 html, body {
   height: 100%;
   scroll-behavior: auto !important;
 }
 
-/* Form styling with subtle shadow */
 .auth-container {
-  margin-top: 5%;
-  margin-bottom: 5%;
+  margin-top: 4%;
+  margin-bottom: 4%;
 }
 
 .auth-form {
-  padding: 3%;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid #e9ecef;
+  padding: 2.5%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 0.25rem;
 }
 
 .auth-form h3 {
@@ -24,26 +24,27 @@ html, body {
 }
 
 .auth-container form {
-  padding: 3% 10%;
+  padding: 2.5% 9%;
 }
 
 .btnSubmit {
   width: 50%;
-  border-radius: 0.25rem;
   padding: 1.5%;
   border: none;
   cursor: pointer;
-  background-color: #6c757d;
-  color: #fff;
+  border-radius: 0.25rem;
 }
 
-.btnSubmit:hover {
-  background-color: #5a6268;
+.auth-form .btnSubmit {
+  font-weight: 600;
+  color: #fff;
+  background-color: #1E6098;
 }
 
 .auth-form .ForgetPwd {
-  color: #495057;
-  text-decoration: underline;
+  color: #1E6098;
+  font-weight: 600;
+  text-decoration: none;
 }
 
 .alert {
@@ -63,9 +64,5 @@ input[type=number] {
 }
 
 a {
-  color: #495057;
-}
-
-a:hover {
-  color: #333;
+  color: #0000cc;
 }

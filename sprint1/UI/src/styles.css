@@ -1,19 +1,19 @@
-/* Sprint 1 - Basic, simplistic design */
-/* Plain Bootstrap defaults with grayscale color scheme, no animations or effects */
+/* Sprint 1 - Flat, basic design */
+/* No shadows, no hover effects, no animations */
+/* Square corners, tight spacing */
 
 html, body {
   height: 100%;
   scroll-behavior: auto !important;
 }
 
-/* Basic form styling - minimal */
 .auth-container {
-  margin-top: 5%;
-  margin-bottom: 5%;
+  margin-top: 3%;
+  margin-bottom: 3%;
 }
 
 .auth-form {
-  padding: 3%;
+  padding: 2%;
   border: 1px solid #dee2e6;
 }
 
@@ -23,21 +23,27 @@ html, body {
 }
 
 .auth-container form {
-  padding: 3% 10%;
+  padding: 2% 8%;
 }
 
 .btnSubmit {
   width: 50%;
   padding: 1.5%;
-  border: 1px solid #333;
+  border: none;
   cursor: pointer;
-  background-color: #6c757d;
+  border-radius: 0;
+}
+
+.auth-form .btnSubmit {
+  font-weight: 600;
   color: #fff;
+  background-color: #1E6098;
 }
 
 .auth-form .ForgetPwd {
-  color: #333;
-  text-decoration: underline;
+  color: #1E6098;
+  font-weight: 600;
+  text-decoration: none;
 }
 
 .alert {
@@ -57,5 +63,5 @@ input[type=number] {
 }
 
 a {
-  color: #333;
+  color: #0000cc;
 }

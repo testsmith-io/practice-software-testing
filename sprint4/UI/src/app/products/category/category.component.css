@@ -1,18 +1,31 @@
-/* Sprint 4 - Category with animations */
-/* Image zoom on hover, close to Sprint 5 */
+/* Sprint 4 - Full category grid with animations */
+/* Shadows, hover effects, image zoom transitions */
+/* Full rounding (0.75rem), generous spacing */
 
 .container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  grid-gap: 15px;
+  grid-gap: 16px;
+}
+
+.card {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+  border-radius: 0.75rem;
+}
+
+.card:hover {
+  background: #efefef;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .card-img-top {
   width: 100%;
   height: 15em;
   object-fit: cover;
-  -webkit-transition: 5s ease;
-  transition: 5s ease;
+  -webkit-transition: transform 5s ease;
+  transition: transform 5s ease;
+  border-radius: 0.75rem 0.75rem 0 0;
 }
 
 .card-img-top:hover {
@@ -24,10 +37,16 @@
 .card-img-wrapper {
   overflow: hidden;
   height: 15em;
+  border-radius: 0.75rem 0.75rem 0 0;
 }
 
-.card:hover {
-  background: #efefef;
+.card-body {
+  padding: 1rem;
+}
+
+.card-footer {
+  padding: 0.75rem 1rem;
+  border-radius: 0 0 0.75rem 0.75rem;
 }
 
 .discounted {

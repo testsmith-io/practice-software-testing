@@ -1,16 +1,23 @@
-/* Sprint 2 - Category with basic hover states */
-/* Grayscale with subtle hover effects, no image zoom */
+/* Sprint 2 - Category grid with shadows */
+/* Subtle card shadows, no hover effects yet */
+/* Slight rounding (0.25rem), moderate spacing */
 
 .container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  grid-gap: 15px;
+  grid-gap: 12px;
+}
+
+.card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 0.25rem;
 }
 
 .card-img-top {
   width: 100%;
   height: 15em;
   object-fit: cover;
+  border-radius: 0.25rem 0.25rem 0 0;
 }
 
 .card-img-wrapper {
@@ -18,13 +25,17 @@
   height: 15em;
 }
 
-.card:hover {
-  background: #f8f9fa;
+.card-body {
+  padding: 0.85rem;
+}
+
+.card-footer {
+  padding: 0.6rem 0.85rem;
 }
 
 .discounted {
   text-decoration: line-through;
   font-style: italic;
-  color: #666;
+  color: red;
   font-size: 80%;
 }
