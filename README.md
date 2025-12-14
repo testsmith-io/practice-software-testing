@@ -24,9 +24,9 @@
 
 The mobile app is fully integrated with version 4 of Practice Software Testing, which means both share the same environment. Any changes you make through the mobile app (like creating or editing data) will appear on the website, and updates on the website will also show up in the app.
 
-[Android Mobile APK](https://testsmith.s3.eu-central-1.amazonaws.com/artifacts/practice-software-testing.apk)
+[Android Mobile APK](https://testsmith.ams3.cdn.digitaloceanspaces.com/artifacts/practice-software-testing.apk)
 
-[iOS Simulator App](https://testsmith.s3.eu-central-1.amazonaws.com/artifacts/practice-software-testing.zip)
+[iOS Simulator App](https://testsmith.ams3.cdn.digitaloceanspaces.com/artifacts/practice-software-testing.zip)
 
 # Using the docker containers
 
