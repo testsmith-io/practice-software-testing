@@ -26,7 +26,7 @@
               <label for="quantity-{{item.id}}" class="visually-hidden">Quantity for {{item.product.name}}</label>
               <input type="number" id="quantity-{{item.id}}" data-test="product-quantity" min="1" max="99" class="form-control quantity"
                      (change)="updateQuantity($event, item)"
-                     [value]="item.quantity">
+                     [(ngModel)]="item.quantity">
             </td>
 
             <td class="col-md-2 text-end"><span data-test="product-price"
