@@ -7,6 +7,7 @@ import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {ArchwizardModule} from "@y3krulez/angular-archwizard";
 import {TranslocoDirective} from "@jsverse/transloco";
 import {GaService} from "../../_services/ga.service";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-cart',
@@ -16,7 +17,8 @@ import {GaService} from "../../_services/ga.service";
     DecimalPipe,
     FaIconComponent,
     ArchwizardModule,
-    TranslocoDirective
+    TranslocoDirective,
+    FormsModule
   ],
   styleUrls: ['./cart.component.css']
 })
@@ -46,32 +48,17 @@ export class CartComponent implements OnInit {
     });
   }
 
-  validateQuantityInput(event: Event, item: any): void {
-    const target = event.target as HTMLInputElement;
-    let value = parseInt(target.value, 10);
-
-    // Check if value is NaN or exceeds maximum
-    if (isNaN(value) || value < 1) {
-      value = 1;
-    } else if (value > 999999999) {
-      value = 999999999;
-    }
-
-    target.value = value.toString();
-  }
-
   updateQuantity(event: Event, item: any): void {
-    const target = event.target as HTMLInputElement;
-    let quantity = parseInt(target.value, 10);
+    let quantity = item.quantity;
 
     // Validate the quantity
     if (isNaN(quantity) || quantity < 1) {
       quantity = 1;
+      item.quantity = quantity;
     } else if (quantity > 999999999) {
       quantity = 999999999;
+      item.quantity = quantity;
     }
-
-    target.value = quantity.toString();
 
     if (quantity >= 1 && quantity <= 999999999) {
       this.cartService.replaceQuantity(item.product.id, quantity).subscribe({

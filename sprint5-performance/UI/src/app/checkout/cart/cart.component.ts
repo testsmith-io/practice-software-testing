@@ -6,6 +6,7 @@ import {TranslocoDirective} from "@jsverse/transloco";
 import {DecimalPipe, NgClass} from "@angular/common";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {ArchwizardModule} from "@y3krulez/angular-archwizard";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-cart',
@@ -15,7 +16,8 @@ import {ArchwizardModule} from "@y3krulez/angular-archwizard";
     NgClass,
     DecimalPipe,
     FaIconComponent,
-    ArchwizardModule
+    ArchwizardModule,
+    FormsModule
   ],
   styleUrls: ['./cart.component.css']
 })
@@ -45,8 +47,16 @@ export class CartComponent implements OnInit {
   }
 
   updateQuantity(event: Event, item: any): void {
-    const target = event.target as HTMLInputElement;
-    const quantity = Math.max(1, parseInt(target.value, 10));
+    let quantity = item.quantity;
+
+    // Validate the quantity
+    if (isNaN(quantity) || quantity < 1) {
+      quantity = 1;
+      item.quantity = quantity;
+    } else if (quantity > 99) {
+      quantity = 99;
+      item.quantity = quantity;
+    }
 
     if (quantity >= 1) {
       this.cartService.replaceQuantity(item.product.id, quantity).subscribe(() => {
