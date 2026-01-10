@@ -717,22 +717,15 @@ export class ChatWidgetComponent implements OnInit {
     this.isLoading = true;
     this.currentStep = 'order-product-added';
 
-    this.cartService.addItem({id: this.orderData.product.id, quantity: this.orderData.quantity}).subscribe({
-      next: () => {
-        this.isLoading = false;
-        this.addBotMessage('Added to your cart!');
-        this.addBotMessage('What would you like to do next?', [
-          {label: 'Continue shopping', action: 'continue-shopping'},
-          {label: 'Go to checkout', action: 'checkout'},
-          {label: 'Back to menu', action: 'back-to-menu'}
-        ]);
-        this.resetOrderData();
-      },
-      error: () => {
-        this.isLoading = false;
-        this.addBotMessage('Could not add to cart. Please try again.', this.getBackAction());
-      }
-    });
+    this.cartService.addItem({id: this.orderData.product.id, quantity: this.orderData.quantity});
+    this.isLoading = false;
+    this.addBotMessage('Added to your cart!');
+    this.addBotMessage('What would you like to do next?', [
+      {label: 'Continue shopping', action: 'continue-shopping'},
+      {label: 'Go to checkout', action: 'checkout'},
+      {label: 'Back to menu', action: 'back-to-menu'}
+    ]);
+    this.resetOrderData();
   }
 
   // Checkout flow methods (simplified - requires login)
