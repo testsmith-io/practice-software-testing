@@ -7,3 +7,4 @@ node_modules/
 .scannerwork/
 mutation.html
 stryker.log
+settings.local.json

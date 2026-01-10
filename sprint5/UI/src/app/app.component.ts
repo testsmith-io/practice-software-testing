@@ -4,6 +4,7 @@ import {Title} from '@angular/platform-browser';
 import {filter, map} from 'rxjs/operators';
 import {HeaderComponent} from "./header/header.component";
 import {FooterComponent} from "./footer/footer.component";
+import {ChatWidgetComponent} from "./chat-widget/chat-widget.component";
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 import {faGlobe, faShoppingCart} from '@fortawesome/free-solid-svg-icons';
 
@@ -13,7 +14,8 @@ import {faGlobe, faShoppingCart} from '@fortawesome/free-solid-svg-icons';
   imports: [
     HeaderComponent,
     RouterOutlet,
-    FooterComponent
+    FooterComponent,
+    ChatWidgetComponent
   ],
   styleUrls: []
 })
