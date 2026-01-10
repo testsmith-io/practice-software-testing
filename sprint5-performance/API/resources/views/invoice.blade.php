@@ -10218,11 +10218,11 @@
             <table style="border: 0px">
                 <tr>
                     <td style="width: 100px">Address</td>
-                    <td>{{$invoice['billing_address']}}</td>
+                    <td>{{$invoice['billing_street']}}</td>
                 </tr>
                 <tr>
                     <td>Postcode</td>
-                    <td>{{ $invoice['billing_postcode'] }}</td>
+                    <td>{{ $invoice['billing_postal_code'] }}</td>
                 </tr>
                 <tr>
                     <td>City</td>
