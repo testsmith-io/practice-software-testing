@@ -6,6 +6,7 @@ import {FaIconLibrary} from "@fortawesome/angular-fontawesome";
 import {FooterComponent} from "./footer/footer.component";
 import {RouterOutlet} from "@angular/router";
 import {ToastsComponent} from "./_services/toasts.component";
+import {ChatWidgetComponent} from "./chat-widget/chat-widget.component";
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,8 @@ import {ToastsComponent} from "./_services/toasts.component";
     HeaderComponent,
     FooterComponent,
     RouterOutlet,
-    ToastsComponent
+    ToastsComponent,
+    ChatWidgetComponent
   ],
   styleUrls: []
 })
