@@ -28,7 +28,7 @@
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
-        "pestphp/pest": "3.8.2",
+        "pestphp/pest": "^3.8.2",
         "pestphp/pest-plugin-drift": "^3.0",
         "spatie/laravel-ignition": "^2.0"
     },
