@@ -79,6 +79,7 @@
     - [Admin Dashboard](user-stories/v5.md#admin-dashboard)
     - [Chat Widget](user-stories/v5.md#chat-widget)
     - [Geo-Location Discount](user-stories/v5.md#geo-location-discount)
+    - [Combination Discount](user-stories/v5.md#combination-discount)
     - [Multi-Language](user-stories/v5.md#multi-language-support)
     - [Privacy Policy](user-stories/v5.md#privacy-policy)
     - [Browse by Category](user-stories/v5.md#browse-products-by-category)
