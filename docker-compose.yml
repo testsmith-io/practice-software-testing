@@ -23,7 +23,9 @@ services:
       target: development
     working_dir: /app
     volumes:
-      - ./${SPRINT}/UI:/app:cached
+      - ./${SPRINT_FOLDER}/UI:/app:cached
+      - /app/node_modules
+
     ports:
       - 4200:4200
     command: >
@@ -54,7 +56,7 @@ services:
   mariadb:
     image: yobasystems/alpine-mariadb:10.6.11
     ports:
-      - 3306:3306
+      - 3307:3306
     expose:
       - 3306
     environment:

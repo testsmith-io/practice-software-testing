@@ -1,5 +1,9 @@
 [![Run Playwright Tests 🎭](https://github.com/testsmith-io/practice-software-testing/actions/workflows/run-tests.yml/badge.svg)](https://github.com/testsmith-io/practice-software-testing/actions/workflows/run-tests.yml)
 
+docker-compose exec laravel-api php artisan migrate:fresh --seed
+
+
+
 # Default accounts
 
 | First name | Last name | Role   | E-mail                                | Password   |
