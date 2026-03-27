@@ -84,9 +84,20 @@ class Controller extends BaseController
     private function makeXML($xml, $status = 200, array $headers = [], $xmlRoot = 'response', $encoding = null)
     {
         if (is_array($xml)) {
+            // Check if array has numeric keys (sequential array)
+            if (array_keys($xml) === range(0, count($xml) - 1)) {
+                // Wrap sequential array in a container element
+                $xml = ['item' => $xml];
+            }
             $xml = ArrayToXml::convert($xml, $xmlRoot, true, $encoding);
         } elseif (is_object($xml) && method_exists($xml, 'toArray')) {
-            $xml = ArrayToXml::convert($xml->toArray(), $xmlRoot, true, $encoding);
+            $arrayData = $xml->toArray();
+            // Check if array has numeric keys (sequential array)
+            if (array_keys($arrayData) === range(0, count($arrayData) - 1)) {
+                // Wrap sequential array in a container element
+                $arrayData = ['item' => $arrayData];
+            }
+            $xml = ArrayToXml::convert($arrayData, $xmlRoot, true, $encoding);
         } elseif (is_string($xml)) {
             $xml = $xml;
         } else {
@@ -103,8 +114,9 @@ class Controller extends BaseController
         if (strcmp(app('request')->headers->get('Accept'), 'text/xml') == 0) {
             return $this->makeXML($data, $status, array_merge($headers, ['Content-Type' => app('request')->headers->get('Accept')]), $xmlRoot);
         } else {
+            $defaultHeaders = ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'];
             return response()->json($data, $status,
-                ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+                array_merge($defaultHeaders, $headers), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
         }
     }
 

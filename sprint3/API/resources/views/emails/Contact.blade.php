@@ -84,12 +84,11 @@
 Thanks for your message. We will contact you shortly!
 
 Your request:<br>
-Subject: {{ $contactSubject }}<br>
-Message: {{ $contactMessage }}
+Subject: {{ $contactSubject }}<br><br>
+Message: {{ $contactMessage }}<br><br>
 
 Best regards,<br>
-Team Practice Software Testing<br>
-
+Team Practice Software Testing
 
 
 {{-- Footer --}}

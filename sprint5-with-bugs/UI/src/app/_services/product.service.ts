@@ -23,7 +23,7 @@ export class ProductService {
       .pipe(map(this.extractData));
   }
 
-  getProductsNew(searchQuery: string, sorting: string, minPrice: string, maxPrice: string, categoryIds: any, brandIds: any, page: any): Observable<Pagination<Product>> {
+  getProductsNew(searchQuery: string, sorting: string, minPrice: string, maxPrice: string, categoryIds: any, brandIds: any, page: any, ecoFriendlyFilter?: boolean): Observable<Pagination<Product>> {
     let params = new HttpParams();
     if (searchQuery) {
       params = params.set('q', searchQuery);
@@ -39,6 +39,9 @@ export class ProductService {
     }
     if (brandIds.length) {
       params = params.set('by_brand', brandIds);
+    }
+    if (ecoFriendlyFilter) {
+      params = params.set('eco_friendly', '1');
     }
     params = params.set('page', page);
     return this.httpClient.get(this.apiURL + '/products', {params: params})
@@ -76,7 +79,7 @@ export class ProductService {
     return this.httpClient.get(this.apiURL + `/products/${id}/related`);
   }
 
-  getProductsByCategoryAndBrand(categoryIds: any, brandIds: any, sorting: string, slug?: string): Observable<Pagination<Product>> {
+  getProductsByCategoryAndBrand(categoryIds: any, brandIds: any, sorting: string, slug?: string, ecoFriendlyFilter?: boolean): Observable<Pagination<Product>> {
     let params = new HttpParams();
     if (categoryIds.length) {
       params = params.set('by_category', categoryIds);
@@ -89,6 +92,9 @@ export class ProductService {
     }
     if (slug) {
       params = params.set('by_category_slug', slug);
+    }
+    if (ecoFriendlyFilter) {
+      params = params.set('eco_friendly', '1');
     }
     return this.httpClient.get(this.apiURL + '/products', {params: params})
       .pipe(map(this.extractData));

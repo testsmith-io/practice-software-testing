@@ -253,7 +253,9 @@
         "name-asc": "Name (A - Z)",
         "name-desc": "Name (Z - A)",
         "price-desc": "Price (High - Low)",
-        "price-asc": "Price (Low - High)"
+        "price-asc": "Price (Low - High)",
+        "co2-asc": "CO₂ Rating (A - E)",
+        "co2-desc": "CO₂ Rating (E - A)"
       },
       "price-range": "Price Range",
       "search": "Search",
@@ -262,6 +264,10 @@
       "category": "Category",
       "brands": "Brands",
       "by-brand": "By brand",
+      "sustainability": "Sustainability",
+      "eco-friendly": "Eco-Friendly Products",
+      "show-eco-friendly": "Show only eco-friendly products",
+      "co2-tooltip": "A = most environmentally friendly, E = higher environmental impact",
       "no-results": "There are no products found.",
       "no-stock": "Out of stock"
     },
@@ -351,11 +357,18 @@
         "price-header": "Price",
         "subtotal": "Subtotal",
         "discount": "Discount",
-        "total": "Total"
+        "total": "Total",
+        "continue-shopping": "Continue Shopping"
       },
       "sign-in": {
         "title": "Sign in",
         "already": "Hello {{ first_name }} {{ last_name }}, you are already logged in. You can proceed to checkout."
+      },
+      "guest": {
+        "title": "Continue as Guest",
+        "description": "Checkout without creating an account",
+        "btn": "Continue as Guest",
+        "proceed": "Continuing as guest: {{ first_name }} {{ last_name }} ({{ email }})"
       },
       "address": {
         "title": "Billing Address"

@@ -82,9 +82,20 @@ class Controller extends BaseController
     private function makeXML($xml, $status = 200, array $headers = [], $xmlRoot = 'response', $encoding = null)
     {
         if (is_array($xml)) {
+            // Check if array has numeric keys (sequential array)
+            if (array_keys($xml) === range(0, count($xml) - 1)) {
+                // Wrap sequential array in a container element
+                $xml = ['item' => $xml];
+            }
             $xml = ArrayToXml::convert($xml, $xmlRoot, true, $encoding);
         } elseif (is_object($xml) && method_exists($xml, 'toArray')) {
-            $xml = ArrayToXml::convert($xml->toArray(), $xmlRoot, true, $encoding);
+            $arrayData = $xml->toArray();
+            // Check if array has numeric keys (sequential array)
+            if (array_keys($arrayData) === range(0, count($arrayData) - 1)) {
+                // Wrap sequential array in a container element
+                $arrayData = ['item' => $arrayData];
+            }
+            $xml = ArrayToXml::convert($arrayData, $xmlRoot, true, $encoding);
         } elseif (is_string($xml)) {
             $xml = $xml;
         } else {

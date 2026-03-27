@@ -1,5 +1,4 @@
-[![Run Playwright Tests 🎭](https://github.com/testsmith-io/practice-software-testing/actions/workflows/run-tests.yml/badge.svg)](https://github.com/testsmith-io/practice-software-testing/actions/workflows/run-tests.yml) [![StackShare](http://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/testsmith-io/practice-software-testing)
-
+[![Run Playwright Tests 🎭](https://github.com/testsmith-io/practice-software-testing/actions/workflows/run-tests.yml/badge.svg)](https://github.com/testsmith-io/practice-software-testing/actions/workflows/run-tests.yml)
 
 # Default accounts
 
@@ -25,13 +24,13 @@
 
 The mobile app is fully integrated with version 4 of Practice Software Testing, which means both share the same environment. Any changes you make through the mobile app (like creating or editing data) will appear on the website, and updates on the website will also show up in the app.
 
-[Android Mobile APK](https://testsmith.s3.eu-central-1.amazonaws.com/artifacts/practice-software-testing.apk)
+[Android Mobile APK](https://testsmith.ams3.cdn.digitaloceanspaces.com/artifacts/practice-software-testing.apk)
 
-[iOS Simulator App](https://testsmith.s3.eu-central-1.amazonaws.com/artifacts/practice-software-testing.zip)
+[iOS Simulator App](https://testsmith.ams3.cdn.digitaloceanspaces.com/artifacts/practice-software-testing.zip)
 
 # Using the docker containers
 
-I will take up to 5 minutes (depending on your internet connection speed), if you run `docker compose up -d` for the first
+It will take up to 5 minutes (depending on your internet connection speed), if you run `docker compose up -d` for the first
 time. Any subsequent `docker compose up -d` will take seconds. You may need to add sudo before the docker command `sudo docker compose up -d`
 
 All images together are less than 1,5 GB.

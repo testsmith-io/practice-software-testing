@@ -15,6 +15,28 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
+        // Category-based CO2 rating logic
+        // B = Low impact (recycled materials, sustainable wood)
+        // D = Higher impact (steel tools)
+        // E = High impact (power tools)
+        $categoryRatings = [
+            'Hand Saw' => 'B',           // Wood handles, traditional tools
+            'Safety Gear' => 'B',        // Often recycled materials/fabrics
+            'Storage Solutions' => 'B',  // Recycled plastics
+            'Tool Belts' => 'B',         // Fabric/recycled materials
+            'Workbench' => 'B',          // Wood construction
+            'Measures' => 'C',           // Mixed materials
+            'Fasteners' => 'C',          // Small metal parts
+            'Screwdriver' => 'C',        // Mixed materials
+            'Pliers' => 'D',             // Steel construction
+            'Hammer' => 'D',             // Steel construction
+            'Wrench' => 'D',             // Steel construction
+            'Chisels' => 'D',            // Steel construction
+            'Saw' => 'D',                // Metal saw blades
+            'Drill' => 'E',              // Power tools
+            'Sander' => 'E',             // Power tools
+        ];
+
         DB::table('products')->insert([[
             'id' => Str::ulid()->toBase32(),
             'name' => 'Combination Pliers',
@@ -25,7 +47,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Pliers')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'pliers01.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'A'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Pliers',
@@ -36,7 +59,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Pliers')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'pliers02.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'B'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Bolt Cutters',
@@ -47,7 +71,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Pliers')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'pliers03.avif')->first()->id,
             'is_location_offer' => true,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Long Nose Pliers',
@@ -58,7 +83,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Pliers')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'pliers04.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Slip Joint Pliers',
@@ -69,7 +95,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Pliers')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'pliers05.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'A'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Claw Hammer with Shock Reduction Grip',
@@ -80,7 +107,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Hammer')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'hammer01.avif')->first()->id,
             'is_location_offer' => true,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'B'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Hammer',
@@ -91,7 +119,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Hammer')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'hammer02.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'B'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Claw Hammer',
@@ -102,7 +131,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Hammer')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'hammer03.avif')->first()->id,
             'is_location_offer' => true,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'B'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Thor Hammer',
@@ -113,7 +143,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Hammer')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'hammer04.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'B'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Sledgehammer',
@@ -124,7 +155,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Hammer')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'hammer05.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'B'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Claw Hammer with Fiberglass Handle',
@@ -135,7 +167,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Hammer')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'hammer06.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'B'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Court Hammer',
@@ -146,7 +179,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Hammer')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'hammer07.avif')->first()->id,
             'is_location_offer' => true,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'B'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Wood Saw',
@@ -157,7 +191,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Hand Saw')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'saw01.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'B'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Adjustable Wrench',
@@ -168,7 +203,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Wrench')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'wrench01.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Angled Spanner',
@@ -179,7 +215,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Wrench')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'wrench02.avif')->first()->id,
             'is_location_offer' => true,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Open-end Spanners (Set)',
@@ -190,7 +227,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Wrench')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'wrench03.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Phillips Screwdriver',
@@ -201,7 +239,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Screwdriver')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'screwdriver01.avif')->first()->id,
             'is_location_offer' => true,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'A'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Mini Screwdriver',
@@ -212,7 +251,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Screwdriver')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'screwdriver02.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'B'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Chisels Set',
@@ -223,7 +263,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Chisels')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'chisels01.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Wood Carving Chisels',
@@ -234,7 +275,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Chisels')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'chisels02.avif')->first()->id,
             'is_location_offer' => true,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Swiss Woodcarving Chisels',
@@ -245,7 +287,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Chisels')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'chisels03.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Tape Measure 7.5m',
@@ -256,7 +299,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Measures')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'measure01.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'A'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Measuring Tape',
@@ -267,7 +311,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Measures')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'measure02.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'B'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Tape Measure 5m',
@@ -278,7 +323,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Measures')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'measure03.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Square Ruler',
@@ -289,7 +335,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Measures')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'measure04.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Safety Goggles',
@@ -300,7 +347,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Safety Gear')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'goggles01.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Safety Helmet Face Shield',
@@ -311,7 +359,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Safety Gear')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'goggles02.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Protective Gloves',
@@ -322,7 +371,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Safety Gear')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'gloves01.avif')->first()->id,
             'is_location_offer' => true,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Super-thin Protection Gloves',
@@ -333,7 +383,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Safety Gear')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'gloves02.avif')->first()->id,
             'is_location_offer' => true,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Construction Helmet',
@@ -344,7 +395,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Safety Gear')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'helmet01.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Ear Protection',
@@ -355,7 +407,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Safety Gear')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'earprotection01.avif')->first()->id,
             'is_location_offer' => true,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Screws',
@@ -366,7 +419,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Fasteners')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'fasteners01.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Nuts and bolts',
@@ -377,7 +431,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Fasteners')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'fasteners02.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Cross-head screws',
@@ -388,7 +443,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Fasteners')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'fasteners03.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Flat-Head Wood Screws',
@@ -399,7 +455,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Fasteners')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'fasteners04.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'M4 Nuts',
@@ -410,7 +467,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Fasteners')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'fasteners05.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Washers',
@@ -421,7 +479,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Fasteners')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'fasteners06.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Drawer Tool Cabinet',
@@ -432,7 +491,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Storage Solutions')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'toolcabinet02.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Tool Cabinet',
@@ -443,7 +503,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Storage Solutions')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'toolcabinet01.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Workbench with Drawers',
@@ -454,7 +515,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Workbench')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'workbench02.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Wooden Workbench',
@@ -465,7 +527,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Workbench')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'workbench01.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Leather toolbelt',
@@ -476,7 +539,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Tool Belts')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'toolbelt01.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Sheet Sander',
@@ -487,7 +551,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Sander')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'sander01.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Belt Sander',
@@ -498,7 +563,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Sander')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'sander02.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Circular Saw',
@@ -509,7 +575,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Saw')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'saw02.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Random Orbit Sander',
@@ -520,7 +587,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Sander')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'sander03.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Cordless Drill 20V',
@@ -531,7 +599,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Drill')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'drill01.avif')->first()->id,
             'is_location_offer' => true,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Cordless Drill 24V',
@@ -542,7 +611,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Drill')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'drill02.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Cordless Drill 18V',
@@ -553,7 +623,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Drill')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'drill03.avif')->first()->id,
             'is_location_offer' => false,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Cordless Drill 12V',
@@ -564,7 +635,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Drill')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'drill04.avif')->first()->id,
             'is_location_offer' => true,
-            'is_rental' => false
+            'is_rental' => false,
+            'co2_rating' => 'C'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Excavator',
@@ -575,7 +647,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Drill')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'excavator01.avif')->first()->id,
             'is_location_offer' => true,
-            'is_rental' => true
+            'is_rental' => true,
+            'co2_rating' => 'D'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Bulldozer',
@@ -586,7 +659,8 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Drill')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'bulldozer01.avif')->first()->id,
             'is_location_offer' => true,
-            'is_rental' => true
+            'is_rental' => true,
+            'co2_rating' => 'D'
         ], [
             'id' => Str::ulid()->toBase32(),
             'name' => 'Crane',
@@ -597,9 +671,17 @@ class ProductSeeder extends Seeder
             'category_id' => DB::table('categories')->where('name', '=', 'Drill')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'crane01.avif')->first()->id,
             'is_location_offer' => true,
-            'is_rental' => true
+            'is_rental' => true,
+            'co2_rating' => 'D'
         ]
         ]);
 
+        // Update CO2 ratings based on category
+        foreach ($categoryRatings as $categoryName => $rating) {
+            $categoryId = DB::table('categories')->where('name', '=', $categoryName)->value('id');
+            if ($categoryId) {
+                DB::table('products')->where('category_id', $categoryId)->update(['co2_rating' => $rating]);
+            }
+        }
     }
 }

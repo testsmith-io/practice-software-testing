@@ -2,7 +2,7 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-namespace app\Console\Commands;
+namespace App\Console\Commands;
 
 use App\Jobs\CreateInvoicePDF;
 use App\Models\Download;

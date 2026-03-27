@@ -124,7 +124,7 @@ class ProductController extends Controller
                 $query->where('name', 'like', "%$q%");
             }
 
-            $results = $query->filter()->paginate(9);
+            $results = $query->withFilters($request->all())->filter()->paginate(9);
             Log::info('Filtered product results returned');
             return $this->preferredFormat($results);
         }
@@ -132,6 +132,7 @@ class ProductController extends Controller
         Log::debug('Fetching products without filters');
         $results = Product::where('is_rental', $request->get('is_rental') ? 1 : 0)
             ->with('product_image', 'category', 'brand')
+            ->withFilters($request->all())
             ->filter()
             ->paginate(9);
 
@@ -211,7 +212,15 @@ class ProductController extends Controller
 
         Log::debug('Product found', ['id' => $product->id]);
 
-        return $this->preferredFormat($product);
+        // CTF Flag: Product shows stock information to non-admin users
+        $response = $product->toArray();
+
+        return $this->preferredFormat($response, 200, [
+            'X-CTF-Flag' => 'API3_2023_BROKEN_OBJECT_PROPERTY_LEVEL_AUTHORIZATION_STOCK',
+            'X-CTF-Vulnerability-Description' => 'The product response exposes the stock quantity field. This sensitive inventory information should only be visible to admin users.',
+            'X-CTF-Sequence' => '5',
+            'X-CTF-Code' => '01110010'
+        ]);
     }
 
     /**
@@ -374,6 +383,17 @@ class ProductController extends Controller
             Product::find($id)->delete();
 
             Log::debug('Product deleted successfully');
+
+            // CTF Flag: Check if non-admin deleted the product (BFLA vulnerability)
+            $userRole = auth()->check() ? auth()->user()->role : null;
+            if ($userRole && $userRole !== 'admin') {
+                return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK, [
+                    'X-CTF-Flag' => 'API5_2023_BROKEN_FUNCTION_LEVEL_AUTHORIZATION_PRODUCT',
+                    'X-CTF-Vulnerability-Description' => 'Non-admin users can delete products. This endpoint should require admin role but does not properly enforce it.',
+                    'X-CTF-Sequence' => '6',
+                    'X-CTF-Code' => '01100101'
+                ]);
+            }
 
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
         } catch (QueryException $e) {
