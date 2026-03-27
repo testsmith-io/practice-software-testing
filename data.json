@@ -1,0 +1,17 @@
+﻿[
+  {
+    "email": "invaliduser@example.com",
+    "password": "wrongpassword",
+    "searchTerm": "invalid"
+  },
+  {
+    "email": "customer@practicesoftwaretesting.com",
+    "password": "welcome01",
+    "searchTerm": "john"
+  },
+  {
+    "email": "",
+    "password": "",
+    "searchTerm": ""
+  }
+]
