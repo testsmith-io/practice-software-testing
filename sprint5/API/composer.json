@@ -10,7 +10,7 @@
         "darkaonline/l5-swagger": "9.0.1",
         "guzzlehttp/guzzle": "7.9.3",
         "haruncpi/laravel-id-generator": "1.1",
-        "laravel/framework": "v12.13.0",
+        "laravel/framework": "^11.0",
         "laravel/sanctum": "v4.1.1",
         "laravel/socialite": "v5.20.0",
         "laravel/tinker": "v2.10.1",
