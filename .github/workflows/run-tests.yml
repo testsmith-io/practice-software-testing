@@ -9,17 +9,18 @@ concurrency: production_environment
 jobs:
   test:
     runs-on: ubuntu-22.04
+    env:
+      SPRINT: sprint5
+      DISABLE_LOGGING: "true"
     steps:
       - name: Checkout ⚙️
         uses: actions/checkout@v4
       - name: Start containers 🐳
-        run: |
-          export DISABLE_LOGGING=true
-          docker compose -f docker-compose.yml up -d --force-recreate
+        run: docker compose -f docker-compose.yml up -d --force-recreate
+      - name: Sleep for 30 seconds (wait for containers)
+        run: sleep 30s
       - name: Install Composer dependencies 📦
-        run: |
-          docker run --rm --volumes-from $(docker compose ps -q laravel-api) -w /var/www composer:2.6.6 install --no-dev --optimize-autoloader --ignore-platform-req=ext-ffi
-          echo "Composer dependencies installed successfully!"
+        run: docker compose exec -T -u root laravel-api composer install --no-dev --optimize-autoloader --ignore-platform-req=ext-ffi
       - name: Wait for database to be ready 🗄️
         run: |
           echo "Waiting for MariaDB..."

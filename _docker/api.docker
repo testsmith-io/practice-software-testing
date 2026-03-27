@@ -26,6 +26,9 @@ FROM base as development
 COPY ./opcache.ini $PHP_INI_DIR/conf.d/
 COPY ./php-ini-overrides.ini $PHP_INI_DIR/conf.d/
 
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 RUN chown -R www-data:www-data /var/www
 
 USER www-data
