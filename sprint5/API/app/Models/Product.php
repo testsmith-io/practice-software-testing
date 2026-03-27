@@ -1,6 +1,4 @@
 <?php
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
 
 namespace App\Models;
 
@@ -23,7 +21,6 @@ use Tymon\JWTAuth\Exceptions\JWTException;
  *         @OA\Property(property="product_image_id", type="string", example=1),
  *         @OA\Property(property="is_location_offer", type="boolean", example=1),
  *         @OA\Property(property="is_rental", type="boolean", example=0),
- *         @OA\Property(property="co2_rating", type="string", example="A"),
  *     }
  * )
  *
@@ -39,8 +36,6 @@ use Tymon\JWTAuth\Exceptions\JWTException;
  *         @OA\Property(property="is_location_offer", type="boolean", example=1),
  *         @OA\Property(property="is_rental", type="boolean", example=0),
  *         @OA\Property(property="in_stock", type="boolean", example=0),
- *         @OA\Property(property="co2_rating", type="string", example="A"),
- *         @OA\Property(property="is_eco_friendly", type="boolean", example=1),
  *         @OA\Property(property="brand", ref="#/components/schemas/BrandResponse"),
  *         @OA\Property(property="category", ref="#/components/schemas/CategoryResponse"),
  *         @OA\Property(property="product_image", ref="#/components/schemas/ImageResponse")
@@ -52,9 +47,9 @@ class Product extends BaseModel
     use HasFactory, FilterQueryString, HasUlids;
 
     protected $table = 'products';
-    protected $fillable = ['name', 'description', 'category_id', 'brand_id', 'price', 'product_image_id', 'is_location_offer', 'is_rental', 'stock', 'co2_rating'];
+    protected $fillable = ['name', 'description', 'category_id', 'brand_id', 'price', 'product_image_id', 'is_location_offer', 'is_rental', 'stock'];
     protected $hidden = ['brand_id', 'category_id', 'product_image_id', 'stock', 'created_at', 'updated_at'];
-    protected $appends = ['in_stock', 'is_eco_friendly'];
+    protected $appends = ['in_stock'];
     protected $filters = ['between', 'sort'];
 
     protected $casts = array(
@@ -81,19 +76,14 @@ class Product extends BaseModel
     public function getInStockAttribute()
     {
         $user = auth('users')->user();
-
+        
         // If user can view stock details (admin), return actual stock number
         if ($user && $user->can('viewStock', $this)) {
             return $this->stock;
         }
-
+        
         // For regular users and guests, return boolean stock status
         return $this->stock > 0;
-    }
-
-    public function getIsEcoFriendlyAttribute()
-    {
-        return in_array(strtoupper($this->co2_rating ?? ''), ['A', 'B']);
     }
 
     // Query Scopes for better performance and reusability
@@ -105,11 +95,6 @@ class Product extends BaseModel
             return $q->whereIn('brand_id', is_array($brands) ? $brands : explode(',', $brands));
         })->when(isset($filters['is_rental']), function ($q) use ($filters) {
             return $q->where('is_rental', $filters['is_rental']);
-        })->when($filters['eco_friendly'] ?? null, function ($q, $ecoFriendly) {
-            if ($ecoFriendly == '1' || $ecoFriendly === true || $ecoFriendly === 'true') {
-                return $q->ecoFriendly();
-            }
-            return $q;
         })->when($filters['q'] ?? null, function ($q, $search) {
             return $q->where('name', 'like', "%{$search}%");
         });
@@ -140,11 +125,6 @@ class Product extends BaseModel
     public function scopeSearch($query, $searchTerm)
     {
         return $query->where('name', 'like', "%{$searchTerm}%");
-    }
-
-    public function scopeEcoFriendly($query)
-    {
-        return $query->whereIn('co2_rating', ['A', 'B', 'a', 'b']);
     }
 
     public function scopeWithEagerLoading($query)

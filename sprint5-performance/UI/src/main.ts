@@ -1,6 +1,3 @@
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
-
 import {enableProdMode, importProvidersFrom} from '@angular/core';
 import {bootstrapApplication} from '@angular/platform-browser';
 import {AppComponent} from './app/app.component';

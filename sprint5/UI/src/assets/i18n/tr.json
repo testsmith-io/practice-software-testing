@@ -170,13 +170,6 @@
         "required": "Soyad gereklidir"
       }
     },
-    "street": {
-      "label": "Sokak",
-      "placeholder": "Sokağınız",
-      "errors": {
-        "required": "Sokak gereklidir"
-      }
-    },
     "address": {
       "label": "Adres",
       "placeholder": "Adresiniz",
@@ -260,9 +253,7 @@
         "name-asc": "İsim (A - Z)",
         "name-desc": "İsim (Z - A)",
         "price-desc": "Fiyat (Yüksek - Düşük)",
-        "price-asc": "Fiyat (Düşük - Yüksek)",
-        "co2-asc": "CO₂ Değerlendirmesi (A - E)",
-        "co2-desc": "CO₂ Değerlendirmesi (E - A)"
+        "price-asc": "Fiyat (Düşük - Yüksek)"
       },
       "price-range": "Fiyat Aralığı",
       "search": "Ara",
@@ -271,10 +262,6 @@
       "category": "Kategori",
       "brands": "Markalar",
       "by-brand": "Markaya göre",
-      "sustainability": "Sürdürülebilirlik",
-      "eco-friendly": "Çevre Dostu Ürünler",
-      "show-eco-friendly": "Sadece çevre dostu ürünleri göster",
-      "co2-tooltip": "A = en çevre dostu, E = daha yüksek çevresel etki",
       "no-results": "Ürün bulunamadı.",
       "no-stock": "Stokta yok"
     },
@@ -364,18 +351,11 @@
         "price-header": "Fiyat",
         "subtotal": "Ara Toplam",
         "discount": "İndirim",
-        "total": "Toplam",
-        "continue-shopping": "Alışverişe devam et"
+        "total": "Toplam"
       },
       "sign-in": {
         "title": "Giriş Yap",
         "already": "Merhaba {{ first_name }} {{ last_name }}, zaten giriş yaptınız. Ödemeye geçebilirsiniz."
-      },
-      "guest": {
-        "title": "Misafir olarak devam et",
-        "description": "Hesap oluşturmadan ödeme yap",
-        "btn": "Misafir olarak devam et",
-        "proceed": "Misafir olarak devam ediliyor: {{ first_name }} {{ last_name }} ({{ email }})"
       },
       "address": {
         "title": "Fatura Adresi"

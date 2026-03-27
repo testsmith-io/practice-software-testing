@@ -1,20 +1,13 @@
 <?php
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
 
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Invoice\PatchInvoice;
 use App\Http\Requests\Invoice\StoreInvoice;
-use App\Mail\Checkout;
 use App\Models\PaymentzCreditCardDetails;
 use App\Services\InvoiceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -26,7 +19,7 @@ class InvoiceController extends Controller
     public function __construct(InvoiceService $invoiceService)
     {
         $this->invoiceService = $invoiceService;
-        $this->middleware('auth:users')->except(['storeGuest']);
+        $this->middleware('auth:users');
     }
 
     /**
@@ -101,76 +94,6 @@ class InvoiceController extends Controller
     {
         $invoice = $this->invoiceService->createInvoice($request->except(['cart_id']), $request->input('cart_id'));
         $this->invoiceService->handlePayment($invoice->id, $request->input('payment_method'), Arr::except($request->input('payment_details'), ['@type']) ?? []);
-
-        // Send checkout email
-        if (App::environment('local')) {
-            $user = Auth::user();
-            Log::debug("Sending checkout email to: {$user->email}");
-            $invoiceWithLines = $this->invoiceService->getInvoice($invoice->id, false);
-            Mail::to([$user->email])->send(new Checkout("{$user->first_name} {$user->last_name}", $invoiceWithLines->invoicelines, $invoiceWithLines));
-        }
-
-        return $this->preferredFormat($invoice, ResponseAlias::HTTP_CREATED);
-    }
-
-    /**
-     * @OA\Post(
-     *      path="/invoices/guest",
-     *      operationId="storeGuestInvoice",
-     *      tags={"Invoice"},
-     *      summary="Store new guest invoice",
-     *      description="Store new invoice for guest checkout",
-     *      @OA\RequestBody(
-     *           required=true,
-     *           description="Guest invoice request object",
-     *           @OA\JsonContent(
-     *               allOf={
-     *                   @OA\Schema(ref="#/components/schemas/InvoiceRequest"),
-     *                   @OA\Schema(
-     *                       @OA\Property(property="guest_email", type="string", format="email", description="Guest email address"),
-     *                       @OA\Property(property="guest_first_name", type="string", description="Guest first name"),
-     *                       @OA\Property(property="guest_last_name", type="string", description="Guest last name")
-     *                   )
-     *               }
-     *           )
-     *       ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent(ref="#/components/schemas/InvoiceResponse")
-     *      ),
-     *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse")
-     * )
-     */
-    public function storeGuest(Request $request)
-    {
-        $request->validate([
-            'payment_method' => ['required', Rule::in(['bank-transfer', 'cash-on-delivery', 'credit-card', 'buy-now-pay-later', 'gift-card'])],
-            "payment_details" => ['present'],
-            'invoice_date' => 'date_format:Y-m-d',
-            'billing_street' => ['required', 'string', 'max:70'],
-            'billing_city' => ['required', 'string', 'max:40'],
-            'billing_state' => ['string', 'max:40'],
-            'billing_country' => ['required', 'string', 'max:40'],
-            'billing_postal_code' => ['string', 'max:10'],
-            'cart_id' => 'required',
-            'guest_email' => ['required', 'email', 'max:255'],
-            'guest_first_name' => ['required', 'string', 'max:255'],
-            'guest_last_name' => ['required', 'string', 'max:255']
-        ]);
-
-        $invoice = $this->invoiceService->createGuestInvoice($request->except(['cart_id']), $request->input('cart_id'));
-        $this->invoiceService->handlePayment($invoice->id, $request->input('payment_method'), Arr::except($request->input('payment_details'), ['@type']) ?? []);
-
-        // Send checkout email for guest
-        if (App::environment('local')) {
-            $guestEmail = $request->input('guest_email');
-            $guestFirstName = $request->input('guest_first_name');
-            $guestLastName = $request->input('guest_last_name');
-            Log::debug("Sending checkout email to guest: {$guestEmail}");
-            $invoiceWithLines = $this->invoiceService->getInvoice($invoice->id, true);
-            Mail::to([$guestEmail])->send(new Checkout("{$guestFirstName} {$guestLastName}", $invoiceWithLines->invoicelines, $invoiceWithLines));
-        }
 
         return $this->preferredFormat($invoice, ResponseAlias::HTTP_CREATED);
     }

@@ -1,6 +1,4 @@
 <?php
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
 
 namespace App\Http\Controllers;
 
@@ -212,18 +210,6 @@ class BrandController extends Controller
 
             $brand->delete();
             Log::debug('Brand deleted successfully', ['id' => $id]);
-
-            // CTF Flag: Check if non-admin deleted the brand (BFLA vulnerability)
-            $userRole = auth()->check() ? auth()->user()->role : null;
-            if (!isset($userRole) || $userRole !== 'admin') {
-                return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_NO_CONTENT, [
-                    'X-CTF-Flag' => 'API5_2023_BROKEN_FUNCTION_LEVEL_AUTHORIZATION_BRAND',
-                    'X-CTF-Vulnerability-Description' => 'Non-admin users can delete brands. This endpoint should require admin role but does not properly enforce it.',
-                    'X-CTF-Sequence' => '4',
-                    'X-CTF-Code' => '01110101'
-                ]);
-            }
-
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
 
         } catch (QueryException $e) {

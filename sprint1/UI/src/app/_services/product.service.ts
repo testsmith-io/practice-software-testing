@@ -1,6 +1,3 @@
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
-
 import {inject, Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {map, Observable, throwError} from "rxjs";

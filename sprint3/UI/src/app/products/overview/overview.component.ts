@@ -1,6 +1,3 @@
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
-
 import {Component, ElementRef, inject, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Brand} from "../../models/brand";

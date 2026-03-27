@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-# Copyright (c) 2024-2026 Testsmith. All rights reserved.
-# See LICENSE for details.
-
 
 set -e
 

@@ -1,6 +1,3 @@
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
-
 import {Image} from "./image";
 import {Brand} from "./brand";
 import {Category} from "./category";

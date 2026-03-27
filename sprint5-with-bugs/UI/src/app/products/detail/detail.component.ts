@@ -1,6 +1,3 @@
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
-
 import {Component, inject, OnInit} from '@angular/core';
 import {CartService} from "../../_services/cart.service";
 import {FavoriteService} from "../../_services/favorite.service";
@@ -102,19 +99,6 @@ export class DetailComponent implements OnInit {
       this.cartService.addItem(item);
       this.toastService.show('Oeps, something went wrong.', {classname: 'bg-danger text-light'})
     }
-  }
-
-  isCo2ScaleEnabled(): boolean {
-    const setting = window.localStorage.getItem('CO2_SCALE_ENABLED');
-    return setting === null || setting === 'true';
-  }
-
-  isEcoBadgeEnabled(): boolean {
-    if (!this.isCo2ScaleEnabled()) {
-      return false;
-    }
-    const setting = window.localStorage.getItem('ECO_BADGE_ENABLED');
-    return setting === null || setting === 'true';
   }
 
 }

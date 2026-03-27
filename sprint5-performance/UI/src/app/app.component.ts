@@ -1,13 +1,10 @@
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
-
 import {Component, inject, OnInit} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {filter, map} from 'rxjs/operators';
 import {HeaderComponent} from "./header/header.component";
 import {FooterComponent} from "./footer/footer.component";
-import {faGlobe, faShoppingCart, faLeaf} from '@fortawesome/free-solid-svg-icons';
+import {faGlobe, faShoppingCart} from '@fortawesome/free-solid-svg-icons';
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 
 @Component({
@@ -28,7 +25,7 @@ export class AppComponent implements OnInit {
   title = 'Toolshop';
 
   constructor() {
-    this.library.addIcons(faGlobe, faShoppingCart, faLeaf);
+    this.library.addIcons(faGlobe, faShoppingCart);
   }
   ngOnInit(): void {
     if (!window.localStorage.getItem('GEO_LOCATION') &&

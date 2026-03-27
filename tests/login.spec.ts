@@ -1,6 +1,3 @@
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
-
 import {test, expect} from '@playwright/test';
 
 test.describe('Login Feature', () => {

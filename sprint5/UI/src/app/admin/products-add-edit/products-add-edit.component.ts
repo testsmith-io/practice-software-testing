@@ -1,6 +1,3 @@
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
-
 import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ActivatedRoute, RouterLink} from "@angular/router";
@@ -55,28 +52,13 @@ export class ProductsAddEditComponent implements OnInit {
       id: ['', []],
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      stock: ['', []],  // Conditionally required based on is_rental
+      stock: ['', [Validators.required]],
       price: ['', [Validators.required]],
       brand_id: ['', [Validators.required]],
       category_id: ['', [Validators.required]],
       product_image_id: ['', [Validators.required]],
       is_location_offer: ['', []],
-      is_rental: ['', []],
-      co2_rating: ['', []]
-    });
-
-    // Watch for changes to is_rental to conditionally require stock
-    this.form.get('is_rental')?.valueChanges.subscribe(isRental => {
-      const stockControl = this.form.get('stock');
-      if (isRental) {
-        // Rental products don't need stock
-        stockControl?.clearValidators();
-        stockControl?.setValue('');
-      } else {
-        // Non-rental products require stock
-        stockControl?.setValidators([Validators.required]);
-      }
-      stockControl?.updateValueAndValidity();
+      is_rental: ['', []]
     });
 
     this.brandService.getBrands()
@@ -99,15 +81,6 @@ export class ProductsAddEditComponent implements OnInit {
               this.selectedImage = this.images.find((el: Image) => {
                 return el?.id == x.product_image_id;
               });
-
-              // Trigger stock validation based on loaded product's is_rental value
-              const stockControl = this.form.get('stock');
-              if (x.is_rental) {
-                stockControl?.clearValidators();
-              } else {
-                stockControl?.setValidators([Validators.required]);
-              }
-              stockControl?.updateValueAndValidity();
             });
         }
       });

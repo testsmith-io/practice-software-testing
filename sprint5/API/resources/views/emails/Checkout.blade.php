@@ -61,16 +61,9 @@ Thanks for your order.
 | Amount       | Product         | Price | Total |
 | :--------- | :------------- | :------------- | :------------- |
 @foreach ($items as $item)
-| {{ $item['quantity'] }} | {{ $item['product']['name'] }}{{ isset($item['product']['co2_rating']) ? ' [CO2: ' . $item['product']['co2_rating'] . ']' : '' }} {{ ($item['product']['is_rental'] === 1) ? " (For rent)": "" }} | $ {{ number_format($item['product']['price'],2) }} | $ {{ number_format($item['quantity'] * ($item['discounted_price'] ?? $item['product']['price']),2) }} |
+| {{ $item['quantity'] }} | {{ $item['name'] }} {{ ($item['is_rental'] === 1) ? " (For rent)": "" }} | $ {{ number_format($item['price'],2) }} | $ {{ number_format($item['total'],2) }} |
 @endforeach
-@if ($additional_discount_percentage)
-|  |  | Subtotal: | $ {{ number_format($subtotal,2) }} |
-|  |  | Discount ({{ $additional_discount_percentage }}%): | -$ {{ number_format($additional_discount_amount,2) }} |
-@endif
-@if (isset($eco_discount_percentage) && $eco_discount_percentage > 0)
-|  |  | Eco-Friendly Discount ({{ $eco_discount_percentage }}%): | -$ {{ number_format($eco_discount_amount,2) }} |
-@endif
-|  |  | **Total:** | **$ {{ number_format($total,2) }}** |
+|  |  |  | $ {{ number_format($total,2) }} |
 @endcomponent
 
 You can review your invoice in your account's "Invoices" section by clicking "My account" on our shop.

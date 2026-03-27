@@ -1,6 +1,4 @@
 <?php
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
 
 namespace App\Http\Controllers;
 
@@ -27,7 +25,7 @@ class UserController extends Controller
     {
         $this->middleware('auth:users', ['except' => ['login', 'store', 'forgotPassword', 'refresh']]);
         $this->middleware('assign.guard:users');
-        $this->middleware('role:admin', ['only' => ['destroy']]);
+        $this->middleware('role:admin', ['only' => ['index', 'destroy']]);
 
         Log::debug('UserController constructed');
     }
@@ -70,17 +68,7 @@ class UserController extends Controller
         Log::info('Index method called to retrieve all users with role user');
         $users = User::where('role', '=', 'user')->paginate();
         Log::debug('Users retrieved', ['count' => count($users->items())]);
-
-        // CTF Flag: Users endpoint reveals too many details (enabled, failed_login_attempts)
-        // These fields should only be visible to admins, but they're exposed to everyone
-        $response = $users->toArray();
-
-        return $this->preferredFormat($response, 200, [
-            'X-CTF-Flag' => 'API3_2023_BROKEN_OBJECT_PROPERTY_LEVEL_AUTHORIZATION_USERS',
-            'X-CTF-Vulnerability-Description' => 'The enabled and failed_login_attempts fields are exposed in the response. These should only be visible to admins.',
-            'X-CTF-Sequence' => '3',
-            'X-CTF-Code' => '01100011'
-        ]);
+        return $this->preferredFormat($users);
     }
 
     /**
@@ -195,9 +183,6 @@ class UserController extends Controller
         Log::debug('Executing raw query', ['query' => $query]);
         $user = DB::selectOne($query);
 
-        // CTF Flag: Detect SQL injection attempt
-        $sqlInjectionDetected = strpos($email, '--') !== false || strpos($email, '\'') !== false;
-
         if (!$user) {
             Log::warning('Login failed: user not found', ['email' => $email]);
             return $this->failedLoginResponse();
@@ -241,7 +226,7 @@ class UserController extends Controller
         Log::info('User logged in successfully', ['user_id' => $user->id]);
 
         // Return the successful login response
-        return $this->successfulLoginResponse($token, $sqlInjectionDetected);
+        return $this->successfulLoginResponse($token);
     }
 
     protected function validateLogin(Request $request)
@@ -285,29 +270,10 @@ class UserController extends Controller
         return response()->json(['error' => 'Unauthorized'], ResponseAlias::HTTP_UNAUTHORIZED);
     }
 
-    protected function successfulLoginResponse($token, $sqlInjectionDetected = false)
+    protected function successfulLoginResponse($token)
     {
         Log::info('Successful login response generated');
-        $response = $this->respondWithToken($token);
-        $data = json_decode($response->getContent(), true);
-
-        // CTF Flags: Add headers for vulnerabilities
-        $headers = [
-            'X-CTF-Flag' => 'API2_2023_BROKEN_AUTHENTICATION_LONG_LIVED_TOKEN',
-            'X-CTF-Vulnerability-Description' => 'Access token TTL is set to 260000 minutes (~180 days) and refresh token to 520000 minutes (~361 days). Tokens should expire much sooner for security.',
-            'X-CTF-Sequence' => '2',
-            'X-CTF-Code' => '01100101'
-        ];
-
-        // Add SQL injection flag headers if detected
-        if ($sqlInjectionDetected) {
-            $headers['X-CTF-Flag-SQL'] = 'API8_2019_INJECTION_SQL';
-            $headers['X-CTF-Vulnerability-Description-SQL'] = 'The login endpoint is vulnerable to SQL injection. Using \' -- in the email bypasses password verification.';
-            $headers['X-CTF-Sequence-SQL'] = '9';
-            $headers['X-CTF-Code-SQL'] = '01110000';
-        }
-
-        return response()->json($data, $response->status())->withHeaders($headers);
+        return $this->respondWithToken($token);
     }
 
     /**
@@ -565,19 +531,7 @@ class UserController extends Controller
     {
         Log::info('Show method called to retrieve user', ['user_id' => $id]);
         $user = User::findOrFail($id);
-
-        // CTF Flag: Check if user is accessing another user's data (BOLA vulnerability)
-        $response = $user->toArray();
-        if (auth()->check() && auth()->id() != $id) {
-            return $this->preferredFormat($response, 200, [
-                'X-CTF-Flag' => 'API1_2023_BROKEN_OBJECT_LEVEL_AUTHORIZATION',
-                'X-CTF-Vulnerability-Description' => 'You can retrieve another user\'s details by changing the user ID. The API does not verify that the authenticated user has permission to access this specific user\'s data.',
-                'X-CTF-Sequence' => '1',
-                'X-CTF-Code' => '01110011'
-            ]);
-        }
-
-        return $this->preferredFormat($response);
+        return $this->preferredFormat($user);
     }
 
     /**

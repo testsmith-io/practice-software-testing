@@ -1,6 +1,4 @@
 <?php
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
 
 namespace app\Http\Requests\Product;
 
@@ -34,8 +32,7 @@ class PatchProduct extends BaseFormRequest
             'brand_id' => 'sometimes',
             'is_location_offer' => 'sometimes|boolean',
             'is_rental' => 'sometimes|boolean',
-            'product_image_id' => 'sometimes|string',
-            'co2_rating' => 'sometimes|nullable|in:A,B,C,D,E'
+            'product_image_id' => 'sometimes|string'
         ];
     }
 }

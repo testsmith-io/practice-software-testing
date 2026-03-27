@@ -1,6 +1,3 @@
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
-
 import {Component, inject, Input, OnInit} from '@angular/core';
 import {
   AbstractControl,
@@ -172,7 +169,7 @@ export class PaymentComponent implements OnInit {
         break;
     }
 
-    const payload: any = {
+    const payload = {
       'billing_street': this.address.street,
       'billing_city': this.address.city,
       'billing_state': this.address.state,
@@ -182,15 +179,6 @@ export class PaymentComponent implements OnInit {
       'payment_details': payment,
       'cart_id': cartId
     };
-
-    // Check if guest checkout info exists and add to payload
-    const guestInfo = sessionStorage.getItem('guestCheckout');
-    if (guestInfo) {
-      const guest = JSON.parse(guestInfo);
-      payload['guest_email'] = guest.email;
-      payload['guest_first_name'] = guest.first_name;
-      payload['guest_last_name'] = guest.last_name;
-    }
 
     const payloadPayload = {
       'payment_method': paymentData.payment_method,

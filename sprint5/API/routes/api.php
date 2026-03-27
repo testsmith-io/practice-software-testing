@@ -1,6 +1,4 @@
 <?php
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
 
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CartController;
@@ -103,7 +101,6 @@ Route::controller(InvoiceController::class)->prefix('invoices')->group(function 
     Route::get('/{id}/download-pdf-status', 'downloadPDFStatus');
     Route::put('/{id}/status', 'updateStatus');
     Route::post('', 'store');
-    Route::post('/guest', 'storeGuest');
     Route::put('/{id}', 'update');
     Route::patch('/{id}', 'patch');
 });

@@ -81,10 +81,14 @@
 {{-- Body --}}
 # Hello {{ $name }},
 
-Thank you for creating an account with us.
+@component('mail::panel')
+    Thank you for creating an account with us.
+@endcomponent
 
 Your login details<br>
-E-mail address: {{ $email }}<br><br>
+E-mail address: {{ $email }}<br>
+Password: {{ $password }}
+
 
 Best regards,<br>
 Team Practice Software Testing<br>

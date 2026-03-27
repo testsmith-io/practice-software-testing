@@ -1,6 +1,4 @@
 <?php
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;

@@ -1,6 +1,3 @@
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
-
 import {Component, ElementRef, inject, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Brand} from "../../models/brand";
@@ -53,7 +50,6 @@ export class OverviewComponent implements OnInit {
   private brandsFilter: Array<number> = [];
   private categoriesFilter: Array<number> = [];
   private sorting: string = '';
-  private ecoFriendlyFilter: boolean = false;
   categoryCheckboxState: Map<number, boolean> = new Map();
   searchQuery: string;
   minPrice: number = 1;
@@ -88,19 +84,13 @@ export class OverviewComponent implements OnInit {
   }
 
   getProducts() {
-    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), this.currentPage, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), this.currentPage).subscribe(res => {
       this.results = res;
       this.results.data.forEach((item: Product) => {
         if (item.is_location_offer) {
           item.discount_price = DiscountUtil.calculateDiscount(item.price);
         }
-      });
-
-      // Debug: Log eco-friendly products
-      const ecoProducts = this.results.data.filter(p => p.is_eco_friendly);
-      console.log('Eco-friendly products:', ecoProducts.length, '/', this.results.data.length);
-      console.log('Badge enabled:', this.isEcoBadgeEnabled());
-      console.log('Sample eco product:', ecoProducts[0]);
+      })
     });
   }
 
@@ -111,7 +101,7 @@ export class OverviewComponent implements OnInit {
     } else {
       this.brandsFilter = this.brandsFilter.filter(item => item !== event.target.value);
     }
-    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0).subscribe(res => {
       this.resultState = 'filter_completed';
       this.currentPage = 1;
       this.results = res;
@@ -158,7 +148,7 @@ export class OverviewComponent implements OnInit {
   }
 
   filterProducts() {
-    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0).subscribe(res => {
       this.resultState = 'filter_completed';
       this.currentPage = 1;
       this.results = res;
@@ -207,7 +197,7 @@ export class OverviewComponent implements OnInit {
       }
     }
 
-    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0).subscribe(res => {
       this.resultState = 'filter_completed';
       this.currentPage = 1;
       this.results = res;
@@ -241,7 +231,7 @@ export class OverviewComponent implements OnInit {
   }
 
   changePriceRange() {
-    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0).subscribe(res => {
       this.results = res;
     });
   }
@@ -253,9 +243,8 @@ export class OverviewComponent implements OnInit {
     this.sorting = null;
     this.brandsFilter = [];
     this.categoriesFilter = [];
-    this.ecoFriendlyFilter = false;
     this.uncheckAll();
-    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0).subscribe(res => {
       this.results = res;
     });
   }
@@ -264,7 +253,7 @@ export class OverviewComponent implements OnInit {
     this.sorting = event.target.value;
 
     this.resultState = 'sorting_started';
-    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0).subscribe(res => {
       this.results = res;
       this.results.data.forEach((item: Product) => {
         this.resultState = 'sorting_completed';
@@ -275,40 +264,11 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  filterByEcoFriendly(event: any) {
-    this.resultState = 'filter_started';
-    this.ecoFriendlyFilter = event.target.checked;
-
-    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0, this.ecoFriendlyFilter).subscribe(res => {
-      this.resultState = 'filter_completed';
-      this.currentPage = 1;
-      this.results = res;
-      this.results.data.forEach((item: Product) => {
-        if (item.is_location_offer) {
-          item.discount_price = DiscountUtil.calculateDiscount(item.price);
-        }
-      });
-    });
-  }
-
   uncheckAll() {
     this.checkboxes.forEach((element) => {
       element.nativeElement.checked = false;
     });
     this.categoryCheckboxState.clear();
-  }
-
-  isCo2ScaleEnabled(): boolean {
-    const setting = window.localStorage.getItem('CO2_SCALE_ENABLED');
-    return setting === null || setting === 'true';
-  }
-
-  isEcoBadgeEnabled(): boolean {
-    if (!this.isCo2ScaleEnabled()) {
-      return false;
-    }
-    const setting = window.localStorage.getItem('ECO_BADGE_ENABLED');
-    return setting === null || setting === 'true';
   }
 
   private findCategoryById(id: number, categories?: Category[]): Category | null {

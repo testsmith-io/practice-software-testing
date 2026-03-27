@@ -1,6 +1,4 @@
 <?php
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
 
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
@@ -28,12 +26,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/status', function () {
-    return response()->json([
-        'version' => config('app.version'),
-        'laravel_version' => app()->version(),
-        'environment' => env('APP_ENV'),
-        'app_name' => env('APP_NAME')
-    ], 200,
+    return response()->json(['version' => config('app.version'), 'environment' => env('APP_ENV'), 'app_name' => env('APP_NAME')], 200,
         ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
 });
 
@@ -46,13 +39,7 @@ Route::get('/logs/laravel.log', function () {
         $logContents = 'Log file not found.';
     }
 
-    // CTF Flag: Logs exposed vulnerability - add flag to headers
-    return response(nl2br(e($logContents)))->withHeaders([
-        'X-CTF-Flag' => 'API8_2023_SECURITY_MISCONFIGURATION_LOG_EXPOSURE',
-        'X-CTF-Vulnerability-Description' => 'Application logs are publicly accessible via the web. Logs may contain sensitive information like API keys, user data, and internal system details. This endpoint should be disabled or properly secured.',
-        'X-CTF-Sequence' => '10',
-        'X-CTF-Code' => '01101001'
-    ]);
+    return nl2br(e($logContents));
 });
 
 Route::controller(BrandController::class)->prefix('brands')->group(function () {

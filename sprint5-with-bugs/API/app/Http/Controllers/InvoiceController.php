@@ -1,6 +1,4 @@
 <?php
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
 
 namespace App\Http\Controllers;
 
@@ -65,16 +63,7 @@ class InvoiceController extends Controller
             ->orderBy('invoice_date', 'DESC')
             ->paginate();
         Log::debug('Fetched invoices:', ['invoice_count' => $invoices->count()]);
-
-        // CTF Flag: All invoices are returned, not filtered by user_id (BFLA vulnerability)
-        $response = $invoices->toArray();
-
-        return $this->preferredFormat($response, 200, [
-            'X-CTF-Flag' => 'API5_2023_BROKEN_FUNCTION_LEVEL_AUTHORIZATION_INVOICE',
-            'X-CTF-Vulnerability-Description' => 'All invoices are returned regardless of the authenticated user. The endpoint should only return invoices belonging to the current user.',
-            'X-CTF-Sequence' => '8',
-            'X-CTF-Code' => '01100001'
-        ]);
+        return $this->preferredFormat($invoices);
     }
 
     /**
@@ -130,19 +119,6 @@ class InvoiceController extends Controller
             'length' => 14,
             'prefix' => 'INV-' . now()->year
         ]);
-
-        // CTF Flag: Detect if total doesn't match sum of invoice_items (quantity * unit_price)
-        $priceManipulated = false;
-        $calculatedTotal = 0;
-        foreach ($request->only(['invoice_items'])['invoice_items'] as $invoiceItem) {
-            $calculatedTotal += $invoiceItem['quantity'] * $invoiceItem['unit_price'];
-        }
-
-        // Check if the provided total matches the calculated total
-        if ($request->total != $calculatedTotal) {
-            $priceManipulated = true;
-        }
-
         $invoice = Invoice::create($input);
 
         Log::info('Invoice created successfully.', ['invoice_id' => $invoice->id, 'invoice_number' => $invoice->invoice_number]);
@@ -174,16 +150,6 @@ class InvoiceController extends Controller
             Mail::to([$user->email])->send(new Checkout($user->first_name . ' ' . $user->last_name, $items, $total,));
 
             Log::info('Checkout email sent to user.', ['user_email' => $user->email, 'total_amount' => $total]);
-        }
-
-        // Add CTF flag headers if price was manipulated
-        if ($priceManipulated) {
-            return $this->preferredFormat($invoice, ResponseAlias::HTTP_CREATED, [
-                'X-CTF-Flag' => 'A04_2021_INSECURE_DESIGN_PRICE_MANIPULATION',
-                'X-CTF-Vulnerability-Description' => 'The API accepts client-provided unit_price values in invoice_items. Prices should be validated server-side against actual product prices to prevent manipulation.',
-                'X-CTF-Sequence' => '11',
-                'X-CTF-Code' => '00100001'
-            ]);
         }
 
         return $this->preferredFormat($invoice, ResponseAlias::HTTP_CREATED);

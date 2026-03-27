@@ -1,6 +1,3 @@
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
-
 import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {InvoicesComponent} from './invoices.component';
 import {InvoiceService} from '../../_services/invoice.service';

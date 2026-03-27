@@ -6,7 +6,6 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
-        "symfony/console": "^7.0 <7.4",
         "barryvdh/laravel-dompdf": "v3.1.1",
         "darkaonline/l5-swagger": "9.0.1",
         "guzzlehttp/guzzle": "7.9.3",
@@ -76,9 +75,6 @@
             "pact-foundation/composer-downloads-plugin": true,
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
-        },
-        "platform": {
-            "php": "8.3.28"
         }
     },
     "minimum-stability": "stable",

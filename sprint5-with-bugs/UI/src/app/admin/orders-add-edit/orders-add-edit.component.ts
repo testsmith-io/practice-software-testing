@@ -1,6 +1,3 @@
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
-
 import {Component, inject, OnInit} from '@angular/core';
 import {Invoice} from "../../models/invoice";
 import {InvoiceService} from "../../_services/invoice.service";

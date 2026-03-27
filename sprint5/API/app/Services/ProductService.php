@@ -1,6 +1,4 @@
 <?php
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
 
 namespace App\Services;
 
@@ -18,8 +16,7 @@ class ProductService
             $value = strtolower((string) $filters['is_rental']);
             $filters['is_rental'] = in_array($value, ['1', 'true'], true) ? 1 : 0;
         } else {
-            // Default to excluding rentals when not specified
-            $filters['is_rental'] = 0;
+            $filters['is_rental'] =  0;
         }
 
         $cacheKey = $this->generateCacheKey($filters);
@@ -28,7 +25,7 @@ class ProductService
 
         return Cache::remember($cacheKey, 60 * 60, function () use ($filters) {
             $query = Product::withEagerLoading()
-                ->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id', 'is_location_offer', 'is_rental', 'stock', 'co2_rating');
+                ->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id', 'is_location_offer', 'is_rental', 'stock');
 
             if (!empty($filters['by_category_slug'])) {
                 $categorySlug = $filters['by_category_slug'];
@@ -81,16 +78,11 @@ class ProductService
         Log::debug("Fetching product by ID", ['id' => $id]);
 
         return Cache::remember($cacheKey, 60 * 60, function () use ($id) {
-            $product = Product::with([
+            return Product::with([
                 'product_image:id,by_name,by_url,source_name,source_url,file_name,title',
                 'category:id,name,slug,parent_id',
                 'brand:id,name'
             ])->findOrFail($id);
-
-            // Make hidden fields visible for admin editing
-            $product->makeVisible(['stock', 'brand_id', 'category_id', 'product_image_id']);
-
-            return $product;
         });
     }
 
@@ -115,7 +107,7 @@ class ProductService
                 'category:id,name',
                 'brand:id,name'
             ])
-            ->select('id', 'name', 'description', 'price', 'category_id', 'brand_id', 'product_image_id', 'is_location_offer', 'is_rental', 'stock', 'co2_rating')
+            ->select('id', 'name', 'description', 'price', 'category_id', 'brand_id', 'product_image_id', 'is_location_offer', 'is_rental', 'stock')
             ->where('category_id', $categoryId)
             ->where('id', '!=', $id)
             ->limit(10)
@@ -139,7 +131,7 @@ class ProductService
                 'category:id,name',
                 'brand:id,name'
             ])
-            ->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id', 'is_location_offer', 'is_rental', 'stock', 'co2_rating')
+            ->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id', 'is_location_offer', 'is_rental', 'stock')
             ->where('name', 'like', "%{$query}%")
             ->paginate(9);
 

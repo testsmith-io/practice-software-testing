@@ -1,6 +1,4 @@
 <?php
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -23,7 +21,6 @@ class CreateProductsTable extends Migration
             $table->decimal('price', 10, 2);
             $table->boolean('is_location_offer');
             $table->boolean('is_rental');
-            $table->char('co2_rating', 1)->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
             $table->foreignUlid('brand_id')->references('id')->on('brands');
@@ -35,7 +32,6 @@ class CreateProductsTable extends Migration
             $table->index('category_id');
             $table->index('brand_id');
             $table->index('is_rental');
-            $table->index('co2_rating');
             $table->index('name');
             $table->index('price');
         });

@@ -1,6 +1,4 @@
 <?php
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
 
 namespace App\Services;
 
@@ -62,11 +60,6 @@ class ProductService
             if (isset($filters['is_rental'])) {
                 $query->where('is_rental', '=', $filters['is_rental']);
                 Log::debug("Filtering by is_rental", ['is_rental' => $filters['is_rental']]);
-            }
-
-            if (!empty($filters['eco_friendly'])) {
-                Log::debug("Filtering by eco_friendly", ['eco_friendly' => $filters['eco_friendly']]);
-                $query->withFilters($filters);
             }
 
             $results = $query->filter()->paginate(9);

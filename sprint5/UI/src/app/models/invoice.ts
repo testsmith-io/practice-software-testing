@@ -1,6 +1,3 @@
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
-
 import {Invoiceline} from "./invoiceline";
 
 export interface Invoice {
@@ -15,8 +12,6 @@ export interface Invoice {
   invoice_number?: string;
   additional_discount_percentage?: number;
   additional_discount_amount?: number;
-  eco_discount_percentage?: number;
-  eco_discount_amount?: number;
   invoicelines?: Invoiceline[];
   payment?: any;
   subtotal?: number;

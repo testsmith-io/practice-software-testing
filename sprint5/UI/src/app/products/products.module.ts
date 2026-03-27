@@ -1,6 +1,3 @@
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
-
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ProductsRoutingModule} from './products-routing.module';
@@ -17,7 +14,6 @@ import {
   faArrowsLeftRight,
   faArrowsUpDown,
   faFilter,
-  faLeaf,
   faMinus,
   faPlus,
   faSearch,
@@ -45,6 +41,6 @@ import {
 })
 export class ProductsModule {
   constructor(library: FaIconLibrary) {
-    library.addIcons(faFilter, faArrowsLeftRight, faArrowsUpDown, faSearch, faMinus, faPlus, faShoppingCart, faStar, faLeaf);
+    library.addIcons(faFilter, faArrowsLeftRight, faArrowsUpDown, faSearch, faMinus, faPlus, faShoppingCart, faStar);
   }
 }

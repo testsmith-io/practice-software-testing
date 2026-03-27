@@ -1,6 +1,4 @@
 <?php
-// Copyright (c) 2024-2026 Testsmith. All rights reserved.
-// See LICENSE for details.
 
 namespace app\Http\Requests\Customer;
 
@@ -52,8 +50,7 @@ class UpdateCustomer extends BaseFormRequest
             'address.postal_code' => ['nullable', 'string', 'max:10', new SubscriptSuperscriptRule()],
             'phone' => ['nullable', 'string', 'max:24', new SubscriptSuperscriptRule()],
             'dob' => ['date', 'date_format:Y-m-d', "before:{$before}"],
-            'email' => ['required', 'string', 'max:256', new SubscriptSuperscriptRule()],
-            'failed_login_attempts' => ['numeric'],
+            'email' => ['required', 'string', 'max:256', new SubscriptSuperscriptRule()]
         ];
     }
 }
