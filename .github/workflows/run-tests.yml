@@ -29,6 +29,20 @@ jobs:
           curl -v -X POST 'http://localhost:8091/users/login' \
           -H 'Content-Type: application/json' \
           --data-raw '{"email":"customer@practicesoftwaretesting.com","password":"welcome01"}'
+      - name: Wait for Angular UI to be ready 🕐
+        run: |
+          echo "Waiting for Angular UI on port 4200..."
+          for i in $(seq 1 60); do
+            if curl -s -o /dev/null -w "%{http_code}" http://localhost:4200 | grep -q "200"; then
+              echo "Angular UI is ready!"
+              exit 0
+            fi
+            echo "Attempt $i/60 - not ready yet, waiting 5s..."
+            sleep 5
+          done
+          echo "Angular UI failed to start within 5 minutes"
+          docker compose logs angular-ui
+          exit 1
       - name: Install node ⚙️
         uses: actions/setup-node@v4
         with:
