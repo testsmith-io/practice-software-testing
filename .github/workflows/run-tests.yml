@@ -18,10 +18,11 @@ jobs:
           docker compose -f docker-compose.yml up -d --force-recreate
       - name: Wait for Composer to finish 📦
         run: |
-          echo "Waiting for composer service to complete..."
-          docker compose wait composer || true
-          # Verify vendor directory was created
-          docker compose exec -T laravel-api test -f /var/www/vendor/autoload.php
+          echo "Composer container logs:"
+          docker compose logs composer
+          echo "---"
+          echo "Re-running composer install inside laravel-api container..."
+          docker compose exec -T laravel-api composer install --no-dev --optimize-autoloader --ignore-platform-req=ext-ffi
           echo "Composer dependencies installed successfully!"
       - name: Wait for database to be ready 🗄️
         run: |
