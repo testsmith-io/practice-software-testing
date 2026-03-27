@@ -45,7 +45,8 @@ services:
 
   composer:
     image: composer:2.6.6
-    command: install --no-dev --optimize-autoloader --ignore-platform-req=ext-ffi && chown -R www-data /var/www && chmod 777 /var/www
+    entrypoint: /bin/sh
+    command: -c "composer install --no-dev --optimize-autoloader --ignore-platform-req=ext-ffi && chown -R www-data /var/www && chmod 777 /var/www"
     volumes_from:
       - laravel-api
     working_dir: /var/www
