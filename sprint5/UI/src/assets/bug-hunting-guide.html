@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bug Hunting Guide</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      background: #f8f9fa;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .guide-container {
+      padding: 20px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #dc3545, #c82333);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header h1 {
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    .header p {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .progress-bar {
+      background: rgba(255,255,255,0.3);
+      height: 6px;
+      border-radius: 3px;
+      margin-top: 15px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      background: white;
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+
+    .progress-text {
+      font-size: 11px;
+      margin-top: 8px;
+      opacity: 0.9;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+      border: 1px solid #dee2e6;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 18px;
+      font-weight: 700;
+      color: #dc3545;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #6c757d;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .page {
+      display: none;
+      flex: 1;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .page-content {
+      background: white;
+      border-radius: 10px;
+      border: 1px solid #dee2e6;
+      overflow: hidden;
+      height: calc(100vh - 200px);
+      overflow-y: auto;
+    }
+
+    .page-header {
+      background: #dc3545;
+      color: white;
+      padding: 20px;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .page-intro {
+      padding: 20px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+      font-size: 14px;
+      color: #6c757d;
+      line-height: 1.6;
+    }
+
+    .hunt-card {
+      padding: 20px;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background-color 0.2s ease;
+    }
+
+    .hunt-card:hover {
+      background-color: #f8f9fa;
+    }
+
+    .hunt-card:last-child {
+      border-bottom: none;
+    }
+
+    .hunt-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+
+    .hunt-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2c3e50;
+      flex: 1;
+      margin-right: 15px;
+    }
+
+    .hunt-badges {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .difficulty-badge {
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .difficulty-beginner { background: #28a745; color: white; }
+    .difficulty-intermediate { background: #ffc107; color: #212529; }
+    .difficulty-advanced { background: #fd7e14; color: white; }
+    .difficulty-expert { background: #dc3545; color: white; }
+
+    .method-badge {
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 500;
+      background: #6f42c1;
+      color: white;
+    }
+
+    .hunt-content {
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .hunt-section {
+      margin-bottom: 15px;
+    }
+
+    .hunt-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .hunt-section h4 {
+      font-size: 12px;
+      font-weight: 600;
+      color: #dc3545;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .hunt-section p, .hunt-section li {
+      color: #495057;
+    }
+
+    .hunt-section ul {
+      margin-left: 18px;
+    }
+
+    .hunt-section li {
+      margin-bottom: 5px;
+    }
+
+    .hint-section {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 15px;
+    }
+
+    .hint-section h5 {
+      color: #856404;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .hint-section p {
+      color: #856404;
+      font-size: 12px;
+    }
+
+    .reveal-section {
+      background: #d1ecf1;
+      border: 1px solid #bee5eb;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .reveal-section.show {
+      display: block;
+    }
+
+    .reveal-section h5 {
+      color: #0c5460;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .reveal-section p, .reveal-section li {
+      color: #0c5460;
+      font-size: 12px;
+    }
+
+    .hunt-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #f0f0f0;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      background: #6c757d;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      background: #5a6268;
+      transform: translateY(-1px);
+    }
+
+    .action-btn.reveal {
+      background: #17a2b8;
+    }
+
+    .action-btn.reveal:hover {
+      background: #138496;
+    }
+
+    .action-btn.found {
+      background: #28a745;
+    }
+
+    .action-btn.found:hover {
+      background: #218838;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin-top: 15px;
+    }
+
+    .checkbox-container input[type="checkbox"] {
+      margin-right: 8px;
+      transform: scale(1.2);
+    }
+
+    .checkbox-container label {
+      font-size: 12px;
+      color: #6c757d;
+      cursor: pointer;
+    }
+
+    .category-navigation {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .category-card {
+      background: white;
+      border: 2px solid #dee2e6;
+      border-radius: 10px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .category-card:hover {
+      border-color: #dc3545;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(220, 53, 69, 0.15);
+    }
+
+    .category-card.active {
+      border-color: #dc3545;
+      background: #fff5f5;
+    }
+
+    .category-icon {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .category-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+
+    .category-count {
+      font-size: 12px;
+      color: #6c757d;
+    }
+
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      padding: 20px 0;
+    }
+
+    .nav-button {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      min-width: 120px;
+    }
+
+    .nav-button:hover {
+      background: #c82333;
+      transform: translateY(-1px);
+    }
+
+    .nav-button:disabled {
+      background: #6c757d;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .nav-button.secondary {
+      background: #6c757d;
+    }
+
+    .nav-button.secondary:hover {
+      background: #5a6268;
+    }
+
+    @media (max-width: 768px) {
+      .guide-container {
+        padding: 10px;
+      }
+
+      .category-navigation {
+        grid-template-columns: 1fr;
+      }
+
+      .hunt-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hunt-badges {
+        margin-top: 10px;
+      }
+
+      .navigation {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .hunt-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="guide-container">
+    <div class="header">
+      <h1>🕵️ Bug Hunting Session</h1>
+      <p>Interactive guided exploration to discover bugs in the with-bugs version</p>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="progress-text" id="progress-text">0 bugs discovered (0%)</div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-item">
+        <div class="stat-number" id="discoveries">0</div>
+        <div class="stat-label">Discovered</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" id="hints-used">0</div>
+        <div class="stat-label">Hints Used</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" id="current-session">8</div>
+        <div class="stat-label">Hunt Areas</div>
+      </div>
+    </div>
+
+    <!-- Overview Page -->
+    <div class="page active" id="page-overview">
+      <div class="category-navigation">
+        <div class="category-card" onclick="showPage('cart-hunt')">
+          <div class="category-icon">🛒</div>
+          <div class="category-title">Cart & Checkout Hunt</div>
+          <div class="category-count">Critical Flow Testing</div>
+        </div>
+        <div class="category-card" onclick="showPage('product-hunt')">
+          <div class="category-icon">📦</div>
+          <div class="category-title">Product Discovery Hunt</div>
+          <div class="category-count">Navigation & Display</div>
+        </div>
+        <div class="category-card" onclick="showPage('visual-hunt')">
+          <div class="category-icon">🎨</div>
+          <div class="category-title">Visual Bug Hunt</div>
+          <div class="category-count">UI/UX Exploration</div>
+        </div>
+        <div class="category-card" onclick="showPage('data-hunt')">
+          <div class="category-icon">📊</div>
+          <div class="category-title">Data Validation Hunt</div>
+          <div class="category-count">Form & Field Testing</div>
+        </div>
+        <div class="category-card" onclick="showPage('text-hunt')">
+          <div class="category-icon">✏️</div>
+          <div class="category-title">Text & Typo Hunt</div>
+          <div class="category-count">Content Review</div>
+        </div>
+        <div class="category-card" onclick="showPage('security-hunt')">
+          <div class="category-icon">🔒</div>
+          <div class="category-title">Security Vulnerability Hunt</div>
+          <div class="category-count">Advanced Testing</div>
+        </div>
+        <div class="category-card" onclick="showPage('accessibility-hunt')">
+          <div class="category-icon">♿</div>
+          <div class="category-title">Accessibility Hunt</div>
+          <div class="category-count">WCAG Compliance</div>
+        </div>
+        <div class="category-card" onclick="showPage('business-hunt')">
+          <div class="category-icon">⚙️</div>
+          <div class="category-title">Business Logic Hunt</div>
+          <div class="category-count">Functional Testing</div>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <div class="page-intro">
+          <h3>🎯 Welcome to Interactive Bug Hunting!</h3>
+          <p>This is a guided bug hunting session where you'll discover real bugs in the with-bugs version of the Practice Software Testing application. Each hunting area focuses on different testing techniques and bug types.</p>
+          <br>
+          <p><strong>🔍 How This Works:</strong></p>
+          <ul style="margin-left: 20px; margin-top: 10px;">
+            <li><strong>Guided Exploration:</strong> Each hunt gives you scenarios to test and areas to explore</li>
+            <li><strong>Progressive Hints:</strong> Get hints when you need them to guide your investigation</li>
+            <li><strong>Discovery Validation:</strong> Confirm your findings and learn about the bug types</li>
+            <li><strong>Skill Building:</strong> Learn different testing techniques and approaches</li>
+          </ul>
+          <br>
+          <p><strong>🛠️ Testing Techniques You'll Learn:</strong></p>
+          <ul style="margin-left: 20px; margin-top: 10px;">
+            <li><strong>Landmark Tour:</strong> Testing the main user journeys and core functionality</li>
+            <li><strong>SuperModel:</strong> Visual consistency and cross-browser testing</li>
+            <li><strong>BadBoy Tour:</strong> Security testing and boundary conditions</li>
+            <li><strong>FedEx:</strong> Data flow testing and field validation</li>
+            <li><strong>Supporting Actor:</strong> Secondary features and edge cases</li>
+            <li><strong>GarbageCollector:</strong> Interactive elements and error handling</li>
+          </ul>
+          <br>
+          <p><strong>💡 Tips for Success:</strong></p>
+          <ul style="margin-left: 20px; margin-top: 10px;">
+            <li>Use the split-screen to test while reading instructions</li>
+            <li>Try different browsers if mentioned in the hunt</li>
+            <li>Don't rush - explore thoroughly before using hints</li>
+            <li>Think like a real user, not just a tester</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="navigation">
+        <button class="nav-button secondary" onclick="resetProgress()">🔄 Reset Session</button>
+        <button class="nav-button" onclick="showPage('cart-hunt')">Start Hunting! →</button>
+      </div>
+    </div>
+
+    <!-- Cart & Checkout Hunt -->
+    <div class="page" id="page-cart-hunt">
+      <div class="page-content">
+        <div class="page-header">
+          🛒 Cart & Checkout Hunt - Critical User Journeys
+        </div>
+        <div class="page-intro">
+          <strong>🎯 Mission:</strong> Test the shopping cart and checkout process. This is where customers convert, so any bugs here directly impact revenue.
+        </div>
+
+        <div class="hunt-card">
+          <div class="hunt-header">
+            <div class="hunt-title">Hunt #1: Shopping Cart Quantity Controls</div>
+            <div class="hunt-badges">
+              <span class="difficulty-badge difficulty-beginner">Beginner</span>
+              <span class="method-badge">Landmark Tour</span>
+            </div>
+          </div>
+          <div class="hunt-content">
+            <div class="hunt-section">
+              <h4>🎯 Your Mission</h4>
+              <p>Test the quantity controls in the shopping cart. Can customers easily adjust quantities?</p>
+            </div>
+            <div class="hunt-section">
+              <h4>🧪 Test Scenario</h4>
+              <ul>
+                <li>Add any product to your cart</li>
+                <li>Go to the cart page</li>
+                <li>Try to change the quantity using all available methods</li>
+                <li>What works and what doesn't?</li>
+              </ul>
+            </div>
+            <div class="hint-section">
+              <h5>💡 Need a Hint?</h5>
+              <p>Look for + and - buttons next to quantities. Test both the buttons and manual input.</p>
+            </div>
+            <div class="reveal-section" id="reveal-cart-1">
+              <h5>🔍 What You Should Find</h5>
+              <p><strong>Bug:</strong> The plus (+) and minus (-) buttons don't work at all. Only the input field works for changing quantities.</p>
+              <p><strong>Impact:</strong> Users expect these buttons to work - it's a major usability issue.</p>
+            </div>
+          </div>
+          <div class="hunt-actions">
+            <button class="action-btn" onclick="showHint('hint-cart-1')">💡 Get Hint</button>
+            <button class="action-btn reveal" onclick="revealAnswer('reveal-cart-1')">🔍 Show Answer</button>
+            <button class="action-btn found" onclick="markFound('cart-1')">✅ Found It!</button>
+          </div>
+          <div class="checkbox-container" style="display: none;">
+            <input type="checkbox" id="hunt-cart-1" onchange="updateProgress()">
+            <label for="hunt-cart-1">Bug discovered</label>
+          </div>
+        </div>
+
+        <div class="hunt-card">
+          <div class="hunt-header">
+            <div class="hunt-title">Hunt #2: Cart Total Calculation</div>
+            <div class="hunt-badges">
+              <span class="difficulty-badge difficulty-beginner">Beginner</span>
+              <span class="method-badge">Landmark Tour</span>
+            </div>
+          </div>
+          <div class="hunt-content">
+            <div class="hunt-section">
+              <h4>🎯 Your Mission</h4>
+              <p>Check if the cart correctly calculates and displays the total price.</p>
+            </div>
+            <div class="hunt-section">
+              <h4>🧪 Test Scenario</h4>
+              <ul>
+                <li>Add several items with different prices to your cart</li>
+                <li>Go to the checkout page</li>
+                <li>Check the total price display</li>
+                <li>Does the math add up correctly?</li>
+              </ul>
+            </div>
+            <div class="hint-section">
+              <h5>💡 Need a Hint?</h5>
+              <p>Look at the total price area in the cart. Sometimes obvious bugs are hiding in plain sight.</p>
+            </div>
+            <div class="reveal-section" id="reveal-cart-2">
+              <h5>🔍 What You Should Find</h5>
+              <p><strong>Bug:</strong> The total price shows "0,00" instead of the actual sum.</p>
+              <p><strong>Impact:</strong> Customers can't see their total - major checkout blocker!</p>
+            </div>
+          </div>
+          <div class="hunt-actions">
+            <button class="action-btn" onclick="showHint('hint-cart-2')">💡 Get Hint</button>
+            <button class="action-btn reveal" onclick="revealAnswer('reveal-cart-2')">🔍 Show Answer</button>
+            <button class="action-btn found" onclick="markFound('cart-2')">✅ Found It!</button>
+          </div>
+          <div class="checkbox-container" style="display: none;">
+            <input type="checkbox" id="hunt-cart-2" onchange="updateProgress()">
+            <label for="hunt-cart-2">Bug discovered</label>
+          </div>
+        </div>
+
+        <div class="hunt-card">
+          <div class="hunt-header">
+            <div class="hunt-title">Hunt #3: Payment Gateway Investigation</div>
+            <div class="hunt-badges">
+              <span class="difficulty-badge difficulty-intermediate">Intermediate</span>
+              <span class="method-badge">Supporting Actor</span>
+            </div>
+          </div>
+          <div class="hunt-content">
+            <div class="hunt-section">
+              <h4>🎯 Your Mission</h4>
+              <p>Test the payment method selection during checkout.</p>
+            </div>
+            <div class="hunt-section">
+              <h4>🧪 Test Scenario</h4>
+              <ul>
+                <li>Add items to cart and proceed through checkout</li>
+                <li>Fill out billing information</li>
+                <li>Get to the payment method step</li>
+                <li>What payment options are available?</li>
+              </ul>
+            </div>
+            <div class="hint-section">
+              <h5>💡 Need a Hint?</h5>
+              <p>Check the dropdown for payment methods. Error messages can be very revealing.</p>
+            </div>
+            <div class="reveal-section" id="reveal-cart-3">
+              <h5>🔍 What You Should Find</h5>
+              <p><strong>Bug:</strong> Payment method dropdown shows "Error 304 - Missing Payment Gateway"</p>
+              <p><strong>Impact:</strong> Customers cannot complete purchases - complete checkout failure!</p>
+            </div>
+          </div>
+          <div class="hunt-actions">
+            <button class="action-btn" onclick="showHint('hint-cart-3')">💡 Get Hint</button>
+            <button class="action-btn reveal" onclick="revealAnswer('reveal-cart-3')">🔍 Show Answer</button>
+            <button class="action-btn found" onclick="markFound('cart-3')">✅ Found It!</button>
+          </div>
+          <div class="checkbox-container" style="display: none;">
+            <input type="checkbox" id="hunt-cart-3" onchange="updateProgress()">
+            <label for="hunt-cart-3">Bug discovered</label>
+          </div>
+        </div>
+
+        <div class="hunt-card">
+          <div class="hunt-header">
+            <div class="hunt-title">Hunt #4: Form Field Validation Exploration</div>
+            <div class="hunt-badges">
+              <span class="difficulty-badge difficulty-intermediate">Intermediate</span>
+              <span class="method-badge">GarbageCollector</span>
+            </div>
+          </div>
+          <div class="hunt-content">
+            <div class="hunt-section">
+              <h4>🎯 Your Mission</h4>
+              <p>Examine the checkout form fields and buttons for issues.</p>
+            </div>
+            <div class="hunt-section">
+              <h4>🧪 Test Scenario</h4>
+              <ul>
+                <li>Go through the billing address form</li>
+                <li>Check all field labels and placeholders</li>
+                <li>Look for button text and functionality</li>
+                <li>Are there any missing or incorrect elements?</li>
+              </ul>
+            </div>
+            <div class="hint-section">
+              <h5>💡 Need a Hint?</h5>
+              <p>Pay attention to typos in labels, missing text on buttons, and placeholder values that don't make sense.</p>
+            </div>
+            <div class="reveal-section" id="reveal-cart-4">
+              <h5>🔍 What You Should Find</h5>
+              <p><strong>Multiple Bugs:</strong></p>
+              <ul>
+                <li>Label shows "Type Billing Address" (typo)</li>
+                <li>Postcode field shows "Missing value" instead of actual postcode</li>
+                <li>Submit/Next button has no text at all</li>
+              </ul>
+            </div>
+          </div>
+          <div class="hunt-actions">
+            <button class="action-btn" onclick="showHint('hint-cart-4')">💡 Get Hint</button>
+            <button class="action-btn reveal" onclick="revealAnswer('reveal-cart-4')">🔍 Show Answer</button>
+            <button class="action-btn found" onclick="markFound('cart-4')">✅ Found It!</button>
+          </div>
+          <div class="checkbox-container" style="display: none;">
+            <input type="checkbox" id="hunt-cart-4" onchange="updateProgress()">
+            <label for="hunt-cart-4">Bug discovered</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="navigation">
+        <button class="nav-button secondary" onclick="showPage('overview')">← Back to Overview</button>
+        <button class="nav-button" onclick="showPage('product-hunt')">Next Hunt: Products →</button>
+      </div>
+    </div>
+
+    <!-- Product Hunt -->
+    <div class="page" id="page-product-hunt">
+      <div class="page-content">
+        <div class="page-header">
+          📦 Product Discovery Hunt - Navigation & Display
+        </div>
+        <div class="page-intro">
+          <strong>🎯 Mission:</strong> Test product browsing, sorting, and interaction features. Find issues that affect product discovery and purchasing.
+        </div>
+
+        <div class="hunt-card">
+          <div class="hunt-header">
+            <div class="hunt-title">Hunt #5: Category Navigation Test</div>
+            <div class="hunt-badges">
+              <span class="difficulty-badge difficulty-beginner">Beginner</span>
+              <span class="method-badge">Landmark Tour</span>
+            </div>
+          </div>
+          <div class="hunt-content">
+            <div class="hunt-section">
+              <h4>🎯 Your Mission</h4>
+              <p>Test the product category navigation. Do all category links work properly?</p>
+            </div>
+            <div class="hunt-section">
+              <h4>🧪 Test Scenario</h4>
+              <ul>
+                <li>Browse through different product categories</li>
+                <li>Click on each category link</li>
+                <li>Try to find the "Chainsaw" category</li>
+                <li>Do you reach the expected product listings?</li>
+              </ul>
+            </div>
+            <div class="hint-section">
+              <h5>💡 Need a Hint?</h5>
+              <p>One specific category leads to an error page instead of showing products.</p>
+            </div>
+            <div class="reveal-section" id="reveal-product-1">
+              <h5>🔍 What You Should Find</h5>
+              <p><strong>Bug:</strong> The "Chainsaw" category link leads to a 404 error page.</p>
+              <p><strong>Impact:</strong> Customers can't browse chainsaw products, losing potential sales.</p>
+            </div>
+          </div>
+          <div class="hunt-actions">
+            <button class="action-btn" onclick="showHint('hint-product-1')">💡 Get Hint</button>
+            <button class="action-btn reveal" onclick="revealAnswer('reveal-product-1')">🔍 Show Answer</button>
+            <button class="action-btn found" onclick="markFound('product-1')">✅ Found It!</button>
+          </div>
+          <div class="checkbox-container" style="display: none;">
+            <input type="checkbox" id="hunt-product-1" onchange="updateProgress()">
+            <label for="hunt-product-1">Bug discovered</label>
+          </div>
+        </div>
+
+        <div class="hunt-card">
+          <div class="hunt-header">
+            <div class="hunt-title">Hunt #6: Product Sorting Investigation</div>
+            <div class="hunt-badges">
+              <span class="difficulty-badge difficulty-intermediate">Intermediate</span>
+              <span class="method-badge">Supporting Actor</span>
+            </div>
+          </div>
+          <div class="hunt-content">
+            <div class="hunt-section">
+              <h4>🎯 Your Mission</h4>
+              <p>Test the product sorting functionality. Does it work as expected?</p>
+            </div>
+            <div class="hunt-section">
+              <h4>🧪 Test Scenario</h4>
+              <ul>
+                <li>Go to any product category page</li>
+                <li>Try sorting by "Price: Low to High"</li>
+                <li>Try sorting by "Price: High to Low"</li>
+                <li>Check if the products are actually sorted correctly</li>
+              </ul>
+            </div>
+            <div class="hint-section">
+              <h5>💡 Need a Hint?</h5>
+              <p>Compare the product prices in the sorted results. Are they in the order you'd expect?</p>
+            </div>
+            <div class="reveal-section" id="reveal-product-2">
+              <h5>🔍 What You Should Find</h5>
+              <p><strong>Bug:</strong> The sorting works backwards - "Low to High" shows high to low, and vice versa.</p>
+              <p><strong>Impact:</strong> Users can't find products in their preferred price range efficiently.</p>
+            </div>
+          </div>
+          <div class="hunt-actions">
+            <button class="action-btn" onclick="showHint('hint-product-2')">💡 Get Hint</button>
+            <button class="action-btn reveal" onclick="revealAnswer('reveal-product-2')">🔍 Show Answer</button>
+            <button class="action-btn found" onclick="markFound('product-2')">✅ Found It!</button>
+          </div>
+          <div class="checkbox-container" style="display: none;">
+            <input type="checkbox" id="hunt-product-2" onchange="updateProgress()">
+            <label for="hunt-product-2">Bug discovered</label>
+          </div>
+        </div>
+
+        <div class="hunt-card">
+          <div class="hunt-header">
+            <div class="hunt-title">Hunt #7: Product Detail Page Controls</div>
+            <div class="hunt-badges">
+              <span class="difficulty-badge difficulty-intermediate">Intermediate</span>
+              <span class="method-badge">Landmark Tour</span>
+            </div>
+          </div>
+          <div class="hunt-content">
+            <div class="hunt-section">
+              <h4>🎯 Your Mission</h4>
+              <p>Test the product detail page interactions, especially quantity controls and action buttons.</p>
+            </div>
+            <div class="hunt-section">
+              <h4>🧪 Test Scenario</h4>
+              <ul>
+                <li>Go to any product detail page</li>
+                <li>Try the quantity + and - buttons</li>
+                <li>Try the "Add to Cart" button</li>
+                <li>Try the "Add to Favorites" button</li>
+                <li>Test different quantity amounts</li>
+              </ul>
+            </div>
+            <div class="hint-section">
+              <h5>💡 Need a Hint?</h5>
+              <p>Check if all buttons work as expected and if there are any quantity limits or error messages.</p>
+            </div>
+            <div class="reveal-section" id="reveal-product-3">
+              <h5>🔍 What You Should Find</h5>
+              <p><strong>Multiple Bugs:</strong></p>
+              <ul>
+                <li>Quantity +/- buttons don't work (same as cart)</li>
+                <li>"Add to Cart" shows error but actually adds the item</li>
+                <li>"Add to Favorites" shows "Upsss... something wrong"</li>
+                <li>Can't add more than 10 items to cart</li>
+              </ul>
+            </div>
+          </div>
+          <div class="hunt-actions">
+            <button class="action-btn" onclick="showHint('hint-product-3')">💡 Get Hint</button>
+            <button class="action-btn reveal" onclick="revealAnswer('reveal-product-3')">🔍 Show Answer</button>
+            <button class="action-btn found" onclick="markFound('product-3')">✅ Found It!</button>
+          </div>
+          <div class="checkbox-container" style="display: none;">
+            <input type="checkbox" id="hunt-product-3" onchange="updateProgress()">
+            <label for="hunt-product-3">Bug discovered</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="navigation">
+        <button class="nav-button secondary" onclick="showPage('cart-hunt')">← Previous: Cart Hunt</button>
+        <button class="nav-button" onclick="showPage('visual-hunt')">Next Hunt: Visual →</button>
+      </div>
+    </div>
+
+    <!-- Continue with other hunt pages following the same pattern... -->
+    <!-- For brevity, I'll include one more example and mention the rest -->
+
+    <!-- Visual Hunt -->
+    <div class="page" id="page-visual-hunt">
+      <div class="page-content">
+        <div class="page-header">
+          🎨 Visual Bug Hunt - UI/UX Cross-Browser Testing
+        </div>
+        <div class="page-intro">
+          <strong>🎯 Mission:</strong> Test visual consistency across different browsers. Find broken images, alignment issues, and styling problems.
+        </div>
+
+        <div class="hunt-card">
+          <div class="hunt-header">
+            <div class="hunt-title">Hunt #8: Broken Image Investigation</div>
+            <div class="hunt-badges">
+              <span class="difficulty-badge difficulty-beginner">Beginner</span>
+              <span class="method-badge">SuperModel</span>
+            </div>
+          </div>
+          <div class="hunt-content">
+            <div class="hunt-section">
+              <h4>🎯 Your Mission</h4>
+              <p>Find broken images throughout the site that appear as missing image icons.</p>
+            </div>
+            <div class="hunt-section">
+              <h4>🧪 Test Scenario</h4>
+              <ul>
+                <li>Browse the homepage carefully</li>
+                <li>Look for the site logo and search icon</li>
+                <li>Check product pages and rental pages</li>
+                <li>Try different browsers if possible</li>
+              </ul>
+            </div>
+            <div class="hint-section">
+              <h5>💡 Need a Hint?</h5>
+              <p>Look for broken image placeholders (🖼️) where there should be the ToolshopLogo and magnifying glass icon.</p>
+            </div>
+            <div class="reveal-section" id="reveal-visual-1">
+              <h5>🔍 What You Should Find</h5>
+              <p><strong>Multiple Image Bugs:</strong></p>
+              <ul>
+                <li>Homepage: ToolshopLogo shows as broken image</li>
+                <li>Homepage: Magnifying glass icon next to search is broken</li>
+                <li>Various product images missing in different browsers</li>
+              </ul>
+            </div>
+          </div>
+          <div class="hunt-actions">
+            <button class="action-btn" onclick="showHint('hint-visual-1')">💡 Get Hint</button>
+            <button class="action-btn reveal" onclick="revealAnswer('reveal-visual-1')">🔍 Show Answer</button>
+            <button class="action-btn found" onclick="markFound('visual-1')">✅ Found It!</button>
+          </div>
+          <div class="checkbox-container" style="display: none;">
+            <input type="checkbox" id="hunt-visual-1" onchange="updateProgress()">
+            <label for="hunt-visual-1">Bug discovered</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="navigation">
+        <button class="nav-button secondary" onclick="showPage('product-hunt')">← Previous: Product Hunt</button>
+        <button class="nav-button" onclick="showPage('data-hunt')">Next Hunt: Data →</button>
+      </div>
+    </div>
+
+    <!-- Placeholder pages for remaining hunts -->
+    <div class="page" id="page-data-hunt">
+      <div class="page-content">
+        <div class="page-header">📊 Data Validation Hunt</div>
+        <div class="page-intro">Coming soon - Field mapping and validation testing...</div>
+      </div>
+      <div class="navigation">
+        <button class="nav-button secondary" onclick="showPage('visual-hunt')">← Previous: Visual Hunt</button>
+        <button class="nav-button" onclick="showPage('text-hunt')">Next Hunt: Text →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-text-hunt">
+      <div class="page-content">
+        <div class="page-header">✏️ Text & Typo Hunt</div>
+        <div class="page-intro">Coming soon - Spelling and text error hunting...</div>
+      </div>
+      <div class="navigation">
+        <button class="nav-button secondary" onclick="showPage('data-hunt')">← Previous: Data Hunt</button>
+        <button class="nav-button" onclick="showPage('security-hunt')">Next Hunt: Security →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-security-hunt">
+      <div class="page-content">
+        <div class="page-header">🔒 Security Vulnerability Hunt</div>
+        <div class="page-intro">Coming soon - Security testing and vulnerability discovery...</div>
+      </div>
+      <div class="navigation">
+        <button class="nav-button secondary" onclick="showPage('text-hunt')">← Previous: Text Hunt</button>
+        <button class="nav-button" onclick="showPage('accessibility-hunt')">Next Hunt: Accessibility →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-accessibility-hunt">
+      <div class="page-content">
+        <div class="page-header">♿ Accessibility Hunt</div>
+        <div class="page-intro">Coming soon - WCAG compliance and accessibility testing...</div>
+      </div>
+      <div class="navigation">
+        <button class="nav-button secondary" onclick="showPage('security-hunt')">← Previous: Security Hunt</button>
+        <button class="nav-button" onclick="showPage('business-hunt')">Next Hunt: Business Logic →</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-business-hunt">
+      <div class="page-content">
+        <div class="page-header">⚙️ Business Logic Hunt</div>
+        <div class="page-intro">Coming soon - Functional and business logic testing...</div>
+      </div>
+      <div class="navigation">
+        <button class="nav-button secondary" onclick="showPage('accessibility-hunt')">← Previous: Accessibility Hunt</button>
+        <button class="nav-button" onclick="showPage('overview')">Back to Overview</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let discoveries = 0;
+    let hintsUsed = 0;
+    let currentPage = 'overview';
+
+    function showPage(pageId) {
+      // Hide all pages
+      document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+      });
+
+      // Update category cards
+      document.querySelectorAll('.category-card').forEach(card => {
+        card.classList.remove('active');
+      });
+
+      // Show selected page
+      const targetPage = document.getElementById('page-' + pageId);
+      if (targetPage) {
+        targetPage.classList.add('active');
+        currentPage = pageId;
+
+        // Save current page to localStorage
+        localStorage.setItem('bug-hunting-current-page', pageId);
+
+        // Scroll to top
+        const pageContent = targetPage.querySelector('.page-content');
+        if (pageContent) {
+          pageContent.scrollTop = 0;
+        }
+      }
+    }
+
+    function showHint(hintId) {
+      hintsUsed++;
+      document.getElementById('hints-used').textContent = hintsUsed;
+      localStorage.setItem('bug-hunting-hints-used', hintsUsed.toString());
+
+      // You could show additional hint content here if needed
+      alert('Hint shown! Check the hint section above.');
+    }
+
+    function revealAnswer(revealId) {
+      const revealSection = document.getElementById(revealId);
+      if (revealSection) {
+        revealSection.classList.add('show');
+      }
+    }
+
+    function markFound(huntId) {
+      const checkbox = document.getElementById('hunt-' + huntId);
+      if (checkbox) {
+        checkbox.checked = true;
+        updateProgress();
+      }
+
+      // Show celebration
+      alert('🎉 Great discovery! Bug logged in your hunting session.');
+    }
+
+    function updateProgress() {
+      discoveries = document.querySelectorAll('input[type="checkbox"]:checked').length;
+
+      const percentage = discoveries > 0 ? Math.round((discoveries / 15) * 100) : 0; // Assuming ~15 hunts total
+
+      document.getElementById('progress-fill').style.width = percentage + '%';
+      document.getElementById('progress-text').textContent = `${discoveries} bugs discovered (${percentage}%)`;
+      document.getElementById('discoveries').textContent = discoveries;
+
+      // Save progress
+      const checkedBoxes = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.id);
+      localStorage.setItem('bug-hunting-progress', JSON.stringify(checkedBoxes));
+    }
+
+    function resetProgress() {
+      if (confirm('Reset your entire hunting session? This will clear all discovered bugs and progress.')) {
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+        document.querySelectorAll('.reveal-section').forEach(section => section.classList.remove('show'));
+        localStorage.removeItem('bug-hunting-progress');
+        localStorage.removeItem('bug-hunting-current-page');
+        localStorage.removeItem('bug-hunting-hints-used');
+        discoveries = 0;
+        hintsUsed = 0;
+        updateProgress();
+        document.getElementById('hints-used').textContent = '0';
+      }
+    }
+
+    function loadProgress() {
+      // Load discoveries
+      const savedProgress = localStorage.getItem('bug-hunting-progress');
+      if (savedProgress) {
+        const checkedBoxes = JSON.parse(savedProgress);
+        checkedBoxes.forEach(id => {
+          const checkbox = document.getElementById(id);
+          if (checkbox) {
+            checkbox.checked = true;
+          }
+        });
+      }
+
+      // Load hints used
+      const savedHints = localStorage.getItem('bug-hunting-hints-used');
+      if (savedHints) {
+        hintsUsed = parseInt(savedHints);
+        document.getElementById('hints-used').textContent = hintsUsed;
+      }
+
+      // Load current page
+      const savedPage = localStorage.getItem('bug-hunting-current-page');
+      if (savedPage && savedPage !== 'overview') {
+        showPage(savedPage);
+      }
+
+      updateProgress();
+    }
+
+    // Initialize when page loads
+    window.addEventListener('load', () => {
+      loadProgress();
+    });
+  </script>
+</body>
+</html>
