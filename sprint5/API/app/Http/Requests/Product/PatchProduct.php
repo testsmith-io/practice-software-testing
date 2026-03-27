@@ -2,7 +2,7 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-namespace app\Http\Requests\Product;
+namespace App\Http\Requests\Product;
 
 use App\Http\Requests\BaseFormRequest;
 use App\Rules\SubscriptSuperscriptRule;

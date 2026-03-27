@@ -2,7 +2,7 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-namespace app\Http\Requests\Customer;
+namespace App\Http\Requests\Customer;
 
 use App\Http\Requests\BaseFormRequest;
 
