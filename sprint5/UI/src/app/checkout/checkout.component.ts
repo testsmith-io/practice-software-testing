@@ -1,3 +1,6 @@
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
+
 import {Component, ViewChild} from '@angular/core';
 import {FormGroup} from "@angular/forms";
 import {AddressComponent} from "./address/address.component";

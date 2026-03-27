@@ -1,3 +1,6 @@
+/* Copyright (c) 2024-2026 Testsmith. All rights reserved. */
+/* See LICENSE for details. */
+
 .google-sign-in-button {
   cursor: pointer;
   transition: background-color .3s, box-shadow .3s;

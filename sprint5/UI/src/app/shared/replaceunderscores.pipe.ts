@@ -1,3 +1,6 @@
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
+
 import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({name: 'replaceUnderscores'})

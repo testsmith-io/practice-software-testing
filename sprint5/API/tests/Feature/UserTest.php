@@ -1,4 +1,6 @@
 <?php
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
 
 use App\Http\Controllers\UserController;
 use App\Mail\ForgetPassword;

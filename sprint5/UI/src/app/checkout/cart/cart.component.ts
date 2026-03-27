@@ -1,3 +1,6 @@
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
+
 import {Component, inject, OnInit} from '@angular/core';
 import {CartService} from "../../_services/cart.service";
 import {CustomerAccountService} from "../../shared/customer-account.service";

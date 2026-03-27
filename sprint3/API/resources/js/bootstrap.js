@@ -1,3 +1,6 @@
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
+
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
