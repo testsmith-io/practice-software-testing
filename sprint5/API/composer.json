@@ -12,7 +12,7 @@
         "haruncpi/laravel-id-generator": "1.1",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "v4.1.1",
-        "laravel/socialite": "v5.20.0",
+        "laravel/socialite": "v5.26.0",
         "laravel/tinker": "v2.10.1",
         "mehradsadeghi/laravel-filter-querystring": "1.1.10",
         "pact-foundation/pact-php": "10.1.1",
