@@ -16,13 +16,9 @@ jobs:
         run: |
           export DISABLE_LOGGING=true
           docker compose -f docker-compose.yml up -d --force-recreate
-      - name: Wait for Composer to finish 📦
+      - name: Install Composer dependencies 📦
         run: |
-          echo "Composer container logs:"
-          docker compose logs composer
-          echo "---"
-          echo "Re-running composer install inside laravel-api container..."
-          docker compose exec -T laravel-api composer install --no-dev --optimize-autoloader --ignore-platform-req=ext-ffi
+          docker run --rm --volumes-from $(docker compose ps -q laravel-api) -w /var/www composer:2.6.6 install --no-dev --optimize-autoloader --ignore-platform-req=ext-ffi
           echo "Composer dependencies installed successfully!"
       - name: Wait for database to be ready 🗄️
         run: |
