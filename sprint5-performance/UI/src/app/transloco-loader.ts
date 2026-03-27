@@ -1,3 +1,6 @@
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
+
 import {inject, Injectable} from "@angular/core";
 import {Translation, TranslocoLoader} from "@jsverse/transloco";
 import {HttpClient} from "@angular/common/http";

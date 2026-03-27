@@ -1,3 +1,6 @@
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
+
 import {User} from "./user.model";
 import {ContactMessageReply} from "./contact-message-reply";
 

@@ -153,10 +153,9 @@ allows you to manipulate data.
 The deliverable of Sprint0 is a Dockerized environment, just like database seeding scripts. Basically, the result is
 an empty environment.
 
-# Support This Project
+## License
 
-If you find this project useful and want to support its ongoing development, please consider [supporting](https://testwithroy.com/b/support) it!
+This repository is publicly viewable for reference purposes only.
 
-I appreciate your support!
-
+Commercial use, public hosting, redistribution, and use for third-party services are not allowed without prior written permission. See [LICENSE](LICENSE) for details.
 

@@ -1,3 +1,6 @@
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
+
   $(function() {
    var $window     = $(window)
      , $top_link   = $('#toplink')
