@@ -1,3 +1,5 @@
+{{-- Copyright (c) 2024-2026 Testsmith. All rights reserved. See LICENSE for details. --}}
+
 @component('mail::layout')
 {{-- Header --}}
 @slot('header')

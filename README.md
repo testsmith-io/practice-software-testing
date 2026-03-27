@@ -159,4 +159,8 @@ If you find this project useful and want to support its ongoing development, ple
 
 I appreciate your support!
 
+# License
 
+This repository is publicly viewable for reference purposes only.
+
+Commercial use, public hosting, redistribution, and use for third-party services are not allowed without prior written permission. See [LICENSE](LICENSE) for details.

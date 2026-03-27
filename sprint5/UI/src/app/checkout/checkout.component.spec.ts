@@ -1,3 +1,6 @@
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
+
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {CheckoutComponent} from './checkout.component';
