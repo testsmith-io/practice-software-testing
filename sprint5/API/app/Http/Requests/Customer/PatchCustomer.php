@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Http\Requests\Customer;
+namespace App\Http\Requests\Customer;
 
 use App\Http\Requests\BaseFormRequest;
 use App\Rules\SubscriptSuperscriptRule;
