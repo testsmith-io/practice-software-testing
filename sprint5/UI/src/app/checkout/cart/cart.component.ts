@@ -1,3 +1,6 @@
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
+
 import {Component, inject, OnInit} from '@angular/core';
 import {CartService} from "../../_services/cart.service";
 import {CustomerAccountService} from "../../shared/customer-account.service";
@@ -6,7 +9,6 @@ import {DecimalPipe, NgClass} from "@angular/common";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {ArchwizardModule} from "@y3krulez/angular-archwizard";
 import {TranslocoDirective} from "@jsverse/transloco";
-import {Router} from "@angular/router";
 import {GaService} from "../../_services/ga.service";
 import {FormsModule} from "@angular/forms";
 
@@ -27,13 +29,11 @@ export class CartComponent implements OnInit {
   private cartService = inject(CartService);
   private toastr = inject(ToastrService);
   private customerAccountService = inject(CustomerAccountService);
-  private router = inject(Router);
   private gaService = inject(GaService);
 
   cart: any;
   isLoggedIn: boolean = false;
   discount: number = 0;
-  ecoDiscount: number = 0;
   total: number = 0;
   subtotal: number = 0;
 
@@ -47,8 +47,7 @@ export class CartComponent implements OnInit {
       this.cart = cart;
       this.total = this.calculateTotal(cart.cart_items);
       this.subtotal = this.total;
-      this.discount = this.calculateDiscount(cart.additional_discount_percentage);
-      this.ecoDiscount = this.calculateEcoDiscount(cart.cart_items);
+      this.discount = this.calculateDiscount(cart.additional_discount_percentage)
     });
   }
 
@@ -100,36 +99,6 @@ export class CartComponent implements OnInit {
     this.total = this.total - discountAmount;
 
     return discountAmount;
-  }
-
-  private calculateEcoDiscount(items: any[]): number {
-    // Count eco-friendly products (CO2 rating A or B)
-    let ecoFriendlyCount = 0;
-    let totalProductCount = 0;
-
-    items.forEach(cartItem => {
-      const quantity = cartItem.quantity || 0;
-      totalProductCount += quantity;
-
-      const co2Rating = cartItem.product?.co2_rating?.toUpperCase();
-      if (co2Rating === 'A' || co2Rating === 'B') {
-        ecoFriendlyCount += quantity;
-      }
-    });
-
-    // Apply 5% eco discount if more than 50% of products are eco-friendly
-    if (totalProductCount > 0 && (ecoFriendlyCount / totalProductCount) > 0.5) {
-      const ecoDiscountAmount = this.total * 0.05;
-      this.total = this.total - ecoDiscountAmount;
-      return ecoDiscountAmount;
-    }
-
-    return 0;
-  }
-
-
-  continueShopping(): void {
-    this.router.navigate(['/']);
   }
 
   beginCheckout(): void {

@@ -1,4 +1,6 @@
 <?php
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -28,13 +30,9 @@ class CreateInvoicesTable extends Migration
             $table->decimal('total', 10, 2)->nullable();
             $table->enum('status', ['AWAITING_FULFILLMENT', 'ON_HOLD', 'AWAITING_SHIPMENT', 'SHIPPED', 'COMPLETED'])->default('AWAITING_FULFILLMENT');
             $table->string('status_message', 255)->nullable();
-            $table->boolean('is_guest')->default(false);
-            $table->string('customer_email')->nullable();
-            $table->string('customer_first_name')->nullable();
-            $table->string('customer_last_name')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
-            $table->foreignUlid('user_id')->nullable()->references('id')->on('users');
+            $table->foreignUlid('user_id')->references('id')->on('users');
             $table->index(['user_id', 'invoice_date'], 'idx_invoices_user_date');
             $table->index(['invoice_date'], 'idx_invoices_date');
         });

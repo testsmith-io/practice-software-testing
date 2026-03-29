@@ -1,3 +1,6 @@
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
+
 import {Component, inject, OnInit} from '@angular/core';
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -28,11 +31,8 @@ export class LoginComponent implements OnInit {
   private http = inject(HttpClient);
 
   isLoggedIn: boolean = false;
-  isGuestCheckout: boolean = false;
   cusForm: FormGroup | any;
-  guestForm: FormGroup | any;
   cusSubmitted = false;
-  guestSubmitted = false;
   customerError: string | undefined;
   isLoginFailed = false;
   showTotpInput: boolean = false;
@@ -53,14 +53,6 @@ export class LoginComponent implements OnInit {
           Validators.minLength(6),
           Validators.maxLength(40)]],
         totp: [''],
-      }
-    );
-
-    this.guestForm = this.formBuilder.group(
-      {
-        email: ['', [Validators.required, Validators.email]],
-        first_name: ['', [Validators.required, Validators.minLength(2)]],
-        last_name: ['', [Validators.required, Validators.minLength(2)]],
       }
     );
   }
@@ -166,42 +158,5 @@ export class LoginComponent implements OnInit {
         this.handleLoginTOTPError(err);
       },
     });
-  }
-
-  continueAsGuest(): void {
-    this.guestSubmitted = true;
-
-    if (this.guestForm.invalid) {
-      return;
-    }
-
-    // Store guest information in session storage
-    const guestInfo = {
-      email: this.guestForm.value.email,
-      first_name: this.guestForm.value.first_name,
-      last_name: this.guestForm.value.last_name,
-      isGuest: true
-    };
-
-    sessionStorage.setItem('guestCheckout', JSON.stringify(guestInfo));
-    this.isGuestCheckout = true;
-    this.customer = guestInfo;
-    this.customerError = undefined;
-  }
-
-  get guest_email() {
-    return this.guestForm.get('email');
-  }
-
-  get guest_first_name() {
-    return this.guestForm.get('first_name');
-  }
-
-  get guest_last_name() {
-    return this.guestForm.get('last_name');
-  }
-
-  get gf(): { [key: string]: AbstractControl } {
-    return this.guestForm.controls;
   }
 }

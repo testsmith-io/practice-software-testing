@@ -1,3 +1,6 @@
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
+
 import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Brand} from "../../models/brand";
@@ -47,7 +50,6 @@ export class CategoryComponent implements OnInit {
   private brandsFilter: Array<number> = [];
   private categoriesFilter: Array<number> = [];
   private sorting: string = '';
-  private ecoFriendlyFilter: boolean = false;
   categoryCheckboxState: Map<number, boolean> = new Map();
 
   ngOnInit(): void {
@@ -91,7 +93,7 @@ export class CategoryComponent implements OnInit {
     } else {
       this.brandsFilter = this.brandsFilter.filter(item => item !== event.target.value);
     }
-    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug).subscribe(res => {
       this.resultState = 'filter_completed';
       this.results = res;
       this.results.data.forEach((item: Product) => {
@@ -140,7 +142,7 @@ export class CategoryComponent implements OnInit {
       }
     }
 
-    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug).subscribe(res => {
       this.resultState = 'filter_completed';
       this.results = res;
       this.results.data.forEach((item: Product) => {
@@ -161,7 +163,7 @@ export class CategoryComponent implements OnInit {
     this.sorting = event.target.value;
 
     this.resultState = 'sorting_started';
-    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug).subscribe(res => {
       this.results = res;
       this.results.data.forEach((item: Product) => {
         this.resultState = 'sorting_completed';
@@ -248,34 +250,6 @@ export class CategoryComponent implements OnInit {
 
   isCategoryChecked(categoryId: number): boolean {
     return this.categoryCheckboxState.get(categoryId) || false;
-  }
-
-  filterByEcoFriendly(event: any) {
-    this.resultState = 'filter_started';
-    this.ecoFriendlyFilter = event.target.checked;
-
-    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter).subscribe(res => {
-      this.resultState = 'filter_completed';
-      this.results = res;
-      this.results.data.forEach((item: Product) => {
-        if (item.is_location_offer) {
-          item.discount_price = DiscountUtil.calculateDiscount(item.price);
-        }
-      });
-    });
-  }
-
-  isCo2ScaleEnabled(): boolean {
-    const setting = window.localStorage.getItem('CO2_SCALE_ENABLED');
-    return setting === null || setting === 'true';
-  }
-
-  isEcoBadgeEnabled(): boolean {
-    if (!this.isCo2ScaleEnabled()) {
-      return false;
-    }
-    const setting = window.localStorage.getItem('ECO_BADGE_ENABLED');
-    return setting === null || setting === 'true';
   }
 
 }

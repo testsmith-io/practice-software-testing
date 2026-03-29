@@ -1,3 +1,6 @@
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
+
 import {inject, Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
@@ -45,10 +48,6 @@ export class InvoiceService {
   }
 
   createInvoice(payload: any): Observable<any> {
-    // Check if this is a guest checkout
-    if (payload.guest_email) {
-      return this.httpClient.post(`${this.apiUrl}/guest`, payload);
-    }
     return this.httpClient.post(this.apiUrl, payload);
   }
 

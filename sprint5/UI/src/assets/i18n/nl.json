@@ -170,13 +170,6 @@
         "required": "Achternaam is vereist"
       }
     },
-    "street": {
-      "label": "Straat",
-      "placeholder": "Uw straat",
-      "errors": {
-        "required": "Straat is vereist"
-      }
-    },
     "address": {
       "label": "Adres",
       "placeholder": "Uw adres",
@@ -260,9 +253,7 @@
         "name-asc": "Naam (A - Z)",
         "name-desc": "Naam (Z - A)",
         "price-desc": "Prijs (Hoog - Laag)",
-        "price-asc": "Prijs (Laag - Hoog)",
-        "co2-asc": "CO₂-Waardering (A - E)",
-        "co2-desc": "CO₂-Waardering (E - A)"
+        "price-asc": "Prijs (Laag - Hoog)"
       },
       "price-range": "Prijsklasse",
       "search": "Zoeken",
@@ -271,10 +262,6 @@
       "category": "Categorie",
       "brands": "Merken",
       "by-brand": "Op merk",
-      "sustainability": "Duurzaamheid",
-      "eco-friendly": "Milieuvriendelijke Producten",
-      "show-eco-friendly": "Alleen milieuvriendelijke producten tonen",
-      "co2-tooltip": "A = meest milieuvriendelijk, E = hogere milieu-impact",
       "no-results": "Geen producten gevonden.",
       "no-stock": "Niet op voorraad"
     },
@@ -364,18 +351,11 @@
         "price-header": "Prijs",
         "subtotal": "Subtotaal",
         "discount": "Korting",
-        "total": "Totaal",
-        "continue-shopping": "Verder winkelen"
+        "total": "Totaal"
       },
       "sign-in": {
         "title": "Inloggen",
         "already": "Hallo {{ first_name }} {{ last_name }}, u bent al ingelogd. U kunt doorgaan naar betaling."
-      },
-      "guest": {
-        "title": "Doorgaan als gast",
-        "description": "Afrekenen zonder account aan te maken",
-        "btn": "Doorgaan als gast",
-        "proceed": "Doorgaan als gast: {{ first_name }} {{ last_name }} ({{ email }})"
       },
       "address": {
         "title": "Factuuradres"

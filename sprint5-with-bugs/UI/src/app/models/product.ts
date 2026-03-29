@@ -1,3 +1,6 @@
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
+
 import {Image} from "./image";
 import {Brand} from "./brand";
 import {Category} from "./category";
@@ -17,6 +20,4 @@ export interface Product {
   category_id?: number;
   brand: Brand;
   category: Category;
-  co2_rating?: string;
-  is_eco_friendly?: boolean;
 }

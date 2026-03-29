@@ -1,4 +1,6 @@
 <?php
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
 
 namespace App\Http\Requests\Product;
 
@@ -31,8 +33,7 @@ class StoreProduct extends BaseFormRequest
             'brand_id' => 'required',
             'is_location_offer' => 'required|boolean',
             'is_rental' => 'required|boolean',
-            'product_image_id' => 'required|numeric',
-            'co2_rating' => 'nullable|string|in:A,B,C,D,E'
+            'product_image_id' => 'required|numeric'
         ];
     }
 }

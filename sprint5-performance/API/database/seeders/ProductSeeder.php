@@ -1,4 +1,6 @@
 <?php
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
 
 namespace Database\Seeders;
 
@@ -8,36 +10,6 @@ use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
 {
-    /**
-     * Determine CO₂ rating based on category name
-     */
-    private function getCo2Rating(string $categoryName): string
-    {
-        // B = Low impact (eco-friendly)
-        $lowImpact = ['Hand Saw', 'Safety Gear', 'Storage Solutions', 'Tool Belts', 'Workbench'];
-
-        // C = Moderate impact
-        $moderateImpact = ['Measures', 'Fasteners', 'Screwdriver'];
-
-        // D = Higher impact (steel construction)
-        $higherImpact = ['Pliers', 'Hammer', 'Wrench', 'Chisels', 'Saw'];
-
-        // E = High impact (power tools)
-        $highImpact = ['Drill', 'Sander'];
-
-        if (in_array($categoryName, $lowImpact)) {
-            return 'B';
-        } elseif (in_array($categoryName, $moderateImpact)) {
-            return 'C';
-        } elseif (in_array($categoryName, $higherImpact)) {
-            return 'D';
-        } elseif (in_array($categoryName, $highImpact)) {
-            return 'E';
-        }
-
-        return 'C'; // Default to moderate impact
-    }
-
     /**
      * Run the database seeds.
      */
@@ -52,7 +24,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Pliers')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'pliers01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Pliers'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -64,7 +35,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Pliers')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'pliers02.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Pliers'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -76,7 +46,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'MightyCraft Hardware')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Pliers')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'pliers03.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Pliers'),
             'is_location_offer' => true,
             'is_rental' => false
         ], [
@@ -88,7 +57,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'MightyCraft Hardware')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Pliers')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'pliers04.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Pliers'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -100,7 +68,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'MightyCraft Hardware')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Pliers')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'pliers05.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Pliers'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -112,7 +79,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Hammer')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'hammer01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Hammer'),
             'is_location_offer' => true,
             'is_rental' => false
         ], [
@@ -124,7 +90,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Hammer')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'hammer02.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Hammer'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -136,7 +101,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'MightyCraft Hardware')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Hammer')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'hammer03.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Hammer'),
             'is_location_offer' => true,
             'is_rental' => false
         ], [
@@ -148,7 +112,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Hammer')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'hammer04.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Hammer'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -160,7 +123,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Hammer')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'hammer05.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Hammer'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -172,7 +134,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Hammer')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'hammer06.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Hammer'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -184,7 +145,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Hammer')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'hammer07.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Hammer'),
             'is_location_offer' => true,
             'is_rental' => false
         ], [
@@ -196,7 +156,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Hand Saw')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'saw01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Hand Saw'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -208,7 +167,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Wrench')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'wrench01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Wrench'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -220,7 +178,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Wrench')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'wrench02.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Wrench'),
             'is_location_offer' => true,
             'is_rental' => false
         ], [
@@ -232,7 +189,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Wrench')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'wrench03.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Wrench'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -244,7 +200,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Screwdriver')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'screwdriver01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Screwdriver'),
             'is_location_offer' => true,
             'is_rental' => false
         ], [
@@ -256,7 +211,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Screwdriver')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'screwdriver02.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Screwdriver'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -268,7 +222,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'MightyCraft Hardware')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Chisels')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'chisels01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Chisels'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -280,7 +233,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Chisels')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'chisels02.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Chisels'),
             'is_location_offer' => true,
             'is_rental' => false
         ], [
@@ -292,7 +244,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Chisels')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'chisels03.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Chisels'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -304,7 +255,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Measures')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'measure01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Measures'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -316,7 +266,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Measures')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'measure02.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Measures'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -328,7 +277,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Measures')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'measure03.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Measures'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -340,7 +288,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Measures')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'measure04.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Measures'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -352,7 +299,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Safety Gear')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'goggles01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Safety Gear'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -364,7 +310,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Safety Gear')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'goggles02.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Safety Gear'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -376,7 +321,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Safety Gear')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'gloves01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Safety Gear'),
             'is_location_offer' => true,
             'is_rental' => false
         ], [
@@ -388,7 +332,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Safety Gear')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'gloves02.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Safety Gear'),
             'is_location_offer' => true,
             'is_rental' => false
         ], [
@@ -400,7 +343,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Safety Gear')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'helmet01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Safety Gear'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -412,7 +354,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Safety Gear')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'earprotection01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Safety Gear'),
             'is_location_offer' => true,
             'is_rental' => false
         ], [
@@ -424,7 +365,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'MightyCraft Hardware')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Fasteners')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'fasteners01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Fasteners'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -436,7 +376,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Fasteners')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'fasteners02.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Fasteners'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -448,7 +387,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Fasteners')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'fasteners03.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Fasteners'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -460,7 +398,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Fasteners')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'fasteners04.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Fasteners'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -472,7 +409,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Fasteners')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'fasteners05.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Fasteners'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -484,7 +420,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Fasteners')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'fasteners06.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Fasteners'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -496,7 +431,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'MightyCraft Hardware')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Storage Solutions')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'toolcabinet02.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Storage Solutions'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -508,7 +442,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Storage Solutions')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'toolcabinet01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Storage Solutions'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -520,7 +453,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Workbench')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'workbench02.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Workbench'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -532,7 +464,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'MightyCraft Hardware')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Workbench')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'workbench01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Workbench'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -544,7 +475,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Tool Belts')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'toolbelt01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Tool Belts'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -556,7 +486,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Sander')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'sander01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Sander'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -568,7 +497,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'MightyCraft Hardware')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Sander')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'sander02.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Sander'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -580,7 +508,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Saw')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'saw02.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Saw'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -592,7 +519,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Sander')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'sander03.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Sander'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -604,7 +530,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Drill')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'drill01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Drill'),
             'is_location_offer' => true,
             'is_rental' => false
         ], [
@@ -616,7 +541,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Drill')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'drill02.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Drill'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -628,7 +552,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Drill')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'drill03.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Drill'),
             'is_location_offer' => false,
             'is_rental' => false
         ], [
@@ -640,7 +563,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'MightyCraft Hardware')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Drill')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'drill04.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Drill'),
             'is_location_offer' => true,
             'is_rental' => false
         ], [
@@ -652,7 +574,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Drill')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'excavator01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Drill'),
             'is_location_offer' => true,
             'is_rental' => true
         ], [
@@ -664,7 +585,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'ForgeFlex Tools')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Drill')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'bulldozer01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Drill'),
             'is_location_offer' => true,
             'is_rental' => true
         ], [
@@ -676,7 +596,6 @@ class ProductSeeder extends Seeder
             'brand_id' => DB::table('brands')->where('name', '=', 'MightyCraft Hardware')->first()->id,
             'category_id' => DB::table('categories')->where('name', '=', 'Drill')->first()->id,
             'product_image_id' => DB::table('product_images')->where('file_name', '=', 'crane01.avif')->first()->id,
-            'co2_rating' => $this->getCo2Rating('Drill'),
             'is_location_offer' => true,
             'is_rental' => true
         ]

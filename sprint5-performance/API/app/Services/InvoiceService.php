@@ -1,4 +1,6 @@
 <?php
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
 
 namespace App\Services;
 
@@ -59,8 +61,6 @@ class InvoiceService
         $cart = Cart::with('cartItems', 'cartItems.product')->findOrFail($cartId);
 
         $subTotalPrice = 0;
-        $ecoFriendlyCount = 0;
-        $totalProductCount = 0;
 
         foreach ($cart->cartItems as $cartItem) {
             $quantity = $cartItem['quantity'];
@@ -82,33 +82,16 @@ class InvoiceService
             ]);
 
             $subTotalPrice += $discountedPrice ? $quantity * $discountedPrice : $quantity * $unitPrice;
-
-            // Count eco-friendly products (CO2 rating A or B)
-            $totalProductCount += $quantity;
-            if (isset($cartItem['product']->co2_rating) && in_array(strtoupper($cartItem['product']->co2_rating), ['A', 'B'])) {
-                $ecoFriendlyCount += $quantity;
-            }
         }
 
         $discountAmount = $subTotalPrice * ($cart->additional_discount_percentage / 100);
-
-        // Calculate eco-friendly discount (5% if more than 50% of products are eco-friendly)
-        $ecoDiscountPercentage = 0;
-        $ecoDiscountAmount = 0;
-        if ($totalProductCount > 0 && ($ecoFriendlyCount / $totalProductCount) > 0.5) {
-            $ecoDiscountPercentage = 5;
-            $ecoDiscountAmount = ($subTotalPrice - $discountAmount) * ($ecoDiscountPercentage / 100);
-        }
-
-        $totalPrice = $subTotalPrice - $discountAmount - $ecoDiscountAmount;
+        $totalPrice = $subTotalPrice - $discountAmount;
 
         $invoice->update([
             'subtotal' => $subTotalPrice,
             'total' => $totalPrice,
             'additional_discount_percentage' => $cart->additional_discount_percentage,
             'additional_discount_amount' => $discountAmount,
-            'eco_discount_percentage' => $ecoDiscountPercentage,
-            'eco_discount_amount' => $ecoDiscountAmount,
         ]);
 
         Log::info('Invoice finalized', ['invoice_id' => $invoice->id, 'total' => $totalPrice]);
@@ -170,14 +153,7 @@ class InvoiceService
     {
         Log::info('Fetching invoice', ['invoice_id' => $id, 'is_admin' => $isAdmin]);
 
-        $query = Invoice::with([
-            'invoicelines',
-            'invoicelines.product' => function ($query) {
-                $query->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id', 'co2_rating', 'is_rental');
-            },
-            'payment',
-            'payment.payment_details'
-        ]);
+        $query = Invoice::with('invoicelines', 'invoicelines.product', 'payment', 'payment.payment_details');
 
         if (!$isAdmin) {
             $query->where('user_id', Auth::user()->id);

@@ -1,3 +1,6 @@
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
+
 import {inject, Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {Observable, throwError} from "rxjs";
@@ -19,7 +22,7 @@ export class ProductService {
     return this.httpClient.get<Pagination<Product>>(this.apiURL, { params });
   }
 
-  getProductsNew(searchQuery: string, sorting: string, minPrice: string, maxPrice: string, categoryIds: string, brandIds: string, page: number, ecoFriendly: boolean = false, isRental: boolean | null = false): Observable<Pagination<Product>> {
+  getProductsNew(searchQuery: string, sorting: string, minPrice: string, maxPrice: string, categoryIds: string, brandIds: string, page: number): Observable<Pagination<Product>> {
     let params = new HttpParams().set('page', page.toString());
 
     if (searchQuery) params = params.set('q', searchQuery);
@@ -27,8 +30,6 @@ export class ProductService {
     if (minPrice && maxPrice) params = params.set('between', `price,${minPrice},${maxPrice}`);
     if (categoryIds) params = params.set('by_category', categoryIds);
     if (brandIds) params = params.set('by_brand', brandIds);
-    if (ecoFriendly) params = params.set('eco_friendly', 'true');
-    if (isRental !== null) params = params.set('is_rental', isRental ? 'true' : 'false');
 
     return this.httpClient.get<Pagination<Product>>(this.apiURL, { params });
   }
@@ -58,14 +59,13 @@ export class ProductService {
     return this.httpClient.get<Product[]>(`${this.apiURL}/${id}/related`);
   }
 
-  getProductsByCategoryAndBrand(categoryIds: string, brandIds: string, sorting: string, slug?: string, ecoFriendly: boolean = false): Observable<Pagination<Product>> {
+  getProductsByCategoryAndBrand(categoryIds: string, brandIds: string, sorting: string, slug?: string): Observable<Pagination<Product>> {
     let params = new HttpParams();
 
     if (categoryIds) params = params.set('by_category', categoryIds);
     if (brandIds) params = params.set('by_brand', brandIds);
     if (sorting) params = params.set('sort', sorting);
     if (slug) params = params.set('by_category_slug', slug);
-    if (ecoFriendly) params = params.set('eco_friendly', 'true');
 
     return this.httpClient.get<Pagination<Product>>(this.apiURL, { params });
   }

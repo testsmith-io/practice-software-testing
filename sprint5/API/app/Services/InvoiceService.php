@@ -1,4 +1,6 @@
 <?php
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
 
 namespace App\Services;
 
@@ -61,8 +63,6 @@ class InvoiceService
         $cart = Cart::with('cartItems', 'cartItems.product')->findOrFail($cartId);
 
         $subTotalPrice = 0;
-        $ecoFriendlyCount = 0;
-        $totalProductCount = 0;
 
         foreach ($cart->cartItems as $cartItem) {
             $quantity = $cartItem['quantity'];
@@ -84,113 +84,19 @@ class InvoiceService
             ]);
 
             $subTotalPrice += $discountedPrice ? $quantity * $discountedPrice : $quantity * $unitPrice;
-
-            // Count eco-friendly products (CO2 rating A or B)
-            $totalProductCount += $quantity;
-            if (isset($cartItem['product']->co2_rating) && in_array(strtoupper($cartItem['product']->co2_rating), ['A', 'B'])) {
-                $ecoFriendlyCount += $quantity;
-            }
         }
 
         $discountAmount = $subTotalPrice * ($cart->additional_discount_percentage / 100);
-
-        // Calculate eco-friendly discount (5% if more than 50% of products are eco-friendly)
-        $ecoDiscountPercentage = 0;
-        $ecoDiscountAmount = 0;
-        if ($totalProductCount > 0 && ($ecoFriendlyCount / $totalProductCount) > 0.5) {
-            $ecoDiscountPercentage = 5;
-            $ecoDiscountAmount = ($subTotalPrice - $discountAmount) * ($ecoDiscountPercentage / 100);
-        }
-
-        $totalPrice = $subTotalPrice - $discountAmount - $ecoDiscountAmount;
+        $totalPrice = $subTotalPrice - $discountAmount;
 
         $invoice->update([
             'subtotal' => $subTotalPrice,
             'total' => $totalPrice,
             'additional_discount_percentage' => $cart->additional_discount_percentage,
             'additional_discount_amount' => $discountAmount,
-            'eco_discount_percentage' => $ecoDiscountPercentage,
-            'eco_discount_amount' => $ecoDiscountAmount,
         ]);
 
         Log::info('Invoice finalized', ['invoice_id' => $invoice->id, 'total' => $totalPrice]);
-
-        return $invoice;
-    }
-
-    public function createGuestInvoice(array $data, $cartId)
-    {
-        Log::info('Creating guest invoice', ['cart_id' => $cartId]);
-
-        // Guest invoices don't have a user_id
-        $data['user_id'] = null;
-        $data['invoice_date'] = now();
-        $data['invoice_number'] = $this->invoiceNumberGenerator->generate([
-            'table' => 'invoices',
-            'field' => 'invoice_number',
-            'length' => 14,
-            'prefix' => 'INV-' . now()->year
-        ]);
-
-        $invoice = Invoice::create($data);
-        Log::debug('Guest invoice created', ['invoice_id' => $invoice->id]);
-
-        $cart = Cart::with('cartItems', 'cartItems.product')->findOrFail($cartId);
-
-        $subTotalPrice = 0;
-        $ecoFriendlyCount = 0;
-        $totalProductCount = 0;
-
-        foreach ($cart->cartItems as $cartItem) {
-            $quantity = $cartItem['quantity'];
-            $unitPrice = $cartItem['product']->price;
-
-            $discountedPrice = $cartItem->discount_percentage !== null
-                ? round($cartItem->product->price * (1 - ($cartItem->discount_percentage / 100)), 2)
-                : null;
-
-            UpdateProductInventory::dispatch($cartItem['product']->id, $quantity);
-            Log::debug('Dispatched inventory update', ['product_id' => $cartItem['product']->id, 'quantity' => $quantity]);
-
-            $invoice->invoicelines()->create([
-                'product_id' => $cartItem['product']->id,
-                'unit_price' => $unitPrice,
-                'quantity' => $quantity,
-                'discount_percentage' => $cartItem->discount_percentage,
-                'discounted_price' => $discountedPrice
-            ]);
-
-            $subTotalPrice += $discountedPrice ? $quantity * $discountedPrice : $quantity * $unitPrice;
-
-            // Count eco-friendly products (CO2 rating A or B)
-            $totalProductCount += $quantity;
-            if (isset($cartItem['product']->co2_rating) && in_array(strtoupper($cartItem['product']->co2_rating), ['A', 'B'])) {
-                $ecoFriendlyCount += $quantity;
-            }
-        }
-
-        $discountAmount = $subTotalPrice * ($cart->additional_discount_percentage / 100);
-
-        // Calculate eco-friendly discount (5% if more than 50% of products are eco-friendly)
-        $ecoDiscountPercentage = 0;
-        $ecoDiscountAmount = 0;
-        if ($totalProductCount > 0 && ($ecoFriendlyCount / $totalProductCount) > 0.5) {
-            $ecoDiscountPercentage = 5;
-            $ecoDiscountAmount = ($subTotalPrice - $discountAmount) * ($ecoDiscountPercentage / 100);
-        }
-
-        $totalPrice = $subTotalPrice - $discountAmount - $ecoDiscountAmount;
-
-        $invoice->update([
-            'subtotal' => $subTotalPrice,
-            'total' => $totalPrice,
-            'additional_discount_percentage' => $cart->additional_discount_percentage,
-            'additional_discount_amount' => $discountAmount,
-            'eco_discount_percentage' => $ecoDiscountPercentage,
-            'eco_discount_amount' => $ecoDiscountAmount,
-        ]);
-
-        Log::info('Guest invoice finalized', ['invoice_id' => $invoice->id, 'total' => $totalPrice]);
 
         return $invoice;
     }
@@ -254,7 +160,7 @@ class InvoiceService
                 $query->select('id', 'invoice_id', 'product_id', 'unit_price', 'quantity', 'discount_percentage', 'discounted_price');
             },
             'invoicelines.product' => function ($query) {
-                $query->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id', 'co2_rating', 'is_rental')
+                $query->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id')
                       ->with([
                           'product_image:id,by_name,by_url',
                           'category:id,name',

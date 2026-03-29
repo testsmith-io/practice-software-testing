@@ -36,13 +36,6 @@
         "required": "Nachname ist verpflichtend"
       }
     },
-    "street": {
-      "label": "Straße",
-      "placeholder": "Ihre Straße",
-      "errors": {
-        "required": "Straße ist verpflichtend"
-      }
-    },
     "address": {
       "label": "Adresse",
       "placeholder": "Ihre Adresse",
@@ -126,9 +119,7 @@
         "name-asc": "Name (A - Z)",
         "name-desc": "Name (Z - A)",
         "price-desc": "Preis (Hoch - Niedrig)",
-        "price-asc": "Preis (Niedrig - Hoch)",
-        "co2-asc": "CO₂-Bewertung (A - E)",
-        "co2-desc": "CO₂-Bewertung (E - A)"
+        "price-asc": "Preis (Niedrig - Hoch)"
       },
       "price-range": "Preisspanne",
       "search": "Suche",
@@ -137,10 +128,6 @@
       "category": "Kategorie",
       "brands": "Marken",
       "by-brand": "Nach Marken",
-      "sustainability": "Nachhaltigkeit",
-      "eco-friendly": "Umweltfreundliche Produkte",
-      "show-eco-friendly": "Nur umweltfreundliche Produkte anzeigen",
-      "co2-tooltip": "A = am umweltfreundlichsten, E = höhere Umweltbelastung",
       "no-results": "Es wurden keine passenden Produkte gefunden.",
       "no-stock": "Nicht auf Lager"
     },

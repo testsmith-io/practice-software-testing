@@ -1,4 +1,6 @@
 <?php
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
 
 namespace App\Http\Requests\Customer;
 
@@ -33,7 +35,7 @@ class UpdateCustomer extends BaseFormRequest
             'postcode' => 'nullable|string|max:10',
             'phone' => 'nullable|string|max:24',
             'email' => 'required|string|max:60',
-            'role' => 'sometimes|in:user,admin'
+            'role' => 'in:user,admin'
         ];
     }
 }
