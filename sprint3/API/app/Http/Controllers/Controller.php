@@ -90,12 +90,17 @@ class Controller extends BaseController
     private function makeXML($xml, $status = 200, array $headers = [], $xmlRoot = 'response', $encoding = null)
     {
         if (is_array($xml)) {
+            if (array_keys($xml) === range(0, count($xml) - 1)) {
+                $xml = ['item' => $xml];
+            }
             $xml = ArrayToXml::convert($xml, $xmlRoot, true, $encoding);
         } elseif (is_object($xml) && method_exists($xml, 'toArray')) {
-            $xml = ArrayToXml::convert($xml->toArray(), $xmlRoot, true, $encoding);
-        } elseif (is_string($xml)) {
-            $xml = $xml;
-        } else {
+            $arrayData = $xml->toArray();
+            if (array_keys($arrayData) === range(0, count($arrayData) - 1)) {
+                $arrayData = ['item' => $arrayData];
+            }
+            $xml = ArrayToXml::convert($arrayData, $xmlRoot, true, $encoding);
+        } elseif (!is_string($xml)) {
             $xml = '';
         }
         if (!isset($headers['Content-Type'])) {

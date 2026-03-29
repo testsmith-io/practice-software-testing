@@ -7,7 +7,7 @@ import {Title} from '@angular/platform-browser';
 import {filter, map} from 'rxjs/operators';
 import {HeaderComponent} from "./header/header.component";
 import {FooterComponent} from "./footer/footer.component";
-import {faGlobe, faShoppingCart} from '@fortawesome/free-solid-svg-icons';
+import {faGlobe, faLeaf, faShoppingCart} from '@fortawesome/free-solid-svg-icons';
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 
 @Component({
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
   title = 'Toolshop';
 
   constructor() {
-    this.library.addIcons(faGlobe, faShoppingCart);
+    this.library.addIcons(faGlobe, faShoppingCart, faLeaf);
   }
   ngOnInit(): void {
     if (!window.localStorage.getItem('GEO_LOCATION') &&
