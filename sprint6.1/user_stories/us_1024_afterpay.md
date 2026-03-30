@@ -7,7 +7,8 @@ I want to be able to use Afterpay as a payment method.
 
 ## Acceptance criteria
 
-Current task requires fixing [this bug](#bug-description) in billing address. \
+Current task requires fixing [this bug](#bug-description)  \
+if the app is to be run in edge explorer browser.
 
 Check the billing address of the customer. \
 If the user is located in the US make Afterpay payment option available \
