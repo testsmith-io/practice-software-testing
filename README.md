@@ -9,7 +9,7 @@ To maintain code quality and a smooth development workflow, please adhere to the
 ### 🌿 1. Feature Branches
 All feature development must take place in a separate branch.
 *   **Base branch:** Always branch off from `main`.
-*   **Naming convention:** `feature/your-feature-name` or `bugfix/issue-description`.
+*   **Naming convention:** `US-{your-storyID}`.
 
 **Example:**
 ```bash
@@ -18,7 +18,7 @@ git checkout main
 git pull origin main
 
 # Create and switch to a new feature branch
-git checkout -b feature/login-page-refactor
+git checkout -b US-E1.1
 ```
 
 ### 🧪 2. Local Development & Testing
