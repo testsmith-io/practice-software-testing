@@ -1,6 +1,63 @@
 [![Run Playwright Tests 🎭](https://github.com/testsmith-io/practice-software-testing/actions/workflows/run-tests.yml/badge.svg)](https://github.com/testsmith-io/practice-software-testing/actions/workflows/run-tests.yml) [![StackShare](http://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](https://stackshare.io/testsmith-io/practice-software-testing)
 
 
+
+
+# 🛠 Repository Rules
+
+To maintain code quality and a smooth development workflow, please adhere to the following rules:
+
+### 🌿 1. Feature Branches
+All feature development must take place in a separate branch.
+*   **Base branch:** Always branch off from `main`.
+*   **Naming convention:** `US-{your-storyID}`.
+
+**Example:**
+```bash
+# Update main to the latest version
+git checkout main
+git pull origin main
+
+# Create and switch to a new feature branch
+git checkout -b US-E1.1
+```
+
+### 🧪 2. Local Development & Testing
+Before requesting a Pull Request:
+1.  **Work on your code:** Make small, logical commits.
+2.  **Tester Verification:** Once you've completed your task, a tester must manually verify the changes in your local environment or a staging environment if available.
+
+**Example:**
+```bash
+# Add your changes
+git add .
+git commit -m "feat: refactor login page UI"
+
+# Keep your branch up to date with main
+git fetch origin main
+git merge origin/main
+```
+
+### 🔄 3. Pull Requests (PR)
+When the feature is ready and verified:
+1.  **Push your branch** to the remote repository.
+2.  **Open a Pull Request** targeting the `main` branch.
+3.  **Automated Tests:** GitHub Actions will automatically run the Playwright tests on your PR.
+4.  **Review:** Wait for at least one approval before merging.
+
+**Example:**
+```bash
+# Push your branch
+git push origin feature/login-page-refactor
+
+# Go to GitHub and open a Pull Request
+```
+
+### 🎭 4. Automated Testing
+Every Pull Request automatically triggers the Playwright test suite.
+*   Check the **Actions** tab on GitHub or the PR status to see if tests passed.
+*   If tests fail, fix the issues and push new commits to the same branch.
+
 # Default accounts
 
 | First name | Last name | Role   | E-mail                                | Password   |
