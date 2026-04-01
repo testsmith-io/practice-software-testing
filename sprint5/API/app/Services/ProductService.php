@@ -27,7 +27,7 @@ class ProductService
 
         return Cache::remember($cacheKey, 60 * 60, function () use ($filters) {
             $query = Product::withEagerLoading()
-                ->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id', 'is_location_offer', 'is_rental', 'stock');
+                ->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id', 'is_location_offer', 'is_rental', 'stock', 'co2_rating');
 
             if (!empty($filters['by_category_slug'])) {
                 $categorySlug = $filters['by_category_slug'];
@@ -133,7 +133,7 @@ class ProductService
                 'category:id,name',
                 'brand:id,name'
             ])
-            ->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id', 'is_location_offer', 'is_rental', 'stock')
+            ->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id', 'is_location_offer', 'is_rental', 'stock', 'co2_rating')
             ->where('name', 'like', "%{$query}%")
             ->paginate(9);
 

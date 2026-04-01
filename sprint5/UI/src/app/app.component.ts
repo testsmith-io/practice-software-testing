@@ -9,7 +9,7 @@ import {HeaderComponent} from "./header/header.component";
 import {FooterComponent} from "./footer/footer.component";
 import {ChatWidgetComponent} from "./chat-widget/chat-widget.component";
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
-import {faGlobe, faShoppingCart} from '@fortawesome/free-solid-svg-icons';
+import {faGlobe, faLeaf, faShoppingCart} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-root',
@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
 
   constructor() {
-    this.library.addIcons(faGlobe, faShoppingCart);
+    this.library.addIcons(faGlobe, faShoppingCart, faLeaf);
   }
 
   ngOnInit(): void {
