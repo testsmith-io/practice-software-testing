@@ -425,6 +425,24 @@
         }
       }
     },
+    "comparison": {
+      "title": "Product Comparison",
+      "clear-all": "Clear All",
+      "empty": "No products selected for comparison. Add products from the overview page.",
+      "browse": "Browse Products",
+      "price": "Price",
+      "brand": "Brand",
+      "category": "Category",
+      "stock": "Availability",
+      "in-stock": "In Stock",
+      "out-of-stock": "Out of Stock",
+      "co2-rating": "CO\u2082 Rating",
+      "eco-friendly": "Eco-Friendly",
+      "description": "Description",
+      "add": "Compare",
+      "bar-count": "{{ count }} product(s) selected",
+      "compare-btn": "Compare Now"
+    },
     "my-account": {
       "overview": {
         "title": "My account",

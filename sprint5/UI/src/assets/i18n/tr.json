@@ -425,6 +425,24 @@
         }
       }
     },
+    "comparison": {
+      "title": "Ürün Karşılaştırma",
+      "clear-all": "Tümünü temizle",
+      "empty": "Karşılaştırma için ürün seçilmedi. Genel bakış sayfasından ürün ekleyin.",
+      "browse": "Ürünlere göz at",
+      "price": "Fiyat",
+      "brand": "Marka",
+      "category": "Kategori",
+      "stock": "Stok Durumu",
+      "in-stock": "Stokta",
+      "out-of-stock": "Stokta yok",
+      "co2-rating": "CO\u2082 Değerlendirmesi",
+      "eco-friendly": "Çevre Dostu",
+      "description": "Açıklama",
+      "add": "Karşılaştır",
+      "bar-count": "{{ count }} ürün seçildi",
+      "compare-btn": "Şimdi karşılaştır"
+    },
     "my-account": {
       "overview": {
         "title": "Hesabım",
