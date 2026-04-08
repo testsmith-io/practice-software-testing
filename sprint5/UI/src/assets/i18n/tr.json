@@ -153,7 +153,7 @@
         "length": "Şifre uzunluğu geçersiz",
         "minlength": "Şifre en az 6 karakter olmalıdır.",
         "maxlength": "Şifre 40 karakterden fazla olamaz.",
-        "pattern": "Şifre, geçersiz karakterler içermelidir."
+        "pattern": "Şifre, geçersiz karakterler içermemelidir."
       }
     },
     "first-name": {
@@ -357,11 +357,18 @@
         "price-header": "Fiyat",
         "subtotal": "Ara Toplam",
         "discount": "İndirim",
-        "total": "Toplam"
+        "total": "Toplam",
+        "continue-shopping": "Alışverişe devam et"
       },
       "sign-in": {
         "title": "Giriş Yap",
         "already": "Merhaba {{ first_name }} {{ last_name }}, zaten giriş yaptınız. Ödemeye geçebilirsiniz."
+      },
+      "guest": {
+        "title": "Misafir olarak devam et",
+        "description": "Hesap oluşturmadan ödeme yap",
+        "btn": "Misafir olarak devam et",
+        "proceed": "Misafir olarak devam ediliyor: {{ first_name }} {{ last_name }} ({{ email }})"
       },
       "address": {
         "title": "Fatura Adresi"
