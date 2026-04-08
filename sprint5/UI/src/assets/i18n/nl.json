@@ -153,7 +153,7 @@
         "length": "Wachtwoordlengte is ongeldig",
         "minlength": "Wachtwoord moet minimaal 6 tekens lang zijn.",
         "maxlength": "Wachtwoord mag niet langer zijn dan 40 tekens.",
-        "pattern": "Wachtwoord moet ongeldige tekens bevatten."
+        "pattern": "Wachtwoord mag geen ongeldige tekens bevatten."
       }
     },
     "first-name": {
@@ -357,11 +357,18 @@
         "price-header": "Prijs",
         "subtotal": "Subtotaal",
         "discount": "Korting",
-        "total": "Totaal"
+        "total": "Totaal",
+        "continue-shopping": "Verder winkelen"
       },
       "sign-in": {
         "title": "Inloggen",
         "already": "Hallo {{ first_name }} {{ last_name }}, u bent al ingelogd. U kunt doorgaan naar betaling."
+      },
+      "guest": {
+        "title": "Doorgaan als gast",
+        "description": "Afrekenen zonder account aan te maken",
+        "btn": "Doorgaan als gast",
+        "proceed": "Doorgaan als gast: {{ first_name }} {{ last_name }} ({{ email }})"
       },
       "address": {
         "title": "Factuuradres"

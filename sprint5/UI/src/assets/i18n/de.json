@@ -153,7 +153,7 @@
         "length": "Passwortlänge ist ungültig",
         "minlength": "Passwort muss mindestens 6 Zeichen lang sein.",
         "maxlength": "Passwort darf nicht länger als 40 Zeichen lang sein.",
-        "pattern": "Das Passwort muss ungültige Zeichen enthalten."
+        "pattern": "Das Passwort darf keine ungültigen Zeichen enthalten."
       }
     },
     "first-name": {
@@ -357,11 +357,18 @@
         "price-header": "Preis",
         "subtotal": "Gesamt",
         "discount": "Rabatt",
-        "total": "Gesamtsumme"
+        "total": "Gesamtsumme",
+        "continue-shopping": "Weiter einkaufen"
       },
       "sign-in": {
         "title": "Anmelden",
         "already": "Hallo {{ first_name }} {{ last_name }}, Sie sind bereits angemeldet. Sie können weiter zur Kasse."
+      },
+      "guest": {
+        "title": "Als Gast fortfahren",
+        "description": "Zur Kasse ohne Konto zu erstellen",
+        "btn": "Als Gast fortfahren",
+        "proceed": "Weiter als Gast: {{ first_name }} {{ last_name }} ({{ email }})"
       },
       "address": {
         "title": "Rechnungsadresse"
