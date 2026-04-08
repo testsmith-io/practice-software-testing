@@ -425,6 +425,24 @@
         }
       }
     },
+    "comparison": {
+      "title": "Productvergelijking",
+      "clear-all": "Alles wissen",
+      "empty": "Geen producten geselecteerd om te vergelijken. Voeg producten toe vanaf de overzichtspagina.",
+      "browse": "Producten bekijken",
+      "price": "Prijs",
+      "brand": "Merk",
+      "category": "Categorie",
+      "stock": "Beschikbaarheid",
+      "in-stock": "Op voorraad",
+      "out-of-stock": "Niet op voorraad",
+      "co2-rating": "CO\u2082 Beoordeling",
+      "eco-friendly": "Milieuvriendelijk",
+      "description": "Beschrijving",
+      "add": "Vergelijken",
+      "bar-count": "{{ count }} product(en) geselecteerd",
+      "compare-btn": "Nu vergelijken"
+    },
     "my-account": {
       "overview": {
         "title": "Mijn account",

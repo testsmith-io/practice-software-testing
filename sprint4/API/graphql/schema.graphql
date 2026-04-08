@@ -1,0 +1,297 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+type User {
+    id: ID!
+    first_name: String!
+    last_name: String!
+    email: String!
+    address: String
+    city: String
+    state: String
+    country: String
+    postcode: String
+    phone: String
+    dob: String
+    role: String
+    created_at: DateTime
+}
+
+type Product {
+    id: ID!
+    name: String!
+    description: String
+    price: Float
+    is_location_offer: Boolean
+    is_rental: Boolean
+    category: Category @belongsTo
+    brand: Brand @belongsTo
+    product_image: ProductImage @belongsTo
+}
+
+type Brand {
+    id: ID!
+    name: String!
+    slug: String!
+    products: [Product!] @hasMany
+}
+
+type Category {
+    id: ID!
+    name: String!
+    slug: String!
+    parent_id: Int
+    parent_category: Category @belongsTo
+    sub_categories: [Category!] @hasMany
+}
+
+type ProductImage {
+    id: ID!
+    by_name: String
+    by_url: String
+    source_name: String
+    source_url: String
+    file_name: String
+    title: String
+}
+
+type Invoice {
+    id: ID!
+    user_id: Int!
+    invoice_date: DateTime
+    invoice_number: String
+    billing_address: String
+    billing_city: String
+    billing_state: String
+    billing_country: String
+    billing_postcode: String
+    total: Float
+    payment_method: String
+    payment_account_name: String
+    payment_account_number: String
+    user: User @belongsTo
+    invoicelines: [Invoiceline!] @hasMany
+}
+
+type Invoiceline {
+    id: ID!
+    invoice_id: Int!
+    product_id: Int!
+    unit_price: Float
+    quantity: Int
+    product: Product @belongsTo
+    invoice: Invoice @belongsTo
+}
+
+type Favorite {
+    id: ID!
+    user_id: Int!
+    product_id: Int!
+    product: Product @belongsTo
+}
+
+type ContactRequest @model(class: "App\\Models\\ContactRequests") {
+    id: ID!
+    user_id: Int
+    name: String
+    email: String
+    subject: String
+    message: String
+    status: String
+    user: User @belongsTo
+    replies: [ContactRequestReply!] @hasMany
+    created_at: DateTime
+}
+
+type ContactRequestReply {
+    id: ID!
+    user_id: Int
+    message_id: Int
+    message: String
+    user: User @belongsTo
+    created_at: DateTime
+}
+
+type AuthPayload {
+    access_token: String!
+    token_type: String!
+    expires_in: Int!
+}
+
+type Query {
+    "Find a single product by ID."
+    product(id: ID! @eq): Product @find
+
+    "List products with optional filters."
+    products(
+        name: String @where(operator: "like")
+        category_id: Int @eq
+        brand_id: Int @eq
+    ): [Product!]! @all
+
+    "List all brands."
+    brands: [Brand!]! @all
+
+    "Find a single brand by ID."
+    brand(id: ID! @eq): Brand @find
+
+    "List all categories."
+    categories: [Category!]! @all
+
+    "Find a single category by ID."
+    category(id: ID! @eq): Category @find
+
+    "Find a single user by ID."
+    user(id: ID! @eq): User @find @guard(with: ["users"])
+
+    "List all users."
+    users: [User!]! @all @guard(with: ["users"])
+
+    "Find a single invoice by ID."
+    invoice(id: ID! @eq): Invoice @find @guard(with: ["users"])
+
+    "List all invoices."
+    invoices: [Invoice!]! @all @guard(with: ["users"])
+
+    "List all favorites for the authenticated user."
+    favorites: [Favorite!]! @all @guard(with: ["users"])
+
+    "List all contact requests."
+    contactRequests: [ContactRequest!]! @all @guard(with: ["users"])
+
+    "Find a single contact request by ID."
+    contactRequest(id: ID! @eq): ContactRequest @find @guard(with: ["users"])
+}
+
+input LoginInput {
+    email: String!
+    password: String!
+}
+
+input RegisterInput {
+    first_name: String!
+    last_name: String!
+    email: String!
+    password: String!
+    address: String
+    city: String
+    state: String
+    country: String
+    postcode: String
+    phone: String
+    dob: String
+}
+
+input CreateBrandInput {
+    name: String!
+    slug: String!
+}
+
+input UpdateBrandInput {
+    id: ID!
+    name: String
+    slug: String
+}
+
+input CreateCategoryInput {
+    name: String!
+    slug: String!
+    parent_id: Int
+}
+
+input UpdateCategoryInput {
+    id: ID!
+    name: String
+    slug: String
+    parent_id: Int
+}
+
+input CreateProductInput {
+    name: String!
+    description: String
+    price: Float!
+    category_id: Int!
+    brand_id: Int!
+    product_image_id: Int
+    is_location_offer: Boolean
+    is_rental: Boolean
+}
+
+input UpdateProductInput {
+    id: ID!
+    name: String
+    description: String
+    price: Float
+    category_id: Int
+    brand_id: Int
+    product_image_id: Int
+    is_location_offer: Boolean
+    is_rental: Boolean
+}
+
+input AddFavoriteInput {
+    user_id: Int!
+    product_id: Int!
+}
+
+input SendContactMessageInput {
+    user_id: Int
+    name: String!
+    email: String!
+    subject: String!
+    message: String!
+    status: String
+}
+
+input ReplyToContactMessageInput {
+    user_id: Int!
+    message_id: Int!
+    message: String!
+}
+
+type Mutation {
+    "Log in and receive a JWT token."
+    login(input: LoginInput! @spread): AuthPayload!
+
+    "Register a new user."
+    register(input: RegisterInput! @spread): User!
+
+    "Create a new brand."
+    createBrand(input: CreateBrandInput! @spread): Brand! @create @guard(with: ["users"])
+
+    "Update an existing brand."
+    updateBrand(input: UpdateBrandInput! @spread): Brand! @update @guard(with: ["users"])
+
+    "Delete a brand."
+    deleteBrand(id: ID! @eq): Brand @delete @guard(with: ["users"])
+
+    "Create a new category."
+    createCategory(input: CreateCategoryInput! @spread): Category! @create @guard(with: ["users"])
+
+    "Update an existing category."
+    updateCategory(input: UpdateCategoryInput! @spread): Category! @update @guard(with: ["users"])
+
+    "Delete a category."
+    deleteCategory(id: ID! @eq): Category @delete @guard(with: ["users"])
+
+    "Create a new product."
+    createProduct(input: CreateProductInput! @spread): Product! @create @guard(with: ["users"])
+
+    "Update an existing product."
+    updateProduct(input: UpdateProductInput! @spread): Product! @update @guard(with: ["users"])
+
+    "Delete a product."
+    deleteProduct(id: ID! @eq): Product @delete @guard(with: ["users"])
+
+    "Add a product to favorites."
+    addFavorite(input: AddFavoriteInput! @spread): Favorite! @create @guard(with: ["users"])
+
+    "Remove a favorite."
+    deleteFavorite(id: ID! @eq): Favorite @delete @guard(with: ["users"])
+
+    "Send a contact message."
+    sendContactMessage(input: SendContactMessageInput! @spread): ContactRequest! @create
+
+    "Reply to a contact message."
+    replyToContactMessage(input: ReplyToContactMessageInput! @spread): ContactRequestReply! @create @guard(with: ["users"])
+}

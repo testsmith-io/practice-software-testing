@@ -13,11 +13,12 @@ import {ProductService} from "../../_services/product.service";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
 import {Category} from "../../models/category";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {NgClass, NgTemplateOutlet} from "@angular/common";
+import {AsyncPipe, NgClass, NgTemplateOutlet} from "@angular/common";
 import {PaginationComponent} from "../../pagination/pagination.component";
 import {RouterLink} from "@angular/router";
 import {NgxSliderModule} from "@angular-slider/ngx-slider";
 import {TranslocoDirective} from "@jsverse/transloco";
+import {ComparisonService} from "../../_services/comparison.service";
 
 @Component({
   selector: 'app-overview',
@@ -30,7 +31,8 @@ import {TranslocoDirective} from "@jsverse/transloco";
     ReactiveFormsModule,
     NgxSliderModule,
     NgTemplateOutlet,
-    TranslocoDirective
+    TranslocoDirective,
+    AsyncPipe
   ],
   styleUrls: ['./overview.component.css']
 })
@@ -40,6 +42,7 @@ export class OverviewComponent implements OnInit {
   private brandService = inject(BrandService);
   private categoryService = inject(CategoryService);
   public browserDetect = inject(BrowserDetectorService);
+  public comparisonService = inject(ComparisonService);
 
   @ViewChildren("checkboxes") checkboxes: QueryList<ElementRef>;
 

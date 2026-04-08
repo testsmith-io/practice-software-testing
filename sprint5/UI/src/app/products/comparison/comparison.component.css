@@ -1,0 +1,55 @@
+/* Copyright (c) 2024-2026 Testsmith. All rights reserved. See LICENSE for details. */
+
+.comparison-table {
+  table-layout: fixed;
+}
+
+.attribute-col {
+  width: 150px;
+  min-width: 150px;
+  background-color: #f8f9fa;
+  vertical-align: middle;
+}
+
+.product-col {
+  min-width: 200px;
+  vertical-align: top;
+  padding: 1rem;
+}
+
+.comparison-img {
+  width: 100%;
+  max-width: 180px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.co2-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  font-weight: 700;
+  border-radius: 6px;
+  color: white;
+}
+
+.co2-badge.rating-a { background-color: #10b981; }
+.co2-badge.rating-b { background-color: #84cc16; }
+.co2-badge.rating-c { background-color: #facc15; color: #1f2937; }
+.co2-badge.rating-d { background-color: #f97316; }
+.co2-badge.rating-e { background-color: #ef4444; }
+
+.eco-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 16px;
+}
