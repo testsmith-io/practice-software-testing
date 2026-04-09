@@ -99,6 +99,12 @@
         <button class="btn btn-warning"
                 data-test="add-to-favorites" id="btn-add-to-favorites" (click)="addToFavorites(product)"><fa-icon [icon]="['fas', 'star']" class="px-1"></fa-icon> {{ t('pages.product-detail.add-to-favorites-btn') }}
         </button>
+        <button class="btn"
+                [ngClass]="{'btn-primary': comparisonService.isSelected(product.id), 'btn-outline-primary': !comparisonService.isSelected(product.id)}"
+                data-test="add-to-compare"
+                (click)="comparisonService.toggle(product.id)">
+          <fa-icon [icon]="['fas', 'balance-scale']" class="px-1"></fa-icon> {{ t('pages.comparison.add') }}
+        </button>
       </div>
     </div>
   </div>

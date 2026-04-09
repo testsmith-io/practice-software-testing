@@ -127,6 +127,13 @@
                   data-test="product-discount-price"> ${{ item.discount_price }}</span>
               }
         </span>
+              <button class="btn btn-sm compare-btn float-start"
+                      [ngClass]="{'btn-primary': comparisonService.isSelected(item.id), 'btn-outline-primary': !comparisonService.isSelected(item.id)}"
+                      data-test="compare-btn"
+                      (click)="$event.preventDefault(); $event.stopPropagation(); comparisonService.toggle(item.id)"
+                      title="{{ t('pages.comparison.add') }}">
+                <fa-icon [icon]="['fas', 'balance-scale']" size="sm"></fa-icon>
+              </button>
             </div>
 
           </a>
@@ -139,3 +146,23 @@
     </div>
   </div>
 </div>
+
+@if ((comparisonService.count$ | async) > 0) {
+  <div class="comparison-bar" *transloco="let t" data-test="comparison-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <span>
+        <fa-icon [icon]="['fas', 'balance-scale']" size="sm"></fa-icon>
+        {{ t('pages.comparison.bar-count', {count: (comparisonService.count$ | async)}) }}
+      </span>
+      <span>
+        <button class="btn btn-outline-light btn-sm me-2" data-test="clear-comparison"
+                (click)="comparisonService.clear()">
+          {{ t('pages.comparison.clear-all') }}
+        </button>
+        <a routerLink="/comparison" class="btn btn-light btn-sm" data-test="compare-link">
+          {{ t('pages.comparison.compare-btn') }}
+        </a>
+      </span>
+    </div>
+  </div>
+}
