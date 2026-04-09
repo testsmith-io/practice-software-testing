@@ -229,12 +229,18 @@
   <div class="comparison-bar" *transloco="let t" data-test="comparison-bar">
     <div class="container d-flex justify-content-between align-items-center">
       <span>
-        <fa-icon [icon]="['fas', 'balance-scale']"></fa-icon>
+        <fa-icon [icon]="['fas', 'balance-scale']" size="sm"></fa-icon>
         {{ t('pages.comparison.bar-count', {count: (comparisonService.count$ | async)}) }}
       </span>
-      <a routerLink="/comparison" class="btn btn-primary btn-sm" data-test="compare-link">
-        {{ t('pages.comparison.compare-btn') }}
-      </a>
+      <span>
+        <button class="btn btn-outline-light btn-sm me-2" data-test="clear-comparison"
+                (click)="comparisonService.clear()">
+          {{ t('pages.comparison.clear-all') }}
+        </button>
+        <a routerLink="/comparison" class="btn btn-light btn-sm" data-test="compare-link">
+          {{ t('pages.comparison.compare-btn') }}
+        </a>
+      </span>
     </div>
   </div>
 }
