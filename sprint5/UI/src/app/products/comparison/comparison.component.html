@@ -1,22 +1,24 @@
 <!-- Copyright (c) 2024-2026 Testsmith. All rights reserved. See LICENSE for details. -->
 
-<div class="container my-4" *transloco="let t">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 data-test="comparison-title">{{ t('pages.comparison.title') }}</h2>
-    @if (products.length > 0) {
-      <div>
-        @if (allSpecNames.length > 0) {
-          <label class="form-check-label me-3">
-            <input type="checkbox" class="form-check-input" data-test="show-differences"
-                   [(ngModel)]="showOnlyDifferences">
-            {{ t('pages.comparison.show-differences') }}
-          </label>
-        }
-        <button class="btn btn-outline-danger btn-sm" data-test="clear-comparison" (click)="clearAll()">
-          {{ t('pages.comparison.clear-all') }}
-        </button>
-      </div>
-    }
+<div class="comparison-wrapper my-4" *transloco="let t">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 data-test="comparison-title">{{ t('pages.comparison.title') }}</h2>
+      @if (products.length > 0) {
+        <div>
+          @if (allSpecNames.length > 0) {
+            <label class="form-check-label me-3">
+              <input type="checkbox" class="form-check-input" data-test="show-differences"
+                     [(ngModel)]="showOnlyDifferences">
+              {{ t('pages.comparison.show-differences') }}
+            </label>
+          }
+          <button class="btn btn-outline-danger btn-sm" data-test="clear-comparison" (click)="clearAll()">
+            {{ t('pages.comparison.clear-all') }}
+          </button>
+        </div>
+      }
+    </div>
   </div>
 
   @if (loading) {
@@ -26,20 +28,21 @@
       </div>
     </div>
   } @else if (products.length === 0) {
-    <div class="alert alert-info" data-test="comparison-empty">
-      <p class="mb-2">{{ t('pages.comparison.empty') }}</p>
-      <a routerLink="/" class="btn btn-primary btn-sm">{{ t('pages.comparison.browse') }}</a>
+    <div class="container">
+      <div class="alert alert-info" data-test="comparison-empty">
+        <p class="mb-2">{{ t('pages.comparison.empty') }}</p>
+        <a routerLink="/" class="btn btn-primary btn-sm">{{ t('pages.comparison.browse') }}</a>
+      </div>
     </div>
   } @else {
-    <!-- Desktop: table layout -->
-    <div class="table-responsive d-none d-md-block">
-      <table class="table table-bordered comparison-table" data-test="comparison-table">
+    <div class="comparison-scroll">
+      <table class="comparison-table" data-test="comparison-table">
         <thead>
           <tr>
-            <th class="attribute-col"></th>
+            <th class="attribute-col sticky-col"></th>
             @for (product of products; track product.id) {
               <th class="product-col text-center">
-                <button class="btn btn-sm btn-outline-secondary float-end" data-test="remove-product"
+                <button class="btn btn-sm btn-outline-secondary remove-btn" data-test="remove-product"
                         (click)="removeProduct(product.id)" aria-label="Remove from comparison">
                   &times;
                 </button>
@@ -47,7 +50,7 @@
                   <img src="assets/img/products/{{product.product_image.file_name}}"
                        alt="{{product.name}}" class="comparison-img mb-2">
                 </a>
-                <div class="fw-bold">
+                <div class="product-name fw-bold">
                   <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark"
                      data-test="product-name">{{ product.name }}</a>
                 </div>
@@ -57,25 +60,25 @@
         </thead>
         <tbody>
           <tr>
-            <td class="attribute-col fw-bold">{{ t('pages.comparison.price') }}</td>
+            <td class="attribute-col sticky-col">{{ t('pages.comparison.price') }}</td>
             @for (product of products; track product.id) {
               <td class="text-center" data-test="compare-price">${{ product.price.toFixed(2) }}</td>
             }
           </tr>
           <tr>
-            <td class="attribute-col fw-bold">{{ t('pages.comparison.brand') }}</td>
+            <td class="attribute-col sticky-col">{{ t('pages.comparison.brand') }}</td>
             @for (product of products; track product.id) {
               <td class="text-center" data-test="compare-brand">{{ product.brand.name }}</td>
             }
           </tr>
           <tr>
-            <td class="attribute-col fw-bold">{{ t('pages.comparison.category') }}</td>
+            <td class="attribute-col sticky-col">{{ t('pages.comparison.category') }}</td>
             @for (product of products; track product.id) {
               <td class="text-center" data-test="compare-category">{{ product.category.name }}</td>
             }
           </tr>
           <tr>
-            <td class="attribute-col fw-bold">{{ t('pages.comparison.stock') }}</td>
+            <td class="attribute-col sticky-col">{{ t('pages.comparison.stock') }}</td>
             @for (product of products; track product.id) {
               <td class="text-center" data-test="compare-stock">
                 @if (product.in_stock) {
@@ -87,7 +90,7 @@
             }
           </tr>
           <tr>
-            <td class="attribute-col fw-bold">{{ t('pages.comparison.co2-rating') }}</td>
+            <td class="attribute-col sticky-col">{{ t('pages.comparison.co2-rating') }}</td>
             @for (product of products; track product.id) {
               <td class="text-center" data-test="compare-co2">
                 @if (product.co2_rating) {
@@ -101,7 +104,7 @@
             }
           </tr>
           <tr>
-            <td class="attribute-col fw-bold">{{ t('pages.comparison.eco-friendly') }}</td>
+            <td class="attribute-col sticky-col">{{ t('pages.comparison.eco-friendly') }}</td>
             @for (product of products; track product.id) {
               <td class="text-center" data-test="compare-eco">
                 @if (product.is_eco_friendly) {
@@ -115,13 +118,16 @@
 
           <!-- Dynamic specs -->
           @if (allSpecNames.length > 0) {
-            <tr class="table-secondary">
-              <td class="attribute-col fw-bold" colspan="99">{{ t('pages.comparison.specifications') }}</td>
+            <tr class="spec-header-row">
+              <td class="attribute-col sticky-col">{{ t('pages.comparison.specifications') }}</td>
+              @for (product of products; track product.id) {
+                <td></td>
+              }
             </tr>
             @for (specName of allSpecNames; track specName) {
               @if (shouldShowSpec(specName)) {
                 <tr [ngClass]="{'spec-diff': isSpecDifferent(specName)}">
-                  <td class="attribute-col fw-bold">{{ specName }}</td>
+                  <td class="attribute-col sticky-col">{{ specName }}</td>
                   @for (product of products; track product.id) {
                     <td class="text-center" data-test="compare-spec">{{ getSpecValue(product, specName) }}</td>
                   }
@@ -131,98 +137,13 @@
           }
 
           <tr>
-            <td class="attribute-col fw-bold">{{ t('pages.comparison.description') }}</td>
+            <td class="attribute-col sticky-col">{{ t('pages.comparison.description') }}</td>
             @for (product of products; track product.id) {
-              <td class="text-center small" data-test="compare-description">{{ product.description }}</td>
+              <td class="description-cell" data-test="compare-description">{{ product.description }}</td>
             }
           </tr>
         </tbody>
       </table>
-    </div>
-
-    <!-- Mobile: card layout -->
-    <div class="d-md-none">
-      @for (product of products; track product.id) {
-        <div class="card mb-3" data-test="comparison-card">
-          <div class="card-body">
-            <button class="btn btn-sm btn-outline-secondary float-end" data-test="remove-product"
-                    (click)="removeProduct(product.id)" aria-label="Remove from comparison">
-              &times;
-            </button>
-            <div class="text-center mb-3">
-              <a [routerLink]="['/product', product.id]">
-                <img src="assets/img/products/{{product.product_image.file_name}}"
-                     alt="{{product.name}}" class="comparison-img-mobile mb-2">
-              </a>
-              <h5>
-                <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark"
-                   data-test="product-name">{{ product.name }}</a>
-              </h5>
-            </div>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item d-flex justify-content-between">
-                <span class="fw-bold">{{ t('pages.comparison.price') }}</span>
-                <span data-test="compare-price">${{ product.price.toFixed(2) }}</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between">
-                <span class="fw-bold">{{ t('pages.comparison.brand') }}</span>
-                <span data-test="compare-brand">{{ product.brand.name }}</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between">
-                <span class="fw-bold">{{ t('pages.comparison.category') }}</span>
-                <span data-test="compare-category">{{ product.category.name }}</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between">
-                <span class="fw-bold">{{ t('pages.comparison.stock') }}</span>
-                <span data-test="compare-stock">
-                  @if (product.in_stock) {
-                    <span class="text-success">{{ t('pages.comparison.in-stock') }}</span>
-                  } @else {
-                    <span class="text-danger">{{ t('pages.comparison.out-of-stock') }}</span>
-                  }
-                </span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span class="fw-bold">{{ t('pages.comparison.co2-rating') }}</span>
-                <span data-test="compare-co2">
-                  @if (product.co2_rating) {
-                    <span class="co2-badge" [ngClass]="getCo2Class(product.co2_rating)">
-                      {{ product.co2_rating }}
-                    </span>
-                  } @else {
-                    <span class="text-muted">-</span>
-                  }
-                </span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span class="fw-bold">{{ t('pages.comparison.eco-friendly') }}</span>
-                <span data-test="compare-eco">
-                  @if (product.is_eco_friendly) {
-                    <span class="eco-label"><fa-icon [icon]="['fas', 'leaf']"></fa-icon> ECO</span>
-                  } @else {
-                    <span class="text-muted">-</span>
-                  }
-                </span>
-              </li>
-              @if (product.specs?.length) {
-                <li class="list-group-item bg-light">
-                  <span class="fw-bold">{{ t('pages.comparison.specifications') }}</span>
-                </li>
-                @for (spec of product.specs; track spec.id) {
-                  <li class="list-group-item d-flex justify-content-between">
-                    <span class="fw-bold">{{ spec.spec_name }}</span>
-                    <span data-test="compare-spec">{{ spec.spec_unit ? spec.spec_value + ' ' + spec.spec_unit : spec.spec_value }}</span>
-                  </li>
-                }
-              }
-              <li class="list-group-item">
-                <span class="fw-bold d-block mb-1">{{ t('pages.comparison.description') }}</span>
-                <span class="small text-muted" data-test="compare-description">{{ product.description }}</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      }
     </div>
   }
 </div>
