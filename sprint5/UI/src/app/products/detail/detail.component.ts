@@ -12,7 +12,7 @@ import {BrowserDetectorService} from "../../_services/browser-detector.service";
 import {Title} from "@angular/platform-browser";
 import {NgxSliderModule, Options} from "@angular-slider/ngx-slider";
 import {ToastrService} from "ngx-toastr";
-import {NgClass} from "@angular/common";
+import {AsyncPipe, NgClass} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {TranslocoDirective} from "@jsverse/transloco";
@@ -28,7 +28,8 @@ import {ComparisonService} from "../../_services/comparison.service";
     NgxSliderModule,
     FaIconComponent,
     RouterLink,
-    TranslocoDirective
+    TranslocoDirective,
+    AsyncPipe
   ],
   styleUrls: ['./detail.component.css']
 })

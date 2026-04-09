@@ -78,23 +78,6 @@
       </fieldset>
     }
 
-    @if (specGroups.length > 0) {
-      <div class="py-2"></div>
-      <h4>{{ t('pages.overview.specifications') }}:</h4>
-      @for (group of specGroups; track group.name) {
-        <fieldset class="mb-2">
-          <legend class="spec-filter-title">{{ group.name }} @if (group.unit) { <small class="text-muted">({{ group.unit }})</small> }</legend>
-          @for (value of group.values; track value) {
-            <div class="checkbox">
-              <label><input type="checkbox" class="icheck" attr.data-test="spec-{{group.name}}-{{value}}"
-                            (change)="filterBySpec($event, group.name, value)"/>
-                {{ value }}</label>
-            </div>
-          }
-        </fieldset>
-      }
-    }
-
   </div>
   <div class="col-md-9">
     @if (!results?.data.length) {
