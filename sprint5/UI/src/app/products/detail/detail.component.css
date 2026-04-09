@@ -153,3 +153,29 @@ h1 {
   background-color: #ef4444;
   color: white;
 }
+
+.comparison-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(30, 58, 95, 0.85);
+  color: white;
+  padding: 8px 0;
+  z-index: 1050;
+  font-size: 0.85rem;
+  box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.1);
+}
+
+.comparison-bar .btn-sm {
+  font-size: 0.8rem;
+  padding: 3px 12px;
+}
+
+.comparison-bar .btn-outline-light {
+  border-color: rgba(255,255,255,0.4);
+}
+
+.comparison-bar .btn-outline-light:hover {
+  background: rgba(255,255,255,0.15);
+}
