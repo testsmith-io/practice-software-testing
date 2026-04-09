@@ -76,6 +76,11 @@ type Mutation {
     replyToContactMessage(input: ReplyToContactMessageInput! @spread): ContactRequestReply! @create @guard(with: ["users"])
     updateContactMessageStatus(id: ID!, status: String!): ContactRequest @guard(with: ["users"]) @field(resolver: "App\\GraphQL\\Mutations\\UpdateContactMessageStatus")
 
+    # ── Product Specs ─────────────────────────────────────────
+    createProductSpec(input: CreateProductSpecInput! @spread): ProductSpec! @create @guard(with: ["users"])
+    updateProductSpec(id: ID!, input: UpdateProductSpecInput! @spread): ProductSpec! @update @guard(with: ["users"])
+    deleteProductSpec(id: ID! @whereKey): ProductSpec! @delete @guard(with: ["users"])
+
     # ── Invoices ──────────────────────────────────────────────
     updateInvoiceStatus(id: ID!, status: InvoiceStatus!, status_message: String): Invoice @guard(with: ["users"]) @field(resolver: "App\\GraphQL\\Mutations\\UpdateInvoiceStatus")
 }
@@ -96,7 +101,17 @@ type Product {
     category: Category @belongsTo
     brand: Brand @belongsTo
     product_image: ProductImage @belongsTo
+    specs: [ProductSpec!]! @hasMany
     created_at: DateTime
+}
+
+type ProductSpec {
+    id: ID!
+    product_id: ID!
+    spec_name: String!
+    spec_value: String!
+    spec_unit: String
+    product: Product @belongsTo
 }
 
 type Brand {
@@ -349,4 +364,17 @@ input ReplyToContactMessageInput {
     user_id: ID!
     message_id: ID!
     message: String!
+}
+
+input CreateProductSpecInput {
+    product_id: ID!
+    spec_name: String!
+    spec_value: String!
+    spec_unit: String
+}
+
+input UpdateProductSpecInput {
+    spec_name: String
+    spec_value: String
+    spec_unit: String
 }

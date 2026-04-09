@@ -269,7 +269,8 @@
       "sustainability": "Sürdürülebilirlik",
       "eco-friendly": "Çevre Dostu Ürünler",
       "show-eco-friendly": "Sadece çevre dostu ürünleri göster",
-      "co2-tooltip": "A = en çevre dostu, E = daha yüksek çevresel etki"
+      "co2-tooltip": "A = en çevre dostu, E = daha yüksek çevresel etki",
+      "specifications": "Özellikler"
     },
     "product-detail": {
       "photo-by": "Fotoğraf",
@@ -441,7 +442,9 @@
       "description": "Açıklama",
       "add": "Karşılaştır",
       "bar-count": "{{ count }} ürün seçildi",
-      "compare-btn": "Şimdi karşılaştır"
+      "compare-btn": "Şimdi karşılaştır",
+      "specifications": "Özellikler",
+      "show-differences": "Sadece farklılıkları göster"
     },
     "my-account": {
       "overview": {

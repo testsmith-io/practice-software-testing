@@ -83,7 +83,8 @@ class ProductService
             return Product::with([
                 'product_image:id,by_name,by_url,source_name,source_url,file_name,title',
                 'category:id,name,slug,parent_id',
-                'brand:id,name'
+                'brand:id,name',
+                'specs:id,product_id,spec_name,spec_value,spec_unit'
             ])->findOrFail($id);
         });
     }

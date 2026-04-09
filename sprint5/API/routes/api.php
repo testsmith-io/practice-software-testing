@@ -10,6 +10,7 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProductSpecController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SocialConnectController;
@@ -121,6 +122,15 @@ Route::controller(ProductController::class)->prefix('products')->group(function 
     Route::put('/{id}', 'update');
     Route::patch('/{id}', 'patch');
     Route::delete('/{id}', 'destroy');
+});
+
+Route::controller(ProductSpecController::class)->group(function () {
+    Route::get('/products/{productId}/specs', 'index');
+    Route::get('/products/{productId}/specs/{specId}', 'show');
+    Route::post('/products/{productId}/specs', 'store');
+    Route::put('/products/{productId}/specs/{specId}', 'update');
+    Route::delete('/products/{productId}/specs/{specId}', 'destroy');
+    Route::get('/product-specs/names', 'specNames');
 });
 
 Route::middleware(['throttle:reports'])->controller(ReportController::class)->prefix('reports')->group(function () {

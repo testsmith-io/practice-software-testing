@@ -269,7 +269,8 @@
       "sustainability": "Nachhaltigkeit",
       "eco-friendly": "Umweltfreundliche Produkte",
       "show-eco-friendly": "Nur umweltfreundliche Produkte anzeigen",
-      "co2-tooltip": "A = am umweltfreundlichsten, E = höhere Umweltbelastung"
+      "co2-tooltip": "A = am umweltfreundlichsten, E = höhere Umweltbelastung",
+      "specifications": "Spezifikationen"
     },
     "product-detail": {
       "photo-by": "Foto von",
@@ -441,7 +442,9 @@
       "description": "Beschreibung",
       "add": "Vergleichen",
       "bar-count": "{{ count }} Produkt(e) ausgewählt",
-      "compare-btn": "Jetzt vergleichen"
+      "compare-btn": "Jetzt vergleichen",
+      "specifications": "Spezifikationen",
+      "show-differences": "Nur Unterschiede anzeigen"
     },
     "my-account": {
       "overview": {

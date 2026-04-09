@@ -19,6 +19,7 @@ import {RouterLink} from "@angular/router";
 import {NgxSliderModule} from "@angular-slider/ngx-slider";
 import {TranslocoDirective} from "@jsverse/transloco";
 import {ComparisonService} from "../../_services/comparison.service";
+import {ProductSpecService, SpecNameGroup} from "../../_services/product-spec.service";
 
 @Component({
   selector: 'app-overview',
@@ -43,6 +44,7 @@ export class OverviewComponent implements OnInit {
   private categoryService = inject(CategoryService);
   public browserDetect = inject(BrowserDetectorService);
   public comparisonService = inject(ComparisonService);
+  private specService = inject(ProductSpecService);
 
   @ViewChildren("checkboxes") checkboxes: QueryList<ElementRef>;
 
@@ -59,6 +61,8 @@ export class OverviewComponent implements OnInit {
   private ecoFriendlyFilter: boolean = false;
   categoryCheckboxState: Map<number, boolean> = new Map();
   searchQuery: string;
+  specGroups: SpecNameGroup[] = [];
+  specFilters: Map<string, Set<string>> = new Map();
   minPrice: number = 1;
   maxPrice: number = 100;
   sliderOptions: any = {
@@ -75,6 +79,10 @@ export class OverviewComponent implements OnInit {
 
     this.categoryService.getCategoriesTree().subscribe(response => {
       this.categories = response;
+    });
+
+    this.specService.getSpecNames().subscribe(response => {
+      this.specGroups = response;
     });
 
     this.search = this.formBuilder.group(
@@ -109,8 +117,33 @@ export class OverviewComponent implements OnInit {
     this.getProducts();
   }
 
+  filterBySpec(event: any, specName: string, specValue: string) {
+    if (!this.specFilters.has(specName)) {
+      this.specFilters.set(specName, new Set());
+    }
+    const values = this.specFilters.get(specName)!;
+    if (event.target.checked) {
+      values.add(specValue);
+    } else {
+      values.delete(specValue);
+      if (values.size === 0) this.specFilters.delete(specName);
+    }
+    this.currentPage = 0;
+    this.getProducts();
+  }
+
+  buildSpecFilterString(): string {
+    const parts: string[] = [];
+    this.specFilters.forEach((values, name) => {
+      if (values.size > 0) {
+        parts.push(`${name}:${Array.from(values).join('|')}`);
+      }
+    });
+    return parts.join(',');
+  }
+
   getProducts() {
-    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), this.currentPage, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), this.currentPage, this.ecoFriendlyFilter, false, this.buildSpecFilterString()).subscribe(res => {
       this.results = res;
       this.results.data.forEach((item: Product) => {
         if (item.is_location_offer) {

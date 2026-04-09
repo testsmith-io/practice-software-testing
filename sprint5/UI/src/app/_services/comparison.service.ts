@@ -5,6 +5,13 @@ import {inject, Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, map} from "rxjs";
 import {GraphqlService} from "./graphql.service";
 
+export interface ComparisonProductSpec {
+  id: string;
+  spec_name: string;
+  spec_value: string;
+  spec_unit: string | null;
+}
+
 export interface ComparisonProduct {
   id: string;
   name: string;
@@ -17,6 +24,7 @@ export interface ComparisonProduct {
   brand: { id: string; name: string };
   category: { id: string; name: string };
   product_image: { file_name: string; by_name: string; by_url: string };
+  specs: ComparisonProductSpec[];
 }
 
 @Injectable({
@@ -71,6 +79,7 @@ export class ComparisonService {
         brand { id name }
         category { id name }
         product_image { file_name by_name by_url }
+        specs { id spec_name spec_value spec_unit }
       }`
     ).join('\n');
 

@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Mehradsadeghi\FilterQueryString\FilterQueryString;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
@@ -78,6 +79,11 @@ class Product extends BaseModel
         return $this->belongsTo('App\Models\Brand');
     }
 
+    public function specs(): HasMany
+    {
+        return $this->hasMany(ProductSpec::class);
+    }
+
     public function getInStockAttribute()
     {
         $user = auth('users')->user();
@@ -112,6 +118,20 @@ class Product extends BaseModel
             return $q;
         })->when($filters['q'] ?? null, function ($q, $search) {
             return $q->where('name', 'like', "%{$search}%");
+        })->when($filters['by_spec'] ?? null, function ($q, $specFilter) {
+            // Format: "spec_name:value1|value2,spec_name2:value3"
+            $specFilters = explode(',', $specFilter);
+            foreach ($specFilters as $filter) {
+                $parts = explode(':', $filter, 2);
+                if (count($parts) === 2) {
+                    $specName = trim($parts[0]);
+                    $specValues = array_map('trim', explode('|', $parts[1]));
+                    $q->whereHas('specs', function ($sq) use ($specName, $specValues) {
+                        $sq->where('spec_name', $specName)->whereIn('spec_value', $specValues);
+                    });
+                }
+            }
+            return $q;
         });
     }
 

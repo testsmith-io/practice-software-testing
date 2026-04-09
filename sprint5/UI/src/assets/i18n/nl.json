@@ -269,7 +269,8 @@
       "sustainability": "Duurzaamheid",
       "eco-friendly": "Milieuvriendelijke Producten",
       "show-eco-friendly": "Alleen milieuvriendelijke producten tonen",
-      "co2-tooltip": "A = meest milieuvriendelijk, E = hogere milieu-impact"
+      "co2-tooltip": "A = meest milieuvriendelijk, E = hogere milieu-impact",
+      "specifications": "Specificaties"
     },
     "product-detail": {
       "photo-by": "Foto door",
@@ -441,7 +442,9 @@
       "description": "Beschrijving",
       "add": "Vergelijken",
       "bar-count": "{{ count }} product(en) geselecteerd",
-      "compare-btn": "Nu vergelijken"
+      "compare-btn": "Nu vergelijken",
+      "specifications": "Specificaties",
+      "show-differences": "Alleen verschillen tonen"
     },
     "my-account": {
       "overview": {
