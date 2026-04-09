@@ -14,9 +14,10 @@ import {Pagination} from "../../models/pagination";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
 import {Title} from "@angular/platform-browser";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {NgClass, NgTemplateOutlet, TitleCasePipe} from "@angular/common";
+import {AsyncPipe, NgClass, NgTemplateOutlet, TitleCasePipe} from "@angular/common";
 import {PaginationComponent} from "../../pagination/pagination.component";
 import {TranslocoDirective} from "@jsverse/transloco";
+import {ComparisonService} from "../../_services/comparison.service";
 
 @Component({
   selector: 'app-category',
@@ -28,7 +29,8 @@ import {TranslocoDirective} from "@jsverse/transloco";
     PaginationComponent,
     NgTemplateOutlet,
     TranslocoDirective,
-    TitleCasePipe
+    TitleCasePipe,
+    AsyncPipe
   ],
   styleUrls: ['./category.component.css']
 })
@@ -40,6 +42,7 @@ export class CategoryComponent implements OnInit {
   private categoryService = inject(CategoryService);
   public browserDetect = inject(BrowserDetectorService);
   private titleService = inject(Title);
+  public comparisonService = inject(ComparisonService);
   search: FormGroup | any;
   resultState: string = '';
   currentPage: number = 1;

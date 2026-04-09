@@ -17,6 +17,7 @@ import {FormsModule} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {TranslocoDirective} from "@jsverse/transloco";
 import {GaService} from "../../_services/ga.service";
+import {ComparisonService} from "../../_services/comparison.service";
 
 @Component({
   selector: 'app-detail',
@@ -40,6 +41,7 @@ export class DetailComponent implements OnInit {
   public browserDetect = inject(BrowserDetectorService);
   private titleService = inject(Title);
   private gaService = inject(GaService);
+  public comparisonService = inject(ComparisonService);
   product: Product;
   discount_percentage: any;
   quantity: number = 1;
