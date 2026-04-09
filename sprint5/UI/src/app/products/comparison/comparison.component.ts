@@ -7,6 +7,7 @@ import {RouterLink} from "@angular/router";
 import {TranslocoDirective} from "@jsverse/transloco";
 import {NgClass} from "@angular/common";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-comparison',
@@ -16,7 +17,8 @@ import {FaIconComponent} from "@fortawesome/angular-fontawesome";
     RouterLink,
     TranslocoDirective,
     NgClass,
-    FaIconComponent
+    FaIconComponent,
+    FormsModule
   ]
 })
 export class ComparisonComponent implements OnInit {
@@ -24,11 +26,14 @@ export class ComparisonComponent implements OnInit {
 
   products: ComparisonProduct[] = [];
   loading = true;
+  allSpecNames: string[] = [];
+  showOnlyDifferences = false;
 
   ngOnInit(): void {
     this.comparisonService.getComparisonProducts().subscribe({
       next: (products) => {
         this.products = products;
+        this.allSpecNames = this.collectSpecNames(products);
         this.loading = false;
       },
       error: () => {
@@ -40,11 +45,13 @@ export class ComparisonComponent implements OnInit {
   removeProduct(productId: string): void {
     this.comparisonService.toggle(productId);
     this.products = this.products.filter(p => p.id !== productId);
+    this.allSpecNames = this.collectSpecNames(this.products);
   }
 
   clearAll(): void {
     this.comparisonService.clear();
     this.products = [];
+    this.allSpecNames = [];
   }
 
   getCo2Class(rating: string): string {
@@ -52,5 +59,29 @@ export class ComparisonComponent implements OnInit {
       'A': 'rating-a', 'B': 'rating-b', 'C': 'rating-c', 'D': 'rating-d', 'E': 'rating-e'
     };
     return classes[rating] || '';
+  }
+
+  getSpecValue(product: ComparisonProduct, specName: string): string {
+    const spec = product.specs?.find(s => s.spec_name === specName);
+    if (!spec) return '-';
+    return spec.spec_unit ? `${spec.spec_value} ${spec.spec_unit}` : spec.spec_value;
+  }
+
+  isSpecDifferent(specName: string): boolean {
+    const values = this.products.map(p => this.getSpecValue(p, specName));
+    return new Set(values).size > 1;
+  }
+
+  shouldShowSpec(specName: string): boolean {
+    if (!this.showOnlyDifferences) return true;
+    return this.isSpecDifferent(specName);
+  }
+
+  private collectSpecNames(products: ComparisonProduct[]): string[] {
+    const names = new Set<string>();
+    products.forEach(p => {
+      p.specs?.forEach(s => names.add(s.spec_name));
+    });
+    return Array.from(names).sort();
   }
 }

@@ -269,7 +269,8 @@
       "sustainability": "Sostenibilidad",
       "eco-friendly": "Productos Ecológicos",
       "show-eco-friendly": "Mostrar solo productos ecológicos",
-      "co2-tooltip": "A = más respetuoso con el medio ambiente, E = mayor impacto ambiental"
+      "co2-tooltip": "A = más respetuoso con el medio ambiente, E = mayor impacto ambiental",
+      "specifications": "Especificaciones"
     },
     "product-detail": {
       "photo-by": "Foto por",
@@ -441,7 +442,9 @@
       "description": "Descripción",
       "add": "Comparar",
       "bar-count": "{{ count }} producto(s) seleccionado(s)",
-      "compare-btn": "Comparar ahora"
+      "compare-btn": "Comparar ahora",
+      "specifications": "Especificaciones",
+      "show-differences": "Mostrar solo diferencias"
     },
     "my-account": {
       "overview": {

@@ -50,6 +50,12 @@
   font-size: 80%;
 }
 
+.spec-filter-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
 .compare-btn {
   padding: 1px 6px;
   font-size: 0.65rem;

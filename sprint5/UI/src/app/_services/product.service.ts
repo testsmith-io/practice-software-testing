@@ -22,7 +22,7 @@ export class ProductService {
     return this.httpClient.get<Pagination<Product>>(this.apiURL, { params });
   }
 
-  getProductsNew(searchQuery: string, sorting: string, minPrice: string, maxPrice: string, categoryIds: string, brandIds: string, page: number, ecoFriendly: boolean = false, isRental: boolean | null = false): Observable<Pagination<Product>> {
+  getProductsNew(searchQuery: string, sorting: string, minPrice: string, maxPrice: string, categoryIds: string, brandIds: string, page: number, ecoFriendly: boolean = false, isRental: boolean | null = false, specFilter: string = ''): Observable<Pagination<Product>> {
     let params = new HttpParams().set('page', page.toString());
 
     if (searchQuery) params = params.set('q', searchQuery);
@@ -32,6 +32,7 @@ export class ProductService {
     if (brandIds) params = params.set('by_brand', brandIds);
     if (ecoFriendly) params = params.set('eco_friendly', 'true');
     if (isRental !== null) params = params.set('is_rental', isRental ? 'true' : 'false');
+    if (specFilter) params = params.set('by_spec', specFilter);
 
     return this.httpClient.get<Pagination<Product>>(this.apiURL, { params });
   }
@@ -61,7 +62,7 @@ export class ProductService {
     return this.httpClient.get<Product[]>(`${this.apiURL}/${id}/related`);
   }
 
-  getProductsByCategoryAndBrand(categoryIds: string, brandIds: string, sorting: string, slug?: string, ecoFriendly: boolean = false): Observable<Pagination<Product>> {
+  getProductsByCategoryAndBrand(categoryIds: string, brandIds: string, sorting: string, slug?: string, ecoFriendly: boolean = false, specFilter: string = ''): Observable<Pagination<Product>> {
     let params = new HttpParams();
 
     if (categoryIds) params = params.set('by_category', categoryIds);
@@ -69,6 +70,7 @@ export class ProductService {
     if (sorting) params = params.set('sort', sorting);
     if (slug) params = params.set('by_category_slug', slug);
     if (ecoFriendly) params = params.set('eco_friendly', 'true');
+    if (specFilter) params = params.set('by_spec', specFilter);
 
     return this.httpClient.get<Pagination<Product>>(this.apiURL, { params });
   }

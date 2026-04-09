@@ -25,6 +25,14 @@
   border-radius: 8px;
 }
 
+.comparison-img-mobile {
+  width: 100%;
+  max-width: 220px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
 .co2-badge {
   display: inline-flex;
   align-items: center;
@@ -52,4 +60,8 @@
   font-size: 0.8rem;
   font-weight: 700;
   border-radius: 16px;
+}
+
+.spec-diff td:not(.attribute-col) {
+  background-color: #fff3cd;
 }
