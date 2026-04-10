@@ -37,13 +37,15 @@
   } @else {
     <div class="comparison-scroll">
       <table class="comparison-table" data-test="comparison-table">
+        <caption class="visually-hidden">{{ t('pages.comparison.title') }}</caption>
         <thead>
           <tr>
-            <th class="attribute-col sticky-col"></th>
+            <th class="attribute-col sticky-col" scope="col"></th>
             @for (product of products; track product.id) {
-              <th class="product-col text-center">
+              <th class="product-col text-center" scope="col">
                 <button class="btn btn-sm btn-outline-secondary remove-btn" data-test="remove-product"
-                        (click)="removeProduct(product.id)" aria-label="Remove from comparison">
+                        (click)="removeProduct(product.id)"
+                        [attr.aria-label]="t('pages.comparison.remove-product', {name: product.name})">
                   &times;
                 </button>
                 <a [routerLink]="['/product', product.id]">
@@ -60,25 +62,25 @@
         </thead>
         <tbody>
           <tr>
-            <td class="attribute-col sticky-col">{{ t('pages.comparison.price') }}</td>
+            <th class="attribute-col sticky-col" scope="row">{{ t('pages.comparison.price') }}</th>
             @for (product of products; track product.id) {
               <td class="text-center" data-test="compare-price">${{ product.price.toFixed(2) }}</td>
             }
           </tr>
           <tr>
-            <td class="attribute-col sticky-col">{{ t('pages.comparison.brand') }}</td>
+            <th class="attribute-col sticky-col" scope="row">{{ t('pages.comparison.brand') }}</th>
             @for (product of products; track product.id) {
               <td class="text-center" data-test="compare-brand">{{ product.brand.name }}</td>
             }
           </tr>
           <tr>
-            <td class="attribute-col sticky-col">{{ t('pages.comparison.category') }}</td>
+            <th class="attribute-col sticky-col" scope="row">{{ t('pages.comparison.category') }}</th>
             @for (product of products; track product.id) {
               <td class="text-center" data-test="compare-category">{{ product.category.name }}</td>
             }
           </tr>
           <tr>
-            <td class="attribute-col sticky-col">{{ t('pages.comparison.stock') }}</td>
+            <th class="attribute-col sticky-col" scope="row">{{ t('pages.comparison.stock') }}</th>
             @for (product of products; track product.id) {
               <td class="text-center" data-test="compare-stock">
                 @if (product.in_stock) {
@@ -90,7 +92,7 @@
             }
           </tr>
           <tr>
-            <td class="attribute-col sticky-col">{{ t('pages.comparison.co2-rating') }}</td>
+            <th class="attribute-col sticky-col" scope="row">{{ t('pages.comparison.co2-rating') }}</th>
             @for (product of products; track product.id) {
               <td class="text-center" data-test="compare-co2">
                 @if (product.co2_rating) {
@@ -104,7 +106,7 @@
             }
           </tr>
           <tr>
-            <td class="attribute-col sticky-col">{{ t('pages.comparison.eco-friendly') }}</td>
+            <th class="attribute-col sticky-col" scope="row">{{ t('pages.comparison.eco-friendly') }}</th>
             @for (product of products; track product.id) {
               <td class="text-center" data-test="compare-eco">
                 @if (product.is_eco_friendly) {
@@ -119,15 +121,12 @@
           <!-- Dynamic specs -->
           @if (allSpecNames.length > 0) {
             <tr class="spec-header-row">
-              <td class="attribute-col sticky-col">{{ t('pages.comparison.specifications') }}</td>
-              @for (product of products; track product.id) {
-                <td></td>
-              }
+              <th class="attribute-col sticky-col" scope="colgroup" [attr.colspan]="products.length + 1">{{ t('pages.comparison.specifications') }}</th>
             </tr>
             @for (specName of allSpecNames; track specName) {
               @if (shouldShowSpec(specName)) {
                 <tr [ngClass]="{'spec-diff': isSpecDifferent(specName)}">
-                  <td class="attribute-col sticky-col">{{ specName }}</td>
+                  <th class="attribute-col sticky-col" scope="row">{{ specName }}</th>
                   @for (product of products; track product.id) {
                     <td class="text-center" data-test="compare-spec">{{ getSpecValue(product, specName) }}</td>
                   }
@@ -137,7 +136,7 @@
           }
 
           <tr>
-            <td class="attribute-col sticky-col">{{ t('pages.comparison.description') }}</td>
+            <th class="attribute-col sticky-col" scope="row">{{ t('pages.comparison.description') }}</th>
             @for (product of products; track product.id) {
               <td class="description-cell" data-test="compare-description">{{ product.description }}</td>
             }

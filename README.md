@@ -90,35 +90,35 @@ Update the `SPRINT` in [.env](.env) to use the proper version that belongs to th
 
 ## Roll Back - Run Migrations - Seed Database
 
-`docker compose exec laravel-api php artisan migrate:fresh --seed`
+`docker exec -it pst-laravel-api-1 php artisan migrate:fresh --seed`
 
 ## Migrate database schema
 
-`docker compose exec laravel-api php artisan migrate`
+`docker exec -it pst-laravel-api-1 php artisan migrate`
 
 ## Seed database
 
-`docker compose exec laravel-api php artisan db:seed`
+`docker exec -it pst-laravel-api-1 php artisan db:seed`
 
 ## Access to the Laravel Logs
 
-`docker-compose exec laravel-api tail -f storage/logs/laravel.log`
+`docker exec -it pst-laravel-api-1 tail -f storage/logs/laravel.log`
 
 ## Generate Swagger documentation
 
-`docker compose exec laravel-api php artisan l5-swagger:generate`
+`docker exec -it pst-laravel-api-1 php artisan l5-swagger:generate`
 
 ## Update order status
 
-`docker compose exec laravel-api php artisan order:update`
+`docker exec -it pst-laravel-api-1 php artisan order:update`
 
 ## Remove PDF documents
 
-`docker compose exec laravel-api php artisan invoice:remove`
+`docker exec -it pst-laravel-api-1 php artisan invoice:remove`
 
 ## Generate PDF documents
 
-`docker compose exec laravel-api php artisan invoice:generate`
+`docker exec -it pst-laravel-api-1 php artisan invoice:generate`
 
 ## Execute unit tests (sprint 1 to sprint 4)
 

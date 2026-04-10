@@ -1,5 +1,20 @@
 /* Copyright (c) 2024-2026 Testsmith. All rights reserved. See LICENSE for details. */
 
+/* Make <button> dropdown toggles look like the original <a> based ones */
+.btn-link-style {
+  background: none;
+  border: none;
+  text-decoration: none;
+  text-align: inherit;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.btn-link-style:focus {
+  outline: 2px solid #1E6098;
+  outline-offset: 2px;
+}
+
 .st0{fill:#8DC12F;}
 .st1{fill:#FFFFFF;}
 .st2{fill:#9DC83D;}

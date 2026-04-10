@@ -1,7 +1,7 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-import {Component, ElementRef, inject, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {Component, ElementRef, inject, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Brand} from "../../models/brand";
 import {BrandService} from "../../_services/brand.service";
@@ -13,6 +13,8 @@ import {BrowserDetectorService} from "../../_services/browser-detector.service";
 import {NgxPaginationModule} from "ngx-pagination";
 import {RouterLink} from "@angular/router";
 import {NgClass, NgTemplateOutlet} from "@angular/common";
+import {Subject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-overview',
@@ -26,7 +28,9 @@ import {NgClass, NgTemplateOutlet} from "@angular/common";
 ],
   styleUrls: ['./overview.component.css']
 })
-export class OverviewComponent implements OnInit {
+export class OverviewComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+
   private readonly productService = inject(ProductService);
   private readonly formBuilder = inject(FormBuilder);
   private readonly brandService = inject(BrandService);
@@ -48,11 +52,11 @@ export class OverviewComponent implements OnInit {
   ngOnInit(): void {
     this.getProducts();
 
-    this.brandService.getBrands().subscribe(response => {
+    this.brandService.getBrands().pipe(takeUntil(this.destroy$)).subscribe(response => {
       this.brands = response;
     });
 
-    this.categoryService.getCategoriesTree().subscribe(response => {
+    this.categoryService.getCategoriesTree().pipe(takeUntil(this.destroy$)).subscribe(response => {
       this.categories = response;
     });
 
@@ -64,8 +68,13 @@ export class OverviewComponent implements OnInit {
       });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   getProducts() {
-    this.productService.getProducts(this.p).subscribe(res => {
+    this.productService.getProducts(this.p).pipe(takeUntil(this.destroy$)).subscribe(res => {
       this.results = res;
     });
   }
@@ -77,7 +86,7 @@ export class OverviewComponent implements OnInit {
     } else {
       this.brandsFilter = this.brandsFilter.filter(item => item !== event.target.value);
     }
-    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting).subscribe(res => {
+    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting).pipe(takeUntil(this.destroy$)).subscribe(res => {
       this.resultState = 'filter_completed';
       this.p = 1;
       this.results = res;
@@ -91,7 +100,7 @@ export class OverviewComponent implements OnInit {
     } else {
       this.categoriesFilter = this.categoriesFilter.filter(item => item !== event.target.value);
     }
-    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting).subscribe(res => {
+    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting).pipe(takeUntil(this.destroy$)).subscribe(res => {
       this.resultState = 'filter_completed';
       this.p = 1;
       this.results = res;
@@ -109,7 +118,7 @@ export class OverviewComponent implements OnInit {
     }
 
     this.resultState = 'search_started';
-    this.productService.searchProducts(this.search.value.query).subscribe(res => {
+    this.productService.searchProducts(this.search.value.query).pipe(takeUntil(this.destroy$)).subscribe(res => {
       this.resultState = 'search_completed';
       this.results = res;
     });
@@ -121,7 +130,7 @@ export class OverviewComponent implements OnInit {
     this.sorting = event.target.value;
 
     this.resultState = 'sorting_started';
-    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting).subscribe(res => {
+    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting).pipe(takeUntil(this.destroy$)).subscribe(res => {
       this.results = res;
       this.resultState = 'sorting_completed';
     });

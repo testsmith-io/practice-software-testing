@@ -86,13 +86,22 @@ class Product extends BaseModel
 
     public function getInStockAttribute()
     {
-        $user = auth('users')->user();
-        
+        // Resolve the user once per request and memoize on the request instance.
+        // The previous implementation called auth('users')->user() on every
+        // serialized product row, which on a paginated overview meant 9+
+        // calls to the auth resolver per response.
+        static $cachedUser = null;
+        static $resolved = false;
+        if (!$resolved) {
+            $cachedUser = auth('users')->user();
+            $resolved = true;
+        }
+
         // If user can view stock details (admin), return actual stock number
-        if ($user && $user->can('viewStock', $this)) {
+        if ($cachedUser && $cachedUser->can('viewStock', $this)) {
             return $this->stock;
         }
-        
+
         // For regular users and guests, return boolean stock status
         return $this->stock > 0;
     }

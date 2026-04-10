@@ -445,7 +445,8 @@
       "bar-count": "{{ count }} product(en) geselecteerd",
       "compare-btn": "Nu vergelijken",
       "specifications": "Specificaties",
-      "show-differences": "Alleen verschillen tonen"
+      "show-differences": "Alleen verschillen tonen",
+      "remove-product": "{{ name }} uit vergelijking verwijderen"
     },
     "my-account": {
       "overview": {

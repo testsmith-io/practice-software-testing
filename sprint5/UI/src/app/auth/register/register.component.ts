@@ -55,6 +55,11 @@ export class RegisterComponent implements OnInit {
           PasswordValidators.hasNumber(),
           PasswordValidators.hasSymbol()
         ]],
+      },
+      {
+        // Run validators only on blur instead of every keystroke for less
+        // change-detection churn on this form (10 fields, complex password validators).
+        updateOn: 'blur'
       }
     );
   }

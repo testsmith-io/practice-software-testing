@@ -1,7 +1,9 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Subject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Brand} from "../../models/brand";
 import {BrandService} from "../../_services/brand.service";
@@ -26,7 +28,7 @@ import {NgxPaginationModule} from "ngx-pagination";
 ],
   styleUrls: ['./category.component.css']
 })
-export class CategoryComponent implements OnInit {
+export class CategoryComponent implements OnInit, OnDestroy {
   private readonly productService = inject(ProductService);
   private readonly formBuilder = inject(FormBuilder);
   private readonly categoryService = inject(CategoryService);
@@ -44,19 +46,26 @@ export class CategoryComponent implements OnInit {
   private brandsFilter: Array<number> = [];
   private categoriesFilter: Array<number> = [];
   private sorting: string = '';
+  private readonly destroy$ = new Subject<void>();
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.slug = params['name'];
-      this.getProductsByCategory(this.slug);
-      this.brandService.getBrands().subscribe(response => {
-        this.brands = response;
-      });
+    this.route.params
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        this.slug = params['name'];
+        this.getProductsByCategory(this.slug);
+        this.brandService.getBrands()
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(response => {
+            this.brands = response;
+          });
 
-      this.categoryService.getSubCategoriesTreeBySlug(this.slug).subscribe(response => {
-        this.categories = response;
+        this.categoryService.getSubCategoriesTreeBySlug(this.slug)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(response => {
+            this.categories = response;
+          });
       });
-    });
 
     this.search = this.formBuilder.group(
       {
@@ -66,10 +75,17 @@ export class CategoryComponent implements OnInit {
       });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   getProductsByCategory(slug: string) {
-    this.productService.getProductsByCategory(slug, this.p).subscribe(res => {
-      this.results = res;
-    });
+    this.productService.getProductsByCategory(slug, this.p)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(res => {
+        this.results = res;
+      });
   }
 
   filterByBrand(event: any) {
@@ -79,10 +95,12 @@ export class CategoryComponent implements OnInit {
     } else {
       this.brandsFilter = this.brandsFilter.filter(item => item !== event.target.value);
     }
-    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug).subscribe(res => {
-      this.resultState = 'filter_completed';
-      this.results = res;
-    });
+    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(res => {
+        this.resultState = 'filter_completed';
+        this.results = res;
+      });
   }
 
   filterByCategory(event: any) {
@@ -92,10 +110,12 @@ export class CategoryComponent implements OnInit {
     } else {
       this.categoriesFilter = this.categoriesFilter.filter(item => item !== event.target.value);
     }
-    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug).subscribe(res => {
-      this.resultState = 'filter_completed';
-      this.results = res;
-    });
+    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(res => {
+        this.resultState = 'filter_completed';
+        this.results = res;
+      });
   }
 
   handlePageChange(event: number): void {
@@ -107,10 +127,12 @@ export class CategoryComponent implements OnInit {
     this.sorting = event.target.value;
 
     this.resultState = 'sorting_started';
-    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug).subscribe(res => {
-      this.results = res;
-      this.resultState = 'sorting_completed';
-    });
+    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(res => {
+        this.results = res;
+        this.resultState = 'sorting_completed';
+      });
   }
 
 }

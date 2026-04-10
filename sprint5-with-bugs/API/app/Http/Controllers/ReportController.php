@@ -5,11 +5,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ReportController extends Controller
 {
+    // The DB is reset hourly, so reports cache for 5 minutes which gives a
+    // big performance boost while staying well within the reset window.
+    private const REPORT_CACHE_TTL = 300;
+
 
     /**
      * @OA\Get(
@@ -48,14 +53,17 @@ class ReportController extends Controller
      */
     public function totalSalesPerCountry()
     {
-        Log::info('Fetching total sales per country');
+        $results = Cache::remember('reports.total_sales_per_country', self::REPORT_CACHE_TTL, function () {
+            Log::info('Fetching total sales per country');
 
-        $results = DB::table('invoices')
-            ->select(DB::raw('SUM(total) as "total_sales", billing_country'))
-            ->groupBy('billing_country')
-            ->get();
+            $result = DB::table('invoices')
+                ->select(DB::raw('SUM(total) as "total_sales", billing_country'))
+                ->groupBy('billing_country')
+                ->get();
 
-        Log::debug('Total sales per country retrieved', ['count' => $results->count()]);
+            Log::debug('Total sales per country retrieved', ['count' => $result->count()]);
+            return $result;
+        });
 
         return $this->preferredFormat($results);
     }
@@ -97,17 +105,20 @@ class ReportController extends Controller
      */
     public function top10PurchasedProducts()
     {
-        Log::info('Fetching top 10 purchased products');
+        $results = Cache::remember('reports.top10_products', self::REPORT_CACHE_TTL, function () {
+            Log::info('Fetching top 10 purchased products');
 
-        $results = DB::table('products AS p')
-            ->join('invoice_items AS i', 'i.product_id', '=', 'p.id')
-            ->select(DB::raw('p.name, count(p.name) as count'))
-            ->groupBy('p.name')
-            ->orderByDesc('count')
-            ->limit(10)
-            ->get();
+            $result = DB::table('products AS p')
+                ->join('invoice_items AS i', 'i.product_id', '=', 'p.id')
+                ->select(DB::raw('p.name, count(p.name) as count'))
+                ->groupBy('p.name')
+                ->orderByDesc('count')
+                ->limit(10)
+                ->get();
 
-        Log::debug('Top purchased products retrieved', ['count' => $results->count()]);
+            Log::debug('Top purchased products retrieved', ['count' => $result->count()]);
+            return $result;
+        });
 
         return $this->preferredFormat($results);
     }
@@ -149,19 +160,22 @@ class ReportController extends Controller
      */
     public function top10BestSellingCategories()
     {
-        Log::info('Fetching top 10 best selling categories');
+        $results = Cache::remember('reports.top10_categories', self::REPORT_CACHE_TTL, function () {
+            Log::info('Fetching top 10 best selling categories');
 
-        $results = DB::table(DB::raw('(SELECT c.name as "category_name", SUM(i.unit_price) as "total_earned"
-                FROM invoice_items i
-                JOIN products p ON p.id = i.product_id
-                JOIN categories c ON p.category_id = c.id
-                GROUP BY c.name) as f'))
-            ->select(DB::raw('category_name, total_earned'))
-            ->orderByDesc('total_earned')
-            ->limit(10)
-            ->get();
+            $result = DB::table(DB::raw('(SELECT c.name as "category_name", SUM(i.unit_price) as "total_earned"
+                    FROM invoice_items i
+                    JOIN products p ON p.id = i.product_id
+                    JOIN categories c ON p.category_id = c.id
+                    GROUP BY c.name) as f'))
+                ->select(DB::raw('category_name, total_earned'))
+                ->orderByDesc('total_earned')
+                ->limit(10)
+                ->get();
 
-        Log::debug('Best selling categories retrieved', ['count' => $results->count()]);
+            Log::debug('Best selling categories retrieved', ['count' => $result->count()]);
+            return $result;
+        });
 
         return $this->preferredFormat($results);
     }
@@ -212,30 +226,35 @@ class ReportController extends Controller
     public function totalSalesOfYears(Request $request)
     {
         $years = $request->get('years', 1);
-        Log::info('Fetching total sales of past years', ['years' => $years]);
-
         $numberOfYears = $years - 1;
         $endYear = intval(date("Y"));
         $startYear = $endYear - $numberOfYears;
-
         $driver = config('database.default');
-        Log::debug('Using DB driver', ['driver' => $driver]);
 
-        if ($driver == 'sqlite') {
-            $yearQuery = "strftime('%Y', invoice_date) AS year";
-            $yearGroup = "strftime('%Y', invoice_date)";
-        } else {
-            $yearQuery = 'YEAR(invoice_date) AS year';
-            $yearGroup = 'YEAR(invoice_date)';
-        }
+        $results = Cache::remember(
+            "reports.total_sales_years.{$startYear}.{$endYear}.{$driver}",
+            self::REPORT_CACHE_TTL,
+            function () use ($startYear, $driver) {
+                Log::info('Fetching total sales of past years', ['startYear' => $startYear, 'driver' => $driver]);
 
-        $results = DB::table('invoices')
-            ->selectRaw("SUM(total) AS total, $yearQuery")
-            ->whereYear('invoice_date', '>=', $startYear)
-            ->groupBy(DB::raw($yearGroup))
-            ->get();
+                if ($driver == 'sqlite') {
+                    $yearQuery = "strftime('%Y', invoice_date) AS year";
+                    $yearGroup = "strftime('%Y', invoice_date)";
+                } else {
+                    $yearQuery = 'YEAR(invoice_date) AS year';
+                    $yearGroup = 'YEAR(invoice_date)';
+                }
 
-        Log::debug('Sales by year retrieved', ['years' => $results->pluck('year')->toArray()]);
+                $result = DB::table('invoices')
+                    ->selectRaw("SUM(total) AS total, $yearQuery")
+                    ->whereYear('invoice_date', '>=', $startYear)
+                    ->groupBy(DB::raw($yearGroup))
+                    ->get();
+
+                Log::debug('Sales by year retrieved', ['years' => $result->pluck('year')->toArray()]);
+                return $result;
+            }
+        );
 
         $dates = [];
         foreach ($results as $result) {
@@ -306,26 +325,32 @@ class ReportController extends Controller
     public function averageSalesPerMonth(Request $request)
     {
         $year = $request->get('year', date('Y'));
-        Log::info('Fetching average sales per month', ['year' => $year]);
-
         $driver = config('database.default');
-        Log::debug('Using DB driver', ['driver' => $driver]);
 
-        if ($driver == 'sqlite') {
-            $monthQuery = 'CAST(strftime("%m", invoice_date) AS INTEGER) AS month';
-            $monthGroup = 'strftime("%m", invoice_date)';
-        } else {
-            $monthQuery = 'MONTH(invoice_date) AS month';
-            $monthGroup = 'MONTH(invoice_date)';
-        }
+        $results = Cache::remember(
+            "reports.avg_sales_month.{$year}.{$driver}",
+            self::REPORT_CACHE_TTL,
+            function () use ($year, $driver) {
+                Log::info('Fetching average sales per month', ['year' => $year, 'driver' => $driver]);
 
-        $results = DB::table('invoices')
-            ->selectRaw("$monthQuery, AVG(total) AS average, COUNT(*) AS amount")
-            ->whereYear('invoice_date', '=', $year)
-            ->groupBy(DB::raw($monthGroup))
-            ->get();
+                if ($driver == 'sqlite') {
+                    $monthQuery = 'CAST(strftime("%m", invoice_date) AS INTEGER) AS month';
+                    $monthGroup = 'strftime("%m", invoice_date)';
+                } else {
+                    $monthQuery = 'MONTH(invoice_date) AS month';
+                    $monthGroup = 'MONTH(invoice_date)';
+                }
 
-        Log::debug('Monthly sales data retrieved', ['months' => $results->pluck('month')->toArray()]);
+                $result = DB::table('invoices')
+                    ->selectRaw("$monthQuery, AVG(total) AS average, COUNT(*) AS amount")
+                    ->whereYear('invoice_date', '=', $year)
+                    ->groupBy(DB::raw($monthGroup))
+                    ->get();
+
+                Log::debug('Monthly sales data retrieved', ['months' => $result->pluck('month')->toArray()]);
+                return $result;
+            }
+        );
 
         $dates = [];
         foreach ($results as $result) {
@@ -399,26 +424,32 @@ class ReportController extends Controller
     public function averageSalesPerWeek(Request $request)
     {
         $year = $request->get('year', date('Y'));
-        Log::info('Fetching average sales per week', ['year' => $year]);
-
         $driver = config('database.default');
-        Log::debug('Using DB driver', ['driver' => $driver]);
 
-        if ($driver == 'sqlite') {
-            $weekQuery = 'CAST(strftime("%W", invoice_date) AS INTEGER) AS week';
-            $weekGroup = 'strftime("%W", invoice_date)';
-        } else {
-            $weekQuery = 'WEEK(invoice_date) AS week';
-            $weekGroup = 'WEEK(invoice_date)';
-        }
+        $results = Cache::remember(
+            "reports.avg_sales_week.{$year}.{$driver}",
+            self::REPORT_CACHE_TTL,
+            function () use ($year, $driver) {
+                Log::info('Fetching average sales per week', ['year' => $year, 'driver' => $driver]);
 
-        $results = DB::table('invoices')
-            ->selectRaw("$weekQuery, AVG(total) AS average, COUNT(*) AS amount")
-            ->whereYear('invoice_date', '=', $year)
-            ->groupBy(DB::raw($weekGroup))
-            ->get();
+                if ($driver == 'sqlite') {
+                    $weekQuery = 'CAST(strftime("%W", invoice_date) AS INTEGER) AS week';
+                    $weekGroup = 'strftime("%W", invoice_date)';
+                } else {
+                    $weekQuery = 'WEEK(invoice_date) AS week';
+                    $weekGroup = 'WEEK(invoice_date)';
+                }
 
-        Log::debug('Weekly sales data retrieved', ['weeks' => $results->pluck('week')->toArray()]);
+                $result = DB::table('invoices')
+                    ->selectRaw("$weekQuery, AVG(total) AS average, COUNT(*) AS amount")
+                    ->whereYear('invoice_date', '=', $year)
+                    ->groupBy(DB::raw($weekGroup))
+                    ->get();
+
+                Log::debug('Weekly sales data retrieved', ['weeks' => $result->pluck('week')->toArray()]);
+                return $result;
+            }
+        );
 
         $dates = [];
         foreach ($results as $result) {
@@ -483,15 +514,18 @@ class ReportController extends Controller
      */
     public function customersByCountry(Request $request)
     {
-        Log::info('Fetching customers by country');
+        $results = Cache::remember('reports.customers_by_country', self::REPORT_CACHE_TTL, function () {
+            Log::info('Fetching customers by country');
 
-        $results = DB::table('users AS u')
-            ->selectRaw('COUNT(*) AS amount, u.country')
-            ->where('u.role', '=', 'user')
-            ->groupBy('u.country')
-            ->get();
+            $result = DB::table('users AS u')
+                ->selectRaw('COUNT(*) AS amount, u.country')
+                ->where('u.role', '=', 'user')
+                ->groupBy('u.country')
+                ->get();
 
-        Log::debug('Customer distribution retrieved', ['countries' => $results->pluck('country')->toArray()]);
+            Log::debug('Customer distribution retrieved', ['countries' => $result->pluck('country')->toArray()]);
+            return $result;
+        });
 
         return $this->preferredFormat($results);
     }

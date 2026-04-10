@@ -8,7 +8,7 @@
         <div class="row">
           <div class="col-md-6">
             <div class="form-group mb-3">
-              <label for="first_name" class="form-label">First name</label>
+              <label for="first_name" class="form-label">First name *</label>
               <input formControlName="first_name"
                 id="first_name"
                 data-test="first-name"
@@ -16,10 +16,13 @@
                 [ngClass]="{ 'is-invalid': submitted && f['first_name'].errors }"
                 type="text"
                 placeholder="Your first name *"
+                aria-required="true"
+                [attr.aria-invalid]="submitted && f['first_name'].errors ? 'true' : 'false'"
+                aria-describedby="first_name-error"
                 value=""/>
             </div>
             @if (f['first_name'].invalid && submitted) {
-              <div data-test="first-name-error"
+              <div id="first_name-error" data-test="first-name-error" role="alert"
                 class="alert alert-danger">
                 @if (f['first_name'].errors?.['required']) {
                   <div>
@@ -31,17 +34,20 @@
           </div>
           <div class="col-md-6">
             <div class="form-group mb-3">
-              <label for="last_name" class="form-label">Last name</label>
+              <label for="last_name" class="form-label">Last name *</label>
               <input formControlName="last_name"
                 id="last_name"
                 data-test="last-name"
                 class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f['last_name'].errors }" type="text"
                 placeholder="Your last name *"
+                aria-required="true"
+                [attr.aria-invalid]="submitted && f['last_name'].errors ? 'true' : 'false'"
+                aria-describedby="last_name-error"
                 value=""/>
             </div>
             @if (f['last_name'].invalid && submitted) {
-              <div data-test="last-name-error"
+              <div id="last_name-error" data-test="last-name-error" role="alert"
                 class="alert alert-danger">
                 @if (f['last_name'].errors?.['required']) {
                   <div>
@@ -53,7 +59,7 @@
           </div>
 
           <div class="form-group mb-3">
-            <label for="dob" class="form-label">Date of birth</label>
+            <label for="dob" class="form-label">Date of birth *</label>
             <input
               formControlName="dob"
               id="dob"
@@ -61,10 +67,13 @@
               class="form-control"
               type="text"
               placeholder="YYYY-MM-DD"
+              aria-required="true"
+              [attr.aria-invalid]="submitted && f['dob'].errors ? 'true' : 'false'"
+              aria-describedby="dob-error"
               [ngClass]="{ 'is-invalid': submitted && f['dob'].errors }"
             />
             @if (f['dob'].invalid && submitted) {
-              <div data-test="dob-error"
+              <div id="dob-error" data-test="dob-error" role="alert"
                 class="alert alert-danger mt-3">
                 @if (f['dob'].errors?.['invalidDate']) {
                   <div>
@@ -81,16 +90,19 @@
           </div>
 
           <div class="form-group mb-3">
-            <label for="address" class="form-label">Address</label>
+            <label for="address" class="form-label">Address *</label>
             <input formControlName="address"
               id="address"
               data-test="address"
               class="form-control"
               [ngClass]="{ 'is-invalid': submitted && f['address'].errors }" type="text"
               placeholder="Your address *"
+              aria-required="true"
+              [attr.aria-invalid]="submitted && f['address'].errors ? 'true' : 'false'"
+              aria-describedby="address-error"
               value=""/>
             @if (f['address'].invalid && submitted) {
-              <div data-test="address-error"
+              <div id="address-error" data-test="address-error" role="alert"
                 class="alert alert-danger mt-3">
                 @if (f['address'].errors?.['required']) {
                   <div>
@@ -103,17 +115,20 @@
 
           <div class="col-md-4">
             <div class="form-group mb-3">
-              <label for="postcode" class="form-label">Postcode</label>
+              <label for="postcode" class="form-label">Postcode *</label>
               <input formControlName="postcode"
                 id="postcode"
                 data-test="postcode"
                 class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f['postcode'].errors }" type="text"
                 placeholder="Your postcode *"
+                aria-required="true"
+                [attr.aria-invalid]="submitted && f['postcode'].errors ? 'true' : 'false'"
+                aria-describedby="postcode-error"
                 value=""/>
             </div>
             @if (f['postcode'].invalid && submitted) {
-              <div data-test="postcode-error"
+              <div id="postcode-error" data-test="postcode-error" role="alert"
                 class="alert alert-danger">
                 @if (f['postcode'].errors?.['required']) {
                   <div>
@@ -130,17 +145,20 @@
           </div>
           <div class="col-md-8">
             <div class="form-group mb-3">
-              <label for="city" class="form-label">City</label>
+              <label for="city" class="form-label">City *</label>
               <input formControlName="city"
                 id="city"
                 data-test="city"
                 class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f['city'].errors }" type="text"
                 placeholder="Your city *"
+                aria-required="true"
+                [attr.aria-invalid]="submitted && f['city'].errors ? 'true' : 'false'"
+                aria-describedby="city-error"
                 value=""/>
             </div>
             @if (f['city'].invalid && submitted) {
-              <div data-test="city-error"
+              <div id="city-error" data-test="city-error" role="alert"
                 class="alert alert-danger">
                 @if (f['city'].errors?.['required']) {
                   <div>
@@ -152,17 +170,20 @@
           </div>
           <div class="col-md-6">
             <div class="form-group mb-3">
-              <label for="state" class="form-label">State</label>
+              <label for="state" class="form-label">State *</label>
               <input formControlName="state"
                 id="state"
                 data-test="state"
                 class="form-control"
                 [ngClass]="{ 'is-invalid': submitted && f['state'].errors }" type="text"
                 placeholder="Your state *"
+                aria-required="true"
+                [attr.aria-invalid]="submitted && f['state'].errors ? 'true' : 'false'"
+                aria-describedby="state-error"
                 value=""/>
             </div>
             @if (f['state'].invalid && submitted) {
-              <div data-test="state-error"
+              <div id="state-error" data-test="state-error" role="alert"
                 class="alert alert-danger">
                 @if (f['state'].errors?.['required']) {
                   <div>
@@ -174,10 +195,13 @@
           </div>
           <div class="col-md-6">
             <div class="form-group mb-3">
-              <label for="country" class="form-label">Country</label>
+              <label for="country" class="form-label">Country *</label>
               <select id="country"
                 data-test="country"
                 formControlName="country"
+                aria-required="true"
+                [attr.aria-invalid]="submitted && f['country'].errors ? 'true' : 'false'"
+                aria-describedby="country-error"
                 [ngClass]="{ 'is-invalid': submitted && f['country'].errors }" class="form-select">
                 <option value="" disabled selected hidden>Select your country *</option>
                 @for (country of countries; track country) {
@@ -186,7 +210,7 @@
               </select>
             </div>
             @if (f['country'].invalid && submitted) {
-              <div data-test="country-error"
+              <div id="country-error" data-test="country-error" role="alert"
                 class="alert alert-danger">
                 @if (f['country'].errors?.['required']) {
                   <div>
@@ -197,16 +221,19 @@
             }
           </div>
           <div class="form-group mb-3">
-            <label for="phone" class="form-label">Phone</label>
+            <label for="phone" class="form-label">Phone *</label>
             <input formControlName="phone"
               id="phone"
               data-test="phone"
               class="form-control"
               [ngClass]="{ 'is-invalid': submitted && f['phone'].errors }" type="text"
               placeholder="Your phone *"
+              aria-required="true"
+              [attr.aria-invalid]="submitted && f['phone'].errors ? 'true' : 'false'"
+              aria-describedby="phone-error"
               value=""/>
             @if (f['phone'].invalid && submitted) {
-              <div data-test="phone-error"
+              <div id="phone-error" data-test="phone-error" role="alert"
                 class="alert alert-danger mt-3">
                 @if (f['phone'].errors?.['required']) {
                   <div>
@@ -222,16 +249,19 @@
             }
           </div>
           <div class="form-group mb-3">
-            <label for="email" class="form-label">E-mail address</label>
+            <label for="email" class="form-label">E-mail address *</label>
             <input formControlName="email"
               id="email"
               data-test="email"
               class="form-control"
               [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" type="text"
               placeholder="Your e-mail *"
+              aria-required="true"
+              [attr.aria-invalid]="submitted && f['email'].errors ? 'true' : 'false'"
+              aria-describedby="email-error"
               value=""/>
             @if (f['email'].invalid && submitted) {
-              <div data-test="email-error"
+              <div id="email-error" data-test="email-error" role="alert"
                 class="alert alert-danger mt-3">
                 @if (f['email'].errors?.['required']) {
                   <div>
@@ -247,16 +277,19 @@
             }
           </div>
           <div class="form-group mb-3">
-            <label for="password" class="form-label">Password</label>
+            <label for="password" class="form-label">Password *</label>
             <input formControlName="password"
               id="password"
               data-test="password"
               class="form-control"
               [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" type="password"
               placeholder="Your password *"
+              aria-required="true"
+              [attr.aria-invalid]="submitted && f['password'].errors ? 'true' : 'false'"
+              aria-describedby="password-error"
               value=""/>
             @if (f['password'].invalid && submitted) {
-              <div data-test="password-error"
+              <div id="password-error" data-test="password-error" role="alert"
                 class="alert alert-danger mt-3">
                 @if (f['password'].errors?.['required']) {
                   <div>
@@ -278,7 +311,7 @@
           </div>
           <button type="submit" data-test="register-submit" class="btnSubmit mb-3">Register</button>
           @if (error) {
-            <div data-test="register-error" class="alert alert-danger">
+            <div data-test="register-error" role="alert" class="alert alert-danger">
               <div>
                 <div class="help-block">{{error}}</div>
               </div>

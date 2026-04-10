@@ -1,7 +1,9 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Subject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
 import {CartService} from "../../_services/cart.service";
 import {FavoriteService} from "../../_services/favorite.service";
 import {ActivatedRoute, RouterLink} from "@angular/router";
@@ -23,7 +25,7 @@ import {FormsModule} from "@angular/forms";
 ],
   styleUrls: ['./detail.component.css']
 })
-export class DetailComponent implements OnInit {
+export class DetailComponent implements OnInit, OnDestroy {
   private readonly cartService = inject(CartService);
   private readonly favoriteService = inject(FavoriteService);
   private readonly route = inject(ActivatedRoute);
@@ -34,21 +36,27 @@ export class DetailComponent implements OnInit {
   product: Product;
   quantity: number = 1;
   relatedProducts: Product[];
-  private sub: any;
   private id: number;
+  private readonly destroy$ = new Subject<void>();
   sliderOptions: Options = {
     floor: 1,
     ceil: 10
   };
 
   ngOnInit(): void {
-    this.sub = this.route.params.subscribe(params => {
-      this.id = +params['id'];
-      this.getProduct(this.id);
-      this.getRelatedProducts(this.id);
-    });
+    this.route.params
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        this.id = +params['id'];
+        this.getProduct(this.id);
+        this.getRelatedProducts(this.id);
+      });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   plus() {
     this.quantity = this.quantity + 1;
@@ -61,28 +69,34 @@ export class DetailComponent implements OnInit {
   }
 
   getProduct(id: number) {
-    this.productService.getProduct(id).subscribe(response => {
-      this.product = response;
-    });
+    this.productService.getProduct(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(response => {
+        this.product = response;
+      });
   }
 
   getRelatedProducts(id: number) {
-    this.productService.getRelatedProducts(id).subscribe(response => {
-      this.relatedProducts = response;
-    });
+    this.productService.getRelatedProducts(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(response => {
+        this.relatedProducts = response;
+      });
   }
 
   addToFavorites(product: any) {
     let payload = {product_id: product.id}
-    this.favoriteService.addFavorite(payload).subscribe(() => {
-      this.toastService.show('Product added to your favorites list.', {classname: 'bg-success text-light'})
-    }, (response) => {
-      if (response.error.message === 'Duplicate Entry') {
-        this.toastService.show('Product already in your favorites list.', {classname: 'bg-warning text-dark'})
-      } else if (response.error.message === 'Unauthorized') {
-        this.toastService.show('Unauthorized, can not add product to your favorite list.', {classname: 'bg-danger text-light'})
-      }
-    });
+    this.favoriteService.addFavorite(payload)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.toastService.show('Product added to your favorites list.', {classname: 'bg-success text-light'})
+      }, (response) => {
+        if (response.error.message === 'Duplicate Entry') {
+          this.toastService.show('Product already in your favorites list.', {classname: 'bg-warning text-dark'})
+        } else if (response.error.message === 'Unauthorized') {
+          this.toastService.show('Unauthorized, can not add product to your favorite list.', {classname: 'bg-danger text-light'})
+        }
+      });
   }
 
   addToCart(product: Product) {

@@ -6,6 +6,7 @@
       <figure class="figure">
         <div class="card-img-wrapper">
           <img src="assets/img/products/{{product.product_image.file_name}}" class="figure-img img-fluid"
+               loading="lazy"
                alt="A generic square placeholder image with rounded corners in a figure.">
         </div>
         <figcaption class="figure-caption">Photo by <a target="_blank"
@@ -82,7 +83,7 @@
         <a routerLink="/product/{{item.id}}" class="card"
            style="text-decoration: none; color: black;">
           <div class="card-img-wrapper">
-            <img class="card-img-top" src="assets/img/products/{{item.product_image.file_name}}">
+            <img class="card-img-top" loading="lazy" alt="{{item.name}}" src="assets/img/products/{{item.product_image.file_name}}">
           </div>
           <div class="card-body">
             <h5 class="card-title">

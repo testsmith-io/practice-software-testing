@@ -29,7 +29,6 @@
     "@y3krulez/angular-archwizard": "8.0.0-develop",
     "angular2-chartjs": "^0.5.1",
     "chartjs-plugin-datalabels": "^2.2.0",
-    "jquery": "3.7.1",
     "chart.js": "^4.5.0",
     "ng2-charts": "^8.0.0",
     "bootstrap": "5.3.7",

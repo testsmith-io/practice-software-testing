@@ -54,6 +54,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
     this.items = this.getCartItems();
     this.role = this.auth.getRole();
     this.activeLanguage = this.translocoService.getActiveLang();
+    document.documentElement.setAttribute('lang', this.activeLanguage);
     this.getSignedInUser();
   }
 
@@ -81,6 +82,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
     this.translocoService.setActiveLang(language);
     localStorage.setItem('language', language);
     this.activeLanguage = language;
+    document.documentElement.setAttribute('lang', language);
   }
 
 }

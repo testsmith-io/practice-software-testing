@@ -1,4 +1,5 @@
 version: '3.8'
+name: pst
 services:
   # The Application
   laravel-api:

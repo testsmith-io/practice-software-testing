@@ -45,7 +45,10 @@ export class ContactComponent implements OnInit {
         attachment: ['', []],
         subject: ['', [Validators.required]],
         message: ['', [Validators.required, Validators.minLength(50)]]
-      }
+      },
+      // Validate on blur instead of every keystroke (the message field has
+      // a 50-char minlength validator that runs per char otherwise).
+      { updateOn: 'blur' }
     );
     this.getSignedInUser();
   }

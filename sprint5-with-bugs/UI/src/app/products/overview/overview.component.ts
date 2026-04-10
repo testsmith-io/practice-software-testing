@@ -1,7 +1,7 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-import {Component, ElementRef, inject, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {Component, ElementRef, inject, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Brand} from "../../models/brand";
 import {BrandService} from "../../_services/brand.service";
@@ -15,6 +15,8 @@ import {NgxSliderModule, Options} from "@angular-slider/ngx-slider";
 import {NgxPaginationModule} from "ngx-pagination";
 import {RouterLink} from "@angular/router";
 import {NgClass, NgTemplateOutlet} from "@angular/common";
+import {Subject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-overview',
@@ -29,7 +31,9 @@ import {NgClass, NgTemplateOutlet} from "@angular/common";
   ],
   styleUrls: ['./overview.component.css']
 })
-export class OverviewComponent implements OnInit {
+export class OverviewComponent implements OnInit, OnDestroy {
+  private readonly destroy$ = new Subject<void>();
+
   private readonly productService = inject(ProductService);
   private readonly formBuilder = inject(FormBuilder);
   private readonly brandService = inject(BrandService);
@@ -60,11 +64,11 @@ export class OverviewComponent implements OnInit {
   ngOnInit(): void {
     this.getProducts();
 
-    this.brandService.getBrands().subscribe(response => {
+    this.brandService.getBrands().pipe(takeUntil(this.destroy$)).subscribe(response => {
       this.brands = response;
     });
 
-    this.categoryService.getCategoriesTree().subscribe(response => {
+    this.categoryService.getCategoriesTree().pipe(takeUntil(this.destroy$)).subscribe(response => {
       this.categories = response;
     });
 
@@ -77,7 +81,7 @@ export class OverviewComponent implements OnInit {
   }
 
   getProducts() {
-    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), this.p, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), this.p, this.ecoFriendlyFilter).pipe(takeUntil(this.destroy$)).subscribe(res => {
       this.results = res;
       this.results.data.forEach((item: Product) => {
         if (item.is_location_offer) {
@@ -137,7 +141,7 @@ export class OverviewComponent implements OnInit {
 
     this.resultState = 'search_started';
     this.searchQuery = this.search.value.query;
-    this.productService.searchProducts(this.searchQuery).subscribe(res => {
+    this.productService.searchProducts(this.searchQuery).pipe(takeUntil(this.destroy$)).subscribe(res => {
       this.resultState = 'search_completed';
       this.minPrice = 1;
       this.maxPrice = 100;
@@ -153,7 +157,7 @@ export class OverviewComponent implements OnInit {
   }
 
   changePriceRange() {
-    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0, this.ecoFriendlyFilter).pipe(takeUntil(this.destroy$)).subscribe(res => {
       this.results = res;
     });
   }
@@ -167,9 +171,14 @@ export class OverviewComponent implements OnInit {
     this.categoriesFilter = [];
     this.ecoFriendlyFilter = false;
     this.uncheckAll();
-    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0, this.ecoFriendlyFilter).pipe(takeUntil(this.destroy$)).subscribe(res => {
       this.results = res;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   changeSorting(event: any) {

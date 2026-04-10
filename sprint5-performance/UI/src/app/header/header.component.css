@@ -74,3 +74,11 @@
   right:100%; left:auto;
   margin-top: -25px;
 }
+
+.btn-link-style {
+  background: none; border: none; text-decoration: none;
+  text-align: inherit; padding-left: 0.5rem; padding-right: 0.5rem;
+}
+.btn-link-style:focus {
+  outline: 2px solid #1E6098; outline-offset: 2px;
+}

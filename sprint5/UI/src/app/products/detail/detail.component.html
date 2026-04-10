@@ -6,7 +6,7 @@
       <figure class="figure">
         <div class="card-img-wrapper">
           <img src="assets/img/products/{{product.product_image.file_name}}" class="figure-img img-fluid"
-               alt="{{product.name}}">
+               alt="{{product.name}}" fetchpriority="high">
         </div>
         <figcaption class="figure-caption">{{ t('pages.product-detail.photo-by') }} <a target="_blank"
                                                        href="{{product.product_image.by_url}}">{{ product.product_image.by_name }}</a>
@@ -140,7 +140,7 @@
         <a routerLink="/product/{{item.id}}" class="card"
            style="text-decoration: none; color: black;">
           <div class="card-img-wrapper">
-            <img class="card-img-top" alt="{{item.name}}" src="assets/img/products/{{item.product_image.file_name}}">
+            <img class="card-img-top" alt="{{item.name}}" loading="lazy" src="assets/img/products/{{item.product_image.file_name}}">
           </div>
           <div class="card-body">
             <h5 class="card-title">

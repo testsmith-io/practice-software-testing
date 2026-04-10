@@ -1,7 +1,8 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-import {Component, ElementRef, inject, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {Component, ElementRef, inject, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {Subject, takeUntil} from "rxjs";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Brand} from "../../models/brand";
 import {BrandService} from "../../_services/brand.service";
@@ -37,7 +38,8 @@ import {ProductSpecService, SpecNameGroup} from "../../_services/product-spec.se
   ],
   styleUrls: ['./overview.component.css']
 })
-export class OverviewComponent implements OnInit {
+export class OverviewComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   private productService = inject(ProductService);
   private formBuilder = inject(FormBuilder);
   private brandService = inject(BrandService);
@@ -73,17 +75,23 @@ export class OverviewComponent implements OnInit {
   ngOnInit(): void {
     this.getProducts();
 
-    this.brandService.getBrands().subscribe(response => {
-      this.brands = response;
-    });
+    this.brandService.getBrands()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(response => {
+        this.brands = response;
+        });
 
-    this.categoryService.getCategoriesTree().subscribe(response => {
-      this.categories = response;
-    });
+    this.categoryService.getCategoriesTree()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(response => {
+        this.categories = response;
+        });
 
-    this.specService.getSpecNames().subscribe(response => {
-      this.specGroups = response;
-    });
+    this.specService.getSpecNames()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(response => {
+        this.specGroups = response;
+        });
 
     this.search = this.formBuilder.group(
       {
@@ -91,6 +99,11 @@ export class OverviewComponent implements OnInit {
           Validators.minLength(3),
           Validators.maxLength(40)]],
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onPageChange(page: number) {
@@ -168,7 +181,7 @@ export class OverviewComponent implements OnInit {
         if (item.is_location_offer) {
           item.discount_price = DiscountUtil.calculateDiscount(item.price);
         }
-      })
+      });
     });
   }
 

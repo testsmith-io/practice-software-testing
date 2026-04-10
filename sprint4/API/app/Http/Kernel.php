@@ -35,7 +35,8 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'auth' => Authenticate::class,
         'assign.guard' => AssignGuard::class,
-        'role' => RoleMiddleware::class
+        'role' => RoleMiddleware::class,
+        'cache.headers' => SetCacheHeaders::class,
     ];
 
     /**

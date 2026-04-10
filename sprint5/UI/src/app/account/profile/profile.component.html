@@ -226,10 +226,14 @@
       <p>{{ t('pages.my-account.profile.two_factor_authentication_enabled') }}</p>
     }
     @if (errorMessage) {
-      <p data-test="totp-error" style="color: red;">{{ errorMessage }}</p>
+      <div class="alert alert-danger mt-2" role="alert" data-test="totp-error">
+        <strong>Error:</strong> {{ errorMessage }}
+      </div>
     }
     @if (successMessage) {
-      <p data-test="totp-success" style="color: green;">{{ successMessage }}</p>
+      <div class="alert alert-success mt-2" role="status" data-test="totp-success">
+        <strong>Success:</strong> {{ successMessage }}
+      </div>
     }
   </div>
 </div>

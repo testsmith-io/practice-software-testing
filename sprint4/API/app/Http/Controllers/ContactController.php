@@ -65,7 +65,7 @@ class ContactController extends Controller
         if (App::environment('local')) {
             $email = $request->input('email');
             $name = $request->input('first_name') . ' ' . $request->input('last_name');
-            Mail::to([$email])->send(new Contact($name, $request->input('subject'), $request->input('message')));
+            Mail::to([$email])->queue(new Contact($name, $request->input('subject'), $request->input('message')));
         }
 
         return $this->preferredFormat($result, ResponseAlias::HTTP_OK);

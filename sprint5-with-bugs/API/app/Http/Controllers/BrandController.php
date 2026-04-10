@@ -135,7 +135,13 @@ class BrandController extends Controller
     {
         $q = $request->get('q');
         Log::info('Searching brands', ['query' => $q]);
-        $results = Brand::where('name', 'like', "%$q%")->get();
+        // FULLTEXT requires terms of at least ft_min_word_len (default 4).
+        // Use it for longer queries; fall back to LIKE for short ones.
+        if (strlen($q) >= 4) {
+            $results = Brand::whereRaw('MATCH(name) AGAINST(? IN BOOLEAN MODE)', [$q . '*'])->get();
+        } else {
+            $results = Brand::where('name', 'like', "%$q%")->get();
+        }
         Log::debug('Search results', ['count' => $results->count()]);
         return $this->preferredFormat($results);
     }

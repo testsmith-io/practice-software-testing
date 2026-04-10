@@ -39,7 +39,7 @@ class UserService
 
         if (App::environment('local')) {
             Log::debug("Sending registration email to: {$data['email']}");
-            Mail::to([$data['email']])->send(new Register("{$data['first_name']} {$data['last_name']}", $data['email'], $data['password']));
+            Mail::to([$data['email']])->queue(new Register("{$data['first_name']} {$data['last_name']}", $data['email'], $data['password']));
         }
 
         $user = User::create($data);
@@ -165,7 +165,7 @@ class UserService
 
         if (App::environment('local')) {
             Log::debug("Sending reset email to: {$email}");
-            Mail::to($email)->send(new ForgetPassword("{$user->first_name} {$user->last_name}", $newPassword));
+            Mail::to($email)->queue(new ForgetPassword("{$user->first_name} {$user->last_name}", $newPassword));
         }
 
         return ['success' => true];
@@ -238,13 +238,21 @@ class UserService
     {
         Log::debug("Searching users with query: {$query}");
 
-        return User::where('role', '=', 'user')
-            ->where(function ($q) use ($query) {
+        $builder = User::where('role', '=', 'user');
+        if (strlen($query) >= 4) {
+            $builder->whereRaw(
+                'MATCH(first_name, last_name, email, city) AGAINST(? IN BOOLEAN MODE)',
+                [$query . '*']
+            );
+        } else {
+            $builder->where(function ($q) use ($query) {
                 $q->where('first_name', 'like', "%$query%")
                     ->orWhere('last_name', 'like', "%$query%")
                     ->orWhere('email', 'like', "%$query%")
                     ->orWhere('city', 'like', "%$query%");
-            })->paginate();
+            });
+        }
+        return $builder->paginate();
     }
 
     private function incrementLoginAttempts($user)
