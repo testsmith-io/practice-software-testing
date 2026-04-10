@@ -158,6 +158,55 @@
         }
       </div>
     </div>
+    @if (!isAddMode) {
+      <div class="row mt-4">
+        <div class="col-12">
+          <h4>Product Specifications</h4>
+          <hr>
+          <table class="table table-sm" data-test="specs-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Value</th>
+                <th>Unit</th>
+                <th style="width: 60px;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (spec of specs; track spec.id) {
+                <tr>
+                  <td>{{ spec.spec_name }}</td>
+                  <td>{{ spec.spec_value }}</td>
+                  <td>{{ spec.spec_unit || '-' }}</td>
+                  <td>
+                    <button type="button" class="btn btn-sm btn-outline-danger" data-test="delete-spec"
+                            (click)="deleteSpec(spec.id!)">&times;</button>
+                  </td>
+                </tr>
+              }
+              <tr>
+                <td>
+                  <input type="text" class="form-control form-control-sm" [(ngModel)]="newSpec.spec_name"
+                         [ngModelOptions]="{standalone: true}" placeholder="e.g. Weight" data-test="spec-name">
+                </td>
+                <td>
+                  <input type="text" class="form-control form-control-sm" [(ngModel)]="newSpec.spec_value"
+                         [ngModelOptions]="{standalone: true}" placeholder="e.g. 1.5" data-test="spec-value">
+                </td>
+                <td>
+                  <input type="text" class="form-control form-control-sm" [(ngModel)]="newSpec.spec_unit"
+                         [ngModelOptions]="{standalone: true}" placeholder="e.g. kg" data-test="spec-unit">
+                </td>
+                <td>
+                  <button type="button" class="btn btn-sm btn-primary" data-test="add-spec"
+                          (click)="addSpec()">+</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
     <div class="row">
       <div class="col-12">
         <button type="submit" class="btn btn-primary" data-test="product-submit">Save</button>

@@ -1,0 +1,185 @@
+/* Copyright (c) 2024-2026 Testsmith. All rights reserved. See LICENSE for details. */
+
+/* Scrollable container */
+.comparison-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 8px;
+}
+
+/* Table */
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 500px;
+}
+
+.comparison-table th,
+.comparison-table td {
+  border: 1px solid #dee2e6;
+  padding: 10px 14px;
+  vertical-align: middle;
+}
+
+.comparison-table thead th {
+  border-bottom-width: 2px;
+}
+
+.comparison-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Sticky first column */
+.sticky-col {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background-color: #f0f1f3;
+  font-weight: 600;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.comparison-table thead .sticky-col {
+  z-index: 3;
+}
+
+/* Attribute label column */
+.attribute-col {
+  width: 140px;
+  min-width: 140px;
+}
+
+/* Product columns */
+.product-col {
+  min-width: 220px;
+  width: 25%;
+  vertical-align: top;
+  padding: 16px;
+  position: relative;
+}
+
+.product-name {
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
+/* Product image */
+.comparison-img {
+  width: 100%;
+  max-width: 200px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Remove button */
+.remove-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  line-height: 1;
+  padding: 2px 7px;
+  font-size: 1rem;
+}
+
+/* Description */
+.description-cell {
+  font-size: 0.8rem;
+  color: #6b7280;
+  line-height: 1.5;
+  max-width: 280px;
+}
+
+/* CO2 badge */
+.co2-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  font-weight: 700;
+  border-radius: 6px;
+  color: white;
+}
+
+.co2-badge.rating-a { background-color: #10b981; }
+.co2-badge.rating-b { background-color: #84cc16; }
+.co2-badge.rating-c { background-color: #facc15; color: #1f2937; }
+.co2-badge.rating-d { background-color: #f97316; }
+.co2-badge.rating-e { background-color: #ef4444; }
+
+/* ECO label */
+.eco-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 16px;
+}
+
+/* Spec section header */
+.spec-header-row td {
+  background-color: #e9ecef;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* Diff highlight */
+.spec-diff td:not(.attribute-col) {
+  background-color: #fff3cd;
+}
+
+/* ── Responsive tweaks ─────────────────────────── */
+
+@media (max-width: 767px) {
+  .attribute-col {
+    width: 110px;
+    min-width: 110px;
+    font-size: 0.78rem;
+    padding: 8px 10px;
+  }
+
+  .product-col {
+    min-width: 180px;
+    padding: 12px 10px;
+  }
+
+  .comparison-img {
+    max-width: 140px;
+    height: 110px;
+  }
+
+  .product-name {
+    font-size: 0.82rem;
+  }
+
+  .comparison-table td {
+    font-size: 0.82rem;
+    padding: 8px 10px;
+  }
+
+  .description-cell {
+    font-size: 0.75rem;
+    max-width: 180px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .product-col {
+    min-width: 260px;
+  }
+
+  .comparison-img {
+    max-width: 220px;
+    height: 170px;
+  }
+
+  .description-cell {
+    max-width: 320px;
+  }
+}

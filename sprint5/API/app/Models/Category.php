@@ -70,4 +70,8 @@ class Category extends BaseModel
         return $this->hasMany(Category::class, 'parent_id')->with('sub_categories');
     }
 
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
 }

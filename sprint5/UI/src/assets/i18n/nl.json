@@ -153,7 +153,7 @@
         "length": "Wachtwoordlengte is ongeldig",
         "minlength": "Wachtwoord moet minimaal 6 tekens lang zijn.",
         "maxlength": "Wachtwoord mag niet langer zijn dan 40 tekens.",
-        "pattern": "Wachtwoord moet ongeldige tekens bevatten."
+        "pattern": "Wachtwoord mag geen ongeldige tekens bevatten."
       }
     },
     "first-name": {
@@ -269,7 +269,8 @@
       "sustainability": "Duurzaamheid",
       "eco-friendly": "Milieuvriendelijke Producten",
       "show-eco-friendly": "Alleen milieuvriendelijke producten tonen",
-      "co2-tooltip": "A = meest milieuvriendelijk, E = hogere milieu-impact"
+      "co2-tooltip": "A = meest milieuvriendelijk, E = hogere milieu-impact",
+      "specifications": "Specificaties"
     },
     "product-detail": {
       "photo-by": "Foto door",
@@ -284,7 +285,8 @@
       "duration": "Duur",
       "hours": "uur",
       "related-products": "Gerelateerde producten",
-      "more-information": "Meer informatie"
+      "more-information": "Meer informatie",
+      "specifications": "Specificaties"
     },
     "rentals": {
       "title": "Verhuur"
@@ -357,11 +359,18 @@
         "price-header": "Prijs",
         "subtotal": "Subtotaal",
         "discount": "Korting",
-        "total": "Totaal"
+        "total": "Totaal",
+        "continue-shopping": "Verder winkelen"
       },
       "sign-in": {
         "title": "Inloggen",
         "already": "Hallo {{ first_name }} {{ last_name }}, u bent al ingelogd. U kunt doorgaan naar betaling."
+      },
+      "guest": {
+        "title": "Doorgaan als gast",
+        "description": "Afrekenen zonder account aan te maken",
+        "btn": "Doorgaan als gast",
+        "proceed": "Doorgaan als gast: {{ first_name }} {{ last_name }} ({{ email }})"
       },
       "address": {
         "title": "Factuuradres"
@@ -417,6 +426,27 @@
           "validation-code-error-format": "Validatiecode moet alfanumeriek zijn."
         }
       }
+    },
+    "comparison": {
+      "title": "Productvergelijking",
+      "clear-all": "Alles wissen",
+      "empty": "Geen producten geselecteerd om te vergelijken. Voeg producten toe vanaf de overzichtspagina.",
+      "browse": "Producten bekijken",
+      "price": "Prijs",
+      "brand": "Merk",
+      "category": "Categorie",
+      "stock": "Beschikbaarheid",
+      "in-stock": "Op voorraad",
+      "out-of-stock": "Niet op voorraad",
+      "co2-rating": "CO\u2082 Beoordeling",
+      "eco-friendly": "Milieuvriendelijk",
+      "description": "Beschrijving",
+      "add": "Vergelijken",
+      "bar-count": "{{ count }} product(en) geselecteerd",
+      "compare-btn": "Nu vergelijken",
+      "specifications": "Specificaties",
+      "show-differences": "Alleen verschillen tonen",
+      "remove-product": "{{ name }} uit vergelijking verwijderen"
     },
     "my-account": {
       "overview": {

@@ -39,7 +39,11 @@ A complete matrix of all features across every version of Practice Software Test
 | Multi-Language                        |        |        |        |        | x      |               | x               |                |
 | Privacy Policy                        |        |        |        |        | x      |               | x               |                |
 | Product Category                      | x      | x      | x      | x      | x      | x             | x               |                |
+| Product Comparison                    |        |        |        |        | x      |               |                 |                |
+| - Side-by-side specs comparison       |        |        |        |        | x      |               |                 |                |
+| - Highlight differences only          |        |        |        |        | x      |               |                 |                |
 | Product Detail                        | x      | x      | x      | x      | x      | x             | x               |                |
+| - Product specifications              |        |        |        |        | x      |               |                 |                |
 | Product Overview                      | x      | x      | x      | x      | x      | x             | x               |                |
 | - Pagination                          |        | x      | x      | x      | x      | x             | x               |                |
 | - Filter                              |        | x      | x      | x      | x      | x             | x               | x              |
@@ -47,3 +51,8 @@ A complete matrix of all features across every version of Practice Software Test
 | - Sorting                             |        | x      | x      | x      | x      | x             | x               | x              |
 | - Price-range                         |        |        |        |        | x      | x             | x               |                |
 | Rentals                               |        |        | x      | x      | x      | x             | x               | x              |
+| **APIs**                              |        |        |        |        |        |               |                 |                |
+| - REST API                            | x      | x      | x      | x      | x      | x             | x               | x              |
+| - REST API documentation (Swagger)    | x      | x      | x      | x      | x      | x             | x               |                |
+| - GraphQL API                         |        |        | x      | x      | x      | x             |                 |                |
+| - GraphQL playground (GraphiQL)       |        |        | x      | x      | x      | x             |                 |                |

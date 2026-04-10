@@ -1,7 +1,8 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Subject, takeUntil} from "rxjs";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Brand} from "../../models/brand";
 import {BrandService} from "../../_services/brand.service";
@@ -14,9 +15,11 @@ import {Pagination} from "../../models/pagination";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
 import {Title} from "@angular/platform-browser";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {NgClass, NgTemplateOutlet, TitleCasePipe} from "@angular/common";
+import {AsyncPipe, NgClass, NgTemplateOutlet, TitleCasePipe} from "@angular/common";
 import {PaginationComponent} from "../../pagination/pagination.component";
 import {TranslocoDirective} from "@jsverse/transloco";
+import {ComparisonService} from "../../_services/comparison.service";
+import {ProductSpecService, SpecNameGroup} from "../../_services/product-spec.service";
 
 @Component({
   selector: 'app-category',
@@ -28,11 +31,13 @@ import {TranslocoDirective} from "@jsverse/transloco";
     PaginationComponent,
     NgTemplateOutlet,
     TranslocoDirective,
-    TitleCasePipe
+    TitleCasePipe,
+    AsyncPipe
   ],
   styleUrls: ['./category.component.css']
 })
-export class CategoryComponent implements OnInit {
+export class CategoryComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   private productService = inject(ProductService);
   private formBuilder = inject(FormBuilder);
   private route = inject(ActivatedRoute);
@@ -40,6 +45,8 @@ export class CategoryComponent implements OnInit {
   private categoryService = inject(CategoryService);
   public browserDetect = inject(BrowserDetectorService);
   private titleService = inject(Title);
+  public comparisonService = inject(ComparisonService);
+  private specService = inject(ProductSpecService);
   search: FormGroup | any;
   resultState: string = '';
   currentPage: number = 1;
@@ -52,21 +59,34 @@ export class CategoryComponent implements OnInit {
   private sorting: string = '';
   private ecoFriendlyFilter: boolean = false;
   categoryCheckboxState: Map<number, boolean> = new Map();
+  specGroups: SpecNameGroup[] = [];
+  specFilters: Map<string, Set<string>> = new Map();
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.slug = params['name'];
+    this.route.params
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        this.slug = params['name'];
 
-      this.getProductsByCategory(this.slug);
-      this.brandService.getBrands().subscribe(response => {
-        this.brands = response;
-      });
+        this.getProductsByCategory(this.slug);
+        this.specService.getSpecNames()
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(response => {
+            this.specGroups = response;
+          });
+        this.brandService.getBrands()
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(response => {
+            this.brands = response;
+          });
 
-      this.categoryService.getSubCategoriesTreeBySlug(this.slug).subscribe(response => {
-        this.categories = response;
-        this.updateTitle(this.categories[0].name);
+        this.categoryService.getSubCategoriesTreeBySlug(this.slug)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(response => {
+            this.categories = response;
+            this.updateTitle(this.categories[0].name);
+          });
       });
-    });
 
     this.search = this.formBuilder.group(
       {
@@ -74,6 +94,11 @@ export class CategoryComponent implements OnInit {
           Validators.minLength(3),
           Validators.maxLength(40)]],
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getProductsByCategory(slug: string) {
@@ -94,7 +119,7 @@ export class CategoryComponent implements OnInit {
     } else {
       this.brandsFilter = this.brandsFilter.filter(item => item !== event.target.value);
     }
-    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter, this.buildSpecFilterString()).subscribe(res => {
       this.resultState = 'filter_completed';
       this.results = res;
       this.results.data.forEach((item: Product) => {
@@ -143,7 +168,7 @@ export class CategoryComponent implements OnInit {
       }
     }
 
-    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter, this.buildSpecFilterString()).subscribe(res => {
       this.resultState = 'filter_completed';
       this.results = res;
       this.results.data.forEach((item: Product) => {
@@ -164,7 +189,7 @@ export class CategoryComponent implements OnInit {
     this.sorting = event.target.value;
 
     this.resultState = 'sorting_started';
-    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter, this.buildSpecFilterString()).subscribe(res => {
       this.results = res;
       this.results.data.forEach((item: Product) => {
         this.resultState = 'sorting_completed';
@@ -257,7 +282,7 @@ export class CategoryComponent implements OnInit {
     this.resultState = 'filter_started';
     this.ecoFriendlyFilter = event.target.checked;
 
-    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter, this.buildSpecFilterString()).subscribe(res => {
       this.resultState = 'filter_completed';
       this.results = res;
       this.results.data.forEach((item: Product) => {
@@ -266,6 +291,39 @@ export class CategoryComponent implements OnInit {
         }
       });
     });
+  }
+
+  filterBySpec(event: any, specName: string, specValue: string) {
+    if (!this.specFilters.has(specName)) {
+      this.specFilters.set(specName, new Set());
+    }
+    const values = this.specFilters.get(specName)!;
+    if (event.target.checked) {
+      values.add(specValue);
+    } else {
+      values.delete(specValue);
+      if (values.size === 0) this.specFilters.delete(specName);
+    }
+    this.resultState = 'filter_started';
+    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter, this.buildSpecFilterString()).subscribe(res => {
+      this.resultState = 'filter_completed';
+      this.results = res;
+      this.results.data.forEach((item: Product) => {
+        if (item.is_location_offer) {
+          item.discount_price = DiscountUtil.calculateDiscount(item.price);
+        }
+      });
+    });
+  }
+
+  buildSpecFilterString(): string {
+    const parts: string[] = [];
+    this.specFilters.forEach((values, name) => {
+      if (values.size > 0) {
+        parts.push(`${name}:${Array.from(values).join('|')}`);
+      }
+    });
+    return parts.join(',');
   }
 
   isCo2ScaleEnabled(): boolean {

@@ -160,6 +160,16 @@ class CategoryController extends Controller
     {
         $q = $request->get('q');
 
+        // FULLTEXT requires terms of at least ft_min_word_len (default 4).
+        // Use it for longer queries; fall back to LIKE for short ones.
+        if (strlen($q) >= 4 && in_array(\DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+            return $this->preferredFormat(
+                Category::with('sub_categories')
+                    ->whereRaw('MATCH(name) AGAINST(? IN BOOLEAN MODE)', [$q . '*'])
+                    ->get()
+            );
+        }
+
         return $this->preferredFormat(Category::with('sub_categories')->where('name', 'like', "%$q%")->get());
     }
 

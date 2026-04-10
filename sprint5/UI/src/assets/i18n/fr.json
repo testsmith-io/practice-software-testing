@@ -153,7 +153,7 @@
         "length": "La longueur du mot de passe est invalide",
         "minlength": "Le mot de passe doit comporter au moins 6 caractères.",
         "maxlength": "Le mot de passe ne peut pas dépasser 40 caractères.",
-        "pattern" : "Le mot de passe doit inclure des caractères invalides."
+        "pattern": "Le mot de passe ne peut pas inclure de caractères invalides."
       }
     },
     "first-name": {
@@ -269,7 +269,8 @@
       "sustainability": "Durabilité",
       "eco-friendly": "Produits Écologiques",
       "show-eco-friendly": "Afficher uniquement les produits écologiques",
-      "co2-tooltip": "A = le plus respectueux de l'environnement, E = impact environnemental plus élevé"
+      "co2-tooltip": "A = le plus respectueux de l'environnement, E = impact environnemental plus élevé",
+      "specifications": "Spécifications"
     },
     "product-detail": {
       "photo-by": "Photo de",
@@ -284,7 +285,8 @@
       "duration": "Durée",
       "hours": "heure(s)",
       "related-products": "Produits connexes",
-      "more-information": "Plus d'informations"
+      "more-information": "Plus d'informations",
+      "specifications": "Spécifications"
     },
     "rentals": {
       "title": "Locations"
@@ -357,11 +359,18 @@
         "price-header": "Prix",
         "subtotal": "Sous-total",
         "discount": "Remise",
-        "total": "Total"
+        "total": "Total",
+        "continue-shopping": "Continuer les achats"
       },
       "sign-in": {
         "title": "Se connecter",
         "already": "Bonjour {{ first_name }} {{ last_name }}, vous êtes déjà connecté. Vous pouvez passer à la caisse."
+      },
+      "guest": {
+        "title": "Continuer en tant qu'invité",
+        "description": "Payer sans créer de compte",
+        "btn": "Continuer en tant qu'invité",
+        "proceed": "Continuer en tant qu'invité: {{ first_name }} {{ last_name }} ({{ email }})"
       },
       "address": {
         "title": "Adresse de facturation"
@@ -417,6 +426,27 @@
           "validation-code-error-format": "Le code de validation doit être alphanumérique."
         }
       }
+    },
+    "comparison": {
+      "title": "Comparaison de produits",
+      "clear-all": "Tout effacer",
+      "empty": "Aucun produit sélectionné pour la comparaison. Ajoutez des produits depuis la page d'aperçu.",
+      "browse": "Parcourir les produits",
+      "price": "Prix",
+      "brand": "Marque",
+      "category": "Catégorie",
+      "stock": "Disponibilité",
+      "in-stock": "En stock",
+      "out-of-stock": "Rupture de stock",
+      "co2-rating": "Note CO\u2082",
+      "eco-friendly": "Écologique",
+      "description": "Description",
+      "add": "Comparer",
+      "bar-count": "{{ count }} produit(s) sélectionné(s)",
+      "compare-btn": "Comparer maintenant",
+      "specifications": "Spécifications",
+      "show-differences": "Afficher uniquement les différences",
+      "remove-product": "Retirer {{ name }} de la comparaison"
     },
     "my-account": {
       "overview": {

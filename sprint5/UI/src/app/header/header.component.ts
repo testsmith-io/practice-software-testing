@@ -55,6 +55,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
     this.items = this.getCartItems();
     this.role = this.auth.getRole();
     this.activeLanguage = this.translocoService.getActiveLang();
+    document.documentElement.setAttribute('lang', this.activeLanguage);
     this.getSignedInUser();
 
     // Check if Bug Hunting button should be shown (only on deployed version)
@@ -88,6 +89,8 @@ export class HeaderComponent implements OnDestroy, OnInit {
     this.translocoService.setActiveLang(language);
     localStorage.setItem('language', language);
     this.activeLanguage = language;
+    // Update <html lang> so screen readers announce content in the right language.
+    document.documentElement.setAttribute('lang', language);
   }
 
   private checkAndRestoreSplitScreen(): void {

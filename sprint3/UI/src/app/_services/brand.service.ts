@@ -6,7 +6,7 @@ import {environment} from "../../environments/environment";
 import {map, Observable, throwError} from "rxjs";
 import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
 import {Brand} from "../models/brand";
-import {catchError} from "rxjs/operators";
+import {catchError, shareReplay} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,8 @@ export class BrandService {
 
   private apiURL = environment.apiUrl;
 
+  private brands$: Observable<Brand[]> | null = null;
+
   searchBrands(query: string): Observable<any> {
     let params = new HttpParams()
       .set('q', query);
@@ -24,8 +26,15 @@ export class BrandService {
   }
 
   getBrands(): Observable<Brand[]> {
-    return this.httpClient.get<Brand[]>(this.apiURL + `/brands`)
-      .pipe(map(this.extractData));
+    if (!this.brands$) {
+      this.brands$ = this.httpClient.get<Brand[]>(this.apiURL + `/brands`)
+        .pipe(map(this.extractData), shareReplay(1));
+    }
+    return this.brands$;
+  }
+
+  invalidateBrandsCache(): void {
+    this.brands$ = null;
   }
 
   getById(id: string): Observable<Brand> {
@@ -33,6 +42,7 @@ export class BrandService {
   }
 
   create(brand: Brand): Observable<any> {
+    this.invalidateBrandsCache();
     return this.httpClient.post(this.apiURL + '/brands', JSON.stringify(brand), {responseType: 'json'})
       .pipe(
         catchError(this.errorHandler)
@@ -40,6 +50,7 @@ export class BrandService {
   }
 
   update(id: string, brand: Brand) {
+    this.invalidateBrandsCache();
     return this.httpClient.put(this.apiURL + `/brands/${id}`, JSON.stringify(brand), {responseType: 'json'})
       .pipe(
         catchError(this.errorHandler)
@@ -47,6 +58,7 @@ export class BrandService {
   }
 
   delete(id: number) {
+    this.invalidateBrandsCache();
     return this.httpClient.delete(this.apiURL + `/brands/${id}`, {responseType: 'json'})
       .pipe(
         catchError(this.errorHandler)

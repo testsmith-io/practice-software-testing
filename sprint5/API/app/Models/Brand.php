@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Mehradsadeghi\FilterQueryString\FilterQueryString;
 
 /** @OA\Schema(
@@ -38,4 +39,8 @@ class Brand extends BaseModel
     protected $fillable = ['name', 'slug'];
     protected $filters = ['sort'];
 
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
 }

@@ -16,6 +16,7 @@ import {FaIconComponent, FaIconLibrary, FontAwesomeModule} from "@fortawesome/an
 import {
   faArrowsLeftRight,
   faArrowsUpDown,
+  faBalanceScale,
   faFilter,
   faMinus,
   faPlus,
@@ -23,6 +24,7 @@ import {
   faShoppingCart,
   faStar
 } from "@fortawesome/free-solid-svg-icons";
+import {ComparisonComponent} from "./comparison/comparison.component";
 
 
 @NgModule({
@@ -40,10 +42,11 @@ import {
     CategoryComponent,
     OverviewComponent,
     ProductOverviewComponent,
+    ComparisonComponent,
   ]
 })
 export class ProductsModule {
   constructor(library: FaIconLibrary) {
-    library.addIcons(faFilter, faArrowsLeftRight, faArrowsUpDown, faSearch, faMinus, faPlus, faShoppingCart, faStar);
+    library.addIcons(faFilter, faArrowsLeftRight, faArrowsUpDown, faSearch, faMinus, faPlus, faShoppingCart, faStar, faBalanceScale);
   }
 }

@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Mehradsadeghi\FilterQueryString\FilterQueryString;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
@@ -78,15 +79,29 @@ class Product extends BaseModel
         return $this->belongsTo('App\Models\Brand');
     }
 
+    public function specs(): HasMany
+    {
+        return $this->hasMany(ProductSpec::class);
+    }
+
     public function getInStockAttribute()
     {
-        $user = auth('users')->user();
-        
+        // Resolve the user once per request and memoize on the request instance.
+        // The previous implementation called auth('users')->user() on every
+        // serialized product row, which on a paginated overview meant 9+
+        // calls to the auth resolver per response.
+        static $cachedUser = null;
+        static $resolved = false;
+        if (!$resolved) {
+            $cachedUser = auth('users')->user();
+            $resolved = true;
+        }
+
         // If user can view stock details (admin), return actual stock number
-        if ($user && $user->can('viewStock', $this)) {
+        if ($cachedUser && $cachedUser->can('viewStock', $this)) {
             return $this->stock;
         }
-        
+
         // For regular users and guests, return boolean stock status
         return $this->stock > 0;
     }
@@ -112,6 +127,20 @@ class Product extends BaseModel
             return $q;
         })->when($filters['q'] ?? null, function ($q, $search) {
             return $q->where('name', 'like', "%{$search}%");
+        })->when($filters['by_spec'] ?? null, function ($q, $specFilter) {
+            // Format: "spec_name:value1|value2,spec_name2:value3"
+            $specFilters = explode(',', $specFilter);
+            foreach ($specFilters as $filter) {
+                $parts = explode(':', $filter, 2);
+                if (count($parts) === 2) {
+                    $specName = trim($parts[0]);
+                    $specValues = array_map('trim', explode('|', $parts[1]));
+                    $q->whereHas('specs', function ($sq) use ($specName, $specValues) {
+                        $sq->where('spec_name', $specName)->whereIn('spec_value', $specValues);
+                    });
+                }
+            }
+            return $q;
         });
     }
 

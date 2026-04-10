@@ -1,0 +1,380 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+type Query {
+    # ── Products ──────────────────────────────────────────────
+    product(id: ID! @eq): Product @find
+    products(
+        name: String @where(operator: "like")
+        category_id: ID @eq
+        brand_id: ID @eq
+        is_rental: Boolean @eq
+    ): [Product!]! @paginate(defaultCount: 10)
+    productSearch(q: String! @where(key: "name", operator: "like")): [Product!]! @paginate(defaultCount: 10)
+
+    # ── Brands ────────────────────────────────────────────────
+    brand(id: ID! @eq): Brand @find
+    brands: [Brand!]! @paginate(defaultCount: 10)
+    brandSearch(name: String! @where(operator: "like")): [Brand!]! @paginate(defaultCount: 10)
+
+    # ── Categories ────────────────────────────────────────────
+    category(id: ID! @eq): Category @find
+    categories: [Category!]! @paginate(defaultCount: 10)
+
+    # ── Users ─────────────────────────────────────────────────
+    user(id: ID! @eq): User @find @guard(with: ["users"])
+    users: [User!]! @paginate(defaultCount: 10) @guard(with: ["users"])
+
+    # ── Invoices ──────────────────────────────────────────────
+    invoice(id: ID! @eq): Invoice @find @guard(with: ["users"])
+    invoices: [Invoice!]! @paginate(defaultCount: 10) @guard(with: ["users"])
+
+    # ── Favorites ─────────────────────────────────────────────
+    favorites: [Favorite!]! @paginate(defaultCount: 10) @guard(with: ["users"])
+
+    # ── Contact Messages ──────────────────────────────────────
+    contactRequests: [ContactRequest!]! @paginate(defaultCount: 10) @guard(with: ["users"])
+    contactRequest(id: ID! @eq): ContactRequest @find @guard(with: ["users"])
+
+    # ── Cart ──────────────────────────────────────────────────
+    cart(id: ID! @eq): Cart @find
+}
+
+type Mutation {
+    # ── Auth ──────────────────────────────────────────────────
+    login(input: LoginInput! @spread): AuthPayload! @field(resolver: "App\\GraphQL\\Mutations\\Login")
+    register(input: RegisterInput! @spread): User! @field(resolver: "App\\GraphQL\\Mutations\\Register")
+
+    # ── Brands ────────────────────────────────────────────────
+    createBrand(input: CreateBrandInput! @spread): Brand! @create @guard(with: ["users"])
+    updateBrand(id: ID!, input: UpdateBrandInput! @spread): Brand! @update @guard(with: ["users"])
+    deleteBrand(id: ID! @whereKey): Brand! @delete @guard(with: ["users"])
+
+    # ── Categories ────────────────────────────────────────────
+    createCategory(input: CreateCategoryInput! @spread): Category! @create @guard(with: ["users"])
+    updateCategory(id: ID!, input: UpdateCategoryInput! @spread): Category! @update @guard(with: ["users"])
+    deleteCategory(id: ID! @whereKey): Category! @delete @guard(with: ["users"])
+
+    # ── Products ──────────────────────────────────────────────
+    createProduct(input: CreateProductInput! @spread): Product! @create @guard(with: ["users"])
+    updateProduct(id: ID!, input: UpdateProductInput! @spread): Product! @update @guard(with: ["users"])
+    deleteProduct(id: ID! @whereKey): Product! @delete @guard(with: ["users"])
+
+    # ── Cart ──────────────────────────────────────────────────
+    createCart: Cart! @create
+    addCartItem(input: AddCartItemInput! @spread): CartItem! @field(resolver: "App\\GraphQL\\Mutations\\AddCartItem")
+    updateCartItemQuantity(input: UpdateCartItemQuantityInput! @spread): CartItem! @field(resolver: "App\\GraphQL\\Mutations\\UpdateCartItemQuantity")
+    removeCartItem(cart_id: ID!, product_id: ID!): CartItem @field(resolver: "App\\GraphQL\\Mutations\\RemoveCartItem")
+    deleteCart(id: ID! @whereKey): Cart! @delete
+
+    # ── Favorites ─────────────────────────────────────────────
+    addFavorite(input: AddFavoriteInput! @spread): Favorite! @create @guard(with: ["users"])
+    deleteFavorite(id: ID! @whereKey): Favorite! @delete @guard(with: ["users"])
+
+    # ── Contact ───────────────────────────────────────────────
+    sendContactMessage(input: SendContactMessageInput! @spread): ContactRequest! @create
+    replyToContactMessage(input: ReplyToContactMessageInput! @spread): ContactRequestReply! @create @guard(with: ["users"])
+    updateContactMessageStatus(id: ID!, status: String!): ContactRequest @guard(with: ["users"]) @field(resolver: "App\\GraphQL\\Mutations\\UpdateContactMessageStatus")
+
+    # ── Product Specs ─────────────────────────────────────────
+    createProductSpec(input: CreateProductSpecInput! @spread): ProductSpec! @create @guard(with: ["users"])
+    updateProductSpec(id: ID!, input: UpdateProductSpecInput! @spread): ProductSpec! @update @guard(with: ["users"])
+    deleteProductSpec(id: ID! @whereKey): ProductSpec! @delete @guard(with: ["users"])
+
+    # ── Invoices ──────────────────────────────────────────────
+    updateInvoiceStatus(id: ID!, status: InvoiceStatus!, status_message: String): Invoice @guard(with: ["users"]) @field(resolver: "App\\GraphQL\\Mutations\\UpdateInvoiceStatus")
+}
+
+# ── Types ─────────────────────────────────────────────────────
+
+type Product {
+    id: ID!
+    name: String!
+    description: String
+    price: Float!
+    is_location_offer: Boolean!
+    is_rental: Boolean!
+    in_stock: Boolean
+    stock: Int
+    co2_rating: String
+    is_eco_friendly: Boolean
+    category: Category @belongsTo
+    brand: Brand @belongsTo
+    product_image: ProductImage @belongsTo
+    specs: [ProductSpec!]! @hasMany
+    created_at: DateTime
+}
+
+type ProductSpec {
+    id: ID!
+    product_id: ID!
+    spec_name: String!
+    spec_value: String!
+    spec_unit: String
+    product: Product @belongsTo
+}
+
+type Brand {
+    id: ID!
+    name: String!
+    slug: String!
+    products: [Product!]! @hasMany
+}
+
+type Category {
+    id: ID!
+    name: String!
+    slug: String!
+    parent_id: ID
+    parent_category: Category @belongsTo(relation: "parent_category")
+    sub_categories: [Category!]! @hasMany(relation: "sub_categories")
+    products: [Product!]! @hasMany
+}
+
+type ProductImage {
+    id: ID!
+    by_name: String
+    by_url: String
+    source_name: String
+    source_url: String
+    file_name: String
+    title: String
+}
+
+type User {
+    id: ID!
+    first_name: String!
+    last_name: String!
+    email: String!
+    street: String
+    city: String
+    state: String
+    country: String
+    postal_code: String
+    phone: String
+    dob: String
+    role: String
+    enabled: Boolean
+    created_at: DateTime
+}
+
+type Invoice {
+    id: ID!
+    user_id: ID
+    invoice_date: DateTime
+    invoice_number: String
+    billing_street: String
+    billing_city: String
+    billing_state: String
+    billing_country: String
+    billing_postal_code: String
+    additional_discount_percentage: Float
+    additional_discount_amount: Float
+    eco_discount_percentage: Float
+    eco_discount_amount: Float
+    subtotal: Float
+    total: Float
+    status: InvoiceStatus
+    status_message: String
+    user: User @belongsTo
+    invoicelines: [Invoiceline!]! @hasMany
+    payment: Payment @hasOne
+    created_at: DateTime
+}
+
+type Invoiceline {
+    id: ID!
+    invoice_id: ID!
+    product_id: ID!
+    unit_price: Float!
+    quantity: Int!
+    discount_percentage: Float
+    discounted_price: Float
+    product: Product @belongsTo
+    invoice: Invoice @belongsTo
+}
+
+type Payment {
+    id: ID!
+    invoice_id: ID!
+    payment_method: String!
+    payment_details_id: ID
+    payment_details_type: String
+    invoice: Invoice @belongsTo
+}
+
+type Cart {
+    id: ID!
+    lat: Float
+    lng: Float
+    additional_discount_percentage: Float
+    cart_items: [CartItem!]! @hasMany(relation: "cartItems")
+    created_at: DateTime
+}
+
+type CartItem {
+    id: ID!
+    cart_id: ID!
+    product_id: ID!
+    quantity: Int!
+    discount_percentage: Float
+    product: Product @belongsTo
+    cart: Cart @belongsTo
+}
+
+type Favorite {
+    id: ID!
+    user_id: ID!
+    product_id: ID!
+    product: Product @belongsTo
+}
+
+type ContactRequest @model(class: "App\\Models\\ContactRequests") {
+    id: ID!
+    user_id: ID
+    name: String
+    email: String
+    subject: String!
+    message: String!
+    status: String
+    user: User @belongsTo
+    replies: [ContactRequestReply!]! @hasMany
+    created_at: DateTime
+}
+
+type ContactRequestReply {
+    id: ID!
+    user_id: ID
+    message_id: ID!
+    message: String!
+    user: User @belongsTo
+    created_at: DateTime
+}
+
+type AuthPayload {
+    access_token: String!
+    token_type: String!
+    expires_in: Int!
+}
+
+# ── Enums ─────────────────────────────────────────────────────
+
+enum InvoiceStatus {
+    AWAITING_FULFILLMENT
+    ON_HOLD
+    AWAITING_SHIPMENT
+    SHIPPED
+    COMPLETED
+}
+
+# ── Inputs ────────────────────────────────────────────────────
+
+input LoginInput {
+    email: String!
+    password: String!
+}
+
+input RegisterInput {
+    first_name: String!
+    last_name: String!
+    email: String!
+    password: String!
+    street: String
+    city: String
+    state: String
+    country: String
+    postal_code: String
+    phone: String
+    dob: String
+}
+
+input CreateBrandInput {
+    name: String!
+    slug: String!
+}
+
+input UpdateBrandInput {
+    name: String
+    slug: String
+}
+
+input CreateCategoryInput {
+    name: String!
+    slug: String!
+    parent_id: ID
+}
+
+input UpdateCategoryInput {
+    name: String
+    slug: String
+    parent_id: ID
+}
+
+input CreateProductInput {
+    name: String!
+    description: String
+    price: Float!
+    category_id: ID!
+    brand_id: ID!
+    product_image_id: ID
+    is_location_offer: Boolean
+    is_rental: Boolean
+    stock: Int
+    co2_rating: String
+}
+
+input UpdateProductInput {
+    name: String
+    description: String
+    price: Float
+    category_id: ID
+    brand_id: ID
+    product_image_id: ID
+    is_location_offer: Boolean
+    is_rental: Boolean
+    stock: Int
+    co2_rating: String
+}
+
+input AddCartItemInput {
+    cart_id: ID!
+    product_id: ID!
+    quantity: Int! = 1
+}
+
+input UpdateCartItemQuantityInput {
+    cart_id: ID!
+    product_id: ID!
+    quantity: Int!
+}
+
+input AddFavoriteInput {
+    user_id: ID!
+    product_id: ID!
+}
+
+input SendContactMessageInput {
+    name: String!
+    email: String!
+    subject: String!
+    message: String!
+}
+
+input ReplyToContactMessageInput {
+    user_id: ID!
+    message_id: ID!
+    message: String!
+}
+
+input CreateProductSpecInput {
+    product_id: ID!
+    spec_name: String!
+    spec_value: String!
+    spec_unit: String
+}
+
+input UpdateProductSpecInput {
+    spec_name: String
+    spec_value: String
+    spec_unit: String
+}

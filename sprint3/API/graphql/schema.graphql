@@ -1,0 +1,203 @@
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+type Product {
+    id: ID!
+    name: String!
+    description: String
+    price: Float
+    is_location_offer: Boolean
+    is_rental: Boolean
+    category: Category @belongsTo
+    brand: Brand @belongsTo
+    product_image: ProductImage @belongsTo
+}
+
+type Brand {
+    id: ID!
+    name: String!
+    slug: String!
+    products: [Product!]! @hasMany
+}
+
+type Category {
+    id: ID!
+    name: String!
+    slug: String!
+    parent_id: ID
+    parent_category: Category @belongsTo
+    sub_categories: [Category!]! @hasMany
+}
+
+type ProductImage {
+    id: ID!
+    by_name: String
+    by_url: String
+    source_name: String
+    source_url: String
+    file_name: String
+    title: String
+}
+
+type Invoice {
+    id: ID!
+    invoice_date: DateTime
+    invoice_number: String
+    first_name: String
+    last_name: String
+    billing_address: String
+    billing_city: String
+    billing_state: String
+    billing_country: String
+    billing_postcode: String
+    total: Float
+    payment_method: String
+    payment_account_name: String
+    payment_account_number: String
+    invoicelines: [Invoiceline!]! @hasMany
+}
+
+type Invoiceline {
+    id: ID!
+    invoice_id: ID!
+    product_id: ID!
+    unit_price: Float
+    quantity: Int
+    product: Product @belongsTo
+    invoice: Invoice @belongsTo
+}
+
+type Favorite {
+    id: ID!
+    user_id: ID
+    product_id: ID!
+    product: Product @belongsTo
+}
+
+type ContactRequest @model(class: "App\\Models\\ContactRequests") {
+    id: ID!
+    user_id: ID
+    name: String
+    email: String
+    subject: String
+    message: String
+    status: String
+    replies: [ContactRequestReply!]! @hasMany
+}
+
+type ContactRequestReply {
+    id: ID!
+    user_id: ID
+    message_id: ID!
+    message: String
+}
+
+type Query {
+    product(id: ID! @eq): Product @find
+    products(
+        name: String @where(operator: "like")
+        category_id: ID @eq
+        brand_id: ID @eq
+    ): [Product!]! @all
+
+    brands: [Brand!]! @all
+    brand(id: ID! @eq): Brand @find
+
+    categories: [Category!]! @all
+    category(id: ID! @eq): Category @find
+
+    invoice(id: ID! @eq): Invoice @find
+    invoices: [Invoice!]! @all
+
+    favorites: [Favorite!]! @all
+
+    contactRequests: [ContactRequest!]! @all
+    contactRequest(id: ID! @eq): ContactRequest @find
+}
+
+input CreateBrandInput {
+    name: String!
+    slug: String!
+}
+
+input UpdateBrandInput {
+    id: ID!
+    name: String
+    slug: String
+}
+
+input CreateCategoryInput {
+    name: String!
+    slug: String!
+    parent_id: ID
+}
+
+input UpdateCategoryInput {
+    id: ID!
+    name: String
+    slug: String
+    parent_id: ID
+}
+
+input CreateProductInput {
+    name: String!
+    description: String
+    price: Float!
+    category_id: ID!
+    brand_id: ID!
+    product_image_id: ID
+    is_location_offer: Boolean
+    is_rental: Boolean
+}
+
+input UpdateProductInput {
+    id: ID!
+    name: String
+    description: String
+    price: Float
+    category_id: ID
+    brand_id: ID
+    product_image_id: ID
+    is_location_offer: Boolean
+    is_rental: Boolean
+}
+
+input AddFavoriteInput {
+    user_id: ID
+    product_id: ID!
+}
+
+input SendContactMessageInput {
+    user_id: ID
+    name: String!
+    email: String!
+    subject: String!
+    message: String!
+    status: String
+}
+
+input ReplyToContactMessageInput {
+    user_id: ID
+    message_id: ID!
+    message: String!
+}
+
+type Mutation {
+    createBrand(input: CreateBrandInput! @spread): Brand! @create
+    updateBrand(input: UpdateBrandInput! @spread): Brand! @update
+    deleteBrand(id: ID! @whereKey): Brand! @delete
+
+    createCategory(input: CreateCategoryInput! @spread): Category! @create
+    updateCategory(input: UpdateCategoryInput! @spread): Category! @update
+    deleteCategory(id: ID! @whereKey): Category! @delete
+
+    createProduct(input: CreateProductInput! @spread): Product! @create
+    updateProduct(input: UpdateProductInput! @spread): Product! @update
+    deleteProduct(id: ID! @whereKey): Product! @delete
+
+    addFavorite(input: AddFavoriteInput! @spread): Favorite! @create
+    deleteFavorite(id: ID! @whereKey): Favorite! @delete
+
+    sendContactMessage(input: SendContactMessageInput! @spread): ContactRequest! @create
+    replyToContactMessage(input: ReplyToContactMessageInput! @spread): ContactRequestReply! @create
+}

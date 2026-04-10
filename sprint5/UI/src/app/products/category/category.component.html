@@ -91,14 +91,23 @@
           <a attr.data-test="product-{{item.id}}" routerLink="/product/{{item.id}}"
 
              class="card" style="text-decoration: none; color: black;">
-            <div class="card-img-wrapper">
-              <img class="card-img-top"
+            <div class="card-img-wrapper position-relative">
+              <img class="card-img-top" loading="lazy" alt="{{item.name}}"
                    src="assets/img/products/{{item.product_image.file_name}}">
               @if (item.is_eco_friendly && isEcoBadgeEnabled()) {
                 <span class="eco-badge position-absolute top-0 end-0 m-2" data-test="eco-badge">
                   <fa-icon [icon]="['fas', 'leaf']"></fa-icon> ECO
                 </span>
               }
+              <button class="btn compare-btn position-absolute top-0 start-0 m-2"
+                      [ngClass]="{'compare-btn-active': comparisonService.isSelected(item.id)}"
+                      data-test="compare-btn"
+                      (click)="$event.preventDefault(); $event.stopPropagation(); comparisonService.toggle(item.id)"
+                      [attr.aria-label]="t('pages.comparison.add')"
+                      [attr.aria-pressed]="comparisonService.isSelected(item.id)"
+                      title="{{ t('pages.comparison.add') }}">
+                <fa-icon [icon]="['fas', 'balance-scale']"></fa-icon>
+              </button>
             </div>
             <div class="card-body">
               <h5 data-test="product-name" class="card-title">
@@ -139,3 +148,23 @@
     </div>
   </div>
 </div>
+
+@if ((comparisonService.count$ | async) > 0) {
+  <div class="comparison-bar" *transloco="let t" data-test="comparison-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <span>
+        <fa-icon [icon]="['fas', 'balance-scale']" size="sm"></fa-icon>
+        {{ t('pages.comparison.bar-count', {count: (comparisonService.count$ | async)}) }}
+      </span>
+      <span>
+        <button class="btn btn-outline-light btn-sm me-2" data-test="clear-comparison"
+                (click)="comparisonService.clear()">
+          {{ t('pages.comparison.clear-all') }}
+        </button>
+        <a routerLink="/comparison" class="btn btn-light btn-sm" data-test="compare-link">
+          {{ t('pages.comparison.compare-btn') }}
+        </a>
+      </span>
+    </div>
+  </div>
+}

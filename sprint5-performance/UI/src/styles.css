@@ -106,3 +106,7 @@ textarea:focus {
   outline: 2px solid #1E6098;
   outline-offset: 2px;
 }
+
+.text-muted {
+  color: #555f6a !important;
+}

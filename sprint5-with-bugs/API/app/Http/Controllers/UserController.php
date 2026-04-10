@@ -112,7 +112,7 @@ class UserController extends Controller
 
         if (App::environment('local')) {
             Log::debug('Running in local environment. Sending registration email.');
-            Mail::to([$input['email']])->send(new Register($input['first_name'] . ' ' . $input['last_name'], $input['email'], $input['password']));
+            Mail::to([$input['email']])->queue(new Register($input['first_name'] . ' ' . $input['last_name'], $input['email'], $input['password']));
         }
         // Hash the password
         $input['password'] = hash('sha256', $input['password']);
@@ -316,7 +316,7 @@ class UserController extends Controller
         if (App::environment('local')) {
             $user = User::where('email', $request['email'])->first();
             Log::debug('Sending forget password email', ['user_id' => $user->id]);
-            Mail::to([$request['email']])->send(new ForgetPassword($user->first_name . ' ' . $user->last_name, "welcome02"));
+            Mail::to([$request['email']])->queue(new ForgetPassword($user->first_name . ' ' . $user->last_name, "welcome02"));
         }
         $updated = (bool)User::where('email', $request['email'])->update(['password' => $request['password']]);
         Log::debug('Forgot password update', ['email' => $request->get('email'), 'updated' => $updated]);
@@ -567,12 +567,23 @@ class UserController extends Controller
     {
         $q = $request->get('q');
         Log::info('Search method called', ['query' => $q]);
-        $results = User::where('role', '=', 'user')->where(function ($query) use ($q) {
-            $query->where('first_name', 'like', "%$q%")
-                ->orWhere('last_name', 'like', "%$q%")
-                ->orWhere('email', 'like', "%$q%")
-                ->orWhere('city', 'like', "%$q%");
-        })->paginate();
+        // FULLTEXT requires terms of at least ft_min_word_len (default 4).
+        // Use it for longer queries; fall back to LIKE for short ones.
+        if (strlen($q) >= 4 && in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+            $results = User::where('role', '=', 'user')
+                ->whereRaw(
+                    'MATCH(first_name, last_name, email, city) AGAINST(? IN BOOLEAN MODE)',
+                    [$q . '*']
+                )
+                ->paginate();
+        } else {
+            $results = User::where('role', '=', 'user')->where(function ($query) use ($q) {
+                $query->where('first_name', 'like', "%$q%")
+                    ->orWhere('last_name', 'like', "%$q%")
+                    ->orWhere('email', 'like', "%$q%")
+                    ->orWhere('city', 'like', "%$q%");
+            })->paginate();
+        }
         Log::debug('Search results retrieved', ['count' => count($results->items())]);
         return $this->preferredFormat($results);
     }

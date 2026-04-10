@@ -293,7 +293,7 @@ class ContactTest extends TestCase {
 
         $response = $this->postJson('/messages', $data, $this->headers($user));
 
-        Mail::assertSent(Contact::class);
+        Mail::assertQueued(Contact::class);
         $this->assertDatabaseHas('contact_requests', ['user_id' => $user->id]);
         $response->assertStatus(200);
 

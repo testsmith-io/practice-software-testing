@@ -107,7 +107,7 @@ class UserController extends Controller
         $input['role'] = 'user';
 
         if (App::environment('local')) {
-            Mail::to([$input['email']])->send(new Register($input['first_name'] . ' ' . $input['last_name'], $input['email'], $input['password']));
+            Mail::to([$input['email']])->queue(new Register($input['first_name'] . ' ' . $input['last_name'], $input['email'], $input['password']));
         }
         // Hash the password
         $input['password'] = app('hash')->make($input['password']);
@@ -214,7 +214,7 @@ class UserController extends Controller
 
         if (App::environment('local')) {
             $user = User::where('email', $request['email'])->first();
-            Mail::to([$request['email']])->send(new ForgetPassword($user->first_name . ' ' . $user->last_name, "welcome02"));
+            Mail::to([$request['email']])->queue(new ForgetPassword($user->first_name . ' ' . $user->last_name, "welcome02"));
         }
         return $this->preferredFormat(['success' => (bool)User::where('email', $request['email'])->update(['password' => $request['password']])], ResponseAlias::HTTP_OK);
     }
@@ -466,12 +466,23 @@ class UserController extends Controller
     {
         $q = $request->get('q');
 
-        return $this->preferredFormat(User::where('role', '=', 'user')->where(function ($query) use ($q) {
-            $query->where('first_name', 'like', "%$q%")
-                ->orWhere('last_name', 'like', "%$q%")
-                ->orWhere('email', 'like', "%$q%")
-                ->orWhere('city', 'like', "%$q%");
-        })->paginate());
+        $builder = User::where('role', '=', 'user');
+        // FULLTEXT requires terms of at least ft_min_word_len (default 4).
+        if (strlen($q) >= 4 && in_array(\DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+            $builder->whereRaw(
+                'MATCH(first_name, last_name, email, city) AGAINST(? IN BOOLEAN MODE)',
+                [$q . '*']
+            );
+        } else {
+            $builder->where(function ($query) use ($q) {
+                $query->where('first_name', 'like', "%$q%")
+                    ->orWhere('last_name', 'like', "%$q%")
+                    ->orWhere('email', 'like', "%$q%")
+                    ->orWhere('city', 'like', "%$q%");
+            });
+        }
+
+        return $this->preferredFormat($builder->paginate());
     }
 
     /**

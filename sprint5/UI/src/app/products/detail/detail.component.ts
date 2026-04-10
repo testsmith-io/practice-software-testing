@@ -1,7 +1,8 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Subject, takeUntil} from "rxjs";
 import {CartService} from "../../_services/cart.service";
 import {FavoriteService} from "../../_services/favorite.service";
 import {ActivatedRoute, RouterLink} from "@angular/router";
@@ -12,11 +13,12 @@ import {BrowserDetectorService} from "../../_services/browser-detector.service";
 import {Title} from "@angular/platform-browser";
 import {NgxSliderModule, Options} from "@angular-slider/ngx-slider";
 import {ToastrService} from "ngx-toastr";
-import {NgClass} from "@angular/common";
+import {AsyncPipe, NgClass} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {TranslocoDirective} from "@jsverse/transloco";
 import {GaService} from "../../_services/ga.service";
+import {ComparisonService} from "../../_services/comparison.service";
 
 @Component({
   selector: 'app-detail',
@@ -27,11 +29,13 @@ import {GaService} from "../../_services/ga.service";
     NgxSliderModule,
     FaIconComponent,
     RouterLink,
-    TranslocoDirective
+    TranslocoDirective,
+    AsyncPipe
   ],
   styleUrls: ['./detail.component.css']
 })
-export class DetailComponent implements OnInit {
+export class DetailComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   private cartService = inject(CartService);
   private favoriteService = inject(FavoriteService);
   private route = inject(ActivatedRoute);
@@ -40,6 +44,7 @@ export class DetailComponent implements OnInit {
   public browserDetect = inject(BrowserDetectorService);
   private titleService = inject(Title);
   private gaService = inject(GaService);
+  public comparisonService = inject(ComparisonService);
   product: Product;
   discount_percentage: any;
   quantity: number = 1;
@@ -52,11 +57,18 @@ export class DetailComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.sub = this.route.params.subscribe(params => {
-      this.id = params['id'];
-      this.getProduct(this.id);
-      this.getRelatedProducts(this.id);
-    });
+    this.route.params
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        this.id = params['id'];
+        this.getProduct(this.id);
+        this.getRelatedProducts(this.id);
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 

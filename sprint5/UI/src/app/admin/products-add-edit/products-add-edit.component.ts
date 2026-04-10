@@ -13,7 +13,9 @@ import {BrandService} from "../../_services/brand.service";
 import {CategoryService} from "../../_services/category.service";
 import {Image} from "../../models/image";
 import {ImageService} from "../../_services/image.service";
+import {ProductSpec, ProductSpecService} from "../../_services/product-spec.service";
 import {NgClass} from "@angular/common";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-products-add-edit',
@@ -21,7 +23,8 @@ import {NgClass} from "@angular/common";
   imports: [
     ReactiveFormsModule,
     NgClass,
-    RouterLink
+    RouterLink,
+    FormsModule
   ],
   styleUrls: ['./products-add-edit.component.css']
 })
@@ -32,6 +35,7 @@ export class ProductsAddEditComponent implements OnInit {
   private readonly brandService = inject(BrandService);
   private readonly categoryService = inject(CategoryService);
   private readonly imageService = inject(ImageService);
+  private readonly specService = inject(ProductSpecService);
 
   form: FormGroup;
   products!: Product[];
@@ -46,6 +50,8 @@ export class ProductsAddEditComponent implements OnInit {
   isUpdated: boolean = false;
   hideAlert: boolean = false;
   error: string;
+  specs: ProductSpec[] = [];
+  newSpec: Partial<ProductSpec> = { spec_name: '', spec_value: '', spec_unit: '' };
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
@@ -108,6 +114,9 @@ export class ProductsAddEditComponent implements OnInit {
                 stockControl?.setValidators([Validators.required]);
               }
               stockControl?.updateValueAndValidity();
+
+              // Load specs for this product
+              this.loadSpecs(this.id);
             });
         }
       });
@@ -185,5 +194,35 @@ export class ProductsAddEditComponent implements OnInit {
       this.form.controls[name].setValue('');
       this.form.controls[name].setErrors(null);
     }
+    this.specs = [];
+  }
+
+  loadSpecs(productId: string) {
+    this.specService.getSpecs(productId).subscribe(specs => {
+      this.specs = specs;
+    });
+  }
+
+  addSpec() {
+    if (!this.newSpec.spec_name || !this.newSpec.spec_value) return;
+
+    this.specService.createSpec(this.id, this.newSpec).subscribe({
+      next: (spec) => {
+        this.specs.push(spec);
+        this.newSpec = { spec_name: '', spec_value: '', spec_unit: '' };
+      },
+      error: (err) => {
+        this.error = 'Failed to add spec';
+        this.hideAlert = false;
+      }
+    });
+  }
+
+  deleteSpec(specId: string) {
+    this.specService.deleteSpec(this.id, specId).subscribe({
+      next: () => {
+        this.specs = this.specs.filter(s => s.id !== specId);
+      }
+    });
   }
 }

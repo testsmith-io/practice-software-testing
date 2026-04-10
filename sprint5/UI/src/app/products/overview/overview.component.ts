@@ -1,7 +1,8 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-import {Component, ElementRef, inject, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {Component, ElementRef, inject, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {Subject, takeUntil} from "rxjs";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Brand} from "../../models/brand";
 import {BrandService} from "../../_services/brand.service";
@@ -13,11 +14,13 @@ import {ProductService} from "../../_services/product.service";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
 import {Category} from "../../models/category";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {NgClass, NgTemplateOutlet} from "@angular/common";
+import {AsyncPipe, NgClass, NgTemplateOutlet} from "@angular/common";
 import {PaginationComponent} from "../../pagination/pagination.component";
 import {RouterLink} from "@angular/router";
 import {NgxSliderModule} from "@angular-slider/ngx-slider";
 import {TranslocoDirective} from "@jsverse/transloco";
+import {ComparisonService} from "../../_services/comparison.service";
+import {ProductSpecService, SpecNameGroup} from "../../_services/product-spec.service";
 
 @Component({
   selector: 'app-overview',
@@ -30,16 +33,20 @@ import {TranslocoDirective} from "@jsverse/transloco";
     ReactiveFormsModule,
     NgxSliderModule,
     NgTemplateOutlet,
-    TranslocoDirective
+    TranslocoDirective,
+    AsyncPipe
   ],
   styleUrls: ['./overview.component.css']
 })
-export class OverviewComponent implements OnInit {
+export class OverviewComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   private productService = inject(ProductService);
   private formBuilder = inject(FormBuilder);
   private brandService = inject(BrandService);
   private categoryService = inject(CategoryService);
   public browserDetect = inject(BrowserDetectorService);
+  public comparisonService = inject(ComparisonService);
+  private specService = inject(ProductSpecService);
 
   @ViewChildren("checkboxes") checkboxes: QueryList<ElementRef>;
 
@@ -56,6 +63,8 @@ export class OverviewComponent implements OnInit {
   private ecoFriendlyFilter: boolean = false;
   categoryCheckboxState: Map<number, boolean> = new Map();
   searchQuery: string;
+  specGroups: SpecNameGroup[] = [];
+  specFilters: Map<string, Set<string>> = new Map();
   minPrice: number = 1;
   maxPrice: number = 100;
   sliderOptions: any = {
@@ -66,13 +75,23 @@ export class OverviewComponent implements OnInit {
   ngOnInit(): void {
     this.getProducts();
 
-    this.brandService.getBrands().subscribe(response => {
-      this.brands = response;
-    });
+    this.brandService.getBrands()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(response => {
+        this.brands = response;
+        });
 
-    this.categoryService.getCategoriesTree().subscribe(response => {
-      this.categories = response;
-    });
+    this.categoryService.getCategoriesTree()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(response => {
+        this.categories = response;
+        });
+
+    this.specService.getSpecNames()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(response => {
+        this.specGroups = response;
+        });
 
     this.search = this.formBuilder.group(
       {
@@ -80,6 +99,11 @@ export class OverviewComponent implements OnInit {
           Validators.minLength(3),
           Validators.maxLength(40)]],
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onPageChange(page: number) {
@@ -106,8 +130,33 @@ export class OverviewComponent implements OnInit {
     this.getProducts();
   }
 
+  filterBySpec(event: any, specName: string, specValue: string) {
+    if (!this.specFilters.has(specName)) {
+      this.specFilters.set(specName, new Set());
+    }
+    const values = this.specFilters.get(specName)!;
+    if (event.target.checked) {
+      values.add(specValue);
+    } else {
+      values.delete(specValue);
+      if (values.size === 0) this.specFilters.delete(specName);
+    }
+    this.currentPage = 0;
+    this.getProducts();
+  }
+
+  buildSpecFilterString(): string {
+    const parts: string[] = [];
+    this.specFilters.forEach((values, name) => {
+      if (values.size > 0) {
+        parts.push(`${name}:${Array.from(values).join('|')}`);
+      }
+    });
+    return parts.join(',');
+  }
+
   getProducts() {
-    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), this.currentPage, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), this.currentPage, this.ecoFriendlyFilter, false, this.buildSpecFilterString()).subscribe(res => {
       this.results = res;
       this.results.data.forEach((item: Product) => {
         if (item.is_location_offer) {
@@ -132,7 +181,7 @@ export class OverviewComponent implements OnInit {
         if (item.is_location_offer) {
           item.discount_price = DiscountUtil.calculateDiscount(item.price);
         }
-      })
+      });
     });
   }
 
