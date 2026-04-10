@@ -90,7 +90,7 @@ class CategoryService
             Log::debug("Cache miss: searching categories in DB", ['query' => $query]);
 
             $builder = Category::with('sub_categories');
-            if (strlen($query) >= 4) {
+            if (strlen($query) >= 4 && in_array(\DB::getDriverName(), ['mysql', 'mariadb'], true)) {
                 $builder->whereRaw('MATCH(name) AGAINST(? IN BOOLEAN MODE)', [$query . '*']);
             } else {
                 $builder->where('name', 'like', "%$query%");

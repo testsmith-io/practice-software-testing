@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
+        if (! in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+            return;
+        }
         if (Schema::hasTable('products')) {
             DB::statement('ALTER TABLE products ADD FULLTEXT idx_products_ft_name (name)');
             DB::statement('ALTER TABLE products ADD FULLTEXT idx_products_ft_name_desc (name, description)');
@@ -26,6 +29,9 @@ return new class extends Migration {
 
     public function down()
     {
+        if (! in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+            return;
+        }
         if (Schema::hasTable('products')) {
             DB::statement('ALTER TABLE products DROP INDEX idx_products_ft_name');
             DB::statement('ALTER TABLE products DROP INDEX idx_products_ft_name_desc');

@@ -157,7 +157,7 @@ class ProductService
             ])
             ->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id', 'is_location_offer', 'is_rental', 'stock', 'co2_rating');
 
-            if (strlen($query) >= 4) {
+            if (strlen($query) >= 4 && in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
                 $builder->whereRaw('MATCH(name, description) AGAINST(? IN BOOLEAN MODE)', [$query . '*']);
             } else {
                 $builder->where('name', 'like', "%{$query}%");

@@ -80,7 +80,7 @@ class Authenticate
             $this->auth->guard($guard)->setUser($user);
         } catch (JWTException $e) {
             return response()->json([
-                'message' => 'Token error: ' . $e->getMessage()
+                'message' => 'Unauthorized'
             ], ResponseAlias::HTTP_UNAUTHORIZED);
         }
 

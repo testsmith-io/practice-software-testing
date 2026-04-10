@@ -185,7 +185,7 @@ class CategoryController extends Controller
 
         // FULLTEXT requires terms of at least ft_min_word_len (default 4).
         // Use it for longer queries; fall back to LIKE for short ones.
-        if (strlen($q) >= 4) {
+        if (strlen($q) >= 4 && in_array(\DB::getDriverName(), ['mysql', 'mariadb'], true)) {
             $builder = Category::with('sub_categories')
                 ->whereRaw('MATCH(name) AGAINST(? IN BOOLEAN MODE)', [$q . '*']);
         } else {
