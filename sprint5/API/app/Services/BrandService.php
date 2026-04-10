@@ -53,7 +53,7 @@ class BrandService
             Log::info("Cache miss for brand search: '{$query}'. Querying DB.");
             // FULLTEXT requires terms of at least ft_min_word_len (default 4).
             // Use it for longer queries; fall back to LIKE for short ones.
-            if (strlen($query) >= 4) {
+            if (strlen($query) >= 4 && in_array(\DB::getDriverName(), ['mysql', 'mariadb'], true)) {
                 return Brand::whereRaw('MATCH(name) AGAINST(? IN BOOLEAN MODE)', [$query . '*'])->get();
             }
             return Brand::where('name', 'like', "%$query%")->get();

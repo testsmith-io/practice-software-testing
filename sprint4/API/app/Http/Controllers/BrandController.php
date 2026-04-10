@@ -127,7 +127,7 @@ class BrandController extends Controller
 
         // FULLTEXT requires terms of at least ft_min_word_len (default 4).
         // Use it for longer queries; fall back to LIKE for short ones.
-        if (strlen($q) >= 4) {
+        if (strlen($q) >= 4 && in_array(\DB::getDriverName(), ['mysql', 'mariadb'], true)) {
             return $this->preferredFormat(
                 Brand::whereRaw('MATCH(name) AGAINST(? IN BOOLEAN MODE)', [$q . '*'])->get()
             );

@@ -569,7 +569,7 @@ class UserController extends Controller
         Log::info('Search method called', ['query' => $q]);
         // FULLTEXT requires terms of at least ft_min_word_len (default 4).
         // Use it for longer queries; fall back to LIKE for short ones.
-        if (strlen($q) >= 4) {
+        if (strlen($q) >= 4 && in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
             $results = User::where('role', '=', 'user')
                 ->whereRaw(
                     'MATCH(first_name, last_name, email, city) AGAINST(? IN BOOLEAN MODE)',

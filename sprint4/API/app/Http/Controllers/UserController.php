@@ -468,7 +468,7 @@ class UserController extends Controller
 
         $builder = User::where('role', '=', 'user');
         // FULLTEXT requires terms of at least ft_min_word_len (default 4).
-        if (strlen($q) >= 4) {
+        if (strlen($q) >= 4 && in_array(\DB::getDriverName(), ['mysql', 'mariadb'], true)) {
             $builder->whereRaw(
                 'MATCH(first_name, last_name, email, city) AGAINST(? IN BOOLEAN MODE)',
                 [$q . '*']

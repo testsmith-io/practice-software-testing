@@ -78,7 +78,7 @@ class UserTest extends TestCase
 
         $this->postJson('/users/register', $userData);
 
-        Mail::assertSent(Register::class, function ($mail) use ($userData) {
+        Mail::assertQueued(Register::class, function ($mail) use ($userData) {
             return $mail->hasTo($userData['email']);
         });
     }
@@ -432,7 +432,7 @@ class UserTest extends TestCase
         $response->assertOk()
             ->assertJson(['success' => true]);
 
-        Mail::assertSent(ForgetPassword::class, function ($mail) {
+        Mail::assertQueued(ForgetPassword::class, function ($mail) {
             return $mail->hasTo($this->user->email);
         });
     }

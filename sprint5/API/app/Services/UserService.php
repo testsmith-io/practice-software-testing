@@ -239,7 +239,7 @@ class UserService
         Log::debug("Searching users with query: {$query}");
 
         $builder = User::where('role', '=', 'user');
-        if (strlen($query) >= 4) {
+        if (strlen($query) >= 4 && in_array(\DB::getDriverName(), ['mysql', 'mariadb'], true)) {
             $builder->whereRaw(
                 'MATCH(first_name, last_name, email, city) AGAINST(? IN BOOLEAN MODE)',
                 [$query . '*']

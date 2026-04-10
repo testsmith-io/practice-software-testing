@@ -12,6 +12,9 @@ return new class extends Migration
     {
         // FULLTEXT indexes for fast LIKE-style searches.
         // These work on InnoDB in MySQL 5.6+ and MariaDB 10.0+.
+        if (! in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+            return;
+        }
         DB::statement('ALTER TABLE products ADD FULLTEXT idx_products_ft_name (name)');
         DB::statement('ALTER TABLE products ADD FULLTEXT idx_products_ft_name_desc (name, description)');
         DB::statement('ALTER TABLE brands ADD FULLTEXT idx_brands_ft_name (name)');
@@ -21,6 +24,9 @@ return new class extends Migration
 
     public function down()
     {
+        if (! in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+            return;
+        }
         DB::statement('ALTER TABLE products DROP INDEX idx_products_ft_name');
         DB::statement('ALTER TABLE products DROP INDEX idx_products_ft_name_desc');
         DB::statement('ALTER TABLE brands DROP INDEX idx_brands_ft_name');
