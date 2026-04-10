@@ -183,9 +183,16 @@ class CategoryController extends Controller
         $q = $request->get('q');
         Log::debug('Searching categories', ['query' => $q]);
 
-        return $this->preferredFormat(
-            Category::with('sub_categories')->where('name', 'like', "%$q%")->get()
-        );
+        // FULLTEXT requires terms of at least ft_min_word_len (default 4).
+        // Use it for longer queries; fall back to LIKE for short ones.
+        if (strlen($q) >= 4) {
+            $builder = Category::with('sub_categories')
+                ->whereRaw('MATCH(name) AGAINST(? IN BOOLEAN MODE)', [$q . '*']);
+        } else {
+            $builder = Category::with('sub_categories')->where('name', 'like', "%$q%");
+        }
+
+        return $this->preferredFormat($builder->get());
     }
 
     /**

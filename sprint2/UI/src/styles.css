@@ -68,3 +68,7 @@ input[type=number] {
 a {
   color: #0000cc;
 }
+
+.text-muted {
+  color: #555f6a !important;
+}

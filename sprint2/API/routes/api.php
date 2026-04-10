@@ -32,19 +32,23 @@ Route::get('/status', function () {
 });
 
 Route::controller(BrandController::class)->prefix('brands')->group(function () {
-    Route::get('', 'index');
-    Route::get('/search', 'search');
-    Route::get('/{id}', 'show');
+    Route::middleware('cache.headers:public;max_age=120;etag')->group(function () {
+        Route::get('', 'index');
+        Route::get('/search', 'search');
+        Route::get('/{id}', 'show');
+    });
     Route::post('', 'store');
     Route::put('/{id}', 'update');
     Route::delete('/{id}', 'destroy');
 });
 
 Route::controller(CategoryController::class)->prefix('categories')->group(function () {
-    Route::get('/tree', 'indexTree');
-    Route::get('', 'index');
-    Route::get('/search', 'search');
-    Route::get('/tree/{id}', 'show');
+    Route::middleware('cache.headers:public;max_age=120;etag')->group(function () {
+        Route::get('/tree', 'indexTree');
+        Route::get('', 'index');
+        Route::get('/search', 'search');
+        Route::get('/tree/{id}', 'show');
+    });
     Route::post('', 'store');
     Route::put('/{id}', 'update');
     Route::delete('/{id}', 'destroy');
@@ -68,7 +72,9 @@ Route::controller(FavoriteController::class)->prefix('favorites')->group(functio
 });
 
 Route::controller(ImageController::class)->prefix('images')->group(function () {
-    Route::get('', 'index');
+    Route::middleware('cache.headers:public;max_age=120;etag')->group(function () {
+        Route::get('', 'index');
+    });
 });
 
 Route::controller(InvoiceController::class)->prefix('invoices')->group(function () {
@@ -86,10 +92,12 @@ Route::controller(PaymentController::class)->prefix('payment')->group(function (
 });
 
 Route::controller(ProductController::class)->prefix('products')->group(function () {
-    Route::get('', 'index');
-    Route::get('/search', 'search');
-    Route::get('/{id}', 'show');
-    Route::get('/{id}/related', 'showRelated');
+    Route::middleware('cache.headers:public;max_age=120;etag')->group(function () {
+        Route::get('', 'index');
+        Route::get('/search', 'search');
+        Route::get('/{id}', 'show');
+        Route::get('/{id}/related', 'showRelated');
+    });
     Route::post('', 'store');
     Route::put('/{id}', 'update');
     Route::delete('/{id}', 'destroy');

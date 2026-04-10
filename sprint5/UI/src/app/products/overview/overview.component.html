@@ -151,7 +151,7 @@
         @for (item of results.data; track item.id) {
           <a attr.data-test="product-{{item.id}}" routerLink="/product/{{item.id}}"
              class="card" style="text-decoration: none; color: black;">
-            <div class="card-img-wrapper">
+            <div class="card-img-wrapper position-relative">
               <img class="card-img-top" alt="{{ item.name }}"
                    loading="lazy"
                    src="assets/img/products/{{item.product_image.file_name}}">
@@ -160,6 +160,15 @@
                   <fa-icon [icon]="['fas', 'leaf']"></fa-icon> ECO
                 </span>
               }
+              <button class="btn compare-btn position-absolute top-0 start-0 m-2"
+                      [ngClass]="{'compare-btn-active': comparisonService.isSelected(item.id)}"
+                      data-test="compare-btn"
+                      (click)="$event.preventDefault(); $event.stopPropagation(); comparisonService.toggle(item.id)"
+                      [attr.aria-label]="t('pages.comparison.add')"
+                      [attr.aria-pressed]="comparisonService.isSelected(item.id)"
+                      title="{{ t('pages.comparison.add') }}">
+                <fa-icon [icon]="['fas', 'balance-scale']"></fa-icon>
+              </button>
             </div>
             <div class="card-body">
               <h5 data-test="product-name" class="card-title">
@@ -188,13 +197,6 @@
                   data-test="product-discount-price"> ${{ item.discount_price.toFixed(2) }}</span>
               }
         </span>
-              <button class="btn btn-sm compare-btn float-start"
-                      [ngClass]="{'btn-primary': comparisonService.isSelected(item.id), 'btn-outline-primary': !comparisonService.isSelected(item.id)}"
-                      data-test="compare-btn"
-                      (click)="$event.preventDefault(); $event.stopPropagation(); comparisonService.toggle(item.id)"
-                      title="{{ t('pages.comparison.add') }}">
-                <fa-icon [icon]="['fas', 'balance-scale']" size="sm"></fa-icon>
-              </button>
             </div>
 
           </a>

@@ -33,7 +33,7 @@ class ContactService
 
             Log::debug('Sending email to user', ['email' => $email, 'name' => $name]);
 
-            Mail::to([$email])->send(new Contact($name, $input['subject'], $input['message']));
+            Mail::to([$email])->queue(new Contact($name, $input['subject'], $input['message']));
 
             Log::info('Contact email sent');
         }

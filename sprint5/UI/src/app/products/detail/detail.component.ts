@@ -1,7 +1,8 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Subject, takeUntil} from "rxjs";
 import {CartService} from "../../_services/cart.service";
 import {FavoriteService} from "../../_services/favorite.service";
 import {ActivatedRoute, RouterLink} from "@angular/router";
@@ -33,7 +34,8 @@ import {ComparisonService} from "../../_services/comparison.service";
   ],
   styleUrls: ['./detail.component.css']
 })
-export class DetailComponent implements OnInit {
+export class DetailComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   private cartService = inject(CartService);
   private favoriteService = inject(FavoriteService);
   private route = inject(ActivatedRoute);
@@ -55,11 +57,18 @@ export class DetailComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.sub = this.route.params.subscribe(params => {
-      this.id = params['id'];
-      this.getProduct(this.id);
-      this.getRelatedProducts(this.id);
-    });
+    this.route.params
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        this.id = params['id'];
+        this.getProduct(this.id);
+        this.getRelatedProducts(this.id);
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 

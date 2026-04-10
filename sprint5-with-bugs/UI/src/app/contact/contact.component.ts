@@ -42,7 +42,8 @@ export class ContactComponent implements OnInit {
         attachment: ['', []],
         subject: ['', [Validators.required]],
         message: ['', [Validators.required, Validators.minLength(50)]]
-      }
+      },
+      { updateOn: 'blur' }
     );
     this.getSignedInUser();
   }

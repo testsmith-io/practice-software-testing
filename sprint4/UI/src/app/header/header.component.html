@@ -63,10 +63,10 @@
           <a class="nav-link active" data-test="nav-home" aria-current="page" href="#">Home</a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" data-test="nav-categories" role="button" data-bs-toggle="dropdown"
+          <button type="button" class="nav-link dropdown-toggle btn-link-style" data-test="nav-categories" id="nav-categories" data-bs-toggle="dropdown"
             aria-expanded="false">
             Categories
-          </a>
+          </button>
           <ul class="dropdown-menu" aria-labelledby="nav-categories">
             <li><a class="dropdown-item" data-test="nav-hand-tools" routerLink="/category/hand-tools">Hand Tools</a></li>
             <li><a class="dropdown-item" data-test="nav-power-tools" routerLink="/category/power-tools">Power Tools</a></li>
@@ -87,10 +87,10 @@
         }
         @if (name && role === 'user') {
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" data-test="nav-user-menu" id="user-menu" role="button" data-bs-toggle="dropdown"
+            <button type="button" class="nav-link dropdown-toggle btn-link-style" data-test="nav-user-menu" id="user-menu" data-bs-toggle="dropdown"
               aria-expanded="false">
               {{name}}
-            </a>
+            </button>
             <ul class="dropdown-menu" aria-labelledby="user-menu">
               <li><a class="dropdown-item" data-test="nav-my-account" routerLink="/account">My account</a></li>
               <li><a class="dropdown-item" data-test="nav-my-favorites" routerLink="/account/favorites">My favorites</a></li>

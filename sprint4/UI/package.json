@@ -25,13 +25,13 @@
     "@popperjs/core": "2.11.8",
     "@y3krulez/angular-archwizard": "8.0.0-develop",
     "bootstrap": "5.3.7",
-    "jquery": "3.7.1",
     "ng-http-loader": "18.0.0",
     "ngx-pagination": "6.0.3",
     "rxjs": "7.8.2",
     "tslib": "2.8.1",
     "zone.js": "0.15.1"
   },
+
   "devDependencies": {
     "@angular-devkit/build-angular": "20.0.4",
     "@angular-eslint/builder": "20.1.1",

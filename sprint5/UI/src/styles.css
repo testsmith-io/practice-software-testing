@@ -87,6 +87,13 @@ ul.steps-indicator li a div.label{
   color: #CA0B00 !important;
 }
 
+/* Override Bootstrap's .text-muted (#6c757d, ~4.5:1 on white but inconsistent
+ * across grey backgrounds) with a darker grey that meets WCAG AA 4.5:1
+ * contrast on both white and #f8f9fa backgrounds. */
+.text-muted {
+  color: #555f6a !important;
+}
+
 /* Focus states for accessibility */
 a:focus,
 button:focus,

@@ -89,9 +89,13 @@ class CategoryService
         return Cache::remember($cacheKey, 60 * 60, function () use ($query) {
             Log::debug("Cache miss: searching categories in DB", ['query' => $query]);
 
-            $results = Category::with('sub_categories')
-                ->where('name', 'like', "%$query%")
-                ->get();
+            $builder = Category::with('sub_categories');
+            if (strlen($query) >= 4) {
+                $builder->whereRaw('MATCH(name) AGAINST(? IN BOOLEAN MODE)', [$query . '*']);
+            } else {
+                $builder->where('name', 'like', "%$query%");
+            }
+            $results = $builder->get();
 
             Log::debug("Search results fetched", ['query' => $query, 'count' => $results->count()]);
 

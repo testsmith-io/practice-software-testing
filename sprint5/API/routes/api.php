@@ -17,6 +17,7 @@ use App\Http\Controllers\SocialConnectController;
 use App\Http\Controllers\TOTPController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,13 +44,19 @@ Route::post('/refresh', function () {
 
     Artisan::call('invoice:remove');
 
+    // The DB is wiped — flush all caches so we don't serve stale records
+    // pointing to IDs that no longer exist after the seed.
+    Cache::flush();
+
     return response()->json(['result' => 'refresh done']);
 });
 
 Route::controller(BrandController::class)->prefix('brands')->group(function () {
-    Route::get('', 'index');
-    Route::get('/search', 'search');
-    Route::get('/{id}', 'show');
+    Route::middleware('cache.headers:public;max_age=120;etag')->group(function () {
+        Route::get('', 'index');
+        Route::get('/search', 'search');
+        Route::get('/{id}', 'show');
+    });
     Route::post('', 'store');
     Route::put('/{id}', 'update');
     Route::patch('/{id}', 'patch');
@@ -66,10 +73,12 @@ Route::controller(CartController::class)->prefix('carts')->group(function () {
 });
 
 Route::controller(CategoryController::class)->prefix('categories')->group(function () {
-    Route::get('/tree', 'indexTree');
-    Route::get('', 'index');
-    Route::get('/search', 'search');
-    Route::get('/tree/{id}', 'show');
+    Route::middleware('cache.headers:public;max_age=120;etag')->group(function () {
+        Route::get('/tree', 'indexTree');
+        Route::get('', 'index');
+        Route::get('/search', 'search');
+        Route::get('/tree/{id}', 'show');
+    });
     Route::post('', 'store');
     Route::patch('/{id}', 'patch');
     Route::put('/{id}', 'update');
@@ -93,7 +102,9 @@ Route::controller(FavoriteController::class)->prefix('favorites')->group(functio
 });
 
 Route::controller(ImageController::class)->prefix('images')->group(function () {
-    Route::get('', 'index');
+    Route::middleware('cache.headers:public;max_age=120;etag')->group(function () {
+        Route::get('', 'index');
+    });
 });
 
 Route::controller(InvoiceController::class)->prefix('invoices')->group(function () {
@@ -114,10 +125,12 @@ Route::controller(PaymentController::class)->prefix('payment')->group(function (
 });
 
 Route::controller(ProductController::class)->prefix('products')->group(function () {
-    Route::get('', 'index');
-    Route::get('/search', 'search');
-    Route::get('/{id}', 'show');
-    Route::get('/{id}/related', 'showRelated');
+    Route::middleware('cache.headers:public;max_age=120;etag')->group(function () {
+        Route::get('', 'index');
+        Route::get('/search', 'search');
+        Route::get('/{id}', 'show');
+        Route::get('/{id}/related', 'showRelated');
+    });
     Route::post('', 'store');
     Route::put('/{id}', 'update');
     Route::patch('/{id}', 'patch');
@@ -125,12 +138,14 @@ Route::controller(ProductController::class)->prefix('products')->group(function 
 });
 
 Route::controller(ProductSpecController::class)->group(function () {
-    Route::get('/products/{productId}/specs', 'index');
-    Route::get('/products/{productId}/specs/{specId}', 'show');
+    Route::middleware('cache.headers:public;max_age=120;etag')->group(function () {
+        Route::get('/products/{productId}/specs', 'index');
+        Route::get('/products/{productId}/specs/{specId}', 'show');
+        Route::get('/product-specs/names', 'specNames');
+    });
     Route::post('/products/{productId}/specs', 'store');
     Route::put('/products/{productId}/specs/{specId}', 'update');
     Route::delete('/products/{productId}/specs/{specId}', 'destroy');
-    Route::get('/product-specs/names', 'specNames');
 });
 
 Route::middleware(['throttle:reports'])->controller(ReportController::class)->prefix('reports')->group(function () {

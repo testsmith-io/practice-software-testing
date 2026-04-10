@@ -4,7 +4,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
-import {catchError} from 'rxjs/operators';
+import {catchError, shareReplay} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 import {Brand} from '../models/brand';
 
@@ -14,6 +14,7 @@ import {Brand} from '../models/brand';
 export class BrandService {
   private readonly httpClient = inject(HttpClient);
   private readonly apiURL = `${environment.apiUrl}/brands`;
+  private brands$: Observable<Brand[]> | null = null;
 
   searchBrands(query: string): Observable<Brand[]> {
     const params = new HttpParams().set('q', query);
@@ -22,8 +23,18 @@ export class BrandService {
   }
 
   getBrands(): Observable<Brand[]> {
-    return this.httpClient.get<Brand[]>(this.apiURL)
-      .pipe(catchError(this.handleError));
+    if (!this.brands$) {
+      this.brands$ = this.httpClient.get<Brand[]>(this.apiURL)
+        .pipe(
+          shareReplay(1),
+          catchError(this.handleError)
+        );
+    }
+    return this.brands$;
+  }
+
+  invalidateBrandsCache(): void {
+    this.brands$ = null;
   }
 
   getById(id: string): Observable<Brand> {
@@ -32,16 +43,19 @@ export class BrandService {
   }
 
   create(brand: Brand): Observable<Brand> {
+    this.invalidateBrandsCache();
     return this.httpClient.post<Brand>(this.apiURL, brand)
       .pipe(catchError(this.handleError));
   }
 
   update(id: string, brand: Brand): Observable<Brand> {
+    this.invalidateBrandsCache();
     return this.httpClient.put<Brand>(`${this.apiURL}/${id}`, brand)
       .pipe(catchError(this.handleError));
   }
 
   delete(id: string): Observable<void> {
+    this.invalidateBrandsCache();
     return this.httpClient.delete<void>(`${this.apiURL}/${id}`)
       .pipe(catchError(this.handleError));
   }

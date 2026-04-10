@@ -1,7 +1,7 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {CartService} from "../../_services/cart.service";
 import {FavoriteService} from "../../_services/favorite.service";
 import {ActivatedRoute, RouterLink} from "@angular/router";
@@ -13,6 +13,8 @@ import {NgxSliderModule, Options} from "@angular-slider/ngx-slider";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
 import {NgClass} from "@angular/common";
 import {FormsModule} from "@angular/forms";
+import {Subject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-detail',
@@ -25,7 +27,7 @@ import {FormsModule} from "@angular/forms";
   ],
   styleUrls: ['./detail.component.css']
 })
-export class DetailComponent implements OnInit {
+export class DetailComponent implements OnInit, OnDestroy {
   private readonly cartService = inject(CartService);
   private readonly favoriteService = inject(FavoriteService);
   private readonly route = inject(ActivatedRoute);
@@ -39,19 +41,24 @@ export class DetailComponent implements OnInit {
   relatedProducts: Product[];
   private sub: any;
   private id: number;
+  private readonly destroy$ = new Subject<void>();
   sliderOptions: Options = {
     floor: 1,
     ceil: 10
   };
 
   ngOnInit(): void {
-    this.sub = this.route.params.subscribe(params => {
+    this.sub = this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.id = +params['id'];
       this.getProduct(this.id);
       this.getRelatedProducts(this.id);
     });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   plus() {
   }
@@ -60,7 +67,7 @@ export class DetailComponent implements OnInit {
   }
 
   getProduct(id: number) {
-    this.productService.getProduct(id).subscribe(response => {
+    this.productService.getProduct(id).pipe(takeUntil(this.destroy$)).subscribe(response => {
       this.product = response;
       if (this.product.is_location_offer) {
         this.product.discount_price = DiscountUtil.calculateDiscount(this.product.price);
@@ -70,7 +77,7 @@ export class DetailComponent implements OnInit {
   }
 
   getRelatedProducts(id: number) {
-    this.productService.getRelatedProducts(id).subscribe(response => {
+    this.productService.getRelatedProducts(id).pipe(takeUntil(this.destroy$)).subscribe(response => {
       this.relatedProducts = response;
     });
   }

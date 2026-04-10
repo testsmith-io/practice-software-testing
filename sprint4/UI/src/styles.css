@@ -73,3 +73,22 @@ input[type=number] {
 a {
   color: #0000cc;
 }
+
+.text-muted {
+  color: #555f6a !important;
+}
+
+.btn-link-style {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-link-style:hover,
+.btn-link-style:focus {
+  text-decoration: underline;
+}

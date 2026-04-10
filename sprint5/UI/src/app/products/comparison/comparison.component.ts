@@ -1,7 +1,7 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
 import {ComparisonProduct, ComparisonService} from "../../_services/comparison.service";
 import {RouterLink} from "@angular/router";
 import {TranslocoDirective} from "@jsverse/transloco";
@@ -19,10 +19,12 @@ import {FormsModule} from "@angular/forms";
     NgClass,
     FaIconComponent,
     FormsModule
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ComparisonComponent implements OnInit {
   private comparisonService = inject(ComparisonService);
+  private cdr = inject(ChangeDetectorRef);
 
   products: ComparisonProduct[] = [];
   loading = true;
@@ -35,9 +37,11 @@ export class ComparisonComponent implements OnInit {
         this.products = products;
         this.allSpecNames = this.collectSpecNames(products);
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.loading = false;
+        this.cdr.markForCheck();
       }
     });
   }

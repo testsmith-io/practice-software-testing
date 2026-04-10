@@ -1,7 +1,7 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {CartService} from "../../_services/cart.service";
 import {ActivatedRoute, RouterLink} from "@angular/router";
 import {ToastService} from "../../_services/toast.service";
@@ -9,6 +9,8 @@ import {Product} from "../../models/product";
 import {ProductService} from "../../_services/product.service";
 import {NgxSliderModule, Options} from "@angular-slider/ngx-slider";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
+import {Subject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
 
 import {FormsModule} from "@angular/forms";
 
@@ -22,7 +24,7 @@ import {FormsModule} from "@angular/forms";
 ],
   styleUrls: ['./detail.component.css']
 })
-export class DetailComponent implements OnInit {
+export class DetailComponent implements OnInit, OnDestroy {
   private readonly cartService = inject(CartService);
   private readonly route = inject(ActivatedRoute);
   private readonly toastService = inject(ToastService);
@@ -32,7 +34,7 @@ export class DetailComponent implements OnInit {
   product: Product;
   quantity: number = 1;
   relatedProducts: Product[];
-  private sub: any;
+  private destroy$ = new Subject<void>();
   private id: number;
   sliderOptions: Options = {
     floor: 1,
@@ -40,11 +42,16 @@ export class DetailComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.sub = this.route.params.subscribe(params => {
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.id = +params['id'];
       this.getProduct(this.id);
       this.getRelatedProducts(this.id);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 
@@ -59,13 +66,13 @@ export class DetailComponent implements OnInit {
   }
 
   getProduct(id: number) {
-    this.productService.getProduct(id).subscribe(response => {
+    this.productService.getProduct(id).pipe(takeUntil(this.destroy$)).subscribe(response => {
       this.product = response;
     });
   }
 
   getRelatedProducts(id: number) {
-    this.productService.getRelatedProducts(id).subscribe(response => {
+    this.productService.getRelatedProducts(id).pipe(takeUntil(this.destroy$)).subscribe(response => {
       this.relatedProducts = response;
     });
   }

@@ -1,7 +1,7 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Brand} from "../../models/brand";
 import {BrandService} from "../../_services/brand.service";
@@ -14,6 +14,8 @@ import {Pagination} from "../../models/pagination";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
 import {NgClass, NgTemplateOutlet, TitleCasePipe} from "@angular/common";
 import {NgxPaginationModule} from "ngx-pagination";
+import {Subject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-category',
@@ -27,7 +29,9 @@ import {NgxPaginationModule} from "ngx-pagination";
   ],
   styleUrls: ['./category.component.css']
 })
-export class CategoryComponent implements OnInit {
+export class CategoryComponent implements OnInit, OnDestroy {
+  private readonly destroy$ = new Subject<void>();
+
   private readonly productService = inject(ProductService);
   private readonly formBuilder = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
@@ -49,14 +53,14 @@ export class CategoryComponent implements OnInit {
   protected readonly Math = Math;
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.slug = params['name'];
       this.getProductsByCategory(this.slug);
-      this.brandService.getBrands().subscribe(response => {
+      this.brandService.getBrands().pipe(takeUntil(this.destroy$)).subscribe(response => {
         this.brands = response;
       });
 
-      this.categoryService.getSubCategoriesTreeBySlug(this.slug).subscribe(response => {
+      this.categoryService.getSubCategoriesTreeBySlug(this.slug).pipe(takeUntil(this.destroy$)).subscribe(response => {
         this.categories = response;
       });
     });
@@ -69,8 +73,13 @@ export class CategoryComponent implements OnInit {
       });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   getProductsByCategory(slug: string) {
-    this.productService.getProductsByCategory(slug, this.p).subscribe(res => {
+    this.productService.getProductsByCategory(slug, this.p).pipe(takeUntil(this.destroy$)).subscribe(res => {
       this.results = res;
       this.results.data.forEach((item: Product) => {
         if(item.is_location_offer) {
@@ -87,7 +96,7 @@ export class CategoryComponent implements OnInit {
     } else {
       this.brandsFilter = this.brandsFilter.filter(item => item !== event.target.value);
     }
-    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter).pipe(takeUntil(this.destroy$)).subscribe(res => {
       this.resultState = 'filter_completed';
       this.results = res;
       this.results.data.forEach((item: Product) => {
@@ -105,7 +114,7 @@ export class CategoryComponent implements OnInit {
     } else {
       this.categoriesFilter = this.categoriesFilter.filter(item => item !== event.target.value);
     }
-    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter).pipe(takeUntil(this.destroy$)).subscribe(res => {
       this.resultState = 'filter_completed';
       this.results = res;
       this.results.data.forEach((item: Product) => {
@@ -125,7 +134,7 @@ export class CategoryComponent implements OnInit {
     this.sorting = event.target.value;
 
     this.resultState = 'sorting_started';
-    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter).pipe(takeUntil(this.destroy$)).subscribe(res => {
       this.results = res;
       this.results.data.forEach((item: Product) => {
         this.resultState = 'sorting_completed';
@@ -140,7 +149,7 @@ export class CategoryComponent implements OnInit {
     this.resultState = 'filter_started';
     this.ecoFriendlyFilter = event.target.checked;
 
-    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter).subscribe(res => {
+    this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter).pipe(takeUntil(this.destroy$)).subscribe(res => {
       this.resultState = 'filter_completed';
       this.p = 1;
       this.results = res;

@@ -116,7 +116,7 @@ class InvoiceController extends Controller
 
         if (App::environment('local')) {
             $user = Auth::user();
-            Mail::to([$user->email])->send(new Checkout($user->first_name . ' ' . $user->last_name, $items, $total,));
+            Mail::to([$user->email])->queue(new Checkout($user->first_name . ' ' . $user->last_name, $items, $total,));
         }
 
         return $this->preferredFormat($invoice, ResponseAlias::HTTP_CREATED);

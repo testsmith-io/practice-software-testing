@@ -1,7 +1,8 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Subject, takeUntil} from "rxjs";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Brand} from "../../models/brand";
 import {BrandService} from "../../_services/brand.service";
@@ -35,7 +36,8 @@ import {ProductSpecService, SpecNameGroup} from "../../_services/product-spec.se
   ],
   styleUrls: ['./category.component.css']
 })
-export class CategoryComponent implements OnInit {
+export class CategoryComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   private productService = inject(ProductService);
   private formBuilder = inject(FormBuilder);
   private route = inject(ActivatedRoute);
@@ -61,22 +63,30 @@ export class CategoryComponent implements OnInit {
   specFilters: Map<string, Set<string>> = new Map();
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.slug = params['name'];
+    this.route.params
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        this.slug = params['name'];
 
-      this.getProductsByCategory(this.slug);
-      this.specService.getSpecNames().subscribe(response => {
-        this.specGroups = response;
-      });
-      this.brandService.getBrands().subscribe(response => {
-        this.brands = response;
-      });
+        this.getProductsByCategory(this.slug);
+        this.specService.getSpecNames()
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(response => {
+            this.specGroups = response;
+          });
+        this.brandService.getBrands()
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(response => {
+            this.brands = response;
+          });
 
-      this.categoryService.getSubCategoriesTreeBySlug(this.slug).subscribe(response => {
-        this.categories = response;
-        this.updateTitle(this.categories[0].name);
+        this.categoryService.getSubCategoriesTreeBySlug(this.slug)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(response => {
+            this.categories = response;
+            this.updateTitle(this.categories[0].name);
+          });
       });
-    });
 
     this.search = this.formBuilder.group(
       {
@@ -84,6 +94,11 @@ export class CategoryComponent implements OnInit {
           Validators.minLength(3),
           Validators.maxLength(40)]],
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getProductsByCategory(slug: string) {

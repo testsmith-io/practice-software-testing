@@ -12,6 +12,27 @@ use Illuminate\Support\Facades\Log;
 
 class ProductService
 {
+    private const CACHE_TAG = 'products';
+    // The DB is reset hourly via /refresh, which calls Cache::flush().
+    // Keeping TTL well under that window protects against stale entries
+    // for users that hit the cache between resets.
+    private const CACHE_TTL = 300; // 5 minutes
+
+    /**
+     * Tagged cache helper. Falls back to untagged cache if the active store
+     * does not support tags (e.g. file/database). Redis supports tags, so on
+     * production this will scope all product caches under the 'products' tag
+     * and allow surgical invalidation.
+     */
+    protected function cache()
+    {
+        try {
+            return Cache::tags([self::CACHE_TAG]);
+        } catch (\BadMethodCallException $e) {
+            return Cache::store();
+        }
+    }
+
     public function getAllProducts(array $filters)
     {
         if (isset($filters['is_rental'])) {
@@ -25,7 +46,7 @@ class ProductService
 
         Log::debug("Fetching all products with filters", ['filters' => $filters, 'cacheKey' => $cacheKey]);
 
-        return Cache::remember($cacheKey, 60 * 60, function () use ($filters) {
+        return $this->cache()->remember($cacheKey, self::CACHE_TTL, function () use ($filters) {
             $query = Product::withEagerLoading()
                 ->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id', 'is_location_offer', 'is_rental', 'stock', 'co2_rating');
 
@@ -79,7 +100,7 @@ class ProductService
 
         Log::debug("Fetching product by ID", ['id' => $id]);
 
-        return Cache::remember($cacheKey, 60 * 60, function () use ($id) {
+        return $this->cache()->remember($cacheKey, self::CACHE_TTL, function () use ($id) {
             return Product::with([
                 'product_image:id,by_name,by_url,source_name,source_url,file_name,title',
                 'category:id,name,slug,parent_id',
@@ -95,7 +116,7 @@ class ProductService
 
         Log::debug("Fetching related products", ['id' => $id]);
 
-        return Cache::remember($cacheKey, 60 * 60, function () use ($id) {
+        return $this->cache()->remember($cacheKey, self::CACHE_TTL, function () use ($id) {
             $product = Product::select('id', 'category_id')->find($id);
 
             if (!$product) {
@@ -128,15 +149,21 @@ class ProductService
 
         Log::debug("Searching products", ['query' => $query, 'page' => $page]);
 
-        return Cache::remember($cacheKey, 60 * 60, function () use ($query) {
-            $results = Product::with([
+        return $this->cache()->remember($cacheKey, self::CACHE_TTL, function () use ($query) {
+            $builder = Product::with([
                 'product_image:id,by_name,by_url,source_name,source_url,file_name,title',
                 'category:id,name',
                 'brand:id,name'
             ])
-            ->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id', 'is_location_offer', 'is_rental', 'stock', 'co2_rating')
-            ->where('name', 'like', "%{$query}%")
-            ->paginate(9);
+            ->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id', 'is_location_offer', 'is_rental', 'stock', 'co2_rating');
+
+            if (strlen($query) >= 4) {
+                $builder->whereRaw('MATCH(name, description) AGAINST(? IN BOOLEAN MODE)', [$query . '*']);
+            } else {
+                $builder->where('name', 'like', "%{$query}%");
+            }
+
+            $results = $builder->paginate(9);
 
             Log::debug("Search results found", ['total' => $results->total()]);
             return $results;
@@ -168,13 +195,16 @@ class ProductService
     {
         Log::debug("Clearing cache", ['id' => $id]);
 
-        // Clear all product list caches by using cache tags
-        Cache::flush();
-
-        if ($id) {
-            Cache::forget("products.{$id}");
-            Cache::forget("products.{$id}.related");
-            // Clear any search caches that might include this product
+        // With tagged cache (Redis), this only flushes product-related entries.
+        // With non-tagging stores, the fallback flushes the entire store — only
+        // matters in local dev environments using file/database cache.
+        try {
+            Cache::tags([self::CACHE_TAG])->flush();
+        } catch (\BadMethodCallException $e) {
+            if ($id) {
+                Cache::forget("products.{$id}");
+                Cache::forget("products.{$id}.related");
+            }
             Cache::flush();
         }
     }

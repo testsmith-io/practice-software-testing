@@ -445,7 +445,8 @@
       "bar-count": "{{ count }} Produkt(e) ausgewählt",
       "compare-btn": "Jetzt vergleichen",
       "specifications": "Spezifikationen",
-      "show-differences": "Nur Unterschiede anzeigen"
+      "show-differences": "Nur Unterschiede anzeigen",
+      "remove-product": "{{ name }} aus dem Vergleich entfernen"
     },
     "my-account": {
       "overview": {

@@ -50,7 +50,8 @@ export class RegisterComponent implements OnInit {
         password: ['', [Validators.required,
           Validators.minLength(9),
           Validators.maxLength(40)]],
-      }
+      },
+      { updateOn: 'blur' }
     );
   }
 

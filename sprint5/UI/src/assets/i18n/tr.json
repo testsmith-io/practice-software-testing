@@ -445,7 +445,8 @@
       "bar-count": "{{ count }} ürün seçildi",
       "compare-btn": "Şimdi karşılaştır",
       "specifications": "Özellikler",
-      "show-differences": "Sadece farklılıkları göster"
+      "show-differences": "Sadece farklılıkları göster",
+      "remove-product": "{{ name }} ürününü karşılaştırmadan kaldır"
     },
     "my-account": {
       "overview": {

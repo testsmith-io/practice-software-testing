@@ -121,7 +121,13 @@ class ProductController extends Controller
             if ($request->get('q')) {
                 $q = $request->get('q');
                 Log::debug('Searching by name', ['query' => $q]);
-                $query->where('name', 'like', "%$q%");
+                // FULLTEXT requires terms of at least ft_min_word_len (default 4).
+                // Use it for longer queries; fall back to LIKE for short ones.
+                if (strlen($q) >= 4) {
+                    $query->whereRaw('MATCH(name, description) AGAINST(? IN BOOLEAN MODE)', [$q . '*']);
+                } else {
+                    $query->where('name', 'like', "%$q%");
+                }
             }
 
             $results = $query->filter()->paginate(9);
@@ -300,9 +306,16 @@ class ProductController extends Controller
 
         Log::info('Searching for products', ['query' => $q]);
 
-        $results = Product::with('product_image')
-            ->where('name', 'like', "%$q%")
-            ->paginate(9);
+        // FULLTEXT requires terms of at least ft_min_word_len (default 4).
+        // Use it for longer queries; fall back to LIKE for short ones.
+        $builder = Product::with('product_image');
+        if (strlen($q) >= 4) {
+            $builder->whereRaw('MATCH(name, description) AGAINST(? IN BOOLEAN MODE)', [$q . '*']);
+        } else {
+            $builder->where('name', 'like', "%$q%");
+        }
+
+        $results = $builder->paginate(9);
 
         return $this->preferredFormat($results);
     }

@@ -86,6 +86,7 @@
               class="card" style="text-decoration: none; color: black;">
               <div class="card-img-wrapper">
                 <img class="card-img-top"
+                  loading="lazy"
                   src="assets/img/products/{{item.product_image.file_name}}">
                 @if (item.is_eco_friendly && isEcoBadgeEnabled()) {
                   <span class="eco-badge position-absolute top-0 end-0 m-2" data-test="eco-badge">

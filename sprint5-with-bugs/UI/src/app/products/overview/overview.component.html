@@ -120,6 +120,7 @@
                 class="card" style="text-decoration: none; color: black;">
                 <div class="card-img-wrapper">
                   <img class="card-img-top"
+                    loading="lazy"
                     [ngClass]="{'d-none': browserDetect.isChrome() && ([5,13,20].includes(item.id))}"
                     src="assets/img/products/{{item.product_image.file_name}}">
                   @if (item.is_eco_friendly && isEcoBadgeEnabled()) {

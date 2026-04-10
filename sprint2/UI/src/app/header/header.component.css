@@ -56,3 +56,12 @@
 .accordion:hover ul {
   display: block;
 }
+
+.btn-link-style {
+  background: none;
+  border: none;
+  text-decoration: none;
+  text-align: inherit;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}

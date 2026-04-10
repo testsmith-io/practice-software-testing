@@ -6,7 +6,7 @@
       <figure class="figure">
         <div class="card-img-wrapper">
           <img src="assets/img/products/{{product.product_image.file_name}}" class="figure-img img-fluid"
-               alt="{{product.name}}">
+               alt="{{product.name}}" fetchpriority="high">
         </div>
         <figcaption class="figure-caption">{{ t('pages.product-detail.photo-by') }} <a target="_blank"
                                                        href="{{product.product_image.by_url}}">{{ product.product_image.by_name }}</a>
@@ -116,7 +116,7 @@
         <table class="table table-striped specs-table" data-test="product-specs">
           <tbody>
             @for (spec of product.specs; track spec.id) {
-              <tr data-test="spec-row" attr.data-test-spec="{{ spec.spec_name.toLowerCase().replaceAll(' ', '-') }}">
+              <tr data-test="spec-row" attr.data-test-spec="{{ spec.spec_name.toLowerCase().split(' ').join('-') }}">
                 <td class="spec-name fw-bold" data-test="spec-name">{{ spec.spec_name }}</td>
                 <td class="spec-value" data-test="spec-value">
                   <span data-test="spec-value-text">{{ spec.spec_value }}</span>@if (spec.spec_unit) { <span class="text-muted ms-1" data-test="spec-unit">{{ spec.spec_unit }}</span> }
@@ -140,7 +140,7 @@
         <a routerLink="/product/{{item.id}}" class="card"
            style="text-decoration: none; color: black;">
           <div class="card-img-wrapper">
-            <img class="card-img-top" alt="{{item.name}}" src="assets/img/products/{{item.product_image.file_name}}">
+            <img class="card-img-top" alt="{{item.name}}" loading="lazy" src="assets/img/products/{{item.product_image.file_name}}">
           </div>
           <div class="card-body">
             <h5 class="card-title">

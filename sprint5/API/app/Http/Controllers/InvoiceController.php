@@ -6,10 +6,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Invoice\PatchInvoice;
 use App\Http\Requests\Invoice\StoreInvoice;
+use App\Jobs\SendCheckoutEmail;
 use App\Models\PaymentzCreditCardDetails;
 use App\Services\InvoiceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -97,6 +99,9 @@ class InvoiceController extends Controller
         $invoice = $this->invoiceService->createInvoice($request->except(['cart_id']), $request->input('cart_id'));
         $this->invoiceService->handlePayment($invoice->id, $request->input('payment_method'), Arr::except($request->input('payment_details'), ['@type']) ?? []);
 
+        // Queue the checkout email so the user gets a fast response.
+        SendCheckoutEmail::dispatch($invoice->id, Auth::user());
+
         return $this->preferredFormat($invoice, ResponseAlias::HTTP_CREATED);
     }
 
@@ -148,6 +153,14 @@ class InvoiceController extends Controller
 
         $invoice = $this->invoiceService->createGuestInvoice($request->except(['cart_id']), $request->input('cart_id'));
         $this->invoiceService->handlePayment($invoice->id, $request->input('payment_method'), Arr::except($request->input('payment_details'), ['@type']) ?? []);
+
+        // Queue the checkout email for the guest so the response stays fast.
+        $guestUser = (object) [
+            'email' => $request->input('guest_email'),
+            'first_name' => $request->input('guest_first_name'),
+            'last_name' => $request->input('guest_last_name'),
+        ];
+        SendCheckoutEmail::dispatch($invoice->id, $guestUser);
 
         return $this->preferredFormat($invoice, ResponseAlias::HTTP_CREATED);
     }

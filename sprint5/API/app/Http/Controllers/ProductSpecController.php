@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductSpec;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -69,6 +70,8 @@ class ProductSpecController extends Controller
             'spec_unit' => $request->input('spec_unit'),
         ]);
 
+        $this->invalidateCache($productId);
+
         return $this->preferredFormat($spec, ResponseAlias::HTTP_CREATED);
     }
 
@@ -122,6 +125,8 @@ class ProductSpecController extends Controller
             ->where('id', $specId)
             ->update($request->only(['spec_name', 'spec_value', 'spec_unit']));
 
+        $this->invalidateCache($productId);
+
         return $this->preferredFormat(['success' => (bool)$updated]);
     }
 
@@ -141,7 +146,19 @@ class ProductSpecController extends Controller
     public function destroy($productId, $specId)
     {
         ProductSpec::where('product_id', $productId)->where('id', $specId)->delete();
+        $this->invalidateCache($productId);
         return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
+    }
+
+    private function invalidateCache($productId): void
+    {
+        Cache::forget('product_specs.names');
+        // Drop the cached product detail since it eager-loads specs.
+        try {
+            Cache::tags(['products'])->flush();
+        } catch (\BadMethodCallException $e) {
+            Cache::forget("products.{$productId}");
+        }
     }
 
     /**
@@ -155,21 +172,24 @@ class ProductSpecController extends Controller
      */
     public function specNames()
     {
-        $specs = DB::table('product_specs')
-            ->select('spec_name', 'spec_value', 'spec_unit')
-            ->distinct()
-            ->orderBy('spec_name')
-            ->orderBy('spec_value')
-            ->get()
-            ->groupBy('spec_name')
-            ->map(function ($values, $name) {
-                return [
-                    'name' => $name,
-                    'values' => $values->pluck('spec_value')->unique()->values(),
-                    'unit' => $values->first()->spec_unit,
-                ];
-            })
-            ->values();
+        // The DB is reset hourly, so keep TTL well below that window.
+        $specs = Cache::remember('product_specs.names', 300, function () {
+            return DB::table('product_specs')
+                ->select('spec_name', 'spec_value', 'spec_unit')
+                ->distinct()
+                ->orderBy('spec_name')
+                ->orderBy('spec_value')
+                ->get()
+                ->groupBy('spec_name')
+                ->map(function ($values, $name) {
+                    return [
+                        'name' => $name,
+                        'values' => $values->pluck('spec_value')->unique()->values(),
+                        'unit' => $values->first()->spec_unit,
+                    ];
+                })
+                ->values();
+        });
 
         return $this->preferredFormat($specs);
     }
