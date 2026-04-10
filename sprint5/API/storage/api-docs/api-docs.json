@@ -1665,6 +1665,64 @@
                 ]
             }
         },
+        "/invoices/guest": {
+            "post": {
+                "tags": [
+                    "Invoice"
+                ],
+                "summary": "Store new guest invoice",
+                "description": "Store new invoice for guest checkout",
+                "operationId": "storeGuestInvoice",
+                "requestBody": {
+                    "description": "Guest invoice request object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/components/schemas/InvoiceRequest"
+                                    },
+                                    {
+                                        "properties": {
+                                            "guest_email": {
+                                                "description": "Guest email address",
+                                                "type": "string",
+                                                "format": "email"
+                                            },
+                                            "guest_first_name": {
+                                                "description": "Guest first name",
+                                                "type": "string"
+                                            },
+                                            "guest_last_name": {
+                                                "description": "Guest last name",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvoiceResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
+                    }
+                }
+            }
+        },
         "/invoices/{invoiceId}": {
             "get": {
                 "tags": [
@@ -2250,43 +2308,12 @@
                     }
                 },
                 "responses": {
-                    "201": {
-                        "description": "Returns when product is created",
+                    "200": {
+                        "description": "Successful operation",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "title": "StoreProductResponse",
-                                    "properties": {
-                                        "id": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "name": {
-                                            "type": "string",
-                                            "example": "Lorum ipsum"
-                                        },
-                                        "description": {
-                                            "type": "string",
-                                            "example": "Lorum ipsum"
-                                        },
-                                        "price": {
-                                            "type": "number",
-                                            "example": 9.99
-                                        },
-                                        "is_location_offer": {
-                                            "type": "boolean",
-                                            "example": 1
-                                        },
-                                        "is_rental": {
-                                            "type": "boolean",
-                                            "example": 0
-                                        },
-                                        "is_stock": {
-                                            "type": "boolean",
-                                            "example": 0
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/ProductResponse"
                                 }
                             }
                         }
@@ -2595,6 +2622,260 @@
                     },
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
+                    }
+                }
+            }
+        },
+        "/products/{productId}/specs": {
+            "get": {
+                "tags": [
+                    "Product Spec"
+                ],
+                "summary": "Retrieve specs for a product",
+                "operationId": "getProductSpecs",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProductSpecResponse"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Product Spec"
+                ],
+                "summary": "Add a spec to a product",
+                "operationId": "storeProductSpec",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "spec_name",
+                                    "spec_value"
+                                ],
+                                "properties": {
+                                    "spec_name": {
+                                        "type": "string",
+                                        "example": "Weight"
+                                    },
+                                    "spec_value": {
+                                        "type": "string",
+                                        "example": "1.5"
+                                    },
+                                    "spec_unit": {
+                                        "type": "string",
+                                        "example": "kg",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Spec created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductSpecResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/products/{productId}/specs/{specId}": {
+            "get": {
+                "tags": [
+                    "Product Spec"
+                ],
+                "summary": "Retrieve a specific spec",
+                "operationId": "getProductSpec",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "specId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductSpecResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Product Spec"
+                ],
+                "summary": "Update a spec",
+                "operationId": "updateProductSpec",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "specId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "spec_name": {
+                                        "type": "string"
+                                    },
+                                    "spec_value": {
+                                        "type": "string"
+                                    },
+                                    "spec_unit": {
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/UpdateResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Product Spec"
+                ],
+                "summary": "Delete a spec",
+                "operationId": "deleteProductSpec",
+                "parameters": [
+                    {
+                        "name": "productId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "specId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
+            }
+        },
+        "/product-specs/names": {
+            "get": {
+                "tags": [
+                    "Product Spec"
+                ],
+                "summary": "Retrieve all distinct spec names with their values",
+                "operationId": "getSpecNames",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
                     }
                 }
             }
@@ -3000,7 +3281,7 @@
                 ],
                 "summary": "Setup TOTP for the authenticated user",
                 "description": "Generates a TOTP secret and QR code URL for the user to scan and enables TOTP setup.",
-                "operationId": "6d47e2cfc2f1079261c4c93ce0007ae0",
+                "operationId": "setupTotp",
                 "responses": {
                     "200": {
                         "description": "TOTP setup successful",
@@ -3055,7 +3336,7 @@
                 ],
                 "summary": "Verify TOTP code for the authenticated user",
                 "description": "Validates the submitted TOTP code and enables TOTP if verification is successful.",
-                "operationId": "0a819cdd91a22a616d7ddbb08330394a",
+                "operationId": "verifyTotp",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -3254,6 +3535,10 @@
                         "application/json": {
                             "schema": {
                                 "title": "AccountRequest",
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
                                 "properties": {
                                     "email": {
                                         "type": "string",
@@ -4458,6 +4743,10 @@
                     "is_rental": {
                         "type": "boolean",
                         "example": 0
+                    },
+                    "co2_rating": {
+                        "type": "string",
+                        "example": "A"
                     }
                 },
                 "type": "object"
@@ -4492,6 +4781,14 @@
                     "in_stock": {
                         "type": "boolean",
                         "example": 0
+                    },
+                    "co2_rating": {
+                        "type": "string",
+                        "example": "A"
+                    },
+                    "is_eco_friendly": {
+                        "type": "boolean",
+                        "example": true
                     },
                     "brand": {
                         "$ref": "#/components/schemas/BrandResponse"
@@ -4532,37 +4829,99 @@
                 },
                 "type": "object"
             },
+            "ProductSpecRequest": {
+                "title": "ProductSpecRequest",
+                "required": [
+                    "product_id",
+                    "spec_name",
+                    "spec_value"
+                ],
+                "properties": {
+                    "product_id": {
+                        "type": "string"
+                    },
+                    "spec_name": {
+                        "type": "string",
+                        "example": "Weight"
+                    },
+                    "spec_value": {
+                        "type": "string",
+                        "example": "1.5"
+                    },
+                    "spec_unit": {
+                        "type": "string",
+                        "example": "kg",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "ProductSpecResponse": {
+                "title": "ProductSpecResponse",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "product_id": {
+                        "type": "string"
+                    },
+                    "spec_name": {
+                        "type": "string"
+                    },
+                    "spec_value": {
+                        "type": "string"
+                    },
+                    "spec_unit": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
             "UserRequest": {
                 "title": "UserRequest",
+                "required": [
+                    "first_name",
+                    "last_name",
+                    "email",
+                    "password"
+                ],
                 "properties": {
                     "first_name": {
                         "type": "string",
+                        "maxLength": 40,
                         "example": "John"
                     },
                     "last_name": {
                         "type": "string",
+                        "maxLength": 20,
                         "example": "Doe"
                     },
                     "address": {
                         "properties": {
                             "street": {
                                 "type": "string",
+                                "maxLength": 70,
                                 "example": "Street 1"
                             },
                             "city": {
                                 "type": "string",
+                                "maxLength": 40,
                                 "example": "City"
                             },
                             "state": {
                                 "type": "string",
+                                "maxLength": 40,
                                 "example": "State"
                             },
                             "country": {
                                 "type": "string",
+                                "maxLength": 40,
                                 "example": "Country"
                             },
                             "postal_code": {
                                 "type": "string",
+                                "maxLength": 10,
                                 "example": "1234AA"
                             }
                         },
@@ -4570,18 +4929,26 @@
                     },
                     "phone": {
                         "type": "string",
+                        "maxLength": 24,
                         "example": "0987654321"
                     },
                     "dob": {
+                        "description": "Must be a valid date between 18 and 75 years ago",
                         "type": "string",
+                        "format": "date",
                         "example": "1970-01-01"
                     },
                     "password": {
+                        "description": "Must include uppercase, lowercase, number, and symbol",
                         "type": "string",
-                        "example": "super-secret"
+                        "format": "password",
+                        "minLength": 8,
+                        "example": "SuperSecure@123"
                     },
                     "email": {
                         "type": "string",
+                        "format": "email",
+                        "maxLength": 256,
                         "example": "john@doe.example"
                     }
                 },
@@ -4642,11 +5009,10 @@
                         "type": "string"
                     },
                     "totp_enabled": {
-                        "type": "string"
+                        "type": "boolean"
                     },
                     "enabled": {
-                        "type": "boolean",
-                        "nullable": true
+                        "type": "boolean"
                     },
                     "failed_login_attempts": {
                         "type": "integer",
@@ -4761,5 +5127,59 @@
                 "scheme": "bearer"
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Brand",
+            "description": "Brand"
+        },
+        {
+            "name": "Cart",
+            "description": "Cart"
+        },
+        {
+            "name": "Category",
+            "description": "Category"
+        },
+        {
+            "name": "Contact",
+            "description": "Contact"
+        },
+        {
+            "name": "Favorite",
+            "description": "Favorite"
+        },
+        {
+            "name": "Image",
+            "description": "Image"
+        },
+        {
+            "name": "Invoice",
+            "description": "Invoice"
+        },
+        {
+            "name": "Payment",
+            "description": "Payment"
+        },
+        {
+            "name": "Product",
+            "description": "Product"
+        },
+        {
+            "name": "Product Spec",
+            "description": "Product Spec"
+        },
+        {
+            "name": "Report",
+            "description": "Report"
+        },
+        {
+            "name": "TOTP",
+            "description": "TOTP"
+        },
+        {
+            "name": "User",
+            "description": "User"
+        }
+    ]
 }
