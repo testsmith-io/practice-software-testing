@@ -1665,64 +1665,6 @@
                 ]
             }
         },
-        "/invoices/guest": {
-            "post": {
-                "tags": [
-                    "Invoice"
-                ],
-                "summary": "Store new guest invoice",
-                "description": "Store new invoice for guest checkout",
-                "operationId": "storeGuestInvoice",
-                "requestBody": {
-                    "description": "Guest invoice request object",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "allOf": [
-                                    {
-                                        "$ref": "#/components/schemas/InvoiceRequest"
-                                    },
-                                    {
-                                        "properties": {
-                                            "guest_email": {
-                                                "description": "Guest email address",
-                                                "type": "string",
-                                                "format": "email"
-                                            },
-                                            "guest_first_name": {
-                                                "description": "Guest first name",
-                                                "type": "string"
-                                            },
-                                            "guest_last_name": {
-                                                "description": "Guest last name",
-                                                "type": "string"
-                                            }
-                                        },
-                                        "type": "object"
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/InvoiceResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "$ref": "#/components/responses/UnprocessableEntityResponse"
-                    }
-                }
-            }
-        },
         "/invoices/{invoiceId}": {
             "get": {
                 "tags": [
@@ -2210,15 +2152,6 @@
                         }
                     },
                     {
-                        "name": "eco_friendly",
-                        "in": "query",
-                        "description": "Filter for eco-friendly products (CO₂ rating A or B)",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
                         "name": "between",
                         "in": "query",
                         "description": "Can be used to define a price range, like: price,10,30",
@@ -2230,7 +2163,7 @@
                     {
                         "name": "sort",
                         "in": "query",
-                        "description": "Can be used to sort based on specific column value, like: name,asc OR name,desc OR price,asc OR price,desc OR co2_rating,asc OR co2_rating,desc",
+                        "description": "Can be used to sort based on specific column value, like: name,asc OR name,desc OR price,asc OR price,desc",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -2317,12 +2250,43 @@
                     }
                 },
                 "responses": {
-                    "200": {
-                        "description": "Successful operation",
+                    "201": {
+                        "description": "Returns when product is created",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ProductResponse"
+                                    "title": "StoreProductResponse",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Lorum ipsum"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "Lorum ipsum"
+                                        },
+                                        "price": {
+                                            "type": "number",
+                                            "example": 9.99
+                                        },
+                                        "is_location_offer": {
+                                            "type": "boolean",
+                                            "example": 1
+                                        },
+                                        "is_rental": {
+                                            "type": "boolean",
+                                            "example": 0
+                                        },
+                                        "is_stock": {
+                                            "type": "boolean",
+                                            "example": 0
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -3290,10 +3254,6 @@
                         "application/json": {
                             "schema": {
                                 "title": "AccountRequest",
-                                "required": [
-                                    "email",
-                                    "password"
-                                ],
                                 "properties": {
                                     "email": {
                                         "type": "string",
@@ -4498,10 +4458,6 @@
                     "is_rental": {
                         "type": "boolean",
                         "example": 0
-                    },
-                    "co2_rating": {
-                        "type": "string",
-                        "example": "A"
                     }
                 },
                 "type": "object"
@@ -4536,14 +4492,6 @@
                     "in_stock": {
                         "type": "boolean",
                         "example": 0
-                    },
-                    "co2_rating": {
-                        "type": "string",
-                        "example": "A"
-                    },
-                    "is_eco_friendly": {
-                        "type": "boolean",
-                        "example": 1
                     },
                     "brand": {
                         "$ref": "#/components/schemas/BrandResponse"
@@ -4586,48 +4534,35 @@
             },
             "UserRequest": {
                 "title": "UserRequest",
-                "required": [
-                    "first_name",
-                    "last_name",
-                    "email",
-                    "password"
-                ],
                 "properties": {
                     "first_name": {
                         "type": "string",
-                        "maxLength": 40,
                         "example": "John"
                     },
                     "last_name": {
                         "type": "string",
-                        "maxLength": 20,
                         "example": "Doe"
                     },
                     "address": {
                         "properties": {
                             "street": {
                                 "type": "string",
-                                "maxLength": 70,
                                 "example": "Street 1"
                             },
                             "city": {
                                 "type": "string",
-                                "maxLength": 40,
                                 "example": "City"
                             },
                             "state": {
                                 "type": "string",
-                                "maxLength": 40,
                                 "example": "State"
                             },
                             "country": {
                                 "type": "string",
-                                "maxLength": 40,
                                 "example": "Country"
                             },
                             "postal_code": {
                                 "type": "string",
-                                "maxLength": 10,
                                 "example": "1234AA"
                             }
                         },
@@ -4635,26 +4570,18 @@
                     },
                     "phone": {
                         "type": "string",
-                        "maxLength": 24,
                         "example": "0987654321"
                     },
                     "dob": {
-                        "description": "Must be a valid date between 18 and 75 years ago",
                         "type": "string",
-                        "format": "date",
                         "example": "1970-01-01"
                     },
                     "password": {
-                        "description": "Must include uppercase, lowercase, number, and symbol",
                         "type": "string",
-                        "format": "password",
-                        "minLength": 8,
-                        "example": "SuperSecure@123"
+                        "example": "super-secret"
                     },
                     "email": {
                         "type": "string",
-                        "format": "email",
-                        "maxLength": 256,
                         "example": "john@doe.example"
                     }
                 },
@@ -4715,10 +4642,11 @@
                         "type": "string"
                     },
                     "totp_enabled": {
-                        "type": "boolean"
+                        "type": "string"
                     },
                     "enabled": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     },
                     "failed_login_attempts": {
                         "type": "integer",
@@ -4833,55 +4761,5 @@
                 "scheme": "bearer"
             }
         }
-    },
-    "tags": [
-        {
-            "name": "Brand",
-            "description": "Brand"
-        },
-        {
-            "name": "Cart",
-            "description": "Cart"
-        },
-        {
-            "name": "Category",
-            "description": "Category"
-        },
-        {
-            "name": "Contact",
-            "description": "Contact"
-        },
-        {
-            "name": "Favorite",
-            "description": "Favorite"
-        },
-        {
-            "name": "Image",
-            "description": "Image"
-        },
-        {
-            "name": "Invoice",
-            "description": "Invoice"
-        },
-        {
-            "name": "Payment",
-            "description": "Payment"
-        },
-        {
-            "name": "Product",
-            "description": "Product"
-        },
-        {
-            "name": "Report",
-            "description": "Report"
-        },
-        {
-            "name": "TOTP",
-            "description": "TOTP"
-        },
-        {
-            "name": "User",
-            "description": "User"
-        }
-    ]
+    }
 }
