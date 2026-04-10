@@ -285,7 +285,8 @@
       "duration": "Duration",
       "hours": "hour(s)",
       "related-products": "Related products",
-      "more-information": "More information"
+      "more-information": "More information",
+      "specifications": "Specifications"
     },
     "rentals": {
       "title": "Rentals"

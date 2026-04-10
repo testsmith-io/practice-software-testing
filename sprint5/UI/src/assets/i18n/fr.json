@@ -285,7 +285,8 @@
       "duration": "Durée",
       "hours": "heure(s)",
       "related-products": "Produits connexes",
-      "more-information": "Plus d'informations"
+      "more-information": "Plus d'informations",
+      "specifications": "Spécifications"
     },
     "rentals": {
       "title": "Locations"

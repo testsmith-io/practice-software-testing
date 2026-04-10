@@ -154,6 +154,19 @@ h1 {
   color: white;
 }
 
+.specs-table {
+  max-width: 600px;
+}
+
+.specs-table .spec-name {
+  width: 40%;
+  color: #374151;
+}
+
+.specs-table .spec-value {
+  color: #1f2937;
+}
+
 .comparison-bar {
   position: fixed;
   bottom: 0;

@@ -285,7 +285,8 @@
       "duration": "Süre",
       "hours": "saat(ler)",
       "related-products": "İlgili ürünler",
-      "more-information": "Daha fazla bilgi"
+      "more-information": "Daha fazla bilgi",
+      "specifications": "Özellikler"
     },
     "rentals": {
       "title": "Kiralama"
