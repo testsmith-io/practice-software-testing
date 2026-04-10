@@ -108,6 +108,26 @@
       </div>
     </div>
   </div>
+
+  @if (product.specs && product.specs.length > 0) {
+    <div class="row mt-4" *transloco="let t">
+      <div class="col-12">
+        <h3 data-test="specs-title">{{ t('pages.product-detail.specifications') }}</h3>
+        <table class="table table-striped specs-table" data-test="product-specs">
+          <tbody>
+            @for (spec of product.specs; track spec.id) {
+              <tr data-test="spec-row">
+                <td class="spec-name fw-bold">{{ spec.spec_name }}</td>
+                <td class="spec-value">
+                  {{ spec.spec_value }}@if (spec.spec_unit) { <span class="text-muted ms-1">{{ spec.spec_unit }}</span> }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
 }
 
 <hr/>

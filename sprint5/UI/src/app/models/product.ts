@@ -5,6 +5,14 @@ import {Image} from "./image";
 import {Brand} from "./brand";
 import {Category} from "./category";
 
+export interface ProductSpec {
+  id?: string;
+  product_id?: string;
+  spec_name: string;
+  spec_value: string;
+  spec_unit?: string;
+}
+
 export interface Product {
   id?: string;
   name?: string;
@@ -22,4 +30,5 @@ export interface Product {
   category?: Category;
   co2_rating?: string;
   is_eco_friendly?: boolean;
+  specs?: ProductSpec[];
 }
