@@ -8,7 +8,7 @@ import {ToastrService} from "ngx-toastr";
 import {DecimalPipe, NgClass} from "@angular/common";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {ArchwizardModule} from "@y3krulez/angular-archwizard";
-import {TranslocoDirective} from "@jsverse/transloco";
+import {TranslocoDirective, TranslocoService} from "@jsverse/transloco";
 import {Router} from "@angular/router";
 import {GaService} from "../../_services/ga.service";
 import {FormsModule} from "@angular/forms";
@@ -32,6 +32,7 @@ export class CartComponent implements OnInit {
   private customerAccountService = inject(CustomerAccountService);
   private router = inject(Router);
   private gaService = inject(GaService);
+  private translocoService = inject(TranslocoService);
 
   cart: any;
   isLoggedIn: boolean = false;
@@ -71,7 +72,7 @@ export class CartComponent implements OnInit {
       this.cartService.replaceQuantity(item.product.id, quantity).subscribe({
         next: () => {
           this.fetchCartItems();
-          this.toastr.success('Product quantity updated.', null, { progressBar: true });
+          this.toastr.success(this.translocoService.translate('toasts.product-quantity-updated'), null, { progressBar: true });
         },
         error: (response) => {
           this.toastr.error(response.error.message, null, { progressBar: true });
@@ -83,7 +84,7 @@ export class CartComponent implements OnInit {
   delete(id: number): void {
     this.cartService.deleteItem(id).subscribe(() => {
       this.fetchCartItems();
-      this.toastr.success('Product deleted.', null, {progressBar: true});
+      this.toastr.success(this.translocoService.translate('toasts.product-deleted'), null, {progressBar: true});
     });
   }
 
