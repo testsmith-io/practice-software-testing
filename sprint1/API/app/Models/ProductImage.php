@@ -12,13 +12,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *     type="object",
  *     title="ImageResponse",
  *     properties={
- *         @OA\Property(property="by_name", type="string"),
- *         @OA\Property(property="by_url", type="string"),
- *         @OA\Property(property="source_name", type="string"),
- *         @OA\Property(property="source_url", type="string"),
- *         @OA\Property(property="file_name", type="string"),
- *         @OA\Property(property="title", type="string"),
- *         @OA\Property(property="id", type="integer")
+ *         @OA\Property(property="by_name", type="string", nullable=true),
+ *         @OA\Property(property="by_url", type="string", nullable=true),
+ *         @OA\Property(property="source_name", type="string", nullable=true),
+ *         @OA\Property(property="source_url", type="string", nullable=true),
+ *         @OA\Property(property="file_name", type="string", nullable=true),
+ *         @OA\Property(property="title", type="string", nullable=true),
+ *         @OA\Property(property="id", type="integer", readOnly=true)
  *     }
  * )
  */

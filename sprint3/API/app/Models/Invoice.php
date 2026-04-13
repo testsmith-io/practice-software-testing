@@ -49,7 +49,7 @@ use Mehradsadeghi\FilterQueryString\FilterQueryString;
  *         @OA\Property(property="payment_account_name", type="string", example="Jogn Doe"),
  *         @OA\Property(property="payment_account_number", type="string", example="0987654345"),
  *         @OA\Property(property="status", type="string", example="COMPLETED"),
- *         @OA\Property(property="status_message", type="string", example=""),
+ *         @OA\Property(property="status_message", type="string", nullable=true, example=""),
  *         @OA\Property(property="invoicelines", type="array", @OA\Items(ref="#/components/schemas/InvoiceLineResponse"))
  *     }
  * )
@@ -61,6 +61,10 @@ class Invoice extends BaseModel
     protected $filters = ['in', 'sort', 'starts_with'];
     protected $table = 'invoices';
     protected $fillable = ['first_name', 'last_name', 'invoice_date', 'invoice_number', 'billing_address', 'billing_city', 'billing_state', 'billing_country', 'billing_postcode', 'total', 'payment_method', 'payment_account_name', 'payment_account_number'];
+
+    protected $casts = [
+        'total' => 'double',
+    ];
 
     public function invoicelines(): HasMany
     {

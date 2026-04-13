@@ -64,6 +64,7 @@ class FavoriteController extends Controller
      *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
      *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
      *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response="409", ref="#/components/responses/DuplicateConflictResponse"),
      *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
      *      security={{ "apiAuth": {} }}
      * )
@@ -132,7 +133,7 @@ class FavoriteController extends Controller
      */
     public function destroy(DestroyFavorite $request, $id)
     {
-        Favorite::where('user_id', Auth::user()->id)->where('product_id', $id)->delete();
+        Favorite::where('user_id', Auth::user()->id)->where('id', $id)->delete();
         return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
     }
 }

@@ -49,10 +49,10 @@ class InvoiceController extends Controller
      *                  type="array",
      *                  @OA\Items(ref="#/components/schemas/InvoiceResponse")
      *              ),
-     *              @OA\Property(property="from", type="integer", example=1),
+     *              @OA\Property(property="from", type="integer", nullable=true, example=1),
      *              @OA\Property(property="last_page", type="integer", example=1),
      *              @OA\Property(property="per_page", type="integer", example=1),
-     *              @OA\Property(property="to", type="integer", example=1),
+     *              @OA\Property(property="to", type="integer", nullable=true, example=1),
      *              @OA\Property(property="total", type="integer", example=1),
      *          )
      *      ),
@@ -239,10 +239,10 @@ class InvoiceController extends Controller
      *                  type="array",
      *                  @OA\Items(ref="#/components/schemas/InvoiceResponse")
      *              ),
-     *              @OA\Property(property="from", type="integer", example=1),
+     *              @OA\Property(property="from", type="integer", nullable=true, example=1),
      *              @OA\Property(property="last_page", type="integer", example=1),
      *              @OA\Property(property="per_page", type="integer", example=1),
-     *              @OA\Property(property="to", type="integer", example=1),
+     *              @OA\Property(property="to", type="integer", nullable=true, example=1),
      *              @OA\Property(property="total", type="integer", example=1),
      *          )
      *      ),

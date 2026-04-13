@@ -26,11 +26,12 @@ class UpdateProduct extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'name' => 'string|max:120',
-            'description' => 'string|max:1250',
-            'price' => '',
-            'category_id' => '',
-            'brand_id' => ''
+            'name' => 'sometimes|string|max:120',
+            'description' => 'sometimes|nullable|string|max:1250',
+            'price' => 'sometimes|numeric',
+            'category_id' => 'sometimes|integer|exists:categories,id',
+            'brand_id' => 'sometimes|integer|exists:brands,id',
+            'product_image_id' => 'sometimes|integer|exists:product_images,id',
         ];
     }
 }

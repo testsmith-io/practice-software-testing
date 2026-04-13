@@ -48,7 +48,11 @@ class Product extends BaseModel
     use HasFactory, FilterQueryString;
 
     protected $table = 'products';
-    protected $fillable = ['name', 'description', 'category_id', 'brand_id', 'price', 'product_image_id', 'is_location_offer', 'is_rental'];
+    protected $fillable = ['name', 'description', 'category_id', 'brand_id', 'price', 'product_image_id', 'is_location_offer', 'is_rental', 'stock'];
+
+    protected $attributes = [
+        'stock' => 0,
+    ];
     protected $hidden = ['brand_id', 'category_id', 'product_image_id', 'created_at', 'updated_at'];
     protected $filters = ['sort'];
 
@@ -66,7 +70,7 @@ class Product extends BaseModel
     protected function price(): Attribute
     {
         return Attribute::get(
-            get: fn($value) => number_format($value, 2, '.', null),
+            get: fn($value) => (double) $value,
         );
     }
 

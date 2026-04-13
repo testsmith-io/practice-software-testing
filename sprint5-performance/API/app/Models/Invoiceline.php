@@ -14,9 +14,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *     type="object",
  *     title="InvoiceLineResponse",
  *     properties={
- *         @OA\Property(property="id", type="string", example=1),
- *         @OA\Property(property="invoice_id", type="string", example=1),
- *         @OA\Property(property="product_id", type="string", example=1),
+ *         @OA\Property(property="id", type="string", example="01JFG8Q5XKZJY4BEYQ87PC2Q1Y"),
+ *         @OA\Property(property="invoice_id", type="string", example="01JFG8Q5XKZJY4BEYQ87PC2Q1Y"),
+ *         @OA\Property(property="product_id", type="string", example="01JFG8Q5XKZJY4BEYQ87PC2Q1Y"),
  *         @OA\Property(property="unit_price", type="number"),
  *         @OA\Property(property="discount_percentage", type="number"),
  *         @OA\Property(property="discounted_price", type="number"),

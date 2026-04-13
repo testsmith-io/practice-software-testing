@@ -74,6 +74,25 @@ use Spatie\ArrayToXml\ArrayToXml;
  *      @OA\Response(
  *          response="UnprocessableEntityResponse",
  *          description="Returns when the server was not able to process the content"
+ *      ),
+ *      @OA\Response(
+ *          response="DuplicateConflictResponse",
+ *          description="The resource conflicts with an existing one (e.g. unique slug already taken). Body is either a field-level MessageBag (when caught by validation) or a single message (when caught by the Handler from a race / FormRequest bypass).",
+ *          @OA\JsonContent(
+ *              oneOf={
+ *                  @OA\Schema(
+ *                      type="object",
+ *                      description="Field-level conflict from the unique: validator rule",
+ *                      additionalProperties={"type":"array","items":{"type":"string"}},
+ *                      example={"slug":{"A brand already exists with this slug."}}
+ *                  ),
+ *                  @OA\Schema(
+ *                      type="object",
+ *                      description="Generic conflict from the global Handler (race / bypass)",
+ *                      @OA\Property(property="message", type="string", example="Duplicate Entry")
+ *                  )
+ *              }
+ *          )
  *      )
  *  )
  */
@@ -115,7 +134,7 @@ class Controller extends BaseController
             return $this->makeXML($data, $status, array_merge($headers, ['Content-Type' => app('request')->headers->get('Accept')]), $xmlRoot);
         } else {
             return response()->json($data, $status,
-                ['Content-Type' => 'application/json'], JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+                ['Content-Type' => 'application/json'], JSON_UNESCAPED_UNICODE);
         }
     }
 

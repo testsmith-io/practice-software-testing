@@ -85,6 +85,9 @@
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
+                    "409": {
+                        "$ref": "#/components/responses/DuplicateConflictResponse"
+                    },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
@@ -169,6 +172,9 @@
                     },
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/DuplicateConflictResponse"
                     },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntityResponse"
@@ -362,6 +368,9 @@
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
+                    "409": {
+                        "$ref": "#/components/responses/DuplicateConflictResponse"
+                    },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
@@ -491,6 +500,9 @@
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
+                    "409": {
+                        "$ref": "#/components/responses/DuplicateConflictResponse"
+                    },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
@@ -580,7 +592,8 @@
                                         },
                                         "from": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 1,
+                                            "nullable": true
                                         },
                                         "last_page": {
                                             "type": "integer",
@@ -592,7 +605,8 @@
                                         },
                                         "to": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 1,
+                                            "nullable": true
                                         },
                                         "total": {
                                             "type": "integer",
@@ -633,14 +647,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "oneOf": [
-                                    {
-                                        "$ref": "#/components/schemas/ContactRequest"
-                                    },
-                                    {
-                                        "$ref": "#/components/schemas/ContactRequestAuthenticated"
-                                    }
-                                ]
+                                "$ref": "#/components/schemas/ContactRequest"
                             }
                         }
                     }
@@ -744,7 +751,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/FavoriteResponse"
+                                        "$ref": "#/components/schemas/FavoriteWithProductResponse"
                                     }
                                 }
                             }
@@ -803,6 +810,9 @@
                     },
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/DuplicateConflictResponse"
                     },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntityResponse"
@@ -977,7 +987,8 @@
                                         },
                                         "from": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 1,
+                                            "nullable": true
                                         },
                                         "last_page": {
                                             "type": "integer",
@@ -989,7 +1000,8 @@
                                         },
                                         "to": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 1,
+                                            "nullable": true
                                         },
                                         "total": {
                                             "type": "integer",
@@ -1164,50 +1176,6 @@
                         "apiAuth": []
                     }
                 ]
-            },
-            "delete": {
-                "tags": [
-                    "Invoice"
-                ],
-                "summary": "Delete specific invoice",
-                "description": "Delete a specific invoice",
-                "operationId": "deleteInvoice",
-                "parameters": [
-                    {
-                        "name": "invoiceId",
-                        "in": "path",
-                        "description": "The invoiceId parameter in path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "Successful operation"
-                    },
-                    "401": {
-                        "$ref": "#/components/responses/UnauthorizedResponse"
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/ItemNotFoundResponse"
-                    },
-                    "409": {
-                        "$ref": "#/components/responses/ConflictResponse"
-                    },
-                    "405": {
-                        "$ref": "#/components/responses/MethodNotAllowedResponse"
-                    },
-                    "422": {
-                        "$ref": "#/components/responses/UnprocessableEntityResponse"
-                    }
-                },
-                "security": [
-                    {
-                        "apiAuth": []
-                    }
-                ]
             }
         },
         "/invoices/{invoiceId}/status": {
@@ -1233,6 +1201,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
+                                "title": "InvoiceStatusRequest",
                                 "properties": {
                                     "status": {
                                         "description": "The status of the order",
@@ -1330,7 +1299,8 @@
                                         },
                                         "from": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 1,
+                                            "nullable": true
                                         },
                                         "last_page": {
                                             "type": "integer",
@@ -1342,7 +1312,8 @@
                                         },
                                         "to": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 1,
+                                            "nullable": true
                                         },
                                         "total": {
                                             "type": "integer",
@@ -1412,8 +1383,8 @@
                                     "title": "PaymentResponse",
                                     "properties": {
                                         "message": {
-                                            "type": "boolean",
-                                            "example": "Success status"
+                                            "type": "string",
+                                            "example": "Payment was successful"
                                         }
                                     },
                                     "type": "object"
@@ -1499,7 +1470,8 @@
                                         },
                                         "from": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 1,
+                                            "nullable": true
                                         },
                                         "last_page": {
                                             "type": "integer",
@@ -1511,7 +1483,8 @@
                                         },
                                         "to": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 1,
+                                            "nullable": true
                                         },
                                         "total": {
                                             "type": "integer",
@@ -1810,7 +1783,8 @@
                                         },
                                         "from": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 1,
+                                            "nullable": true
                                         },
                                         "last_page": {
                                             "type": "integer",
@@ -1822,7 +1796,8 @@
                                         },
                                         "to": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 1,
+                                            "nullable": true
                                         },
                                         "total": {
                                             "type": "integer",
@@ -1868,10 +1843,42 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/UserResponse"
-                                    }
+                                    "title": "PaginatedUserResponse",
+                                    "properties": {
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/UserResponse"
+                                            }
+                                        },
+                                        "from": {
+                                            "type": "integer",
+                                            "example": 1,
+                                            "nullable": true
+                                        },
+                                        "last_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "to": {
+                                            "type": "integer",
+                                            "example": 1,
+                                            "nullable": true
+                                        },
+                                        "total": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -1928,6 +1935,9 @@
                     },
                     "403": {
                         "description": "Forbidden"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/DuplicateConflictResponse"
                     }
                 }
             }
@@ -1997,7 +2007,7 @@
                     "User"
                 ],
                 "summary": "Request a new password",
-                "description": "Request a new password, it actually sets the password to `welcome01`",
+                "description": "Request a new password, it actually sets the password to `welcome02`",
                 "operationId": "forgotPassword",
                 "requestBody": {
                     "content": {
@@ -2285,52 +2295,11 @@
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
+                    "409": {
+                        "$ref": "#/components/responses/DuplicateConflictResponse"
+                    },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntityResponse"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    }
-                },
-                "security": [
-                    {
-                        "apiAuth": []
-                    }
-                ]
-            },
-            "delete": {
-                "tags": [
-                    "User"
-                ],
-                "summary": "Delete specific user",
-                "description": "Delete a specific user",
-                "operationId": "deleteUser",
-                "parameters": [
-                    {
-                        "name": "userId",
-                        "in": "path",
-                        "description": "The userId parameter in path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "Successful operation"
-                    },
-                    "401": {
-                        "$ref": "#/components/responses/UnauthorizedResponse"
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/ItemNotFoundResponse"
-                    },
-                    "409": {
-                        "$ref": "#/components/responses/ConflictResponse"
-                    },
-                    "405": {
-                        "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
                     "403": {
                         "description": "Forbidden"
@@ -2377,10 +2346,42 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/UserResponse"
-                                    }
+                                    "title": "PaginatedUserResponse",
+                                    "properties": {
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/UserResponse"
+                                            }
+                                        },
+                                        "from": {
+                                            "type": "integer",
+                                            "example": 1,
+                                            "nullable": true
+                                        },
+                                        "last_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "to": {
+                                            "type": "integer",
+                                            "example": 1,
+                                            "nullable": true
+                                        },
+                                        "total": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -2447,6 +2448,10 @@
                         "description": "URL part, words separated by hyphen",
                         "type": "string",
                         "example": "new-category"
+                    },
+                    "parent_id": {
+                        "type": "integer",
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -2458,7 +2463,8 @@
                         "type": "integer"
                     },
                     "parent_id": {
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "name": {
                         "type": "string",
@@ -2484,7 +2490,8 @@
                         "type": "integer"
                     },
                     "parent_id": {
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "name": {
                         "type": "string",
@@ -2526,32 +2533,32 @@
             "ContactRequest": {
                 "title": "ContactRequest",
                 "required": [
-                    "name"
+                    "subject",
+                    "message"
                 ],
                 "properties": {
                     "name": {
-                        "description": "",
+                        "description": "Sender name",
                         "type": "string",
+                        "maxLength": 120,
                         "example": "John"
                     },
                     "email": {
-                        "description": "",
+                        "description": "Required when not authenticated",
                         "type": "string",
+                        "maxLength": 120,
                         "example": "john@doe.example"
                     },
                     "subject": {
                         "description": "",
                         "type": "string",
+                        "maxLength": 120,
                         "example": "website"
-                    },
-                    "status": {
-                        "description": "",
-                        "type": "string",
-                        "example": "NEW"
                     },
                     "message": {
                         "description": "",
                         "type": "string",
+                        "maxLength": 250,
                         "example": "Something is wrong with the website."
                     }
                 },
@@ -2681,15 +2688,37 @@
             "FavoriteResponse": {
                 "title": "FavoriteResponse",
                 "properties": {
-                    "product": {
-                        "type": "string",
-                        "example": "new-brand"
+                    "product_id": {
+                        "type": "integer",
+                        "example": 2
                     },
-                    "created_at": {
-                        "type": "string",
-                        "example": "2022-08-01 08:24:56"
+                    "user_id": {
+                        "type": "integer",
+                        "example": 2
                     },
                     "id": {
+                        "type": "integer",
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "FavoriteWithProductResponse": {
+                "title": "FavoriteResponse",
+                "properties": {
+                    "product_id": {
+                        "type": "integer",
+                        "example": "1234"
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": "1234"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "example": "1234"
+                    },
+                    "product": {
                         "$ref": "#/components/schemas/ProductResponse"
                     }
                 },
@@ -2734,12 +2763,7 @@
                     "invoicelines": {
                         "type": "array",
                         "items": {
-                            "type": "object",
-                            "example": {
-                                "product_id": 9,
-                                "quantity": 1,
-                                "unit_price": 12.01
-                            }
+                            "$ref": "#/components/schemas/InvoiceLineRequest"
                         }
                     }
                 },
@@ -2749,6 +2773,10 @@
                 "title": "InvoiceResponse",
                 "properties": {
                     "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
                         "type": "integer",
                         "example": 1
                     },
@@ -2796,7 +2824,8 @@
                     },
                     "status_message": {
                         "type": "string",
-                        "example": ""
+                        "example": "",
+                        "nullable": true
                     },
                     "invoicelines": {
                         "type": "array",
@@ -2807,10 +2836,34 @@
                 },
                 "type": "object"
             },
+            "InvoiceLineRequest": {
+                "title": "InvoiceLineRequest",
+                "properties": {
+                    "product_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "unit_price": {
+                        "type": "number"
+                    },
+                    "quantity": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
             "InvoiceLineResponse": {
                 "title": "InvoiceLineResponse",
                 "properties": {
                     "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "invoice_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "product_id": {
                         "type": "integer",
                         "example": 1
                     },
@@ -2876,6 +2929,10 @@
                     "description": {
                         "type": "string",
                         "example": "Lorum ipsum"
+                    },
+                    "stock": {
+                        "type": "number",
+                        "example": 10
                     },
                     "price": {
                         "type": "number",
@@ -2949,7 +3006,8 @@
                     },
                     "state": {
                         "type": "string",
-                        "example": "State"
+                        "example": "State",
+                        "nullable": true
                     },
                     "country": {
                         "type": "string",
@@ -2957,11 +3015,13 @@
                     },
                     "postcode": {
                         "type": "string",
-                        "example": "1234AA"
+                        "example": "1234AA",
+                        "nullable": true
                     },
                     "phone": {
                         "type": "string",
-                        "example": "0987654321"
+                        "example": "0987654321",
+                        "nullable": true
                     },
                     "dob": {
                         "type": "string",
@@ -2999,7 +3059,8 @@
                     },
                     "state": {
                         "type": "string",
-                        "example": "State"
+                        "example": "State",
+                        "nullable": true
                     },
                     "country": {
                         "type": "string",
@@ -3007,11 +3068,13 @@
                     },
                     "postcode": {
                         "type": "string",
-                        "example": "1234AA"
+                        "example": "1234AA",
+                        "nullable": true
                     },
                     "phone": {
                         "type": "string",
-                        "example": "0987654321"
+                        "example": "0987654321",
+                        "nullable": true
                     },
                     "dob": {
                         "type": "string",
@@ -3023,6 +3086,10 @@
                     },
                     "id": {
                         "type": "integer"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2022-08-01 08:24:56"
                     }
                 },
                 "type": "object"
@@ -3119,6 +3186,42 @@
             },
             "UnprocessableEntityResponse": {
                 "description": "Returns when the server was not able to process the content"
+            },
+            "DuplicateConflictResponse": {
+                "description": "The resource conflicts with an existing one (e.g. unique slug already taken). Body is either a field-level MessageBag (when caught by validation) or a single message (when caught by the Handler from a race / FormRequest bypass).",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "description": "Field-level conflict from the unique: validator rule",
+                                    "type": "object",
+                                    "example": {
+                                        "slug": [
+                                            "A brand already exists with this slug."
+                                        ]
+                                    },
+                                    "additionalProperties": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                {
+                                    "description": "Generic conflict from the global Handler (race / bypass)",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Duplicate Entry"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            ]
+                        }
+                    }
+                }
             }
         },
         "securitySchemes": {

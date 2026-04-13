@@ -12,9 +12,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *     schema="CategoryRequest",
  *     type="object",
  *     title="CategoryRequest",
+ *     required={"name","slug"},
  *     properties={
- *         @OA\Property(property="name", type="string", example="new category", description=""),
- *         @OA\Property(property="slug", type="string", example="new-category", description="URL part, words separated by hyphen")
+ *         @OA\Property(property="name", type="string", maxLength=120, example="new category", description=""),
+ *         @OA\Property(property="slug", type="string", maxLength=120, example="new-category", description="URL part, words separated by hyphen"),
+ *         @OA\Property(property="parent_id", type="integer", nullable=true)
  *     }
  * )
  *
@@ -23,8 +25,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *     type="object",
  *     title="CategoryTreeResponse",
  *     properties={
- *         @OA\Property(property="id", type="integer"),
- *         @OA\Property(property="parent_id", type="integer"),
+ *         @OA\Property(property="id", type="integer", readOnly=true),
+ *         @OA\Property(property="parent_id", type="integer", nullable=true),
  *         @OA\Property(property="name", type="string", example="new category"),
  *         @OA\Property(property="slug", type="string", example="new-category"),
  *              @OA\Property(
@@ -39,15 +41,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *     type="object",
  *     title="CategoryResponse",
  *     properties={
- *         @OA\Property(property="id", type="integer"),
- *         @OA\Property(property="parent_id", type="integer"),
+ *         @OA\Property(property="id", type="integer", readOnly=true),
+ *         @OA\Property(property="parent_id", type="integer", nullable=true),
  *         @OA\Property(property="name", type="string", example="new category"),
- *         @OA\Property(property="slug", type="string", example="new-category"),
- *         @OA\Property(
- *              property="sub_categories",
- *              type="array",
- *              @OA\Items(ref="#/components/schemas/CategoryResponse")
- *         )
+ *         @OA\Property(property="slug", type="string", example="new-category")
  *     }
  * )
  */

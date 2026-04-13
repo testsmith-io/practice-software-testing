@@ -11,6 +11,7 @@
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.8",
+        "spatie/array-to-xml": "^3.4",
         "tymon/jwt-auth": "2.1.1",
         "zircote/swagger-php": "3.3.7"
     },

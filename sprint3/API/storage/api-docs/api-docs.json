@@ -85,6 +85,9 @@
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
+                    "409": {
+                        "$ref": "#/components/responses/DuplicateConflictResponse"
+                    },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
@@ -169,6 +172,9 @@
                     },
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/DuplicateConflictResponse"
                     },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntityResponse"
@@ -362,6 +368,9 @@
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
+                    "409": {
+                        "$ref": "#/components/responses/DuplicateConflictResponse"
+                    },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
@@ -491,6 +500,9 @@
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
+                    "409": {
+                        "$ref": "#/components/responses/DuplicateConflictResponse"
+                    },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
@@ -604,7 +616,8 @@
                                         },
                                         "from": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 1,
+                                            "nullable": true
                                         },
                                         "last_page": {
                                             "type": "integer",
@@ -616,7 +629,8 @@
                                         },
                                         "to": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 1,
+                                            "nullable": true
                                         },
                                         "total": {
                                             "type": "integer",
@@ -865,7 +879,8 @@
                                         },
                                         "from": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 1,
+                                            "nullable": true
                                         },
                                         "last_page": {
                                             "type": "integer",
@@ -877,7 +892,8 @@
                                         },
                                         "to": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 1,
+                                            "nullable": true
                                         },
                                         "total": {
                                             "type": "integer",
@@ -938,8 +954,8 @@
                                 "schema": {
                                     "title": "PaymentResponse",
                                     "properties": {
-                                        "success": {
-                                            "type": "boolean",
+                                        "message": {
+                                            "type": "string",
                                             "example": "Success status"
                                         }
                                     },
@@ -1026,7 +1042,8 @@
                                         },
                                         "from": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 1,
+                                            "nullable": true
                                         },
                                         "last_page": {
                                             "type": "integer",
@@ -1038,7 +1055,8 @@
                                         },
                                         "to": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 1,
+                                            "nullable": true
                                         },
                                         "total": {
                                             "type": "integer",
@@ -1337,7 +1355,8 @@
                                         },
                                         "from": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 1,
+                                            "nullable": true
                                         },
                                         "last_page": {
                                             "type": "integer",
@@ -1349,7 +1368,8 @@
                                         },
                                         "to": {
                                             "type": "integer",
-                                            "example": 1
+                                            "example": 1,
+                                            "nullable": true
                                         },
                                         "total": {
                                             "type": "integer",
@@ -1418,6 +1438,10 @@
                         "description": "URL part, words separated by hyphen",
                         "type": "string",
                         "example": "new-category"
+                    },
+                    "parent_id": {
+                        "type": "integer",
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -1429,7 +1453,8 @@
                         "type": "integer"
                     },
                     "parent_id": {
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "name": {
                         "type": "string",
@@ -1455,7 +1480,8 @@
                         "type": "integer"
                     },
                     "parent_id": {
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "name": {
                         "type": "string",
@@ -1464,6 +1490,12 @@
                     "slug": {
                         "type": "string",
                         "example": "new-category"
+                    },
+                    "sub_categories": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CategoryResponse"
+                        }
                     }
                 },
                 "type": "object"
@@ -1582,9 +1614,10 @@
                     },
                     "status_message": {
                         "type": "string",
-                        "example": ""
+                        "example": "",
+                        "nullable": true
                     },
-                    "invoice_items": {
+                    "invoicelines": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/InvoiceLineResponse"
@@ -1597,6 +1630,14 @@
                 "title": "InvoiceLineResponse",
                 "properties": {
                     "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "invoice_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "product_id": {
                         "type": "integer",
                         "example": 1
                     },
@@ -1806,6 +1847,42 @@
             },
             "UnprocessableEntityResponse": {
                 "description": "Returns when the server was not able to process the content"
+            },
+            "DuplicateConflictResponse": {
+                "description": "The resource conflicts with an existing one (e.g. unique slug already taken). Body is either a field-level MessageBag (when caught by validation) or a single message (when caught by the Handler from a race / FormRequest bypass).",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "description": "Field-level conflict from the unique: validator rule",
+                                    "type": "object",
+                                    "example": {
+                                        "slug": [
+                                            "A brand already exists with this slug."
+                                        ]
+                                    },
+                                    "additionalProperties": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                {
+                                    "description": "Generic conflict from the global Handler (race / bypass)",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Duplicate Entry"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            ]
+                        }
+                    }
+                }
             }
         }
     }

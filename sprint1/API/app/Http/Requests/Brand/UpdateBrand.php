@@ -5,6 +5,7 @@
 namespace App\Http\Requests\Brand;
 
 use App\Http\Requests\BaseFormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateBrand extends BaseFormRequest
 {
@@ -26,8 +27,8 @@ class UpdateBrand extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'name' => 'string|max:120',
-            'slug' => 'string|max:120'
+            'name' => 'sometimes|string|max:120',
+            'slug' => ['sometimes', 'string', 'max:120', Rule::unique('brands', 'slug')->ignore($this->route('id'))],
         ];
     }
 }

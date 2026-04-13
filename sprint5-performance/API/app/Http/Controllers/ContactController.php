@@ -33,12 +33,7 @@ class ContactController extends Controller
      *      @OA\RequestBody(
      *          required=true,
      *          description="Contact request object",
-     *          @OA\JsonContent(
-     *              oneOf={
-     *                  @OA\Schema(ref="#/components/schemas/ContactRequest"),
-     *                  @OA\Schema(ref="#/components/schemas/ContactRequestAuthenticated")
-     *              }
-     *          )
+     *          @OA\JsonContent(ref="#/components/schemas/ContactRequest")
      *      ),
      *      @OA\Response(
      *          response=200,

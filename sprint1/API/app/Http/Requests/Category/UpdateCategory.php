@@ -5,6 +5,7 @@
 namespace App\Http\Requests\Category;
 
 use App\Http\Requests\BaseFormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateCategory extends BaseFormRequest
 {
@@ -26,9 +27,9 @@ class UpdateCategory extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'name' => 'string|max:120',
-            'slug' => 'string|max:120',
-            'parent_id' => 'integer|nullable'
+            'name' => 'sometimes|string|max:120',
+            'slug' => ['sometimes', 'string', 'max:120', Rule::unique('categories', 'slug')->ignore($this->route('id'))],
+            'parent_id' => 'sometimes|integer|nullable',
         ];
     }
 }

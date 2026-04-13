@@ -101,7 +101,8 @@ class UserController extends Controller
      *      @OA\Response(
      *          response=403,
      *          description="Forbidden"
-     *      )
+     *      ),
+     *      @OA\Response(response="409", ref="#/components/responses/DuplicateConflictResponse")
      * )
      */
     public function store(StoreCustomer $request)
@@ -503,6 +504,7 @@ class UserController extends Controller
      *      @OA\Response(response="200", ref="#/components/responses/UpdateResponse"),
      *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
      *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response="409", ref="#/components/responses/DuplicateConflictResponse"),
      *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
      *      @OA\Response(
      *          response=403,
@@ -548,6 +550,7 @@ class UserController extends Controller
      *      @OA\Response(response="200", ref="#/components/responses/UpdateResponse"),
      *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
      *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response="409", ref="#/components/responses/DuplicateConflictResponse"),
      *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
      *      @OA\Response(
      *          response=403,

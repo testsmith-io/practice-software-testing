@@ -65,7 +65,7 @@ class Product extends BaseModel
     protected function price(): Attribute
     {
         return Attribute::get(
-            get: fn($value) => number_format($value, 2, '.', null),
+            get: fn($value) => (double) $value,
         );
     }
 
