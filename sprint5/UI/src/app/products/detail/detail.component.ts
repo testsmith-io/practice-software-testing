@@ -16,7 +16,7 @@ import {ToastrService} from "ngx-toastr";
 import {AsyncPipe, NgClass} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
-import {TranslocoDirective} from "@jsverse/transloco";
+import {TranslocoDirective, TranslocoService} from "@jsverse/transloco";
 import {GaService} from "../../_services/ga.service";
 import {ComparisonService} from "../../_services/comparison.service";
 
@@ -45,6 +45,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   private titleService = inject(Title);
   private gaService = inject(GaService);
   public comparisonService = inject(ComparisonService);
+  private translocoService = inject(TranslocoService);
   product: Product;
   discount_percentage: any;
   quantity: number = 1;
@@ -124,13 +125,13 @@ export class DetailComponent implements OnInit, OnDestroy {
 
     this.favoriteService.addFavorite(payload).subscribe({
       next: () => {
-        this.toastr.success('Product added to your favorites list.', null, { progressBar: true });
+        this.toastr.success(this.translocoService.translate('toasts.product-added-to-favorites'), null, { progressBar: true });
       },
       error: (response) => {
         if (response.error.message === 'Duplicate Entry') {
-          this.toastr.error('Product already in your favorites list.', null, { progressBar: true });
+          this.toastr.error(this.translocoService.translate('toasts.product-already-in-favorites'), null, { progressBar: true });
         } else if (response.error.message === 'Unauthorized') {
-          this.toastr.error('Unauthorized, can not add product to your favorite list.', null, { progressBar: true });
+          this.toastr.error(this.translocoService.translate('toasts.unauthorized-favorite'), null, { progressBar: true });
         }
       }
     });
@@ -147,7 +148,7 @@ export class DetailComponent implements OnInit, OnDestroy {
       }
       this.cartService.addItem(item).subscribe({
         next: () => {
-          this.toastr.success('Product added to shopping cart.', undefined, { progressBar: true });
+          this.toastr.success(this.translocoService.translate('toasts.product-added-to-cart'), undefined, { progressBar: true });
 
           // Track add to cart event
           this.trackAddToCart();
