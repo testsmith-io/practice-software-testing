@@ -53,10 +53,10 @@ class UserController extends Controller
      *                   type="array",
      *                   @OA\Items(ref="#/components/schemas/UserResponse")
      *               ),
-     *               @OA\Property(property="from", type="integer", example=1),
+     *               @OA\Property(property="from", type="integer", nullable=true, example=1),
      *               @OA\Property(property="last_page", type="integer", example=1),
      *               @OA\Property(property="per_page", type="integer", example=1),
-     *               @OA\Property(property="to", type="integer", example=1),
+     *               @OA\Property(property="to", type="integer", nullable=true, example=1),
      *               @OA\Property(property="total", type="integer", example=1),
      *           )
      *       ),
@@ -98,7 +98,8 @@ class UserController extends Controller
      *      @OA\Response(
      *          response=403,
      *          description="Forbidden"
-     *      )
+     *      ),
+     *      @OA\Response(response="409", ref="#/components/responses/DuplicateConflictResponse")
      * )
      */
     public function store(StoreCustomer $request)
@@ -450,10 +451,10 @@ class UserController extends Controller
      *                   type="array",
      *                   @OA\Items(ref="#/components/schemas/UserResponse")
      *               ),
-     *               @OA\Property(property="from", type="integer", example=1),
+     *               @OA\Property(property="from", type="integer", nullable=true, example=1),
      *               @OA\Property(property="last_page", type="integer", example=1),
      *               @OA\Property(property="per_page", type="integer", example=1),
-     *               @OA\Property(property="to", type="integer", example=1),
+     *               @OA\Property(property="to", type="integer", nullable=true, example=1),
      *               @OA\Property(property="total", type="integer", example=1),
      *           )
      *       ),
@@ -507,6 +508,7 @@ class UserController extends Controller
      *      @OA\Response(response="200", ref="#/components/responses/UpdateResponse"),
      *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
      *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response="409", ref="#/components/responses/DuplicateConflictResponse"),
      *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
      *      @OA\Response(
      *          response=403,
@@ -517,52 +519,12 @@ class UserController extends Controller
      */
     public function update(UpdateCustomer $request, $id)
     {
-        if ((app('auth')->id() == $id)) {
-            //$request['password'] = app('hash')->make($request['password']);
+        if (app('auth')->id() == $id) {
             return $this->preferredFormat(['success' => (bool)User::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
         } else {
             return response()->json(['error' => 'You can only update your own data.'], ResponseAlias::HTTP_FORBIDDEN);
         }
     }
 
-    /**
-     * @OA\Delete(
-     *      path="/users/{userId}",
-     *      operationId="deleteUser",
-     *      tags={"User"},
-     *      summary="Delete specific user",
-     *      description="Delete a specific user",
-     *      @OA\Parameter(
-     *          name="userId",
-     *          in="path",
-     *          description="The userId parameter in path",
-     *          required=true,
-     *          @OA\Schema(type="integer")
-     *      ),
-     *      @OA\Response(response=204, description="Successful operation"),
-     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
-     *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
-     *      @OA\Response(response="409", ref="#/components/responses/ConflictResponse"),
-     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
-     *      @OA\Response(
-     *          response=403,
-     *          description="Forbidden"
-     *      ),
-     *      security={{ "apiAuth": {} }}
-     * ),
-     */
-    public function destroy(DestroyCustomer $request, $id)
-    {
-        try {
-            return response()->json(['error' => 'Only admins can delete accounts.'], ResponseAlias::HTTP_FORBIDDEN);
-        } catch (QueryException $e) {
-            if ($e->getCode() === '23000') {
-                return $this->preferredFormat([
-                    'success' => false,
-                    'message' => 'Seems like this customer is used elsewhere.',
-                ], ResponseAlias::HTTP_CONFLICT);
-            }
-        }
-    }
 
 }

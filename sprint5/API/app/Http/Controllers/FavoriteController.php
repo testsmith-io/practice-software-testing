@@ -67,6 +67,7 @@ class FavoriteController extends Controller
      *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
      *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
      *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response="409", ref="#/components/responses/DuplicateConflictResponse"),
      *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
      *      security={{ "apiAuth": {} }}
      * )

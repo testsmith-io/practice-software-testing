@@ -93,6 +93,7 @@ class CategoryController extends Controller
      *      ),
      *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
      *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response="409", ref="#/components/responses/DuplicateConflictResponse"),
      *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
      *  )
      */
@@ -196,6 +197,7 @@ class CategoryController extends Controller
      *      @OA\Response(response="200", ref="#/components/responses/UpdateResponse"),
      *      @OA\Response(response="404", ref="#/components/responses/ResourceNotFoundResponse"),
      *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response="409", ref="#/components/responses/DuplicateConflictResponse"),
      *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
      *  )
      */

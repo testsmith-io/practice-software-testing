@@ -18,13 +18,16 @@ class ImageController extends Controller
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
+     *          headers={
+     *              @OA\Header(header="Cache-Control", description="public, max-age=120", @OA\Schema(type="string")),
+     *              @OA\Header(header="ETag", @OA\Schema(type="string"))
+     *          },
      *          @OA\JsonContent(
      *              type="array",
      *              @OA\Items(ref="#/components/schemas/ImageResponse")
      *          )
      *       ),
-     *       @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
-     *       @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *       @OA\Response(response=304, description="Not Modified"),
      *  )
      */
     public function index()

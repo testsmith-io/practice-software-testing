@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *     properties={
  *         @OA\Property(property="product_id", type="integer", example=2),
  *         @OA\Property(property="user_id", type="integer", example=2),
- *         @OA\Property(property="id", ref="#/components/schemas/ProductResponse")
+ *         @OA\Property(property="id", type="integer", example=1)
  *     }
  * )
  * @OA\Schema(

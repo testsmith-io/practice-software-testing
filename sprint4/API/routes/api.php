@@ -122,6 +122,5 @@ Route::controller(UserController::class)->prefix('users')->group(function () {
     Route::put('{id}', 'update');
     Route::get('/', 'index');
     Route::get('/{id}', 'show');
-    Route::delete('/{id}', 'destroy');
 });
 

@@ -26,6 +26,11 @@ class Invoiceline extends BaseModel
     protected $table = 'invoice_items';
     protected $fillable = ['invoice_id', 'product_id', 'unit_price', 'quantity'];
 
+    protected $casts = [
+        'unit_price' => 'double',
+        'quantity' => 'integer',
+    ];
+
     public function invoice(): BelongsTo
     {
         return $this->belongsTo('App\Models\Invoices');

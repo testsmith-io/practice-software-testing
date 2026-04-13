@@ -19,6 +19,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/**
+ * @OA\Get(
+ *      path="/status",
+ *      operationId="getStatus",
+ *      tags={"Status"},
+ *      summary="Retrieve application status",
+ *      description="Returns application metadata (version, environment, app name).",
+ *      @OA\Response(
+ *          response=200,
+ *          description="Successful operation",
+ *          @OA\JsonContent(
+ *              type="object",
+ *              @OA\Property(property="version", type="string"),
+ *              @OA\Property(property="environment", type="string"),
+ *              @OA\Property(property="app_name", type="string")
+ *          )
+ *      )
+ * )
+ */
 Route::get('/status', function () {
     return response()->json(['version' => config('app.version'), 'environment' => env('APP_ENV'), 'app_name' => env('APP_NAME')], 200,
         ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);

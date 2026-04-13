@@ -26,34 +26,37 @@ class ProductController extends Controller
      *      @OA\Parameter(
      *          name="by_brand",
      *          in="query",
-     *          description="Id of brand",
+     *          description="Comma-separated list of brand ids",
      *          required=false,
-     *          @OA\Schema(type="integer")
+     *          @OA\Schema(type="string", description="Comma-separated list of ids, e.g. 1,2,3", example="1,2,3")
      *      ),
      *      @OA\Parameter(
      *          name="by_category",
      *          in="query",
-     *          description="Id of category",
+     *          description="Comma-separated list of category ids",
      *          required=false,
-     *          @OA\Schema(type="integer")
+     *          @OA\Schema(type="string", description="Comma-separated list of ids, e.g. 1,2,3", example="1,2,3")
      *      ),
      *      @OA\Parameter(
-     *          name="is_rental",
+     *          name="by_category_slug",
      *          in="query",
-     *          description="Indication if we like to retrieve rentals products",
+     *          description="Filter products by category slug. Matches the given slug and includes all descendants.",
      *          required=false,
      *          @OA\Schema(type="string")
      *      ),
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
+     *          headers={
+     *              @OA\Header(header="Cache-Control", description="public, max-age=120", @OA\Schema(type="string")),
+     *              @OA\Header(header="ETag", @OA\Schema(type="string"))
+     *          },
      *          @OA\JsonContent(
      *              type="array",
      *              @OA\Items(ref="#/components/schemas/ProductResponse")
      *          )
      *       ),
-     *       @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
-     *       @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *       @OA\Response(response=304, description="Not Modified"),
      *  )
      */
     public function index(Request $request)
@@ -106,38 +109,41 @@ class ProductController extends Controller
      *              @OA\Property(property="price", type="number", example=9.99)
      *          )
      *       ),
-     *       @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
-     *       @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
      *       @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
+     *       @OA\Response(response="500", ref="#/components/responses/InternalServerErrorResponse"),
      *  )
      */
     public function store(StoreProduct $request)
     {
-        return $this->preferredFormat(Product::create($request->all()), ResponseAlias::HTTP_CREATED);
+        return $this->preferredFormat(Product::create($request->validated()), ResponseAlias::HTTP_CREATED);
     }
 
     /**
      * @OA\Get(
-     *      path="/products/{productId}",
+     *      path="/products/{id}",
      *      operationId="getProduct",
      *      tags={"Product"},
      *      summary="Retrieve specific product",
      *      description="Retrieve specific product",
      *      @OA\Parameter(
-     *          name="productId",
+     *          name="id",
      *          in="path",
      *          example=1,
-     *          description="The productId parameter in path",
+     *          description="The id parameter in path",
      *          required=true,
      *          @OA\Schema(type="integer")
      *      ),
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
+     *          headers={
+     *              @OA\Header(header="Cache-Control", description="public, max-age=120", @OA\Schema(type="string")),
+     *              @OA\Header(header="ETag", @OA\Schema(type="string"))
+     *          },
      *          @OA\JsonContent(ref="#/components/schemas/ProductResponse")
      *       ),
+     *       @OA\Response(response=304, description="Not Modified"),
      *       @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
-     *       @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
      *  )
      */
     public function show($id)
@@ -147,49 +153,54 @@ class ProductController extends Controller
 
     /**
      * @OA\Get(
-     *      path="/products/{productId}/related",
+     *      path="/products/{id}/related",
      *      operationId="getRelatedProducts",
      *      tags={"Product"},
      *      summary="Retrieve related products",
      *      description="Retrieve related products",
      *      @OA\Parameter(
-     *          name="productId",
+     *          name="id",
      *          in="path",
      *          example=1,
-     *          description="The productId parameter in path",
+     *          description="The id parameter in path",
      *          required=true,
      *          @OA\Schema(type="integer")
      *      ),
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
+     *          headers={
+     *              @OA\Header(header="Cache-Control", description="public, max-age=120", @OA\Schema(type="string")),
+     *              @OA\Header(header="ETag", @OA\Schema(type="string"))
+     *          },
      *          @OA\JsonContent(
      *              type="array",
      *              @OA\Items(ref="#/components/schemas/ProductResponse")
      *          ),
      *       ),
+     *       @OA\Response(response=304, description="Not Modified"),
      *       @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
-     *       @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *       @OA\Response(response="500", ref="#/components/responses/InternalServerErrorResponse"),
      *  )
      */
     public function showRelated($id)
     {
-        $categoryId = Product::where('id', $id)->first()->category_id;
+        $categoryId = Product::findOrFail($id)->category_id;
 
         return $this->preferredFormat(Product::with('product_image', 'category', 'brand')->where('category_id', $categoryId)->where('id', '!=', $id)->get());
     }
 
     /**
      * @OA\Put(
-     *      path="/products/{productId}",
+     *      path="/products/{id}",
      *      operationId="updateProduct",
      *      tags={"Product"},
      *      summary="Update specific product",
      *      description="Update specific product",
      *      @OA\Parameter(
-     *          name="productId",
+     *          name="id",
      *          in="path",
-     *          description="The productId parameter in path",
+     *          description="The id parameter in path",
      *          required=true,
      *          @OA\Schema(type="integer")
      *      ),
@@ -200,40 +211,38 @@ class ProductController extends Controller
      *      ),
      *      @OA\Response(response="200", ref="#/components/responses/UpdateResponse"),
      *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
-     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
      *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
+     *      @OA\Response(response="500", ref="#/components/responses/InternalServerErrorResponse"),
      * )
      */
     public function update(UpdateProduct $request, $id)
     {
-        return $this->preferredFormat(['success' => (bool)Product::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
+        return $this->preferredFormat(['success' => (bool)Product::where('id', $id)->update($request->validated())], ResponseAlias::HTTP_OK);
     }
 
     /**
      * @OA\Delete(
-     *      path="/products/{productId}",
+     *      path="/products/{id}",
      *      operationId="deleteProduct",
      *      tags={"Product"},
      *      summary="Delete specific product",
      *      description="",
      *      @OA\Parameter(
-     *          name="productId",
+     *          name="id",
      *          in="path",
-     *          description="The productId parameter in path",
+     *          description="The id parameter in path",
      *          required=true,
      *          @OA\Schema(type="integer")
      *      ),
      *      @OA\Response(response=204, description="Successful operation"),
-     *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
      *      @OA\Response(response="409", ref="#/components/responses/ConflictResponse"),
-     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
      *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
      * ),
      */
     public function destroy(DestroyProduct $request, $id)
     {
         try {
-            Product::find($id)->delete();
+            Product::findOrFail($id)->delete();
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {
@@ -241,6 +250,8 @@ class ProductController extends Controller
                     'success' => false,
                     'message' => 'Seems like this product is used elsewhere.',
                 ], ResponseAlias::HTTP_CONFLICT);
+            } else {
+                throw $e;
             }
         }
     }

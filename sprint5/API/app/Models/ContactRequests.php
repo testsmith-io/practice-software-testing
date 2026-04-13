@@ -13,12 +13,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *     schema="ContactRequest",
  *     type="object",
  *     title="ContactRequest",
- *     required={"name"},
+ *     required={"subject","message"},
  *     properties={
- *         @OA\Property(property="name", type="string", example="John Doe", description="If set, Authorization header is required"),
- *         @OA\Property(property="email", type="string", example="john@doe.example", description=""),
- *         @OA\Property(property="subject", type="string", example="website", description=""),
- *         @OA\Property(property="message", type="string", example="Something is wrong with the website.", description="")
+ *         @OA\Property(property="name", type="string", example="John Doe", maxLength=120, description="Sender name"),
+ *         @OA\Property(property="email", type="string", example="john@doe.example", maxLength=256, description="Required when not authenticated"),
+ *         @OA\Property(property="subject", type="string", example="website", maxLength=120, description=""),
+ *         @OA\Property(property="message", type="string", example="Something is wrong with the website.", maxLength=250, description="")
  *     }
  * )
  *

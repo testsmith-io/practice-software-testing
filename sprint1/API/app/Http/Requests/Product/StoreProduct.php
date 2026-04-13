@@ -27,11 +27,11 @@ class StoreProduct extends BaseFormRequest
     {
         return [
             'name' => 'required|string|max:120',
-            'description' => 'string|max:1250',
-            'price' => 'numeric|required',
-            'category_id' => 'required',
-            'brand_id' => 'required',
-            'product_image_id' => 'required|numeric'
+            'description' => 'nullable|string|max:1250',
+            'price' => 'required|numeric',
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
+            'brand_id' => ['required', 'integer', 'exists:brands,id'],
+            'product_image_id' => ['required', 'integer', 'exists:product_images,id'],
         ];
     }
 }

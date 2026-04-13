@@ -31,12 +31,7 @@ class ContactController extends Controller
      *      @OA\RequestBody(
      *          required=true,
      *          description="Contact request object",
-     *          @OA\JsonContent(
-     *              oneOf={
-     *                  @OA\Schema(ref="#/components/schemas/ContactRequest"),
-     *                  @OA\Schema(ref="#/components/schemas/ContactRequestAuthenticated")
-     *              }
-     *          )
+     *          @OA\JsonContent(ref="#/components/schemas/ContactRequest")
      *      ),
      *      @OA\Response(
      *          response=200,
@@ -101,10 +96,10 @@ class ContactController extends Controller
      *                       }
      *                   )
      *               ),
-     *              @OA\Property(property="from", type="integer", example=1),
+     *              @OA\Property(property="from", type="integer", nullable=true, example=1),
      *              @OA\Property(property="last_page", type="integer", example=1),
      *              @OA\Property(property="per_page", type="integer", example=1),
-     *              @OA\Property(property="to", type="integer", example=1),
+     *              @OA\Property(property="to", type="integer", nullable=true, example=1),
      *              @OA\Property(property="total", type="integer", example=1),
      *          )
      *      ),

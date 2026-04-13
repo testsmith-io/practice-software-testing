@@ -117,7 +117,7 @@ class Handler extends ExceptionHandler
             return match ($errorCode) {
                 1062 => response([
                     'message' => 'Duplicate Entry'
-                ], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY),
+                ], ResponseAlias::HTTP_CONFLICT),
                 1364 => response([
                     'message' => 'Something went wrong'
                 ], ResponseAlias::HTTP_NOT_FOUND),

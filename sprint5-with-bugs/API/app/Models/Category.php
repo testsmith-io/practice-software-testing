@@ -14,7 +14,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *     title="CategoryRequest",
  *     properties={
  *         @OA\Property(property="name", type="string", example="new category", description=""),
- *         @OA\Property(property="slug", type="string", example="new-category", description="URL part, words separated by hyphen")
+ *         @OA\Property(property="slug", type="string", example="new-category", description="URL part, words separated by hyphen"),
+ *         @OA\Property(property="parent_id", type="string", nullable=true)
  *     }
  * )
  * @OA\Schema(
@@ -23,7 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *     title="CategoryTreeResponse",
  *     properties={
  *         @OA\Property(property="id", type="integer"),
- *         @OA\Property(property="parent_id", type="string"),
+ *         @OA\Property(property="parent_id", type="string", nullable=true),
  *         @OA\Property(property="name", type="string", example="new category"),
  *         @OA\Property(property="slug", type="string", example="new-category"),
  *         @OA\Property(
@@ -39,7 +40,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *     title="CategoryResponse",
  *     properties={
  *         @OA\Property(property="id", type="integer"),
- *         @OA\Property(property="parent_id", type="integer"),
+ *         @OA\Property(property="parent_id", type="integer", nullable=true),
  *         @OA\Property(property="name", type="string", example="new category"),
  *         @OA\Property(property="slug", type="string", example="new-category")
  *     }

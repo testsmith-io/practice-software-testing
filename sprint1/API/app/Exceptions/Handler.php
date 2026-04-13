@@ -91,10 +91,10 @@ class Handler extends ExceptionHandler
             return match ($errorCode) {
                 1062 => response([
                     'message' => 'Duplicate Entry'
-                ], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY),
+                ], ResponseAlias::HTTP_CONFLICT),
                 1364 => response([
-                    'message' => 'Something went wrong'
-                ], ResponseAlias::HTTP_NOT_FOUND),
+                    'message' => 'Missing required field'
+                ], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY),
                 default => response()->json([
                     'message' => 'Something went wrong'
                 ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR),

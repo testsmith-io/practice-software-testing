@@ -10,9 +10,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *     schema="BrandRequest",
  *     type="object",
  *     title="BrandRequest",
+ *     required={"name","slug"},
  *     properties={
- *         @OA\Property(property="name", type="string", example="new brand", description=""),
- *         @OA\Property(property="slug", type="string", example="new-brand", description="URL part, words separated by hyphen")
+ *         @OA\Property(property="name", type="string", maxLength=120, example="new brand", description=""),
+ *         @OA\Property(property="slug", type="string", maxLength=120, example="new-brand", description="URL part, words separated by hyphen. Must be unique.")
  *     }
  * )
  *
@@ -21,7 +22,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *     type="object",
  *     title="BrandResponse",
  *     properties={
- *     @OA\Property(property="id", type="integer"),
+ *     @OA\Property(property="id", type="integer", readOnly=true),
  *         @OA\Property(property="name", type="string", example="new brand"),
  *         @OA\Property(property="slug", type="string", example="new-brand")
  *

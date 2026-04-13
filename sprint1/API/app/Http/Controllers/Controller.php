@@ -11,7 +11,7 @@ use Spatie\ArrayToXml\ArrayToXml;
  * @OA\Info(
  *   title="Toolshop API",
  *   version="1.0.0",
- *   description="Toolshop REST API technical description",
+ *   description="Toolshop REST API technical description. All endpoints accept `Accept: text/xml` and respond with `application/xml`; the default is `application/json`.",
  *   @OA\Contact(
  *     email="info@testsmith.io",
  *     name="Testsmith"
@@ -27,6 +27,13 @@ use Spatie\ArrayToXml\ArrayToXml;
  * )
  *
  * @OA\Components(
+ *      @OA\Parameter(
+ *          parameter="AcceptHeader",
+ *          name="Accept",
+ *          in="header",
+ *          required=false,
+ *          @OA\Schema(type="string", enum={"application/json","text/xml"}, default="application/json")
+ *      ),
  *      @OA\Response(
  *          response="UpdateResponse",
  *          description="Result of the update",
@@ -61,7 +68,12 @@ use Spatie\ArrayToXml\ArrayToXml;
  *      ),
  *      @OA\Response(
  *          response="ConflictResponse",
- *          description="Returns when the entity is used elsewhere"
+ *          description="Returns when the entity is used elsewhere",
+ *          @OA\JsonContent(
+ *              title="ConflictResponse",
+ *              @OA\Property(property="success", type="boolean", example=false),
+ *              @OA\Property(property="message", type="string", example="Seems like this brand is used elsewhere.")
+ *          )
  *      ),
  *      @OA\Response(
  *          response="MethodNotAllowedResponse",
@@ -73,7 +85,39 @@ use Spatie\ArrayToXml\ArrayToXml;
  *      ),
  *      @OA\Response(
  *          response="UnprocessableEntityResponse",
- *          description="Returns when the server was not able to process the content"
+ *          description="Validation error, map of field name to array of error messages",
+ *          @OA\JsonContent(
+ *              type="object",
+ *              description="Validation error, map of field name to array of error messages",
+ *              additionalProperties={"type":"array","items":{"type":"string"}},
+ *              example={"name":{"The name field is required."},"slug":{"The slug has already been taken."}}
+ *          )
+ *      ),
+ *      @OA\Response(
+ *          response="DuplicateConflictResponse",
+ *          description="The resource conflicts with an existing one (e.g. unique slug already taken). Body is either a field-level MessageBag (when caught by validation) or a single message (when caught by the Handler from a race / FormRequest bypass).",
+ *          @OA\JsonContent(
+ *              oneOf={
+ *                  @OA\Schema(
+ *                      type="object",
+ *                      description="Field-level conflict from the unique: validator rule",
+ *                      additionalProperties={"type":"array","items":{"type":"string"}},
+ *                      example={"slug":{"A brand already exists with this slug."}}
+ *                  ),
+ *                  @OA\Schema(
+ *                      type="object",
+ *                      description="Generic conflict from the global Handler (race / bypass)",
+ *                      @OA\Property(property="message", type="string", example="Duplicate Entry")
+ *                  )
+ *              }
+ *          )
+ *      ),
+ *      @OA\Response(
+ *          response="InternalServerErrorResponse",
+ *          description="Unexpected server error",
+ *          @OA\JsonContent(
+ *              @OA\Property(property="message", type="string", example="Something went wrong")
+ *          )
  *      )
  *  )
  */
@@ -108,7 +152,7 @@ class Controller extends BaseController
             return $this->makeXML($data, $status, array_merge($headers, ['Content-Type' => app('request')->headers->get('Accept')]), $xmlRoot);
         } else {
             return response()->json($data, $status,
-                ['Content-Type' => 'application/json'], JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+                ['Content-Type' => 'application/json'], JSON_UNESCAPED_UNICODE);
         }
     }
 

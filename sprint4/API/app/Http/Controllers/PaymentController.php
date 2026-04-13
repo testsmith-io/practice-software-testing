@@ -41,7 +41,7 @@ class PaymentController extends Controller
      *          description="Successful operation",
      *          @OA\JsonContent(
      *              title="PaymentResponse",
-     *              @OA\Property(property="message", type="string", example="Success status"),
+     *              @OA\Property(property="message", type="string", example="Payment was successful"),
      *          )
      *      )
      * )

@@ -69,10 +69,10 @@ class ProductController extends Controller
      *                  type="array",
      *                  @OA\Items(ref="#/components/schemas/ProductResponse")
      *              ),
-     *              @OA\Property(property="from", type="integer", example=1),
+     *              @OA\Property(property="from", type="integer", nullable=true, example=1),
      *              @OA\Property(property="last_page", type="integer", example=1),
      *              @OA\Property(property="per_page", type="integer", example=1),
-     *              @OA\Property(property="to", type="integer", example=1),
+     *              @OA\Property(property="to", type="integer", nullable=true, example=1),
      *              @OA\Property(property="total", type="integer", example=1),
      *          )
      *      ),
@@ -245,10 +245,10 @@ class ProductController extends Controller
      *                  type="array",
      *                  @OA\Items(ref="#/components/schemas/ProductResponse")
      *              ),
-     *              @OA\Property(property="from", type="integer", example=1),
+     *              @OA\Property(property="from", type="integer", nullable=true, example=1),
      *              @OA\Property(property="last_page", type="integer", example=1),
      *              @OA\Property(property="per_page", type="integer", example=1),
-     *              @OA\Property(property="to", type="integer", example=1),
+     *              @OA\Property(property="to", type="integer", nullable=true, example=1),
      *              @OA\Property(property="total", type="integer", example=1),
      *          )
      *      ),

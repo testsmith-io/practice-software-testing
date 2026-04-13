@@ -25,20 +25,23 @@ class CategoryController extends Controller
      *      @OA\Parameter(
      *          name="by_category_slug",
      *          in="query",
-     *          description="Parent category slug",
+     *          description="Filter root-level categories by slug. Does not match sub-category slugs.",
      *          required=false,
      *          @OA\Schema(type="string")
      *      ),
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
+     *          headers={
+     *              @OA\Header(header="Cache-Control", description="public, max-age=120", @OA\Schema(type="string")),
+     *              @OA\Header(header="ETag", @OA\Schema(type="string"))
+     *          },
      *          @OA\JsonContent(
      *              type="array",
      *              @OA\Items(ref="#/components/schemas/CategoryTreeResponse")
      *          )
      *      ),
-     *      @OA\Response(response="404", ref="#/components/responses/ResourceNotFoundResponse"),
-     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response=304, description="Not Modified"),
      * )
      */
     public function indexTree(Request $request)
@@ -60,13 +63,16 @@ class CategoryController extends Controller
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
+     *          headers={
+     *              @OA\Header(header="Cache-Control", description="public, max-age=120", @OA\Schema(type="string")),
+     *              @OA\Header(header="ETag", @OA\Schema(type="string"))
+     *          },
      *          @OA\JsonContent(
      *              type="array",
      *              @OA\Items(ref="#/components/schemas/CategoryResponse")
      *          )
      *      ),
-     *      @OA\Response(response="404", ref="#/components/responses/ResourceNotFoundResponse"),
-     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response=304, description="Not Modified"),
      * )
      */
     public function index()
@@ -91,38 +97,42 @@ class CategoryController extends Controller
      *          description="Successful operation",
      *          @OA\JsonContent(ref="#/components/schemas/CategoryResponse")
      *      ),
-     *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
-     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response="409", ref="#/components/responses/DuplicateConflictResponse"),
      *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
+     *      @OA\Response(response="500", ref="#/components/responses/InternalServerErrorResponse"),
      * )
      */
     public function store(StoreCategory $request)
     {
-        return $this->preferredFormat(Category::create($request->all()), ResponseAlias::HTTP_CREATED);
+        return $this->preferredFormat(Category::create($request->validated()), ResponseAlias::HTTP_CREATED);
     }
 
     /**
      * @OA\Get(
-     *      path="/categories/tree/{categoryId}",
+     *      path="/categories/tree/{id}",
      *      operationId="getCategory",
      *      tags={"Category"},
      *      summary="Retrieve specific category (including subcategories)",
      *      description="Retrieve specific category (including subcategories)",
      *      @OA\Parameter(
-     *          name="categoryId",
+     *          name="id",
      *          in="path",
      *          example=1,
-     *          description="The categoryId parameter in path",
+     *          description="The id parameter in path",
      *          required=true,
      *          @OA\Schema(type="integer")
      *      ),
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
+     *          headers={
+     *              @OA\Header(header="Cache-Control", description="public, max-age=120", @OA\Schema(type="string")),
+     *              @OA\Header(header="ETag", @OA\Schema(type="string"))
+     *          },
      *          @OA\JsonContent(ref="#/components/schemas/CategoryTreeResponse")
      *      ),
+     *      @OA\Response(response=304, description="Not Modified"),
      *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
-     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
      * )
      */
     public function show($id)
@@ -132,16 +142,16 @@ class CategoryController extends Controller
 
     /**
      * @OA\Put(
-     *      path="/categories/{categoryId}",
+     *      path="/categories/{id}",
      *      operationId="updateCategory",
      *      tags={"Category"},
      *      summary="Update specific category",
      *      description="Update specific category",
      *      @OA\Parameter(
-     *          name="categoryId",
+     *          name="id",
      *          in="path",
      *          example=1,
-     *          description="The categoryId parameter in path",
+     *          description="The id parameter in path",
      *          required=true,
      *          @OA\Schema(type="integer")
      *      ),
@@ -151,42 +161,41 @@ class CategoryController extends Controller
      *          @OA\JsonContent(ref="#/components/schemas/CategoryRequest")
      *      ),
      *      @OA\Response(response="200", ref="#/components/responses/UpdateResponse"),
-     *      @OA\Response(response="404", ref="#/components/responses/ResourceNotFoundResponse"),
-     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
+     *      @OA\Response(response="409", ref="#/components/responses/DuplicateConflictResponse"),
      *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
+     *      @OA\Response(response="500", ref="#/components/responses/InternalServerErrorResponse"),
      * )
      */
     public function update(UpdateCategory $request, $id)
     {
-        return $this->preferredFormat(['success' => (bool)Category::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
+        return $this->preferredFormat(['success' => (bool)Category::where('id', $id)->update($request->validated())], ResponseAlias::HTTP_OK);
     }
 
     /**
      * @OA\Delete(
-     *      path="/categories/{categoryId}",
+     *      path="/categories/{id}",
      *      operationId="deleteCategory",
      *      tags={"Category"},
      *      summary="Delete specific category",
      *      description="",
      *      @OA\Parameter(
-     *          name="categoryId",
+     *          name="id",
      *          in="path",
      *          example=1,
-     *          description="The categoryId parameter in path",
+     *          description="The id parameter in path",
      *          required=true,
      *          @OA\Schema(type="integer")
      *      ),
      *      @OA\Response(response=204, description="Successful operation"),
-     *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
      *      @OA\Response(response="409", ref="#/components/responses/ConflictResponse"),
-     *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
      *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse"),
      * ),
      */
     public function destroy(DestroyCategory $request, $id)
     {
         try {
-            Category::find($id)->delete();
+            Category::findOrFail($id)->delete();
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {
@@ -194,6 +203,8 @@ class CategoryController extends Controller
                     'success' => false,
                     'message' => 'Seems like this category is used elsewhere.',
                 ], ResponseAlias::HTTP_CONFLICT);
+            } else {
+                throw $e;
             }
         }
     }
