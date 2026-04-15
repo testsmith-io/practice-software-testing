@@ -514,6 +514,20 @@
         "products": "Ürünler",
         "product": "Ürün"
       }
+    },
+    "profile": {
+      "password": "Şifre"
+    },
+    "privacy": {
+      "title": "Toolshop Gizlilik Politikası"
     }
+  },
+  "toasts": {
+    "product-added-to-favorites": "Ürün favorilere eklendi.",
+    "product-already-in-favorites": "Ürün zaten favorilerinizde.",
+    "unauthorized-favorite": "Yetkisiz, ürün favorilere eklenemiyor.",
+    "product-added-to-cart": "Ürün sepete eklendi.",
+    "product-quantity-updated": "Ürün miktarı güncellendi.",
+    "product-deleted": "Ürün silindi."
   }
 }

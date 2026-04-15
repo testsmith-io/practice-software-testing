@@ -514,6 +514,20 @@
         "products": "Producten",
         "product": "Product"
       }
+    },
+    "profile": {
+      "password": "Wachtwoord"
+    },
+    "privacy": {
+      "title": "Privacybeleid voor Toolshop"
     }
+  },
+  "toasts": {
+    "product-added-to-favorites": "Product toegevoegd aan favorieten.",
+    "product-already-in-favorites": "Product staat al in je favorieten.",
+    "unauthorized-favorite": "Niet geautoriseerd, kan product niet aan favorieten toevoegen.",
+    "product-added-to-cart": "Product toegevoegd aan winkelwagen.",
+    "product-quantity-updated": "Productaantal bijgewerkt.",
+    "product-deleted": "Product verwijderd."
   }
 }

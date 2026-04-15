@@ -514,6 +514,20 @@
         "products": "Produits",
         "product": "Produit"
       }
+    },
+    "profile": {
+      "password": "Mot de passe"
+    },
+    "privacy": {
+      "title": "Politique de confidentialité pour Toolshop"
     }
+  },
+  "toasts": {
+    "product-added-to-favorites": "Produit ajouté à vos favoris.",
+    "product-already-in-favorites": "Produit déjà dans vos favoris.",
+    "unauthorized-favorite": "Non autorisé, impossible d'ajouter le produit aux favoris.",
+    "product-added-to-cart": "Produit ajouté au panier.",
+    "product-quantity-updated": "Quantité du produit mise à jour.",
+    "product-deleted": "Produit supprimé."
   }
 }
