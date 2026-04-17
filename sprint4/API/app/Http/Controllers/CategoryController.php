@@ -232,7 +232,7 @@ class CategoryController extends Controller
     public function destroy(DestroyCategory $request, $id)
     {
         try {
-            Category::find($id)->delete();
+            Category::findOrFail($id)->delete();
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {

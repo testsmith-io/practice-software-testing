@@ -36,7 +36,7 @@ class InvoicelineController extends Controller
     public function destroy(Request $request, $id)
     {
         try {
-            Invoiceline::find($id)->delete();
+            Invoiceline::findOrFail($id)->delete();
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {

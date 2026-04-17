@@ -306,7 +306,7 @@ class ProductController extends Controller
     public function destroy(DestroyProduct $request, $id)
     {
         try {
-            Product::find($id)->delete();
+            Product::findOrFail($id)->delete();
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {
