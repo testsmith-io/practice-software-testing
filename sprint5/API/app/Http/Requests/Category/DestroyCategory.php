@@ -26,7 +26,7 @@ class DestroyCategory extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'id' => 'required|exists:categories,id',
+            'id' => 'required',
         ];
     }
 

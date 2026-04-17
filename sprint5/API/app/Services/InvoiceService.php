@@ -327,16 +327,20 @@ class InvoiceService
         return $status ? $status->toArray() : ['status' => 'NOT_INITIATED'];
     }
 
-    public function updateInvoice($id, array $data)
+    public function updateInvoice($id, array $data): Invoice
     {
         Log::info('Updating invoice', ['invoice_id' => $id]);
-        return Invoice::where('id', $id)->where('user_id', Auth::user()->id)->update($data);
+        $invoice = Invoice::where('id', $id)->where('user_id', Auth::user()->id)->firstOrFail();
+        $invoice->update($data);
+        return $invoice;
     }
 
-    public function patchInvoice($id, array $data)
+    public function patchInvoice($id, array $data): Invoice
     {
         $userId = Auth::user()->id;
         Log::info('Patching invoice', ['invoice_id' => $id, 'user_id' => $userId]);
-        return Invoice::where('id', $id)->where('user_id', $userId)->update($data);
+        $invoice = Invoice::where('id', $id)->where('user_id', $userId)->firstOrFail();
+        $invoice->update($data);
+        return $invoice;
     }
 }

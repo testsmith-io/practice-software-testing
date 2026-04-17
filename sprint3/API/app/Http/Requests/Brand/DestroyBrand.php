@@ -26,7 +26,7 @@ class DestroyBrand extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'id' => 'required|exists:brands,id',
+            'id' => 'required',
         ];
     }
 

@@ -205,8 +205,8 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategory $request, $id)
     {
-        $updated = $this->categoryService->updateCategory($id, $request->all());
-        return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
+        $this->categoryService->updateCategory($id, $request->all());
+        return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -238,10 +238,9 @@ class CategoryController extends Controller
      */
     public function patch(PatchCategory $request, $id)
     {
-        $validatedData = $request->validated();
-        $updated = $this->categoryService->updateCategory($id, $validatedData);
+        $this->categoryService->updateCategory($id, $request->validated());
 
-        return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
+        return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK);
     }
 
     /**

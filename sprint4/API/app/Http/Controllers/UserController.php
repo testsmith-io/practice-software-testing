@@ -520,7 +520,8 @@ class UserController extends Controller
     public function update(UpdateCustomer $request, $id)
     {
         if (app('auth')->id() == $id) {
-            return $this->preferredFormat(['success' => (bool)User::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
+            User::findOrFail($id)->update($request->all());
+            return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK);
         } else {
             return response()->json(['error' => 'You can only update your own data.'], ResponseAlias::HTTP_FORBIDDEN);
         }

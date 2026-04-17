@@ -26,7 +26,7 @@ class DestroyCustomer extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'id' => 'required|exists:users,id',
+            'id' => 'required',
         ];
     }
 

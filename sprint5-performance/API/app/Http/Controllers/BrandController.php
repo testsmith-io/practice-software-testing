@@ -169,8 +169,8 @@ class BrandController extends Controller
      */
     public function update(UpdateBrand $request, $id)
     {
-        $updated = $this->brandService->updateBrand($id, $request->all());
-        return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
+        $this->brandService->updateBrand($id, $request->all());
+        return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -202,9 +202,8 @@ class BrandController extends Controller
      */
     public function patch(PatchBrand $request, $id)
     {
-        $validatedData = $request->validated();
-        $updated = $this->brandService->updateBrand($id, $validatedData);
-        return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
+        $this->brandService->updateBrand($id, $request->validated());
+        return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK);
     }
 
     /**

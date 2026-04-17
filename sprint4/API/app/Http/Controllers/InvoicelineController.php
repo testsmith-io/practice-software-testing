@@ -29,7 +29,8 @@ class InvoicelineController extends Controller
 
     public function update(Request $request, $id)
     {
-        return $this->preferredFormat(['success' => (bool)Invoiceline::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
+        Invoiceline::findOrFail($id)->update($request->all());
+        return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK);
     }
 
     public function destroy(Request $request, $id)

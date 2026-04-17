@@ -108,9 +108,11 @@ class ContactService
         return $reply;
     }
 
-    public function updateStatus($id, $status)
+    public function updateStatus($id, $status): ContactRequests
     {
         Log::info('Updating contact request status', ['message_id' => $id, 'new_status' => $status]);
-        return ContactRequests::where('id', $id)->update(['status' => $status]);
+        $contact = ContactRequests::findOrFail($id);
+        $contact->update(['status' => $status]);
+        return $contact;
     }
 }

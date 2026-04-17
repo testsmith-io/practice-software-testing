@@ -170,16 +170,17 @@ class ProductService
         });
     }
 
-    public function updateProduct($id, array $data)
+    public function updateProduct($id, array $data): Product
     {
         Log::info("Updating product", ['id' => $id]);
 
-        $updated = Product::where('id', $id)->update($data);
+        $product = Product::findOrFail($id);
+        $product->update($data);
         $this->clearCache($id);
 
-        Log::debug("Product updated", ['id' => $id, 'status' => $updated ? 'success' : 'failed']);
+        Log::debug("Product updated", ['id' => $id]);
 
-        return $updated;
+        return $product;
     }
 
     public function deleteProduct($id)
