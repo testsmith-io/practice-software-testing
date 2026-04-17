@@ -409,9 +409,9 @@ class InvoiceController extends Controller
      */
     public function update(StoreInvoice $request, $id)
     {
-        $success = $this->invoiceService->updateInvoice($id, $request->all());
+        $this->invoiceService->updateInvoice($id, $request->all());
 
-        return $this->preferredFormat(['success' => (bool)$success], ResponseAlias::HTTP_OK);
+        return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -443,10 +443,9 @@ class InvoiceController extends Controller
      */
     public function patch(PatchInvoice $request, $id)
     {
-        $validatedData = $request->validated();
-        $success = $this->invoiceService->patchInvoice($id, $validatedData);
+        $this->invoiceService->patchInvoice($id, $request->validated());
 
-        return $this->preferredFormat(['success' => (bool)$success], ResponseAlias::HTTP_OK);
+        return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK);
     }
 
 }

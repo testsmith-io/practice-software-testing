@@ -55,18 +55,19 @@ class BrandService
         });
     }
 
-    public function updateBrand($id, array $data)
+    public function updateBrand($id, array $data): Brand
     {
         Log::info("Updating brand ID: {$id}", $data);
 
-        $updated = Brand::where('id', $id)->update($data);
+        $brand = Brand::findOrFail($id);
+        $brand->update($data);
 
         Cache::forget('brands.all');
         Cache::forget("brands.{$id}");
 
         Log::debug("Cache cleared for brands.all and brands.{$id} after update");
 
-        return $updated;
+        return $brand;
     }
 
     public function deleteBrand($id)

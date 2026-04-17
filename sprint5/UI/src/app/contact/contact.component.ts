@@ -37,19 +37,14 @@ export class ContactComponent implements OnInit {
   private file: File = null;
 
   ngOnInit(): void {
-    this.contact = this.formBuilder.group(
-      {
-        first_name: ['', []],
-        last_name: ['', []],
-        email: ['', [Validators.email]],
-        attachment: ['', []],
-        subject: ['', [Validators.required]],
-        message: ['', [Validators.required, Validators.minLength(50)]]
-      },
-      // Validate on blur instead of every keystroke (the message field has
-      // a 50-char minlength validator that runs per char otherwise).
-      { updateOn: 'blur' }
-    );
+    this.contact = this.formBuilder.group({
+      first_name: ['', []],
+      last_name: ['', []],
+      email: ['', [Validators.email]],
+      attachment: ['', []],
+      subject: ['', [Validators.required]],
+      message: ['', { validators: [Validators.required, Validators.minLength(50)], updateOn: 'blur' }]
+    });
     this.getSignedInUser();
   }
 

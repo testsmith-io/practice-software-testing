@@ -217,7 +217,8 @@ class ProductController extends Controller
      */
     public function update(UpdateProduct $request, $id)
     {
-        return $this->preferredFormat(['success' => (bool)Product::where('id', $id)->update($request->validated())], ResponseAlias::HTTP_OK);
+        Product::findOrFail($id)->update($request->validated());
+        return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK);
     }
 
     /**

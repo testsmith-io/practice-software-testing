@@ -514,6 +514,20 @@
         "products": "Προϊόντα",
         "product": "Προϊόν"
       }
+    },
+    "profile": {
+      "password": "Κωδικός πρόσβασης"
+    },
+    "privacy": {
+      "title": "Πολιτική Απορρήτου για Toolshop"
     }
+  },
+  "toasts": {
+    "product-added-to-favorites": "Το προϊόν προστέθηκε στα αγαπημένα.",
+    "product-already-in-favorites": "Το προϊόν υπάρχει ήδη στα αγαπημένα.",
+    "unauthorized-favorite": "Μη εξουσιοδοτημένο, δεν μπορείτε να προσθέσετε στα αγαπημένα.",
+    "product-added-to-cart": "Το προϊόν προστέθηκε στο καλάθι.",
+    "product-quantity-updated": "Η ποσότητα του προϊόντος ενημερώθηκε.",
+    "product-deleted": "Το προϊόν διαγράφηκε."
   }
 }

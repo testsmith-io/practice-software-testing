@@ -26,7 +26,7 @@ class DestroyInvoice extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'id' => 'required|exists:invoices,id',
+            'id' => 'required',
         ];
     }
 

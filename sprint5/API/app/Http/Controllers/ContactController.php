@@ -285,8 +285,8 @@ class ContactController extends Controller
             'status' => 'required|in:NEW,IN_PROGRESS,RESOLVED',
         ]);
 
-        $success = $this->contactService->updateStatus($id, $request->input('status'));
-        return $this->preferredFormat(['success' => (bool)$success]);
+        $this->contactService->updateStatus($id, $request->input('status'));
+        return $this->preferredFormat(['success' => true]);
     }
 
 }

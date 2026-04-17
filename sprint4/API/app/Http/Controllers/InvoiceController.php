@@ -204,7 +204,8 @@ class InvoiceController extends Controller
             'status_message' => 'string|between:5,50|nullable'
         ]);
 
-        return $this->preferredFormat(['success' => (bool)Invoice::where('id', $id)->update(array('status' => $request['status'], 'status_message' => $request['status_message']))]);
+        Invoice::findOrFail($id)->update(array('status' => $request['status'], 'status_message' => $request['status_message']));
+        return $this->preferredFormat(['success' => true]);
     }
 
     /**

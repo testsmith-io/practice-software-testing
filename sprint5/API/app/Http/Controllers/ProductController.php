@@ -271,8 +271,8 @@ class ProductController extends Controller
      */
     public function update(UpdateProduct $request, $id)
     {
-        $updated = $this->productService->updateProduct($id, $request->all());
-        return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
+        $this->productService->updateProduct($id, $request->all());
+        return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK);
     }
 
     /**
@@ -302,9 +302,8 @@ class ProductController extends Controller
      */
     public function patch(PatchProduct $request, $id)
     {
-        $validatedData = $request->validated();
-        $updated = $this->productService->updateProduct($id, $validatedData);
-        return $this->preferredFormat(['success' => (bool)$updated], ResponseAlias::HTTP_OK);
+        $this->productService->updateProduct($id, $request->validated());
+        return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK);
     }
 
     /**

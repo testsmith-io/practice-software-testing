@@ -158,7 +158,8 @@ class BrandController extends Controller
      */
     public function update(UpdateBrand $request, $id)
     {
-        return $this->preferredFormat(['success' => (bool)Brand::where('id', $id)->update($request->all())], ResponseAlias::HTTP_OK);
+        Brand::findOrFail($id)->update($request->all());
+        return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK);
     }
 
     /**

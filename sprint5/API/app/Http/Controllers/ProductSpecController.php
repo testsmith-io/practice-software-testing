@@ -121,13 +121,14 @@ class ProductSpecController extends Controller
             'spec_unit' => 'nullable|string|max:30',
         ]);
 
-        $updated = ProductSpec::where('product_id', $productId)
+        $spec = ProductSpec::where('product_id', $productId)
             ->where('id', $specId)
-            ->update($request->only(['spec_name', 'spec_value', 'spec_unit']));
+            ->firstOrFail();
+        $spec->update($request->only(['spec_name', 'spec_value', 'spec_unit']));
 
         $this->invalidateCache($productId);
 
-        return $this->preferredFormat(['success' => (bool)$updated]);
+        return $this->preferredFormat(['success' => true]);
     }
 
     /**

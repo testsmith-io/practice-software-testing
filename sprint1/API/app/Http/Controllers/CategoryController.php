@@ -169,7 +169,8 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategory $request, $id)
     {
-        return $this->preferredFormat(['success' => (bool)Category::where('id', $id)->update($request->validated())], ResponseAlias::HTTP_OK);
+        Category::findOrFail($id)->update($request->validated());
+        return $this->preferredFormat(['success' => true], ResponseAlias::HTTP_OK);
     }
 
     /**

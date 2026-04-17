@@ -26,7 +26,7 @@ class DestroyProduct extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'id' => 'required|exists:products,id',
+            'id' => 'required',
         ];
     }
 

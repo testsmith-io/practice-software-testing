@@ -103,11 +103,12 @@ class CategoryService
         });
     }
 
-    public function updateCategory($id, array $data)
+    public function updateCategory($id, array $data): Category
     {
         Log::info("Updating category", ['id' => $id, 'data' => $data]);
 
-        $updated = Category::where('id', $id)->update($data);
+        $category = Category::findOrFail($id);
+        $category->update($data);
 
         Cache::forget('categories.all');
         Cache::forget("categories.{$id}");
@@ -115,7 +116,7 @@ class CategoryService
 
         Log::debug("Cache invalidated after update", ['id' => $id]);
 
-        return $updated;
+        return $category;
     }
 
     public function deleteCategory($id)
