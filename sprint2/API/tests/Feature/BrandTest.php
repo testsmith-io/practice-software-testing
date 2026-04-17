@@ -75,9 +75,9 @@ class BrandTest extends TestCase {
 
     public function testDeleteNonExistingBrand() {
         $this->delete('/brands/99')
-            ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertStatus(ResponseAlias::HTTP_NOT_FOUND)
             ->assertJson([
-                'id' => ['The selected id is invalid.']
+                'message' => 'Requested item not found'
             ]);
     }
 

@@ -186,9 +186,9 @@ class ProductTest extends TestCase {
         $admin = User::factory()->create(['role' => 'admin']);
 
         $this->delete('/products/99', [], $this->headers($admin))
-            ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertStatus(ResponseAlias::HTTP_NOT_FOUND)
             ->assertJson([
-                'id' => ['The selected id is invalid.']
+                'message' => 'Requested item not found'
             ]);
     }
 

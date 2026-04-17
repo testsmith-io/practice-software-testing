@@ -187,7 +187,7 @@ class BrandController extends Controller
     public function destroy(DestroyBrand $request, $id)
     {
         try {
-            Brand::find($id)->delete();
+            Brand::findOrFail($id)->delete();
             return $this->preferredFormat(null, ResponseAlias::HTTP_NO_CONTENT);
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {

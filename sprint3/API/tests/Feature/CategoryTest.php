@@ -118,9 +118,9 @@ class CategoryTest extends TestCase {
 
     public function testDeleteNonExistingCategory() {
         $this->delete('/categories/99')
-            ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertStatus(ResponseAlias::HTTP_NOT_FOUND)
             ->assertJson([
-                'id' => ['The selected id is invalid.']
+                'message' => 'Requested item not found'
             ]);
     }
 

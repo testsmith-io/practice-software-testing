@@ -172,9 +172,9 @@ class ProductTest extends TestCase {
 
     public function testDeleteNonExistingProduct() {
         $this->delete('/products/99')
-            ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertStatus(ResponseAlias::HTTP_NOT_FOUND)
             ->assertJson([
-                'id' => ['The selected id is invalid.']
+                'message' => 'Requested item not found'
             ]);
     }
 
