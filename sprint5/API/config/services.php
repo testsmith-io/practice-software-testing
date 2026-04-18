@@ -37,4 +37,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'postcode' => [
+        'driver' => env('POSTCODE_LOOKUP_DRIVER', 'faker'),
+        'url' => env('POSTCODE_LOOKUP_URL'),
+        'timeout' => (int) env('POSTCODE_LOOKUP_TIMEOUT', 5),
+    ],
+
 ];
