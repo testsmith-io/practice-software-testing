@@ -27,8 +27,8 @@ class UpdateCategory extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|string|max:120',
-            'slug' => ['sometimes', 'string', 'max:120', Rule::unique('categories', 'slug')->ignore($this->route('id'))],
+            'name' => 'required|string|max:120',
+            'slug' => ['required', 'string', 'max:120', Rule::unique('categories', 'slug')->ignore($this->route('id'))],
             'parent_id' => 'sometimes|integer|nullable',
         ];
     }
