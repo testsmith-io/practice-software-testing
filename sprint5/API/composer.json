@@ -30,8 +30,8 @@
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
-        "pestphp/pest": "^4.0",
-        "pestphp/pest-plugin-drift": "^4.0",
+        "pestphp/pest": "^3.8.2",
+        "pestphp/pest-plugin-drift": "^3.0",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
@@ -77,6 +77,15 @@
             "pact-foundation/composer-downloads-plugin": true,
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
+        },
+        "audit": {
+            "ignore": {
+                "PKSA-5jz8-6tcw-pbk4": "dev-only PHPUnit runner (via Pest)",
+                "PKSA-z3gr-8qht-p93v": "dev-only PHPUnit runner (via Pest)"
+            }
+        },
+        "platform": {
+            "php": "8.3"
         }
     },
     "minimum-stability": "stable",

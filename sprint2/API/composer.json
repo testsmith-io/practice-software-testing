@@ -5,7 +5,7 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.3",
+        "php": "^8.1",
         "darkaonline/l5-swagger": "^8.5",
         "guzzlehttp/guzzle": "^7.2",
         "haruncpi/laravel-id-generator": "^1.1",
@@ -22,7 +22,7 @@
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^8.1",
-        "phpunit/phpunit": "^12.0",
+        "phpunit/phpunit": "^11.1.1",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
@@ -67,6 +67,15 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
+        },
+        "audit": {
+            "ignore": {
+                "PKSA-5jz8-6tcw-pbk4": "dev-only PHPUnit runner",
+                "PKSA-z3gr-8qht-p93v": "dev-only PHPUnit runner"
+            }
+        },
+        "platform": {
+            "php": "8.3"
         }
     },
     "minimum-stability": "stable",
