@@ -13,13 +13,20 @@ class PostcodeService
     {
     }
 
-    public function lookup(string $country, string $postcode, ?string $houseNumber = null): PostcodeLookupResult
+    public function lookup(string $country, string $postcode, ?string $houseNumber = null, ?string $overrideUrl = null): PostcodeLookupResult
     {
-        return $this->driver()->lookup($country, $postcode, $houseNumber);
+        return $this->driver($overrideUrl)->lookup($country, $postcode, $houseNumber);
     }
 
-    private function driver(): PostcodeDriver
+    private function driver(?string $overrideUrl): PostcodeDriver
     {
+        // Runtime override (set via admin UI in local/Docker). The controller is
+        // responsible for accepting the override only when APP_ENV != production.
+        if ($overrideUrl !== null && $overrideUrl !== '') {
+            $timeout = (int) $this->config->get('services.postcode.timeout', 5);
+            return new HttpPostcodeDriver($overrideUrl, $timeout);
+        }
+
         $driver = (string) $this->config->get('services.postcode.driver', 'faker');
 
         return match ($driver) {

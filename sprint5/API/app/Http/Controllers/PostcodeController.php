@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Services\Postcode\PostcodeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -49,11 +50,23 @@ class PostcodeController extends Controller
             'house_number' => ['nullable', 'string', 'max:10'],
         ]);
 
+        // Runtime override via the admin UI (localStorage + header). Accept only
+        // outside production to avoid turning the endpoint into an SSRF vector
+        // on the public site.
+        $overrideUrl = null;
+        if (!App::environment('production')) {
+            $headerUrl = $request->header('X-Postcode-Lookup-Url');
+            if (is_string($headerUrl) && filter_var($headerUrl, FILTER_VALIDATE_URL)) {
+                $overrideUrl = $headerUrl;
+            }
+        }
+
         try {
             $result = $this->postcodeService->lookup(
                 $data['country'],
                 $data['postcode'],
                 $data['house_number'] ?? null,
+                $overrideUrl,
             );
         } catch (RuntimeException $e) {
             return response()->json(['message' => $e->getMessage()], ResponseAlias::HTTP_BAD_GATEWAY);

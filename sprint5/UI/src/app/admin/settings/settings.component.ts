@@ -5,6 +5,8 @@ import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {NgClass} from "@angular/common";
 import {RouterLink} from "@angular/router";
+import {environment} from "../../../environments/environment";
+import {POSTCODE_LOOKUP_URL_KEY} from "../../_services/postcode.service";
 
 @Component({
   selector: 'app-settings',
@@ -26,12 +28,15 @@ export class SettingsComponent implements OnInit {
   hideAlert: boolean = false;
   error: string;
 
+  readonly showPostcodeLookupSettings = !environment.production;
+
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       endpoint: ['', []],
       geolocation: ['', []],
       co2Scale: ['', []],
-      ecoBadge: ['', []]
+      ecoBadge: ['', []],
+      postcodeLookupUrl: ['', []]
     });
     this.form.controls['endpoint'].setValue(window.localStorage.getItem('PAYMENT_ENDPOINT'));
     this.form.controls['geolocation'].setValue(window.localStorage.getItem('RETRIEVE_GEOLOCATION'));
@@ -43,6 +48,8 @@ export class SettingsComponent implements OnInit {
     // Eco badge is enabled by default, only store if user explicitly disables it
     const ecoBadgeSetting = window.localStorage.getItem('ECO_BADGE_ENABLED');
     this.form.controls['ecoBadge'].setValue(ecoBadgeSetting === null ? true : ecoBadgeSetting === 'true');
+
+    this.form.controls['postcodeLookupUrl'].setValue(window.localStorage.getItem(POSTCODE_LOOKUP_URL_KEY));
   }
 
   get f() {
@@ -61,6 +68,7 @@ export class SettingsComponent implements OnInit {
     const geolocation = this.form.controls['geolocation'].value;
     const co2Scale = this.form.controls['co2Scale'].value;
     const ecoBadge = this.form.controls['ecoBadge'].value;
+    const postcodeLookupUrl = this.form.controls['postcodeLookupUrl'].value;
 
     if (endpoint !== '' && endpoint !== null) {
       window.localStorage.setItem('PAYMENT_ENDPOINT', endpoint);
@@ -75,6 +83,14 @@ export class SettingsComponent implements OnInit {
 
     // Store eco badge setting (true by default)
     window.localStorage.setItem('ECO_BADGE_ENABLED', ecoBadge ? 'true' : 'false');
+
+    if (this.showPostcodeLookupSettings) {
+      if (postcodeLookupUrl) {
+        window.localStorage.setItem(POSTCODE_LOOKUP_URL_KEY, postcodeLookupUrl);
+      } else {
+        window.localStorage.removeItem(POSTCODE_LOOKUP_URL_KEY);
+      }
+    }
 
     this.isUpdated = true;
   }
@@ -93,6 +109,7 @@ export class SettingsComponent implements OnInit {
     window.localStorage.removeItem('GEO_LOCATION');
     window.localStorage.removeItem('CO2_SCALE_ENABLED');
     window.localStorage.removeItem('ECO_BADGE_ENABLED');
+    window.localStorage.removeItem(POSTCODE_LOOKUP_URL_KEY);
     window.localStorage.removeItem('cart_id');
     window.localStorage.removeItem('cart_quantity');
   }

@@ -206,6 +206,13 @@
         "required": "Bundesland ist verpflichtend"
       }
     },
+    "house_number": {
+      "label": "Hausnummer",
+      "placeholder": "z.B. 42",
+      "errors": {
+        "required": "Hausnummer ist erforderlich"
+      }
+    },
     "country": {
       "label": "Land",
       "placeholder": "Ihr Land",
@@ -312,7 +319,11 @@
     "register": {
       "title": "Kunden Registrierung",
       "email-in-use": "EMail bereits in Verwendung.",
-      "btn": "Registrieren"
+      "btn": "Registrieren",
+      "postcode-lookup": {
+        "hint": "Wählen Sie Ihr Land aus und geben Sie Postleitzahl und Hausnummer ein. Straße, Stadt und Bundesland werden automatisch ausgefüllt.",
+        "loading": "Adresse wird gesucht..."
+      }
     },
     "forgot-password": {
       "title": "Passwort vergessen?",
@@ -380,7 +391,11 @@
         "proceed": "Weiter als Gast: {{ first_name }} {{ last_name }} ({{ email }})"
       },
       "address": {
-        "title": "Rechnungsadresse"
+        "title": "Rechnungsadresse",
+        "postcode-lookup": {
+          "hint": "Geben Sie Land, Postleitzahl und Hausnummer ein. Den Rest füllen wir automatisch aus.",
+          "loading": "Adresse wird gesucht..."
+        }
       },
       "payment": {
         "title": "Zahlung",

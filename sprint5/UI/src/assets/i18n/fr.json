@@ -206,6 +206,13 @@
         "required": "L'état est requis"
       }
     },
+    "house_number": {
+      "label": "Numéro de rue",
+      "placeholder": "ex. 42",
+      "errors": {
+        "required": "Le numéro de rue est requis"
+      }
+    },
     "country": {
       "label": "Pays",
       "placeholder": "Votre pays",
@@ -312,7 +319,11 @@
     "register": {
       "title": "Enregistrement client",
       "email-in-use": "L'email est déjà utilisé.",
-      "btn": "S'enregistrer"
+      "btn": "S'enregistrer",
+      "postcode-lookup": {
+        "hint": "Choisissez votre pays et saisissez le code postal et le numéro de rue. La rue, la ville et la région seront remplies automatiquement.",
+        "loading": "Recherche de l'adresse..."
+      }
     },
     "forgot-password": {
       "title": "Mot de passe oublié",
@@ -380,7 +391,11 @@
         "proceed": "Continuer en tant qu'invité: {{ first_name }} {{ last_name }} ({{ email }})"
       },
       "address": {
-        "title": "Adresse de facturation"
+        "title": "Adresse de facturation",
+        "postcode-lookup": {
+          "hint": "Saisissez le pays, le code postal et le numéro de rue. Le reste sera rempli automatiquement.",
+          "loading": "Recherche de l'adresse..."
+        }
       },
       "payment": {
         "title": "Paiement",

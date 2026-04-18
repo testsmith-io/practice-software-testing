@@ -2,7 +2,7 @@
 // See LICENSE for details.
 
 import {inject, Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
 
@@ -13,6 +13,8 @@ export interface PostcodeLookupResult {
   country: string;
   postcode: string;
 }
+
+export const POSTCODE_LOOKUP_URL_KEY = 'POSTCODE_LOOKUP_URL';
 
 @Injectable({providedIn: 'root'})
 export class PostcodeService {
@@ -26,6 +28,17 @@ export class PostcodeService {
     if (houseNumber) {
       params = params.set('house_number', houseNumber);
     }
-    return this.http.get<PostcodeLookupResult>(this.apiURL, {params});
+
+    // Local-only runtime override: the admin Settings page stores a mock URL in
+    // localStorage. The backend only honors the header when APP_ENV != production.
+    let headers = new HttpHeaders();
+    const overrideUrl = !environment.production
+      ? window.localStorage.getItem(POSTCODE_LOOKUP_URL_KEY)
+      : null;
+    if (overrideUrl) {
+      headers = headers.set('X-Postcode-Lookup-Url', overrideUrl);
+    }
+
+    return this.http.get<PostcodeLookupResult>(this.apiURL, {params, headers});
   }
 }
