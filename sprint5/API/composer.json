@@ -8,6 +8,7 @@
         "php": "^8.3",
         "barryvdh/laravel-dompdf": "v3.1.1",
         "darkaonline/l5-swagger": "9.0.1",
+        "fakerphp/faker": "^1.9.1",
         "guzzlehttp/guzzle": "7.9.3",
         "haruncpi/laravel-id-generator": "1.1",
         "laravel/framework": "^11.0",
@@ -26,7 +27,6 @@
     },
     "require-dev": {
         "deployer/deployer": "^7.4",
-        "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",

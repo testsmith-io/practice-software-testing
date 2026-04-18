@@ -2,7 +2,8 @@
 // See LICENSE for details.
 
 import {Component, inject, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import countriesList from '../../../assets/countries.json';
 import {User} from "../../models/user.model";
@@ -48,8 +49,11 @@ export class RegisterComponent implements OnInit {
         street: ['', [Validators.required]],
         city: ['', [Validators.required]],
         state: ['', [Validators.required]],
-        country: ['', [Validators.required]],
-        postal_code: ['', [Validators.required]],
+        // country, postal_code and house_number update on keystroke (not blur)
+        // so the postcode lookup can fire as soon as all three have a value.
+        country: new FormControl('', {validators: [Validators.required], updateOn: 'change'}),
+        postal_code: new FormControl('', {validators: [Validators.required], updateOn: 'change'}),
+        house_number: new FormControl('', {validators: [Validators.required], updateOn: 'change'}),
         phone: ['', [Validators.required, Validators.pattern(/^[0-9]\d*$/)]],
         email: ['', [Validators.required, Validators.pattern("^(?=.{1,256}$)[a-zA-Z0-9._%+-]{1,64}@[a-zA-Z0-9.-]{1,255}$")]],
         password: ['', [Validators.required,
@@ -66,19 +70,27 @@ export class RegisterComponent implements OnInit {
       }
     );
 
-    this.register.get('postal_code').valueChanges.subscribe(() => this.tryPostcodeLookup());
-    this.register.get('country').valueChanges.subscribe(() => this.tryPostcodeLookup());
+    this.register.get('postal_code').valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe(() => this.tryPostcodeLookup());
+    this.register.get('house_number').valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe(() => this.tryPostcodeLookup());
+    this.register.get('country').valueChanges
+      .pipe(distinctUntilChanged())
+      .subscribe(() => this.tryPostcodeLookup());
   }
 
   private tryPostcodeLookup(): void {
     const country = this.register.get('country').value;
     const postcode = this.register.get('postal_code').value;
-    if (!country || !postcode) {
+    const houseNumber = this.register.get('house_number').value;
+    if (!country || !postcode || !houseNumber) {
       return;
     }
 
     this.postcodeLookupPending = true;
-    this.postcodeService.lookup(country, postcode).subscribe({
+    this.postcodeService.lookup(country, postcode, houseNumber).subscribe({
       next: (result) => {
         this.postcodeLookupPending = false;
         this.register.patchValue({

@@ -7,6 +7,49 @@
       <form [formGroup]="cusAddress">
         <div formGroupName="address">
           <div class="mb-3">
+            <label for="country" class="form-label">{{ t('fields.country.label') }}</label>
+            <input formControlName="country"
+                   data-test="country"
+                   class="form-control"
+                   id="country"
+                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.country?.errors }" type="text"
+                   placeholder="{{t('fields.country.placeholder')}} *"/>
+          </div>
+
+          <small class="text-muted d-block mb-2" data-test="postcode-lookup-hint">
+            {{ t('pages.checkout.address.postcode-lookup.hint') }}
+          </small>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="postal_code" class="form-label">{{ t('fields.postal_code.label') }}</label>
+              <input formControlName="postal_code"
+                     data-test="postal_code"
+                     class="form-control"
+                     id="postal_code"
+                     [ngClass]="{ 'is-invalid': cusAddress && cusAddress.postal_code?.errors }" type="text"
+                     placeholder="{{t('fields.postal_code.placeholder')}} *"/>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="house_number" class="form-label">{{ t('fields.house_number.label') }}</label>
+              <input formControlName="house_number"
+                     data-test="house_number"
+                     class="form-control"
+                     id="house_number"
+                     type="text"
+                     placeholder="{{t('fields.house_number.placeholder')}} *"/>
+            </div>
+          </div>
+
+          @if (postcodeLookupPending) {
+            <div class="alert alert-info py-2 mb-3" role="status" aria-live="polite"
+                 data-test="postcode-lookup-loading">
+              <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              {{ t('pages.checkout.address.postcode-lookup.loading') }}
+            </div>
+          }
+
+          <div class="mb-3">
             <label for="street" class="form-label">{{ t('fields.street.label') }}</label>
             <input formControlName="street"
                    data-test="street"
@@ -34,26 +77,6 @@
                    id="state"
                    [ngClass]="{ 'is-invalid': cusAddress && cusAddress.state?.errors }" type="text"
                    placeholder="{{t('fields.state.label')}} *"/>
-          </div>
-
-          <div class="mb-3">
-            <label for="country" class="form-label">{{ t('fields.country.label') }}</label>
-            <input formControlName="country"
-                   data-test="country"
-                   class="form-control"
-                   id="country"
-                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.country?.errors }" type="text"
-                   placeholder="{{t('fields.country.placeholder')}} *"/>
-          </div>
-
-          <div class="mb-3">
-            <label for="postal_code" class="form-label">{{ t('fields.postal_code.label') }}</label>
-            <input formControlName="postal_code"
-                   data-test="postal_code"
-                   class="form-control"
-                   id="postal_code"
-                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.postal_code?.errors }" type="text"
-                   placeholder="{{t('fields.postal_code.placeholder')}} *"/>
           </div>
         </div>
       </form>

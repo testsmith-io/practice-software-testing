@@ -5,6 +5,7 @@ import {Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output} from 
 import {AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import {Subscription} from "rxjs";
+import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {TranslocoDirective} from "@jsverse/transloco";
 import {NgClass} from "@angular/common";
 import {ArchwizardModule} from "@y3krulez/angular-archwizard";
@@ -49,6 +50,7 @@ export class AddressComponent implements OnInit, OnDestroy {
         state: new FormControl('', [Validators.required, Validators.maxLength(40)]),
         country: new FormControl('', [Validators.required, Validators.maxLength(40)]),
         postal_code: new FormControl('', [Validators.required, Validators.maxLength(10)]),
+        house_number: new FormControl('', [Validators.required, Validators.maxLength(10)]),
       })
     });
 
@@ -60,10 +62,19 @@ export class AddressComponent implements OnInit, OnDestroy {
 
     const addressGroup = this.cusAddress.get('address') as FormGroup;
     this.subscription.add(
-      addressGroup.get('postal_code').valueChanges.subscribe(() => this.tryPostcodeLookup())
+      addressGroup.get('postal_code').valueChanges
+        .pipe(debounceTime(300), distinctUntilChanged())
+        .subscribe(() => this.tryPostcodeLookup())
     );
     this.subscription.add(
-      addressGroup.get('country').valueChanges.subscribe(() => this.tryPostcodeLookup())
+      addressGroup.get('house_number').valueChanges
+        .pipe(debounceTime(300), distinctUntilChanged())
+        .subscribe(() => this.tryPostcodeLookup())
+    );
+    this.subscription.add(
+      addressGroup.get('country').valueChanges
+        .pipe(distinctUntilChanged())
+        .subscribe(() => this.tryPostcodeLookup())
     );
   }
 
@@ -71,13 +82,14 @@ export class AddressComponent implements OnInit, OnDestroy {
     const addressGroup = this.cusAddress.get('address') as FormGroup;
     const country = addressGroup.get('country').value;
     const postcode = addressGroup.get('postal_code').value;
-    if (!country || !postcode) {
+    const houseNumber = addressGroup.get('house_number').value;
+    if (!country || !postcode || !houseNumber) {
       return;
     }
 
     this.postcodeLookupPending = true;
     this.subscription.add(
-      this.postcodeService.lookup(country, postcode).subscribe({
+      this.postcodeService.lookup(country, postcode, houseNumber).subscribe({
         next: (result) => {
           this.postcodeLookupPending = false;
           addressGroup.patchValue({

@@ -206,6 +206,13 @@
         "required": "Eyalet gereklidir"
       }
     },
+    "house_number": {
+      "label": "Kapı numarası",
+      "placeholder": "örn. 42",
+      "errors": {
+        "required": "Kapı numarası zorunludur"
+      }
+    },
     "country": {
       "label": "Ülke",
       "placeholder": "Ülkeniz",
@@ -312,7 +319,11 @@
     "register": {
       "title": "Müşteri Kaydı",
       "email-in-use": "E-posta zaten kullanımda.",
-      "btn": "Kaydol"
+      "btn": "Kaydol",
+      "postcode-lookup": {
+        "hint": "Ülkenizi seçin ve posta kodu ile kapı numarasını girin. Sokak, şehir ve eyalet otomatik olarak doldurulacaktır.",
+        "loading": "Adres aranıyor..."
+      }
     },
     "forgot-password": {
       "title": "Şifremi Unuttum",
@@ -380,7 +391,11 @@
         "proceed": "Misafir olarak devam ediliyor: {{ first_name }} {{ last_name }} ({{ email }})"
       },
       "address": {
-        "title": "Fatura Adresi"
+        "title": "Fatura Adresi",
+        "postcode-lookup": {
+          "hint": "Ülke, posta kodu ve kapı numarasını girin. Geri kalanını otomatik olarak dolduracağız.",
+          "loading": "Adres aranıyor..."
+        }
       },
       "payment": {
         "title": "Ödeme",

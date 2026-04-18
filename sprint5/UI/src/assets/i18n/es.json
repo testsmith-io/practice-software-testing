@@ -206,6 +206,13 @@
         "required": "El estado es obligatorio"
       }
     },
+    "house_number": {
+      "label": "Número",
+      "placeholder": "p. ej. 42",
+      "errors": {
+        "required": "El número es obligatorio"
+      }
+    },
     "country": {
       "label": "País",
       "placeholder": "Tu país",
@@ -312,7 +319,11 @@
     "register": {
       "title": "Registro de cliente",
       "email-in-use": "El correo electrónico ya está en uso.",
-      "btn": "Registrar"
+      "btn": "Registrar",
+      "postcode-lookup": {
+        "hint": "Elige tu país e introduce el código postal y el número. La calle, la ciudad y la provincia se rellenarán automáticamente.",
+        "loading": "Buscando la dirección..."
+      }
     },
     "forgot-password": {
       "title": "Olvidé mi contraseña",
@@ -380,7 +391,11 @@
         "proceed": "Continuando como invitado: {{ first_name }} {{ last_name }} ({{ email }})"
       },
       "address": {
-        "title": "Dirección de facturación"
+        "title": "Dirección de facturación",
+        "postcode-lookup": {
+          "hint": "Introduce país, código postal y número. Rellenaremos el resto automáticamente.",
+          "loading": "Buscando la dirección..."
+        }
       },
       "payment": {
         "title": "Pago",

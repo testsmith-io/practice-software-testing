@@ -199,6 +199,13 @@
         "required": "State is required"
       }
     },
+    "house_number": {
+      "label": "House number",
+      "placeholder": "e.g. 42",
+      "errors": {
+        "required": "House number is required"
+      }
+    },
     "country": {
       "label": "Country",
       "placeholder": "Your country",
@@ -305,7 +312,11 @@
     "register": {
       "title": "Customer registration",
       "email-in-use": "Email is already in use.",
-      "btn": "Register"
+      "btn": "Register",
+      "postcode-lookup": {
+        "hint": "Choose your country and enter the postal code and house number. Street, city and state will be filled in automatically.",
+        "loading": "Looking up your address..."
+      }
     },
     "forgot-password": {
       "title": "Forgot Password",
@@ -373,7 +384,11 @@
         "proceed": "Continuing as guest: {{ first_name }} {{ last_name }} ({{ email }})"
       },
       "address": {
-        "title": "Billing Address"
+        "title": "Billing Address",
+        "postcode-lookup": {
+          "hint": "Enter country, postal code and house number. We will fill in the rest automatically.",
+          "loading": "Looking up your address..."
+        }
       },
       "payment": {
         "title": "Payment",

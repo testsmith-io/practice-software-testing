@@ -206,6 +206,13 @@
         "required": "Provincie is vereist"
       }
     },
+    "house_number": {
+      "label": "Huisnummer",
+      "placeholder": "bv. 42",
+      "errors": {
+        "required": "Huisnummer is verplicht"
+      }
+    },
     "country": {
       "label": "Land",
       "placeholder": "Uw land",
@@ -312,7 +319,11 @@
     "register": {
       "title": "Klantregistratie",
       "email-in-use": "E-mail is al in gebruik.",
-      "btn": "Registreren"
+      "btn": "Registreren",
+      "postcode-lookup": {
+        "hint": "Kies je land en vul postcode en huisnummer in. Straat, plaats en provincie worden automatisch ingevuld.",
+        "loading": "Adres opzoeken..."
+      }
     },
     "forgot-password": {
       "title": "Wachtwoord vergeten",
@@ -380,7 +391,11 @@
         "proceed": "Doorgaan als gast: {{ first_name }} {{ last_name }} ({{ email }})"
       },
       "address": {
-        "title": "Factuuradres"
+        "title": "Factuuradres",
+        "postcode-lookup": {
+          "hint": "Vul land, postcode en huisnummer in. De rest vullen we automatisch in.",
+          "loading": "Adres opzoeken..."
+        }
       },
       "payment": {
         "title": "Betaling",

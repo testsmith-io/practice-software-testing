@@ -96,34 +96,44 @@
             }
           </div>
 
-          <div class="form-group mb-3">
-            <label for="street" class="form-label">{{ t('fields.street.label') }}</label>
-            <input formControlName="street"
-                   id="street"
-                   data-test="street"
-                   class="form-control"
-                   [ngClass]="{ 'is-invalid': submitted && f['street'].errors }"
-                   [attr.aria-invalid]="(submitted && f['street'].errors) ? 'true' : 'false'"
-                   [attr.aria-describedby]="(submitted && f['street'].errors) ? 'street-error' : null"
-                   aria-required="true"
-                   type="text"
-                   placeholder="{{ t('fields.street.placeholder') }} *"
-                   value=""/>
-            @if (f['street'].invalid && submitted) {
-              <div data-test="street-error"
-                   id="street-error"
+          <div class="col-md-12">
+            <div class="form-group mb-3">
+              <label for="country" class="form-label">{{ t('fields.country.label') }}</label>
+              <select id="country"
+                      data-test="country"
+                      formControlName="country"
+                      [ngClass]="{ 'is-invalid': submitted && f['country'].errors }"
+                      [attr.aria-invalid]="(submitted && f['country'].errors) ? 'true' : 'false'"
+                      [attr.aria-describedby]="(submitted && f['country'].errors) ? 'country-error' : null"
+                      aria-required="true"
+                      class="form-select">
+                <option value="" disabled selected hidden>{{ t('fields.country.placeholder') }} *</option>
+                @for (country of countries; track country) {
+                  <option value="{{country.code}}">{{ country.name }}</option>
+                }
+              </select>
+            </div>
+            @if (f['country'].invalid && submitted) {
+              <div data-test="country-error"
+                   id="country-error"
                    role="alert"
-                   class="alert alert-danger mt-3">
-                @if (f['street'].errors?.['required']) {
+                   class="alert alert-danger">
+                @if (f['country'].errors?.['required']) {
                   <div>
-                    {{ t('fields.street.errors.required') }}
+                    {{ t('fields.country.errors.required') }}
                   </div>
                 }
               </div>
             }
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-12 mb-2">
+            <small class="text-muted" data-test="postcode-lookup-hint">
+              {{ t('pages.register.postcode-lookup.hint') }}
+            </small>
+          </div>
+
+          <div class="col-md-6">
             <div class="form-group mb-3">
               <label for="postal_code" class="form-label">{{ t('fields.postal_code.label') }}</label>
               <input formControlName="postal_code"
@@ -156,7 +166,69 @@
               </div>
             }
           </div>
-          <div class="col-md-8">
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="house_number" class="form-label">{{ t('fields.house_number.label') }}</label>
+              <input formControlName="house_number"
+                     id="house_number"
+                     data-test="house_number"
+                     class="form-control"
+                     [ngClass]="{ 'is-invalid': submitted && f['house_number'].errors }"
+                     aria-required="true"
+                     type="text"
+                     placeholder="{{ t('fields.house_number.placeholder') }} *"
+                     value=""/>
+            </div>
+            @if (f['house_number'].invalid && submitted) {
+              <div data-test="house_number-error"
+                   role="alert"
+                   class="alert alert-danger">
+                @if (f['house_number'].errors?.['required']) {
+                  <div>
+                    {{ t('fields.house_number.errors.required') }}
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          @if (postcodeLookupPending) {
+            <div class="col-md-12 mb-2" data-test="postcode-lookup-loading">
+              <div class="alert alert-info py-2 mb-0" role="status" aria-live="polite">
+                <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                {{ t('pages.register.postcode-lookup.loading') }}
+              </div>
+            </div>
+          }
+
+          <div class="form-group mb-3">
+            <label for="street" class="form-label">{{ t('fields.street.label') }}</label>
+            <input formControlName="street"
+                   id="street"
+                   data-test="street"
+                   class="form-control"
+                   [ngClass]="{ 'is-invalid': submitted && f['street'].errors }"
+                   [attr.aria-invalid]="(submitted && f['street'].errors) ? 'true' : 'false'"
+                   [attr.aria-describedby]="(submitted && f['street'].errors) ? 'street-error' : null"
+                   aria-required="true"
+                   type="text"
+                   placeholder="{{ t('fields.street.placeholder') }} *"
+                   value=""/>
+            @if (f['street'].invalid && submitted) {
+              <div data-test="street-error"
+                   id="street-error"
+                   role="alert"
+                   class="alert alert-danger mt-3">
+                @if (f['street'].errors?.['required']) {
+                  <div>
+                    {{ t('fields.street.errors.required') }}
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="col-md-6">
             <div class="form-group mb-3">
               <label for="city" class="form-label">{{ t('fields.city.label') }}</label>
               <input formControlName="city"
@@ -207,36 +279,6 @@
                 @if (f['state'].errors?.['required']) {
                   <div>
                     {{ t('fields.state.errors.required') }}
-                  </div>
-                }
-              </div>
-            }
-          </div>
-          <div class="col-md-6">
-            <div class="form-group mb-3">
-              <label for="country" class="form-label">{{ t('fields.country.label') }}</label>
-              <select id="country"
-                      data-test="country"
-                      formControlName="country"
-                      [ngClass]="{ 'is-invalid': submitted && f['country'].errors }"
-                      [attr.aria-invalid]="(submitted && f['country'].errors) ? 'true' : 'false'"
-                      [attr.aria-describedby]="(submitted && f['country'].errors) ? 'country-error' : null"
-                      aria-required="true"
-                      class="form-select">
-                <option value="" disabled selected hidden>{{ t('fields.country.placeholder') }} *</option>
-                @for (country of countries; track country) {
-                  <option value="{{country.code}}">{{ country.name }}</option>
-                }
-              </select>
-            </div>
-            @if (f['country'].invalid && submitted) {
-              <div data-test="country-error"
-                   id="country-error"
-                   role="alert"
-                   class="alert alert-danger">
-                @if (f['country'].errors?.['required']) {
-                  <div>
-                    {{ t('fields.country.errors.required') }}
                   </div>
                 }
               </div>
