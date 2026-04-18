@@ -99,7 +99,10 @@ class BrandTest extends TestCase {
     public function testUpdateBrand() {
         $brand = Brand::factory()->create();
 
-        $payload = ['name' => 'new name'];
+        $payload = [
+            'name' => 'new name',
+            'slug' => $this->faker->slug,
+        ];
 
         $this->put('/brands/' . $brand->id, $payload)
             ->assertStatus(ResponseAlias::HTTP_OK)

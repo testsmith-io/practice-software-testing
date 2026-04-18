@@ -173,7 +173,14 @@ class ProductTest extends TestCase {
     public function testUpdateProduct() {
         $product = $this->addProduct();
 
-        $payload = ['name' => 'new name'];
+        $payload = [
+            'name' => 'new name',
+            'description' => 'some description',
+            'price' => 4.99,
+            'category_id' => $product->category_id,
+            'brand_id' => $product->brand_id,
+            'product_image_id' => $product->product_image_id,
+        ];
 
         $this->put('/products/' . $product->id, $payload)
             ->assertStatus(ResponseAlias::HTTP_OK)

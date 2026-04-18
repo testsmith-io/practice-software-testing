@@ -134,7 +134,10 @@ class CategoryTest extends TestCase {
     public function testUpdateCategory() {
         $category = Category::factory()->create();
 
-        $payload = ['name' => 'new name'];
+        $payload = [
+            'name' => 'new name',
+            'slug' => $this->faker->slug,
+        ];
 
         $response = $this->put('/categories/' . $category->id, $payload);
 
