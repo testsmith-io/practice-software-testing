@@ -11,6 +11,7 @@ import {NgClass} from "@angular/common";
 import {PasswordInputComponent} from "../../shared/password-input/password-input.component";
 import {TranslocoDirective} from "@jsverse/transloco";
 import { DateValidators } from 'src/app/shared/validators/date.validators';
+import {PostcodeService} from "../../_services/postcode.service";
 
 @Component({
   selector: 'app-register',
@@ -27,12 +28,14 @@ import { DateValidators } from 'src/app/shared/validators/date.validators';
 export class RegisterComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
   private accountService = inject(CustomerAccountService);
+  private postcodeService = inject(PostcodeService);
 
   register: FormGroup | any;
   submitted: boolean;
 
   countries = countriesList;
   error: string;
+  postcodeLookupPending = false;
 
   passwordStrengthIndicator: string;
 
@@ -62,6 +65,32 @@ export class RegisterComponent implements OnInit {
         updateOn: 'blur'
       }
     );
+
+    this.register.get('postal_code').valueChanges.subscribe(() => this.tryPostcodeLookup());
+    this.register.get('country').valueChanges.subscribe(() => this.tryPostcodeLookup());
+  }
+
+  private tryPostcodeLookup(): void {
+    const country = this.register.get('country').value;
+    const postcode = this.register.get('postal_code').value;
+    if (!country || !postcode) {
+      return;
+    }
+
+    this.postcodeLookupPending = true;
+    this.postcodeService.lookup(country, postcode).subscribe({
+      next: (result) => {
+        this.postcodeLookupPending = false;
+        this.register.patchValue({
+          street: result.street,
+          city: result.city,
+          state: result.state,
+        });
+      },
+      error: () => {
+        this.postcodeLookupPending = false;
+      },
+    });
   }
 
   getStrengthWidth(passwordStrength: string): string {

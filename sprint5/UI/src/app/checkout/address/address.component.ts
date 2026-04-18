@@ -8,6 +8,7 @@ import {Subscription} from "rxjs";
 import {TranslocoDirective} from "@jsverse/transloco";
 import {NgClass} from "@angular/common";
 import {ArchwizardModule} from "@y3krulez/angular-archwizard";
+import {PostcodeService} from "../../_services/postcode.service";
 
 @Component({
   selector: 'app-address',
@@ -23,10 +24,12 @@ import {ArchwizardModule} from "@y3krulez/angular-archwizard";
 export class AddressComponent implements OnInit, OnDestroy {
   private readonly formBuilder = inject(FormBuilder);
   private readonly customerAccountService = inject(CustomerAccountService);
+  private readonly postcodeService = inject(PostcodeService);
 
   @Output() cusAddressChange = new EventEmitter<FormGroup>();
   @Input() address: FormGroup;
   cusAddress: FormGroup | any;
+  postcodeLookupPending = false;
   private subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
@@ -52,6 +55,40 @@ export class AddressComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.cusAddress.valueChanges.subscribe(() => {
         this.cusAddressChange.emit(this.cusAddress);
+      })
+    );
+
+    const addressGroup = this.cusAddress.get('address') as FormGroup;
+    this.subscription.add(
+      addressGroup.get('postal_code').valueChanges.subscribe(() => this.tryPostcodeLookup())
+    );
+    this.subscription.add(
+      addressGroup.get('country').valueChanges.subscribe(() => this.tryPostcodeLookup())
+    );
+  }
+
+  private tryPostcodeLookup(): void {
+    const addressGroup = this.cusAddress.get('address') as FormGroup;
+    const country = addressGroup.get('country').value;
+    const postcode = addressGroup.get('postal_code').value;
+    if (!country || !postcode) {
+      return;
+    }
+
+    this.postcodeLookupPending = true;
+    this.subscription.add(
+      this.postcodeService.lookup(country, postcode).subscribe({
+        next: (result) => {
+          this.postcodeLookupPending = false;
+          addressGroup.patchValue({
+            street: result.street,
+            city: result.city,
+            state: result.state,
+          });
+        },
+        error: () => {
+          this.postcodeLookupPending = false;
+        },
       })
     );
   }

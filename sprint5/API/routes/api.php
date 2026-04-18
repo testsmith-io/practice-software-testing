@@ -10,6 +10,7 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PostcodeController;
 use App\Http\Controllers\ProductSpecController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
@@ -84,6 +85,8 @@ Route::controller(CategoryController::class)->prefix('categories')->group(functi
     Route::put('/{id}', 'update');
     Route::delete('/{id}', 'destroy');
 });
+
+Route::get('/postcode-lookup', [PostcodeController::class, 'lookup']);
 
 Route::controller(ContactController::class)->prefix('messages')->group(function () {
     Route::post('', 'send');
