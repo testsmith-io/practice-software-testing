@@ -46,6 +46,7 @@ class PatchCustomer extends BaseFormRequest
             'last_name' => ['sometimes', 'string', 'max:20', new SubscriptSuperscriptRule()],
             'address' => ['array'],
             'address.street' => ['sometimes', 'string', 'max:70', new SubscriptSuperscriptRule()],
+            'address.house_number' => ['sometimes', 'nullable', 'string', 'max:10', new SubscriptSuperscriptRule()],
             'address.city' => ['sometimes', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'address.state' => ['nullable', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'address.country' => ['sometimes', 'string', 'max:40', new SubscriptSuperscriptRule()],

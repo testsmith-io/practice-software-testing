@@ -338,6 +338,7 @@ class UserService
     {
         if (isset($data['address']) && is_array($data['address'])) {
             $data['street'] = $data['address']['street'] ?? null;
+            $data['house_number'] = $data['address']['house_number'] ?? null;
             $data['city'] = $data['address']['city'] ?? null;
             $data['state'] = $data['address']['state'] ?? null;
             $data['country'] = $data['address']['country'] ?? null;

@@ -49,6 +49,7 @@ class StoreCustomer extends BaseFormRequest
             'last_name' => ['required', 'string', 'max:20', new SubscriptSuperscriptRule()],
             'address' => ['array'],
             'address.street' => ['string', 'max:70', new SubscriptSuperscriptRule()],
+            'address.house_number' => ['nullable', 'string', 'max:10', new SubscriptSuperscriptRule()],
             'address.city' => ['string', 'max:40', new SubscriptSuperscriptRule()],
             'address.state' => ['string', 'max:40', new SubscriptSuperscriptRule()],
             'address.country' => ['string', 'max:40', new SubscriptSuperscriptRule()],

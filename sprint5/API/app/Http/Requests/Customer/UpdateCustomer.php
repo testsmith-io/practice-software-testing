@@ -46,6 +46,7 @@ class UpdateCustomer extends BaseFormRequest
             'last_name' => ['required', 'string', 'max:20', new SubscriptSuperscriptRule()],
             'address' => ['array'],
             'address.street' => ['required', 'string', 'max:70', new SubscriptSuperscriptRule()],
+            'address.house_number' => ['nullable', 'string', 'max:10', new SubscriptSuperscriptRule()],
             'address.city' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'address.state' => ['nullable', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'address.country' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule()],
