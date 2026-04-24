@@ -56,7 +56,8 @@ class FakerPostcodeDriver implements PostcodeDriver
             : (string) $faker->numberBetween(1, 250);
 
         return new PostcodeLookupResult(
-            street: $faker->streetName() . ' ' . $house,
+            street: $faker->streetName(),
+            house_number: $house,
             city: $faker->city(),
             state: $faker->state(),
             country: strtoupper($country),

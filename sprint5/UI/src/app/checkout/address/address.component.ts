@@ -10,6 +10,7 @@ import {TranslocoDirective} from "@jsverse/transloco";
 import {NgClass} from "@angular/common";
 import {ArchwizardModule} from "@y3krulez/angular-archwizard";
 import {PostcodeService} from "../../_services/postcode.service";
+import countriesList from '../../../assets/countries.json';
 
 @Component({
   selector: 'app-address',
@@ -31,6 +32,7 @@ export class AddressComponent implements OnInit, OnDestroy {
   @Input() address: FormGroup;
   cusAddress: FormGroup | any;
   postcodeLookupPending = false;
+  countries = countriesList;
   private subscription: Subscription = new Subscription();
 
   ngOnInit(): void {

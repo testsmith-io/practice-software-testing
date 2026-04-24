@@ -32,6 +32,7 @@ class PostcodeController extends Controller
      *          description="Address details",
      *          @OA\JsonContent(
      *              @OA\Property(property="street", type="string"),
+     *              @OA\Property(property="house_number", type="string"),
      *              @OA\Property(property="city", type="string"),
      *              @OA\Property(property="state", type="string"),
      *              @OA\Property(property="country", type="string"),

@@ -8,12 +8,16 @@
         <div formGroupName="address">
           <div class="mb-3">
             <label for="country" class="form-label">{{ t('fields.country.label') }}</label>
-            <input formControlName="country"
-                   data-test="country"
-                   class="form-control"
-                   id="country"
-                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.country?.errors }" type="text"
-                   placeholder="{{t('fields.country.placeholder')}} *"/>
+            <select id="country"
+                    data-test="country"
+                    formControlName="country"
+                    [ngClass]="{ 'is-invalid': cusAddress && cusAddress.country?.errors }"
+                    class="form-select">
+              <option value="" disabled selected hidden>{{ t('fields.country.placeholder') }} *</option>
+              @for (country of countries; track country) {
+                <option value="{{country.code}}">{{ country.name }}</option>
+              }
+            </select>
           </div>
 
           <small class="text-muted d-block mb-2" data-test="postcode-lookup-hint">

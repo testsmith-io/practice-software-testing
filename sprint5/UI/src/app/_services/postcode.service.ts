@@ -8,6 +8,7 @@ import {environment} from '../../environments/environment';
 
 export interface PostcodeLookupResult {
   street: string;
+  house_number: string;
   city: string;
   state: string;
   country: string;
