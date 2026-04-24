@@ -284,7 +284,9 @@
       "eco-friendly": "Milieuvriendelijke Producten",
       "show-eco-friendly": "Alleen milieuvriendelijke producten tonen",
       "co2-tooltip": "A = meest milieuvriendelijk, E = hogere milieu-impact",
-      "specifications": "Specificaties"
+      "specifications": "Specificaties",
+      "search-results-count-one": "1 product gevonden voor '{{ query }}'",
+      "search-results-count-other": "{{ count }} producten gevonden voor '{{ query }}'"
     },
     "product-detail": {
       "photo-by": "Foto door",

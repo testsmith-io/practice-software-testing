@@ -1,7 +1,4 @@
-#
-#
-#
-#
+# Exploratory Testing Tours
 
 from https://trailheadtechnology.com/tour-testing-structured-approach-to-exploratory-testing/
 

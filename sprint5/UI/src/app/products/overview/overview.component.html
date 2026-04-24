@@ -142,6 +142,15 @@
   <div class="col-md-9" *transloco="let t">
     @if (searchQuery) {
       <h3 data-test="search-caption">Searched for: <span data-test="search-term">{{ searchQuery }}</span></h3>
+      @if (results) {
+        <p class="mb-2" data-testid="search-result-count" data-test="search-result-count">
+          @if (results.total === 1) {
+            {{ t('pages.overview.search-results-count-one', { query: searchQuery }) }}
+          } @else {
+            {{ t('pages.overview.search-results-count-other', { count: results.total, query: searchQuery }) }}
+          }
+        </p>
+      }
     }
     @if (results) {
       <div class="container" attr.data-test="{{resultState}}">

@@ -112,6 +112,15 @@
         </a>
         @if (searchQuery) {
           <h3 data-test="search-caption">Searched for: <span data-test="search-term">{{searchQuery}}</span></h3>
+          @if (results) {
+            <p class="mb-2" data-testid="search-result-count" data-test="search-result-count">
+              @if (results.total === 1) {
+                1 product found for '{{ searchQuery }}'
+              } @else {
+                {{ results.total }} products found for '{{ searchQuery }}'
+              }
+            </p>
+          }
         }
         @if (results) {
           <div class="container" attr.data-test="{{resultState}}">
