@@ -51,6 +51,56 @@ test('user creation', function () {
         ]);
 });
 
+test('user creation persists house_number', function () {
+    $street = fake()->streetName();
+    $houseNumber = fake()->buildingNumber();
+
+    $userData = [
+        'first_name' => fake()->firstName(),
+        'last_name' => fake()->lastName(),
+        'address' => [
+            'street' => $street,
+            'house_number' => $houseNumber,
+            'city' => fake()->city(),
+            'state' => fake()->state(),
+            'country' => 'NL',
+            'postal_code' => '1234AA',
+        ],
+        'phone' => fake()->numerify('##########'),
+        'dob' => '1990-01-15',
+        'email' => fake()->unique()->safeEmail(),
+        'password' => 'Test3r01!',
+    ];
+
+    $response = $this->postJson('/users/register', $userData);
+
+    $response->assertStatus(ResponseAlias::HTTP_CREATED)
+        ->assertJsonPath('address.street', $street)
+        ->assertJsonPath('address.house_number', $houseNumber);
+
+    $this->assertDatabaseHas('users', [
+        'email' => $userData['email'],
+        'street' => $street,
+        'house_number' => $houseNumber,
+    ]);
+});
+
+test('checkout can retrieve house_number from user details', function () {
+    $street = fake()->streetName();
+    $houseNumber = fake()->buildingNumber();
+
+    $user = User::factory()->create([
+        'street' => $street,
+        'house_number' => $houseNumber,
+    ]);
+
+    $response = $this->getJson('/users/me', $this->headers($user));
+
+    $response->assertStatus(ResponseAlias::HTTP_OK)
+        ->assertJsonPath('address.street', $street)
+        ->assertJsonPath('address.house_number', $houseNumber);
+});
+
 test('email sent in local environment', function () {
     $this->app['env'] = 'local';
 

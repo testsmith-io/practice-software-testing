@@ -24,6 +24,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  *              property="address",
  *              type="object",
  *              @OA\Property(property="street", type="string", maxLength=70, example="Street 1"),
+ *              @OA\Property(property="house_number", type="string", maxLength=10, example="12"),
  *              @OA\Property(property="city", type="string", maxLength=40, example="City"),
  *              @OA\Property(property="state", type="string", maxLength=40, example="State"),
  *              @OA\Property(property="country", type="string", maxLength=40, example="Country"),
@@ -66,6 +67,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  *              property="address",
  *              type="object",
  *              @OA\Property(property="street", type="string", example="Street 1"),
+ *              @OA\Property(property="house_number", type="string", nullable=true, example="12"),
  *              @OA\Property(property="city", type="string", example="City"),
  *              @OA\Property(property="state", type="string", nullable=true, example="State"),
  *              @OA\Property(property="country", type="string", example="Country"),
@@ -95,7 +97,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array<int, string>
      */
-    protected $fillable = ['first_name', 'last_name', 'street', 'city', 'state', 'country', 'postal_code', 'phone', 'dob', 'email', 'password', 'role', 'enabled', 'failed_login_attempts', 'totp_secret', 'totp_verified_at', 'totp_enabled'];
+    protected $fillable = ['first_name', 'last_name', 'street', 'house_number', 'city', 'state', 'country', 'postal_code', 'phone', 'dob', 'email', 'password', 'role', 'enabled', 'failed_login_attempts', 'totp_secret', 'totp_verified_at', 'totp_enabled'];
 
 
     /**
@@ -103,7 +105,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array<int, string>
      */
-    protected $hidden = ['enabled', 'failed_login_attempts', 'updated_at', 'password', 'role', 'uid', 'totp_secret', 'totp_verified_at', 'street', 'city', 'state', 'country', 'postal_code'];
+    protected $hidden = ['enabled', 'failed_login_attempts', 'updated_at', 'password', 'role', 'uid', 'totp_secret', 'totp_verified_at', 'street', 'house_number', 'city', 'state', 'country', 'postal_code'];
 
     /**
      * The attributes that should be cast.
@@ -123,6 +125,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return [
             'street' => $this->street,
+            'house_number' => $this->house_number,
             'city' => $this->city,
             'state' => $this->state,
             'country' => $this->country,
