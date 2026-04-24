@@ -39,6 +39,7 @@ class HttpPostcodeDriver implements PostcodeDriver
 
         return new PostcodeLookupResult(
             street: (string) ($data['street'] ?? ''),
+            house_number: (string) ($data['house_number'] ?? $houseNumber ?? ''),
             city: (string) ($data['city'] ?? ''),
             state: (string) ($data['state'] ?? ''),
             country: (string) ($data['country'] ?? $country),
