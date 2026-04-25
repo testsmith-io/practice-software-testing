@@ -1,7 +1,4 @@
-#
-#
-#
-#
+# Exploratory Testing Tasks
 
 ## create test idea for Customer Registration
 - Already existing user

@@ -284,7 +284,9 @@
       "co2-tooltip": "Α = πιο φιλικό προς το περιβάλλον, Ε = υψηλότερη περιβαλλοντική επίπτωση",
       "no-results": "Δεν βρέθηκαν προϊόντα.",
       "no-stock": "Μη διαθέσιμο",
-      "specifications": "Προδιαγραφές"
+      "specifications": "Προδιαγραφές",
+      "search-results-count-one": "Βρέθηκε 1 προϊόν για '{{ query }}'",
+      "search-results-count-other": "Βρέθηκαν {{ count }} προϊόντα για '{{ query }}'"
     },
     "product-detail": {
       "photo-by": "Φωτογραφία από",

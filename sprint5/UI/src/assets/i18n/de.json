@@ -284,7 +284,9 @@
       "eco-friendly": "Umweltfreundliche Produkte",
       "show-eco-friendly": "Nur umweltfreundliche Produkte anzeigen",
       "co2-tooltip": "A = am umweltfreundlichsten, E = höhere Umweltbelastung",
-      "specifications": "Spezifikationen"
+      "specifications": "Spezifikationen",
+      "search-results-count-one": "1 Produkt gefunden für '{{ query }}'",
+      "search-results-count-other": "{{ count }} Produkte gefunden für '{{ query }}'"
     },
     "product-detail": {
       "photo-by": "Foto von",

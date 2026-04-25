@@ -284,7 +284,9 @@
       "eco-friendly": "Çevre Dostu Ürünler",
       "show-eco-friendly": "Sadece çevre dostu ürünleri göster",
       "co2-tooltip": "A = en çevre dostu, E = daha yüksek çevresel etki",
-      "specifications": "Özellikler"
+      "specifications": "Özellikler",
+      "search-results-count-one": "'{{ query }}' için 1 ürün bulundu",
+      "search-results-count-other": "'{{ query }}' için {{ count }} ürün bulundu"
     },
     "product-detail": {
       "photo-by": "Fotoğraf",

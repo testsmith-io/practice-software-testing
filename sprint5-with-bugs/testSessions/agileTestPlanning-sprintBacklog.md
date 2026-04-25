@@ -1,14 +1,10 @@
-#
-#
-#
-#
+# Sprint-Backlog
 
-
-
-- Sprint Goal:
+## Sprint Goal:
   - User in China can pay with new payment method China Pay
   - Replace open-source components to increase security and password encryption
-- Sprint Backlog
+
+##Sprint Backlog
   - 3203: Allow Chines character et in registration
   - 3206: Security Enhancements in user profile
   - 3207: Implement new payment methods China Pay
