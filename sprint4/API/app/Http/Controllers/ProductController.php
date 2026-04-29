@@ -107,7 +107,7 @@ class ProductController extends Controller
                 $q = $request->get('q');
                 // FULLTEXT requires terms of at least ft_min_word_len (default 4).
                 if (strlen($q) >= 4 && in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
-                    $query->whereRaw('MATCH(name, description) AGAINST(? IN BOOLEAN MODE)', [$q . '*']);
+                    $query->whereRaw('MATCH(name) AGAINST(? IN BOOLEAN MODE)', [$q . '*']);
                 } else {
                     $query->where('name', 'like', "%$q%");
                 }
@@ -268,7 +268,7 @@ class ProductController extends Controller
         $builder = Product::with('product_image');
         // FULLTEXT requires terms of at least ft_min_word_len (default 4).
         if (strlen($q) >= 4 && in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
-            $builder->whereRaw('MATCH(name, description) AGAINST(? IN BOOLEAN MODE)', [$q . '*']);
+            $builder->whereRaw('MATCH(name) AGAINST(? IN BOOLEAN MODE)', [$q . '*']);
         } else {
             $builder->where('name', 'like', "%$q%");
         }
