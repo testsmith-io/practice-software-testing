@@ -45,7 +45,7 @@
               <label for="total" class="col-sm-3 col-form-label">{{ t('pages.checkout.cart.subtotal') }}</label>
               <div class="col-sm-9">
                 <input type="text" readonly class="form-control-plaintext" data-test="total" id="subtotal"
-                       value="$ {{invoice.subtotal.toFixed(2)}}">
+                       value="{{invoice.subtotal != null ? '$ ' + invoice.subtotal.toFixed(2) : '—'}}">
               </div>
             </div>
           }
@@ -56,7 +56,7 @@
               <div class="col-sm-9">
                 <input type="text" readonly class="form-control-plaintext" data-test="total"
                        id="additional_discount_percentage"
-                       value="$ {{invoice.additional_discount_amount.toFixed(2)}}">
+                       value="{{invoice.additional_discount_amount != null ? '$ ' + invoice.additional_discount_amount.toFixed(2) : '—'}}">
               </div>
             </div>
           }
@@ -67,7 +67,7 @@
               <div class="col-sm-9">
                 <input type="text" readonly class="form-control-plaintext text-success" data-test="eco-discount"
                        id="eco_discount"
-                       value="$ {{invoice.eco_discount_amount.toFixed(2)}}">
+                       value="{{invoice.eco_discount_amount != null ? '$ ' + invoice.eco_discount_amount.toFixed(2) : '—'}}">
               </div>
             </div>
           }
@@ -75,7 +75,7 @@
             <label for="total" class="col-sm-3 col-form-label">{{ t('pages.checkout.cart.total') }}</label>
             <div class="col-sm-9">
               <input type="text" readonly class="form-control-plaintext" data-test="total" id="total"
-                     value="$ {{invoice.total.toFixed(2)}}">
+                     value="{{invoice.total != null ? '$ ' + invoice.total.toFixed(2) : '—'}}">
             </div>
           </div>
         </form>
