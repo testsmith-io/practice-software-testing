@@ -19,7 +19,7 @@
           <td>{{ item.invoice_number }}</td>
           <td>{{ item.billing_street }}</td>
           <td>{{ item.invoice_date }}</td>
-          <td>${{ item.total.toFixed(2) }}</td>
+          <td>{{ item.total != null ? '$' + item.total.toFixed(2) : '—' }}</td>
           <td style="white-space: nowrap">
             <a routerLink="{{item.id}}"
                class="btn btn-sm btn-primary mr-1">{{ t('pages.my-account.invoices.details') }}</a>
