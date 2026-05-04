@@ -55,8 +55,13 @@ class ProductService
             }
 
             if (!empty($filters['q'])) {
-                Log::debug("Applying search query", ['query' => $filters['q']]);
-                $query->where('name', 'like', '%' . $filters['q'] . '%');
+                $sanitised = trim((string) preg_replace('/[^\p{L}\p{N}\s]+/u', ' ', (string) $filters['q']));
+                Log::debug("Applying search query", ['query' => $sanitised]);
+                if ($sanitised === '') {
+                    $query->whereRaw('1=0');
+                } else {
+                    $query->where('name', 'like', '%' . $sanitised . '%');
+                }
             }
 
             if (isset($filters['is_rental'])) {
@@ -129,14 +134,24 @@ class ProductService
 
     public function searchProducts($query, $page = 1)
     {
-        $cacheKey = "products.search.{$query}.page.{$page}";
+        // Strip everything that isn't a letter, digit or whitespace so the
+        // LIKE input is meaningful and consistent across versions.
+        $sanitised = trim((string) preg_replace('/[^\p{L}\p{N}\s]+/u', ' ', (string) $query));
 
-        Log::debug("Searching products", ['query' => $query, 'page' => $page]);
+        $cacheKey = "products.search.{$sanitised}.page.{$page}";
 
-        return Cache::remember($cacheKey, 60 * 60, function () use ($query) {
-            $results = Product::with('product_image')
-                ->where('name', 'like', "%{$query}%")
-                ->paginate(9);
+        Log::debug("Searching products", ['query' => $sanitised, 'page' => $page]);
+
+        return Cache::remember($cacheKey, 60 * 60, function () use ($sanitised) {
+            $builder = Product::with('product_image');
+
+            if ($sanitised === '') {
+                $builder->whereRaw('1=0');
+            } else {
+                $builder->where('name', 'like', "%{$sanitised}%");
+            }
+
+            $results = $builder->paginate(9);
 
             Log::debug("Search results found", ['total' => $results->total()]);
             return $results;
