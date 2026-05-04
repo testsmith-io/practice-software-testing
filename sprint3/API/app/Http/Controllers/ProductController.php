@@ -105,7 +105,12 @@ class ProductController extends Controller
             }
             if ($request->get('q')) {
                 $q = $request->get('q');
-                $query->where('name', 'like', "%$q%");
+                $sanitised = trim((string) preg_replace('/[^\p{L}\p{N}\s]+/u', ' ', (string) $q));
+                if ($sanitised === '') {
+                    $query->whereRaw('1=0');
+                } else {
+                    $query->where('name', 'like', "%{$sanitised}%");
+                }
             }
             $results = $query->filter()->paginate(9);
 
@@ -259,8 +264,16 @@ class ProductController extends Controller
     public function search(Request $request)
     {
         $q = $request->get('q');
+        $sanitised = trim((string) preg_replace('/[^\p{L}\p{N}\s]+/u', ' ', (string) $q));
 
-        return $this->preferredFormat(Product::with('product_image')->where('name', 'like', "%$q%")->paginate(9));
+        $builder = Product::with('product_image');
+        if ($sanitised === '') {
+            $builder->whereRaw('1=0');
+        } else {
+            $builder->where('name', 'like', "%{$sanitised}%");
+        }
+
+        return $this->preferredFormat($builder->paginate(9));
     }
 
     /**

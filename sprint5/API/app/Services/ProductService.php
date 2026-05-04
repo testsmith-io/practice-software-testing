@@ -145,11 +145,15 @@ class ProductService
 
     public function searchProducts($query, $page = 1)
     {
-        $cacheKey = "products.search.{$query}.page.{$page}";
+        // Strip everything that isn't a letter, digit or whitespace so the
+        // FULLTEXT/LIKE input is meaningful and safe (e.g. "@#$%" -> "").
+        $sanitised = trim((string) preg_replace('/[^\p{L}\p{N}\s]+/u', ' ', (string) $query));
 
-        Log::debug("Searching products", ['query' => $query, 'page' => $page]);
+        $cacheKey = "products.search.{$sanitised}.page.{$page}";
 
-        return $this->cache()->remember($cacheKey, self::CACHE_TTL, function () use ($query) {
+        Log::debug("Searching products", ['query' => $sanitised, 'page' => $page]);
+
+        return $this->cache()->remember($cacheKey, self::CACHE_TTL, function () use ($sanitised) {
             $builder = Product::with([
                 'product_image:id,by_name,by_url,source_name,source_url,file_name,title',
                 'category:id,name',
@@ -157,10 +161,13 @@ class ProductService
             ])
             ->select('id', 'name', 'description', 'price', 'product_image_id', 'category_id', 'brand_id', 'is_location_offer', 'is_rental', 'stock', 'co2_rating');
 
-            if (strlen($query) >= 4 && in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
-                $builder->whereRaw('MATCH(name) AGAINST(? IN BOOLEAN MODE)', [$query . '*']);
+            if ($sanitised === '') {
+                // Nothing searchable left after sanitisation -> empty result set.
+                $builder->whereRaw('1=0');
+            } elseif (strlen($sanitised) >= 4 && in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+                $builder->whereRaw('MATCH(name) AGAINST(? IN BOOLEAN MODE)', [$sanitised . '*']);
             } else {
-                $builder->where('name', 'like', "%{$query}%");
+                $builder->where('name', 'like', "%{$sanitised}%");
             }
 
             $results = $builder->paginate(9);

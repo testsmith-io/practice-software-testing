@@ -288,15 +288,22 @@ export class OverviewComponent implements OnInit, OnDestroy {
 
     this.resultState = 'search_started';
     this.searchQuery = this.search.value.query;
-    this.productService.searchProducts(this.searchQuery).subscribe(res => {
-      this.resultState = 'search_completed';
-      this.minPrice = 1;
-      this.maxPrice = 100;
-      this.sorting = null;
-      this.brandsFilter = [];
-      this.categoriesFilter = [];
-      this.uncheckAll();
-      this.results = res;
+    this.minPrice = 1;
+    this.maxPrice = 100;
+    this.sorting = null;
+    this.brandsFilter = [];
+    this.categoriesFilter = [];
+    this.uncheckAll();
+    this.productService.searchProducts(this.searchQuery).subscribe({
+      next: res => {
+        this.resultState = 'search_completed';
+        this.results = res;
+      },
+      error: () => {
+        // Don't leave stale results on screen when the search call fails.
+        this.resultState = 'search_completed';
+        this.results = { data: [], total: 0, current_page: 1, last_page: 1, per_page: 9, from: 0, to: 0 } as any;
+      }
     });
     this.search.reset();
     this.uncheckAll();

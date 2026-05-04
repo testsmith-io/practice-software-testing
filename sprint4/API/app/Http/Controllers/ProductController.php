@@ -105,11 +105,14 @@ class ProductController extends Controller
             }
             if ($request->get('q')) {
                 $q = $request->get('q');
-                // FULLTEXT requires terms of at least ft_min_word_len (default 4).
-                if (strlen($q) >= 4 && in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
-                    $query->whereRaw('MATCH(name) AGAINST(? IN BOOLEAN MODE)', [$q . '*']);
+                $sanitised = trim((string) preg_replace('/[^\p{L}\p{N}\s]+/u', ' ', (string) $q));
+                if ($sanitised === '') {
+                    $query->whereRaw('1=0');
+                } elseif (strlen($sanitised) >= 4 && in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+                    // FULLTEXT requires terms of at least ft_min_word_len (default 4).
+                    $query->whereRaw('MATCH(name) AGAINST(? IN BOOLEAN MODE)', [$sanitised . '*']);
                 } else {
-                    $query->where('name', 'like', "%$q%");
+                    $query->where('name', 'like', "%{$sanitised}%");
                 }
             }
             $results = $query->filter()->paginate(9);
@@ -264,13 +267,16 @@ class ProductController extends Controller
     public function search(Request $request)
     {
         $q = $request->get('q');
+        $sanitised = trim((string) preg_replace('/[^\p{L}\p{N}\s]+/u', ' ', (string) $q));
 
         $builder = Product::with('product_image');
-        // FULLTEXT requires terms of at least ft_min_word_len (default 4).
-        if (strlen($q) >= 4 && in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
-            $builder->whereRaw('MATCH(name) AGAINST(? IN BOOLEAN MODE)', [$q . '*']);
+        if ($sanitised === '') {
+            $builder->whereRaw('1=0');
+        } elseif (strlen($sanitised) >= 4 && in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+            // FULLTEXT requires terms of at least ft_min_word_len (default 4).
+            $builder->whereRaw('MATCH(name) AGAINST(? IN BOOLEAN MODE)', [$sanitised . '*']);
         } else {
-            $builder->where('name', 'like', "%$q%");
+            $builder->where('name', 'like', "%{$sanitised}%");
         }
 
         return $this->preferredFormat($builder->paginate(9));
