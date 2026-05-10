@@ -165,7 +165,13 @@ class ProductService
                 // Nothing searchable left after sanitisation -> empty result set.
                 $builder->whereRaw('1=0');
             } elseif (strlen($sanitised) >= 4 && in_array(DB::getDriverName(), ['mysql', 'mariadb'], true)) {
-                $builder->whereRaw('MATCH(name) AGAINST(? IN BOOLEAN MODE)', [$sanitised . '*']);
+                // Require every token (+word) and allow prefix matches (word*) so
+                // multi-word searches behave as AND, not OR (BOOLEAN MODE default).
+                $boolean = implode(' ', array_map(
+                    static fn ($t) => '+' . $t . '*',
+                    preg_split('/\s+/', $sanitised, -1, PREG_SPLIT_NO_EMPTY)
+                ));
+                $builder->whereRaw('MATCH(name) AGAINST(? IN BOOLEAN MODE)', [$boolean]);
             } else {
                 $builder->where('name', 'like', "%{$sanitised}%");
             }
