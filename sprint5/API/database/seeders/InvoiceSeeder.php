@@ -40,7 +40,7 @@ class InvoiceSeeder extends Seeder
                 $invoiceCounters[$year] = 1;
             }
 
-            // Generate Invoice Number
+            // Generate Invoice Numbercl
             $invoiceNumber = 'INV-' . $year . str_pad($invoiceCounters[$year], 7, '0', STR_PAD_LEFT);
             $invoiceCounters[$year]++;
 
