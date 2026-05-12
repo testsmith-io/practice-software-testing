@@ -4,7 +4,7 @@
   <nav>
     <ul class="pagination">
       <li class="page-item" [class.disabled]="currentPage === 1">
-        <a class="page-link" (click)="changePage(currentPage - 1)" aria-label="Previous" role="button">
+        <a class="page-link" (click)="changePage(currentPage - 1)" data-test="pagination-prev" aria-label="Previous" role="button">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
@@ -14,7 +14,7 @@
         </li>
       }
       <li class="page-item" [class.disabled]="currentPage === lastPage">
-        <a class="page-link" (click)="changePage(currentPage + 1)" aria-label="Next" role="button">
+        <a class="page-link" (click)="changePage(currentPage + 1)" data-test="pagination-next" aria-label="Next" role="button">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
