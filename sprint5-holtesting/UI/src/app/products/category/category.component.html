@@ -1,0 +1,170 @@
+<!-- Copyright (c) 2024-2026 Testsmith. All rights reserved. -->
+<!-- See LICENSE for details. -->
+
+<div class="row" *transloco="let t">
+  <h2 data-test="page-title">{{ t('pages.overview.category') }}: {{ slug.replace('-', ' ') | titlecase }}</h2>
+</div>
+<div class="row my-4" *transloco="let t">
+  <a class="btn btn-secondary d-block d-md-none btn-block mb-3" data-bs-toggle="collapse" data-test="filters"
+     href="#filters"
+     role="button" aria-expanded="false" aria-controls="collapseExample">
+    <fa-icon [icon]="['fas', 'filter']"></fa-icon> {{ t('pages.overview.filters') }}
+  </a>
+  <div data-test="filters" id="filters" class="collapse d-md-block col-md-3 mb-3">
+    <h4 class="grid-title"><fa-icon [icon]="['fas', 'arrows-up-down']"></fa-icon> {{ t('pages.overview.sort') }}</h4>
+    <hr>
+    <form autocomplete=off>
+      <div class="input-group mb-3">
+        <select data-test="sort" (change)="changeSorting($event)" class="form-select">
+          <option value=""></option>
+          <option value="name,asc">{{ t('pages.overview.sort-options.name-asc') }}</option>
+          <option value="name,desc">{{ t('pages.overview.sort-options.name-desc') }}</option>
+          <option value="price,desc">{{ t('pages.overview.sort-options.price-desc') }}</option>
+          <option value="price,asc">{{ t('pages.overview.sort-options.price-asc') }}</option>
+          @if (isCo2ScaleEnabled()) {
+            <option value="co2_rating,asc">{{ t('pages.overview.sort-options.co2-asc') }}</option>
+            <option value="co2_rating,desc">{{ t('pages.overview.sort-options.co2-desc') }}</option>
+          }
+        </select>
+      </div>
+    </form>
+
+    <h4 class="grid-title"><fa-icon [icon]="['fas', 'filter']"></fa-icon> {{ t('pages.overview.filters') }}</h4>
+    <hr>
+    <h4>{{ t('pages.overview.by-category') }}:</h4>
+    <ng-template #recursiveList let-list let-parentId="parentId">
+      @for (category of list;track category) {
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" class="icheck"
+                   attr.data-test="category-{{category.id}}" name="category_id"
+                   [checked]="isCategoryChecked(category.id)"
+                   value="{{category.id}}" (change)="filterByCategory($event, category.id, parentId)"/>
+            {{ category.name }}</label>
+          @if (category.sub_categories.length > 0) {
+            <ul>
+              <ng-container
+                *ngTemplateOutlet="recursiveList; context:{ $implicit: category.sub_categories, parentId: category.id }"></ng-container>
+            </ul>
+          }
+        </div>
+      }
+    </ng-template>
+    <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: categories }"></ng-container>
+
+    <div class="py-2"></div>
+
+    <h4>{{ t('pages.overview.by-brand') }}:</h4>
+    @for (brand of brands;track brand) {
+      <div class="checkbox">
+        <label><input type="checkbox" class="icheck" attr.data-test="brand-{{brand.id}}" name="brand_id"
+                      value="{{brand.id}}"
+                      (change)="filterByBrand($event)"/> <!--(change)="filterByMediatype($event)"-->
+          {{ brand.name }}</label>
+      </div>
+    }
+
+    <div class="py-2"></div>
+
+    @if (isCo2ScaleEnabled()) {
+      <h4>{{ t('pages.overview.sustainability') || 'Sustainability' }}:</h4>
+      <fieldset>
+        <legend class="visually-hidden">{{ t('pages.overview.eco-friendly') || 'Eco-Friendly Products' }}</legend>
+        <div class="checkbox">
+          <label><input type="checkbox" class="icheck" name="eco_friendly" data-test="eco-friendly-filter"
+                        (change)="filterByEcoFriendly($event)"/>
+            {{ t('pages.overview.show-eco-friendly') || 'Show only eco-friendly products' }}</label>
+        </div>
+      </fieldset>
+    }
+
+  </div>
+  <div class="col-md-9">
+    @if (!results?.data.length) {
+      <div data-test="category-empty">
+        {{ t('pages.overview.no-results') }}
+      </div>
+    }
+    @if (results) {
+      <div class="container" attr.data-test="{{resultState}}">
+        @for (item of results.data;track item) {
+          <a attr.data-test="product-{{item.id}}" routerLink="/product/{{item.id}}"
+
+             class="card" style="text-decoration: none; color: black;">
+            <div class="card-img-wrapper position-relative">
+              <img class="card-img-top" loading="lazy" alt="{{item.name}}"
+                   src="assets/img/products/{{item.product_image.file_name}}">
+              @if (item.is_eco_friendly && isEcoBadgeEnabled()) {
+                <span class="eco-badge position-absolute top-0 end-0 m-2" data-test="eco-badge">
+                  <fa-icon [icon]="['fas', 'leaf']"></fa-icon> ECO
+                </span>
+              }
+              <button class="btn compare-btn position-absolute top-0 start-0 m-2"
+                      [ngClass]="{'compare-btn-active': comparisonService.isSelected(item.id)}"
+                      data-test="compare-btn"
+                      (click)="$event.preventDefault(); $event.stopPropagation(); comparisonService.toggle(item.id)"
+                      [attr.aria-label]="t('pages.comparison.add')"
+                      [attr.aria-pressed]="comparisonService.isSelected(item.id)"
+                      title="{{ t('pages.comparison.add') }}">
+                <fa-icon [icon]="['fas', 'balance-scale']"></fa-icon>
+              </button>
+            </div>
+            <div class="card-body">
+              <h5 data-test="product-name" class="card-title">
+                {{ item.name }}
+              </h5>
+              @if (item.co2_rating && isCo2ScaleEnabled()) {
+                <div class="co2-rating-scale"
+                     [title]="t('pages.overview.co2-tooltip')"
+                     data-test="co2-rating-badge">
+                  <span class="co2-letter" [class.active]="item.co2_rating === 'A'" [class.rating-a]="item.co2_rating === 'A'">A</span>
+                  <span class="co2-letter" [class.active]="item.co2_rating === 'B'" [class.rating-b]="item.co2_rating === 'B'">B</span>
+                  <span class="co2-letter" [class.active]="item.co2_rating === 'C'" [class.rating-c]="item.co2_rating === 'C'">C</span>
+                  <span class="co2-letter" [class.active]="item.co2_rating === 'D'" [class.rating-d]="item.co2_rating === 'D'">D</span>
+                  <span class="co2-letter" [class.active]="item.co2_rating === 'E'" [class.rating-e]="item.co2_rating === 'E'">E</span>
+                </div>
+              }
+            </div>
+            <div class="card-footer">
+              @if (!item.in_stock) {
+                <span class="float-start text-danger" data-test="out-of-stock">{{ t('pages.overview.no-stock') }}</span>
+              }
+              <span class="float-end text-muted">
+                   <span data-test="product-price"
+                         [ngClass]="{'discounted' : item.discount_price}">${{ item.price }}</span> @if (item.discount_price) {
+                <span
+                  data-test="product-discount-price"> ${{ item.discount_price }}</span>
+              }
+        </span>
+            </div>
+
+          </a>
+        }
+      </div>
+    }
+    <div class="mt-3">
+      <app-pagination [currentPage]="currentPage" [lastPage]="results?.last_page"
+                      (pageChange)="onPageChange($event)"></app-pagination>
+    </div>
+  </div>
+</div>
+
+@if ((comparisonService.count$ | async) > 0) {
+  <div class="comparison-bar" *transloco="let t" data-test="comparison-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <span>
+        <fa-icon [icon]="['fas', 'balance-scale']" size="sm"></fa-icon>
+        {{ t('pages.comparison.bar-count', {count: (comparisonService.count$ | async)}) }}
+      </span>
+      <span>
+        <button class="btn btn-outline-light btn-sm me-2" data-test="clear-comparison"
+                (click)="comparisonService.clear()">
+          {{ t('pages.comparison.clear-all') }}
+        </button>
+        <a routerLink="/comparison" class="btn btn-light btn-sm" data-test="compare-link">
+          {{ t('pages.comparison.compare-btn') }}
+        </a>
+      </span>
+    </div>
+  </div>
+}

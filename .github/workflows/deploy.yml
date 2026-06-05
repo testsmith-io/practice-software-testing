@@ -15,7 +15,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     strategy:
       matrix:
-        sprint: [1, 2, 3, 4, 5, '5-with-bugs']
+        sprint: [1, 2, 3, 4, 5, '5-with-bugs', '5-holtesting']
     env:
       NODE_VERSION: '22.17.0'
       SECRET_GOOGLE_ID: ${{ matrix.sprint == '5' && secrets.SECRET_GOOGLE_ID || '' }}

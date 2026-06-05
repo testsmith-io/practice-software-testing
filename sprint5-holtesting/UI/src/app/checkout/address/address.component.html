@@ -1,0 +1,108 @@
+<!-- Copyright (c) 2024-2026 Testsmith. All rights reserved. See LICENSE for details. -->
+
+<div class="container login-container" *transloco="let t">
+  <div class="row">
+    <div class="col-md-6 offset-md-3 login-form-1">
+      <h3>{{ t('pages.checkout.address.title') }}</h3>
+      <form [formGroup]="cusAddress">
+        <div formGroupName="address">
+          <div class="mb-3">
+            <label for="country" class="form-label">{{ t('fields.country.label') }}</label>
+            <select id="country"
+                    data-test="country"
+                    formControlName="country"
+                    [ngClass]="{ 'is-invalid': cusAddress && cusAddress.country?.errors }"
+                    class="form-select">
+              <option value="" disabled selected hidden>{{ t('fields.country.placeholder') }} *</option>
+              @for (country of countries; track country) {
+                <option value="{{country.code}}">{{ country.name }}</option>
+              }
+            </select>
+          </div>
+
+          <small class="text-muted d-block mb-2" data-test="postcode-lookup-hint">
+            {{ t('pages.checkout.address.postcode-lookup.hint') }}
+          </small>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="postal_code" class="form-label">{{ t('fields.postal_code.label') }}</label>
+              <input formControlName="postal_code"
+                     data-test="postal_code"
+                     class="form-control"
+                     id="postal_code"
+                     [ngClass]="{ 'is-invalid': cusAddress && cusAddress.postal_code?.errors }" type="text"
+                     placeholder="{{t('fields.postal_code.placeholder')}} *"/>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="house_number" class="form-label">{{ t('fields.house_number.label') }}</label>
+              <input formControlName="house_number"
+                     data-test="house_number"
+                     class="form-control"
+                     id="house_number"
+                     type="text"
+                     placeholder="{{t('fields.house_number.placeholder')}} *"/>
+            </div>
+          </div>
+
+          @if (postcodeLookupPending) {
+            <div class="alert alert-info py-2 mb-3" role="status" aria-live="polite"
+                 data-test="postcode-lookup-loading">
+              <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              {{ t('pages.checkout.address.postcode-lookup.loading') }}
+            </div>
+          }
+
+          <div class="mb-3">
+            <label for="street" class="form-label">{{ t('fields.street.label') }}</label>
+            <input formControlName="street"
+                   data-test="street"
+                   class="form-control"
+                   id="street"
+                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.street?.errors }" type="text"
+                   placeholder="{{t('fields.street.placeholder')}} *"/>
+          </div>
+
+          <div class="mb-3">
+            <label for="city" class="form-label">{{ t('fields.city.label') }}</label>
+            <input formControlName="city"
+                   data-test="city"
+                   class="form-control"
+                   id="city"
+                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.city?.errors }" type="text"
+                   placeholder="{{t('fields.city.placeholder')}} *"/>
+          </div>
+
+          <div class="mb-3">
+            <label for="state" class="form-label">{{ t('fields.state.label') }}</label>
+            <input formControlName="state"
+                   data-test="state"
+                   class="form-control"
+                   id="state"
+                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.state?.errors }" type="text"
+                   placeholder="{{t('fields.state.label')}} *"/>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="delivery-per" class="form-label">{{ t('pages.checkout.address.delivery-per.label') }}</label>
+          <select id="delivery-per"
+                  data-test="delivery-per"
+                  formControlName="delivery_per"
+                  class="form-select"
+                  [ngClass]="{ 'is-invalid': f['delivery_per']?.invalid && f['delivery_per']?.touched }">
+            <option value="" disabled selected hidden>{{ t('pages.checkout.address.delivery-per.placeholder') }}</option>
+            <option value="standard">{{ t('pages.checkout.address.delivery-per.options.standard') }}</option>
+            <option value="zasilkova">{{ t('pages.checkout.address.delivery-per.options.zasilkova') }}</option>
+          </select>
+        </div>
+      </form>
+
+      <div class="float-end">
+        <button data-test="proceed-3" [disabled]="!cusAddress.valid" type="button" class="btn btn-success"
+                awNextStep>{{ t('pages.checkout.btn') }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

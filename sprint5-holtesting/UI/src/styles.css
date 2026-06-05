@@ -1,0 +1,115 @@
+/* Copyright (c) 2024-2026 Testsmith. All rights reserved. See LICENSE for details. */
+
+/* You can add global styles to this file, and also import other style files */
+html, body {
+  height: 100%;
+  /*scroll-behavior: smooth !important;*/
+  scroll-behavior: inherit !important;
+}
+.auth-container{
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+.auth-form{
+  padding: 3%;
+  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+}
+.auth-form h3{
+  text-align: center;
+  color: #333;
+}
+
+.auth-container form{
+  padding: 3% 10%;
+}
+.btnSubmit
+{
+  width: 50%;
+  border-radius: 1rem;
+  padding: 1.5%;
+  border: none;
+  cursor: pointer;
+}
+.auth-form .btnSubmit{
+  font-weight: 600;
+  color: #fff;
+  background-color: #1E6098;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.auth-form .btnSubmit:hover {
+  background-color: #175a8a;
+}
+
+.auth-form .btnSubmit:active {
+  transform: scale(0.98);
+}
+
+.auth-form .ForgetPwd{
+  color: #1E6098;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.alert {
+  margin-bottom: 0.5rem;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+a {
+  color: #0000cc;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap; /* Adding this to keep content on one line */
+}
+
+ul.steps-indicator li a div.label{
+  color: #595959;
+}
+.text-danger {
+  color: #CA0B00 !important;
+}
+
+/* Override Bootstrap's .text-muted (#6c757d, ~4.5:1 on white but inconsistent
+ * across grey backgrounds) with a darker grey that meets WCAG AA 4.5:1
+ * contrast on both white and #f8f9fa backgrounds. */
+.text-muted {
+  color: #555f6a !important;
+}
+
+/* Focus states for accessibility */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid #1E6098;
+  outline-offset: 2px;
+}
+
+/* Skip focus outline for mouse users, keep for keyboard */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid #1E6098;
+  outline-offset: 2px;
+}

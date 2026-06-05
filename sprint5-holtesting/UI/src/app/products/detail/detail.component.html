@@ -1,0 +1,176 @@
+<!-- Copyright (c) 2024-2026 Testsmith. All rights reserved. See LICENSE for details. -->
+
+@if (product) {
+  <div class="row my-3" *transloco="let t">
+    <div class="col-md-6">
+      <figure class="figure">
+        <div class="card-img-wrapper">
+          <img src="assets/img/products/{{product.product_image.file_name}}" class="figure-img img-fluid"
+               alt="{{product.name}}" fetchpriority="high">
+        </div>
+        <figcaption class="figure-caption">{{ t('pages.product-detail.photo-by') }} <a target="_blank"
+                                                       href="{{product.product_image.by_url}}">{{ product.product_image.by_name }}</a>
+          {{ t('pages.product-detail.on') }} <a target="_blank"
+                href="{{product.product_image.source_url}}">{{ product.product_image.source_name }}</a>.
+        </figcaption>
+      </figure>
+    </div>
+    <div class="col-md-6">
+      <h1 data-test="product-name">
+        {{ product.name }}
+        @if (product.is_eco_friendly && isEcoBadgeEnabled()) {
+          <span class="eco-badge ms-2" data-test="eco-badge"><fa-icon [icon]="['fas', 'leaf']"></fa-icon> ECO</span>
+        }
+      </h1>
+      <p><span aria-label="category"
+               class="badge rounded-pill bg-secondary me-1">{{ product.category.name }}</span><span
+        aria-label="brand" class="badge rounded-pill bg-secondary me-1">{{ product.brand.name }}
+    </span>@if (product.discount_price) {
+        <span
+          class="badge rounded-pill bg-danger me-1">-{{ discount_percentage }}%</span>
+      }</p>
+      <div class="price-section">
+        <span [ngClass]="{'discounted' : product.discount_price}">$<span
+          aria-label="unit-price" data-test="unit-price">{{ product.price.toFixed(2) }}</span></span>
+        @if (product.discount_price) {
+          <span data-test="offer-price"
+                class="ms-1">$<span id="discount-price">{{ product.discount_price }}</span></span>
+        }
+        @if (product.is_rental) {
+          <span
+            class="ms-1">{{ t('pages.product-detail.per-hour') }}</span>
+        }
+        @if (product.is_rental) {
+          <small
+            class="ms-1"> / ({{ t('pages.product-detail.total') }} $@if (!product.discount_price) {
+              <span
+                id="total-price">{{ (product.price * quantity).toFixed(2) }}</span>
+            }
+              @if (product.discount_price) {
+                <span
+                  id="total-price">{{ (product.discount_price * quantity).toFixed(2) }}</span>
+              })</small>
+        }
+      </div>
+      @if (product.co2_rating && isCo2ScaleEnabled()) {
+        <div class="co2-rating-scale mt-2"
+             [title]="t('pages.overview.co2-tooltip')"
+             data-test="co2-rating-badge">
+          <span class="co2-letter" [class.active]="product.co2_rating === 'A'" [class.rating-a]="product.co2_rating === 'A'">A</span>
+          <span class="co2-letter" [class.active]="product.co2_rating === 'B'" [class.rating-b]="product.co2_rating === 'B'">B</span>
+          <span class="co2-letter" [class.active]="product.co2_rating === 'C'" [class.rating-c]="product.co2_rating === 'C'">C</span>
+          <span class="co2-letter" [class.active]="product.co2_rating === 'D'" [class.rating-d]="product.co2_rating === 'D'">D</span>
+          <span class="co2-letter" [class.active]="product.co2_rating === 'E'" [class.rating-e]="product.co2_rating === 'E'">E</span>
+        </div>
+      }
+      <p data-test="product-description" id="description">
+        {{ product.description }}</p>
+      @if (!product.is_rental) {
+        <div class="input-group quantity">
+          <!-- Button to decrease quantity -->
+          <button [disabled]="!product.in_stock" class="btn btn-secondary" data-test="decrease-quantity"
+                  id="btn-decrease-quantity" (click)="minus()" attr.aria-label="{{ t('pages.product-detail.decrease-quantity') }}"><fa-icon [icon]="['fas', 'minus']"></fa-icon>
+          </button>
+          <!-- Quantity input field with associated label -->
+          <!-- Label for the input, visually hidden but accessible to screen readers -->
+          <label for="quantity-input" class="visually-hidden">Quantity</label>
+          <input [disabled]="!product.in_stock" type="number" min="1" max="999999999" class="form-control" data-test="quantity"
+                 [(ngModel)]="quantity" (input)="validateQuantity($event)" id="quantity-input" attr.aria-labelledby="{{ t('pages.product-detail.quantity') }}">
+          <!-- Button to increase quantity -->
+          <button [disabled]="!product.in_stock" class="btn btn-secondary" data-test="increase-quantity"
+                  id="btn-increase-quantity" (click)="plus()" attr.aria-label="{{ t('pages.product-detail.increase-quantity') }}"><fa-icon [icon]="['fas', 'plus']"></fa-icon>
+          </button>
+        </div>
+      }
+      @if (product.is_rental) {
+        <div>
+          <label class="form-label">{{ t('pages.product-detail.duration') }} (<span id="duration">{{ quantity }}</span> {{ t('pages.product-detail.hours') }})</label>
+          <ngx-slider [(value)]="quantity" [options]="sliderOptions"></ngx-slider>
+        </div>
+      }
+      @if (!product.in_stock && !product.is_rental) {
+        <p class="text-danger mt-3" data-test="out-of-stock">{{ t('pages.overview.no-stock') }}</p>
+      }
+      <div class="btn-group mt-2">
+        <button class="btn-success btn" [disabled]="!product.in_stock && !product.is_rental" data-test="add-to-cart"
+                id="btn-add-to-cart" (click)="addToCart(product)">
+          <fa-icon [icon]="['fas', 'shopping-cart']" class="px-1"></fa-icon>{{ t('pages.product-detail.add-to-cart-btn') }}
+        </button>
+        <button class="btn btn-warning"
+                data-test="add-to-favorites" id="btn-add-to-favorites" (click)="addToFavorites(product)"><fa-icon [icon]="['fas', 'star']" class="px-1"></fa-icon> {{ t('pages.product-detail.add-to-favorites-btn') }}
+        </button>
+        <button class="btn"
+                [ngClass]="{'btn-primary': comparisonService.isSelected(product.id), 'btn-outline-primary': !comparisonService.isSelected(product.id)}"
+                data-test="add-to-compare"
+                (click)="comparisonService.toggle(product.id)">
+          <fa-icon [icon]="['fas', 'balance-scale']" class="px-1"></fa-icon> {{ t('pages.comparison.add') }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  @if (product.specs && product.specs.length > 0) {
+    <div class="row mt-4" *transloco="let t">
+      <div class="col-12">
+        <h3 data-test="specs-title">{{ t('pages.product-detail.specifications') }}</h3>
+        <table class="table table-striped specs-table" data-test="product-specs">
+          <tbody>
+            @for (spec of product.specs; track spec.id) {
+              <tr data-test="spec-row" attr.data-test-spec="{{ spec.spec_name.toLowerCase().split(' ').join('-') }}">
+                <td class="spec-name fw-bold" data-test="spec-name">{{ spec.spec_name }}</td>
+                <td class="spec-value" data-test="spec-value">
+                  <span data-test="spec-value-text">{{ spec.spec_value }}</span>@if (spec.spec_unit) { <span class="text-muted ms-1" data-test="spec-unit">{{ spec.spec_unit }}</span> }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+}
+
+<hr/>
+
+<div class="row" *transloco="let t">
+  <h2>{{ t('pages.product-detail.related-products') }}</h2>
+  <div class="col">
+    <div class="container">
+      @for (item of relatedProducts; track item) {
+        <a routerLink="/product/{{item.id}}" class="card"
+           style="text-decoration: none; color: black;">
+          <div class="card-img-wrapper">
+            <img class="card-img-top" alt="{{item.name}}" loading="lazy" src="assets/img/products/{{item.product_image.file_name}}">
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">
+              {{ item.name }}
+            </h5>
+            <a href="#" large>{{ t('pages.product-detail.more-information') }}</a>
+          </div>
+
+        </a>
+      }
+    </div>
+  </div>
+</div>
+
+@if ((comparisonService.count$ | async) >= 2) {
+  <div class="comparison-bar" *transloco="let t" data-test="comparison-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <span>
+        <fa-icon [icon]="['fas', 'balance-scale']" size="sm"></fa-icon>
+        {{ t('pages.comparison.bar-count', {count: (comparisonService.count$ | async)}) }}
+      </span>
+      <span>
+        <button class="btn btn-outline-light btn-sm me-2" data-test="clear-comparison"
+                (click)="comparisonService.clear()">
+          {{ t('pages.comparison.clear-all') }}
+        </button>
+        <a routerLink="/comparison" class="btn btn-light btn-sm" data-test="compare-link">
+          {{ t('pages.comparison.compare-btn') }}
+        </a>
+      </span>
+    </div>
+  </div>
+}

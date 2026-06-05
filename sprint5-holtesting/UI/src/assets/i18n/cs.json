@@ -1,0 +1,550 @@
+{
+  "title": "Cvičná aplikace testování softwaru",
+  "buttons": {},
+  "chat": {
+    "title": "Chatový asistent",
+    "welcome": "Dobrý den! Jak vám mohu pomoci?",
+    "menu": {
+      "find-product": "Najít produkt",
+      "order-product": "Objednat produkt",
+      "checkout": "Pokladna",
+      "support": "Vytvořit tiket podpory"
+    },
+    "find-product": {
+      "prompt": "Jaký produkt hledáte?",
+      "no-results": "Žádné produkty nenalezeny. Zkuste jiný dotaz.",
+      "results": "Našel jsem tyto produkty:"
+    },
+    "order-product": {
+      "search-prompt": "Jaký produkt chcete objednat? Zadejte název produktu.",
+      "no-results": "Žádné produkty nenalezeny. Zkuste jiný dotaz.",
+      "select-product": "Zde jsou nalezené produkty. Kliknutím vyberte:",
+      "selected": "Skvělá volba! Vybrali jste:",
+      "quantity-prompt": "Kolik kusů chcete objednat?",
+      "other-quantity": "Jiné",
+      "enter-quantity": "Zadejte požadované množství:",
+      "invalid-quantity": "Zadejte platné číslo (1 nebo více).",
+      "quantity-too-high": "Maximální množství je 999. Zadejte menší číslo.",
+      "confirm-title": "Shrnutí objednávky:",
+      "confirm-quantity": "Množství:",
+      "confirm-total": "Celkem:",
+      "confirm-prompt": "Chcete přidat do košíku?",
+      "confirm-yes": "Ano, přidat do košíku",
+      "change-quantity": "Změnit množství",
+      "success": "Přidáno do košíku!",
+      "what-next": "Co dál?",
+      "continue-shopping": "Pokračovat v nákupu",
+      "go-to-checkout": "Přejít k pokladně",
+      "error": "Nepodařilo se přidat do košíku. Zkuste to znovu."
+    },
+    "support": {
+      "prompt": "Pomohu vám vytvořit tiket podpory.",
+      "greeting-signed-in": "Vidím, že jste přihlášeni. Můžeme začít.",
+      "first-name-prompt": "Jaké je vaše křestní jméno?",
+      "last-name-prompt": "Jaké je vaše příjmení?",
+      "email-prompt": "Jaká je vaše e-mailová adresa?",
+      "email-invalid": "Zadejte platnou e-mailovou adresu.",
+      "subject-prompt": "Vyberte předmět tiketu:",
+      "subjects": {
+        "customer-service": "Zákaznický servis",
+        "webmaster": "Webmaster",
+        "return": "Reklamace / vrácení",
+        "payments": "Platby",
+        "warranty": "Záruka",
+        "status-of-order": "Stav mé objednávky"
+      },
+      "message-prompt": "Popište prosím problém (minimálně 50 znaků):",
+      "message-too-short": "Zpráva musí mít alespoň 50 znaků.",
+      "attachment-prompt": "Chcete přidat přílohu?",
+      "add-attachment": "Přidat přílohu",
+      "skip-attachment": "Přeskočit",
+      "attachment-invalid-type": "Povoleny jsou pouze soubory .txt.",
+      "attachment-invalid-size": "Soubor musí být prázdný (0 KB).",
+      "success": "Váš tiket byl úspěšně odeslán. Brzy se vám ozveme.",
+      "error": "Při odesílání tiketu došlo k chybě:"
+    },
+    "checkout": {
+      "cart-empty": "Váš košík je prázdný. Nejprve přidejte produkty.",
+      "cart-error": "Košík se nepodařilo načíst. Zkuste to znovu.",
+      "cart-summary": "Celkem v košíku:",
+      "login-or-guest": "Chcete se přihlásit nebo pokračovat jako host?",
+      "login": "Přihlásit se",
+      "guest": "Pokračovat jako host",
+      "login-email-prompt": "Zadejte e-mailovou adresu:",
+      "login-password-prompt": "Zadejte heslo:",
+      "login-success": "Jste přihlášeni!",
+      "login-error": "Neplatný e-mail nebo heslo. Zkuste to znovu.",
+      "try-again": "Zkusit znovu",
+      "guest-email-prompt": "Zadejte e-mail pro potvrzení objednávky:",
+      "guest-first-name-prompt": "Zadejte křestní jméno:",
+      "guest-last-name-prompt": "Zadejte příjmení:",
+      "invalid-email": "Zadejte platnou e-mailovou adresu.",
+      "address-street-prompt": "Zadejte ulici:",
+      "address-city-prompt": "Zadejte město:",
+      "address-state-prompt": "Zadejte kraj / stát:",
+      "address-country-prompt": "Zadejte zemi:",
+      "address-postcode-prompt": "Zadejte PSČ:",
+      "address-confirm-title": "Potvrďte fakturační adresu:",
+      "address-confirm-prompt": "Je tato adresa správná?",
+      "confirm": "Potvrdit",
+      "edit": "Upravit",
+      "payment-method-prompt": "Vyberte způsob platby:",
+      "payment-methods": {
+        "credit-card": "Platební karta",
+        "bank-transfer": "Bankovní převod",
+        "bnpl": "Nákup na splátky",
+        "gift-card": "Dárková karta",
+        "cash-on-delivery": "Dobírka"
+      },
+      "months": "měsíců",
+      "card-number-prompt": "Zadejte číslo karty (formát 0000-0000-0000-0000):",
+      "card-expiry-prompt": "Zadejte datum expirace (formát MM/RRRR):",
+      "card-cvv-prompt": "Zadejte CVV (3 nebo 4 číslice):",
+      "card-name-prompt": "Zadejte jméno držitele karty:",
+      "invalid-card-number": "Neplatný formát čísla karty. Použijte 0000-0000-0000-0000.",
+      "invalid-expiry": "Neplatný formát data. Použijte MM/RRRR.",
+      "invalid-cvv": "Neplatné CVV. Musí mít 3 nebo 4 číslice.",
+      "invalid-card-name": "Jméno držitele smí obsahovat pouze písmena a mezery.",
+      "bank-name-prompt": "Zadejte název banky:",
+      "account-name-prompt": "Zadejte jméno majitele účtu:",
+      "account-number-prompt": "Zadejte číslo účtu:",
+      "invalid-bank-name": "Název banky smí obsahovat pouze písmena a mezery.",
+      "invalid-account-name": "Neplatný formát jména účtu.",
+      "invalid-account-number": "Číslo účtu musí obsahovat pouze číslice.",
+      "bnpl-prompt": "Kolik měsíčních splátek chcete?",
+      "giftcard-number-prompt": "Zadejte číslo dárkové karty:",
+      "giftcard-code-prompt": "Zadejte ověřovací kód:",
+      "invalid-giftcard-number": "Číslo dárkové karty musí být alfanumerické.",
+      "invalid-giftcard-code": "Ověřovací kód musí být alfanumerický.",
+      "order-summary": "Shrnutí objednávky:",
+      "total-label": "Celkem:",
+      "shipping-address": "Dodací adresa:",
+      "payment-label": "Způsob platby:",
+      "confirm-order-prompt": "Chcete objednávku dokončit?",
+      "place-order": "Objednat",
+      "edit-payment": "Změnit způsob platby",
+      "processing": "Zpracováváme vaši objednávku...",
+      "success": "Objednávka byla úspěšně odeslána!",
+      "order-number": "Číslo objednávky:",
+      "what-next": "Co chcete udělat dál?",
+      "view-orders": "Zobrazit mé objednávky",
+      "new-order": "Nová objednávka",
+      "error": "Při zpracování objednávky došlo k chybě:",
+      "payment-error": "Ověření platby selhalo:"
+    },
+    "back": "Zpět do menu",
+    "placeholder": "Napište zprávu..."
+  },
+  "fields": {
+    "email": {
+      "label": "E-mailová adresa",
+      "placeholder": "Váš e-mail",
+      "errors": {
+        "required": "E-mail je povinný",
+        "format": "Neplatný formát e-mailu"
+      }
+    },
+    "password": {
+      "label": "Heslo",
+      "placeholder": "Vaše heslo",
+      "errors": {
+        "required": "Heslo je povinné",
+        "length": "Neplatná délka hesla",
+        "minlength": "Heslo musí mít alespoň 6 znaků.",
+        "maxlength": "Heslo nesmí být delší než 40 znaků.",
+        "pattern": "Heslo obsahuje nepovolené znaky."
+      }
+    },
+    "first-name": {
+      "label": "Jméno",
+      "placeholder": "Vaše jméno",
+      "errors": {
+        "required": "Jméno je povinné"
+      }
+    },
+    "last-name": {
+      "label": "Příjmení",
+      "placeholder": "Vaše příjmení",
+      "errors": {
+        "required": "Příjmení je povinné"
+      }
+    },
+    "street": {
+      "label": "Ulice",
+      "placeholder": "Vaše ulice",
+      "errors": {
+        "required": "Ulice je povinná"
+      }
+    },
+    "postal_code": {
+      "label": "PSČ",
+      "placeholder": "Vaše PSČ",
+      "errors": {
+        "required": "PSČ je povinné",
+        "format": "Povoleno je pouze 5 číslic."
+      }
+    },
+    "city": {
+      "label": "Město",
+      "placeholder": "Vaše město",
+      "errors": {
+        "required": "Město je povinné"
+      }
+    },
+    "state": {
+      "label": "Kraj / stát",
+      "placeholder": "Váš kraj nebo stát",
+      "errors": {
+        "required": "Kraj / stát je povinný"
+      }
+    },
+    "house_number": {
+      "label": "Číslo popisné",
+      "placeholder": "např. 42",
+      "errors": {
+        "required": "Číslo popisné je povinné"
+      }
+    },
+    "country": {
+      "label": "Země",
+      "placeholder": "Vaše země",
+      "errors": {
+        "required": "Země je povinná"
+      }
+    },
+    "dob": {
+      "label": "Datum narození",
+      "placeholder": "Vaše datum narození",
+      "errors": {
+        "required": "Datum narození je povinné"
+      }
+    },
+    "phone": {
+      "label": "Telefon",
+      "placeholder": "Váš telefon",
+      "errors": {
+        "required": "Telefon je povinný.",
+        "format": "Povolena jsou pouze čísla."
+      }
+    }
+  },
+  "header": {
+    "menu": {
+      "home": "Domů",
+      "categories": "Kategorie",
+      "hand-tools": "Ruční nářadí",
+      "power-tools": "Elektrické nářadí",
+      "other": "Ostatní",
+      "special-tools": "Speciální nářadí",
+      "rentals": "Pronájmy",
+      "contact": "Kontakt",
+      "sign-in": "Přihlásit se",
+      "my-account": "Můj účet",
+      "my-favorites": "Oblíbené",
+      "my-profile": "Můj profil",
+      "my-invoices": "Faktury",
+      "my-messages": "Zprávy",
+      "sign-out": "Odhlásit se"
+    }
+  },
+  "footer": {
+    "demo-app": "Toto je UKÁZKOVÁ aplikace",
+    "demo-purpose": "určená k výcviku testování softwaru."
+  },
+  "pages": {
+    "overview": {
+      "filters": "Filtry",
+      "sort": "Řazení",
+      "sort-options": {
+        "name-asc": "Název (A - Z)",
+        "name-desc": "Název (Z - A)",
+        "price-desc": "Cena (od nejvyšší)",
+        "price-asc": "Cena (od nejnižší)",
+        "co2-asc": "Hodnocení CO₂ (A - E)",
+        "co2-desc": "Hodnocení CO₂ (E - A)"
+      },
+      "price-range": "Rozsah ceny",
+      "search": "Hledat",
+      "categories": "Kategorie",
+      "by-category": "Podle kategorie",
+      "category": "Kategorie",
+      "brands": "Značky",
+      "by-brand": "Podle značky",
+      "no-results": "Nebyly nalezeny žádné produkty.",
+      "no-stock": "Není skladem",
+      "sustainability": "Udržitelnost",
+      "eco-friendly": "Ekologické produkty",
+      "show-eco-friendly": "Zobrazit pouze ekologické produkty",
+      "co2-tooltip": "A = nejšetrnější k životnímu prostředí, E = vyšší dopad",
+      "specifications": "Specifikace",
+      "search-results-count-one": "1 produkt nalezen pro „{{ query }}“",
+      "search-results-count-other": "{{ count }} produktů nalezeno pro „{{ query }}“"
+    },
+    "product-detail": {
+      "photo-by": "Foto:",
+      "on": "na",
+      "add-to-cart-btn": "Přidat do košíku",
+      "add-to-favorites-btn": "Přidat do oblíbených",
+      "per-hour": "za hodinu",
+      "increase-quantity": "Zvýšit množství",
+      "decrease-quantity": "Snížit množství",
+      "quantity": "Množství",
+      "total": "Celkem",
+      "duration": "Doba",
+      "hours": "hod.",
+      "related-products": "Související produkty",
+      "more-information": "Více informací",
+      "specifications": "Specifikace"
+    },
+    "rentals": {
+      "title": "Pronájmy"
+    },
+    "login": {
+      "title": "Přihlášení",
+      "alternative": "nebo použijte",
+      "btn": "Přihlásit se",
+      "generic-error": "Neplatný e-mail nebo heslo",
+      "no-account": "Ještě nemáte účet?",
+      "register": "Zaregistrujte se",
+      "forgot-password": "Zapomněli jste heslo?",
+      "totp_code": "Kód TOTP",
+      "verify_totp": "Ověřit TOTP"
+    },
+    "register": {
+      "title": "Registrace zákazníka",
+      "email-in-use": "E-mail je již používán.",
+      "btn": "Registrovat",
+      "postcode-lookup": {
+        "hint": "Vyberte zemi a zadejte PSČ a číslo popisné. Ulice, město a kraj se doplní automaticky.",
+        "loading": "Vyhledáváme vaši adresu..."
+      }
+    },
+    "forgot-password": {
+      "title": "Zapomenuté heslo",
+      "btn": "Nastavit nové heslo",
+      "confirm": "Vaše heslo bylo <strong>úspěšně</strong> aktualizováno!"
+    },
+    "contact": {
+      "title": "Kontakt",
+      "btn": "Odeslat",
+      "subject": {
+        "label": "Předmět",
+        "options": {
+          "select": "Vyberte předmět *",
+          "customer-service": "Zákaznický servis",
+          "webmaster": "Webmaster",
+          "return": "Reklamace / vrácení",
+          "payments": "Platby",
+          "warranty": "Záruka",
+          "status-of-order": "Stav mé objednávky"
+        },
+        "errors": {
+          "required": "Předmět je povinný"
+        }
+      },
+      "message": {
+        "label": "Zpráva",
+        "errors": {
+          "required": "Zpráva je povinná",
+          "minlength": "Zpráva musí mít alespoň 50 znaků"
+        }
+      },
+      "attachment": {
+        "label": "Příloha",
+        "help": "Povoleny jsou pouze soubory s příponou <strong>txt</strong> a musí mít velikost 0 KB.",
+        "errors": {
+          "incorrect-type": "Soubor musí mít příponu txt.",
+          "incorrect-size": "Soubor musí být prázdný."
+        }
+      },
+      "known-user": "Dobrý den {{ name }}, vyplňte prosím formulář pro odeslání zprávy.",
+      "confirm": "Děkujeme za zprávu! Brzy se vám ozveme."
+    },
+    "checkout": {
+      "btn": "Přejít k pokladně",
+      "cart": {
+        "title": "Košík",
+        "empty": "Košík je prázdný. Není co zobrazit.",
+        "rental-explainer": "Položka k pronájmu, cena za hodinu",
+        "item-header": "Položka",
+        "quantity-header": "Množství",
+        "price-header": "Cena",
+        "subtotal": "Mezisoučet",
+        "discount": "Sleva",
+        "total": "Celkem",
+        "continue-shopping": "Pokračovat v nákupu"
+      },
+      "sign-in": {
+        "title": "Přihlášení",
+        "already": "Dobrý den {{ first_name }} {{ last_name }}, jste již přihlášeni. Můžete pokračovat k pokladně."
+      },
+      "guest": {
+        "title": "Pokračovat jako host",
+        "description": "Dokončit nákup bez vytvoření účtu",
+        "btn": "Pokračovat jako host",
+        "proceed": "Pokračujete jako host: {{ first_name }} {{ last_name }} ({{ email }})"
+      },
+      "address": {
+        "title": "Fakturační adresa",
+        "postcode-lookup": {
+          "hint": "Zadejte zemi, PSČ a číslo popisné. Zbytek doplníme automaticky.",
+          "loading": "Vyhledáváme vaši adresu..."
+        },
+        "delivery-per": {
+          "label": "Doručení přes",
+          "placeholder": "Vyberte způsob doručení",
+          "options": {
+            "standard": "Standard",
+            "zasilkova": "Zásilkovna"
+          }
+        }
+      },
+      "payment": {
+        "title": "Platba",
+        "confirm-btn": "Potvrdit",
+        "confirm": "Děkujeme za objednávku! Číslo faktury je <span id=\"invoice-number\">{{ invoice_number }}</span>.",
+        "method-label": "Způsob platby",
+        "method-required": "Způsob platby je povinný.",
+        "options": {
+          "select": "Vyberte způsob platby",
+          "bank-transfer": "Bankovní převod",
+          "cash-on-delivery": "Dobírka",
+          "credit-card": "Platební karta",
+          "buy-now-pay-later": "Nákup na splátky",
+          "gift-card": "Dárková karta"
+        },
+        "bank-transfer": {
+          "bank-name": "Název banky",
+          "bank-name-error-format": "Název banky smí obsahovat pouze písmena a mezery.",
+          "account-name": "Jméno majitele účtu",
+          "account-name-error-format": "Jméno účtu smí obsahovat písmena, číslice, mezery, tečky, apostrofy a pomlčky.",
+          "account-number": "Číslo účtu",
+          "account-number-help": "Zadejte číslo účtu tak, jak je uvedeno ve výpisu. Jedná se o jedinečnou řadu číslic identifikující váš účet. Nevkládejte mezery ani pomlčky.",
+          "account-number-error-format": "Číslo účtu musí být číselné."
+        },
+        "credit-card": {
+          "number": "Číslo platební karty",
+          "number-help": "Zadejte 16místné číslo karty ve formátu 0000-0000-0000-0000 včetně pomlček.",
+          "number-error-format": "Neplatný formát čísla karty.",
+          "expiration-date": "Datum expirace",
+          "date-error-format": "Neplatný formát data. Použijte MM/RRRR.",
+          "date-error-past": "Datum expirace musí být v budoucnosti.",
+          "cvv": "CVV",
+          "cvv-help": "CVV je 3 nebo 4místné číslo pro zvýšení bezpečnosti u bezhotovostních plateb.",
+          "cvv-error-format": "CVV musí mít 3 nebo 4 číslice.",
+          "name": "Jméno držitele karty",
+          "name-required": "Povolena jsou pouze písmena a mezery."
+        },
+        "bnpl": {
+          "monthly-installments": "Měsíční splátky",
+          "monthly-installments-choose": "Vyberte počet měsíčních splátek",
+          "monthly-installments-help": "Tato možnost umožňuje rozložit platbu na několik měsíců.",
+          "monthly-installments-error-required": "Vyberte počet měsíčních splátek."
+        },
+        "gift-card": {
+          "number": "Číslo dárkové karty",
+          "number-help": "Zadejte jedinečné číslo z dárkové karty, obvykle na zadní straně.",
+          "number-error-format": "Číslo dárkové karty musí být alfanumerické.",
+          "validation-code": "Ověřovací kód",
+          "validation-code-help": "Ověřovací kód je bezpečnostní prvek poblíž čísla karty. Zadejte ho přesně podle karty.",
+          "validation-code-error-format": "Ověřovací kód musí být alfanumerický."
+        }
+      }
+    },
+    "comparison": {
+      "title": "Porovnání produktů",
+      "clear-all": "Vymazat vše",
+      "empty": "Nejsou vybrány žádné produkty k porovnání. Přidejte je z přehledu produktů.",
+      "browse": "Prohlédnout produkty",
+      "price": "Cena",
+      "brand": "Značka",
+      "category": "Kategorie",
+      "stock": "Dostupnost",
+      "in-stock": "Skladem",
+      "out-of-stock": "Není skladem",
+      "co2-rating": "Hodnocení CO₂",
+      "eco-friendly": "Ekologické",
+      "description": "Popis",
+      "add": "Porovnat",
+      "bar-count": "Vybráno {{ count }} produkt(ů)",
+      "compare-btn": "Porovnat",
+      "specifications": "Specifikace",
+      "show-differences": "Zobrazit pouze rozdíly",
+      "remove-product": "Odebrat {{ name }} z porovnání"
+    },
+    "my-account": {
+      "overview": {
+        "title": "Můj účet",
+        "description": "Zde můžete spravovat profil, oblíbené a objednávky.",
+        "favorites": "Oblíbené",
+        "profile": "Profil",
+        "invoices": "Faktury",
+        "messages": "Zprávy"
+      },
+      "profile": {
+        "title": "Profil",
+        "update-profile-btn": "Aktualizovat profil",
+        "update-profile-success": "Váš profil byl <strong>úspěšně</strong> aktualizován!",
+        "password-section": "Heslo",
+        "current-password": "Současné heslo",
+        "new-password": "Nové heslo",
+        "confirm-new-password": "Potvrzení nového hesla",
+        "change-password-btn": "Změnit heslo",
+        "change-password-success": "Vaše heslo bylo <strong>úspěšně</strong> aktualizováno!",
+        "two_factor_authentication_enabled": "Dvoufázové ověřování je již zapnuto.",
+        "verify_totp": "Ověřit TOTP",
+        "enter_totp_code": "Zadejte kód TOTP",
+        "manually_enter_key": "Nebo tento klíč zadejte ručně do aplikace:",
+        "scan_qr_code": "Naskenujte níže uvedený QR kód v aplikaci autentizátoru (např. Google Authenticator, Authy):",
+        "setup_two_factor_authentication": "Nastavit dvoufázové ověřování",
+        "totp_verified": "TOTP bylo úspěšně ověřeno a zapnuto.",
+        "invalid_totp_code": "Neplatný kód TOTP. Zkuste to znovu."
+      },
+      "messages": {
+        "title": "Zprávy",
+        "no-messages": "Zatím nemáte žádné zprávy. Přejděte na <a class=\"link-primary\" id=\"contact-link\">kontaktní formulář</a> a vyplňte ho.",
+        "subject": "Předmět",
+        "message": "Zpráva",
+        "status": "Stav",
+        "date": "Datum",
+        "details": "Podrobnosti",
+        "back-btn": "Zpět",
+        "replies": "Odpovědi",
+        "reply-btn": "Odpovědět",
+        "add-reply": "Přidat odpověď"
+      },
+      "favorites": {
+        "title": "Oblíbené",
+        "no-favorites": "Zatím nemáte oblíbené. Přejděte do katalogu a označte produkty jako oblíbené."
+      },
+      "invoices": {
+        "title": "Faktury",
+        "invoice-number": "Číslo faktury",
+        "billing-address": "Fakturační adresa",
+        "invoice-date": "Datum faktury",
+        "total": "Celkem",
+        "details": "Podrobnosti",
+        "not-exist": "Tato faktura neexistuje.",
+        "download-pdf": "Stáhnout PDF",
+        "general-information": "Obecné informace",
+        "payment-information": "Informace o platbě",
+        "products": "Produkty",
+        "product": "Produkt"
+      }
+    },
+    "profile": {
+      "password": "Heslo"
+    },
+    "privacy": {
+      "title": "Zásady ochrany osobních údajů pro Toolshop"
+    }
+  },
+  "toasts": {
+    "product-added-to-favorites": "Produkt byl přidán do oblíbených.",
+    "product-already-in-favorites": "Produkt je již v oblíbených.",
+    "unauthorized-favorite": "Nejste oprávněni přidat produkt do oblíbených.",
+    "product-added-to-cart": "Produkt byl přidán do košíku.",
+    "product-quantity-updated": "Množství produktu bylo aktualizováno.",
+    "product-deleted": "Produkt byl odstraněn."
+  }
+}

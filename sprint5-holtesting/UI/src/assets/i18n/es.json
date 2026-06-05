@@ -1,0 +1,558 @@
+{
+  "title": "Practicar Pruebas de Software",
+  "buttons": {
+  },
+  "chat": {
+    "title": "Asistente de Chat",
+    "welcome": "¡Hola! ¿Cómo puedo ayudarte hoy?",
+    "menu": {
+      "find-product": "Buscar un producto",
+      "order-product": "Pedir un producto",
+      "checkout": "Pagar",
+      "support": "Crear ticket de soporte"
+    },
+    "find-product": {
+      "prompt": "¿Qué producto estás buscando?",
+      "no-results": "No se encontraron productos. Intenta con otra búsqueda.",
+      "results": "Aquí hay algunos productos que encontré:"
+    },
+    "order-product": {
+      "search-prompt": "¿Qué producto te gustaría pedir? Escribe un nombre de producto para buscar.",
+      "no-results": "No se encontraron productos. Intenta con otra búsqueda.",
+      "select-product": "Aquí hay algunos productos. Haz clic en uno para pedir:",
+      "selected": "¡Excelente elección! Has seleccionado:",
+      "quantity-prompt": "¿Cuántos te gustaría pedir?",
+      "other-quantity": "Otra",
+      "enter-quantity": "Por favor, introduce la cantidad deseada:",
+      "invalid-quantity": "Por favor, introduce un número válido (1 o más).",
+      "quantity-too-high": "La cantidad máxima es 999. Por favor, introduce un número menor.",
+      "confirm-title": "Resumen del pedido:",
+      "confirm-quantity": "Cantidad:",
+      "confirm-total": "Total:",
+      "confirm-prompt": "¿Te gustaría añadir esto a tu carrito?",
+      "confirm-yes": "Sí, añadir",
+      "change-quantity": "Cambiar cantidad",
+      "success": "¡Añadido a tu carrito!",
+      "what-next": "¿Qué te gustaría hacer ahora?",
+      "continue-shopping": "Seguir comprando",
+      "go-to-checkout": "Ir a pagar",
+      "error": "No se pudo añadir al carrito. Por favor, inténtalo de nuevo."
+    },
+    "support": {
+      "prompt": "Te ayudaré a crear un ticket de soporte.",
+      "greeting-signed-in": "Veo que ya has iniciado sesión. ¡Comencemos!",
+      "first-name-prompt": "¿Cuál es tu nombre?",
+      "last-name-prompt": "¿Cuál es tu apellido?",
+      "email-prompt": "¿Cuál es tu dirección de correo electrónico?",
+      "email-invalid": "Por favor, introduce una dirección de correo electrónico válida.",
+      "subject-prompt": "Por favor, selecciona un tema para tu ticket:",
+      "subjects": {
+        "customer-service": "Servicio al cliente",
+        "webmaster": "Webmaster",
+        "return": "Devolución",
+        "payments": "Pagos",
+        "warranty": "Garantía",
+        "status-of-order": "Estado de mi pedido"
+      },
+      "message-prompt": "Por favor, describe tu problema (mínimo 50 caracteres):",
+      "message-too-short": "Tu mensaje debe tener al menos 50 caracteres.",
+      "attachment-prompt": "¿Te gustaría añadir un archivo adjunto?",
+      "add-attachment": "Añadir archivo",
+      "skip-attachment": "Omitir",
+      "attachment-invalid-type": "Solo se permiten archivos .txt.",
+      "attachment-invalid-size": "El archivo debe estar vacío (0kb).",
+      "success": "¡Tu ticket de soporte ha sido enviado con éxito! Nos pondremos en contacto contigo pronto.",
+      "error": "Hubo un error al enviar tu ticket:"
+    },
+    "checkout": {
+      "cart-empty": "Tu carrito está vacío. Por favor, añade algunos productos primero.",
+      "cart-error": "No se pudo cargar tu carrito. Por favor, inténtalo de nuevo.",
+      "cart-summary": "Total de tu carrito:",
+      "login-or-guest": "¿Te gustaría iniciar sesión o continuar como invitado?",
+      "login": "Iniciar sesión",
+      "guest": "Continuar como invitado",
+      "login-email-prompt": "Por favor, introduce tu dirección de correo electrónico:",
+      "login-password-prompt": "Por favor, introduce tu contraseña:",
+      "login-success": "¡Has iniciado sesión!",
+      "login-error": "Correo electrónico o contraseña inválidos. Por favor, inténtalo de nuevo.",
+      "try-again": "Intentar de nuevo",
+      "guest-email-prompt": "Por favor, introduce tu correo electrónico para la confirmación del pedido:",
+      "guest-first-name-prompt": "Por favor, introduce tu nombre:",
+      "guest-last-name-prompt": "Por favor, introduce tu apellido:",
+      "invalid-email": "Por favor, introduce una dirección de correo electrónico válida.",
+      "address-street-prompt": "Por favor, introduce tu dirección:",
+      "address-city-prompt": "Por favor, introduce tu ciudad:",
+      "address-state-prompt": "Por favor, introduce tu provincia/estado:",
+      "address-country-prompt": "Por favor, introduce tu país:",
+      "address-postcode-prompt": "Por favor, introduce tu código postal:",
+      "address-confirm-title": "Por favor, confirma tu dirección de facturación:",
+      "address-confirm-prompt": "¿Es correcta esta dirección?",
+      "confirm": "Confirmar",
+      "edit": "Editar",
+      "payment-method-prompt": "Por favor, selecciona tu método de pago:",
+      "payment-methods": {
+        "credit-card": "Tarjeta de crédito",
+        "bank-transfer": "Transferencia bancaria",
+        "bnpl": "Compra ahora, paga después",
+        "gift-card": "Tarjeta regalo",
+        "cash-on-delivery": "Pago contra reembolso"
+      },
+      "months": "meses",
+      "card-number-prompt": "Por favor, introduce el número de tu tarjeta de crédito (formato: 0000-0000-0000-0000):",
+      "card-expiry-prompt": "Por favor, introduce la fecha de caducidad (formato: MM/AAAA):",
+      "card-cvv-prompt": "Por favor, introduce el CVV (3 o 4 dígitos):",
+      "card-name-prompt": "Por favor, introduce el nombre del titular de la tarjeta:",
+      "invalid-card-number": "Formato de número de tarjeta inválido. Usa 0000-0000-0000-0000.",
+      "invalid-expiry": "Formato de fecha de caducidad inválido. Usa MM/AAAA.",
+      "invalid-cvv": "CVV inválido. Debe tener 3 o 4 dígitos.",
+      "invalid-card-name": "El nombre del titular solo puede contener letras y espacios.",
+      "bank-name-prompt": "Por favor, introduce el nombre de tu banco:",
+      "account-name-prompt": "Por favor, introduce el nombre del titular de la cuenta:",
+      "account-number-prompt": "Por favor, introduce tu número de cuenta:",
+      "invalid-bank-name": "El nombre del banco solo puede contener letras y espacios.",
+      "invalid-account-name": "Formato de nombre de cuenta inválido.",
+      "invalid-account-number": "El número de cuenta solo debe contener dígitos.",
+      "bnpl-prompt": "¿Cuántas cuotas mensuales te gustaría?",
+      "giftcard-number-prompt": "Por favor, introduce el número de tu tarjeta regalo:",
+      "giftcard-code-prompt": "Por favor, introduce el código de validación:",
+      "invalid-giftcard-number": "El número de tarjeta regalo debe ser alfanumérico.",
+      "invalid-giftcard-code": "El código de validación debe ser alfanumérico.",
+      "order-summary": "Resumen del pedido:",
+      "total-label": "Total:",
+      "shipping-address": "Envío a:",
+      "payment-label": "Método de pago:",
+      "confirm-order-prompt": "¿Listo para realizar tu pedido?",
+      "place-order": "Realizar pedido",
+      "edit-payment": "Cambiar método de pago",
+      "processing": "Procesando tu pedido...",
+      "success": "¡Tu pedido se ha realizado con éxito!",
+      "order-number": "Número de pedido:",
+      "what-next": "¿Qué te gustaría hacer ahora?",
+      "view-orders": "Ver mis pedidos",
+      "new-order": "Iniciar nuevo pedido",
+      "error": "Hubo un error al procesar tu pedido:",
+      "payment-error": "Error en la validación del pago:"
+    },
+    "back": "Volver al menú",
+    "placeholder": "Escribe tu mensaje..."
+  },
+  "fields": {
+    "email": {
+      "label": "Dirección de correo electrónico",
+      "placeholder": "Tu correo electrónico",
+      "errors": {
+        "required": "El correo electrónico es obligatorio",
+        "format": "El formato del correo electrónico no es válido"
+      }
+    },
+    "password": {
+      "label": "Contraseña",
+      "placeholder": "Tu contraseña",
+      "errors": {
+        "required": "La contraseña es obligatoria",
+        "length": "La longitud de la contraseña no es válida",
+        "minlength": "La contraseña debe tener al menos 6 caracteres.",
+        "maxlength": "La contraseña no puede tener más de 40 caracteres.",
+        "pattern": "La contraseña no puede incluir caracteres inválidos."
+      }
+    },
+    "first-name": {
+      "label": "Nombre",
+      "placeholder": "Tu nombre",
+      "errors": {
+        "required": "El nombre es obligatorio"
+      }
+    },
+    "last-name": {
+      "label": "Apellido",
+      "placeholder": "Tu apellido",
+      "errors": {
+        "required": "El apellido es obligatorio"
+      }
+    },
+    "street": {
+      "label": "Calle",
+      "placeholder": "Tu calle",
+      "errors": {
+        "required": "La calle es obligatoria"
+      }
+    },
+    "address": {
+      "label": "Dirección",
+      "placeholder": "Tu dirección",
+      "errors": {
+        "required": "La dirección es obligatoria"
+      }
+    },
+    "postal_code": {
+      "label": "Código postal",
+      "placeholder": "Tu código postal",
+      "errors": {
+        "required": "El código postal es obligatorio",
+        "format": "Solo se permiten 5 números."
+      }
+    },
+    "city": {
+      "label": "Ciudad",
+      "placeholder": "Tu ciudad",
+      "errors": {
+        "required": "La ciudad es obligatoria"
+      }
+    },
+    "state": {
+      "label": "Estado",
+      "placeholder": "Tu estado",
+      "errors": {
+        "required": "El estado es obligatorio"
+      }
+    },
+    "house_number": {
+      "label": "Número",
+      "placeholder": "p. ej. 42",
+      "errors": {
+        "required": "El número es obligatorio"
+      }
+    },
+    "country": {
+      "label": "País",
+      "placeholder": "Tu país",
+      "errors": {
+        "required": "El país es obligatorio"
+      }
+    },
+    "dob": {
+      "label": "Fecha de nacimiento",
+      "placeholder": "Tu fecha de nacimiento",
+      "errors": {
+        "required": "La fecha de nacimiento es obligatoria"
+      }
+    },
+    "phone": {
+      "label": "Teléfono",
+      "placeholder": "Tu teléfono",
+      "errors": {
+        "required": "El teléfono es obligatorio.",
+        "format": "Solo se permiten números."
+      }
+    }
+  },
+  "header": {
+    "menu": {
+      "home": "Inicio",
+      "categories": "Categorías",
+      "hand-tools": "Herramientas manuales",
+      "power-tools": "Herramientas eléctricas",
+      "other": "Otros",
+      "special-tools": "Herramientas especiales",
+      "rentals": "Alquileres",
+      "contact": "Contacto",
+      "sign-in": "Iniciar sesión",
+      "my-account": "Mi cuenta",
+      "my-favorites": "Mis favoritos",
+      "my-profile": "Mi perfil",
+      "my-invoices": "Mis facturas",
+      "my-messages": "Mis mensajes",
+      "sign-out": "Cerrar sesión"
+    }
+  },
+  "footer": {
+    "demo-app": "Esta es una aplicación DEMO",
+    "demo-purpose": "utilizada para propósitos de formación en pruebas de software."
+  },
+  "pages": {
+    "overview": {
+      "filters": "Filtros",
+      "sort": "Ordenar",
+      "sort-options": {
+        "name-asc": "Nombre (A - Z)",
+        "name-desc": "Nombre (Z - A)",
+        "price-desc": "Precio (Alto - Bajo)",
+        "price-asc": "Precio (Bajo - Alto)",
+        "co2-asc": "Calificación CO₂ (A - E)",
+        "co2-desc": "Calificación CO₂ (E - A)"
+      },
+      "price-range": "Rango de precios",
+      "search": "Buscar",
+      "categories": "Categorías",
+      "by-category": "Por categoría",
+      "category": "Categoría",
+      "brands": "Marcas",
+      "by-brand": "Por marca",
+      "no-results": "No se encontraron productos.",
+      "no-stock": "Agotado",
+      "sustainability": "Sostenibilidad",
+      "eco-friendly": "Productos Ecológicos",
+      "show-eco-friendly": "Mostrar solo productos ecológicos",
+      "co2-tooltip": "A = más respetuoso con el medio ambiente, E = mayor impacto ambiental",
+      "specifications": "Especificaciones",
+      "search-results-count-one": "1 producto encontrado para '{{ query }}'",
+      "search-results-count-other": "{{ count }} productos encontrados para '{{ query }}'"
+    },
+    "product-detail": {
+      "photo-by": "Foto por",
+      "on": "en",
+      "add-to-cart-btn": "Añadir al carrito",
+      "add-to-favorites-btn": "Añadir a favoritos",
+      "per-hour": "por hora",
+      "increase-quantity": "Aumentar cantidad",
+      "decrease-quantity": "Disminuir cantidad",
+      "quantity": "Cantidad",
+      "total": "Total",
+      "duration": "Duración",
+      "hours": "hora(s)",
+      "related-products": "Productos relacionados",
+      "more-information": "Más información",
+      "specifications": "Especificaciones"
+    },
+    "rentals": {
+      "title": "Alquileres"
+    },
+    "login": {
+      "title": "Iniciar sesión",
+      "alternative": "o usar",
+      "btn": "Iniciar sesión",
+      "generic-error": "Correo electrónico o contraseña no válidos",
+      "no-account": "¿Aún no tienes una cuenta?",
+      "register": "Registra tu cuenta",
+      "forgot-password": "¿Olvidaste tu contraseña?",
+      "verify_totp": "Verificar TOTP",
+      "totp_code": "Código TOTP"
+    },
+    "register": {
+      "title": "Registro de cliente",
+      "email-in-use": "El correo electrónico ya está en uso.",
+      "btn": "Registrar",
+      "postcode-lookup": {
+        "hint": "Elige tu país e introduce el código postal y el número. La calle, la ciudad y la provincia se rellenarán automáticamente.",
+        "loading": "Buscando la dirección..."
+      }
+    },
+    "forgot-password": {
+      "title": "Olvidé mi contraseña",
+      "btn": "Establecer nueva contraseña",
+      "confirm": "¡Tu contraseña se ha actualizado <strong>exitosamente</strong>!"
+    },
+    "contact": {
+      "title": "Contacto",
+      "btn": "Enviar",
+      "subject": {
+        "label": "Asunto",
+        "options": {
+          "select": "Selecciona un asunto *",
+          "customer-service": "Atención al cliente",
+          "webmaster": "Webmaster",
+          "return": "Devolución",
+          "payments": "Pagos",
+          "warranty": "Garantía",
+          "status-of-order": "Estado de mi pedido"
+        },
+        "errors": {
+          "required": "El asunto es obligatorio"
+        }
+      },
+      "message": {
+        "label": "Mensaje",
+        "errors": {
+          "required": "El mensaje es obligatorio",
+          "minlength": "El mensaje debe tener al menos 50 caracteres"
+        }
+      },
+      "attachment": {
+        "label": "Adjunto",
+        "help": "Solo se permiten archivos con la extensión <strong>txt</strong>, y los archivos deben estar vacíos.",
+        "errors": {
+          "incorrect-type": "El archivo debe tener una extensión txt.",
+          "incorrect-size": "El archivo debe estar vacío."
+        }
+      },
+      "known-user": "Hola {{ name }}, por favor completa este formulario para enviar tu mensaje.",
+      "confirm": "¡Gracias por tu mensaje! Nos pondremos en contacto contigo pronto."
+    },
+    "checkout": {
+      "btn": "Proceder al pago",
+      "cart": {
+        "title": "Carrito",
+        "empty": "El carrito está vacío. Nada que mostrar.",
+        "rental-explainer": "Artículo en alquiler, precio por hora",
+        "item-header": "Artículo",
+        "quantity-header": "Cantidad",
+        "price-header": "Precio",
+        "subtotal": "Subtotal",
+        "discount": "Descuento",
+        "total": "Total",
+        "continue-shopping": "Seguir comprando"
+      },
+      "sign-in": {
+        "title": "Iniciar sesión",
+        "already": "Hola {{ first_name }} {{ last_name }}, ya has iniciado sesión. Puedes proceder al pago."
+      },
+      "guest": {
+        "title": "Continuar como invitado",
+        "description": "Pagar sin crear una cuenta",
+        "btn": "Continuar como invitado",
+        "proceed": "Continuando como invitado: {{ first_name }} {{ last_name }} ({{ email }})"
+      },
+      "address": {
+        "title": "Dirección de facturación",
+        "postcode-lookup": {
+          "hint": "Introduce país, código postal y número. Rellenaremos el resto automáticamente.",
+          "loading": "Buscando la dirección..."
+        },
+        "delivery-per": {
+          "label": "Entrega mediante",
+          "placeholder": "Elige opción de entrega",
+          "options": {
+            "standard": "Standard",
+            "zasilkova": "Zasilkova"
+          }
+        }
+      },
+      "payment": {
+        "title": "Pago",
+        "confirm-btn": "Confirmar",
+        "confirm": "¡Gracias por tu pedido! Tu número de factura es <span id=\"invoice-number\">{{ invoice_number }}</span>.",
+        "method-label": "Método de pago",
+        "method-required": "El método de pago es obligatorio.",
+        "options": {
+          "select": "Elige tu método de pago",
+          "bank-transfer": "Transferencia bancaria",
+          "cash-on-delivery": "Contra reembolso",
+          "credit-card": "Tarjeta de crédito",
+          "buy-now-pay-later": "Compra ahora, paga después",
+          "gift-card": "Tarjeta de regalo"
+        },
+        "bank-transfer": {
+          "bank-name": "Nombre del banco",
+          "bank-name-error-format": "El nombre del banco solo puede contener letras y espacios.",
+          "account-name": "Nombre de la cuenta",
+          "account-name-error-format": "El nombre de la cuenta puede contener letras, números, espacios, puntos, apóstrofes y guiones.",
+          "account-number": "Número de cuenta",
+          "account-number-help": "Por favor, introduce tu número de cuenta bancaria tal como aparece en tu extracto bancario. Es una serie única de números utilizados para identificar tu cuenta individual. Evita incluir espacios o guiones.",
+          "account-number-error-format": "El número de cuenta debe ser numérico."
+        },
+        "credit-card": {
+          "number": "Número de tarjeta de crédito",
+          "number-help": "Introduce tu número de tarjeta de crédito de 16 dígitos tal como aparece en la tarjeta, en el formato 0000-0000-0000-0000. Asegúrate de incluir los guiones para el formato correcto.",
+          "number-error-format": "Formato de número de tarjeta no válido.",
+          "expiration-date": "Fecha de vencimiento",
+          "date-error-format": "Formato de fecha no válido. Usa MM/AAAA.",
+          "date-error-past": "La fecha de vencimiento debe estar en el futuro.",
+          "cvv": "CVV",
+          "cvv-help": "El CVV es un número de 3 o 4 dígitos. Se utiliza para mayor seguridad en transacciones donde la tarjeta no está presente.",
+          "cvv-error-format": "El CVV debe tener 3 o 4 dígitos.",
+          "name": "Nombre del titular de la tarjeta",
+          "name-required": "Solo se permiten letras y espacios."
+        },
+        "bnpl": {
+          "monthly-installments": "Cuotas mensuales",
+          "monthly-installments-choose": "Elige tus cuotas mensuales",
+          "monthly-installments-help": "Esta opción te permite distribuir el costo de tu compra en varios meses.",
+          "monthly-installments-error-required": "Por favor, selecciona el número de cuotas mensuales."
+        },
+        "gift-card": {
+          "number": "Número de tarjeta de regalo",
+          "number-help": "Introduce el número único que se encuentra en tu tarjeta de regalo. Este número suele estar ubicado en la parte posterior de la tarjeta y puede consistir en dígitos y/o letras.",
+          "number-error-format": "El número de la tarjeta de regalo debe ser alfanumérico.",
+          "validation-code": "Código de validación",
+          "validation-code-help": "El código de validación es una característica de seguridad que se encuentra en tu tarjeta de regalo, a menudo ubicado cerca del número de la tarjeta de regalo. Introduce este código exactamente como aparece en tu tarjeta.",
+          "validation-code-error-format": "El código de validación debe ser alfanumérico."
+        }
+      }
+    },
+    "comparison": {
+      "title": "Comparación de productos",
+      "clear-all": "Borrar todo",
+      "empty": "No hay productos seleccionados para comparar. Añade productos desde la página de resumen.",
+      "browse": "Ver productos",
+      "price": "Precio",
+      "brand": "Marca",
+      "category": "Categoría",
+      "stock": "Disponibilidad",
+      "in-stock": "En stock",
+      "out-of-stock": "Agotado",
+      "co2-rating": "Calificación CO\u2082",
+      "eco-friendly": "Ecológico",
+      "description": "Descripción",
+      "add": "Comparar",
+      "bar-count": "{{ count }} producto(s) seleccionado(s)",
+      "compare-btn": "Comparar ahora",
+      "specifications": "Especificaciones",
+      "show-differences": "Mostrar solo diferencias",
+      "remove-product": "Quitar {{ name }} de la comparación"
+    },
+    "my-account": {
+      "overview": {
+        "title": "Mi cuenta",
+        "description": "Aquí puedes gestionar tu perfil, favoritos y pedidos.",
+        "favorites": "Favoritos",
+        "profile": "Perfil",
+        "invoices": "Facturas",
+        "messages": "Mensajes"
+      },
+      "profile": {
+        "title": "Perfil",
+        "update-profile-btn": "Actualizar perfil",
+        "update-profile-success": "¡Tu perfil se ha actualizado <strong>exitosamente</strong>!",
+        "password-section": "Contraseña",
+        "current-password": "Contraseña actual",
+        "new-password": "Nueva contraseña",
+        "confirm-new-password": "Confirmar nueva contraseña",
+        "change-password-btn": "Cambiar contraseña",
+        "change-password-success": "¡Tu contraseña se ha actualizado <strong>exitosamente</strong>!",
+        "two_factor_authentication_enabled": "La autenticación de dos factores ya está habilitada.",
+        "verify_totp": "Verificar TOTP",
+        "enter_totp_code": "Ingrese el código TOTP",
+        "manually_enter_key": "O ingrese esta clave manualmente en su aplicación:",
+        "scan_qr_code": "Escanee el código QR a continuación con su aplicación de autenticación (p. ej., Google Authenticator, Authy):",
+        "setup_two_factor_authentication": "Configurar autenticación de dos factores",
+        "totp_verified": "TOTP verificado y habilitado con éxito.",
+        "invalid_totp_code": "Código TOTP no válido. Inténtalo de nuevo."
+      },
+      "messages": {
+        "title": "Mensajes",
+        "no-messages": "Aún no hay mensajes. Navega al <a class=\"link-primary\" id=\"contact-link\">formulario de contacto</a> y completa el formulario.",
+        "subject": "Asunto",
+        "message": "Mensaje",
+        "status": "Estado",
+        "date": "Fecha",
+        "details": "Detalles",
+        "back-btn": "Volver",
+        "replies": "Respuestas",
+        "reply-btn": "Responder",
+        "add-reply": "Añadir respuesta"
+      },
+      "favorites": {
+        "title": "Favoritos",
+        "no-favorites": "Aún no hay favoritos. Para agregar favoritos, dirígete a la lista de productos y marca algunos productos como tus favoritos."
+      },
+      "invoices": {
+        "title": "Facturas",
+        "invoice-number": "Número de factura",
+        "billing-address": "Dirección de facturación",
+        "invoice-date": "Fecha de la factura",
+        "total": "Total",
+        "details": "Detalles",
+        "not-exist": "Esta factura no existe.",
+        "download-pdf": "Descargar PDF",
+        "general-information": "Información general",
+        "payment-information": "Información de pago",
+        "products": "Productos",
+        "product": "Producto"
+      }
+    },
+    "profile": {
+      "password": "Contraseña"
+    },
+    "privacy": {
+      "title": "Política de privacidad para Toolshop"
+    }
+  },
+  "toasts": {
+    "product-added-to-favorites": "Producto añadido a favoritos.",
+    "product-already-in-favorites": "El producto ya está en tu lista de favoritos.",
+    "unauthorized-favorite": "No autorizado, no se puede añadir el producto a favoritos.",
+    "product-added-to-cart": "Producto añadido al carrito.",
+    "product-quantity-updated": "Cantidad del producto actualizada.",
+    "product-deleted": "Producto eliminado."
+  }
+}

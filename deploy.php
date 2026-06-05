@@ -73,6 +73,10 @@ task('deploy:sprint5-with-bugs', function () {
     deploy('sprint5-with-bugs', 'with-bugs.', '-with-bugs');
 });
 
+task('deploy:sprint5-holtesting', function () {
+    deploy('sprint5-holtesting', 'holtesting.', '-holtesting');
+});
+
 // Function to handle deployment logic
 function deploy($source, $webDestination, $apiDestination) {
     // API deployment

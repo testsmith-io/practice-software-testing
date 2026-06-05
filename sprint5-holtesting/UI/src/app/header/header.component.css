@@ -1,0 +1,147 @@
+/* Copyright (c) 2024-2026 Testsmith. All rights reserved. See LICENSE for details. */
+
+/* Make <button> dropdown toggles look like the original <a> based ones */
+.btn-link-style {
+  background: none;
+  border: none;
+  text-decoration: none;
+  text-align: inherit;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.btn-link-style:focus {
+  outline: 2px solid #1E6098;
+  outline-offset: 2px;
+}
+
+.st0{fill:#8DC12F;}
+.st1{fill:#FFFFFF;}
+.st2{fill:#9DC83D;}
+.st3{fill:#1D6098;}
+.st4{fill:#5A585D;}
+
+.gear {
+  transform-origin: 50% 50%;
+  transform-box: fill-box;
+  -webkit-animation: frames 10s infinite linear;
+  animation: frames 10s infinite linear;
+}
+
+@keyframes frames {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+
+.badge {
+  padding-left: 9px;
+  padding-right: 9px;
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  border-radius: 9px;
+}
+
+.label-warning[href],
+.badge-warning[href] {
+  background-color: #c67605;
+}
+#lblCartCount {
+  font-size: 10px;
+  /*background: #ff0000;*/
+  color: #fff;
+  /*padding: 5px;*/
+  vertical-align: top;
+  margin-left: -10px;
+  margin-top: -5px;
+}
+
+.dropdown-menu li {
+  position: relative;
+}
+
+.dropdown-menu .dropdown-submenu {
+  display: none;
+  position: absolute;
+  right: 100%;
+  top: -7px;
+}
+
+.dropdown-menu>li:hover>.dropdown-submenu {
+  display: block;
+}
+
+.accordion > ul {
+  display: none;
+}
+
+.accordion:hover ul {
+  display: block;
+}
+
+.reports.nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+  right:100%; left:auto;
+  margin-top: -25px;
+}
+
+.testing-notification-bar {
+  background: linear-gradient(90deg, #205d96 0%, #1a4f7f 100%);
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.testing-notification-bar .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.testing-notification-bar span {
+  font-weight: 500;
+}
+
+.testing-guide-btn {
+  background: white;
+  color: #205d96;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.testing-guide-btn:hover {
+  background: #f0f0f0;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.bug-hunting-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.bug-hunting-btn:hover {
+  background: #c82333;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}

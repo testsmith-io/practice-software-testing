@@ -1,0 +1,173 @@
+<?php
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
+
+namespace App\Models;
+
+use App\Observers\CachedAuthUserObserver;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+
+/** @OA\Schema(
+ *     schema="UserRequest",
+ *     type="object",
+ *     title="UserRequest",
+ *     required={"first_name", "last_name", "email", "password"},
+ *     properties={
+ *         @OA\Property(property="first_name", type="string", maxLength=40, example="John"),
+ *         @OA\Property(property="last_name", type="string", maxLength=20, example="Doe"),
+ *         @OA\Property(
+ *              property="address",
+ *              type="object",
+ *              @OA\Property(property="street", type="string", maxLength=70, example="Street 1"),
+ *              @OA\Property(property="house_number", type="string", maxLength=10, example="12"),
+ *              @OA\Property(property="city", type="string", maxLength=40, example="City"),
+ *              @OA\Property(property="state", type="string", maxLength=40, example="State"),
+ *              @OA\Property(property="country", type="string", maxLength=40, example="Country"),
+ *              @OA\Property(property="postal_code", type="string", maxLength=10, example="1234AA")
+ *         ),
+ *         @OA\Property(property="phone", type="string", maxLength=24, example="0987654321"),
+ *         @OA\Property(
+ *             property="dob",
+ *             type="string",
+ *             format="date",
+ *             example="1970-01-01",
+ *             description="Must be a valid date between 18 and 75 years ago"
+ *         ),
+ *         @OA\Property(
+ *             property="password",
+ *             type="string",
+ *             format="password",
+ *             minLength=8,
+ *             example="SuperSecure@123",
+ *             description="Must include uppercase, lowercase, number, and symbol"
+ *         ),
+ *         @OA\Property(
+ *             property="email",
+ *             type="string",
+ *             format="email",
+ *             maxLength=256,
+ *             example="john@doe.example"
+ *         )
+ *     }
+ * )
+ *
+ * @OA\Schema(
+ *     schema="UserResponse",
+ *     type="object",
+ *     title="UserResponse",
+ *     properties={
+ *         @OA\Property(property="first_name", type="string", example="John"),
+ *         @OA\Property(property="last_name", type="string", example="Doe"),
+ *         @OA\Property(
+ *              property="address",
+ *              type="object",
+ *              @OA\Property(property="street", type="string", example="Street 1"),
+ *              @OA\Property(property="house_number", type="string", nullable=true, example="12"),
+ *              @OA\Property(property="city", type="string", example="City"),
+ *              @OA\Property(property="state", type="string", nullable=true, example="State"),
+ *              @OA\Property(property="country", type="string", example="Country"),
+ *              @OA\Property(property="postal_code", type="string", nullable=true, example="1234AA")
+ *         ),
+ *         @OA\Property(property="phone", type="string", nullable=true, example="0987654321"),
+ *         @OA\Property(property="dob", type="string", example="1970-01-01"),
+ *         @OA\Property(property="email", type="string", example="john@doe.example"),
+ *         @OA\Property(property="id", type="string"),
+ *         @OA\Property(property="provider", type="string", nullable=true),
+ *         @OA\Property(property="totp_enabled", type="boolean"),
+ *         @OA\Property(property="enabled", type="boolean"),
+ *         @OA\Property(property="failed_login_attempts", nullable=true, type="integer"),
+ *         @OA\Property(property="created_at", type="string", example="2022-08-01 08:24:56"),
+ *     }
+ * )
+ */
+#[ObservedBy([CachedAuthUserObserver::class])]
+class User extends Authenticatable implements JWTSubject
+{
+    use HasApiTokens, HasFactory, Notifiable, HasUlids;
+
+    protected $table = 'users';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = ['first_name', 'last_name', 'street', 'house_number', 'city', 'state', 'country', 'postal_code', 'phone', 'dob', 'email', 'password', 'role', 'enabled', 'failed_login_attempts', 'totp_secret', 'totp_verified_at', 'totp_enabled'];
+
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = ['enabled', 'failed_login_attempts', 'updated_at', 'password', 'role', 'uid', 'totp_secret', 'totp_verified_at', 'street', 'house_number', 'city', 'state', 'country', 'postal_code'];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = array(
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'enabled' => 'boolean',
+        'totp_enabled' => 'boolean',
+    );
+
+//    protected $appends = ['admin_details'];
+    protected $appends = ['address'];
+
+    public function getAddressAttribute()
+    {
+        return [
+            'street' => $this->street,
+            'house_number' => $this->house_number,
+            'city' => $this->city,
+            'state' => $this->state,
+            'country' => $this->country,
+            'postal_code' => $this->postal_code, // Renamed for API consistency
+        ];
+    }
+
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return ['role' => $this->role];
+    }
+
+    public function toArray()
+    {
+        $array = parent::toArray();
+
+        $currentUser = auth('users')->user();
+        
+        // Only show admin data if current user has permission
+        if ($currentUser && $currentUser->can('viewAdminData', $this)) {
+            $array['enabled'] = $this->enabled;
+            $array['role'] = $this->role;
+            $array['failed_login_attempts'] = $this->failed_login_attempts;
+        }
+
+        return $array;
+    }
+
+}
