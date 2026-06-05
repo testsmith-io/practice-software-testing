@@ -12,6 +12,7 @@ SPRINTS=(
   sprint5
   sprint5-performance
   sprint5-with-bugs
+  sprint5-holtesting
 )
 COMPONENTS=("UI" "API")
 
