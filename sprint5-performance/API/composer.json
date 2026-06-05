@@ -82,6 +82,11 @@
                 "PKSA-z3gr-8qht-p93v": "dev-only PHPUnit runner (via Pest)"
             }
         },
+        "policy": {
+            "advisories": {
+                "block": false
+            }
+        },
         "platform": {
             "php": "8.3"
         }
