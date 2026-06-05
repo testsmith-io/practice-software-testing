@@ -1,0 +1,148 @@
+<!-- Copyright (c) 2024-2026 Testsmith. All rights reserved. See LICENSE for details. -->
+
+<div class="comparison-wrapper my-4" *transloco="let t">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 data-test="comparison-title">{{ t('pages.comparison.title') }}</h2>
+      @if (products.length > 0) {
+        <div>
+          @if (allSpecNames.length > 0) {
+            <label class="form-check-label me-3">
+              <input type="checkbox" class="form-check-input" data-test="show-differences"
+                     [(ngModel)]="showOnlyDifferences">
+              {{ t('pages.comparison.show-differences') }}
+            </label>
+          }
+          <button class="btn btn-outline-danger btn-sm" data-test="clear-comparison" (click)="clearAll()">
+            {{ t('pages.comparison.clear-all') }}
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+
+  @if (loading) {
+    <div class="text-center py-5">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  } @else if (products.length === 0) {
+    <div class="container">
+      <div class="alert alert-info" data-test="comparison-empty">
+        <p class="mb-2">{{ t('pages.comparison.empty') }}</p>
+        <a routerLink="/" class="btn btn-primary btn-sm">{{ t('pages.comparison.browse') }}</a>
+      </div>
+    </div>
+  } @else {
+    <div class="comparison-scroll">
+      <table class="comparison-table" data-test="comparison-table">
+        <caption class="visually-hidden">{{ t('pages.comparison.title') }}</caption>
+        <thead>
+          <tr>
+            <th class="attribute-col sticky-col" scope="col"></th>
+            @for (product of products; track product.id) {
+              <th class="product-col text-center" scope="col">
+                <button class="btn btn-sm btn-outline-secondary remove-btn" data-test="remove-product"
+                        (click)="removeProduct(product.id)"
+                        [attr.aria-label]="t('pages.comparison.remove-product', {name: product.name})">
+                  &times;
+                </button>
+                <a [routerLink]="['/product', product.id]">
+                  <img src="assets/img/products/{{product.product_image.file_name}}"
+                       alt="{{product.name}}" class="comparison-img mb-2">
+                </a>
+                <div class="product-name fw-bold">
+                  <a [routerLink]="['/product', product.id]" class="text-decoration-none text-dark"
+                     data-test="product-name">{{ product.name }}</a>
+                </div>
+              </th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th class="attribute-col sticky-col" scope="row">{{ t('pages.comparison.price') }}</th>
+            @for (product of products; track product.id) {
+              <td class="text-center" data-test="compare-price">${{ product.price.toFixed(2) }}</td>
+            }
+          </tr>
+          <tr>
+            <th class="attribute-col sticky-col" scope="row">{{ t('pages.comparison.brand') }}</th>
+            @for (product of products; track product.id) {
+              <td class="text-center" data-test="compare-brand">{{ product.brand.name }}</td>
+            }
+          </tr>
+          <tr>
+            <th class="attribute-col sticky-col" scope="row">{{ t('pages.comparison.category') }}</th>
+            @for (product of products; track product.id) {
+              <td class="text-center" data-test="compare-category">{{ product.category.name }}</td>
+            }
+          </tr>
+          <tr>
+            <th class="attribute-col sticky-col" scope="row">{{ t('pages.comparison.stock') }}</th>
+            @for (product of products; track product.id) {
+              <td class="text-center" data-test="compare-stock">
+                @if (product.in_stock) {
+                  <span class="text-success">{{ t('pages.comparison.in-stock') }}</span>
+                } @else {
+                  <span class="text-danger">{{ t('pages.comparison.out-of-stock') }}</span>
+                }
+              </td>
+            }
+          </tr>
+          <tr>
+            <th class="attribute-col sticky-col" scope="row">{{ t('pages.comparison.co2-rating') }}</th>
+            @for (product of products; track product.id) {
+              <td class="text-center" data-test="compare-co2">
+                @if (product.co2_rating) {
+                  <span class="co2-badge" [ngClass]="getCo2Class(product.co2_rating)">
+                    {{ product.co2_rating }}
+                  </span>
+                } @else {
+                  <span class="text-muted">-</span>
+                }
+              </td>
+            }
+          </tr>
+          <tr>
+            <th class="attribute-col sticky-col" scope="row">{{ t('pages.comparison.eco-friendly') }}</th>
+            @for (product of products; track product.id) {
+              <td class="text-center" data-test="compare-eco">
+                @if (product.is_eco_friendly) {
+                  <span class="eco-label"><fa-icon [icon]="['fas', 'leaf']"></fa-icon> ECO</span>
+                } @else {
+                  <span class="text-muted">-</span>
+                }
+              </td>
+            }
+          </tr>
+
+          <!-- Dynamic specs -->
+          @if (allSpecNames.length > 0) {
+            <tr class="spec-header-row">
+              <th class="attribute-col sticky-col" scope="colgroup" [attr.colspan]="products.length + 1">{{ t('pages.comparison.specifications') }}</th>
+            </tr>
+            @for (specName of allSpecNames; track specName) {
+              @if (shouldShowSpec(specName)) {
+                <tr [ngClass]="{'spec-diff': isSpecDifferent(specName)}">
+                  <th class="attribute-col sticky-col" scope="row">{{ specName }}</th>
+                  @for (product of products; track product.id) {
+                    <td class="text-center" data-test="compare-spec">{{ getSpecValue(product, specName) }}</td>
+                  }
+                </tr>
+              }
+            }
+          }
+
+          <tr>
+            <th class="attribute-col sticky-col" scope="row">{{ t('pages.comparison.description') }}</th>
+            @for (product of products; track product.id) {
+              <td class="description-cell" data-test="compare-description">{{ product.description }}</td>
+            }
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

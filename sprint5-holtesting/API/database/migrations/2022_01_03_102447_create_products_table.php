@@ -1,0 +1,53 @@
+<?php
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateProductsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('products', function (Blueprint $table) {
+            $table->ulid('id')->primary();
+            $table->string('name', 220);
+            $table->text('description')->nullable();
+            $table->integer('stock')->nullable();
+            $table->decimal('price', 10, 2);
+            $table->boolean('is_location_offer');
+            $table->boolean('is_rental');
+            $table->char('co2_rating', 1)->nullable();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
+            $table->foreignUlid('brand_id')->references('id')->on('brands');
+            $table->foreignUlid('category_id')->references('id')->on('categories');
+            $table->foreignUlid('product_image_id')->nullable()->references('id')->on('product_images');
+
+            // Indexes for optimization
+            $table->index(['brand_id', 'category_id', 'product_image_id']);
+            $table->index('category_id');
+            $table->index('brand_id');
+            $table->index('is_rental');
+            $table->index('co2_rating');
+            $table->index('name');
+            $table->index('price');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('products');
+    }
+}

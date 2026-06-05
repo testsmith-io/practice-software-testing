@@ -1,0 +1,31 @@
+// Copyright (c) 2024-2026 Testsmith. All rights reserved.
+// See LICENSE for details.
+
+import {inject, Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, CanActivate, Router} from '@angular/router';
+import {CustomerAccountService} from "./shared/customer-account.service";
+import {map, Observable, of} from "rxjs";
+import {catchError} from "rxjs/operators";
+
+@Injectable()
+export class AdminAuthGuard implements CanActivate {
+  private readonly auth = inject(CustomerAccountService);
+  private readonly  router = inject(Router);
+
+  canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
+    return this.auth.isAuthenticated()
+      .pipe(
+        map(isAuth => {
+          if (!isAuth || this.auth.getRole() !== 'admin') {
+            this.router.navigate(['auth/login']);
+            return false;
+          } else {
+            return true;
+          }
+        }),
+        catchError(() => {
+          return of(false);
+        })
+      );
+  }
+}
