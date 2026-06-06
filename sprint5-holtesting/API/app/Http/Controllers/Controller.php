@@ -23,7 +23,7 @@ use Spatie\ArrayToXml\ArrayToXml;
  * )
  * @OA\Server(
  *     description="Deployed environment",
- *     url="https://api.practicesoftwaretesting.com"
+ *     url="https://api-holtesting.practicesoftwaretesting.com"
  * )
  * @OA\Server(
  *     description="Local environment",
