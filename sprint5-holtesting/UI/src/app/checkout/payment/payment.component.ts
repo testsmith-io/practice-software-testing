@@ -170,7 +170,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
     let paymentData = this.cusPayment.value;
 
     if (paymentData.payment_method === 'payu-cz' && !this.isCzechiaUser) {
-      this.paymentError = 'PayU CZ is only available for customers from Czechia.';
+      this.paymentError = 'PayU CZ is only available for customers from CZ.';
       return;
     }
 

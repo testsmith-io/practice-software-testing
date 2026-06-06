@@ -37,13 +37,13 @@ On the first CONFIRM click, this.state is still undefined, so finishFunction() r
 
 ## Problematic flow:
 
-User clicks CONFIRM
-checkPayment() starts POST /payment/check
-checkPayment() immediately emits undefined
-createInvoice() is skipped
-Payment API responds with "Payment was successful"
-Success message is shown, but cart and orders are unchanged
-The chat-widget checkout in the same project already handles this correctly by calling createInvoice() inside the payment validation callback.
+- User clicks CONFIRM
+- checkPayment() starts POST /payment/check
+- checkPayment() immediately emits undefined
+- createInvoice() is skipped
+- Payment API responds with "Payment was successful"
+- Success message is shown, but cart and orders are unchanged
+- The chat-widget checkout in the same project already handles this correctly by calling createInvoice() inside the payment validation - callback.
 
 ## Proposed fix
 Rewrite checkPayment() to return the validation Observable and emit true/false only af#ter the HTTP call completes:
@@ -55,15 +55,11 @@ File to change: sprint5-holtesting/UI/src/app/checkout/payment/payment.component
 
 ## Acceptance criteria
 
- Clicking CONFIRM after successful payment creates an invoice/order
-
- Order confirmation screen is displayed with invoice number
-
- Cart is emptied after successful checkout
-
- Order is visible in account orders/invoices
-
- Failed payment validation still shows an error and does not create an invoice
+ - Clicking CONFIRM after successful payment creates an invoice/order
+ - Order confirmation screen is displayed with invoice number
+ - Cart is emptied after successful checkout
+ - Order is visible in account orders/invoices
+ - Failed payment validation still shows an error and does not create an invoice
 
 ## Notes
 No backend/API change is required; invoice creation works when it is actually invoked.
