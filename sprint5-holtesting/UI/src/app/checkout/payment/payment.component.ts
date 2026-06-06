@@ -11,7 +11,7 @@ import {
   Validators
 } from "@angular/forms";
 import {CartService} from "../../_services/cart.service";
-import {Observable, of} from "rxjs";
+import {catchError, map, Observable, of} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {PaymentService} from "../../_services/payment.service";
 import {InvoiceService} from "../../_services/invoice.service";
@@ -43,7 +43,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
   @Input() address: any;
 
   paymentError: any
-  state: any;
   paymentMessage: string;
   cusPayment: FormGroup | any;
 
@@ -259,22 +258,20 @@ export class PaymentComponent implements OnInit, OnDestroy {
   Check payment method, only if mock endpoint is stored in sessionStorage
    */
   checkPayment(paymentPayload: any): Observable<boolean> {
-    if (!this.state) {
-      const endpoint = (window.localStorage.getItem('PAYMENT_ENDPOINT')) ? window.localStorage.getItem('PAYMENT_ENDPOINT') : environment.apiUrl + '/payment/check';
-      this.paymentService.validate(endpoint, paymentPayload).subscribe({
-        next: (res) => {
-          this.paymentError = null;
-          this.paymentMessage = res.message;
-          this.state = true;
-        },
-        error: (err) => {
-          this.state = null;
-          this.paymentError = err.error?.error || 'Unknown error';
-          this.state = false;
-        }
-      });
-    }
-    return of(this.state);
+    const endpoint = window.localStorage.getItem('PAYMENT_ENDPOINT')
+      ?? environment.apiUrl + '/payment/check';
+
+    return this.paymentService.validate(endpoint, paymentPayload).pipe(
+      map((res) => {
+        this.paymentError = null;
+        this.paymentMessage = res.message;
+        return true;
+      }),
+      catchError((err) => {
+        this.paymentError = err.error?.error || 'Unknown error';
+        return of(false);
+      })
+    );
   }
 
   private calculateTotal(items: any[]): number {
