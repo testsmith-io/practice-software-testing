@@ -371,6 +371,7 @@
         "price-header": "Cena",
         "subtotal": "Mezisoučet",
         "discount": "Sleva",
+        "delivery-cost": "Náklady na dopravu",
         "total": "Celkem",
         "continue-shopping": "Pokračovat v nákupu"
       },

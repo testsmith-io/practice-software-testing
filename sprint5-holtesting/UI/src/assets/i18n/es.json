@@ -379,6 +379,7 @@
         "price-header": "Precio",
         "subtotal": "Subtotal",
         "discount": "Descuento",
+        "delivery-cost": "Gastos de envío",
         "total": "Total",
         "continue-shopping": "Seguir comprando"
       },
