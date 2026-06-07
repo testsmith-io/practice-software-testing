@@ -411,6 +411,7 @@
       "payment": {
         "title": "Πληρωμή",
         "confirm-btn": "Επιβεβαίωση",
+        "buy-now-btn": "Αγορά τώρα",
         "confirm": "Ευχαριστούμε για την παραγγελία σας! Ο αριθμός τιμολογίου σας είναι <span id=\"invoice-number\">{{ invoice_number }}</span>.",
         "method-label": "Τρόπος πληρωμής",
         "method-required": "Ο τρόπος πληρωμής είναι υποχρεωτικός.",

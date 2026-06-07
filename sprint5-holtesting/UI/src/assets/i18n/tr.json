@@ -411,6 +411,7 @@
       "payment": {
         "title": "Ödeme",
         "confirm-btn": "Onayla",
+        "buy-now-btn": "Şimdi satın al",
         "confirm": "Siparişiniz için teşekkürler! Fatura numaranız <span id=\"invoice-number\">{{ invoice_number }}</span>.",
         "method-label": "Ödeme Yöntemi",
         "method-required": "Ödeme yöntemi gereklidir.",

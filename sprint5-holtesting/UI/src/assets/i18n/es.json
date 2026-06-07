@@ -411,6 +411,7 @@
       "payment": {
         "title": "Pago",
         "confirm-btn": "Confirmar",
+        "buy-now-btn": "Comprar ahora",
         "confirm": "¡Gracias por tu pedido! Tu número de factura es <span id=\"invoice-number\">{{ invoice_number }}</span>.",
         "method-label": "Método de pago",
         "method-required": "El método de pago es obligatorio.",
