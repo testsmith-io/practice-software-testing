@@ -88,8 +88,8 @@ describe('LoginComponent', () => {
       component.ngOnInit();
 
       expect(component.form).toBeDefined();
-      expect(component.form.get('email')?.hasError('required')).toBeTruthy();
-      expect(component.form.get('password')?.hasError('required')).toBeTruthy();
+      expect(component.form.get('email')?.value).toBe('customer@practicesoftwaretesting.com');
+      expect(component.form.get('password')?.value).toBe('welcome01');
       expect(component.form.get('totp')?.value).toBe('');
     });
 
@@ -137,6 +137,7 @@ describe('LoginComponent', () => {
       const emailControl = component.form.get('email');
 
       // Required validation
+      emailControl?.setValue('');
       expect(emailControl?.hasError('required')).toBeTruthy();
 
       // Email format validation
@@ -153,6 +154,7 @@ describe('LoginComponent', () => {
       const passwordControl = component.form.get('password');
 
       // Required validation
+      passwordControl?.setValue('');
       expect(passwordControl?.hasError('required')).toBeTruthy();
 
       // Min length validation
@@ -442,6 +444,7 @@ describe('LoginComponent', () => {
     });
 
     it('should handle empty form submission', () => {
+      component.form.patchValue({ email: '', password: '' });
       component.onSubmit();
       expect(component.submitted).toBeTruthy();
       expect(mockCustomerAccountService.login).not.toHaveBeenCalled();

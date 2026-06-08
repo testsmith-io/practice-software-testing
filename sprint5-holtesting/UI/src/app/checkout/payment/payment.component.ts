@@ -12,6 +12,7 @@ import {
 } from "@angular/forms";
 import {CartService} from "../../_services/cart.service";
 import {Observable, of} from "rxjs";
+import {catchError, map} from "rxjs/operators";
 import {environment} from "../../../environments/environment";
 import {PaymentService} from "../../_services/payment.service";
 import {InvoiceService} from "../../_services/invoice.service";
@@ -43,9 +44,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
   @Input() address: any;
 
   paymentError: any
-  state: any;
   paymentMessage: string;
+  paymentConfirmed: boolean = false;
   cusPayment: FormGroup | any;
+  private invoicePayload: any;
 
   paid: boolean = false;
   total: number;
@@ -166,50 +168,95 @@ export class PaymentComponent implements OnInit, OnDestroy {
     return this.cusPayment.controls;
   }
 
-  finishFunction() {
-    let cartId = sessionStorage.getItem('cart_id');
-    let paymentData = this.cusPayment.value;
+  confirmPayment(): void {
+    const paymentData = this.cusPayment.value;
 
     if (paymentData.payment_method === 'payu-cz' && !this.isCzechiaUser) {
       this.paymentError = 'PayU CZ is only available for customers from Czechia.';
       return;
     }
 
-    let payment: any;
+    const payment = this.buildPaymentDetails(paymentData);
+    this.invoicePayload = this.buildInvoicePayload(paymentData, payment);
+
+    this.checkPayment({
+      'payment_method': paymentData.payment_method,
+      'payment_details': payment,
+    }).subscribe(result => {
+      if (result) {
+        this.paymentConfirmed = true;
+        this.cusPayment.disable();
+      }
+    });
+  }
+
+  buyNow(): void {
+    if (!this.invoicePayload) {
+      return;
+    }
+
+    this.invoiceService.createInvoice(this.invoicePayload).subscribe({
+      next: (res) => {
+        this.paid = true;
+        this.invoice_number = res['invoice_number'];
+        this.trackPurchase(res['invoice_number']);
+        this.cartService.emptyCart();
+      },
+      error: () => {
+        // handle error if needed
+      }
+    });
+  }
+
+  checkPayment(paymentPayload: any): Observable<boolean> {
+    const endpoint = window.localStorage.getItem('PAYMENT_ENDPOINT') ?? environment.apiUrl + '/payment/check';
+    return this.paymentService.validate(endpoint, paymentPayload).pipe(
+      map((res) => {
+        this.paymentError = null;
+        this.paymentMessage = res.message;
+        return true;
+      }),
+      catchError((err) => {
+        this.paymentError = err.error?.error || 'Unknown error';
+        this.paymentMessage = null;
+        return of(false);
+      })
+    );
+  }
+
+  private buildPaymentDetails(paymentData: any): any {
     switch (paymentData.payment_method) {
       case 'bank-transfer':
-        payment = {
+        return {
           'bank_name': paymentData.bank_name,
           'account_name': paymentData.account_name,
           'account_number': paymentData.account_number
-        }
-        break;
+        };
       case 'gift-card':
-        payment = {
+        return {
           'gift_card_number': paymentData.gift_card_number,
           'validation_code': paymentData.validation_code
-        }
-        break;
+        };
       case 'credit-card':
-        payment = {
+        return {
           'credit_card_number': paymentData.credit_card_number,
           'expiration_date': paymentData.expiration_date,
           'cvv': paymentData.cvv,
           'card_holder_name': paymentData.card_holder_name
-        }
-        break;
+        };
       case 'buy-now-pay-later':
-        payment = {
+        return {
           'monthly_installments': paymentData.monthly_installments
-        }
-        break;
+        };
       case 'cash-on-delivery':
       case 'payu-cz':
-        payment = {
-        }
-        break;
+        return {};
+      default:
+        return {};
     }
+  }
 
+  private buildInvoicePayload(paymentData: any, payment: any): any {
     const payload: any = {
       'billing_street': this.address.street,
       'billing_city': this.address.city,
@@ -218,10 +265,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
       'billing_postal_code': this.address.postal_code,
       'payment_method': paymentData.payment_method,
       'payment_details': payment,
-      'cart_id': cartId
+      'cart_id': sessionStorage.getItem('cart_id')
     };
 
-    // Check if guest checkout info exists and add to payload
     const guestInfo = sessionStorage.getItem('guestCheckout');
     if (guestInfo) {
       const guest = JSON.parse(guestInfo);
@@ -230,51 +276,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
       payload['guest_last_name'] = guest.last_name;
     }
 
-    const payloadPayload = {
-      'payment_method': paymentData.payment_method,
-      'payment_details': payment,
-    };
-
-    this.checkPayment(payloadPayload).subscribe(result => {
-      if (result === true) {
-        this.invoiceService.createInvoice(payload).subscribe({
-          next: (res) => {
-            this.paid = true;
-            this.invoice_number = res['invoice_number'];
-
-            // Track purchase completion
-            this.trackPurchase(res['invoice_number']);
-
-            this.cartService.emptyCart();
-          },
-          error: () => {
-            // handle error if needed
-          }
-        });
-      }
-    })
-  }
-
-  /*
-  Check payment method, only if mock endpoint is stored in sessionStorage
-   */
-  checkPayment(paymentPayload: any): Observable<boolean> {
-    if (!this.state) {
-      const endpoint = (window.localStorage.getItem('PAYMENT_ENDPOINT')) ? window.localStorage.getItem('PAYMENT_ENDPOINT') : environment.apiUrl + '/payment/check';
-      this.paymentService.validate(endpoint, paymentPayload).subscribe({
-        next: (res) => {
-          this.paymentError = null;
-          this.paymentMessage = res.message;
-          this.state = true;
-        },
-        error: (err) => {
-          this.state = null;
-          this.paymentError = err.error?.error || 'Unknown error';
-          this.state = false;
-        }
-      });
-    }
-    return of(this.state);
+    return payload;
   }
 
   private calculateTotal(items: any[]): number {

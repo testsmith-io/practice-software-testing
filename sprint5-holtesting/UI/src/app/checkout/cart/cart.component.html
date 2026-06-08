@@ -87,6 +87,13 @@
       <tr>
         <td class="col-md-5"></td>
         <td class="col-md-2"></td>
+        <td class="col-md-2 text-end"><strong>{{t('pages.checkout.cart.delivery-cost')}}</strong></td>
+        <td class="col-md-2 text-end" data-test="cart-delivery-cost">{{ currencySymbol }}{{ deliveryCost | number: '1.2-2' }}</td>
+        <td class="col-md-1"></td>
+      </tr>
+      <tr>
+        <td class="col-md-5"></td>
+        <td class="col-md-2"></td>
         <td class="col-md-2 text-end"><strong>{{t('pages.checkout.cart.total')}}</strong></td>
         <td class="col-md-2 text-end" data-test="cart-total">{{ currencySymbol }}{{ total | number: '1.2-2' }}</td>
         <td class="col-md-1"></td>

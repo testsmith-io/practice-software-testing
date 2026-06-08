@@ -248,9 +248,14 @@
           }
         </form>
         <div class="float-end">
-          <button data-test="finish" [disabled]="!cusPayment.valid" type="button" class="btn btn-success"
-                  (click)="finishFunction()">
-            {{ t('pages.checkout.payment.confirm-btn') }}
+          <button data-test="finish" [disabled]="!paymentConfirmed && !cusPayment.valid" type="button"
+                  class="btn btn-success"
+                  (click)="paymentConfirmed ? buyNow() : confirmPayment()">
+            @if (paymentConfirmed) {
+              {{ t('pages.checkout.payment.buy-now-btn') }}
+            } @else {
+              {{ t('pages.checkout.payment.confirm-btn') }}
+            }
           </button>
         </div>
       </div>

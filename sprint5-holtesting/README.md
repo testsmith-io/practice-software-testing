@@ -8,3 +8,4 @@ Additional features:
 - Payments in Czech Koruna available if account country = CZ
 - Additional payment option PayU Czech Republic available if account country = CZ
 - New delivery option: Standard and Zasilkovna
+- Delivery costs basic with 7,90 Euro.

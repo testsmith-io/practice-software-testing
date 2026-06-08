@@ -34,10 +34,13 @@ export class CartComponent implements OnInit {
   private gaService = inject(GaService);
   private translocoService = inject(TranslocoService);
 
+  private readonly DELIVERY_COST = 7.90;
+
   cart: any;
   isLoggedIn: boolean = false;
   discount: number = 0;
   ecoDiscount: number = 0;
+  deliveryCost: number = 0;
   total: number = 0;
   subtotal: number = 0;
   countryCode: string = '';
@@ -57,6 +60,8 @@ export class CartComponent implements OnInit {
       this.subtotal = this.total;
       this.discount = this.calculateDiscount(cart.additional_discount_percentage);
       this.ecoDiscount = this.calculateEcoDiscount(cart.cart_items);
+      this.deliveryCost = cart.cart_items?.length ? this.DELIVERY_COST : 0;
+      this.total = this.total + this.deliveryCost;
     });
   }
 

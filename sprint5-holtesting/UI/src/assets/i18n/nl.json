@@ -379,6 +379,7 @@
         "price-header": "Prijs",
         "subtotal": "Subtotaal",
         "discount": "Korting",
+        "delivery-cost": "Bezorgkosten",
         "total": "Totaal",
         "continue-shopping": "Verder winkelen"
       },
@@ -410,6 +411,7 @@
       "payment": {
         "title": "Betaling",
         "confirm-btn": "Bevestigen",
+        "buy-now-btn": "Nu kopen",
         "confirm": "Bedankt voor uw bestelling! Uw factuurnummer is <span id=\"invoice-number\">{{ invoice_number }}</span>.",
         "method-label": "Betaalmethode",
         "method-required": "Betaalmethode is vereist.",
