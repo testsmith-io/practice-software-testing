@@ -74,7 +74,7 @@
           <!-- Quantity input field with associated label -->
           <!-- Label for the input, visually hidden but accessible to screen readers -->
           <label for="quantity-input" class="visually-hidden">Quantity</label>
-          <input [disabled]="!product.in_stock" type="number" min="1" max="999999999" class="form-control" data-test="quantity"
+          <input [disabled]="!product.in_stock" type="number" min="1" [max]="MAX_QUANTITY" class="form-control" data-test="quantity"
                  [(ngModel)]="quantity" (input)="validateQuantity($event)" id="quantity-input" attr.aria-labelledby="{{ t('pages.product-detail.quantity') }}">
           <!-- Button to increase quantity -->
           <button [disabled]="!product.in_stock" class="btn btn-secondary" data-test="increase-quantity"

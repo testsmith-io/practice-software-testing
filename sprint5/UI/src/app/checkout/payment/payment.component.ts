@@ -91,8 +91,8 @@ export class PaymentComponent implements OnInit {
         controls['account_number'].setValidators([Validators.required, Validators.pattern(/^\d+$/)]);
         break;
       case 'gift-card':
-        controls['gift_card_number'].setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9]+$/)]);
-        controls['validation_code'].setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9]+$/)]);
+        controls['gift_card_number'].setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9]{16}$/)]);
+        controls['validation_code'].setValidators([Validators.required, Validators.pattern(/^[a-zA-Z0-9]{4}$/)]);
         break;
       case 'credit-card':
         controls['credit_card_number'].setValidators([Validators.pattern(/^\d{4}-\d{4}-\d{4}-\d{4}$/)]);

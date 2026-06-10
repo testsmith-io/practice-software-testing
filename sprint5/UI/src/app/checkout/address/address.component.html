@@ -53,6 +53,13 @@
             </div>
           }
 
+          @if (postcodeLookupError) {
+            <div class="alert alert-danger py-2 mb-3" role="alert" aria-live="assertive"
+                 data-test="postcode-lookup-error">
+              {{ postcodeLookupError }}
+            </div>
+          }
+
           <div class="mb-3">
             <label for="street" class="form-label">{{ t('fields.street.label') }}</label>
             <input formControlName="street"

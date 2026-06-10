@@ -32,6 +32,7 @@ export class AddressComponent implements OnInit, OnDestroy {
   @Input() address: FormGroup;
   cusAddress: FormGroup | any;
   postcodeLookupPending = false;
+  postcodeLookupError: string | null = null;
   countries = countriesList;
   private subscription: Subscription = new Subscription();
 
@@ -90,18 +91,24 @@ export class AddressComponent implements OnInit, OnDestroy {
     }
 
     this.postcodeLookupPending = true;
+    this.postcodeLookupError = null;
     this.subscription.add(
       this.postcodeService.lookup(country, postcode, houseNumber).subscribe({
         next: (result) => {
           this.postcodeLookupPending = false;
+          this.postcodeLookupError = null;
           addressGroup.patchValue({
             street: result.street,
             city: result.city,
             state: result.state,
           });
         },
-        error: () => {
+        error: (err) => {
           this.postcodeLookupPending = false;
+          // Surface the API message (e.g. an invalid postcode format for the
+          // selected country) instead of silently swallowing it.
+          this.postcodeLookupError = err?.error?.message
+            ?? 'We could not look up this postcode. Please check the postcode and country.';
         },
       })
     );

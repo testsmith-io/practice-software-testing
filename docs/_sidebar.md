@@ -2,6 +2,7 @@
 - [Feature Overview](features.md)
 - [Architecture](architecture.md)
 - [Postcode Lookup + Local Mocks](postcode-lookup.md)
+- [Gift Card Validation](gift-card-validation.md)
 - Getting Started
   - [Quick Start](getting-started.md#quick-start)
   - [Prerequisites](getting-started.md#prerequisites)

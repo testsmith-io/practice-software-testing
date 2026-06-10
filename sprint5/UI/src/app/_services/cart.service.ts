@@ -76,7 +76,7 @@ export class CartService {
 
   addItem(item: any): Observable<any> {
     // Validate quantity before sending to API
-    const validatedQuantity = Math.min(Math.max(1, item.quantity), 999999999);
+    const validatedQuantity = Math.min(Math.max(1, item.quantity), 99);
 
     return this.getOrCreateCartId().pipe(
       switchMap(cartId =>
@@ -99,7 +99,7 @@ export class CartService {
     if (!cartId) return throwError(() => new Error('No cart ID'));
 
     // Validate quantity before sending to API
-    const validatedQuantity = Math.min(Math.max(1, quantity), 999999999);
+    const validatedQuantity = Math.min(Math.max(1, quantity), 99);
 
     return this.httpClient.put(`${this.apiURL}/${cartId}/product/quantity`, { product_id: productId, quantity: validatedQuantity });
   }

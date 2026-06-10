@@ -33,9 +33,8 @@ export class CartComponent implements OnInit {
   private router = inject(Router);
   private gaService = inject(GaService);
   private translocoService = inject(TranslocoService);
-
+  readonly MAX_QUANTITY = 99;
   private readonly DELIVERY_COST = 7.90;
-
   cart: any;
   isLoggedIn: boolean = false;
   discount: number = 0;
@@ -72,12 +71,14 @@ export class CartComponent implements OnInit {
     if (isNaN(quantity) || quantity < 1) {
       quantity = 1;
       item.quantity = quantity;
-    } else if (quantity > 999999999) {
-      quantity = 999999999;
+    } else if (quantity > this.
+              ) {
+      quantity = this.MAX_QUANTITY;
       item.quantity = quantity;
+      this.toastr.warning(`You can order at most ${this.MAX_QUANTITY} of this product.`, null, {progressBar: true});
     }
 
-    if (quantity >= 1 && quantity <= 999999999) {
+    if (quantity >= 1 && quantity <= this.MAX_QUANTITY) {
       this.cartService.replaceQuantity(item.product.id, quantity).subscribe({
         next: () => {
           this.fetchCartItems();

@@ -76,6 +76,42 @@ test('it creates new invoice successfully gift card', function () {
     createsNewInvoiceSuccessfully($this, 'gift-card', $paymentDetails);
 });
 
+test('it does not process an order paid with an invalid gift card', function () {
+    $user = User::factory()->create(['role' => 'user']);
+    $cart = Cart::factory()->create();
+    $product = $this->addProduct();
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'product_id' => $product->id,
+        'quantity' => 1,
+        'discount_percentage' => 10
+    ]);
+
+    // Valid, consistent billing address so the only failure is the gift card.
+    $expected = app(\App\Services\Postcode\PostcodeService::class)->lookup('NL', '1011AB');
+
+    $response = $this->postJson('/invoices', [
+        'cart_id' => $cart->id,
+        'payment_method' => 'gift-card',
+        'payment_details' => [
+            'gift_card_number' => 'not-a-real-card',
+            'validation_code' => '1'
+        ],
+        'billing_street' => $expected->street,
+        'billing_city' => $expected->city,
+        'billing_country' => 'NL',
+        'billing_state' => $expected->state,
+        'billing_postal_code' => '1011AB'
+    ], $this->headers($user));
+
+    $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
+    $response->assertJsonStructure(['payment_details.gift_card_number']);
+
+    // Payment must not have been processed.
+    $this->assertDatabaseMissing('payment_gift_card_details', ['gift_card_number' => 'not-a-real-card']);
+    $this->assertDatabaseMissing('invoices', ['user_id' => $user->id]);
+});
+
 test('it creates new invoice successfully credit card', function () {
     $paymentDetails = [
         'credit_card_number' => '1234-5678-9101-1121',

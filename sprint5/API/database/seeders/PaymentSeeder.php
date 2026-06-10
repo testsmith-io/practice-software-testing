@@ -54,7 +54,7 @@ class PaymentSeeder extends Seeder
             ],
             'gift-card' => [
                 [
-                    'gift_card_number' => Str::random(8),
+                    'gift_card_number' => Str::random(16),
                     'validation_code' => Str::random(4),
                     'table' => 'payment_gift_card_details',
                     'model' => 'App\\Models\\PaymentGiftCardDetails'

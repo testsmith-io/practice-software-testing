@@ -436,11 +436,11 @@
         },
         "gift-card": {
           "number": "Gift Card Number",
-          "number-help": "Enter the unique number found on your gift card. This number is usually located on the back of the card and may consist of digits and/or letters.",
-          "number-error-format": "Gift card number must be alphanumeric.",
+          "number-help": "Enter the unique number found on your gift card. This number is usually located on the back of the card and consists of 16 letters and/or digits.",
+          "number-error-format": "Please enter a valid gift card number: exactly 16 letters and/or digits.",
           "validation-code": "Validation Code",
-          "validation-code-help": "The validation code is a security feature found on your gift card, often located near the gift card number. Enter this code exactly as it appears on your card.",
-          "validation-code-error-format": "Validation code must be alphanumeric."
+          "validation-code-help": "The validation code is a security feature found on your gift card, often located near the gift card number. Enter this 4-character code exactly as it appears on your card.",
+          "validation-code-error-format": "Please enter a valid validation code: exactly 4 letters and/or digits."
         }
       }
     },
