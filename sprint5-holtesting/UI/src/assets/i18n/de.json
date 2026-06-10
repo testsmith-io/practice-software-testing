@@ -379,6 +379,7 @@
         "price-header": "Preis",
         "subtotal": "Gesamt",
         "discount": "Rabatt",
+        "delivery-cost": "Lieferkosten",
         "total": "Gesamtsumme",
         "continue-shopping": "Weiter einkaufen"
       },
@@ -410,6 +411,7 @@
       "payment": {
         "title": "Zahlung",
         "confirm-btn": "Bestätigen",
+        "buy-now-btn": "Jetzt kaufen",
         "confirm": "Danke für den Auftrag. Ihre Rechnungsnummer ist <span id=\"invoice-number\">{{ invoice_number }}</span>.",
         "method-label": "Zahlungsmethode",
         "method-required": "Zahlungsmethode ist verpflichtend.",

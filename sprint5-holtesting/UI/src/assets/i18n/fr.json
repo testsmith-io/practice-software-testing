@@ -379,6 +379,7 @@
         "price-header": "Prix",
         "subtotal": "Sous-total",
         "discount": "Remise",
+        "delivery-cost": "Frais de livraison",
         "total": "Total",
         "continue-shopping": "Continuer les achats"
       },
@@ -410,6 +411,7 @@
       "payment": {
         "title": "Paiement",
         "confirm-btn": "Confirmer",
+        "buy-now-btn": "Acheter maintenant",
         "confirm": "Merci pour votre commande ! Votre numéro de facture est <span id=\"invoice-number\">{{ invoice_number }}</span>.",
         "method-label": "Méthode de paiement",
         "method-required": "La méthode de paiement est requise.",

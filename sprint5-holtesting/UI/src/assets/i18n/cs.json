@@ -371,6 +371,7 @@
         "price-header": "Cena",
         "subtotal": "Mezisoučet",
         "discount": "Sleva",
+        "delivery-cost": "Náklady na dopravu",
         "total": "Celkem",
         "continue-shopping": "Pokračovat v nákupu"
       },
@@ -402,6 +403,7 @@
       "payment": {
         "title": "Platba",
         "confirm-btn": "Potvrdit",
+        "buy-now-btn": "Koupit nyní",
         "confirm": "Děkujeme za objednávku! Číslo faktury je <span id=\"invoice-number\">{{ invoice_number }}</span>.",
         "method-label": "Způsob platby",
         "method-required": "Způsob platby je povinný.",

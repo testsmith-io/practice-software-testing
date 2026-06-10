@@ -10333,12 +10333,22 @@
                     </tr>
                 @endif
                 </tbody>
+                @php
+                    $deliveryCost = $invoice->invoicelines->isNotEmpty() ? 7.90 : 0;
+                    $pdfTotal = $invoice['total'] + $deliveryCost;
+                @endphp
                 <tfoot>
                 <tr>
                     <td></td>
                     <td></td>
+                    <td><strong>Delivery costs</strong></td>
+                    <td>${{ number_format($deliveryCost, 2) }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
                     <td>Total</td>
-                    <td>${{ number_format($invoice['total'],2)}}</td>
+                    <td>${{ number_format($pdfTotal, 2) }}</td>
                 </tr>
                 </tfoot>
             </table>

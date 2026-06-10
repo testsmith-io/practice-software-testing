@@ -372,6 +372,7 @@
         "price-header": "Price",
         "subtotal": "Subtotal",
         "discount": "Discount",
+        "delivery-cost": "Delivery costs",
         "total": "Total",
         "continue-shopping": "Continue Shopping"
       },
@@ -403,6 +404,7 @@
       "payment": {
         "title": "Payment",
         "confirm-btn": "Confirm",
+        "buy-now-btn": "Buy now",
         "confirm": "Thanks for your order! Your invoice number is <span id=\"invoice-number\">{{ invoice_number }}</span>.",
         "method-label": "Payment Method",
         "method-required": "Payment method is required.",
