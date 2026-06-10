@@ -128,8 +128,10 @@ test('it rejects an invoice whose address does not match the selected country', 
 
     $response = $this->postJson('/invoices', $requestData, $this->headers($user));
 
+    // BaseFormRequest returns validation errors at the top level (not wrapped
+    // in an "errors" key), so assert the key directly.
     $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
-    $response->assertJsonValidationErrors('billing_country');
+    $response->assertJsonStructure(['billing_country']);
 });
 
 test('admin can retrieve any invoice', function () {
