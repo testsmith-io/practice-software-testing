@@ -5,6 +5,7 @@
 namespace App\Http\Requests\Invoice;
 
 use App\Http\Requests\BaseFormRequest;
+use App\Rules\AddressMatchesCountry;
 use App\Rules\SubscriptSuperscriptRule;
 use Illuminate\Validation\Rule;
 
@@ -34,7 +35,7 @@ class StoreInvoice extends BaseFormRequest
             'billing_street' => ['required', 'string', 'max:70', new SubscriptSuperscriptRule()],
             'billing_city' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'billing_state' => ['string', 'max:40', new SubscriptSuperscriptRule()],
-            'billing_country' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule()],
+            'billing_country' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule(), new AddressMatchesCountry()],
             'billing_postal_code' => ['string', 'max:10', new SubscriptSuperscriptRule()],
             'cart_id' => 'required'
         ];
