@@ -134,6 +134,35 @@ test('it rejects an invoice whose address does not match the selected country', 
     $response->assertJsonStructure(['billing_country']);
 });
 
+test('it rejects an invoice whose postcode format does not fit the country', function () {
+    $user = User::factory()->create(['role' => 'user']);
+    $cart = Cart::factory()->create();
+    $product = $this->addProduct();
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'product_id' => $product->id,
+        'quantity' => 1,
+        'discount_percentage' => 10
+    ]);
+
+    // Austria selected, but a Dutch-format postcode entered.
+    $requestData = [
+        'cart_id' => $cart->id,
+        'payment_method' => 'cash-on-delivery',
+        'payment_details' => (object)[],
+        'billing_street' => 'Stephansplatz',
+        'billing_city' => 'Wien',
+        'billing_country' => 'AT',
+        'billing_state' => 'Wien',
+        'billing_postal_code' => '1011AB'
+    ];
+
+    $response = $this->postJson('/invoices', $requestData, $this->headers($user));
+
+    $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
+    $response->assertJsonStructure(['billing_country']);
+});
+
 test('admin can retrieve any invoice', function () {
     $response = $this->getJson('/invoices/' . $this->invoice->id, $this->headers($this->admin));
 

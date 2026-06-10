@@ -4,6 +4,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Postcode\PostcodeFormat;
 use App\Services\Postcode\PostcodeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -50,6 +51,15 @@ class PostcodeController extends Controller
             'postcode' => ['required', 'string', 'max:10'],
             'house_number' => ['nullable', 'string', 'max:10'],
         ]);
+
+        // Reject a postcode whose shape does not fit the selected country (e.g.
+        // a Dutch "1011AB" while Austria is selected) so the lookup never
+        // returns an address that contradicts the chosen country.
+        if (!PostcodeFormat::matches($data['country'], $data['postcode'])) {
+            return response()->json([
+                'message' => 'The postal code format is not valid for the selected country.',
+            ], ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         // Runtime override via the admin UI (localStorage + header). Accept only
         // outside production to avoid turning the endpoint into an SSRF vector

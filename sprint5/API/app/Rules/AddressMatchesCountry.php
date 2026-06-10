@@ -4,6 +4,7 @@
 
 namespace App\Rules;
 
+use App\Services\Postcode\PostcodeFormat;
 use App\Services\Postcode\PostcodeService;
 use Closure;
 use Illuminate\Contracts\Validation\DataAwareRule;
@@ -47,6 +48,15 @@ class AddressMatchesCountry implements ValidationRule, DataAwareRule
 
         // Without a country + postcode there is nothing to validate against.
         if ($country === '' || $postcode === '') {
+            return;
+        }
+
+        // The postcode must at least have the right shape for the country, so
+        // a foreign-format code (e.g. a Dutch "1011AB" while Austria is
+        // selected) is rejected.
+        if (!PostcodeFormat::matches($country, $postcode)) {
+            $fail("The {$attribute} does not match the entered address. The postal code format is not valid for the selected country.");
+
             return;
         }
 
