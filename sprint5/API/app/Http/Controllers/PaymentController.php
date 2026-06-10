@@ -4,6 +4,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Payments\GiftCard;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
@@ -62,8 +63,8 @@ class PaymentController extends Controller
         }
         if ($paymentMethod === 'gift-card') {
             $request->validate([
-                'payment_details.gift_card_number' => 'required|string|max:255|regex:/^[a-zA-Z0-9]+$/',
-                'payment_details.validation_code' => 'required|string|max:255|regex:/^[a-zA-Z0-9]+$/',
+                'payment_details.gift_card_number' => GiftCard::numberRules(),
+                'payment_details.validation_code' => GiftCard::codeRules(),
             ]);
         }
         return $this->preferredFormat(['message' => 'Payment was successful'], ResponseAlias::HTTP_OK);

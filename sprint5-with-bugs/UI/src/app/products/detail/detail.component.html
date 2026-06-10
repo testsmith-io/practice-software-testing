@@ -63,8 +63,8 @@ aria-label="unit-price" data-test="unit-price">{{product.price.toFixed(2)}}</spa
       <button [disabled]="product.stock <= 0" class="btn btn-secondary" data-test="decrease-quantity"
         id="btn-decrease-quantity" (click)="minus()"><i class="fa fa-minus"></i>
       </button>
-      <input [disabled]="product.stock <= 0" type="number" min="1" class="form-control" data-test="quantity"
-        [(ngModel)]="quantity">
+      <input [disabled]="product.stock <= 0" type="number" min="1" [max]="MAX_QUANTITY" class="form-control" data-test="quantity"
+        [(ngModel)]="quantity" (input)="validateQuantity($event)">
       <button [disabled]="product.stock <= 0" class="btn btn-secondary" data-test="increase-quantity"
         id="btn-increase-quantity" (click)="plus()"><i class="fa fa-plus"></i></button>
       </div>

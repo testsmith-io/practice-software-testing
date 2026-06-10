@@ -90,6 +90,7 @@
                      class="visually-hidden">{{ t('pages.checkout.payment.gift-card.number') }}</label>
               <input class="form-control" id="gift_card_number" formControlName="gift_card_number"
                      data-test="gift_card_number"
+                     maxlength="16"
                      aria-describedby="gift_card_number_help"
                      placeholder="{{t('pages.checkout.payment.gift-card.number')}}">
               <small id="gift_card_number_help"
@@ -107,6 +108,7 @@
                      class="visually-hidden">{{ t('pages.checkout.payment.gift-card.validation-code') }}</label>
               <input class="form-control" id="validation_code" formControlName="validation_code"
                      data-test="validation_code"
+                     maxlength="4"
                      aria-describedby="validation_code_help"
                      placeholder="Validation Code">
               <small id="validation_code_help"

@@ -44,6 +44,37 @@ test('add new item to cart', function () {
     ]);
 });
 
+test('it rejects adding an unrealistically large quantity to the cart', function () {
+    $cart = Cart::factory()->create();
+    $product = $this->addProduct();
+
+    $response = $this->postJson("/carts/{$cart->id}", [
+        'product_id' => $product->id,
+        'quantity' => 99999
+    ]);
+
+    $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
+        ->assertJsonValidationErrors(['quantity']);
+});
+
+test('it rejects updating a cart item to an unrealistically large quantity', function () {
+    $cart = Cart::factory()->create();
+    $product = $this->addProduct();
+
+    $this->postJson("/carts/{$cart->id}", [
+        'product_id' => $product->id,
+        'quantity' => 1
+    ]);
+
+    $response = $this->putJson("/carts/{$cart->id}/product/quantity", [
+        'product_id' => $product->id,
+        'quantity' => 99999
+    ]);
+
+    $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
+        ->assertJsonValidationErrors(['quantity']);
+});
+
 test('update item quantity in cart', function () {
     $cart = Cart::factory()->create();
     $product = $this->addProduct();

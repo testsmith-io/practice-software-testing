@@ -49,6 +49,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   product: Product;
   discount_percentage: any;
   quantity: number = 1;
+  readonly MAX_QUANTITY = 99;
   relatedProducts: Product[];
   private sub: any;
   private id: string;
@@ -74,8 +75,10 @@ export class DetailComponent implements OnInit, OnDestroy {
 
 
   plus() {
-    if (this.quantity < 999999999) {
+    if (this.quantity < this.MAX_QUANTITY) {
       this.quantity = this.quantity + 1;
+    } else {
+      this.warnMaxQuantity();
     }
   }
 
@@ -92,12 +95,17 @@ export class DetailComponent implements OnInit, OnDestroy {
     // Check if value is NaN or exceeds maximum
     if (isNaN(value) || value < 1) {
       value = 1;
-    } else if (value > 999999999) {
-      value = 999999999;
+    } else if (value > this.MAX_QUANTITY) {
+      value = this.MAX_QUANTITY;
+      this.warnMaxQuantity();
     }
 
     this.quantity = value;
     target.value = value.toString();
+  }
+
+  private warnMaxQuantity(): void {
+    this.toastr.warning(`You can order at most ${this.MAX_QUANTITY} of this product.`, null, {progressBar: true});
   }
 
   getProduct(id: string) {

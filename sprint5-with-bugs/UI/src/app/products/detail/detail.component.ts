@@ -38,6 +38,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   product: Product;
   discount_percentage: any;
   quantity: number = 1;
+  readonly MAX_QUANTITY = 99;
   relatedProducts: Product[];
   private sub: any;
   private id: number;
@@ -95,8 +96,23 @@ export class DetailComponent implements OnInit, OnDestroy {
     });
   }
 
+  validateQuantity(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    let value = parseInt(target.value, 10);
+
+    if (isNaN(value) || value < 1) {
+      value = 1;
+    } else if (value > this.MAX_QUANTITY) {
+      value = this.MAX_QUANTITY;
+      this.toastService.show(`You can order at most ${this.MAX_QUANTITY} of this product.`, {classname: 'bg-warning text-dark'});
+    }
+
+    this.quantity = value;
+    target.value = value.toString();
+  }
+
   addToCart(product: Product) {
-    if (this.quantity >= 0 && this.quantity <= 10) {
+    if (this.quantity >= 1 && this.quantity <= this.MAX_QUANTITY) {
       const price = (product.discount_price) ? product.discount_price : product.price;
       let item = {
         'id': product.id,

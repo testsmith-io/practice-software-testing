@@ -72,6 +72,45 @@ test('gift card with valid details returns success', function () {
     $response->assertJson(['message' => 'Payment was successful']);
 });
 
+test('gift card with a valid format passes the payment check', function () {
+    $response = $this->postJson('/payment/check', [
+        'payment_method' => 'gift-card',
+        'payment_details' => [
+            'gift_card_number' => '1234567890123456',
+            'validation_code' => '1234',
+        ]
+    ]);
+
+    $response->assertStatus(ResponseAlias::HTTP_OK)
+        ->assertJson(['message' => 'Payment was successful']);
+});
+
+test('gift card with an unrealistic number is rejected by the payment check', function () {
+    $response = $this->postJson('/payment/check', [
+        'payment_method' => 'gift-card',
+        'payment_details' => [
+            'gift_card_number' => '1234567890123456789012345', // 25 chars: too long
+            'validation_code' => '1234',
+        ]
+    ]);
+
+    $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
+        ->assertJsonValidationErrors(['payment_details.gift_card_number']);
+});
+
+test('gift card with a malformed validation code is rejected by the payment check', function () {
+    $response = $this->postJson('/payment/check', [
+        'payment_method' => 'gift-card',
+        'payment_details' => [
+            'gift_card_number' => '1234567890123456',
+            'validation_code' => 'no!', // wrong length + non-alphanumeric
+        ]
+    ]);
+
+    $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
+        ->assertJsonValidationErrors(['payment_details.validation_code']);
+});
+
 test('invalid payment method returns error', function () {
     $response = $this->postJson('/payment/check', [
         'payment_method' => 'Invalid Method',

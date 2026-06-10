@@ -108,7 +108,7 @@ class CartController extends Controller
     {
         $request->validate([
             'product_id' => 'required|string|exists:products,id',
-            'quantity' => 'required|integer|min:1|max:999999999'
+            'quantity' => 'required|integer|min:1|max:99'
         ]);
 
         try {
@@ -199,7 +199,7 @@ class CartController extends Controller
     {
         $request->validate([
             'product_id' => 'required|string|exists:products,id',
-            'quantity' => 'required|integer|min:1|max:999999999'
+            'quantity' => 'required|integer|min:1|max:99'
         ]);
 
         try {
