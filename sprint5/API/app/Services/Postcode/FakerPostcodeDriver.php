@@ -45,23 +45,46 @@ class FakerPostcodeDriver implements PostcodeDriver
     {
         $locale = self::COUNTRY_TO_LOCALE[strtoupper($country)] ?? 'en_US';
 
-        // Deterministic output: same inputs always yield the same address,
-        // so demos, screenshots, and tests stay stable.
-        $seed = crc32(strtolower("{$country}|{$postcode}|{$houseNumber}"));
+        // The locality (street/city/state) is a property of the country +
+        // postcode only — the house number must NOT change which city you live
+        // in. Keeping it out of the seed means a server-side re-lookup (which
+        // only has the country + postcode) reproduces the exact same locality
+        // the customer saw at checkout, which is what the address/country
+        // consistency check relies on. Output stays deterministic so demos,
+        // screenshots, and tests remain stable.
+        $localitySeed = crc32(strtolower("{$country}|{$postcode}"));
         $faker = Factory::create($locale);
-        $faker->seed($seed);
+        $faker->seed($localitySeed);
+
+        $street = $faker->streetName();
+        $city = $faker->city();
+        $state = $this->state($faker);
 
         $house = $houseNumber !== null && $houseNumber !== ''
             ? $houseNumber
             : (string) $faker->numberBetween(1, 250);
 
         return new PostcodeLookupResult(
-            street: $faker->streetName(),
+            street: $street,
             house_number: $house,
-            city: $faker->city(),
-            state: $faker->state(),
+            city: $city,
+            state: $state,
             country: strtoupper($country),
             postcode: strtoupper($postcode),
         );
+    }
+
+    /**
+     * Not every Faker locale ships a state/region list — for those, state()
+     * throws. Treat a missing region as simply "no state" instead of letting
+     * the whole lookup fail.
+     */
+    private function state(\Faker\Generator $faker): string
+    {
+        try {
+            return (string) $faker->state();
+        } catch (\InvalidArgumentException $e) {
+            return '';
+        }
     }
 }

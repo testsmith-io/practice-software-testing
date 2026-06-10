@@ -103,6 +103,35 @@ test('it creates new invoice successfully bank transfer', function () {
     createsNewInvoiceSuccessfully($this, 'bank-transfer', $paymentDetails);
 });
 
+test('it rejects an invoice whose address does not match the selected country', function () {
+    $user = User::factory()->create(['role' => 'user']);
+    $cart = Cart::factory()->create();
+    $product = $this->addProduct();
+    CartItem::factory()->create([
+        'cart_id' => $cart->id,
+        'product_id' => $product->id,
+        'quantity' => 1,
+        'discount_percentage' => 10
+    ]);
+
+    // Albania selected, but Austrian (Vienna) address data entered.
+    $requestData = [
+        'cart_id' => $cart->id,
+        'payment_method' => 'cash-on-delivery',
+        'payment_details' => (object)[],
+        'billing_street' => 'Stephansplatz',
+        'billing_city' => 'Wien',
+        'billing_country' => 'AL',
+        'billing_state' => 'Wien',
+        'billing_postal_code' => '1020'
+    ];
+
+    $response = $this->postJson('/invoices', $requestData, $this->headers($user));
+
+    $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
+    $response->assertJsonValidationErrors('billing_country');
+});
+
 test('admin can retrieve any invoice', function () {
     $response = $this->getJson('/invoices/' . $this->invoice->id, $this->headers($this->admin));
 
@@ -267,15 +296,20 @@ function createsNewInvoiceSuccessfully(TestCase $testCase, string $paymentMethod
         'discount_percentage' => 10
     ]);
 
+    // The city/state must be consistent with the selected country, so derive
+    // them from the same postcode lookup the checkout uses (see
+    // AddressMatchesCountry).
+    $expected = app(\App\Services\Postcode\PostcodeService::class)->lookup('NL', '1011AB');
+
     $requestData = [
         'cart_id' => $cart->id,
         'payment_method' => $paymentMethod,
         'payment_details' => empty($paymentDetails) ? (object)[] : $paymentDetails,
-        'billing_street' => 'address',
-        'billing_city' => 'city',
-        'billing_country' => 'country',
-        'billing_state' => 'state',
-        'billing_postal_code' => '12345'
+        'billing_street' => $expected->street,
+        'billing_city' => $expected->city,
+        'billing_country' => 'NL',
+        'billing_state' => $expected->state,
+        'billing_postal_code' => '1011AB'
     ];
 
     $response = $testCase->postJson('/invoices', $requestData, $testCase->headers($user));

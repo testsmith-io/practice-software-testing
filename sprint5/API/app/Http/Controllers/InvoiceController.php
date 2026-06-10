@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Invoice\PatchInvoice;
 use App\Http\Requests\Invoice\StoreInvoice;
 use App\Jobs\SendCheckoutEmail;
+use App\Rules\AddressMatchesCountry;
 use App\Models\PaymentzCreditCardDetails;
 use App\Services\InvoiceService;
 use Illuminate\Http\Request;
@@ -143,7 +144,7 @@ class InvoiceController extends Controller
             'billing_street' => ['required', 'string', 'max:70'],
             'billing_city' => ['required', 'string', 'max:40'],
             'billing_state' => ['string', 'max:40'],
-            'billing_country' => ['required', 'string', 'max:40'],
+            'billing_country' => ['required', 'string', 'max:40', new AddressMatchesCountry()],
             'billing_postal_code' => ['string', 'max:10'],
             'cart_id' => 'required',
             'guest_email' => ['required', 'email', 'max:255'],
