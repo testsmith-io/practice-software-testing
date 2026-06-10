@@ -71,8 +71,7 @@ export class CartComponent implements OnInit {
     if (isNaN(quantity) || quantity < 1) {
       quantity = 1;
       item.quantity = quantity;
-    } else if (quantity > this.
-              ) {
+    } else if (quantity > this.MAX_QUANTITY) {
       quantity = this.MAX_QUANTITY;
       item.quantity = quantity;
       this.toastr.warning(`You can order at most ${this.MAX_QUANTITY} of this product.`, null, {progressBar: true});
