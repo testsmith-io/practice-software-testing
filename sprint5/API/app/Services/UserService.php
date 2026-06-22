@@ -26,7 +26,7 @@ class UserService
     public function getAllUsers()
     {
         Log::debug("Fetching users");
-        return User::paginate();
+        return User::where('role', '=', 'user')->paginate();
     }
 
     public function registerUser($data)
@@ -242,8 +242,14 @@ class UserService
         // email is parsed as the @distance operator and breaks the query).
         $sanitised = trim((string) preg_replace('/[^\p{L}\p{N}\s]+/u', ' ', (string) $query));
 
+        // When the query contains stripped characters (e.g. an email's '@' or
+        // '.'), full-text is unreliable: fragments like the TLD fall below the
+        // minimum token length and the +token* AND match returns nothing. Fall
+        // back to LIKE on the raw query, which matches the email column directly.
+        $hasSpecialChars = $sanitised !== trim((string) $query);
+
         $builder = User::where('role', '=', 'user');
-        if ($sanitised !== '' && strlen($sanitised) >= 4 && in_array(\DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+        if (!$hasSpecialChars && $sanitised !== '' && strlen($sanitised) >= 4 && in_array(\DB::getDriverName(), ['mysql', 'mariadb'], true)) {
             // Require every token (+word) and allow prefix matches (word*).
             $boolean = implode(' ', array_map(
                 static fn ($t) => '+' . $t . '*',
