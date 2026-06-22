@@ -238,11 +238,20 @@ class UserService
     {
         Log::debug("Searching users with query: {$query}");
 
+        // Strip characters that are special in BOOLEAN MODE (e.g. the '@' in an
+        // email is parsed as the @distance operator and breaks the query).
+        $sanitised = trim((string) preg_replace('/[^\p{L}\p{N}\s]+/u', ' ', (string) $query));
+
         $builder = User::where('role', '=', 'user');
-        if (strlen($query) >= 4 && in_array(\DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+        if ($sanitised !== '' && strlen($sanitised) >= 4 && in_array(\DB::getDriverName(), ['mysql', 'mariadb'], true)) {
+            // Require every token (+word) and allow prefix matches (word*).
+            $boolean = implode(' ', array_map(
+                static fn ($t) => '+' . $t . '*',
+                preg_split('/\s+/', $sanitised, -1, PREG_SPLIT_NO_EMPTY)
+            ));
             $builder->whereRaw(
                 'MATCH(first_name, last_name, email, city) AGAINST(? IN BOOLEAN MODE)',
-                [$query . '*']
+                [$boolean]
             );
         } else {
             $builder->where(function ($q) use ($query) {
