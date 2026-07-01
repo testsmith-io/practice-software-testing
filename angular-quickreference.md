@@ -14,18 +14,18 @@
   - [How Data Flows (Payment Example)](#how-data-flows-payment-example)
   - [How Routing Works](#how-routing-works)
 - [Part 2: How Angular Maps to Each User Story](#part-2-how-angular-maps-to-each-user-story)
-  - [US1003 — "How to Angular" (Onboarding)](#us1003-how-to-angular-onboarding)
-  - [US1007 — New Logo](#us1007-new-logo)
-  - [US1008 — Remove Rentals](#us1008-remove-rentals)
-  - [US2300 — Czech Language Support](#us2300-czech-language-support)
-  - [US2350 — Czech Product Content](#us2350-czech-product-content)
-  - [US3100 — PayU Payment Integration](#us3100-payu-payment-integration)
-  - [US4200 — Delivery Costs](#us4200-delivery-costs)
-  - [US4350 — Version Number Display](#us4350-version-number-display)
-  - [US4500 — Register with Google](#us4500-register-with-google)
-  - [US4510 — Automated Regression Tests (Playwright)](#us4510-automated-regression-tests-playwright)
+  - [US1003 - How to Angular (Onboarding)](#us1003---how-to-angular-onboarding)
+  - [US1007 - New Logo](#us1007---new-logo)
+  - [US1008 - Remove Rentals](#us1008---remove-rentals)
+  - [US2300 - Czech Language Support](#us2300---czech-language-support)
+  - [US2350 - Czech Product Content](#us2350---czech-product-content)
+  - [US3100 - PayU Payment Integration](#us3100---payu-payment-integration)
+  - [US4200 - Delivery Costs](#us4200---delivery-costs)
+  - [US4350 - Version Number Display](#us4350---version-number-display)
+  - [US4500 - Register with Google](#us4500---register-with-google)
+  - [US4510 - Automated Regression Tests (Playwright)](#us4510---automated-regression-tests-playwright)
   - [US9100 — Mock PayU Payment Service](#us9100-mock-payu-payment-service-backend-but-angular-touches-it)
-  - [US9200 — PayU TIP Testing UI](#us9200-payu-tip-testing-ui)
+  - [US9200 - PayU TIP Testing UI](#us9200---payu-tip-testing-ui)
 - [Summary: Dependency Map](#summary-dependency-map)
 
 ---
@@ -132,7 +132,7 @@ Browser hits /checkout
 
 ## Part 2: How Angular Maps to Each User Story
 
-### US1003 — "How to Angular" (Onboarding)
+### US1003 - How to Angular (Onboarding)
 
 **What to learn**: The patterns already in the codebase.
 
@@ -149,7 +149,7 @@ Browser hits /checkout
 
 ---
 
-### US1007 — New Logo
+### US1007 - New Logo
 
 **Angular mechanism**: The logo is an inline SVG in `header.component.html` (lines 20-67).
 
@@ -171,7 +171,7 @@ Browser hits /checkout
 
 ---
 
-### US1008 — Remove Rentals
+### US1008 - Remove Rentals
 
 **Angular mechanism**: Rentals are a route + component inside `ProductsModule`.
 
@@ -192,7 +192,7 @@ Browser hits /checkout
 
 ---
 
-### US2300 — Czech Language Support
+### US2300 - Czech Language Support
 
 **Angular mechanism**: Transloco i18n system.
 
@@ -230,7 +230,7 @@ Browser hits /checkout
 
 ---
 
-### US2350 — Czech Product Content
+### US2350 - Czech Product Content
 
 **Angular mechanism**: Product data comes from the API. The frontend displays whatever the backend returns.
 
@@ -248,7 +248,7 @@ Browser hits /checkout
 
 ---
 
-### US3100 — PayU Payment Integration
+### US3100 - PayU Payment Integration
 
 **Angular mechanism**: Payment method selection in the checkout wizard.
 
@@ -278,7 +278,7 @@ Browser hits /checkout
 
 ---
 
-### US4200 — Delivery Costs
+### US4200 - Delivery Costs
 
 **Angular mechanism**: Delivery cost display in the checkout flow.
 
@@ -302,7 +302,7 @@ Browser hits /checkout
 
 ---
 
-### US4350 — Version Number Display
+### US4350 - Version Number Display
 
 **Angular mechanism**: Footer component.
 
@@ -329,7 +329,7 @@ Browser hits /checkout
 
 ---
 
-### US4500 — Register with Google
+### US4500 - Register with Google
 
 **Angular mechanism**: New OAuth button on the registration page.
 
@@ -359,7 +359,7 @@ Browser hits /checkout
 
 ---
 
-### US4510 — Automated Regression Tests (Playwright)
+### US4510 - Automated Regression Tests (Playwright)
 
 **Not Angular code**, but Angular-aware. Tests use `data-test` selectors.
 
@@ -388,7 +388,7 @@ test('US1008: Rentals link removed', async ({ page }) => {
 
 ---
 
-### US9100 — Mock PayU Payment Service (Backend, but Angular Touches It)
+### US9100 - Mock PayU Payment Service (Backend, but Angular Touches It)
 
 **Angular's role**: The frontend must read `message` or `error` from the mock response.
 
@@ -402,7 +402,7 @@ test('US1008: Rentals link removed', async ({ page }) => {
 
 ---
 
-### US9200 — PayU TIP Testing UI
+### US9200 - PayU TIP Testing UI
 
 **Angular mechanism**: New standalone page with a form.
 
