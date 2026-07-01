@@ -1,14 +1,68 @@
-Now I have the full picture. Here's the document.
+# Angular Deep Dive — ToolShop Codebase & User Story Mapping
+
+**Purpose of this doc**: get anyone — regardless of prior Angular experience — from zero to "I can confidently implement or change a feature" in this codebase. Part 1 explains the concepts using the actual patterns in this repo. Part 2 walks through every backlog user story and tells you exactly what to touch and how.
 
 ---
 
-# Angular Deep Dive — ToolShop Codebase & User Story Mapping
+## Table of Contents
 
-## Part 1: How Angular Works (in this project)
+- [What Is Angular? A Restaurant Analogy](#what-is-angular-a-restaurant-analogy)
+- [Part 1: How Angular Works in This Project](#part-1-how-angular-works-in-this-project)
+  - [The Mental Model](#the-mental-model)
+  - [What This Project Actually Uses](#what-this-project-actually-uses)
+  - [The Actual File Tree](#the-actual-file-tree)
+  - [How Data Flows (Payment Example)](#how-data-flows-payment-example)
+  - [How Routing Works](#how-routing-works)
+- [Part 2: How Angular Maps to Each User Story](#part-2-how-angular-maps-to-each-user-story)
+  - [US1003 — "How to Angular" (Onboarding)](#us1003-how-to-angular-onboarding)
+  - [US1007 — New Logo](#us1007-new-logo)
+  - [US1008 — Remove Rentals](#us1008-remove-rentals)
+  - [US2300 — Czech Language Support](#us2300-czech-language-support)
+  - [US2350 — Czech Product Content](#us2350-czech-product-content)
+  - [US3100 — PayU Payment Integration](#us3100-payu-payment-integration)
+  - [US4200 — Delivery Costs](#us4200-delivery-costs)
+  - [US4350 — Version Number Display](#us4350-version-number-display)
+  - [US4500 — Register with Google](#us4500-register-with-google)
+  - [US4510 — Automated Regression Tests (Playwright)](#us4510-automated-regression-tests-playwright)
+  - [US9100 — Mock PayU Payment Service](#us9100-mock-payu-payment-service-backend-but-angular-touches-it)
+  - [US9200 — PayU TIP Testing UI](#us9200-payu-tip-testing-ui)
+- [Summary: Dependency Map](#summary-dependency-map)
+
+---
+
+## What Is Angular? A Restaurant Analogy
+
+Think of the ToolShop app as a restaurant.
+
+- **A component is a station in the kitchen** (the grill station, the dessert station, the drinks station). Each station has three things bolted together: a **recipe card** (the TypeScript class — the logic and data), a **plating template** (the HTML template — how the dish looks when it goes out), and a **station-specific seasoning kit** (the CSS — styles scoped to that station only, so the dessert station's sugar doesn't end up on the grill's steak).
+
+- **A module is a section of the restaurant** — "Checkout" is the front-of-house payment counter, "Products" is the dining room and menu browsing area, "Auth" is the coat-check/ID-verification desk. Each section bundles together the stations (components) it needs to do its job.
+
+- **Routing is the host stand.** When a guest (the browser) walks in and says "table for checkout," the host (the router) doesn't build a new section on the spot — it walks the guest to the already-organized Checkout section.
+
+- **Lazy loading means a section only opens once someone actually orders from it.** The dessert section doesn't heat its ovens until a guest asks for cake — Angular doesn't download and initialize the Checkout module's code until someone actually navigates to `/checkout`. Faster kitchen, faster app.
+
+- **Services are the shared pantry / central prep kitchen.** Every station needs eggs, flour, or price lists — instead of each station keeping its own stash (and going stale or getting out of sync), they all pull from one shared pantry. `CartService`, `PaymentService`, and `ProductService` are that shared pantry for cart state, payment logic, and product data.
+
+- **Dependency Injection is how a station requests pantry items** — a cook doesn't walk to the supplier's warehouse themselves; they say "send me the pantry" and it appears. That's what `private paymentService = inject(PaymentService)` means: "give me the shared pantry item called PaymentService," no manual setup required.
+
+- **Reactive Forms are the order pad.** A guest's order isn't accepted until it's filled out correctly — no protein selected? The kitchen won't fire the ticket. `Validators.required` and friends are the rules the order pad enforces before a ticket can be submitted.
+
+- **Transloco is the multilingual menu.** The same dish exists on the German menu, the French menu, and the Turkish menu — same underlying recipe, different printed text. `t('header.menu.home')` is "print whichever language's word for 'Home' matches the guest's menu."
+
+- **Data binding is the ticket rail between the kitchen and the front desk.** The order flows from the front (template) to the kitchen (class) — `(click)="logout()"` — and status flows back out to the display — `{{ items }}`, `[disabled]="!valid"`. It's a two-way conveyor belt, not a one-time handoff.
+
+- **`data-test` attributes are table numbers.** They don't affect the food or the guest experience at all — they exist purely so the health inspector (Playwright, the test runner) can walk in and reliably find "table 12" every single time, regardless of how the room gets rearranged.
+
+Keep this picture in your head. Every section below is really just: *which station, which section, and which pantry item do I need to touch?*
+
+---
+
+## Part 1: How Angular Works in This Project
 
 ### The Mental Model
 
-Angular is a **component-based framework**. Think of the UI as a tree of LEGO bricks. Each brick (component) has:
+Angular is a **component-based framework**. Think of the UI as a tree of LEGO bricks (or, per the analogy above, a tree of kitchen stations). Each brick (component) has:
 - A **TypeScript class** — holds data and logic
 - An **HTML template** — the visual rendering
 - **CSS styles** — scoped to this component only
@@ -334,7 +388,7 @@ test('US1008: Rentals link removed', async ({ page }) => {
 
 ---
 
-### US9100 — Mock PayU Payment Service (Backend, but Angular touches it)
+### US9100 — Mock PayU Payment Service (Backend, but Angular Touches It)
 
 **Angular's role**: The frontend must read `message` or `error` from the mock response.
 
