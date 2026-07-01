@@ -19,18 +19,18 @@ Before this doc existed, implementing a story meant reverse-engineering the code
 
 | Story | What It Is | Rough Effort |
 |---|---|---|
-| [US1003](angular-quickreference.md#us1003-how-to-angular-onboarding) | Learn the codebase (prerequisite) | Low — reading/exercise only |
-| [US1007](angular-quickreference.md#us1007-new-logo) | Swap the logo | Low |
-| [US1008](angular-quickreference.md#us1008-remove-rentals) | Remove the Rentals feature | Low |
-| [US4350](angular-quickreference.md#us4350-version-number-display) | Show a version number in the footer | Low |
-| [US2300](angular-quickreference.md#us2300-czech-language-support) | Add Czech language support | Medium — mostly translation volume |
-| [US2350](angular-quickreference.md#us2350-czech-product-content) | Czech product content | Medium — depends on US2300 and a backend decision |
-| [US3100](angular-quickreference.md#us3100-payu-payment-integration) | Add PayU as a payment method | Medium |
+| [US1003](angular-quickreference.md#us1003---how-to-angular-onboarding) | Learn the codebase (prerequisite) | Low — reading/exercise only |
+| [US1007](angular-quickreference.md#us1007---new-logo) | Swap the logo | Low |
+| [US1008](angular-quickreference.md#us1008---remove-rentals) | Remove the Rentals feature | Low |
+| [US4350](angular-quickreference.md#us4350---version-number-display) | Show a version number in the footer | Low |
+| [US2300](angular-quickreference.md#us2300---czech-language-support) | Add Czech language support | Medium — mostly translation volume |
+| [US2350](angular-quickreference.md#us2350---czech-product-content) | Czech product content | Medium — depends on US2300 and a backend decision |
+| [US3100](angular-quickreference.md#us3100---payu-payment-integration) | Add PayU as a payment method | Medium |
 | [US9100](angular-quickreference.md#us9100-mock-payu-payment-service-backend-but-angular-touches-it) | Mock PayU backend service | Low on the Angular side |
-| [US9200](angular-quickreference.md#us9200-payu-tip-testing-ui) | Internal PayU testing page | Medium — new page from scratch |
-| [US4200](angular-quickreference.md#us4200-delivery-costs) | Real delivery cost calculation | Medium-High — new service, new pricing logic |
-| [US4500](angular-quickreference.md#us4500-register-with-google) | "Register with Google" | Medium — depends on backend OAuth support |
-| [US4510](angular-quickreference.md#us4510-automated-regression-tests-playwright) | Automated regression tests | Medium — ongoing, scales with feature count |
+| [US9200](angular-quickreference.md#us9200---payu-tip-testing-ui) | Internal PayU testing page | Medium — new page from scratch |
+| [US4200](angular-quickreference.md#us4200---delivery-costs) | Real delivery cost calculation | Medium-High — new service, new pricing logic |
+| [US4500](angular-quickreference.md#us4500---register-with-google) | "Register with Google" | Medium — depends on backend OAuth support |
+| [US4510](angular-quickreference.md#us4510---automated-regression-tests-playwright) | Automated regression tests | Medium — ongoing, scales with feature count |
 
 ## Key Takeaways
 
