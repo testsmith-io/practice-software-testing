@@ -4,6 +4,7 @@
 import {Component} from '@angular/core';
 import {RouterLink} from "@angular/router";
 import {TranslocoDirective} from "@jsverse/transloco";
+import {appVersion} from "../../environments/version";
 
 @Component({
   selector: 'app-footer',
@@ -15,5 +16,5 @@ import {TranslocoDirective} from "@jsverse/transloco";
   styleUrls: []
 })
 export class FooterComponent {
-
+  readonly version = appVersion;
 }

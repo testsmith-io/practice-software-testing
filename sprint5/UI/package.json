@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
+    "prestart": "node set-version.js",
     "start": "ng serve",
+    "prebuild": "node set-version.js",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --browsers=FirefoxHeadless --watch=false",

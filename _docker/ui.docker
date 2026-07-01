@@ -2,7 +2,7 @@
 FROM node:22-alpine as base
 
 RUN apk update && \
-    apk add bash && \
+    apk add bash git && \
     npm install -g npm@10.9.2
 
 RUN npm install -g @angular/cli@latest
