@@ -1,0 +1,13 @@
+{
+  "name": "ui-coverage-tools",
+  "private": true,
+  "description": "Instruments the built Angular bundles with Istanbul, serves them, collects window.__coverage__ and generates reports. Used by docker-compose.coverage.yml.",
+  "dependencies": {
+    "convert-source-map": "^2.0.0",
+    "istanbul-lib-coverage": "^3.2.2",
+    "istanbul-lib-instrument": "^6.0.3",
+    "istanbul-lib-report": "^3.0.1",
+    "istanbul-lib-source-maps": "^5.0.6",
+    "istanbul-reports": "^3.1.7"
+  }
+}

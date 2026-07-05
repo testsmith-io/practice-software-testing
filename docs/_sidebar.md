@@ -9,6 +9,11 @@
   - [Docker Setup](getting-started.md#docker-setup)
   - [Switching Sprints](getting-started.md#switching-sprints)
   - [Useful Commands](getting-started.md#useful-commands)
+- Code Coverage (optional)
+  - [Quick Start](code-coverage.md#quick-start)
+  - [Reports & Auto-refresh](code-coverage.md#reports)
+  - [How It Works](code-coverage.md#how-it-works)
+  - [Caveats](code-coverage.md#caveats)
 - Features by Version
   - [Sprint 1 - Product Catalog](sprints/sprint1.md)
   - [Sprint 2 - Users & Search](sprints/sprint2.md)

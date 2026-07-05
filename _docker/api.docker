@@ -22,6 +22,17 @@ RUN usermod -u 1000 www-data
 # Stage 2: Development (no code copy)
 FROM base as development
 
+# Coverage extensions — installed but disabled by default; enabled via
+# docker-compose.coverage.yml which mounts an ini override (zz-coverage.ini).
+# Xdebug provides line + branch/path coverage, PCOV stays available as a
+# lightweight line-only alternative.
+RUN apk add --no-cache --virtual .coverage-build-deps autoconf g++ make linux-headers && \
+    pecl install pcov xdebug && \
+    docker-php-ext-enable pcov xdebug && \
+    echo "pcov.enabled=0" >> $PHP_INI_DIR/conf.d/docker-php-ext-pcov.ini && \
+    echo 'xdebug.mode="off"' >> $PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini && \
+    apk del .coverage-build-deps
+
 # Copy configuration
 COPY ./opcache.ini $PHP_INI_DIR/conf.d/
 COPY ./php-ini-overrides.ini $PHP_INI_DIR/conf.d/

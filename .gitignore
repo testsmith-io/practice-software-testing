@@ -1,5 +1,9 @@
 .idea/
 node_modules/
+coverage-output/
+_docker/coverage/ui/package-lock.json
+_docker/coverage/php/tools/vendor/
+_docker/coverage/php/tools/composer.lock
 /test-results/
 /playwright-report/
 /blob-report/

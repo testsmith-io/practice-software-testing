@@ -1,0 +1,49 @@
+# Optional overlay: runtime code coverage while testing manually.
+#
+#   docker compose -f docker-compose.yml -f docker-compose.override.yml \
+#                  -f docker-compose.coverage.yml up -d --build
+#
+# or simply: ./start-app-coverage.sh
+# Generate reports afterwards with: ./coverage-report.sh
+# See _docker/coverage/README.md for details.
+name: pst
+services:
+  laravel-api:
+    volumes:
+      # Enables Xdebug coverage and hooks collect.php into every request.
+      # (rw because coverage-report.sh installs the report tooling into
+      # _docker/coverage/php/tools/vendor on first use.)
+      - ./_docker/coverage/php/coverage.ini:/usr/local/etc/php/conf.d/zz-coverage.ini:ro
+      - ./_docker/coverage/php:/opt/coverage
+      - ./coverage-output/php:/opt/coverage-out
+
+  angular-ui:
+    # Instead of ng serve: build once, instrument the bundles with Istanbul,
+    # serve them statically and collect window.__coverage__ (no live reload).
+    # Also serves the live reports at http://localhost:4200/__reports/ and
+    # regenerates the UI report when new coverage arrives.
+    volumes:
+      - ./_docker/coverage/ui:/coverage-tools
+      - ./coverage-output/ui:/coverage-out
+      - ./coverage-output/php:/coverage-out-php:ro
+    environment:
+      - COVERAGE_REPORT_INTERVAL=${COVERAGE_REPORT_INTERVAL:-30}
+    command: bash /coverage-tools/serve-instrumented.sh
+
+  # Auto-refresh for the PHP report: regenerates it whenever new request
+  # dumps arrive. Same dev image as laravel-api, but with Xdebug left off.
+  coverage-php-watcher:
+    build:
+      context: ./_docker
+      dockerfile: api.docker
+      target: development
+    working_dir: /var/www
+    volumes:
+      - ./${SPRINT}/API:/var/www:cached
+      - ./_docker/coverage/php:/opt/coverage
+      - ./coverage-output/php:/opt/coverage-out
+    environment:
+      - COVERAGE_REPORT_INTERVAL=${COVERAGE_REPORT_INTERVAL:-30}
+    command: sh /opt/coverage/watch.sh
+    depends_on:
+      - laravel-api
