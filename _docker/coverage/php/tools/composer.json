@@ -1,0 +1,9 @@
+{
+    "description": "Standalone tooling to turn the raw Xdebug dumps from collect.php into a detailed HTML report. Installed on demand by coverage-report.sh; deliberately isolated from the application's vendor directory.",
+    "require": {
+        "phpunit/php-code-coverage": "^11.0"
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}
