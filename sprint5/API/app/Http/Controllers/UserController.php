@@ -475,6 +475,34 @@ class UserController extends Controller
      *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
      *      security={{ "apiAuth": {} }}
      * )
+     *
+     * @OA\Query(
+     *      path="/users/search",
+     *      operationId="querySearchUser",
+     *      tags={"User"},
+     *      summary="Retrieve specific users matching the search query (HTTP QUERY)",
+     *      description="HTTP QUERY variant (RFC 10008) of `GET /users/search`: the search criteria are sent as a JSON request body.",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="Search criteria; same keys as the GET query parameters",
+     *          @OA\JsonContent(
+     *              required={"q"},
+     *              @OA\Property(property="q", type="string", description="A query phrase", example="Jane"),
+     *              @OA\Property(property="page", type="string", description="pagenumber", example="1")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              type="array",
+     *              @OA\Items(ref="#/components/schemas/UserResponse")
+     *          )
+     *      ),
+     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
+     *      @OA\Response(response="415", description="Unsupported Media Type: the criteria must be sent as `application/json`"),
+     *      security={{ "apiAuth": {} }}
+     * )
      */
     public function search(Request $request)
     {

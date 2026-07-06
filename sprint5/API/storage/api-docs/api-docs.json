@@ -1,5 +1,5 @@
 {
-    "openapi": "3.0.0",
+    "openapi": "3.2.0",
     "info": {
         "title": "Toolshop API",
         "description": "Toolshop REST API technical description",
@@ -313,6 +313,53 @@
                     },
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
+                    }
+                }
+            },
+            "query": {
+                "tags": [
+                    "Brand"
+                ],
+                "summary": "Retrieve specific brands matching the search query (HTTP QUERY)",
+                "description": "HTTP QUERY variant (RFC 10008) of `GET /brands/search`: the search criteria are sent as a JSON request body.",
+                "operationId": "querySearchBrand",
+                "requestBody": {
+                    "description": "Search criteria; same keys as the GET query parameters",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "q"
+                                ],
+                                "properties": {
+                                    "q": {
+                                        "description": "A query phrase",
+                                        "type": "string",
+                                        "example": "Forge"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/BrandResponse"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type: the criteria must be sent as `application/json`"
                     }
                 }
             }
@@ -663,6 +710,50 @@
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 }
+            },
+            "query": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Retrieve all categories including subcategories (HTTP QUERY)",
+                "description": "HTTP QUERY variant (RFC 10008) of `GET /categories/tree`: the criteria are sent as a JSON request body.",
+                "operationId": "queryCategoriesTree",
+                "requestBody": {
+                    "description": "Criteria; same keys as the GET query parameters",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "by_category_slug": {
+                                        "description": "Parent category slug",
+                                        "type": "string",
+                                        "example": "hand-tools"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/CategoryTreeResponse"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type: the criteria must be sent as `application/json`"
+                    }
+                }
             }
         },
         "/categories": {
@@ -817,6 +908,53 @@
                     },
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
+                    }
+                }
+            },
+            "query": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Retrieve specific categories matching the search query (HTTP QUERY)",
+                "description": "HTTP QUERY variant (RFC 10008) of `GET /categories/search`: the search criteria are sent as a JSON request body.",
+                "operationId": "querySearchCategory",
+                "requestBody": {
+                    "description": "Search criteria; same keys as the GET query parameters",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "q"
+                                ],
+                                "properties": {
+                                    "q": {
+                                        "description": "A query phrase",
+                                        "type": "string",
+                                        "example": "tools"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/CategoryResponse"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type: the criteria must be sent as `application/json`"
                     }
                 }
             }
@@ -1303,13 +1441,13 @@
                                 "properties": {
                                     "status": {
                                         "type": "string",
+                                        "example": "IN_PROGRESS",
                                         "enum": [
                                             "NEW",
                                             "ON_HOLD",
                                             "IN_PROGRESS",
                                             "RESOLVED"
-                                        ],
-                                        "example": "IN_PROGRESS"
+                                        ]
                                     }
                                 },
                                 "type": "object"
@@ -2023,10 +2161,12 @@
                                     },
                                     "status_message": {
                                         "description": "A message describing the status",
-                                        "type": "string",
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
                                         "maxLength": 50,
-                                        "minLength": 5,
-                                        "nullable": true
+                                        "minLength": 5
                                     }
                                 },
                                 "type": "object"
@@ -2145,6 +2285,96 @@
                         "apiAuth": []
                     }
                 ]
+            },
+            "query": {
+                "tags": [
+                    "Invoice"
+                ],
+                "summary": "Retrieve specific invoices matching the search query (HTTP QUERY)",
+                "description": "HTTP QUERY variant (RFC 10008) of `GET /invoices/search`: the search criteria are sent as a JSON request body.",
+                "operationId": "querySearchInvoice",
+                "requestBody": {
+                    "description": "Search criteria; same keys as the GET query parameters",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "q"
+                                ],
+                                "properties": {
+                                    "q": {
+                                        "description": "A query phrase",
+                                        "type": "string",
+                                        "example": "INV-2026"
+                                    },
+                                    "page": {
+                                        "description": "pagenumber",
+                                        "type": "string",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "title": "PaginatedInvoiceResponse",
+                                    "properties": {
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/InvoiceResponse"
+                                            }
+                                        },
+                                        "from": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "last_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "to": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "total": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type: the criteria must be sent as `application/json`"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
             }
         },
         "/payment/check": {
@@ -2183,6 +2413,83 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/postcode-lookup": {
+            "get": {
+                "tags": [
+                    "Postcode"
+                ],
+                "summary": "Lookup address details by postcode",
+                "description": "Returns street, city and state for a given country/postcode/house number. The underlying source is configurable: a local faker driver (default) or an external HTTP service (e.g. a WireMock stub) when POSTCODE_LOOKUP_DRIVER=http.",
+                "operationId": "postcodeLookup",
+                "parameters": [
+                    {
+                        "name": "country",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 40
+                        }
+                    },
+                    {
+                        "name": "postcode",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 10
+                        }
+                    },
+                    {
+                        "name": "house_number",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Address details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "street": {
+                                            "type": "string"
+                                        },
+                                        "house_number": {
+                                            "type": "string"
+                                        },
+                                        "city": {
+                                            "type": "string"
+                                        },
+                                        "state": {
+                                            "type": "string"
+                                        },
+                                        "country": {
+                                            "type": "string"
+                                        },
+                                        "postcode": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
+                    },
+                    "502": {
+                        "description": "Upstream lookup failure"
                     }
                 }
             }
@@ -2340,6 +2647,105 @@
                     },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntityResponse"
+                    }
+                }
+            },
+            "query": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Retrieve all products (HTTP QUERY)",
+                "description": "HTTP QUERY variant (RFC 10008) of `GET /products`: the filter criteria are sent as a JSON request body using the same keys as the GET query parameters.",
+                "operationId": "queryProducts",
+                "requestBody": {
+                    "description": "Filter criteria; same keys as the GET query parameters",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "by_brand": {
+                                        "description": "Id of brand",
+                                        "type": "string",
+                                        "example": "1"
+                                    },
+                                    "by_category": {
+                                        "description": "Id of category",
+                                        "type": "string",
+                                        "example": "1"
+                                    },
+                                    "is_rental": {
+                                        "description": "Indication if we like to retrieve rentals products",
+                                        "type": "string",
+                                        "example": "false"
+                                    },
+                                    "between": {
+                                        "description": "Can be used to define a price range, like: price,10,30",
+                                        "type": "string",
+                                        "example": "price,10,30"
+                                    },
+                                    "sort": {
+                                        "description": "Can be used to sort based on specific column value, like: name,asc OR name,desc OR price,asc OR price,desc",
+                                        "type": "string",
+                                        "example": "price,asc"
+                                    },
+                                    "page": {
+                                        "description": "pagenumber",
+                                        "type": "string",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "title": "PaginatedProductResponse",
+                                    "properties": {
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/ProductResponse"
+                                            }
+                                        },
+                                        "from": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "last_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "to": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "total": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type: the criteria must be sent as `application/json`"
                     }
                 }
             }
@@ -2638,6 +3044,88 @@
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
                     }
                 }
+            },
+            "query": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Retrieve specific products matching the search query (HTTP QUERY)",
+                "description": "HTTP QUERY variant (RFC 10008) of `GET /products/search`: the search criteria are sent as a JSON request body.",
+                "operationId": "querySearchProduct",
+                "requestBody": {
+                    "description": "Search criteria; same keys as the GET query parameters",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "q"
+                                ],
+                                "properties": {
+                                    "q": {
+                                        "description": "A query phrase",
+                                        "type": "string",
+                                        "example": "hammer"
+                                    },
+                                    "page": {
+                                        "description": "pagenumber",
+                                        "type": "string",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "title": "PaginatedProductResponse",
+                                    "properties": {
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/ProductResponse"
+                                            }
+                                        },
+                                        "from": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "last_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "to": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "total": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type: the criteria must be sent as `application/json`"
+                    }
+                }
             }
         },
         "/products/{productId}/specs": {
@@ -2708,9 +3196,11 @@
                                         "example": "1.5"
                                     },
                                     "spec_unit": {
-                                        "type": "string",
-                                        "example": "kg",
-                                        "nullable": true
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "example": "kg"
                                     }
                                 },
                                 "type": "object"
@@ -2818,8 +3308,10 @@
                                         "type": "string"
                                     },
                                     "spec_unit": {
-                                        "type": "string",
-                                        "nullable": true
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ]
                                     }
                                 },
                                 "type": "object"
@@ -4067,6 +4559,66 @@
                         "apiAuth": []
                     }
                 ]
+            },
+            "query": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Retrieve specific users matching the search query (HTTP QUERY)",
+                "description": "HTTP QUERY variant (RFC 10008) of `GET /users/search`: the search criteria are sent as a JSON request body.",
+                "operationId": "querySearchUser",
+                "requestBody": {
+                    "description": "Search criteria; same keys as the GET query parameters",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "q"
+                                ],
+                                "properties": {
+                                    "q": {
+                                        "description": "A query phrase",
+                                        "type": "string",
+                                        "example": "Jane"
+                                    },
+                                    "page": {
+                                        "description": "pagenumber",
+                                        "type": "string",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/UserResponse"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type: the criteria must be sent as `application/json`"
+                    }
+                },
+                "security": [
+                    {
+                        "apiAuth": []
+                    }
+                ]
             }
         }
     },
@@ -4137,8 +4689,10 @@
                         "example": "new-category"
                     },
                     "parent_id": {
-                        "type": "string",
-                        "nullable": true
+                        "type": [
+                            "string",
+                            "null"
+                        ]
                     }
                 },
                 "type": "object"
@@ -4150,8 +4704,10 @@
                         "type": "string"
                     },
                     "parent_id": {
-                        "type": "string",
-                        "nullable": true
+                        "type": [
+                            "string",
+                            "null"
+                        ]
                     },
                     "name": {
                         "type": "string",
@@ -4177,8 +4733,10 @@
                         "type": "string"
                     },
                     "parent_id": {
-                        "type": "string",
-                        "nullable": true
+                        "type": [
+                            "string",
+                            "null"
+                        ]
                     },
                     "name": {
                         "type": "string",
@@ -4230,26 +4788,26 @@
                     "name": {
                         "description": "Sender name",
                         "type": "string",
-                        "maxLength": 120,
-                        "example": "John Doe"
+                        "example": "John Doe",
+                        "maxLength": 120
                     },
                     "email": {
                         "description": "Required when not authenticated",
                         "type": "string",
-                        "maxLength": 256,
-                        "example": "john@doe.example"
+                        "example": "john@doe.example",
+                        "maxLength": 256
                     },
                     "subject": {
                         "description": "",
                         "type": "string",
-                        "maxLength": 120,
-                        "example": "website"
+                        "example": "website",
+                        "maxLength": 120
                     },
                     "message": {
                         "description": "",
                         "type": "string",
-                        "maxLength": 250,
-                        "example": "Something is wrong with the website."
+                        "example": "Something is wrong with the website.",
+                        "maxLength": 250
                     }
                 },
                 "type": "object"
@@ -4584,20 +5142,16 @@
             "CreditCardDetails": {
                 "properties": {
                     "credit_card_number": {
-                        "type": "string",
-                        "nullable": false
+                        "type": "string"
                     },
                     "expiration_date": {
-                        "type": "string",
-                        "nullable": false
+                        "type": "string"
                     },
                     "cvv": {
-                        "type": "string",
-                        "nullable": false
+                        "type": "string"
                     },
                     "card_holder_name": {
-                        "type": "string",
-                        "nullable": false
+                        "type": "string"
                     }
                 },
                 "type": "object"
@@ -4605,12 +5159,10 @@
             "GiftCardDetails": {
                 "properties": {
                     "gift_card_number": {
-                        "type": "string",
-                        "nullable": false
+                        "type": "string"
                     },
                     "validation_code": {
-                        "type": "string",
-                        "nullable": false
+                        "type": "string"
                     }
                 },
                 "type": "object"
@@ -4622,16 +5174,13 @@
             "BankTransferDetails": {
                 "properties": {
                     "bank_name": {
-                        "type": "string",
-                        "nullable": false
+                        "type": "string"
                     },
                     "account_name": {
-                        "type": "string",
-                        "nullable": false
+                        "type": "string"
                     },
                     "account_number": {
-                        "type": "string",
-                        "nullable": false
+                        "type": "string"
                     }
                 },
                 "type": "object"
@@ -4639,8 +5188,7 @@
             "BuyNowPayLaterDetails": {
                 "properties": {
                     "monthly_installments": {
-                        "type": "string",
-                        "nullable": false
+                        "type": "string"
                     }
                 },
                 "type": "object"
@@ -4883,9 +5431,11 @@
                         "example": "1.5"
                     },
                     "spec_unit": {
-                        "type": "string",
-                        "example": "kg",
-                        "nullable": true
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "example": "kg"
                     }
                 },
                 "type": "object"
@@ -4906,8 +5456,10 @@
                         "type": "string"
                     },
                     "spec_unit": {
-                        "type": "string",
-                        "nullable": true
+                        "type": [
+                            "string",
+                            "null"
+                        ]
                     }
                 },
                 "type": "object"
@@ -4923,48 +5475,53 @@
                 "properties": {
                     "first_name": {
                         "type": "string",
-                        "maxLength": 40,
-                        "example": "John"
+                        "example": "John",
+                        "maxLength": 40
                     },
                     "last_name": {
                         "type": "string",
-                        "maxLength": 20,
-                        "example": "Doe"
+                        "example": "Doe",
+                        "maxLength": 20
                     },
                     "address": {
                         "properties": {
                             "street": {
                                 "type": "string",
-                                "maxLength": 70,
-                                "example": "Street 1"
+                                "example": "Street 1",
+                                "maxLength": 70
+                            },
+                            "house_number": {
+                                "type": "string",
+                                "example": "12",
+                                "maxLength": 10
                             },
                             "city": {
                                 "type": "string",
-                                "maxLength": 40,
-                                "example": "City"
+                                "example": "City",
+                                "maxLength": 40
                             },
                             "state": {
                                 "type": "string",
-                                "maxLength": 40,
-                                "example": "State"
+                                "example": "State",
+                                "maxLength": 40
                             },
                             "country": {
                                 "type": "string",
-                                "maxLength": 40,
-                                "example": "Country"
+                                "example": "Country",
+                                "maxLength": 40
                             },
                             "postal_code": {
                                 "type": "string",
-                                "maxLength": 10,
-                                "example": "1234AA"
+                                "example": "1234AA",
+                                "maxLength": 10
                             }
                         },
                         "type": "object"
                     },
                     "phone": {
                         "type": "string",
-                        "maxLength": 24,
-                        "example": "0987654321"
+                        "example": "0987654321",
+                        "maxLength": 24
                     },
                     "dob": {
                         "description": "Must be a valid date between 18 and 75 years ago",
@@ -4976,14 +5533,14 @@
                         "description": "Must include uppercase, lowercase, number, and symbol",
                         "type": "string",
                         "format": "password",
-                        "minLength": 8,
-                        "example": "SuperSecure@123"
+                        "example": "SuperSecure@123",
+                        "minLength": 8
                     },
                     "email": {
                         "type": "string",
                         "format": "email",
-                        "maxLength": 256,
-                        "example": "john@doe.example"
+                        "example": "john@doe.example",
+                        "maxLength": 256
                     }
                 },
                 "type": "object"
@@ -5005,31 +5562,44 @@
                                 "type": "string",
                                 "example": "Street 1"
                             },
+                            "house_number": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "example": "12"
+                            },
                             "city": {
                                 "type": "string",
                                 "example": "City"
                             },
                             "state": {
-                                "type": "string",
-                                "example": "State",
-                                "nullable": true
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "example": "State"
                             },
                             "country": {
                                 "type": "string",
                                 "example": "Country"
                             },
                             "postal_code": {
-                                "type": "string",
-                                "example": "1234AA",
-                                "nullable": true
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "example": "1234AA"
                             }
                         },
                         "type": "object"
                     },
                     "phone": {
-                        "type": "string",
-                        "example": "0987654321",
-                        "nullable": true
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "example": "0987654321"
                     },
                     "dob": {
                         "type": "string",
@@ -5043,8 +5613,10 @@
                         "type": "string"
                     },
                     "provider": {
-                        "type": "string",
-                        "nullable": true
+                        "type": [
+                            "string",
+                            "null"
+                        ]
                     },
                     "totp_enabled": {
                         "type": "boolean"
@@ -5053,8 +5625,10 @@
                         "type": "boolean"
                     },
                     "failed_login_attempts": {
-                        "type": "integer",
-                        "nullable": true
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
                     },
                     "created_at": {
                         "type": "string",
@@ -5234,6 +5808,10 @@
         {
             "name": "Payment",
             "description": "Payment"
+        },
+        {
+            "name": "Postcode",
+            "description": "Postcode"
         },
         {
             "name": "Product",

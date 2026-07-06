@@ -19,10 +19,10 @@ export class InvoiceService {
   }
 
   searchInvoices(page: number, query: string): Observable<any> {
-    const params = new HttpParams()
-      .set('page', page.toString())
-      .set('q', query);
-    return this.httpClient.get(`${this.apiUrl}/search`, { params });
+    return this.httpClient.request('QUERY', `${this.apiUrl}/search`, {
+      body: { page: page.toString(), q: query },
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   getNewInvoices(page: number): Observable<any> {

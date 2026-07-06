@@ -94,6 +94,45 @@ class ProductController extends Controller
      *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
      *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
      * )
+     *
+     * @OA\Query(
+     *      path="/products",
+     *      operationId="queryProducts",
+     *      tags={"Product"},
+     *      summary="Retrieve all products (HTTP QUERY)",
+     *      description="HTTP QUERY variant (RFC 10008) of `GET /products`: the filter criteria are sent as a JSON request body using the same keys as the GET query parameters.",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="Filter criteria; same keys as the GET query parameters",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="by_brand", type="string", description="Id of brand", example="1"),
+     *              @OA\Property(property="by_category", type="string", description="Id of category", example="1"),
+     *              @OA\Property(property="is_rental", type="string", description="Indication if we like to retrieve rentals products", example="false"),
+     *              @OA\Property(property="between", type="string", description="Can be used to define a price range, like: price,10,30", example="price,10,30"),
+     *              @OA\Property(property="sort", type="string", description="Can be used to sort based on specific column value, like: name,asc OR name,desc OR price,asc OR price,desc", example="price,asc"),
+     *              @OA\Property(property="page", type="string", description="pagenumber", example="1")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              title="PaginatedProductResponse",
+     *              @OA\Property(property="current_page", type="integer", example=1),
+     *              @OA\Property(
+     *                  property="data",
+     *                  type="array",
+     *                  @OA\Items(ref="#/components/schemas/ProductResponse")
+     *              ),
+     *              @OA\Property(property="from", type="integer", example=1),
+     *              @OA\Property(property="last_page", type="integer", example=1),
+     *              @OA\Property(property="per_page", type="integer", example=1),
+     *              @OA\Property(property="to", type="integer", example=1),
+     *              @OA\Property(property="total", type="integer", example=1),
+     *          )
+     *      ),
+     *      @OA\Response(response="415", description="Unsupported Media Type: the criteria must be sent as `application/json`"),
+     * )
      */
     public function index(Request $request)
     {
@@ -233,6 +272,42 @@ class ProductController extends Controller
      *      ),
      *      @OA\Response(response="404", ref="#/components/responses/ItemNotFoundResponse"),
      *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     * )
+     *
+     * @OA\Query(
+     *      path="/products/search",
+     *      operationId="querySearchProduct",
+     *      tags={"Product"},
+     *      summary="Retrieve specific products matching the search query (HTTP QUERY)",
+     *      description="HTTP QUERY variant (RFC 10008) of `GET /products/search`: the search criteria are sent as a JSON request body.",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="Search criteria; same keys as the GET query parameters",
+     *          @OA\JsonContent(
+     *              required={"q"},
+     *              @OA\Property(property="q", type="string", description="A query phrase", example="hammer"),
+     *              @OA\Property(property="page", type="string", description="pagenumber", example="1")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              title="PaginatedProductResponse",
+     *              @OA\Property(property="current_page", type="integer", example=1),
+     *              @OA\Property(
+     *                  property="data",
+     *                  type="array",
+     *                  @OA\Items(ref="#/components/schemas/ProductResponse")
+     *              ),
+     *              @OA\Property(property="from", type="integer", example=1),
+     *              @OA\Property(property="last_page", type="integer", example=1),
+     *              @OA\Property(property="per_page", type="integer", example=1),
+     *              @OA\Property(property="to", type="integer", example=1),
+     *              @OA\Property(property="total", type="integer", example=1),
+     *          )
+     *      ),
+     *      @OA\Response(response="415", description="Unsupported Media Type: the criteria must be sent as `application/json`"),
      * )
      */
     public function search(Request $request)

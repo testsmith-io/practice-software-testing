@@ -58,6 +58,23 @@ The complete production version with shopping cart, admin dashboard, social auth
 | POST   | `/totp/verify`      | Verify TOTP code         |
 | POST   | `/totp/login/totp`  | Login with TOTP          |
 
+### HTTP QUERY Method
+
+All search/filter endpoints also accept the [HTTP QUERY method](../http-query-method.md)
+(RFC 10008): a safe, idempotent request whose JSON body carries the criteria
+that would otherwise go in the URL query string. The GET variants keep working
+unchanged.
+
+| Method | Endpoint             | Description                            |
+|--------|----------------------|----------------------------------------|
+| QUERY  | `/products`          | Filter products via JSON body criteria |
+| QUERY  | `/products/search`   | Search products                        |
+| QUERY  | `/brands/search`     | Search brands                          |
+| QUERY  | `/categories/search` | Search categories                      |
+| QUERY  | `/categories/tree`   | Category tree scoped by slug           |
+| QUERY  | `/invoices/search`   | Search invoices (authenticated)        |
+| QUERY  | `/users/search`      | Search users (admin)                   |
+
 ## UI Routes
 
 | Path        | Module          | Description                |
