@@ -60,33 +60,39 @@ test('query without a JSON content type is rejected with 415', function () {
 });
 
 test('query product search by term in the body', function () {
+    // Explicit multi-word name: MariaDB full-text search requires every token
+    // to be indexed, and faker names can contain tokens below the minimum
+    // token size (e.g. "Mr."), which return no results there.
     $product = $this->addProduct();
+    $product->update(['name' => 'Cordless Screwdriver']);
 
-    $response = $this->json('QUERY', '/products/search', ['q' => $product->name]);
+    $response = $this->json('QUERY', '/products/search', ['q' => 'Cordless Screwdriver']);
 
     $response
         ->assertStatus(ResponseAlias::HTTP_OK)
-        ->assertJsonPath('data.0.name', $product->name);
+        ->assertJsonPath('data.0.name', 'Cordless Screwdriver');
 });
 
 test('query brand search by term in the body', function () {
     $product = $this->addProduct();
+    $product->brand->update(['name' => 'Forgecraft']);
 
-    $response = $this->json('QUERY', '/brands/search', ['q' => $product->brand->name]);
+    $response = $this->json('QUERY', '/brands/search', ['q' => 'Forgecraft']);
 
     $response
         ->assertStatus(ResponseAlias::HTTP_OK)
-        ->assertJsonFragment(['name' => $product->brand->name]);
+        ->assertJsonFragment(['name' => 'Forgecraft']);
 });
 
 test('query category search by term in the body', function () {
     $product = $this->addProduct();
+    $product->category->update(['name' => 'Workbenches']);
 
-    $response = $this->json('QUERY', '/categories/search', ['q' => $product->category->name]);
+    $response = $this->json('QUERY', '/categories/search', ['q' => 'Workbenches']);
 
     $response
         ->assertStatus(ResponseAlias::HTTP_OK)
-        ->assertJsonFragment(['name' => $product->category->name]);
+        ->assertJsonFragment(['name' => 'Workbenches']);
 });
 
 test('query categories tree scoped by slug in the body', function () {
@@ -103,13 +109,13 @@ test('query categories tree scoped by slug in the body', function () {
 
 test('admin can query user search by term in the body', function () {
     $admin = User::factory()->create(['role' => 'admin']);
-    $customer = User::factory()->create(['role' => 'user']);
+    $customer = User::factory()->create(['role' => 'user', 'first_name' => 'Serenity']);
 
-    $response = $this->json('QUERY', '/users/search', ['q' => $customer->first_name], $this->headers($admin));
+    $response = $this->json('QUERY', '/users/search', ['q' => 'Serenity'], $this->headers($admin));
 
     $response
         ->assertStatus(ResponseAlias::HTTP_OK)
-        ->assertJsonFragment(['first_name' => $customer->first_name]);
+        ->assertJsonFragment(['first_name' => 'Serenity']);
 });
 
 test('admin can query invoice search by term in the body', function () {
