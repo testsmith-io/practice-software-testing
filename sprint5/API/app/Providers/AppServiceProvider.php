@@ -4,22 +4,16 @@
 
 namespace App\Providers;
 
+use App\Swagger\DocBlockGeneratorFactory;
 use Illuminate\Support\ServiceProvider;
-use OpenApi\Analysers\AttributeAnnotationFactory;
-use OpenApi\Analysers\DocBlockAnnotationFactory;
-use OpenApi\Analysers\ReflectionAnalyser;
+use L5Swagger\GeneratorFactory;
 
 class AppServiceProvider extends ServiceProvider
 {
-    public function boot(): void
+    public function register(): void
     {
-        // l5-swagger 11 defaults to an attributes-only analyser, but the API
-        // is documented with @OA docblock annotations. The analyser must be
-        // set here rather than in config/l5-swagger.php because the deploy
-        // runs `config:cache`, which cannot serialize objects.
-        config(['l5-swagger.defaults.scanOptions.analyser' => new ReflectionAnalyser([
-            new DocBlockAnnotationFactory(),
-            new AttributeAnnotationFactory(),
-        ])]);
+        // Swap in a factory that enables docblock @OA annotations; see
+        // DocBlockGeneratorFactory for why this is not done in config.
+        $this->app->bind(GeneratorFactory::class, DocBlockGeneratorFactory::class);
     }
 }
