@@ -2,7 +2,7 @@
 // See LICENSE for details.
 
 import {inject, Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError, shareReplay} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
@@ -18,10 +18,10 @@ export class CategoryService {
   private categories$: Observable<Category[]> | null = null;
 
   searchCategories(query: string): Observable<any> {
-    const params = new HttpParams().set('q', query);
-
-    return this.httpClient.get<any>(`${this.apiURL}/search`, { params })
-      .pipe(catchError(this.handleError));
+    return this.httpClient.request<any>('QUERY', `${this.apiURL}/search`, {
+      body: { q: query },
+      headers: { 'Content-Type': 'application/json' },
+    }).pipe(catchError(this.handleError));
   }
 
   getCategoriesTree(): Observable<Category[]> {
@@ -36,10 +36,10 @@ export class CategoryService {
   }
 
   getSubCategoriesTreeBySlug(slug: string): Observable<Category[]> {
-    const params = new HttpParams().set('by_category_slug', slug);
-
-    return this.httpClient.get<Category[]>(`${this.apiURL}/tree`, { params })
-      .pipe(catchError(this.handleError));
+    return this.httpClient.request<Category[]>('QUERY', `${this.apiURL}/tree`, {
+      body: { by_category_slug: slug },
+      headers: { 'Content-Type': 'application/json' },
+    }).pipe(catchError(this.handleError));
   }
 
   getCategories(): Observable<Category[]> {

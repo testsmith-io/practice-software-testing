@@ -3,6 +3,7 @@
 - [Architecture](architecture.md)
 - [Postcode Lookup + Local Mocks](postcode-lookup.md)
 - [Gift Card Validation](gift-card-validation.md)
+- [HTTP QUERY Method](http-query-method.md)
 - Getting Started
   - [Quick Start](getting-started.md#quick-start)
   - [Prerequisites](getting-started.md#prerequisites)

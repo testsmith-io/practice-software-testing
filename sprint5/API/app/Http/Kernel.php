@@ -6,6 +6,7 @@ namespace App\Http;
 
 use App\Http\Middleware\AssignGuard;
 use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\HandleQueryMethod;
 use App\Http\Middleware\PaginateMiddleware;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -62,5 +63,6 @@ class Kernel extends HttpKernel
     protected $middlewareAliases = [
         'cache.headers' => SetCacheHeaders::class,
         'throttle' => ThrottleRequests::class,
+        'query.body' => HandleQueryMethod::class,
     ];
 }

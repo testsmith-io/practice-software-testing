@@ -58,6 +58,7 @@ Route::controller(BrandController::class)->prefix('brands')->group(function () {
         Route::get('/search', 'search');
         Route::get('/{id}', 'show');
     });
+    Route::match(['QUERY'], '/search', 'search')->middleware('query.body');
     Route::post('', 'store');
     Route::put('/{id}', 'update');
     Route::patch('/{id}', 'patch');
@@ -79,6 +80,10 @@ Route::controller(CategoryController::class)->prefix('categories')->group(functi
         Route::get('', 'index');
         Route::get('/search', 'search');
         Route::get('/tree/{id}', 'show');
+    });
+    Route::middleware('query.body')->group(function () {
+        Route::match(['QUERY'], '/tree', 'indexTree');
+        Route::match(['QUERY'], '/search', 'search');
     });
     Route::post('', 'store');
     Route::patch('/{id}', 'patch');
@@ -113,6 +118,7 @@ Route::controller(ImageController::class)->prefix('images')->group(function () {
 Route::controller(InvoiceController::class)->prefix('invoices')->group(function () {
     Route::get('', 'index');
     Route::get('/search', 'search');
+    Route::match(['QUERY'], '/search', 'search')->middleware('query.body');
     Route::get('/{id}', 'show');
     Route::get('/{id}/download-pdf', 'downloadPDF');
     Route::get('/{id}/download-pdf-status', 'downloadPDFStatus');
@@ -133,6 +139,10 @@ Route::controller(ProductController::class)->prefix('products')->group(function 
         Route::get('/search', 'search');
         Route::get('/{id}', 'show');
         Route::get('/{id}/related', 'showRelated');
+    });
+    Route::middleware('query.body')->group(function () {
+        Route::match(['QUERY'], '', 'index');
+        Route::match(['QUERY'], '/search', 'search');
     });
     Route::post('', 'store');
     Route::put('/{id}', 'update');
@@ -168,6 +178,7 @@ Route::controller(UserController::class)->prefix('users')->group(function () {
     Route::post('/register', 'store');
     Route::get('/logout', 'logout');
     Route::get('/search', 'search');
+    Route::match(['QUERY'], '/search', 'search')->middleware('query.body');
     Route::get('/refresh', 'refresh');
     Route::get('/me', 'me');
     Route::put('{id}', 'update');

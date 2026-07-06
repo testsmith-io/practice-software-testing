@@ -2,7 +2,7 @@
 // See LICENSE for details.
 
 import {inject, Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError, shareReplay} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
@@ -17,9 +17,10 @@ export class BrandService {
   private brands$: Observable<Brand[]> | null = null;
 
   searchBrands(query: string): Observable<Brand[]> {
-    const params = new HttpParams().set('q', query);
-    return this.httpClient.get<Brand[]>(`${this.apiURL}/search`, { params })
-      .pipe(catchError(this.handleError));
+    return this.httpClient.request<Brand[]>('QUERY', `${this.apiURL}/search`, {
+      body: { q: query },
+      headers: { 'Content-Type': 'application/json' },
+    }).pipe(catchError(this.handleError));
   }
 
   getBrands(): Observable<Brand[]> {

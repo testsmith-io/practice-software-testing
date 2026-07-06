@@ -49,6 +49,30 @@ class CategoryController extends Controller
      *      @OA\Response(response="404", ref="#/components/responses/ResourceNotFoundResponse"),
      *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
      * )
+     *
+     * @OA\Query(
+     *      path="/categories/tree",
+     *      operationId="queryCategoriesTree",
+     *      tags={"Category"},
+     *      summary="Retrieve all categories including subcategories (HTTP QUERY)",
+     *      description="HTTP QUERY variant (RFC 10008) of `GET /categories/tree`: the criteria are sent as a JSON request body.",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="Criteria; same keys as the GET query parameters",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="by_category_slug", type="string", description="Parent category slug", example="hand-tools")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              type="array",
+     *              @OA\Items(ref="#/components/schemas/CategoryTreeResponse")
+     *          )
+     *      ),
+     *      @OA\Response(response="415", description="Unsupported Media Type: the criteria must be sent as `application/json`"),
+     * )
      */
     public function indexTree(Request $request)
     {
@@ -166,6 +190,31 @@ class CategoryController extends Controller
      *      ),
      *      @OA\Response(response="404", ref="#/components/responses/ResourceNotFoundResponse"),
      *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
+     * )
+     *
+     * @OA\Query(
+     *      path="/categories/search",
+     *      operationId="querySearchCategory",
+     *      tags={"Category"},
+     *      summary="Retrieve specific categories matching the search query (HTTP QUERY)",
+     *      description="HTTP QUERY variant (RFC 10008) of `GET /categories/search`: the search criteria are sent as a JSON request body.",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="Search criteria; same keys as the GET query parameters",
+     *          @OA\JsonContent(
+     *              required={"q"},
+     *              @OA\Property(property="q", type="string", description="A query phrase", example="tools")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              type="array",
+     *              @OA\Items(ref="#/components/schemas/CategoryResponse")
+     *          )
+     *      ),
+     *      @OA\Response(response="415", description="Unsupported Media Type: the criteria must be sent as `application/json`"),
      * )
      */
     public function search(Request $request)

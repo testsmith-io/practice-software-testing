@@ -21,11 +21,10 @@ export class UserService {
   }
 
   searchUsers(page: number, query: string): Observable<any> {
-    const params = new HttpParams()
-      .set('page', page.toString())
-      .set('q', query);
-
-    return this.httpClient.get(`${this.apiURL}/users/search`, { params });
+    return this.httpClient.request('QUERY', `${this.apiURL}/users/search`, {
+      body: { page: page.toString(), q: query },
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   getById(id: string): Observable<User> {

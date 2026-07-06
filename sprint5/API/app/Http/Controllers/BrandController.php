@@ -132,6 +132,31 @@ class BrandController extends Controller
      *       @OA\Response(response="404", ref="#/components/responses/ResourceNotFoundResponse"),
      *       @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
      * )
+     *
+     * @OA\Query(
+     *      path="/brands/search",
+     *      operationId="querySearchBrand",
+     *      tags={"Brand"},
+     *      summary="Retrieve specific brands matching the search query (HTTP QUERY)",
+     *      description="HTTP QUERY variant (RFC 10008) of `GET /brands/search`: the search criteria are sent as a JSON request body.",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="Search criteria; same keys as the GET query parameters",
+     *          @OA\JsonContent(
+     *              required={"q"},
+     *              @OA\Property(property="q", type="string", description="A query phrase", example="Forge")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              type="array",
+     *              @OA\Items(ref="#/components/schemas/BrandResponse")
+     *          )
+     *       ),
+     *      @OA\Response(response="415", description="Unsupported Media Type: the criteria must be sent as `application/json`"),
+     * )
      */
     public function search(Request $request)
     {

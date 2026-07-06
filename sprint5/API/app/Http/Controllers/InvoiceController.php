@@ -372,6 +372,44 @@ class InvoiceController extends Controller
      *      @OA\Response(response="405", ref="#/components/responses/MethodNotAllowedResponse"),
      *      security={{ "apiAuth": {} }}
      * )
+     *
+     * @OA\Query(
+     *      path="/invoices/search",
+     *      operationId="querySearchInvoice",
+     *      tags={"Invoice"},
+     *      summary="Retrieve specific invoices matching the search query (HTTP QUERY)",
+     *      description="HTTP QUERY variant (RFC 10008) of `GET /invoices/search`: the search criteria are sent as a JSON request body.",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="Search criteria; same keys as the GET query parameters",
+     *          @OA\JsonContent(
+     *              required={"q"},
+     *              @OA\Property(property="q", type="string", description="A query phrase", example="INV-2026"),
+     *              @OA\Property(property="page", type="string", description="pagenumber", example="1")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              title="PaginatedInvoiceResponse",
+     *              @OA\Property(property="current_page", type="integer", example=1),
+     *              @OA\Property(
+     *                  property="data",
+     *                  type="array",
+     *                  @OA\Items(ref="#/components/schemas/InvoiceResponse")
+     *              ),
+     *              @OA\Property(property="from", type="integer", example=1),
+     *              @OA\Property(property="last_page", type="integer", example=1),
+     *              @OA\Property(property="per_page", type="integer", example=1),
+     *              @OA\Property(property="to", type="integer", example=1),
+     *              @OA\Property(property="total", type="integer", example=1),
+     *          )
+     *      ),
+     *      @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
+     *      @OA\Response(response="415", description="Unsupported Media Type: the criteria must be sent as `application/json`"),
+     *      security={{ "apiAuth": {} }}
+     * )
      */
     public function search(Request $request)
     {
