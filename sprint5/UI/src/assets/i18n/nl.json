@@ -189,7 +189,7 @@
       "placeholder": "Uw postcode",
       "errors": {
         "required": "Postcode is vereist",
-        "format": "Alleen 5 cijfers zijn toegestaan."
+        "format": "Voer een geldige postcode in voor het geselecteerde land."
       }
     },
     "city": {

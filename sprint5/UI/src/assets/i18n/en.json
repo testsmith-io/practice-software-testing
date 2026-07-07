@@ -182,7 +182,7 @@
       "placeholder": "Your Postcode",
       "errors": {
         "required": "Postcode is required",
-        "format": "Only 5 numbers are allowed."
+        "format": "Please enter a valid postal code for the selected country."
       }
     },
     "city": {
