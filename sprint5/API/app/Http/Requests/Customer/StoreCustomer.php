@@ -8,6 +8,7 @@ use App\Http\Requests\BaseFormRequest;
 use App\Rules\SubscriptSuperscriptRule;
 use Carbon\Carbon;
 use Illuminate\Validation\Rules\Password;
+use App\Services\Postcode\PostcodeFormat;
 
 class StoreCustomer extends BaseFormRequest
 {
@@ -53,7 +54,14 @@ class StoreCustomer extends BaseFormRequest
             'address.city' => ['string', 'max:40', new SubscriptSuperscriptRule()],
             'address.state' => ['string', 'max:40', new SubscriptSuperscriptRule()],
             'address.country' => ['string', 'max:40', new SubscriptSuperscriptRule()],
-            'address.postal_code' => ['string', 'max:10', new SubscriptSuperscriptRule()],
+            'address.postal_code' => ['string', 'max:10', new SubscriptSuperscriptRule(),
+                function ($attribute, $value, $fail){
+                    $country = $this->input('address.country');
+
+                    if ($country && $value && !PostcodeFormat::matches($country, $value)){
+                        $fail('The postal code format is not valid for the selected country.');
+                    }
+                }],
             'phone' => ['string', 'max:24', new SubscriptSuperscriptRule()],
             'dob' => ['date', 'date_format:Y-m-d', "before:{$before}", "after:{$after}"],
             'email' => ['required', 'unique:users,email', 'string', 'max:256', new SubscriptSuperscriptRule()],
