@@ -22,7 +22,8 @@ services:
       - DISABLE_LOGGING=${DISABLE_LOGGING}
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:fpm-alpine
+    image: phpmyadmin:latest
+    platform: linux/amd64
     links:
       - mariadb:db
     environment:
