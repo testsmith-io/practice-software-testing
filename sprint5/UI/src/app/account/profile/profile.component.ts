@@ -28,6 +28,9 @@ import {of} from "rxjs";
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  // Phone may contain digits, spaces and ( ) + - only; mirrors the API rule.
+  static readonly PHONE_PATTERN = /^\+?[0-9\s().-]{7,24}$/;
+
   private readonly customerAccountService = inject(CustomerAccountService);
   private readonly auth = inject(CustomerAccountService);
   private readonly http = inject(HttpClient);
@@ -72,7 +75,7 @@ export class ProfileComponent implements OnInit {
       first_name: new FormControl('', [Validators.required]),
       last_name: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
-      phone: new FormControl('', [Validators.required]),
+      phone: new FormControl('', [Validators.required, Validators.pattern(ProfileComponent.PHONE_PATTERN)]),
       dob: new FormControl('', [Validators.required]),
       address: new FormGroup({
         street: new FormControl('', [Validators.required]),
@@ -110,6 +113,20 @@ export class ProfileComponent implements OnInit {
   }
 
   updateProfile() {
+    // Clear any state from a previous submission so a stale success and a new
+    // error (or vice versa) can never be shown at the same time.
+    this.isProfileUpdated = false;
+    this.profileError = '';
+    this.hideProfileAlert = false;
+
+    if (this.profileForm.invalid) {
+      this.profileForm.markAllAsTouched();
+      this.profileError = this.f['phone'].errors?.['pattern']
+        ? 'Please enter a valid phone number (digits, spaces and ( ) + - only).'
+        : 'Please correct the highlighted fields before saving.';
+      return;
+    }
+
     this.customerAccountService.update(this.profile.id, this.profileForm.value).subscribe({
       next: (res) => {
         if (res.success) {
@@ -118,17 +135,34 @@ export class ProfileComponent implements OnInit {
         }
       }, error: (err) => {
         this.hideProfileAlert = false;
-        if (err && typeof err === 'object') {
-          const errorMessages = [];
-          for (const field in err) {
-            if (err.hasOwnProperty(field)) {
-              errorMessages.push(...err[field]);
-            }
-          }
-          this.profileError = errorMessages.join('\n\r');
-        }
+        this.profileError = this.formatError(err);
       }
     });
+  }
+
+  /**
+   * Flatten an API error into a readable message. Laravel validation errors
+   * arrive as { field: string[] }, but auth/other failures arrive as a plain
+   * { message: string } or a string. Only spread arrays — spreading a string
+   * would push it one character at a time and render vertically.
+   */
+  private formatError(err: any): string {
+    if (!err) {
+      return 'An unexpected error occurred.';
+    }
+    if (typeof err === 'string') {
+      return err;
+    }
+    const messages: string[] = [];
+    for (const field of Object.keys(err)) {
+      const value = err[field];
+      if (Array.isArray(value)) {
+        messages.push(...value.filter((v) => typeof v === 'string'));
+      } else if (typeof value === 'string') {
+        messages.push(value);
+      }
+    }
+    return messages.length ? messages.join('\n') : 'An unexpected error occurred.';
   }
 
   updatePassword() {

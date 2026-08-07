@@ -254,6 +254,49 @@ test('user can update own information', function () {
     ]);
 });
 
+test('user cannot update own profile with a non-numeric phone', function () {
+    $newData = [
+        'first_name' => 'UpdatedName',
+        'last_name' => 'Doe',
+        'address' => [
+            'street' => 'Street 1',
+            'city' => 'City',
+            'country' => 'Country'
+        ],
+        'phone' => 'Test',
+        'email' => 'john@doe.example',
+    ];
+
+    $response = $this->putJson("/users/{$this->user->id}", $newData, $this->headers($this->user));
+
+    $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
+        ->assertJsonStructure(['phone']);
+});
+
+test('user can update own profile with a valid phone', function () {
+    $newData = [
+        'first_name' => 'UpdatedName',
+        'last_name' => 'Doe',
+        'address' => [
+            'street' => 'Street 1',
+            'city' => 'City',
+            'country' => 'Country'
+        ],
+        'phone' => '+1 (555) 123-4567',
+        'email' => 'john@doe.example',
+    ];
+
+    $response = $this->putJson("/users/{$this->user->id}", $newData, $this->headers($this->user));
+
+    $response->assertStatus(ResponseAlias::HTTP_OK)
+        ->assertExactJson(['success' => true]);
+
+    $this->assertDatabaseHas('users', [
+        'id' => $this->user->id,
+        'phone' => '+1 (555) 123-4567'
+    ]);
+});
+
 test('user can partial update own information', function () {
     $payload = [
         'first_name' => 'Updated User Name',
