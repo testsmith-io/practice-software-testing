@@ -42,4 +42,47 @@ class UserTest extends TestCase
             ]);
     }
 
+    public function testUserCannotUpdateProfileWithNonNumericPhone()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->putJson('/users/' . $user->id, [
+            'first_name' => 'UpdatedName',
+            'last_name' => 'Doe',
+            'address' => 'Street 1',
+            'city' => 'City',
+            'country' => 'Country',
+            'phone' => 'Test',
+            'email' => 'john@doe.example',
+        ], $this->headers($user));
+
+        $response
+            ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJsonStructure(['phone']);
+    }
+
+    public function testUserCanUpdateProfileWithValidPhone()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->putJson('/users/' . $user->id, [
+            'first_name' => 'UpdatedName',
+            'last_name' => 'Doe',
+            'address' => 'Street 1',
+            'city' => 'City',
+            'country' => 'Country',
+            'phone' => '+1 (555) 123-4567',
+            'email' => 'john@doe.example',
+        ], $this->headers($user));
+
+        $response
+            ->assertStatus(ResponseAlias::HTTP_OK)
+            ->assertExactJson(['success' => true]);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'phone' => '+1 (555) 123-4567',
+        ]);
+    }
+
 }

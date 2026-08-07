@@ -28,7 +28,8 @@ class UpdateCustomer extends BaseFormRequest
     public function messages(): array
     {
         return ['dob.before' => 'Customer must be 18 years old.',
-            'email.unique' => 'A customer with this email address already exists.'];
+            'email.unique' => 'A customer with this email address already exists.',
+            'phone.regex' => 'Phone number may only contain digits, spaces and the characters ( ) + - .'];
     }
 
     /**
@@ -51,7 +52,7 @@ class UpdateCustomer extends BaseFormRequest
             'address.state' => ['nullable', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'address.country' => ['required', 'string', 'max:40', new SubscriptSuperscriptRule()],
             'address.postal_code' => ['nullable', 'string', 'max:10', new SubscriptSuperscriptRule()],
-            'phone' => ['nullable', 'string', 'max:24', new SubscriptSuperscriptRule()],
+            'phone' => ['nullable', 'string', 'max:24', 'regex:/^\+?[0-9\s().-]{7,24}$/', new SubscriptSuperscriptRule()],
             'dob' => ['date', 'date_format:Y-m-d', "before:{$before}"],
             'email' => ['required', 'string', 'max:256', new SubscriptSuperscriptRule()]
         ];
