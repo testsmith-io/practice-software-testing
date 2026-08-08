@@ -10,13 +10,15 @@
         <div class="row mb-3">
           <label for="first_name" class="col-sm-3 col-form-label">{{ t('fields.first-name.label') }}</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" formControlName="first_name" data-test="first-name" id="first_name">
+            <input type="text" class="form-control" formControlName="first_name" data-test="first-name" id="first_name"
+                   [class.is-invalid]="f['first_name'].invalid && f['first_name'].touched">
           </div>
         </div>
         <div class="row mb-3">
           <label for="last_name" class="col-sm-3 col-form-label">{{ t('fields.last-name.label') }}</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" formControlName="last_name" data-test="last-name" id="last_name">
+            <input type="text" class="form-control" formControlName="last_name" data-test="last-name" id="last_name"
+                   [class.is-invalid]="f['last_name'].invalid && f['last_name'].touched">
           </div>
         </div>
         <div class="row mb-3">
@@ -28,7 +30,8 @@
         <div class="row mb-3">
           <label for="phone" class="col-sm-3 col-form-label">{{ t('fields.phone.label') }}</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" data-test="phone" id="phone" formControlName="phone">
+            <input type="text" class="form-control" data-test="phone" id="phone" formControlName="phone"
+                   [class.is-invalid]="f['phone'].invalid && f['phone'].touched">
           </div>
         </div>
       </div>
@@ -36,32 +39,37 @@
         <div class="row mb-3">
           <label for="street" class="col-sm-3 col-form-label">{{ t('fields.street.label') }}</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" data-test="street" id="street" formControlName="street">
+            <input type="text" class="form-control" data-test="street" id="street" formControlName="street"
+                   [class.is-invalid]="profileForm.get('address.street')?.invalid && profileForm.get('address.street')?.touched">
           </div>
         </div>
         <div class="row mb-3">
           <label for="postal_code" class="col-sm-3 col-form-label">{{ t('fields.postal_code.label') }}</label>
           <div class="col-sm-9">
             <input type="text" class="form-control" data-test="postal_code" id="postal_code"
-                   formControlName="postal_code">
+                   formControlName="postal_code"
+                   [class.is-invalid]="profileForm.get('address.postal_code')?.invalid && profileForm.get('address.postal_code')?.touched">
           </div>
         </div>
         <div class="row mb-3">
           <label for="city" class="col-sm-3 col-form-label">{{ t('fields.city.label') }}</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" data-test="city" id="city" formControlName="city">
+            <input type="text" class="form-control" data-test="city" id="city" formControlName="city"
+                   [class.is-invalid]="profileForm.get('address.city')?.invalid && profileForm.get('address.city')?.touched">
           </div>
         </div>
         <div class="row mb-3">
           <label for="state" class="col-sm-3 col-form-label">{{ t('fields.state.label') }}</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" data-test="state" id="state" formControlName="state">
+            <input type="text" class="form-control" data-test="state" id="state" formControlName="state"
+                   [class.is-invalid]="profileForm.get('address.state')?.invalid && profileForm.get('address.state')?.touched">
           </div>
         </div>
         <div class="row mb-3">
           <label for="country" class="col-sm-3 col-form-label">{{ t('fields.country.label') }}</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" data-test="country" id="country" formControlName="country">
+            <input type="text" class="form-control" data-test="country" id="country" formControlName="country"
+                   [class.is-invalid]="profileForm.get('address.country')?.invalid && profileForm.get('address.country')?.touched">
           </div>
         </div>
       </div>
