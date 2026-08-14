@@ -69,6 +69,7 @@
     }
 </script>
 
+
 <!-- "Copy for AI" buttons: one per operation, copies that endpoint as clean Markdown -->
 <script>window.__SWAGGER_DOCS_URL__ = "{!! $urlToDocs !!}";</script>
 @verbatim
@@ -77,7 +78,8 @@
     const DOCS_URL = window.__SWAGGER_DOCS_URL__;
 
     const clean = (t) => (t == null ? '' : String(t)).replace(/\s+/g, ' ').trim();
-    const refName = (ref) => ref.split('/').pop();
+    const refName = (ref) => String(ref).split('/').pop();
+    const pretty = (v) => JSON.stringify(v, null, 2);
 
     // Fetch the OpenAPI spec once and reuse it for every button.
     let specPromise = null;
@@ -90,7 +92,7 @@
     }
 
     function resolveRef(spec, ref) {
-        const parts = ref.replace(/^#\//, '').split('/');
+        const parts = String(ref).replace(/^#\//, '').split('/');
         let cur = spec;
         for (const p of parts) {
             if (cur == null) return null;
@@ -99,80 +101,83 @@
         return cur;
     }
 
-    function schemaType(spec, schema) {
-        if (!schema) return '';
-        if (schema.$ref) return refName(schema.$ref);
-        if (schema.type === 'array') return schemaType(spec, schema.items) + '[]';
-        if (schema.enum) return (schema.type || 'enum') + ' (' + schema.enum.join(' | ') + ')';
-        return schema.type || (schema.properties ? 'object' : '');
-    }
-
-    function renderSchema(spec, schema, seen) {
-        seen = seen || new Set();
-        if (schema && schema.$ref) {
-            const n = refName(schema.$ref);
-            if (seen.has(n)) return '`' + n + '` (recursive)\n';
-            seen.add(n);
-            schema = resolveRef(spec, schema.$ref);
-        }
-        if (!schema) return '';
-        if (schema.type === 'array' && schema.items) {
-            return 'Array of:\n\n' + renderSchema(spec, schema.items, seen);
-        }
-        if (!schema.properties) return '`' + schemaType(spec, schema) + '`\n';
-        const required = new Set(schema.required || []);
-        let md = '| Field | Type | Required | Description |\n|---|---|---|---|\n';
-        for (const [name, prop] of Object.entries(schema.properties)) {
-            md += `| ${name} | ${schemaType(spec, prop)} | ${required.has(name) ? 'yes' : 'no'} | ${clean(prop.description)} |\n`;
-        }
-        return md;
-    }
-
     function baseUrl(spec) {
         if (Array.isArray(spec.servers) && spec.servers.length) return spec.servers[0].url;
         if (spec.host) return ((spec.schemes && spec.schemes[0]) || 'https') + '://' + spec.host + (spec.basePath || '');
         return '';
     }
 
+    // Collect every $ref value (deduped, first-seen order) reachable from `obj`.
+    function collectRefs(obj, acc) {
+        if (!obj || typeof obj !== 'object') return;
+        if (Array.isArray(obj)) { obj.forEach((x) => collectRefs(x, acc)); return; }
+        for (const [key, value] of Object.entries(obj)) {
+            if (key === '$ref' && typeof value === 'string') {
+                if (!acc.includes(value)) acc.push(value);
+            } else {
+                collectRefs(value, acc);
+            }
+        }
+    }
+
     // Markdown for a single endpoint.
     function operationToMarkdown(spec, path, method, item) {
         const op = item[method.toLowerCase()];
-        let md = `# ${method} ${path}\n\n`;
-        if (op.summary) md += clean(op.summary) + '\n\n';
-        if (op.description) md += clean(op.description) + '\n\n';
+        const fullUrl = baseUrl(spec) + path;
 
-        const base = baseUrl(spec);
-        if (base) md += `**URL:** \`${method} ${base}${path}\`\n\n`;
-        if (op.tags && op.tags.length) md += `**Tags:** ${op.tags.join(', ')}\n\n`;
+        let md = `# ${method} ${fullUrl}\n\n`;
+        md += `- Method: \`${method}\`\n`;
+        md += `- OpenAPI path: \`${path}\`\n`;
+        md += `- Full URL: \`${fullUrl}\`\n`;
+        if (op.summary) md += `- Summary: ${clean(op.summary)}\n`;
+        md += '\n';
+
+        if (op.description) {
+            md += `## Description\n\n${clean(op.description)}\n\n`;
+        }
 
         // Path-level params are shared by every method on the path.
         const params = (item.parameters || []).concat(op.parameters || []);
         if (params.length) {
-            md += '**Parameters:**\n\n| Name | In | Type | Required | Description |\n|---|---|---|---|---|\n';
+            md += '## Parameters\n\n';
             for (const p of params) {
-                const type = p.schema ? schemaType(spec, p.schema) : (p.type || '');
-                md += `| ${p.name} | ${p.in} | ${type} | ${p.required ? 'yes' : 'no'} | ${clean(p.description)} |\n`;
+                const schema = p.schema || (p.type ? { type: p.type } : {});
+                md += `- \`${p.name}\` in \`${p.in}\` ${p.required ? 'required' : 'optional'}\n`;
+                if (p.description) md += `  - ${clean(p.description)}\n`;
+                md += `  - Schema: \`${JSON.stringify(schema)}\`\n`;
             }
             md += '\n';
         }
 
         if (op.requestBody) {
-            const content = op.requestBody.content || {};
-            const json = content['application/json'];
-            md += '**Request Body:**\n\n';
-            md += json && json.schema
-                ? renderSchema(spec, json.schema) + '\n'
-                : Object.keys(content).join(', ') + '\n\n';
+            md += '## Request Body\n\n```json\n' + pretty(op.requestBody) + '\n```\n\n';
         }
 
         if (op.responses) {
-            md += '**Responses:**\n\n| Code | Description |\n|---|---|\n';
+            md += '## Responses\n\n';
             for (const [code, res] of Object.entries(op.responses)) {
-                md += `| ${code} | ${clean(res.description)} |\n`;
+                md += `### ${code}\n\n`;
+                if (res.description) md += `${clean(res.description)}\n\n`;
+                if (res.content) md += '```json\n' + pretty(res.content) + '\n```\n\n';
             }
-            md += '\n';
         }
-        return md.trim() + '\n';
+
+        // Dump every component schema referenced by this operation (transitively).
+        const refs = [];
+        collectRefs(item.parameters, refs);
+        collectRefs(op.parameters, refs);
+        collectRefs(op.requestBody, refs);
+        collectRefs(op.responses, refs);
+        for (let i = 0; i < refs.length; i++) collectRefs(resolveRef(spec, refs[i]), refs);
+        if (refs.length) {
+            md += '## Referenced Schemas\n\n';
+            for (const ref of refs) {
+                md += `### ${refName(ref)}\n\n`;
+                md += '```json\n' + pretty(resolveRef(spec, ref)) + '\n```\n\n';
+            }
+        }
+
+        return md.trimEnd() + '\n';
     }
 
     function copyText(text) {
