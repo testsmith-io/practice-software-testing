@@ -3780,6 +3780,61 @@
                 ]
             }
         },
+        "/sales-stream": {
+            "get": {
+                "tags": [
+                    "Stream"
+                ],
+                "summary": "Live sales feed over Server-Sent Events (SSE)",
+                "description": "Streams a finite burst of simulated purchases built from real in-stock\n     *          products, using the `text/event-stream` protocol. Named events are emitted in\n     *          order: one `open`, then `sale` events (with an occasional `heartbeat`), then a\n     *          final `end`. Each `sale` carries an incrementing SSE `id`, so a reconnecting\n     *          client can send `Last-Event-ID` to resume numbering. Provide `seed` for a\n     *          deterministic, repeatable sequence.",
+                "operationId": "salesStream",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Number of sale events to emit before closing (1-50, default 10).",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    },
+                    {
+                        "name": "interval",
+                        "in": "query",
+                        "description": "Delay between events in milliseconds (100-3000, default 1000).",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1000
+                        }
+                    },
+                    {
+                        "name": "seed",
+                        "in": "query",
+                        "description": "Seed the random generator for a deterministic sequence.",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 42
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An SSE stream.",
+                        "content": {
+                            "text/event-stream": {
+                                "schema": {
+                                    "description": "A sequence of SSE frames: an open event, then sale events (each with an id and a JSON payload), an occasional heartbeat, and a final end event.",
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/totp/setup": {
             "post": {
                 "tags": [
@@ -5824,6 +5879,10 @@
         {
             "name": "Report",
             "description": "Report"
+        },
+        {
+            "name": "Stream",
+            "description": "Stream"
         },
         {
             "name": "TOTP",
