@@ -1,0 +1,74 @@
+<!-- Copyright (c) 2024-2026 Testsmith. All rights reserved. See LICENSE for details. -->
+
+<div class="live-widget">
+  @if (isOpen) {
+    <div class="live-window" data-test="live-activity-window">
+      <div class="live-header">
+        <div class="live-title">
+          <span class="live-dot" [class.on]="connected"
+                data-test="live-activity-status"
+                [attr.title]="connected ? 'Live' : 'Reconnecting'"></span>
+          <span>Live shop activity</span>
+        </div>
+        <button type="button" class="live-close-btn" (click)="close()"
+                aria-label="Close" data-test="live-activity-close">&times;</button>
+      </div>
+
+      <div class="live-stats">
+        <div>
+          <span class="live-stat-value" data-test="live-activity-count">{{ totalCount }}</span>
+          <span class="live-stat-label">sales seen</span>
+        </div>
+        <div>
+          <span class="live-stat-value" data-test="live-activity-revenue">${{ totalRevenue.toFixed(2) }}</span>
+          <span class="live-stat-label">this session</span>
+        </div>
+      </div>
+
+      <div class="live-feed">
+        @for (item of sales; track item.seq) {
+          <div class="live-item" data-test="live-activity-item">
+            <div class="live-item-main">
+              <span class="live-item-name">{{ item.name }}</span>
+              <span class="live-item-amount">${{ item.amount.toFixed(2) }}</span>
+            </div>
+            <div class="live-item-sub">
+              <span>{{ item.quantity }} &times; ${{ item.unit_price.toFixed(2) }}</span>
+              <span>{{ item.buyer }} &middot; {{ item.city }}</span>
+            </div>
+          </div>
+        } @empty {
+          <div class="live-empty" data-test="live-activity-empty">
+            @if (connected) {
+              Waiting for the next sale&hellip;
+            } @else {
+              Connecting to the live feed&hellip;
+            }
+          </div>
+        }
+      </div>
+
+      <div class="live-footer">
+        <span>Server-Sent Events feed</span>
+        @if (sales.length) {
+          <button type="button" class="live-clear-btn" (click)="clear()"
+                  data-test="live-activity-clear">Clear</button>
+        }
+      </div>
+    </div>
+  }
+
+  <button type="button" class="live-toggle-btn" (click)="toggle()"
+          [class.active]="isOpen" data-test="live-activity-toggle"
+          [attr.aria-label]="isOpen ? 'Hide live shop activity' : 'Show live shop activity'">
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 11a9 9 0 0 1 9 9"></path>
+      <path d="M4 4a16 16 0 0 1 16 16"></path>
+      <circle cx="5" cy="19" r="1"></circle>
+    </svg>
+    @if (!isOpen && totalCount > 0) {
+      <span class="live-badge" data-test="live-activity-badge">{{ totalCount }}</span>
+    }
+  </button>
+</div>

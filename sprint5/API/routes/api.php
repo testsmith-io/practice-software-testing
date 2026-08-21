@@ -15,6 +15,7 @@ use App\Http\Controllers\ProductSpecController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SocialConnectController;
+use App\Http\Controllers\StreamController;
 use App\Http\Controllers\TOTPController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Artisan;
@@ -149,6 +150,9 @@ Route::controller(ProductController::class)->prefix('products')->group(function 
     Route::patch('/{id}', 'patch');
     Route::delete('/{id}', 'destroy');
 });
+
+// Live sales feed over Server-Sent Events (SSE). Public, finite, seedable.
+Route::get('/sales-stream', [StreamController::class, 'sales']);
 
 Route::controller(ProductSpecController::class)->group(function () {
     Route::middleware('cache.headers:public;max_age=120;etag')->group(function () {
