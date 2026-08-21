@@ -79,12 +79,24 @@ class StreamController extends Controller
             ->limit(100)
             ->get(['id', 'name', 'price']);
 
-        $response = new StreamedResponse(function () use ($limit, $interval, $hasSeed, $seed, $startId, $catalog) {
+        // response()->stream() returns the same Symfony StreamedResponse the
+        // eventStream() helper uses. The headers below, together with disabling
+        // PHP output buffering here and FastCGI buffering in nginx, are what make
+        // events arrive one by one instead of all at once at the end.
+        return response()->stream(function () use ($limit, $interval, $hasSeed, $seed, $startId, $catalog) {
             @set_time_limit(0);
-            // Flush anything Laravel/PHP may have buffered so events arrive immediately.
+            @ignore_user_abort(true);
+            // Defeat every layer of PHP output buffering so each write is sent now.
+            @ini_set('zlib.output_compression', '0');
+            @ini_set('output_buffering', 'off');
             while (ob_get_level() > 0) {
                 @ob_end_flush();
             }
+            @ob_implicit_flush(true);
+
+            // First bytes right away so the client opens the connection promptly.
+            echo ": connected\n\n";
+            @flush();
 
             if ($hasSeed) {
                 mt_srand((int)$seed);
@@ -158,14 +170,12 @@ class StreamController extends Controller
                 'total_amount' => $runningTotal,
                 'ended_at'     => now()->toIso8601String(),
             ]);
-        });
-
-        $response->headers->set('Content-Type', 'text/event-stream; charset=UTF-8');
-        $response->headers->set('Cache-Control', 'no-cache, no-transform');
-        $response->headers->set('Connection', 'keep-alive');
-        // Disable proxy/FastCGI buffering (nginx) so events are not held back.
-        $response->headers->set('X-Accel-Buffering', 'no');
-
-        return $response;
+        }, 200, [
+            'Content-Type'      => 'text/event-stream; charset=UTF-8',
+            'Cache-Control'     => 'no-cache, no-transform',
+            'Connection'        => 'keep-alive',
+            // Tell nginx (and other proxies) not to buffer this response.
+            'X-Accel-Buffering' => 'no',
+        ]);
     }
 }
