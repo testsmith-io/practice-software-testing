@@ -1303,13 +1303,13 @@
                                 "properties": {
                                     "status": {
                                         "type": "string",
+                                        "example": "IN_PROGRESS",
                                         "enum": [
                                             "NEW",
                                             "ON_HOLD",
                                             "IN_PROGRESS",
                                             "RESOLVED"
-                                        ],
-                                        "example": "IN_PROGRESS"
+                                        ]
                                     }
                                 },
                                 "type": "object"
@@ -2024,9 +2024,9 @@
                                     "status_message": {
                                         "description": "A message describing the status",
                                         "type": "string",
+                                        "nullable": true,
                                         "maxLength": 50,
-                                        "minLength": 5,
-                                        "nullable": true
+                                        "minLength": 5
                                     }
                                 },
                                 "type": "object"
@@ -2183,6 +2183,83 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/postcode-lookup": {
+            "get": {
+                "tags": [
+                    "Postcode"
+                ],
+                "summary": "Lookup address details by postcode",
+                "description": "Returns street, city and state for a given country/postcode/house number. The underlying source is configurable: a local faker driver (default) or an external HTTP service (e.g. a WireMock stub) when POSTCODE_LOOKUP_DRIVER=http.",
+                "operationId": "postcodeLookup",
+                "parameters": [
+                    {
+                        "name": "country",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 40
+                        }
+                    },
+                    {
+                        "name": "postcode",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 10
+                        }
+                    },
+                    {
+                        "name": "house_number",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Address details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "street": {
+                                            "type": "string"
+                                        },
+                                        "house_number": {
+                                            "type": "string"
+                                        },
+                                        "city": {
+                                            "type": "string"
+                                        },
+                                        "state": {
+                                            "type": "string"
+                                        },
+                                        "country": {
+                                            "type": "string"
+                                        },
+                                        "postcode": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
+                    },
+                    "502": {
+                        "description": "Upstream lookup failure"
                     }
                 }
             }
@@ -4230,26 +4307,26 @@
                     "name": {
                         "description": "Sender name",
                         "type": "string",
-                        "maxLength": 120,
-                        "example": "John Doe"
+                        "example": "John Doe",
+                        "maxLength": 120
                     },
                     "email": {
                         "description": "Required when not authenticated",
                         "type": "string",
-                        "maxLength": 256,
-                        "example": "john@doe.example"
+                        "example": "john@doe.example",
+                        "maxLength": 256
                     },
                     "subject": {
                         "description": "",
                         "type": "string",
-                        "maxLength": 120,
-                        "example": "website"
+                        "example": "website",
+                        "maxLength": 120
                     },
                     "message": {
                         "description": "",
                         "type": "string",
-                        "maxLength": 250,
-                        "example": "Something is wrong with the website."
+                        "example": "Something is wrong with the website.",
+                        "maxLength": 250
                     }
                 },
                 "type": "object"
@@ -4514,7 +4591,8 @@
                             "cash-on-delivery",
                             "credit-card",
                             "buy-now-pay-later",
-                            "gift-card"
+                            "gift-card",
+                            "payu-cz"
                         ]
                     },
                     "cart_id": {
@@ -4554,7 +4632,8 @@
                             "cash-on-delivery",
                             "credit-card",
                             "buy-now-pay-later",
-                            "gift-card"
+                            "gift-card",
+                            "payu-cz"
                         ]
                     },
                     "payment_details": {
@@ -4923,48 +5002,53 @@
                 "properties": {
                     "first_name": {
                         "type": "string",
-                        "maxLength": 40,
-                        "example": "John"
+                        "example": "John",
+                        "maxLength": 40
                     },
                     "last_name": {
                         "type": "string",
-                        "maxLength": 20,
-                        "example": "Doe"
+                        "example": "Doe",
+                        "maxLength": 20
                     },
                     "address": {
                         "properties": {
                             "street": {
                                 "type": "string",
-                                "maxLength": 70,
-                                "example": "Street 1"
+                                "example": "Street 1",
+                                "maxLength": 70
+                            },
+                            "house_number": {
+                                "type": "string",
+                                "example": "12",
+                                "maxLength": 10
                             },
                             "city": {
                                 "type": "string",
-                                "maxLength": 40,
-                                "example": "City"
+                                "example": "City",
+                                "maxLength": 40
                             },
                             "state": {
                                 "type": "string",
-                                "maxLength": 40,
-                                "example": "State"
+                                "example": "State",
+                                "maxLength": 40
                             },
                             "country": {
                                 "type": "string",
-                                "maxLength": 40,
-                                "example": "Country"
+                                "example": "Country",
+                                "maxLength": 40
                             },
                             "postal_code": {
                                 "type": "string",
-                                "maxLength": 10,
-                                "example": "1234AA"
+                                "example": "1234AA",
+                                "maxLength": 10
                             }
                         },
                         "type": "object"
                     },
                     "phone": {
                         "type": "string",
-                        "maxLength": 24,
-                        "example": "0987654321"
+                        "example": "0987654321",
+                        "maxLength": 24
                     },
                     "dob": {
                         "description": "Must be a valid date between 18 and 75 years ago",
@@ -4976,14 +5060,14 @@
                         "description": "Must include uppercase, lowercase, number, and symbol",
                         "type": "string",
                         "format": "password",
-                        "minLength": 8,
-                        "example": "SuperSecure@123"
+                        "example": "SuperSecure@123",
+                        "minLength": 8
                     },
                     "email": {
                         "type": "string",
                         "format": "email",
-                        "maxLength": 256,
-                        "example": "john@doe.example"
+                        "example": "john@doe.example",
+                        "maxLength": 256
                     }
                 },
                 "type": "object"
@@ -5004,6 +5088,11 @@
                             "street": {
                                 "type": "string",
                                 "example": "Street 1"
+                            },
+                            "house_number": {
+                                "type": "string",
+                                "example": "12",
+                                "nullable": true
                             },
                             "city": {
                                 "type": "string",
@@ -5234,6 +5323,10 @@
         {
             "name": "Payment",
             "description": "Payment"
+        },
+        {
+            "name": "Postcode",
+            "description": "Postcode"
         },
         {
             "name": "Product",

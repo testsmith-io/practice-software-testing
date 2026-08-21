@@ -870,14 +870,14 @@
                     "name": {
                         "description": "",
                         "type": "string",
-                        "maxLength": 120,
-                        "example": "new brand"
+                        "example": "new brand",
+                        "maxLength": 120
                     },
                     "slug": {
                         "description": "URL part, words separated by hyphen. Must be unique.",
                         "type": "string",
-                        "maxLength": 120,
-                        "example": "new-brand"
+                        "example": "new-brand",
+                        "maxLength": 120
                     }
                 },
                 "type": "object"
@@ -910,14 +910,14 @@
                     "name": {
                         "description": "",
                         "type": "string",
-                        "maxLength": 120,
-                        "example": "new category"
+                        "example": "new category",
+                        "maxLength": 120
                     },
                     "slug": {
                         "description": "URL part, words separated by hyphen",
                         "type": "string",
-                        "maxLength": 120,
-                        "example": "new-category"
+                        "example": "new-category",
+                        "maxLength": 120
                     },
                     "parent_id": {
                         "type": "integer",
@@ -992,8 +992,8 @@
                     },
                     "description": {
                         "type": "string",
-                        "maxLength": 1250,
-                        "nullable": true
+                        "nullable": true,
+                        "maxLength": 1250
                     },
                     "price": {
                         "type": "number",
@@ -1041,7 +1041,12 @@
                         "$ref": "#/components/schemas/CategoryResponse"
                     },
                     "product_image": {
-                        "$ref": "#/components/schemas/ImageResponse"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ImageResponse"
+                            }
+                        ],
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -1281,5 +1286,23 @@
                 }
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Brand",
+            "description": "Brand"
+        },
+        {
+            "name": "Category",
+            "description": "Category"
+        },
+        {
+            "name": "Image",
+            "description": "Image"
+        },
+        {
+            "name": "Product",
+            "description": "Product"
+        }
+    ]
 }
