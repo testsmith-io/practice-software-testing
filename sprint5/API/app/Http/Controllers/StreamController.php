@@ -95,7 +95,11 @@ class StreamController extends Controller
             @ob_implicit_flush(true);
 
             // First bytes right away so the client opens the connection promptly.
-            echo ": connected\n\n";
+            // The padding is a comment line (ignored by EventSource) sized to push
+            // past the fixed buffer Apache/proxies fill before forwarding the first
+            // chunk. Without it small events can sit in that buffer until the whole
+            // stream ends, which looks exactly like "nothing, then everything".
+            echo ': ' . str_repeat(' ', 2048) . "\n\n";
             @flush();
 
             if ($hasSeed) {
@@ -136,8 +140,6 @@ class StreamController extends Controller
                     break;
                 }
 
-                usleep($interval * 1000);
-
                 $seq = $startId + $i;
                 $product = $catalog[mt_rand(0, $count - 1)];
                 $quantity = mt_rand(1, 3);
@@ -162,6 +164,12 @@ class StreamController extends Controller
                 // and keeps proxies from closing a quiet connection.
                 if (($i + 1) % 5 === 0 && $i + 1 < $limit) {
                     $emit('heartbeat', ['at' => now()->toIso8601String(), 'emitted' => $i + 1]);
+                }
+
+                // Pace the feed. The sleep is at the end of the loop so the first
+                // sale is sent immediately instead of after one interval.
+                if ($i + 1 < $limit) {
+                    usleep($interval * 1000);
                 }
             }
 

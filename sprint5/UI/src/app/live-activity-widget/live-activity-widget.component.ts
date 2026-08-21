@@ -62,9 +62,9 @@ export class LiveActivityWidgetComponent implements OnDestroy {
     if (this.source) {
       return;
     }
-    // Finite bursts of 50 events; the browser reconnects automatically when the
-    // server finishes one, which keeps the feed flowing while the widget is open.
-    const url = `${environment.apiUrl}/sales-stream?interval=2000&limit=50`;
+    // Finite bursts; the browser reconnects automatically when the server
+    // finishes one, which keeps the feed flowing while the widget is open.
+    const url = `${environment.apiUrl}/sales-stream?interval=1000&limit=30`;
     const source = new EventSource(url);
     this.source = source;
 
