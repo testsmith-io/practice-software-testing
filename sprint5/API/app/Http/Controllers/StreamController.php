@@ -72,18 +72,13 @@ class StreamController extends Controller
             $startId = ((int)$lastEventId) + 1;
         }
 
-        // Stable, ordered catalog so a given seed always yields the same picks.
-        $catalog = DB::table('products')
-            ->where('stock', '>', 0)
-            ->orderBy('id')
-            ->limit(100)
-            ->get(['id', 'name', 'price']);
-
         // response()->stream() returns the same Symfony StreamedResponse the
         // eventStream() helper uses. The headers below, together with disabling
-        // PHP output buffering here and FastCGI buffering in nginx, are what make
-        // events arrive one by one instead of all at once at the end.
-        return response()->stream(function () use ($limit, $interval, $hasSeed, $seed, $startId, $catalog) {
+        // PHP output buffering here, are what make events arrive one by one
+        // instead of all at once at the end. The product catalog is queried inside
+        // the stream (after the first flush) so the first byte is not held back by
+        // the database round-trip.
+        return response()->stream(function () use ($limit, $interval, $hasSeed, $seed, $startId) {
             @set_time_limit(0);
             @ignore_user_abort(true);
             // Defeat every layer of PHP output buffering so each write is sent now.
@@ -96,10 +91,11 @@ class StreamController extends Controller
 
             // First bytes right away so the client opens the connection promptly.
             // The padding is a comment line (ignored by EventSource) sized to push
-            // past the fixed buffer Apache/proxies fill before forwarding the first
-            // chunk. Without it small events can sit in that buffer until the whole
-            // stream ends, which looks exactly like "nothing, then everything".
-            echo ': ' . str_repeat(' ', 2048) . "\n\n";
+            // past the fixed buffer Apache/php-fpm/proxies fill before forwarding the
+            // first chunk. 8 KB clears the common 4 KB/8 KB thresholds. If a proxy
+            // buffers the whole response regardless, that must be fixed in server
+            // config (see StreamController docblock / deploy notes), not here.
+            echo ': ' . str_repeat(' ', 8192) . "\n\n";
             @flush();
 
             if ($hasSeed) {
@@ -118,6 +114,16 @@ class StreamController extends Controller
 
             // Tell the browser how quickly to reconnect if the connection drops.
             echo 'retry: ' . $interval . "\n\n";
+            @flush();
+
+            // Stable, ordered catalog so a given seed always yields the same picks.
+            // Queried here (after the opening bytes are already on the wire) so the
+            // connection is not left silent during the query.
+            $catalog = DB::table('products')
+                ->where('stock', '>', 0)
+                ->orderBy('id')
+                ->limit(100)
+                ->get(['id', 'name', 'price']);
 
             $emit('open', [
                 'started_at'   => now()->toIso8601String(),
