@@ -72,18 +72,13 @@ class StreamController extends Controller
             $startId = ((int)$lastEventId) + 1;
         }
 
-        // Stable, ordered catalog so a given seed always yields the same picks.
-        $catalog = DB::table('products')
-            ->where('stock', '>', 0)
-            ->orderBy('id')
-            ->limit(100)
-            ->get(['id', 'name', 'price']);
-
         // response()->stream() returns the same Symfony StreamedResponse the
         // eventStream() helper uses. The headers below, together with disabling
-        // PHP output buffering here and FastCGI buffering in nginx, are what make
-        // events arrive one by one instead of all at once at the end.
-        return response()->stream(function () use ($limit, $interval, $hasSeed, $seed, $startId, $catalog) {
+        // PHP output buffering here, are what make events arrive one by one
+        // instead of all at once at the end. The product catalog is queried inside
+        // the stream (after the first flush) so the first byte is not held back by
+        // the database round-trip.
+        return response()->stream(function () use ($limit, $interval, $hasSeed, $seed, $startId) {
             @set_time_limit(0);
             @ignore_user_abort(true);
             // Defeat every layer of PHP output buffering so each write is sent now.
