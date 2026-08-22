@@ -3786,27 +3786,27 @@
                     "Stream"
                 ],
                 "summary": "Live sales feed over Server-Sent Events (SSE)",
-                "description": "Streams a finite run of simulated purchases built from real in-stock\n     *          products, using the `text/event-stream` protocol. Named events are emitted in\n     *          order: one `open`, then `sale` events (with an occasional `heartbeat`), then a\n     *          final `end`. Each `sale` carries an incrementing SSE `id`, so a reconnecting\n     *          client can send `Last-Event-ID` to resume numbering. Provide `seed` for a\n     *          deterministic, repeatable sequence.\n     *          The feed is modelled to feel alive: sales are **popularity-weighted** (cheaper,\n     *          consumable items sell far more often than expensive ones), arrive in **bursts and\n     *          lulls** rather than at a fixed rate, and are **stock-aware** - each sale draws down\n     *          a per-stream stock counter (`remaining_stock`), quantities are capped to what is\n     *          left, a product is retired once it hits zero (`sold_out: true`), and if everything\n     *          sells out a `sold-out` event is emitted and the stream ends early.",
+                "description": "Streams a finite run of simulated purchases built from real in-stock\n     *          products, using the `text/event-stream` protocol. Named events are emitted in\n     *          order: one `open`, then `sale` events (with an occasional `heartbeat`), then a\n     *          final `end`. Each `sale` carries an incrementing SSE `id`, so a reconnecting\n     *          client can send `Last-Event-ID` to resume numbering. Provide `seed` for a\n     *          deterministic, repeatable sequence.\n     *          The feed is modelled to feel alive: sales are **popularity-weighted** (cheaper,\n     *          consumable items sell far more often than expensive ones), arrive in **bursts and\n     *          lulls** rather than at a fixed rate, and are **stock-aware** - each sale draws down\n     *          a per-stream stock counter (`remaining_stock`), quantities are capped to what is\n     *          left, a product is retired once it hits zero (`sold_out: true`), and if everything\n     *          sells out a `sold-out` event is emitted and the stream ends early.\n     *          Note: Swagger UI and most API clients do not render SSE incrementally - they\n     *          buffer the whole response and only show it once the stream closes, so the call\n     *          appears to hang for its full duration. Consume it with an `EventSource` (browser)\n     *          to see events live, or keep `limit`/`interval` small for quick manual tests.",
                 "operationId": "salesStream",
                 "parameters": [
                     {
                         "name": "limit",
                         "in": "query",
-                        "description": "Maximum number of sale events to emit before closing (1-50, default 10).\n     *              Fewer may be emitted if all products sell out first.",
+                        "description": "Maximum number of sale events to emit before closing (1-50, default 5).\n     *              Fewer may be emitted if all products sell out first.",
                         "required": false,
                         "schema": {
                             "type": "integer",
-                            "example": 10
+                            "example": 5
                         }
                     },
                     {
                         "name": "interval",
                         "in": "query",
-                        "description": "Base delay between events in milliseconds (100-3000, default 1000).\n     *              Within a burst the gaps are ~12-35% of this; between bursts ~90-260%, so the\n     *              feed reads as organic rather than fixed-rate.",
+                        "description": "Base delay between events in milliseconds (100-3000, default 500).\n     *              Within a burst the gaps are ~12-35% of this; between bursts ~90-260%, so the\n     *              feed reads as organic rather than fixed-rate.",
                         "required": false,
                         "schema": {
                             "type": "integer",
-                            "example": 1000
+                            "example": 500
                         }
                     },
                     {
