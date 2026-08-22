@@ -189,7 +189,7 @@
       "placeholder": "Tu código postal",
       "errors": {
         "required": "El código postal es obligatorio",
-        "format": "Solo se permiten 5 números."
+        "format": "Introduzca un código postal válido para el país seleccionado."
       }
     },
     "city": {

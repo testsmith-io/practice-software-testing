@@ -2,7 +2,7 @@
 // See LICENSE for details.
 
 import {Component, inject, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators, ValidatorFn} from "@angular/forms";
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import countriesList from '../../../assets/countries.json';
@@ -13,6 +13,27 @@ import {PasswordInputComponent} from "../../shared/password-input/password-input
 import {TranslocoDirective} from "@jsverse/transloco";
 import { DateValidators } from 'src/app/shared/validators/date.validators';
 import {PostcodeService} from "../../_services/postcode.service";
+
+const postcodePatterns: Record<string, RegExp> = {
+  // DACH
+  AT: /^\d{4}$/,
+  DE: /^\d{5}$/,
+  CH: /^\d{4}$/,
+
+  // CEE
+  AL: /^\d{4}$/,
+  BG: /^\d{4}$/,
+  HR: /^\d{5}$/,
+  CZ: /^\d{3}\s?\d{2}$/,
+  EE: /^\d{5}$/,
+  HU: /^\d{4}$/,
+  LT: /^(LT-?)?\d{5}$/i,
+  LV: /^(LV-?)?\d{4}$/i,
+  PL: /^\d{2}-?\d{3}$/,
+  RO: /^\d{6}$/,
+  SI: /^\d{4}$/,
+  SK: /^\d{3}\s?\d{2}$/,
+};
 
 @Component({
   selector: 'app-register',
@@ -52,7 +73,7 @@ export class RegisterComponent implements OnInit {
         // country, postal_code and house_number update on keystroke (not blur)
         // so the postcode lookup can fire as soon as all three have a value.
         country: new FormControl('', {validators: [Validators.required], updateOn: 'change'}),
-        postal_code: new FormControl('', {validators: [Validators.required], updateOn: 'change'}),
+        postal_code: new FormControl('', {validators: [Validators.required, this.postalCodeValidator()], updateOn: 'change'}),
         house_number: new FormControl('', {validators: [Validators.required], updateOn: 'change'}),
         phone: ['', [Validators.required, Validators.pattern(/^[0-9]\d*$/)]],
         email: ['', [Validators.required, Validators.pattern("^(?=.{1,256}$)[a-zA-Z0-9._%+-]{1,64}@[a-zA-Z0-9.-]{1,255}$")]],
@@ -78,14 +99,39 @@ export class RegisterComponent implements OnInit {
       .subscribe(() => this.tryPostcodeLookup());
     this.register.get('country').valueChanges
       .pipe(distinctUntilChanged())
-      .subscribe(() => this.tryPostcodeLookup());
+      .subscribe(() => {
+        this.register.get('postal_code').updateValueAndValidity();
+        this.tryPostcodeLookup();
+  });
   }
 
+  private postalCodeValidator(): ValidatorFn {
+  return (control: AbstractControl) => {
+    if (!this.register) {
+      return null;
+    }
+
+    const country = this.register.get('country')?.value;
+    const postalCode = control.value;
+
+    if (!country || !postalCode) {
+      return null;
+    }
+
+    const pattern = postcodePatterns[country];
+
+    if (!pattern) {
+      return null;
+    }
+
+    return pattern.test(postalCode) ? null : { pattern: true };
+  };
+}
   private tryPostcodeLookup(): void {
     const country = this.register.get('country').value;
     const postcode = this.register.get('postal_code').value;
     const houseNumber = this.register.get('house_number').value;
-    if (!country || !postcode || !houseNumber) {
+    if (!country || !postcode || !houseNumber || this.register.get('postal_code').invalid) {
       return;
     }
 
