@@ -96,10 +96,11 @@ class StreamController extends Controller
 
             // First bytes right away so the client opens the connection promptly.
             // The padding is a comment line (ignored by EventSource) sized to push
-            // past the fixed buffer Apache/proxies fill before forwarding the first
-            // chunk. Without it small events can sit in that buffer until the whole
-            // stream ends, which looks exactly like "nothing, then everything".
-            echo ': ' . str_repeat(' ', 2048) . "\n\n";
+            // past the fixed buffer Apache/php-fpm/proxies fill before forwarding the
+            // first chunk. 8 KB clears the common 4 KB/8 KB thresholds. If a proxy
+            // buffers the whole response regardless, that must be fixed in server
+            // config (see StreamController docblock / deploy notes), not here.
+            echo ': ' . str_repeat(' ', 8192) . "\n\n";
             @flush();
 
             if ($hasSeed) {
