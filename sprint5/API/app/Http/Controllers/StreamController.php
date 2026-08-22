@@ -39,16 +39,20 @@ class StreamController extends Controller
      *          lulls** rather than at a fixed rate, and are **stock-aware** - each sale draws down
      *          a per-stream stock counter (`remaining_stock`), quantities are capped to what is
      *          left, a product is retired once it hits zero (`sold_out: true`), and if everything
-     *          sells out a `sold-out` event is emitted and the stream ends early.",
+     *          sells out a `sold-out` event is emitted and the stream ends early.
+     *          Note: Swagger UI and most API clients do not render SSE incrementally - they
+     *          buffer the whole response and only show it once the stream closes, so the call
+     *          appears to hang for its full duration. Consume it with an `EventSource` (browser)
+     *          to see events live, or keep `limit`/`interval` small for quick manual tests.",
      *      @OA\Parameter(name="limit", in="query", required=false,
-     *          description="Maximum number of sale events to emit before closing (1-50, default 10).
+     *          description="Maximum number of sale events to emit before closing (1-50, default 5).
      *              Fewer may be emitted if all products sell out first.",
-     *          @OA\Schema(type="integer", example=10)),
+     *          @OA\Schema(type="integer", example=5)),
      *      @OA\Parameter(name="interval", in="query", required=false,
-     *          description="Base delay between events in milliseconds (100-3000, default 1000).
+     *          description="Base delay between events in milliseconds (100-3000, default 500).
      *              Within a burst the gaps are ~12-35% of this; between bursts ~90-260%, so the
      *              feed reads as organic rather than fixed-rate.",
-     *          @OA\Schema(type="integer", example=1000)),
+     *          @OA\Schema(type="integer", example=500)),
      *      @OA\Parameter(name="seed", in="query", required=false,
      *          description="Seed the random generator for a deterministic sequence.",
      *          @OA\Schema(type="integer", example=42)),
@@ -65,10 +69,13 @@ class StreamController extends Controller
      */
     public function sales(Request $request): StreamedResponse
     {
-        $limit = (int)$request->query('limit', 10);
+        // Small defaults so a bare call (Swagger "Try it out", curl, an API client
+        // that buffers the whole response) finishes quickly. The live widget passes
+        // its own larger, calmer values.
+        $limit = (int)$request->query('limit', 5);
         $limit = max(1, min(50, $limit));
 
-        $interval = (int)$request->query('interval', 1000);
+        $interval = (int)$request->query('interval', 500);
         $interval = max(100, min(3000, $interval));
 
         $seed = $request->query('seed');
