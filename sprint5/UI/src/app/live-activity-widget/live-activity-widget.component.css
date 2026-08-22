@@ -173,6 +173,28 @@
   white-space: nowrap;
 }
 
+.live-badge-tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  vertical-align: middle;
+}
+
+.live-badge-tag.sold-out {
+  background: #f1d0d0;
+  color: #b02a37;
+}
+
+.live-badge-tag.low-stock {
+  background: #fff3cd;
+  color: #997404;
+}
+
 .live-item-amount {
   font-weight: 700;
   color: #dc3545;

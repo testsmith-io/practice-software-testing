@@ -14,6 +14,8 @@ interface SaleEvent {
   quantity: number;
   amount: number;
   running_total: number;
+  remaining_stock: number;
+  sold_out: boolean;
   buyer: string;
   city: string;
 }
@@ -64,7 +66,9 @@ export class LiveActivityWidgetComponent implements OnDestroy {
     }
     // Finite bursts; the browser reconnects automatically when the server
     // finishes one, which keeps the feed flowing while the widget is open.
-    const url = `${environment.apiUrl}/sales-stream?interval=1000&limit=30`;
+    // The server jitters the gaps around this base interval, so a calmer base
+    // reads as occasional, organic sales rather than a firehose.
+    const url = `${environment.apiUrl}/sales-stream?interval=2500&limit=40`;
     const source = new EventSource(url);
     this.source = source;
 

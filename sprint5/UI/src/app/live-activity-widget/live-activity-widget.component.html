@@ -29,7 +29,14 @@
         @for (item of sales; track item.seq) {
           <div class="live-item" data-test="live-activity-item">
             <div class="live-item-main">
-              <span class="live-item-name">{{ item.name }}</span>
+              <span class="live-item-name">
+                {{ item.name }}
+                @if (item.sold_out) {
+                  <span class="live-badge-tag sold-out" data-test="live-activity-soldout">Sold out</span>
+                } @else if (item.remaining_stock <= 5) {
+                  <span class="live-badge-tag low-stock">{{ item.remaining_stock }} left</span>
+                }
+              </span>
               <span class="live-item-amount">${{ item.amount.toFixed(2) }}</span>
             </div>
             <div class="live-item-sub">
