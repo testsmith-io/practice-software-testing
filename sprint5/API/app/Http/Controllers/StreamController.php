@@ -114,6 +114,16 @@ class StreamController extends Controller
 
             // Tell the browser how quickly to reconnect if the connection drops.
             echo 'retry: ' . $interval . "\n\n";
+            @flush();
+
+            // Stable, ordered catalog so a given seed always yields the same picks.
+            // Queried here (after the opening bytes are already on the wire) so the
+            // connection is not left silent during the query.
+            $catalog = DB::table('products')
+                ->where('stock', '>', 0)
+                ->orderBy('id')
+                ->limit(100)
+                ->get(['id', 'name', 'price']);
 
             $emit('open', [
                 'started_at'   => now()->toIso8601String(),
