@@ -18,8 +18,8 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
-const ID_PARAM = ID_PARAM;
-const SEARCH_PATH = SEARCH_PATH;
+const ID_PARAM = '/{id}';
+const SEARCH_PATH = '/search';
 
 /*
 |--------------------------------------------------------------------------

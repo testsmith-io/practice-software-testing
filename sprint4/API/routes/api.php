@@ -16,9 +16,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
-const CACHE_HEADERS = CACHE_HEADERS;
-const SEARCH_PATH = SEARCH_PATH;
-const ID_PARAM = ID_PARAM;
+const CACHE_HEADERS = 'cache.headers:public;max_age=120;etag';
+const SEARCH_PATH = '/search';
+const ID_PARAM = '/{id}';
 
 /*
 |--------------------------------------------------------------------------
