@@ -2,6 +2,7 @@
 // See LICENSE for details.
 
 import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {HttpErrorResponse} from '@angular/common/http';
 import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {of, Subject, throwError} from 'rxjs';
@@ -264,7 +265,7 @@ describe('LoginComponent', () => {
     });
 
     it('should handle login error', () => {
-      const mockError = { error: 'Unauthorized' };
+      const mockError = { error: 'Unauthorized' } as unknown as HttpErrorResponse;
       mockCustomerAccountService.login.and.returnValue(throwError(mockError));
       spyOn(component, 'handleLoginError');
 
@@ -316,7 +317,7 @@ describe('LoginComponent', () => {
     });
 
     it('should handle TOTP verification error', () => {
-      const mockError = { error: 'Unauthorized' };
+      const mockError = { error: 'Unauthorized' } as unknown as HttpErrorResponse;
       mockTotpAuthService.verifyTotp.and.returnValue(throwError(mockError));
       spyOn(component, 'handleLoginTOTPError');
       component.form.patchValue({ totp: '123456' });
@@ -360,7 +361,7 @@ describe('LoginComponent', () => {
       ];
 
       testCases.forEach(({ error, expected }) => {
-        component.handleLoginError(error);
+        component.handleLoginError(error as unknown as HttpErrorResponse);
         expect(component.error).toBe(expected);
         expect(component.isLoginFailed).toBeTruthy();
       });
@@ -374,7 +375,7 @@ describe('LoginComponent', () => {
       ];
 
       testCases.forEach(({ error, expected }) => {
-        component.handleLoginTOTPError(error);
+        component.handleLoginTOTPError(error as unknown as HttpErrorResponse);
         expect(component.error).toBe(expected);
         expect(component.isLoginFailed).toBeTruthy();
       });
