@@ -22,7 +22,7 @@ export class RegisterComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   private readonly accountService = inject(CustomerAccountService);
 
-  register: FormGroup | any;
+  register: FormGroup;
   submitted: boolean;
   countries = countriesList;
   error: string;
@@ -38,8 +38,8 @@ export class RegisterComponent implements OnInit {
         state: ['', [Validators.required]],
         country: ['', [Validators.required]],
         postcode: ['', [Validators.required]],
-        phone: ['', [Validators.required, Validators.pattern(/^[0-9]\d*$/)]],
-        email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+        phone: ['', [Validators.required, Validators.pattern(/^\d\d*$/)]],
+        email: ['', [Validators.required, Validators.pattern(String.raw`^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$`)]],
         password: ['', [Validators.required,
           Validators.minLength(6),
           Validators.maxLength(40)]],
@@ -54,8 +54,6 @@ export class RegisterComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-
-    let newDate = this.register.value.dob.split("-").reverse().join("-");
 
     if (this.register.invalid) {
       return;
@@ -82,7 +80,7 @@ export class RegisterComponent implements OnInit {
         if (err.error === 'Duplicate Entry') {
           this.error = 'Email is already in use.';
         } else {
-          this.error = Object.values(err).join('\r\n');
+          this.error = (Object.values(err) as string[][]).flat().join('\r\n');
         }
       }
     });

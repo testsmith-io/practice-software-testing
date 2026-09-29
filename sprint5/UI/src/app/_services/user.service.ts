@@ -20,8 +20,8 @@ export class UserService {
     return this.httpClient.get<Pagination<User>>(`${this.apiURL}/users`, { params });
   }
 
-  searchUsers(page: number, query: string): Observable<any> {
-    return this.httpClient.request('QUERY', `${this.apiURL}/users/search`, {
+  searchUsers(page: number, query: string): Observable<Pagination<User>> {
+    return this.httpClient.request<Pagination<User>>('QUERY', `${this.apiURL}/users/search`, {
       body: { page: page.toString(), q: query },
       headers: { 'Content-Type': 'application/json' },
     });
@@ -31,18 +31,18 @@ export class UserService {
     return this.httpClient.get<User>(`${this.apiURL}/users/${id}`);
   }
 
-  create(user: User): Observable<any> {
-    return this.httpClient.post(`${this.apiURL}/users/register`, user)
+  create(user: User): Observable<User> {
+    return this.httpClient.post<User>(`${this.apiURL}/users/register`, user)
       .pipe(catchError(this.errorHandler));
   }
 
-  update(id: string, user: User): Observable<any> {
-    return this.httpClient.put(`${this.apiURL}/users/${id}`, user)
+  update(id: string, user: User): Observable<User> {
+    return this.httpClient.put<User>(`${this.apiURL}/users/${id}`, user)
       .pipe(catchError(this.errorHandler));
   }
 
-  delete(id: number): Observable<any> {
-    return this.httpClient.delete(`${this.apiURL}/users/${id}`)
+  delete(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.apiURL}/users/${id}`)
       .pipe(catchError(this.errorHandler));
   }
 

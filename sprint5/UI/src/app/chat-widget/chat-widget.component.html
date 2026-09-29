@@ -43,7 +43,9 @@
               <div class="product-list">
                 @for (product of message.products; track product.id) {
                   <div class="product-card"
+                       tabindex="0"
                        (click)="onProductClick(product)"
+                       (keydown.enter)="onProductClick(product)"
                        data-test="chat-product">
                     @if (product.image) {
                       <img [src]="product.image" [alt]="product.name" class="product-image">
@@ -89,6 +91,7 @@
              class="hidden-file-input"
              accept=".txt"
              (change)="onFileSelected($event)"
+             aria-label="File attachment"
              data-test="chat-file-input">
 
       <!-- Input -->
@@ -96,6 +99,7 @@
         <form class="chat-input-container" (ngSubmit)="onSubmit()">
           <input type="text"
                  class="chat-input"
+                 aria-label="Message"
                  [(ngModel)]="userInput"
                  name="userInput"
                  [placeholder]="t('chat.placeholder')"

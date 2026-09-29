@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 uses(DatabaseMigrations::class);
 
-//covers(CartController::class);
 
 test('create cart', function () {
     $response = $this->postJson('/carts', ['lat' => 40.7128, 'lng' => -74.0060]);
@@ -174,7 +173,6 @@ test('successful quantity update', function () {
         'quantity' => 1
     ]);
 
-    $updatedQuantity = 3;
 
     $response = $this->putJson("/carts/{$cart->id}/product/quantity", [
         'product_id' => $product->id,
@@ -200,7 +198,6 @@ test('update quantity requires quantity field', function () {
         'quantity' => 1
     ]);
 
-    $updatedQuantity = 3;
 
     $response = $this->putJson("/carts/{$cart->id}/product/quantity", [
         'product_id' => $product->id
@@ -225,7 +222,6 @@ test('update quantity must be an integer', function () {
         'quantity' => 1
     ]);
 
-    $updatedQuantity = 3;
 
     $response = $this->putJson("/carts/{$cart->id}/product/quantity", [
         'product_id' => $product->id,

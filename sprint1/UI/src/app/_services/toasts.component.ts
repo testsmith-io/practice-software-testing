@@ -5,7 +5,7 @@ import {Component, inject, TemplateRef} from '@angular/core';
 
 import {NgbToast} from "@ng-bootstrap/ng-bootstrap";
 import {NgTemplateOutlet} from "@angular/common";
-import {ToastService} from "./toast.service";
+import {ToastService, Toast} from "./toast.service";
 
 @Component({
   selector: 'app-toasts',
@@ -34,7 +34,7 @@ import {ToastService} from "./toast.service";
 export class ToastsComponent {
   toastService = inject(ToastService);
 
-  isTemplate(toast: any) {
+  isTemplate(toast: Toast) {
     return toast.textOrTpl instanceof TemplateRef;
   }
 }

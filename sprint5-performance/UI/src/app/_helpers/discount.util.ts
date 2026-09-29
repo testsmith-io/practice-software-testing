@@ -3,7 +3,7 @@
 
 export default class DiscountUtil {
 
-  private static coordinates: any = {
+  private static readonly coordinates: Record<string, { lat: number; lng: number; discount_percentage: number }> = {
     "new york": {
       lat: 41,
       lng: 74,

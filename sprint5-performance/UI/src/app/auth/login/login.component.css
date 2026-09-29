@@ -26,9 +26,6 @@
 
 .google-sign-in-button:active {
   background-color: #eeeeee;
-}
-
-.google-sign-in-button:active {
   outline: none;
   box-shadow:
     0 -1px 0 rgba(0, 0, 0, .04),

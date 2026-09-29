@@ -3,7 +3,7 @@
 
 import {Component, inject, TemplateRef} from '@angular/core';
 
-import {ToastService} from './toast.service';
+import {Toast, ToastService} from './toast.service';
 import {NgbToast} from "@ng-bootstrap/ng-bootstrap";
 import {NgTemplateOutlet} from "@angular/common";
 
@@ -34,7 +34,7 @@ import {NgTemplateOutlet} from "@angular/common";
 export class ToastsComponent {
   toastService = inject(ToastService);
 
-  isTemplate(toast: any) {
+  isTemplate(toast: Toast) {
     return toast.textOrTpl instanceof TemplateRef;
   }
 }

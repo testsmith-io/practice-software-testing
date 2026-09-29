@@ -23,10 +23,10 @@ import {tap} from "rxjs/operators";
   styleUrls: []
 })
 export class ContactComponent implements OnInit {
-  private formBuilder = inject(FormBuilder);
-  private contactService = inject(ContactService);
-  private auth = inject(CustomerAccountService);
-  public browserDetect = inject(BrowserDetectorService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly contactService = inject(ContactService);
+  private readonly auth = inject(CustomerAccountService);
+  public readonly browserDetect = inject(BrowserDetectorService);
 
   contact: FormGroup | any;
   submitted: boolean;

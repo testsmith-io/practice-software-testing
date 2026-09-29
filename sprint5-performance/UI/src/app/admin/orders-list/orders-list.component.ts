@@ -28,7 +28,7 @@ export class OrdersListComponent implements OnInit {
 
   currentPage: number = 1;
   results: Pagination<Invoice>;
-  searchForm: FormGroup | any;
+  searchForm: FormGroup;
 
   ngOnInit(): void {
     this.getInvoices();
@@ -40,7 +40,7 @@ export class OrdersListComponent implements OnInit {
   }
 
   search() {
-    let query = this.searchForm.controls['query'].value;
+    const query = this.searchForm.controls['query'].value;
     this.invoiceService.searchInvoices(0, query)
       .pipe(first())
       .subscribe((invoices) => this.results = invoices);

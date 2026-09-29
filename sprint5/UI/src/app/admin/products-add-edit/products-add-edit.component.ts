@@ -2,7 +2,7 @@
 // See LICENSE for details.
 
 import {Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ActivatedRoute, RouterLink} from "@angular/router";
 import {first} from "rxjs/operators";
 import {Product} from "../../models/product";
@@ -15,7 +15,6 @@ import {Image} from "../../models/image";
 import {ImageService} from "../../_services/image.service";
 import {ProductSpec, ProductSpecService} from "../../_services/product-spec.service";
 import {NgClass} from "@angular/common";
-import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-products-add-edit',
@@ -44,7 +43,7 @@ export class ProductsAddEditComponent implements OnInit {
   images!: Image[];
   id: string;
   selectedImageId: number;
-  selectedImage: any;
+  selectedImage: Image;
   isAddMode: boolean;
   submitted: boolean = false;
   isUpdated: boolean = false;
@@ -103,7 +102,7 @@ export class ProductsAddEditComponent implements OnInit {
             .subscribe(x => {
               this.form.patchValue(x)
               this.selectedImage = this.images.find((el: Image) => {
-                return el?.id == x.product_image_id;
+                return el?.id === x.product_image_id;
               });
 
               // Trigger stock validation based on loaded product's is_rental value
@@ -156,7 +155,7 @@ export class ProductsAddEditComponent implements OnInit {
           this.isUpdated = true;
           this.reset();
         }, error: (err) => {
-          this.error = Object.values(err).join('\r\n');
+          this.error = Object.values(err as Record<string, string[] | string>).map(v => Array.isArray(v) ? v.join('\r\n') : v).join('\r\n');
         }, complete: () => {
           this.hideAlert = false;
         }
@@ -170,27 +169,27 @@ export class ProductsAddEditComponent implements OnInit {
         next: () => {
           this.isUpdated = true;
         }, error: (err) => {
-          this.error = Object.values(err).join('\r\n');
+          this.error = Object.values(err as Record<string, string[] | string>).map(v => Array.isArray(v) ? v.join('\r\n') : v).join('\r\n');
         }, complete: () => {
           this.hideAlert = false;
         }
       });
   }
 
-  fadeOutMessage(): any {
+  fadeOutMessage(): void {
     setTimeout(() => {
       this.hideAlert = true;
     }, 3000);
   }
 
-  setImage(image: any) {
+  setImage(image: Image) {
     this.selectedImage = this.images.find((el: Image) => {
-      return el?.id == this.selectedImageId;
+      return el?.id === this.selectedImageId;
     });
   }
 
   private reset() {
-    for (let name in this.form.controls) {
+    for (const name in this.form.controls) {
       this.form.controls[name].setValue('');
       this.form.controls[name].setErrors(null);
     }

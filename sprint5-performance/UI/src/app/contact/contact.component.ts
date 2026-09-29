@@ -26,7 +26,7 @@ export class ContactComponent implements OnInit {
   private readonly auth = inject(CustomerAccountService);
   public readonly browserDetect = inject(BrowserDetectorService);
 
-  contact: FormGroup | any;
+  contact: FormGroup;
   submitted: boolean;
   error: string;
   showConfirmation: boolean = false;
@@ -49,16 +49,19 @@ export class ContactComponent implements OnInit {
   }
 
   getSignedInUser() {
-    this.auth.getDetails().subscribe(res => {
-      this.role = this.auth.getRole();
-      this.name = res.first_name + ' ' + res.last_name;
-    }, () => {
-      this.contact.get('first_name').setValidators(Validators.required);
-      this.contact.get('last_name').setValidators(Validators.required);
-      this.contact.get('email').setValidators([Validators.required, Validators.email]);
-      this.contact.controls['first_name'].updateValueAndValidity();
-      this.contact.controls['last_name'].updateValueAndValidity();
-      this.contact.controls['email'].updateValueAndValidity();
+    this.auth.getDetails().subscribe({
+      next: res => {
+        this.role = this.auth.getRole();
+        this.name = res.first_name + ' ' + res.last_name;
+      },
+      error: () => {
+        this.contact.get('first_name').setValidators(Validators.required);
+        this.contact.get('last_name').setValidators(Validators.required);
+        this.contact.get('email').setValidators([Validators.required, Validators.email]);
+        this.contact.controls['first_name'].updateValueAndValidity();
+        this.contact.controls['last_name'].updateValueAndValidity();
+        this.contact.controls['email'].updateValueAndValidity();
+      }
     })
   }
 
@@ -66,8 +69,8 @@ export class ContactComponent implements OnInit {
     return this.contact.controls;
   }
 
-  changeFile(fileEvent: any) {
-    const file: File = fileEvent.target.files[0];
+  changeFile(fileEvent: Event) {
+    const file: File = (fileEvent.target as HTMLInputElement).files![0];
     if (file.type !== 'text/plain') {
       this.contact.controls['attachment'].setErrors({'incorrectType': true});
     }
@@ -98,7 +101,7 @@ export class ContactComponent implements OnInit {
       next: () => {
         this.showConfirmation = true;
       }, error: (err) => {
-        this.error = Object.values(err).join('\r\n');
+        this.error = (Object.values(err) as string[]).join('\r\n');
       }
     });
   }

@@ -14,6 +14,8 @@ use Tests\TestCase;
 
 uses(DatabaseMigrations::class);
 
+const MESSAGE_ROUTE = '/messages';
+
 covers(ContactController::class);
 
 test('send message as guest', function () {
@@ -40,7 +42,7 @@ test('send message as logged in user', function () {
         'message' => $this->faker->text(55)
     ];
 
-    $response = $this->json('post', '/messages', $payload, $this->headers($user));
+    $response = $this->json('post', MESSAGE_ROUTE, $payload, $this->headers($user));
 
     $response->assertStatus(ResponseAlias::HTTP_OK)
         ->assertJsonStructure([
@@ -137,7 +139,7 @@ test('retrieve messages as admin', function () {
 
     addMessage($this, $this->faker);
 
-    $response = $this->json('get', '/messages', [], $this->headers($user));
+    $response = $this->json('get', MESSAGE_ROUTE, [], $this->headers($user));
 
     $response->assertStatus(ResponseAlias::HTTP_OK)
         ->assertJsonStructure([
@@ -165,9 +167,9 @@ test('retrieve messages as logged in user', function () {
         'message' => $this->faker->text(55)
     ];
 
-    $this->json('post', '/messages', $payload, $this->headers($user));
+    $this->json('post', MESSAGE_ROUTE, $payload, $this->headers($user));
 
-    $response = $this->json('get', '/messages', [], $this->headers($user));
+    $response = $this->json('get', MESSAGE_ROUTE, [], $this->headers($user));
 
     $response->assertStatus(ResponseAlias::HTTP_OK)
         ->assertJsonStructure([
@@ -213,7 +215,7 @@ test('retrieve message as logged in user', function () {
         'message' => $this->faker->text(55)
     ];
 
-    $message = $this->json('post', '/messages', $payload, $this->headers($user));
+    $message = $this->json('post', MESSAGE_ROUTE, $payload, $this->headers($user));
 
     $response = $this->json('get', "/messages/{$message->json('id')}", [], $this->headers($user));
 
@@ -274,7 +276,7 @@ function addMessage(TestCase $testCase, Faker\Generator $faker): TestResponse
         'message' => $faker->text(55)
     ];
 
-    return $testCase->postJson('/messages', $payload);
+    return $testCase->postJson(MESSAGE_ROUTE, $payload);
 }
 
 test('email is sent in local environment', function () {
@@ -289,7 +291,7 @@ test('email is sent in local environment', function () {
 
     $this->app['env'] = 'local';
 
-    $response = $this->postJson('/messages', $data, $this->headers($user));
+    $response = $this->postJson(MESSAGE_ROUTE, $data, $this->headers($user));
 
     Mail::assertQueued(Contact::class);
     $this->assertDatabaseHas('contact_requests', ['user_id' => $user->id]);
@@ -322,7 +324,7 @@ test('reply message is required', function () {
 
 test('fails without correct guard set', function () {
     $message = addMessage($this, $this->faker);
-    $admin = User::factory()->create(['role' => 'admin']);
+    User::factory()->create(['role' => 'admin']);
 
     $response = $this->postJson("/messages/{$message->json('id')}/reply", []);
 

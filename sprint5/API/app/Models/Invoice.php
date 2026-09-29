@@ -189,8 +189,8 @@ class Invoice extends BaseModel
     public function scopeWithBasicInfo($query)
     {
         return $query->select([
-            'id', 'user_id', 'invoice_number', 'invoice_date', 'status', 
-            'total', 'subtotal', 'billing_street', 'billing_city', 
+            'id', 'user_id', 'invoice_number', 'invoice_date', 'status',
+            'total', 'subtotal', 'billing_street', 'billing_city',
             'billing_state', 'billing_country', 'billing_postal_code',
             'additional_discount_percentage', 'additional_discount_amount'
         ]);

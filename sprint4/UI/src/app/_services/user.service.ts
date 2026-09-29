@@ -13,28 +13,28 @@ import {Pagination} from "../models/pagination";
   providedIn: 'root'
 })
 export class UserService {
-  private httpClient = inject(HttpClient);
+  private readonly httpClient = inject(HttpClient);
   apiURL = environment.apiUrl;
 
-  getUsers(page: any): Observable<Pagination<User>> {
-    let params = new HttpParams().set('page', page);
+  getUsers(page: number): Observable<Pagination<User>> {
+    const params = new HttpParams().set('page', page);
 
-    return this.httpClient.get<User[]>(environment.apiUrl + `/users`, {params: params})
+    return this.httpClient.get<Pagination<User>>(environment.apiUrl + `/users`, {params: params})
       .pipe(map(this.extractData));
   }
-  searchUsers(page:any, query: string): Observable<any> {
-    let params = new HttpParams().set('page', page)
+  searchUsers(page: number, query: string): Observable<Pagination<User>> {
+    const params = new HttpParams().set('page', page)
       .set('q', query);
 
-    return this.httpClient.get(environment.apiUrl + '/users/search', {responseType: 'json', params: params});
+    return this.httpClient.get<Pagination<User>>(environment.apiUrl + '/users/search', {responseType: 'json', params: params});
   }
 
   getById(id: string): Observable<User> {
     return this.httpClient.get<User>(environment.apiUrl + `/users/${id}`);
   }
 
-  create(user: User): Observable<any> {
-    return this.httpClient.post(this.apiURL + '/users/register', JSON.stringify(user), {responseType: 'json'})
+  create(user: User): Observable<User> {
+    return this.httpClient.post<User>(this.apiURL + '/users/register', JSON.stringify(user), {responseType: 'json'})
       .pipe(
         catchError(this.errorHandler)
       )
@@ -55,8 +55,8 @@ export class UserService {
   }
 
   errorHandler(error: HttpErrorResponse) {
-    return throwError(error.error || "server error.");
+    return throwError(() => error.error || "server error.");
   }
 
-  private extractData = (res: any) => res;
+  private extractData = <T>(res: T): T => res;
 }

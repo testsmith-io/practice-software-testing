@@ -22,13 +22,13 @@ import {PaginationComponent} from "../../pagination/pagination.component";
   styleUrls: []
 })
 export class UsersListComponent implements OnInit {
-  private userService = inject(UserService);
-  private toastr = inject(ToastrService);
-  private formBuilder = inject(FormBuilder);
+  private readonly userService = inject(UserService);
+  private readonly toastr = inject(ToastrService);
+  private readonly formBuilder = inject(FormBuilder);
 
   currentPage: number = 1;
   results: Pagination<User>;
-  searchForm: FormGroup | any;
+  searchForm: FormGroup;
 
   ngOnInit(): void {
     this.getUsers();
@@ -40,7 +40,7 @@ export class UsersListComponent implements OnInit {
   }
 
   search() {
-    let query = this.searchForm.controls['query'].value;
+    const query = this.searchForm.controls['query'].value;
     this.userService.searchUsers(0, query)
       .pipe(first())
       .subscribe((users) => this.results = users);
@@ -51,7 +51,7 @@ export class UsersListComponent implements OnInit {
     this.getUsers();
   }
 
-  deleteUser(id: number | any) {
+  deleteUser(id: number) {
     this.userService.delete(id)
       .pipe(first())
       .subscribe({

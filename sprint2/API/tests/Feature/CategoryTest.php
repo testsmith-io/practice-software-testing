@@ -15,10 +15,13 @@ use Tests\TestCase;
 class CategoryTest extends TestCase {
     use DatabaseMigrations;
 
+    private const CATEGORIES = '/categories';
+    private const CATEGORIES_PREFIX = '/categories/';
+
     public function testRetrieveCategories() {
         Category::factory()->create();
 
-        $response = $this->get('/categories');
+        $response = $this->get(self::CATEGORIES);
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
@@ -79,7 +82,7 @@ class CategoryTest extends TestCase {
         $payload = ['name' => 'new',
             'slug' => 'some description'];
 
-        $response = $this->post('/categories', $payload);
+        $response = $this->post(self::CATEGORIES, $payload);
 
         $response
             ->assertStatus(ResponseAlias::HTTP_CREATED)
@@ -91,7 +94,7 @@ class CategoryTest extends TestCase {
     }
 
     public function testAddCategoryRequiredFields() {
-        $response = $this->post('/categories');
+        $response = $this->post(self::CATEGORIES);
 
         $response
             ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
@@ -104,7 +107,7 @@ class CategoryTest extends TestCase {
     public function testDeleteCategory() {
         $category = Category::factory()->create();
 
-        $this->delete('/categories/' . $category->id)
+        $this->delete(self::CATEGORIES_PREFIX . $category->id)
             ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
     }
 
@@ -127,7 +130,7 @@ class CategoryTest extends TestCase {
             'product_image_id' => $productImage->id]);
 
 
-        $this->json('DELETE', '/categories/' . $category->id)
+        $this->json('DELETE', self::CATEGORIES_PREFIX . $category->id)
             ->assertStatus(ResponseAlias::HTTP_CONFLICT);
     }
 
@@ -136,7 +139,7 @@ class CategoryTest extends TestCase {
 
         $payload = ['name' => 'new name'];
 
-        $response = $this->put('/categories/' . $category->id, $payload);
+        $response = $this->put(self::CATEGORIES_PREFIX . $category->id, $payload);
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)

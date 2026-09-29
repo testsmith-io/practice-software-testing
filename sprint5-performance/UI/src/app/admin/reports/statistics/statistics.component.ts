@@ -4,6 +4,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ReportService} from "../../../_services/report.service";
 import {RenderDelayDirective} from "../../../render-delay-directive.directive";
+import {CustomerPerCountry, SalesPerCountry, TopPurchasedProduct, TopSellingCategory} from "../../../models/report";
 
 @Component({
   selector: 'app-statistics',
@@ -16,10 +17,10 @@ import {RenderDelayDirective} from "../../../render-delay-directive.directive";
 export class StatisticsComponent implements OnInit {
   private readonly reportService = inject(ReportService);
 
-  top10BestSellingCategories: any;
-  top10PurchasedProducts: any;
-  customerByCountry: any;
-  totalSalesPerCountry: any;
+  top10BestSellingCategories: TopSellingCategory[] = [];
+  top10PurchasedProducts: TopPurchasedProduct[] = [];
+  customerByCountry: CustomerPerCountry[] = [];
+  totalSalesPerCountry: SalesPerCountry[] = [];
 
   ngOnInit(): void {
     this.reportService.getTop10BestSellingCategories().subscribe(res => {

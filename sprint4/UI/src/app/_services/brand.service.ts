@@ -12,15 +12,15 @@ import {catchError, shareReplay} from "rxjs/operators";
   providedIn: 'root'
 })
 export class BrandService {
-  private httpClient = inject(HttpClient);
-  private apiURL = environment.apiUrl;
+  private readonly httpClient = inject(HttpClient);
+  private readonly apiURL = environment.apiUrl;
   private brands$: Observable<Brand[]> | null = null;
 
-  searchBrands(query: string): Observable<any> {
-    let params = new HttpParams()
+  searchBrands(query: string): Observable<Brand[]> {
+    const params = new HttpParams()
       .set('q', query);
 
-    return this.httpClient.get(this.apiURL + '/brands/search', {responseType: 'json', params: params});
+    return this.httpClient.get<Brand[]>(this.apiURL + '/brands/search', {responseType: 'json', params: params});
   }
 
   getBrands(): Observable<Brand[]> {
@@ -42,9 +42,9 @@ export class BrandService {
     return this.httpClient.get<Brand>(this.apiURL + `/brands/${id}`);
   }
 
-  create(brand: Brand): Observable<any> {
+  create(brand: Brand): Observable<Brand> {
     this.invalidateBrandsCache();
-    return this.httpClient.post(this.apiURL + '/brands', JSON.stringify(brand), {responseType: 'json'})
+    return this.httpClient.post<Brand>(this.apiURL + '/brands', JSON.stringify(brand), {responseType: 'json'})
       .pipe(
         catchError(this.errorHandler)
       )
@@ -67,9 +67,9 @@ export class BrandService {
   }
 
   errorHandler(error: HttpErrorResponse) {
-    return throwError(error.error || "server error.");
+    return throwError(() => error.error || "server error.");
   }
 
-  private extractData = (res: any) => res;
+  private extractData = <T>(res: T): T => res;
 
 }

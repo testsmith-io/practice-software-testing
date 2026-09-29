@@ -17,8 +17,10 @@ use Tests\TestCase;
 class BrandTest extends TestCase {
     use DatabaseMigrations;
 
+    private const BRANDS = '/brands';
+
     public function testRetrieveBrands(): void {
-        $response = $this->getJson('/brands');
+        $response = $this->getJson(self::BRANDS);
 
         $response->assertStatus(ResponseAlias::HTTP_OK)
             ->assertJsonStructure([
@@ -47,7 +49,7 @@ class BrandTest extends TestCase {
             'slug' => $this->faker->slug
         ];
 
-        $response = $this->postJson('/brands', $payload);
+        $response = $this->postJson(self::BRANDS, $payload);
 
         $response->assertStatus(ResponseAlias::HTTP_CREATED)
             ->assertJsonStructure([
@@ -58,7 +60,7 @@ class BrandTest extends TestCase {
     }
 
     public function testAddBrandRequiredFields(): void {
-        $response = $this->postJson('/brands');
+        $response = $this->postJson(self::BRANDS);
 
         $response
             ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)

@@ -15,6 +15,10 @@ use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+const ID_PARAM = '/{id}';
+const SEARCH_PATH = '/search';
+const CACHE_HEADERS = 'cache.headers:public;max_age=120;etag';
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -32,33 +36,33 @@ Route::get('/status', function () {
 });
 
 Route::controller(BrandController::class)->prefix('brands')->group(function () {
-    Route::middleware('cache.headers:public;max_age=120;etag')->group(function () {
+    Route::middleware(CACHE_HEADERS)->group(function () {
         Route::get('', 'index');
-        Route::get('/search', 'search');
-        Route::get('/{id}', 'show');
+        Route::get(SEARCH_PATH, 'search');
+        Route::get(ID_PARAM, 'show');
     });
     Route::post('', 'store');
-    Route::put('/{id}', 'update');
-    Route::delete('/{id}', 'destroy');
+    Route::put(ID_PARAM, 'update');
+    Route::delete(ID_PARAM, 'destroy');
 });
 
 Route::controller(CategoryController::class)->prefix('categories')->group(function () {
-    Route::middleware('cache.headers:public;max_age=120;etag')->group(function () {
+    Route::middleware(CACHE_HEADERS)->group(function () {
         Route::get('/tree', 'indexTree');
         Route::get('', 'index');
-        Route::get('/search', 'search');
+        Route::get(SEARCH_PATH, 'search');
         Route::get('/tree/{id}', 'show');
     });
     Route::post('', 'store');
-    Route::put('/{id}', 'update');
-    Route::delete('/{id}', 'destroy');
+    Route::put(ID_PARAM, 'update');
+    Route::delete(ID_PARAM, 'destroy');
 });
 
 Route::controller(ContactController::class)->prefix('messages')->group(function () {
     Route::post('', 'send');
     Route::post('/{id}/attach-file', 'attachFile');
     Route::get('', 'index');
-    Route::get('/{id}', 'show');
+    Route::get(ID_PARAM, 'show');
     Route::post('/{id}/reply', 'storeReply');
     Route::put('/{id}/status', 'updateStatus');
 });
@@ -66,25 +70,25 @@ Route::controller(ContactController::class)->prefix('messages')->group(function 
 Route::controller(FavoriteController::class)->prefix('favorites')->group(function () {
     Route::get('', 'index');
     Route::post('', 'store');
-    Route::get('/{id}', 'show');
-    Route::delete('/{id}', 'destroy');
-    Route::put('/{id}', 'update');
+    Route::get(ID_PARAM, 'show');
+    Route::delete(ID_PARAM, 'destroy');
+    Route::put(ID_PARAM, 'update');
 });
 
 Route::controller(ImageController::class)->prefix('images')->group(function () {
-    Route::middleware('cache.headers:public;max_age=120;etag')->group(function () {
+    Route::middleware(CACHE_HEADERS)->group(function () {
         Route::get('', 'index');
     });
 });
 
 Route::controller(InvoiceController::class)->prefix('invoices')->group(function () {
     Route::get('', 'index');
-    Route::get('/search', 'search');
-    Route::get('/{id}', 'show');
+    Route::get(SEARCH_PATH, 'search');
+    Route::get(ID_PARAM, 'show');
     Route::put('/{id}/status', 'updateStatus');
     Route::post('', 'store');
-    Route::delete('/{id}', 'destroy');
-    Route::put('/{id}', 'update');
+    Route::delete(ID_PARAM, 'destroy');
+    Route::put(ID_PARAM, 'update');
 });
 
 Route::controller(PaymentController::class)->prefix('payment')->group(function () {
@@ -92,15 +96,15 @@ Route::controller(PaymentController::class)->prefix('payment')->group(function (
 });
 
 Route::controller(ProductController::class)->prefix('products')->group(function () {
-    Route::middleware('cache.headers:public;max_age=120;etag')->group(function () {
+    Route::middleware(CACHE_HEADERS)->group(function () {
         Route::get('', 'index');
-        Route::get('/search', 'search');
-        Route::get('/{id}', 'show');
+        Route::get(SEARCH_PATH, 'search');
+        Route::get(ID_PARAM, 'show');
         Route::get('/{id}/related', 'showRelated');
     });
     Route::post('', 'store');
-    Route::put('/{id}', 'update');
-    Route::delete('/{id}', 'destroy');
+    Route::put(ID_PARAM, 'update');
+    Route::delete(ID_PARAM, 'destroy');
 });
 
 Route::middleware(['throttle:reports'])->controller(ReportController::class)->prefix('reports')->group(function () {
@@ -119,12 +123,12 @@ Route::controller(UserController::class)->prefix('users')->group(function () {
     Route::post('/forgot-password', 'forgotPassword');
     Route::post('/register', 'store');
     Route::get('/logout', 'logout');
-    Route::get('/search', 'search');
+    Route::get(SEARCH_PATH, 'search');
     Route::get('/refresh', 'refresh');
     Route::get('/me', 'me');
     Route::put('{id}', 'update');
     Route::get('/', 'index');
-    Route::get('/{id}', 'show');
-    Route::delete('/{id}', 'destroy');
+    Route::get(ID_PARAM, 'show');
+    Route::delete(ID_PARAM, 'destroy');
 });
 

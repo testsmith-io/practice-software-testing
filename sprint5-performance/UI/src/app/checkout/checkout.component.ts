@@ -35,7 +35,7 @@ export class CheckoutComponent {
     this.canExitStep3 = cusAddress.valid;
   }
 
-  enterAddressStep($event: any) {
+  enterAddressStep($event: unknown) {
     this.addressComponent.setAddress();
   }
 

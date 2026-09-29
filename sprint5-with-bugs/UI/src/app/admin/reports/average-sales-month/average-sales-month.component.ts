@@ -25,7 +25,7 @@ import {BaseChartDirective} from "ng2-charts";
   styleUrls: []
 })
 export class AverageSalesMonthComponent implements OnInit {
-  private reportService = inject(ReportService);
+  private readonly reportService = inject(ReportService);
 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,

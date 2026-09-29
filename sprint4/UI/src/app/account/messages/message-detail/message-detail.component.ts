@@ -66,7 +66,7 @@ export class MessageDetailComponent implements OnInit {
   }
 
   private addReply() {
-    let messageId = this.message.id;
+    const messageId = this.message.id;
 
     const payload: ContactMessage = {
       message: this.form.value.message};
@@ -79,7 +79,7 @@ export class MessageDetailComponent implements OnInit {
           this.getMessage();
           this.reset();
         }, error: (err) => {
-          this.error = Object.values(err).join('\r\n');
+          this.error = (Object.values(err) as string[][]).flat().join('\r\n');
         }, complete: () => {
           this.hideAlert = false;
         }
@@ -87,7 +87,7 @@ export class MessageDetailComponent implements OnInit {
   }
 
   private reset() {
-    for (let name in this.form.controls) {
+    for (const name in this.form.controls) {
       this.form.controls[name].setValue('');
       this.form.controls[name].setErrors(null);
     }

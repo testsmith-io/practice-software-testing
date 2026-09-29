@@ -30,7 +30,7 @@ export class ProductsListComponent implements OnInit {
 
   currentPage: number = 1;
   products!: Pagination<Product>;
-  searchForm: FormGroup | any;
+  searchForm: FormGroup;
 
   ngOnInit(): void {
     this.getProducts();
@@ -42,7 +42,7 @@ export class ProductsListComponent implements OnInit {
   }
 
   search() {
-    let query = this.searchForm.controls['query'].value;
+    const query = this.searchForm.controls['query'].value;
     this.productService.searchProducts(query)
       .pipe(first())
       .subscribe((products) => this.products = products);

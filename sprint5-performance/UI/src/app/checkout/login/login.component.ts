@@ -5,7 +5,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {TokenStorageService} from "../../_services/token-storage.service";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {NgClass} from "@angular/common";
 import {RouterLink} from "@angular/router";
@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
   private readonly http = inject(HttpClient);
 
   isLoggedIn: boolean = false;
-  cusForm: FormGroup | any;
+  cusForm: FormGroup;
   cusSubmitted = false;
   customerError: string | undefined;
   isLoginFailed = false;
@@ -110,7 +110,7 @@ export class LoginComponent implements OnInit {
     this.roles = this.accountService.getRole();
   }
 
-  handleLoginError(err: any): void {
+  handleLoginError(err: HttpErrorResponse): void {
     if (err.error === 'Unauthorized') {
       this.customerError = 'Invalid email or password';
     } else {
@@ -120,7 +120,7 @@ export class LoginComponent implements OnInit {
     this.isLoginFailed = true;
   }
 
-  handleLoginTOTPError(err: any): void {
+  handleLoginTOTPError(err: HttpErrorResponse): void {
     if (err.error === 'Unauthorized') {
       this.customerError = 'Invalid TOTP';
     } else {

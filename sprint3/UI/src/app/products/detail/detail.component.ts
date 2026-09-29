@@ -34,7 +34,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   product: Product;
   quantity: number = 1;
   relatedProducts: Product[];
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
   private id: number;
   sliderOptions: Options = {
     floor: 1,
@@ -60,7 +60,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   minus() {
-    if (this.quantity != 1) {
+    if (this.quantity !== 1) {
       this.quantity = this.quantity - 1;
     }
   }
@@ -80,7 +80,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   addToCart(product: Product) {
     if (this.quantity >= 1) {
       const price = (product.discount_price) ? product.discount_price : product.price;
-      let item = {
+      const item = {
         'id': product.id,
         'is_rental': product.is_rental,
         'name': product.name,

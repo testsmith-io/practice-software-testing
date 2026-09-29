@@ -2,7 +2,7 @@
 // See LICENSE for details.
 
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {Subject, takeUntil} from "rxjs";
+import {Subject, Subscription, takeUntil} from "rxjs";
 import {CartService} from "../../_services/cart.service";
 import {FavoriteService} from "../../_services/favorite.service";
 import {ActivatedRoute, RouterLink} from "@angular/router";
@@ -35,23 +35,23 @@ import {ComparisonService} from "../../_services/comparison.service";
   styleUrls: ['./detail.component.css']
 })
 export class DetailComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
-  private cartService = inject(CartService);
-  private favoriteService = inject(FavoriteService);
-  private route = inject(ActivatedRoute);
-  private toastr = inject(ToastrService);
-  private productService = inject(ProductService);
-  public browserDetect = inject(BrowserDetectorService);
-  private titleService = inject(Title);
-  private gaService = inject(GaService);
-  public comparisonService = inject(ComparisonService);
-  private translocoService = inject(TranslocoService);
+  private readonly destroy$ = new Subject<void>();
+  private readonly cartService = inject(CartService);
+  private readonly favoriteService = inject(FavoriteService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly toastr = inject(ToastrService);
+  private readonly productService = inject(ProductService);
+  public readonly browserDetect = inject(BrowserDetectorService);
+  private readonly titleService = inject(Title);
+  private readonly gaService = inject(GaService);
+  public readonly comparisonService = inject(ComparisonService);
+  private readonly translocoService = inject(TranslocoService);
   product: Product;
-  discount_percentage: any;
+  discount_percentage: number;
   quantity: number = 1;
   readonly MAX_QUANTITY = 99;
   relatedProducts: Product[];
-  private sub: any;
+  private sub: Subscription;
   private id: string;
   sliderOptions: Options = {
     floor: 1,
@@ -90,10 +90,10 @@ export class DetailComponent implements OnInit, OnDestroy {
 
   validateQuantity(event: Event): void {
     const target = event.target as HTMLInputElement;
-    let value = parseInt(target.value, 10);
+    let value = Number.parseInt(target.value, 10);
 
     // Check if value is NaN or exceeds maximum
-    if (isNaN(value) || value < 1) {
+    if (Number.isNaN(value) || value < 1) {
       value = 1;
     } else if (value > this.MAX_QUANTITY) {
       value = this.MAX_QUANTITY;
@@ -148,7 +148,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   addToCart(product: Product) {
     if (this.quantity >= 1) {
       const price = (product.discount_price) ? product.discount_price : product.price;
-      let item = {
+      const item = {
         'id': product.id,
         'quantity': this.quantity,
         'price': price,

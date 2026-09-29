@@ -3,9 +3,8 @@
 
 import {Component, inject, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {CustomerAccountService} from "../../shared/customer-account.service";
+import {CustomerAccountService, Credentials} from "../../shared/customer-account.service";
 import {TokenStorageService} from "../../_services/token-storage.service";
-import {User} from "../../models/user.model";
 import {NgClass} from "@angular/common";
 import {RouterLink} from "@angular/router";
 
@@ -24,7 +23,7 @@ export class LoginComponent implements OnInit {
   private readonly accountService = inject(CustomerAccountService);
   private readonly tokenStorage = inject(TokenStorageService);
 
-  form: FormGroup | any;
+  form: FormGroup;
   submitted = false;
   error: string | undefined;
   isLoggedIn = false;
@@ -38,7 +37,7 @@ export class LoginComponent implements OnInit {
 
     this.form = this.formBuilder.group(
       {
-        email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+        email: ['', [Validators.required, Validators.pattern(String.raw`^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$`)]],
         password: ['', [Validators.required,
           Validators.minLength(3),
           Validators.maxLength(40)]],
@@ -65,7 +64,7 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    const payload: User = {
+    const payload: Credentials = {
       email: this.form.value.email,
       password: this.form.value.password
     };

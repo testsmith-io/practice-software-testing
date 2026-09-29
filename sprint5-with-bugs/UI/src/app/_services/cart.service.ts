@@ -9,7 +9,7 @@ import {ToastService} from "./toast.service";
   providedIn: 'root'
 })
 export class CartService {
-  private toastService = inject(ToastService);
+  private readonly toastService = inject(ToastService);
   public storageSub = new Subject<string>();
 
   getItems() {

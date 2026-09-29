@@ -209,12 +209,12 @@ class UserService
 
         if ($currentUserId !== $id && $currentUserRole !== 'admin') {
             Log::warning("Unauthorized update attempt by user ID: {$currentUserId}");
-            throw new Exception('You can only update your own data.');
+            throw new \DomainException('You can only update your own data.');
         }
 
         if (isset($data['role']) && $currentUserRole !== 'admin') {
             Log::warning("Role update blocked for non-admin user ID: {$currentUserId}");
-            throw new Exception('Only admins can update the role.');
+            throw new \DomainException('Only admins can update the role.');
         }
 
         if ($currentUserRole !== 'admin') {
@@ -293,7 +293,7 @@ class UserService
         }
 
         Log::warning("Unauthorized access to user ID: {$id} by user ID: {$currentUserId}");
-        throw new Exception('You are not authorized to view this user.');
+        throw new \DomainException('You are not authorized to view this user.');
     }
 
     public function patchUser($id, $data, $currentUserId, $currentUserRole)
@@ -304,7 +304,7 @@ class UserService
 
         if ($currentUserId === $id || $currentUserRole === "admin") {
             if (isset($data['role']) && $currentUserRole !== "admin") {
-                throw new Exception('Only admins can update the role.');
+                throw new \DomainException('Only admins can update the role.');
             }
 
             if ($currentUserRole !== "admin") {
@@ -320,7 +320,7 @@ class UserService
         }
 
         Log::warning("Unauthorized patch attempt on user ID: {$id}");
-        throw new Exception('You can only update your own data.');
+        throw new \DomainException('You can only update your own data.');
     }
 
     public function extractAddressFields($data)

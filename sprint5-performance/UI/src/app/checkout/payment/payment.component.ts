@@ -11,6 +11,7 @@ import {
   Validators
 } from "@angular/forms";
 import {CartService} from "../../_services/cart.service";
+import {Address} from "../../models/address";
 import {Observable, of} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {PaymentService} from "../../_services/payment.service";
@@ -34,16 +35,16 @@ export class PaymentComponent implements OnInit {
 
   selectedPaymentMethod: string = '';
 
-  @Input() address: any;
+  @Input() address: Address;
 
-  paymentError: any
-  state: any;
+  paymentError: string | null
+  state: boolean | null;
   paymentMessage: string;
-  cusPayment: FormGroup | any;
+  cusPayment: FormGroup;
 
   paid: boolean = false;
   total: number;
-  invoice_number: number;
+  invoice_number: string;
 
   ngOnInit(): void {
     this.cusPayment = this.formBuilder.group({
@@ -126,10 +127,10 @@ export class PaymentComponent implements OnInit {
   }
 
   finishFunction() {
-    let cartId = sessionStorage.getItem('cart_id');
-    let paymentData = this.cusPayment.value;
+    const cartId = sessionStorage.getItem('cart_id');
+    const paymentData = this.cusPayment.value;
 
-    let payment: any;
+    let payment: Record<string, unknown>;
     switch (paymentData.payment_method) {
       case 'bank-transfer':
         payment = {
@@ -194,7 +195,7 @@ export class PaymentComponent implements OnInit {
   /*
   Check payment method, only if mock endpoint is stored in sessionStorage
    */
-  checkPayment(paymentPayload: any): Observable<boolean> {
+  checkPayment(paymentPayload: Record<string, unknown>): Observable<boolean> {
     if (!this.state) {
       const endpoint = (window.localStorage.getItem('PAYMENT_ENDPOINT')) ? window.localStorage.getItem('PAYMENT_ENDPOINT') : environment.apiUrl + '/payment/check';
       this.paymentService.validate(endpoint, paymentPayload).subscribe(res => {

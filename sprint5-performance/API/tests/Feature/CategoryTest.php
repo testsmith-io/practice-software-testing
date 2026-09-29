@@ -12,12 +12,13 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 uses(DatabaseMigrations::class);
 
-//covers(CategoryController::class);
+
+const CATEGORIES = '/categories';
 
 test('retrieve categories', function () {
     Category::factory()->create();
 
-    $response = $this->getJson('/categories');
+    $response = $this->getJson(CATEGORIES);
 
     $response
         ->assertStatus(ResponseAlias::HTTP_OK)
@@ -78,7 +79,7 @@ test('add category', function () {
     $payload = ['name' => 'new',
         'slug' => 'some-description'];
 
-    $response = $this->postJson('/categories', $payload);
+    $response = $this->postJson(CATEGORIES, $payload);
 
     $response
         ->assertStatus(ResponseAlias::HTTP_CREATED)
@@ -90,7 +91,7 @@ test('add category', function () {
 });
 
 test('add category required fields', function () {
-    $response = $this->postJson('/categories');
+    $response = $this->postJson(CATEGORIES);
 
     $response
         ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)

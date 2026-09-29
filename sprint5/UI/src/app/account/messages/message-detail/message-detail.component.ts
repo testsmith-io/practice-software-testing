@@ -23,10 +23,10 @@ import {TranslocoDirective} from "@jsverse/transloco";
   styleUrls: []
 })
 export class MessageDetailComponent implements OnInit {
-  private messageService = inject(ContactService);
-  private route = inject(ActivatedRoute);
-  private formBuilder = inject(FormBuilder);
-  private titleService = inject(Title);
+  private readonly messageService = inject(ContactService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly titleService = inject(Title);
 
   statuses = ["NEW", "IN_PROGRESS", "RESOLVED"];
   message!: ContactMessage;
@@ -72,7 +72,7 @@ export class MessageDetailComponent implements OnInit {
   }
 
   private addReply() {
-    let messageId = this.message.id;
+    const messageId = this.message.id;
 
     const payload: ContactMessage = {
       message: this.form.value.message
@@ -86,7 +86,7 @@ export class MessageDetailComponent implements OnInit {
           this.getMessage();
           this.reset();
         }, error: (err) => {
-          this.error = Object.values(err).join('\r\n');
+          this.error = Object.values(err as Record<string, string[] | string>).map(v => Array.isArray(v) ? v.join('\r\n') : v).join('\r\n');
         }, complete: () => {
           this.hideAlert = false;
         }
@@ -94,7 +94,7 @@ export class MessageDetailComponent implements OnInit {
   }
 
   private reset() {
-    for (let name in this.form.controls) {
+    for (const name in this.form.controls) {
       this.form.controls[name].setValue('');
       this.form.controls[name].setErrors(null);
     }

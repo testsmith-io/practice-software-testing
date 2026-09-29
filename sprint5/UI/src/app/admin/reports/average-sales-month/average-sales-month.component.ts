@@ -102,19 +102,19 @@ export class AverageSalesMonthComponent implements OnInit {
     this.getData('2025')
   }
 
-  selectYear(year: any) {
-    this.getData(year.target.value)
+  selectYear(year: Event) {
+    this.getData((year.target as HTMLSelectElement).value)
   }
 
-  getData(year: any) {
+  getData(year: string) {
     this.reportService.getAverageSalesPerMonth(year).subscribe(res => {
-      let labels = res.map((item) => {
+      const labels = res.map((item) => {
         return item['month'];
       });
-      let data = res.map((item) => {
+      const data = res.map((item) => {
         return item['average'].toFixed(2);
       });
-      let amount = res.map((item) => {
+      const amount = res.map((item) => {
         return item['amount'];
       });
 

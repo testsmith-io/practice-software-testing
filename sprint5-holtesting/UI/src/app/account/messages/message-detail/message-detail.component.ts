@@ -23,10 +23,10 @@ import {TranslocoDirective} from "@jsverse/transloco";
   styleUrls: []
 })
 export class MessageDetailComponent implements OnInit {
-  private messageService = inject(ContactService);
-  private route = inject(ActivatedRoute);
-  private formBuilder = inject(FormBuilder);
-  private titleService = inject(Title);
+  private readonly messageService = inject(ContactService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly titleService = inject(Title);
 
   statuses = ["NEW", "IN_PROGRESS", "RESOLVED"];
   message!: ContactMessage;

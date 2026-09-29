@@ -35,17 +35,17 @@ import {ComparisonService} from "../../_services/comparison.service";
   styleUrls: ['./detail.component.css']
 })
 export class DetailComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
-  private cartService = inject(CartService);
-  private favoriteService = inject(FavoriteService);
-  private route = inject(ActivatedRoute);
-  private toastr = inject(ToastrService);
-  private productService = inject(ProductService);
-  public browserDetect = inject(BrowserDetectorService);
-  private titleService = inject(Title);
-  private gaService = inject(GaService);
-  public comparisonService = inject(ComparisonService);
-  private translocoService = inject(TranslocoService);
+  private readonly destroy$ = new Subject<void>();
+  private readonly cartService = inject(CartService);
+  private readonly favoriteService = inject(FavoriteService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly toastr = inject(ToastrService);
+  private readonly productService = inject(ProductService);
+  public readonly browserDetect = inject(BrowserDetectorService);
+  private readonly titleService = inject(Title);
+  private readonly gaService = inject(GaService);
+  public readonly comparisonService = inject(ComparisonService);
+  private readonly translocoService = inject(TranslocoService);
   product: Product;
   discount_percentage: any;
   quantity: number = 1;

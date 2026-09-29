@@ -17,8 +17,8 @@ export class CategoryService {
   private categoriesTree$: Observable<Category[]> | null = null;
   private categories$: Observable<Category[]> | null = null;
 
-  searchCategories(query: string): Observable<any> {
-    return this.httpClient.request<any>('QUERY', `${this.apiURL}/search`, {
+  searchCategories(query: string): Observable<Category[]> {
+    return this.httpClient.request<Category[]>('QUERY', `${this.apiURL}/search`, {
       body: { q: query },
       headers: { 'Content-Type': 'application/json' },
     }).pipe(catchError(this.handleError));

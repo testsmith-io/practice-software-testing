@@ -17,10 +17,10 @@ declare global {
   providedIn: 'root'
 })
 export class GaService {
-  private router = inject(Router);
+  private readonly router = inject(Router);
   private isInitialized = false;
   private isReady = false;
-  private eventQueue: Array<() => void> = [];
+  private readonly eventQueue: Array<() => void> = [];
 
   constructor() {
     if (environment.production && environment.gaCode && !this.isInitialized) {

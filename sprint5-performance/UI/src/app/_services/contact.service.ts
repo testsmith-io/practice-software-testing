@@ -7,6 +7,7 @@ import {Observable, of, switchMap, throwError} from "rxjs";
 import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
 import {catchError} from "rxjs/operators";
 import {ContactMessage} from "../models/contact-message";
+import {Pagination} from "../models/pagination";
 
 @Injectable({
   providedIn: 'root'
@@ -16,26 +17,26 @@ export class ContactService {
   private readonly apiURL = `${environment.apiUrl}/messages`;
   private readonly jsonHeaders = { 'Content-Type': 'application/json' };
 
-  getMessages(page: number): Observable<any> {
+  getMessages(page: number): Observable<Pagination<ContactMessage>> {
     const params = new HttpParams().set('page', page.toString());
-    return this.httpClient.get(this.apiURL, { params });
+    return this.httpClient.get<Pagination<ContactMessage>>(this.apiURL, { params });
   }
 
-  getMessage(id: string): Observable<any> {
-    return this.httpClient.get(`${this.apiURL}/${id}`);
+  getMessage(id: string): Observable<ContactMessage> {
+    return this.httpClient.get<ContactMessage>(`${this.apiURL}/${id}`);
   }
 
-  addReply(contact: ContactMessage, id: string): Observable<any> {
-    return this.httpClient.post(`${this.apiURL}/${id}/reply`, contact, {
+  addReply(contact: ContactMessage, id: string): Observable<ContactMessage> {
+    return this.httpClient.post<ContactMessage>(`${this.apiURL}/${id}/reply`, contact, {
       headers: this.jsonHeaders
     });
   }
 
-  sendMessage(file: File | null, contact: ContactMessage): Observable<any> {
-    return this.httpClient.post(this.apiURL, contact, {
+  sendMessage(file: File | null, contact: ContactMessage): Observable<unknown> {
+    return this.httpClient.post<ContactMessage>(this.apiURL, contact, {
       headers: this.jsonHeaders
     }).pipe(
-      switchMap((response: any) => {
+      switchMap((response: ContactMessage) => {
         if (file) {
           return this.uploadFile(response.id, file);
         }
@@ -45,13 +46,13 @@ export class ContactService {
     );
   }
 
-  updateStatus(id: number, status: string): Observable<any> {
-    return this.httpClient.put(`${this.apiURL}/${id}/status`, { status }, {
+  updateStatus(id: number, status: string): Observable<ContactMessage> {
+    return this.httpClient.put<ContactMessage>(`${this.apiURL}/${id}/status`, { status }, {
       headers: this.jsonHeaders
     });
   }
 
-  private uploadFile(messageId: string, file: File): Observable<any> {
+  private uploadFile(messageId: number | string, file: File): Observable<unknown> {
     const formData = new FormData();
     formData.append('file', file);
 

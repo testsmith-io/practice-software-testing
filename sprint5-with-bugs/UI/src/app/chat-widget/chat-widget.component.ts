@@ -25,14 +25,14 @@ export class ChatWidgetComponent implements OnInit {
   @ViewChild('messagesContainer') private messagesContainer: ElementRef;
   @ViewChild('fileInput') private fileInput: ElementRef;
 
-  private productService = inject(ProductService);
-  private cartService = inject(CartService);
-  private contactService = inject(ContactService);
-  private invoiceService = inject(InvoiceService);
-  private paymentService = inject(PaymentService);
-  private customerAccountService = inject(CustomerAccountService);
-  private tokenStorage = inject(TokenStorageService);
-  private router = inject(Router);
+  private readonly productService = inject(ProductService);
+  private readonly cartService = inject(CartService);
+  private readonly contactService = inject(ContactService);
+  private readonly invoiceService = inject(InvoiceService);
+  private readonly paymentService = inject(PaymentService);
+  private readonly customerAccountService = inject(CustomerAccountService);
+  private readonly tokenStorage = inject(TokenStorageService);
+  private readonly router = inject(Router);
 
   isOpen = false;
   messages: ChatMessage[] = [];

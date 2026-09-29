@@ -25,10 +25,10 @@ import {TranslocoDirective} from "@jsverse/transloco";
   styleUrls: []
 })
 export class LoginComponent implements OnInit {
-  private formBuilder = inject(FormBuilder);
-  private tokenStorage = inject(TokenStorageService);
-  private accountService = inject(CustomerAccountService);
-  private http = inject(HttpClient);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly tokenStorage = inject(TokenStorageService);
+  private readonly accountService = inject(CustomerAccountService);
+  private readonly http = inject(HttpClient);
 
   isLoggedIn: boolean = false;
   isGuestCheckout: boolean = false;

@@ -3,15 +3,20 @@
 
 import {Injectable, TemplateRef} from '@angular/core';
 
+export interface Toast {
+  textOrTpl: string | TemplateRef<unknown>;
+  [key: string]: unknown;
+}
+
 @Injectable({providedIn: 'root'})
 export class ToastService {
-  toasts: any[] = [];
+  toasts: Toast[] = [];
 
-  show(textOrTpl: string | TemplateRef<any>, options: any = {}) {
+  show(textOrTpl: string | TemplateRef<unknown>, options: Record<string, unknown> = {}) {
     this.toasts.push({textOrTpl, ...options});
   }
 
-  remove(toast: any) {
+  remove(toast: Toast) {
     this.toasts = this.toasts.filter(t => t !== toast);
   }
 

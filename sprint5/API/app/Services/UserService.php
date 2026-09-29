@@ -54,7 +54,7 @@ class UserService
 
         if (isset($credentials['email']) && isset($credentials['password'])) {
             $user = User::select([
-            'id', 'email', 'password', 'enabled', 'role', 
+            'id', 'email', 'password', 'enabled', 'role',
             'failed_login_attempts', 'totp_enabled', 'totp_secret'
         ])->where('email', $credentials['email'])->first();
 

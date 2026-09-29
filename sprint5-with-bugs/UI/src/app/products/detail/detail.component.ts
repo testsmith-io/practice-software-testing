@@ -85,13 +85,16 @@ export class DetailComponent implements OnInit, OnDestroy {
 
   addToFavorites(product: any) {
     let payload = {product_id: product.id}
-    this.favoriteService.addFavorite(payload).subscribe(() => {
-      this.toastService.show('Oeps, something went wrong.', {classname: 'bg-danger text-light'})
-    }, (response) => {
-      if (response.error.message === 'Duplicate Entry') {
-        this.toastService.show('Product already in your favorites list.', {classname: 'bg-warning text-dark'})
-      } else if (response.error.message === 'Unauthorized') {
-        this.toastService.show('Unauthorized, can not add product to your favorite list.', {classname: 'bg-danger text-light'})
+    this.favoriteService.addFavorite(payload).subscribe({
+      next: () => {
+        this.toastService.show('Oeps, something went wrong.', {classname: 'bg-danger text-light'})
+      },
+      error: (response) => {
+        if (response.error.message === 'Duplicate Entry') {
+          this.toastService.show('Product already in your favorites list.', {classname: 'bg-warning text-dark'})
+        } else if (response.error.message === 'Unauthorized') {
+          this.toastService.show('Unauthorized, can not add product to your favorite list.', {classname: 'bg-danger text-light'})
+        }
       }
     });
   }

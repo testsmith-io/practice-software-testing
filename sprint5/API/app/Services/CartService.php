@@ -13,6 +13,8 @@ use Throwable;
 
 class CartService
 {
+    private const CART_NOT_FOUND = 'Cart doesnt exists.';
+
     public function createCart(array $data)
     {
         $cart = new Cart($data);
@@ -30,7 +32,7 @@ class CartService
         $cart = Cart::with('cartItems')->find($cartId);
         if (!$cart) {
             Log::warning('Cart not found', ['cart_id' => $cartId]);
-            throw new ModelNotFoundException('Cart doesnt exists.');
+            throw new ModelNotFoundException(self::CART_NOT_FOUND);
         }
 
         $product = Product::findOrFail($productId);
@@ -138,7 +140,7 @@ class CartService
         $cart = Cart::with('cartItems')->find($cartId);
         if (!$cart) {
             Log::warning('Attempted to delete non-existent cart', ['cart_id' => $cartId]);
-            throw new ModelNotFoundException('Cart doesnt exists.');
+            throw new ModelNotFoundException(self::CART_NOT_FOUND);
         }
 
         $cart->cartItems()->delete();
@@ -152,7 +154,7 @@ class CartService
         $cart = Cart::with('cartItems')->find($cartId);
         if (!$cart) {
             Log::warning('Cart not found when removing product', ['cart_id' => $cartId]);
-            throw new ModelNotFoundException('Cart doesnt exists.');
+            throw new ModelNotFoundException(self::CART_NOT_FOUND);
         }
 
         $cart->cartItems()->where('product_id', $productId)->delete();

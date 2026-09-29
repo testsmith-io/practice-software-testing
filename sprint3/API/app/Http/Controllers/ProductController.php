@@ -82,41 +82,45 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->get('by_category') || $request->get('by_brand') || $request->get('by_category_slug') || $request->get('q')) {
-            $query = Product::with('product_image', 'category', 'brand');
-            if ($request->get('by_category_slug')) {
-                $ids = DB::table('categories')->select('id')
-                    ->from('categories')
-                    ->whereIn('parent_id', function ($query) use ($request) {
-                        $query->select('id')
-                            ->from('categories')
-                            ->where('slug', '=', $request->get('by_category_slug'));
-                    });
-                $query->whereIn('category_id', $ids);
-            }
-            if ($request->get('by_category')) {
-                $query->whereIn('category_id', explode(',', $request->get('by_category')));
-            }
-            if ($request->get('by_brand')) {
-                $query->whereIn('brand_id', explode(',', $request->get('by_brand')));
-            }
-            if ($request->get('is_rental')) {
-                $query->where('is_rental', '=', $request->get('is_rental') ? 1 : 0);
-            }
-            if ($request->get('q')) {
-                $q = $request->get('q');
-                $sanitised = trim((string) preg_replace('/[^\p{L}\p{N}\s]+/u', ' ', (string) $q));
-                if ($sanitised === '') {
-                    $query->whereRaw('1=0');
-                } else {
-                    $query->where('name', 'like', "%{$sanitised}%");
-                }
-            }
-            $results = $query->filter()->paginate(9);
-
-            return $this->preferredFormat($results);
-        } else {
+        if (!$request->get('by_category') && !$request->get('by_brand') && !$request->get('by_category_slug') && !$request->get('q')) {
             return $this->preferredFormat(Product::where('is_rental', $request->get('is_rental') ? 1 : 0)->with('product_image', 'category', 'brand')->filter()->paginate(9));
+        }
+
+        $query = Product::with('product_image', 'category', 'brand');
+        $this->applyProductFilters($query, $request);
+
+        return $this->preferredFormat($query->filter()->paginate(9));
+    }
+
+    private function applyProductFilters($query, Request $request): void
+    {
+        if ($request->get('by_category_slug')) {
+            $ids = DB::table('categories')->select('id')
+                ->from('categories')
+                ->whereIn('parent_id', function ($subQuery) use ($request) {
+                    $subQuery->select('id')
+                        ->from('categories')
+                        ->where('slug', '=', $request->get('by_category_slug'));
+                });
+            $query->whereIn('category_id', $ids);
+        }
+        if ($request->get('by_category')) {
+            $query->whereIn('category_id', explode(',', $request->get('by_category')));
+        }
+        if ($request->get('by_brand')) {
+            $query->whereIn('brand_id', explode(',', $request->get('by_brand')));
+        }
+        if ($request->get('is_rental')) {
+            $query->where('is_rental', '=', $request->get('is_rental') ? 1 : 0);
+        }
+        if ($request->get('q')) {
+            $q = $request->get('q');
+            $sanitised = trim((string) preg_replace('/[^\p{L}\p{N}\s]+/u', ' ', (string) $q));
+            if ($sanitised === '') {
+                $query->whereRaw('1=0');
+            } else {
+                $query->where('name', 'like', "%{$sanitised}%");
+            }
         }
     }
 

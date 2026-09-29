@@ -10,6 +10,7 @@ import {PaymentService} from "../_services/payment.service";
 import {environment} from "../../environments/environment";
 import {DecimalPipe, NgClass} from "@angular/common";
 import { ArchwizardModule } from '@y3krulez/angular-archwizard';
+import {CartItem} from "../models/cart";
 
 @Component({
   selector: 'app-checkout',
@@ -23,28 +24,28 @@ import { ArchwizardModule } from '@y3krulez/angular-archwizard';
   styleUrls: ['./checkout.component.css']
 })
 export class CheckoutComponent implements OnInit {
-  private paymentService = inject(PaymentService);
-  private invoiceService = inject(InvoiceService);
-  private formBuilder = inject(FormBuilder);
-  private cartService = inject(CartService);
+  private readonly paymentService = inject(PaymentService);
+  private readonly invoiceService = inject(InvoiceService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly cartService = inject(CartService);
 
-  PaymentMethods: any = ['Bank Transfer', 'Cash on Delivery', 'Credit Card', 'Buy Now Pay Later', 'Gift Card'];
-  cusAddress: FormGroup | any;
-  cusPayment: FormGroup | any;
-  cusForm: FormGroup | any;
+  PaymentMethods: string[] = ['Bank Transfer', 'Cash on Delivery', 'Credit Card', 'Buy Now Pay Later', 'Gift Card'];
+  cusAddress: FormGroup;
+  cusPayment: FormGroup;
+  cusForm: FormGroup;
   roles: string[] = [];
 
-  items: any;
+  items: CartItem[];
   isLoggedIn: boolean = false;
-  customer: any;
+  customer: unknown;
 
-  paymentError: any
-  state: any;
+  paymentError: string | null
+  state: boolean | null;
   paymentMessage: string;
 
   paid: boolean = false;
   total: number;
-  invoice_number: number;
+  invoice_number: string;
 
   ngOnInit(): void {
     this.items = this.cartService.getItems();
@@ -54,7 +55,7 @@ export class CheckoutComponent implements OnInit {
       {
         first_name: ['', [Validators.required]],
         last_name: ['', [Validators.required]],
-        email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+        email: ['', [Validators.required, Validators.pattern(String.raw`^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$`)]],
         address: ['', [Validators.required]],
         city: ['', [Validators.required,
           Validators.minLength(3),
@@ -102,16 +103,16 @@ export class CheckoutComponent implements OnInit {
 
   private getTotal() {
     const items = this.cartService.getItems();
-    if (items != null && items.length) {
+    if (items?.length) {
       return Math.floor(items
-        .reduce((sum: number, current: { total: any; }) => sum + Number(current.total), 0) * 100) / 100;
+        .reduce((sum: number, current: CartItem) => sum + Number(current.total), 0) * 100) / 100;
     } else {
       return 0;
     }
   }
 
   finishFunction() {
-    const invoiceItems: any = [];
+    const invoiceItems: { product_id: number; unit_price: number; quantity: number }[] = [];
 
     this.cartService.getItems().forEach((item: { id: number; price: number; quantity: number }) => {
       const invoiceItem = {'product_id': item.id, 'unit_price': item.price, 'quantity': item.quantity};
@@ -136,11 +137,14 @@ export class CheckoutComponent implements OnInit {
 
     this.checkPayment().subscribe(result => {
       if (result === true) {
-        this.invoiceService.createInvoice(payload).subscribe(res => {
-          this.paid = true;
-          this.invoice_number = res['invoice_number'];
-          this.cartService.emptyCart();
-        }, () => {
+        this.invoiceService.createInvoice(payload).subscribe({
+          next: res => {
+            this.paid = true;
+            this.invoice_number = res['invoice_number'];
+            this.cartService.emptyCart();
+          },
+          error: () => {
+          }
         });
       }
     })
@@ -158,21 +162,25 @@ export class CheckoutComponent implements OnInit {
         'account_number': this.cusPayment.value.account_number
       }
       const endpoint = (window.localStorage.getItem('PAYMENT_ENDPOINT')) ? window.localStorage.getItem('PAYMENT_ENDPOINT') : environment.apiUrl + '/payment/check';
-      this.paymentService.validate(endpoint, payload).subscribe(res => {
-        this.paymentError = null;
-        this.paymentMessage = res.message;
-        this.state = true;
-      }, err => {
-        this.state = null;
-        this.paymentError = err.error.error;
-        this.state = false;
+      this.paymentService.validate(endpoint, payload).subscribe({
+        next: res => {
+          this.paymentError = null;
+          this.paymentMessage = res.message;
+          this.state = true;
+        },
+        error: err => {
+          this.state = null;
+          this.paymentError = err.error.error;
+          this.state = false;
+        }
       });
     }
     return of(this.state);
   }
-  updateQuantity($event: Event, item: any) {
-    const quantity = (($event as any)?.target?.value >= 1) ? ($event as any)?.target?.value : 1;
-    this.cartService.replaceQuantity(item.id, parseInt(quantity));
+  updateQuantity($event: Event, item: CartItem) {
+    const target = $event.target as HTMLInputElement;
+    const quantity: string = (Number(target.value) >= 1) ? target.value : '1';
+    this.cartService.replaceQuantity(item.id, Number.parseInt(quantity));
     this.items = this.cartService.getItems();
     this.total = this.getTotal();
   }

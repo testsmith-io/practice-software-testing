@@ -85,7 +85,7 @@
       }
       @if (product.is_rental) {
         <div>
-          <label class="form-label">{{ t('pages.product-detail.duration') }} (<span id="duration">{{ quantity }}</span> {{ t('pages.product-detail.hours') }})</label>
+          <div class="form-label">{{ t('pages.product-detail.duration') }} (<span id="duration">{{ quantity }}</span> {{ t('pages.product-detail.hours') }})</div>
           <ngx-slider [(value)]="quantity" [options]="sliderOptions"></ngx-slider>
         </div>
       }

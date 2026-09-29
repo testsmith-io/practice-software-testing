@@ -9,7 +9,7 @@ export interface User {
   last_name?: string;
   dob?: string;
   address?: Address;
-  phone?: boolean;
-  email: boolean;
-  password?: boolean;
+  phone?: string;
+  email: string;
+  password?: string;
 }

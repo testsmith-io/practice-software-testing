@@ -86,6 +86,7 @@ class Product extends BaseModel
                 return $this->stock;
             }
         } catch (JWTException $e) {
+            // No valid token (public request): fall through to the boolean below.
         }
         return $this->stock > 0;
     }

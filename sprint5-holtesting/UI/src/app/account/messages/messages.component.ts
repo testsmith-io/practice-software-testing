@@ -26,10 +26,10 @@ import {PaginationComponent} from "../../pagination/pagination.component";
   styleUrls: []
 })
 export class MessagesComponent implements OnInit {
-  private messageService = inject(ContactService);
-  private translocoService = inject(TranslocoService);
-  private sanitizer = inject(DomSanitizer);
-  private router = inject(Router);
+  private readonly messageService = inject(ContactService);
+  private readonly translocoService = inject(TranslocoService);
+  private readonly sanitizer = inject(DomSanitizer);
+  private readonly router = inject(Router);
 
   currentPage: number = 1;
   results: Pagination<ContactMessage>;

@@ -34,15 +34,17 @@ export class MessagesComponent implements OnInit {
   getMessages() {
     this.messageService.getMessages(this.p)
       .pipe(first())
-      .subscribe((messages) => {
+      .subscribe({
+        next: (messages) => {
           this.results = messages
         },
-        (error) => {
+        error: (error) => {
           if (error.status === 401 || error.status === 403) {
             window.localStorage.removeItem('TOKEN_KEY');
             window.location.href = '/#/auth/login';
           }
-        });
+        }
+      });
   }
 
   handlePageChange(event: number): void {

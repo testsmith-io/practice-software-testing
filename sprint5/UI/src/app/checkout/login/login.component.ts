@@ -5,7 +5,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {TokenStorageService} from "../../_services/token-storage.service";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {NgClass} from "@angular/common";
 import {RouterLink} from "@angular/router";
@@ -25,15 +25,15 @@ import {TranslocoDirective} from "@jsverse/transloco";
   styleUrls: []
 })
 export class LoginComponent implements OnInit {
-  private formBuilder = inject(FormBuilder);
-  private tokenStorage = inject(TokenStorageService);
-  private accountService = inject(CustomerAccountService);
-  private http = inject(HttpClient);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly tokenStorage = inject(TokenStorageService);
+  private readonly accountService = inject(CustomerAccountService);
+  private readonly http = inject(HttpClient);
 
   isLoggedIn: boolean = false;
   isGuestCheckout: boolean = false;
-  cusForm: FormGroup | any;
-  guestForm: FormGroup | any;
+  cusForm: FormGroup;
+  guestForm: FormGroup;
   cusSubmitted = false;
   guestSubmitted = false;
   customerError: string | undefined;
@@ -120,7 +120,7 @@ export class LoginComponent implements OnInit {
     this.roles = this.accountService.getRole();
   }
 
-  handleLoginError(err: any): void {
+  handleLoginError(err: HttpErrorResponse): void {
     if (err.error === 'Unauthorized') {
       this.customerError = 'Invalid email or password';
     } else {
@@ -130,7 +130,7 @@ export class LoginComponent implements OnInit {
     this.isLoginFailed = true;
   }
 
-  handleLoginTOTPError(err: any): void {
+  handleLoginTOTPError(err: HttpErrorResponse): void {
     if (err.error === 'Unauthorized') {
       this.customerError = 'Invalid TOTP';
     } else {

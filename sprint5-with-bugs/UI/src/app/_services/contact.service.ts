@@ -12,8 +12,8 @@ import {ContactMessage} from "../models/contact-message";
   providedIn: 'root'
 })
 export class ContactService {
-  private httpClient = inject(HttpClient);
-  private apiURL = environment.apiUrl;
+  private readonly httpClient = inject(HttpClient);
+  private readonly apiURL = environment.apiUrl;
 
   getMessages(page: any): Observable<any> {
     let params = new HttpParams().set('page', page);
@@ -57,7 +57,7 @@ export class ContactService {
   }
 
   errorHandler(error: HttpErrorResponse) {
-    return throwError(error.error || "server error.");
+    return throwError(() => error.error || "server error.");
   }
 
 }

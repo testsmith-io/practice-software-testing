@@ -19,12 +19,12 @@ import {NgClass} from "@angular/common";
   styleUrls: []
 })
 export class ContactComponent implements OnInit {
-  private formBuilder = inject(FormBuilder);
-  private contactService = inject(ContactService);
-  private auth = inject(CustomerAccountService);
-  public browserDetect = inject(BrowserDetectorService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly contactService = inject(ContactService);
+  private readonly auth = inject(CustomerAccountService);
+  public readonly browserDetect = inject(BrowserDetectorService);
 
-  contact: FormGroup | any;
+  contact: FormGroup;
   submitted: boolean;
   error: string;
   showConfirmation: boolean = false;
@@ -36,7 +36,7 @@ export class ContactComponent implements OnInit {
       {
         first_name: ['', []],
         last_name: ['', []],
-        email: ['', [Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+        email: ['', [Validators.pattern(String.raw`^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$`)]],
         subject: ['', [Validators.required]],
         message: ['', [Validators.required, Validators.minLength(50)]]
       },
@@ -46,16 +46,18 @@ export class ContactComponent implements OnInit {
   }
 
   getSignedInUser() {
-    this.auth.getDetails().subscribe(res => {
-      this.role = this.auth.getRole();
-      this.name = res.first_name + ' ' + res.last_name;
-    }, () => {
-      this.contact.get('first_name').setValidators(Validators.required);
-      this.contact.get('last_name').setValidators(Validators.required);
-      this.contact.get('email').setValidators(Validators.required);
-      this.contact.controls['first_name'].updateValueAndValidity();
-      this.contact.controls['last_name'].updateValueAndValidity();
-      this.contact.controls['email'].updateValueAndValidity();
+    this.auth.getDetails().subscribe({
+      next: res => {
+        this.role = this.auth.getRole();
+        this.name = res.first_name + ' ' + res.last_name;
+      }, error: () => {
+        this.contact.get('first_name').setValidators(Validators.required);
+        this.contact.get('last_name').setValidators(Validators.required);
+        this.contact.get('email').setValidators(Validators.required);
+        this.contact.controls['first_name'].updateValueAndValidity();
+        this.contact.controls['last_name'].updateValueAndValidity();
+        this.contact.controls['email'].updateValueAndValidity();
+      }
     })
   }
 
@@ -82,7 +84,7 @@ export class ContactComponent implements OnInit {
       next: () => {
         this.showConfirmation = true;
       }, error: (err) => {
-        this.error = Object.values(err).join('\r\n');
+        this.error = (Object.values(err) as string[][]).flat().join('\r\n');
       }
     });
   }

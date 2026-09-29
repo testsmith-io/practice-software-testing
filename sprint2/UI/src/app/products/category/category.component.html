@@ -9,7 +9,7 @@
     <hr>
       <form autocomplete=off>
         <div class="input-group mb-3">
-          <select data-test="sort" (change)="changeSorting($event)" class="form-select">
+          <select data-test="sort" (change)="changeSorting($event)" class="form-select" aria-label="Sort products">
             <option value=""></option>
             <option value="name,asc">Name (A - Z)</option>
             <option value="name,desc">Name (Z - A)</option>
@@ -54,10 +54,10 @@
 
     </div>
     <div class="col-md-9">
-      <a class="btn btn-secondary d-block d-md-none btn-block mb-3" data-bs-toggle="collapse" data-test="filters" href="#filters"
-        role="button" aria-expanded="false" aria-controls="collapseExample">
+      <button type="button" class="btn btn-secondary d-block d-md-none btn-block mb-3" data-bs-toggle="collapse" data-test="filters" data-bs-target="#filters"
+        aria-expanded="false" aria-controls="collapseExample">
         <i class="fa fa-filter"></i> Filters
-      </a>
+      </button>
       <!-- Sprint 2: Basic cards without images -->
       @if (results) {
         <div class="container" attr.data-test="{{resultState}}">

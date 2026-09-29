@@ -1,7 +1,7 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {Product} from "../../../models/product";
 import {ProductService} from "../../../_services/product.service";
 import {Pagination} from "../../../models/pagination";
@@ -19,11 +19,10 @@ import {NgClass} from "@angular/common";
 })
 export class OverviewComponent implements OnInit {
 
+  public productService = inject(ProductService);
+
   p: number = 1;
   results: Pagination<Product>;
-
-  constructor(public productService: ProductService) {
-  }
 
   ngOnInit(): void {
     this.getProductRentals();

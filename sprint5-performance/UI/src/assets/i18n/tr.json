@@ -242,6 +242,7 @@
       "payment": {
         "title": "Ödeme",
         "confirm-btn": "Onayla",
+        "check-payment-btn": "Ödemeyi kontrol et",
         "confirm": "Siparişiniz için teşekkürler! Fatura numaranız <span id=\"invoice-number\">{{ invoice_number }}</span>.",
         "method-label": "Ödeme Yöntemi",
         "method-required": "Ödeme yöntemi gereklidir.",
