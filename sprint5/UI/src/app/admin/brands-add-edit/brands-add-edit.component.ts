@@ -106,7 +106,7 @@ export class BrandsAddEditComponent implements OnInit {
       });
   }
 
-  fadeOutMessage(): void {
+  fadeOutMessage(): any {
     setTimeout(() => {
       this.hideAlert = true;
     }, 3000);

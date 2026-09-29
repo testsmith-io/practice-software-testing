@@ -80,7 +80,7 @@ export class OrdersAddEditComponent implements OnInit {
       });
   }
 
-  fadeOutMessage(): void {
+  fadeOutMessage(): any {
     setTimeout(() => {
       this.hideAlert = true;
     }, 3000);
