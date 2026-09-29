@@ -95,7 +95,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  fadeOutMessage(): void {
+  fadeOutMessage(): any {
     setTimeout(() => {
       this.hideAlert = true;
     }, 3000);

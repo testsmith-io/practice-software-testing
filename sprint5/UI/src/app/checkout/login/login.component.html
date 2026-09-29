@@ -34,7 +34,7 @@
             </div>
             @if (cus_email.invalid && cusSubmitted) {
               <div id="email-error" data-test="email-error" class="alert alert-danger">
-                @if (cus_email.errors?.required) {
+                @if (cus_email.errors?.['required']) {
                   <div>{{t('fields.email.errors.required')}}</div>
                 }
                 @if (cus_email.errors?.['email']) {
@@ -56,7 +56,7 @@
             </div>
             @if (cus_password.invalid && cusSubmitted) {
               <div id="password-error" data-test="password-error" class="alert alert-danger">
-                @if (cus_password.errors?.required) {
+                @if (cus_password.errors?.['required']) {
                   <div>{{t('fields.password.errors.required')}}</div>
                 }
                 @if (cus_password.errors?.['minlength'] || cus_password.errors?.['maxlength']) {
@@ -114,7 +114,7 @@
                 </div>
                 @if (guest_email.invalid && guestSubmitted) {
                   <div id="guest-email-error" data-test="guest-email-error" class="alert alert-danger">
-                    @if (guest_email.errors?.required) {
+                    @if (guest_email.errors?.['required']) {
                       <div>{{t('fields.email.errors.required')}}</div>
                     }
                     @if (guest_email.errors?.['email']) {
@@ -136,7 +136,7 @@
                 </div>
                 @if (guest_first_name.invalid && guestSubmitted) {
                   <div id="guest-first-name-error" data-test="guest-first-name-error" class="alert alert-danger">
-                    @if (guest_first_name.errors?.required) {
+                    @if (guest_first_name.errors?.['required']) {
                       <div>{{t('fields.first-name.errors.required')}}</div>
                     }
                   </div>
@@ -155,7 +155,7 @@
                 </div>
                 @if (guest_last_name.invalid && guestSubmitted) {
                   <div id="guest-last-name-error" data-test="guest-last-name-error" class="alert alert-danger">
-                    @if (guest_last_name.errors?.required) {
+                    @if (guest_last_name.errors?.['required']) {
                       <div>{{t('fields.last-name.errors.required')}}</div>
                     }
                   </div>

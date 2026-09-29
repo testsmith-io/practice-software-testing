@@ -28,7 +28,10 @@ export class CheckoutComponent {
   @ViewChild(AddressComponent) addressComponent: AddressComponent;
 
   canExitStep3 = true;
-  addressData: FormGroup;
+  // Holds the address form's value object, but is bound both to <app-address>
+  // (which treats it as a form control) and <app-payment> (which treats it as
+  // a plain address object) — so it stays loosely typed to satisfy both.
+  addressData: any;
 
   handleCusAddressChange(cusAddress: FormGroup) {
     this.addressData = cusAddress.value.address;
