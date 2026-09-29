@@ -21,10 +21,8 @@ class CachedAuthUserProvider extends EloquentUserProvider
         $cacheKey = "auth.user.$identifier";
 
         if (Cache::has($cacheKey)) {
-//            Log::info("User {$identifier} retrieved from cache.");
             return Cache::get($cacheKey);
         } else {
-//            Log::info("User {$identifier} retrieved from database.");
             $user = parent::retrieveById($identifier);
             Cache::put($cacheKey, $user, now()->addMinutes(10)); // Cache for 10 minutes
             return $user;

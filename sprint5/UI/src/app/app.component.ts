@@ -28,9 +28,9 @@ export class AppComponent implements OnInit {
   private readonly library = inject(FaIconLibrary);
 
   title = 'Toolshop';
-  private titleService = inject(Title);
-  private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
+  private readonly titleService = inject(Title);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
 
   constructor() {
     this.library.addIcons(faGlobe, faShoppingCart, faLeaf);

@@ -118,7 +118,6 @@ class User extends Authenticatable implements JWTSubject
         'totp_enabled' => 'boolean',
     );
 
-//    protected $appends = ['admin_details'];
     protected $appends = ['address'];
 
     public function getAddressAttribute()

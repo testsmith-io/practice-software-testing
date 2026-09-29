@@ -5,7 +5,6 @@
 namespace App\Services;
 
 use App\Models\Product;
-use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -116,7 +115,7 @@ class ProductService
 
             if (!$product) {
                 Log::error("Related products fetch failed — product not found", ['id' => $id]);
-                throw new Exception("Product with ID {$id} not found");
+                throw new \DomainException("Product with ID {$id} not found");
             }
 
             $categoryId = $product->category_id;

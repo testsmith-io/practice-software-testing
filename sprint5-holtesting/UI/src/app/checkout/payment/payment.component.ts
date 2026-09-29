@@ -30,12 +30,12 @@ import {CustomerAccountService} from "../../shared/customer-account.service";
   styleUrls: []
 })
 export class PaymentComponent implements OnInit, OnDestroy {
-  private cartService = inject(CartService);
-  private paymentService = inject(PaymentService);
-  private invoiceService = inject(InvoiceService);
-  private formBuilder = inject(FormBuilder);
-  private gaService = inject(GaService);
-  private customerAccountService = inject(CustomerAccountService);
+  private readonly cartService = inject(CartService);
+  private readonly paymentService = inject(PaymentService);
+  private readonly invoiceService = inject(InvoiceService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly gaService = inject(GaService);
+  private readonly customerAccountService = inject(CustomerAccountService);
 
   selectedPaymentMethod: string = '';
   showValidationModal: boolean = false;

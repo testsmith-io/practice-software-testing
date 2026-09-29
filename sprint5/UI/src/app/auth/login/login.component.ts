@@ -5,6 +5,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {CustomerAccountService} from '../../shared/customer-account.service';
 import {TokenStorageService} from '../../_services/token-storage.service';
+import {HttpErrorResponse} from '@angular/common/http';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {TotpAuthService} from '../../_services/totp-auth.service';
 import {BrowserService} from '../../_services/browser.service';
@@ -27,12 +28,12 @@ import {NgClass} from "@angular/common";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  private formBuilder = inject(FormBuilder);
-  private accountService = inject(CustomerAccountService);
-  private tokenStorage = inject(TokenStorageService);
-  private activatedRoute = inject(ActivatedRoute);
-  private totpAuthService = inject(TotpAuthService);
-  private browser = inject(BrowserService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly accountService = inject(CustomerAccountService);
+  private readonly tokenStorage = inject(TokenStorageService);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly totpAuthService = inject(TotpAuthService);
+  private readonly browser = inject(BrowserService);
 
   form: FormGroup;
   submitted = false;
@@ -108,7 +109,7 @@ export class LoginComponent implements OnInit {
 
     this.totpAuthService.verifyTotp(this.form.value.totp, this.accessToken).subscribe({
       next: (res: { access_token: string; }) => this.handleSuccessfulLogin(res.access_token),
-      error: (err: any) => this.handleLoginTOTPError(err)
+      error: (err: HttpErrorResponse) => this.handleLoginTOTPError(err)
     });
   }
 
@@ -126,14 +127,14 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  handleLoginError(err: any): void {
+  handleLoginError(err: HttpErrorResponse): void {
     this.error = err.error === 'Unauthorized'
       ? 'Invalid email or password'
       : err.error || 'Login failed';
     this.isLoginFailed = true;
   }
 
-  handleLoginTOTPError(err: any): void {
+  handleLoginTOTPError(err: HttpErrorResponse): void {
     this.error = err.error === 'Unauthorized'
       ? 'Invalid TOTP'
       : err.error?.error || 'Login failed';

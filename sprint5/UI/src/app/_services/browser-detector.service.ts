@@ -29,13 +29,13 @@ export class BrowserDetectorService {
 
   // Regex patterns for better accuracy
   private readonly browserPatterns = {
-    [BrowserType.EDGE]: /edg(?:e|ios|a)?\/([\d\.]+)/i,
-    [BrowserType.CHROMIUM_EDGE]: /edg\/([\d\.]+)/i,
-    [BrowserType.OPERA]: /(?:opr|opera)\/([\d\.]+)/i,
-    [BrowserType.CHROME]: /chrome\/([\d\.]+)/i,
-    [BrowserType.FIREFOX]: /firefox\/([\d\.]+)/i,
-    [BrowserType.SAFARI]: /version\/([\d\.]+).*safari/i,
-    [BrowserType.IE]: /(?:msie |trident.*rv:)([\d\.]+)/i
+    [BrowserType.EDGE]: /edg(?:e|ios|a)?\/([\d.]+)/i,
+    [BrowserType.CHROMIUM_EDGE]: /edg\/([\d.]+)/i,
+    [BrowserType.OPERA]: /(?:opr|opera)\/([\d.]+)/i,
+    [BrowserType.CHROME]: /chrome\/([\d.]+)/i,
+    [BrowserType.FIREFOX]: /firefox\/([\d.]+)/i,
+    [BrowserType.SAFARI]: /version\/([\d.]+).*safari/i,
+    [BrowserType.IE]: /(?:msie |trident.*rv:)([\d.]+)/i
   };
 
   constructor() {
@@ -146,9 +146,9 @@ export class BrowserDetectorService {
     }
 
     const pattern = this.browserPatterns[browserName as keyof typeof this.browserPatterns];
-    const match = this.userAgent.match(pattern);
+    const match = pattern.exec(this.userAgent);
 
-    if (match && match[1]) {
+    if (match?.[1]) {
       return match[1].split('.')[0]; // Return major version only
     }
 

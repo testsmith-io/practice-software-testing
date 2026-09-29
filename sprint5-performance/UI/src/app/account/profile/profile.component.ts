@@ -58,13 +58,16 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.customerAccountService.getDetails()
       .pipe(first())
-      .subscribe((profile) => {
-        this.profile = profile;
-        this.profileForm.patchValue(profile);
-      }, (error) => {
-        if (error.status === 401 || error.status === 403) {
-          window.localStorage.removeItem('TOKEN_KEY');
-          window.location.href = '/auth/login';
+      .subscribe({
+        next: (profile) => {
+          this.profile = profile;
+          this.profileForm.patchValue(profile);
+        },
+        error: (error) => {
+          if (error.status === 401 || error.status === 403) {
+            window.localStorage.removeItem('TOKEN_KEY');
+            window.location.href = '/auth/login';
+          }
         }
       });
 
@@ -142,16 +145,17 @@ export class ProfileComponent implements OnInit {
    * { message: string } or a string. Only spread arrays — spreading a string
    * would push it one character at a time and render vertically.
    */
-  private formatError(err: any): string {
+  private formatError(err: unknown): string {
     if (!err) {
       return 'An unexpected error occurred.';
     }
     if (typeof err === 'string') {
       return err;
     }
+    const errors = err as Record<string, unknown>;
     const messages: string[] = [];
-    for (const field of Object.keys(err)) {
-      const value = err[field];
+    for (const field of Object.keys(errors)) {
+      const value = errors[field];
       if (Array.isArray(value)) {
         messages.push(...value.filter((v) => typeof v === 'string'));
       } else if (typeof value === 'string') {
@@ -175,7 +179,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  fadeOutMessage(): any {
+  fadeOutMessage(): void {
     setTimeout(() => {
       this.hideProfileAlert = true;
       this.hidePasswordAlert = true;
@@ -209,7 +213,7 @@ export class ProfileComponent implements OnInit {
     if (/[a-z]/.test(password)) strength += 1;
     if (/[A-Z]/.test(password)) strength += 1;
     if (/\d/.test(password)) strength += 1;
-    if (/[!\"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]/.test(password)) strength += 1;
+    if (/[!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]/.test(password)) strength += 1;
 
     switch (strength) {
       case 1:
@@ -228,31 +232,31 @@ export class ProfileComponent implements OnInit {
   }
 
   getTotpSetup(): void {
-    this.http.post(this.apiURL +'/totp/setup', {}).subscribe(
-      (response: any) => {
+    this.http.post<{ qrCodeUrl: string; secret: string }>(this.apiURL +'/totp/setup', {}).subscribe({
+      next: (response) => {
         this.qrCodeUrl = response.qrCodeUrl;
         this.secret = response.secret;
       },
-      (error) => {
+      error: (error) => {
         if (error.status === 403) {
           this.errorMessage = 'Access denied: If you want to configure TOTP, please create your own account.';
         } else {
           this.errorMessage = 'Failed to load TOTP setup details.';
         }
       }
-    );
+    });
   }
 
   verifyTotp(): void {
-    this.http.post(this.apiURL +'/totp/verify', { totp: this.totpForm.get('totpCode').value }).subscribe(
-      () => {
+    this.http.post(this.apiURL +'/totp/verify', { totp: this.totpForm.get('totpCode').value }).subscribe({
+      next: () => {
         this.successMessage = 'TOTP verified and enabled successfully.';
         this.errorMessage = '';
       },
-      (error) => {
+      error: () => {
         this.errorMessage = 'Invalid TOTP code. Please try again.';
         this.successMessage = '';
       }
-    );
+    });
   }
 }

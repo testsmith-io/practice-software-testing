@@ -18,6 +18,9 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
+const ID_PARAM = ID_PARAM;
+const SEARCH_PATH = SEARCH_PATH;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -48,19 +51,19 @@ Route::post('/refresh', function () {
 Route::controller(BrandController::class)->prefix('brands')->group(function () {
     Route::get('', 'index')
         ->middleware('performance.degrade:threshold:20,window:300,max_delay:3000,strategy:exponential,scope:ip');
-    Route::get('/search', 'search');
-    Route::get('/{id}', 'show');
+    Route::get(SEARCH_PATH, 'search');
+    Route::get(ID_PARAM, 'show');
     Route::post('', 'store');
-    Route::put('/{id}', 'update');
-    Route::patch('/{id}', 'patch');
-    Route::delete('/{id}', 'destroy');
+    Route::put(ID_PARAM, 'update');
+    Route::patch(ID_PARAM, 'patch');
+    Route::delete(ID_PARAM, 'destroy');
 });
 
 Route::controller(CartController::class)->prefix('carts')->group(function () {
     Route::post('', 'createCart');
-    Route::post('/{id}', 'addItem');
+    Route::post(ID_PARAM, 'addItem');
     Route::put('/{id}/product/quantity', 'updateQuantity');
-    Route::get('/{id}', 'getCart');
+    Route::get(ID_PARAM, 'getCart');
     Route::delete('/{cartId}/product/{productId}', 'removeProductFromCart');
     Route::delete('/{cartId}', 'deleteCart');
 });
@@ -69,20 +72,20 @@ Route::controller(CategoryController::class)->prefix('categories')->group(functi
     Route::get('/tree', 'indexTree')
         ->middleware('performance.degrade:threshold:10,window:60,max_delay:2000,strategy:stepped,scope:ip');
     Route::get('', 'index');
-    Route::get('/search', 'search')
+    Route::get(SEARCH_PATH, 'search')
         ->middleware('performance.degrade:threshold:10,window:60,max_delay:2000,strategy:stepped,scope:ip,degradation_type:blocking');
     Route::get('/tree/{id}', 'show');
     Route::post('', 'store');
-    Route::patch('/{id}', 'patch');
-    Route::put('/{id}', 'update');
-    Route::delete('/{id}', 'destroy');
+    Route::patch(ID_PARAM, 'patch');
+    Route::put(ID_PARAM, 'update');
+    Route::delete(ID_PARAM, 'destroy');
 });
 
 Route::controller(ContactController::class)->prefix('messages')->group(function () {
     Route::post('', 'send');
     Route::post('/{id}/attach-file', 'attachFile');
     Route::get('', 'index');
-    Route::get('/{id}', 'show');
+    Route::get(ID_PARAM, 'show');
     Route::post('/{id}/reply', 'storeReply');
     Route::put('/{id}/status', 'updateStatus');
 });
@@ -90,8 +93,8 @@ Route::controller(ContactController::class)->prefix('messages')->group(function 
 Route::controller(FavoriteController::class)->prefix('favorites')->group(function () {
     Route::get('', 'index');
     Route::post('', 'store');
-    Route::get('/{id}', 'show');
-    Route::delete('/{id}', 'destroy');
+    Route::get(ID_PARAM, 'show');
+    Route::delete(ID_PARAM, 'destroy');
 });
 
 Route::controller(ImageController::class)->prefix('images')->group(function () {
@@ -100,15 +103,15 @@ Route::controller(ImageController::class)->prefix('images')->group(function () {
 
 Route::controller(InvoiceController::class)->prefix('invoices')->group(function () {
     Route::get('', 'index');
-    Route::get('/search', 'search');
-    Route::get('/{id}', 'show')
+    Route::get(SEARCH_PATH, 'search');
+    Route::get(ID_PARAM, 'show')
         ->middleware('performance.degrade:threshold:50,window:300,max_delay:2000,strategy:stepped,scope:ip,degradation_type:blocking');
     Route::get('/{id}/download-pdf', 'downloadPDF');
     Route::get('/{id}/download-pdf-status', 'downloadPDFStatus');
     Route::put('/{id}/status', 'updateStatus');
     Route::post('', 'store');
-    Route::put('/{id}', 'update');
-    Route::patch('/{id}', 'patch');
+    Route::put(ID_PARAM, 'update');
+    Route::patch(ID_PARAM, 'patch');
 });
 
 Route::controller(PaymentController::class)->prefix('payment')->group(function () {
@@ -118,13 +121,13 @@ Route::controller(PaymentController::class)->prefix('payment')->group(function (
 Route::controller(ProductController::class)->prefix('products')->group(function () {
     Route::get('', 'index')
         ->middleware('performance.degrade:threshold:50,window:60,max_delay:1000,strategy:linear,scope:ip,degradation_type:blocking');
-    Route::get('/search', 'search');
-    Route::get('/{id}', 'show');
+    Route::get(SEARCH_PATH, 'search');
+    Route::get(ID_PARAM, 'show');
     Route::get('/{id}/related', 'showRelated');
     Route::post('', 'store');
-    Route::put('/{id}', 'update');
-    Route::patch('/{id}', 'patch');
-    Route::delete('/{id}', 'destroy');
+    Route::put(ID_PARAM, 'update');
+    Route::patch(ID_PARAM, 'patch');
+    Route::delete(ID_PARAM, 'destroy');
 });
 
 Route::controller(ReportController::class)->prefix('reports')->group(function () {
@@ -151,14 +154,14 @@ Route::controller(UserController::class)->prefix('users')->group(function () {
     Route::post('/register', 'store')
         ->middleware('performance.degrade:threshold:30,window:300,max_delay:1000,strategy:linear,scope:ip,degradation_type:blocking');
     Route::get('/logout', 'logout');
-    Route::get('/search', 'search');
+    Route::get(SEARCH_PATH, 'search');
     Route::get('/refresh', 'refresh');
     Route::get('/me', 'me');
     Route::put('{id}', 'update');
     Route::patch('{id}', 'patch');
     Route::get('/', 'index');
-    Route::get('/{id}', 'show');
-    Route::delete('/{id}', 'destroy');
+    Route::get(ID_PARAM, 'show');
+    Route::delete(ID_PARAM, 'destroy');
 });
 
 Route::controller(SocialConnectController::class)->prefix('auth')->group(function () {

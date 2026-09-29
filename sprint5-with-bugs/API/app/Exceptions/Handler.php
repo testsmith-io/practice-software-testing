@@ -37,21 +37,6 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * Report or log an exception.
-     *
-     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param Throwable $e
-     * @return void
-     *
-     * @throws Exception|Throwable
-     */
-    public function report(Throwable $e)
-    {
-        parent::report($e);
-    }
-
-    /**
      * Render an exception into an HTTP response.
      *
      * @param Request $request

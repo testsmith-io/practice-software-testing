@@ -8,7 +8,7 @@ import {Injectable} from '@angular/core';
 })
 export class BrowserDetectorService {
 
-  agent: any;
+  agent: string;
 
   constructor() {
     this.agent = window.navigator.userAgent.toLowerCase();
@@ -49,15 +49,25 @@ export class BrowserDetectorService {
     return window.navigator.maxTouchPoints > 0;
   }
 
+  // Ordered so more specific tokens win (e.g. 'edge' before 'edg', and
+  // 'edg'/'opr' before 'chrome' since those browsers also contain 'chrome').
+  private static readonly BROWSER_MATCHERS: ReadonlyArray<readonly [string, string]> = [
+    ['edge', 'Microsoft Edge'],
+    ['edg', 'Chromium-based Edge'],
+    ['opr', 'Opera'],
+    ['chrome', 'Chrome'],
+    ['trident', 'Internet Explorer'],
+    ['firefox', 'Firefox'],
+    ['safari', 'Safari']
+  ];
+
   private getBrowserName(): string {
-    return this.agent.indexOf('edge') > -1 ? 'Microsoft Edge'
-      : this.agent.indexOf('edg') > -1 ? 'Chromium-based Edge'
-        : this.agent.indexOf('opr') > -1 ? 'Opera'
-          : this.agent.indexOf('chrome') > -1 ? 'Chrome'
-            : this.agent.indexOf('trident') > -1 ? 'Internet Explorer'
-              : this.agent.indexOf('firefox') > -1 ? 'Firefox'
-                : this.agent.indexOf('safari') > -1 ? 'Safari'
-                  : 'other';
+    for (const [token, name] of BrowserDetectorService.BROWSER_MATCHERS) {
+      if (this.agent.includes(token)) {
+        return name;
+      }
+    }
+    return 'other';
   }
 
 }

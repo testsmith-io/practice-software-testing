@@ -13,6 +13,7 @@ use Throwable;
 
 class CartService
 {
+    private const CART_NOT_FOUND = 'Cart doesnt exists.';
     public function createCart(array $data)
     {
         $cart = new Cart($data);
@@ -30,7 +31,7 @@ class CartService
         $cart = Cart::with('cartItems')->find($cartId);
         if (!$cart) {
             Log::warning('Cart not found', ['cart_id' => $cartId]);
-            throw new ModelNotFoundException('Cart doesnt exists.');
+            throw new ModelNotFoundException(self::CART_NOT_FOUND);
         }
 
         $product = Product::findOrFail($productId);
@@ -40,7 +41,7 @@ class CartService
                 $existingThorHammer = $cart->cartItems()->where('product_id', $productId)->first();
                 if ($existingThorHammer || $quantity > 1) {
                     Log::warning('Thor Hammer constraint violated', ['cart_id' => $cartId]);
-                    throw new Exception('You can only have one Thor Hammer in the cart.');
+                    throw new \DomainException('You can only have one Thor Hammer in the cart.');
                 }
 
                 $cart->cartItems()->create([
@@ -116,7 +117,7 @@ class CartService
 
         if ($product->name === 'Thor Hammer' && $quantity > 1) {
             Log::warning('Attempted to set Thor Hammer quantity > 1', ['cart_id' => $cartId]);
-            throw new Exception('You can only have one Thor Hammer in the cart.');
+            throw new \DomainException('You can only have one Thor Hammer in the cart.');
         }
 
         $updated = $cart->cartItems()
@@ -138,7 +139,7 @@ class CartService
         $cart = Cart::with('cartItems')->find($cartId);
         if (!$cart) {
             Log::warning('Attempted to delete non-existent cart', ['cart_id' => $cartId]);
-            throw new ModelNotFoundException('Cart doesnt exists.');
+            throw new ModelNotFoundException(self::CART_NOT_FOUND);
         }
 
         $cart->cartItems()->delete();
@@ -152,7 +153,7 @@ class CartService
         $cart = Cart::with('cartItems')->find($cartId);
         if (!$cart) {
             Log::warning('Cart not found when removing product', ['cart_id' => $cartId]);
-            throw new ModelNotFoundException('Cart doesnt exists.');
+            throw new ModelNotFoundException(self::CART_NOT_FOUND);
         }
 
         $cart->cartItems()->where('product_id', $productId)->delete();

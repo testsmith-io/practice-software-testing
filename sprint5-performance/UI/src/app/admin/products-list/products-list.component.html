@@ -5,7 +5,7 @@
 <form [formGroup]="searchForm" class="col-lg-6 mb-3" data-test="product-search-form">
   <div class="input-group">
     <a routerLink="add" class="btn btn-success" data-test="product-add">Add Product</a>
-    <input type="text" class="form-control" formControlName="query" data-test="product-search-query">
+    <input type="text" class="form-control" formControlName="query" data-test="product-search-query" aria-label="Search products">
     <button class="btn btn-warning" (click)="search()" type="submit" data-test="product-search-submit">Search</button>
     <button class="btn btn-secondary" (click)="reset()" type="reset" data-test="product-search-reset">Reset</button>
   </div>

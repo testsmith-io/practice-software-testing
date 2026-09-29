@@ -17,6 +17,8 @@ import {PaymentService} from "../../_services/payment.service";
 import {InvoiceService} from "../../_services/invoice.service";
 import {TranslocoDirective} from "@jsverse/transloco";
 import {GaService} from "../../_services/ga.service";
+import {Cart, CartItem} from "../../models/cart";
+import {Address} from "../../models/address";
 
 @Component({
   selector: 'app-payment',
@@ -28,25 +30,25 @@ import {GaService} from "../../_services/ga.service";
   styleUrls: []
 })
 export class PaymentComponent implements OnInit {
-  private cartService = inject(CartService);
-  private paymentService = inject(PaymentService);
-  private invoiceService = inject(InvoiceService);
-  private formBuilder = inject(FormBuilder);
-  private gaService = inject(GaService);
+  private readonly cartService = inject(CartService);
+  private readonly paymentService = inject(PaymentService);
+  private readonly invoiceService = inject(InvoiceService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly gaService = inject(GaService);
 
   selectedPaymentMethod: string = '';
 
-  @Input() address: any;
+  @Input() address: Address;
 
-  paymentError: any
-  state: any;
+  paymentError: string | null
+  state: boolean | null;
   paymentMessage: string;
-  cusPayment: FormGroup | any;
+  cusPayment: FormGroup;
 
   paid: boolean = false;
   total: number;
-  invoice_number: number;
-  cart: any;
+  invoice_number: string;
+  cart: Cart | null = null;
 
   ngOnInit(): void {
     this.cusPayment = this.formBuilder.group({
@@ -71,6 +73,7 @@ export class PaymentComponent implements OnInit {
     // Get cart data for purchase tracking
     this.cartService.getCart().subscribe(cart => {
       this.cart = cart;
+      if (!cart) return;
       this.total = this.calculateTotal(cart.cart_items);
     });
   }
@@ -135,10 +138,10 @@ export class PaymentComponent implements OnInit {
   }
 
   finishFunction() {
-    let cartId = sessionStorage.getItem('cart_id');
-    let paymentData = this.cusPayment.value;
+    const cartId = sessionStorage.getItem('cart_id');
+    const paymentData = this.cusPayment.value;
 
-    let payment: any;
+    let payment: Record<string, unknown>;
     switch (paymentData.payment_method) {
       case 'bank-transfer':
         payment = {
@@ -172,7 +175,7 @@ export class PaymentComponent implements OnInit {
         break;
     }
 
-    const payload: any = {
+    const payload: Record<string, unknown> = {
       'billing_street': this.address.street,
       'billing_city': this.address.city,
       'billing_state': this.address.state,
@@ -220,7 +223,7 @@ export class PaymentComponent implements OnInit {
   /*
   Check payment method, only if mock endpoint is stored in sessionStorage
    */
-  checkPayment(paymentPayload: any): Observable<boolean> {
+  checkPayment(paymentPayload: Record<string, unknown>): Observable<boolean> {
     if (!this.state) {
       const endpoint = (window.localStorage.getItem('PAYMENT_ENDPOINT')) ? window.localStorage.getItem('PAYMENT_ENDPOINT') : environment.apiUrl + '/payment/check';
       this.paymentService.validate(endpoint, paymentPayload).subscribe({
@@ -239,7 +242,7 @@ export class PaymentComponent implements OnInit {
     return of(this.state);
   }
 
-  private calculateTotal(items: any[]): number {
+  private calculateTotal(items: CartItem[]): number {
     return items.reduce((sum, cartItem) => {
       const quantity = cartItem.quantity || 0;
       const price = cartItem.discount_percentage ? cartItem.discounted_price : cartItem.product?.price || 0;
@@ -250,7 +253,7 @@ export class PaymentComponent implements OnInit {
   private trackPurchase(transactionId: string): void {
     if (!this.cart?.cart_items?.length) return;
 
-    const items = this.cart.cart_items.map((cartItem: any) => ({
+    const items = this.cart.cart_items.map((cartItem: CartItem) => ({
       item_id: cartItem.product.id,
       item_name: cartItem.product.name,
       item_category: cartItem.product.category?.name || 'Unknown',

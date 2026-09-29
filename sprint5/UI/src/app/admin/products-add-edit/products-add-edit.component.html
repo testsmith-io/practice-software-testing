@@ -186,15 +186,15 @@
               }
               <tr>
                 <td>
-                  <input type="text" class="form-control form-control-sm" [(ngModel)]="newSpec.spec_name"
+                  <input type="text" class="form-control form-control-sm" [(ngModel)]="newSpec.spec_name" aria-label="Specification name"
                          [ngModelOptions]="{standalone: true}" placeholder="e.g. Weight" data-test="spec-name">
                 </td>
                 <td>
-                  <input type="text" class="form-control form-control-sm" [(ngModel)]="newSpec.spec_value"
+                  <input type="text" class="form-control form-control-sm" [(ngModel)]="newSpec.spec_value" aria-label="Specification value"
                          [ngModelOptions]="{standalone: true}" placeholder="e.g. 1.5" data-test="spec-value">
                 </td>
                 <td>
-                  <input type="text" class="form-control form-control-sm" [(ngModel)]="newSpec.spec_unit"
+                  <input type="text" class="form-control form-control-sm" [(ngModel)]="newSpec.spec_unit" aria-label="Specification unit"
                          [ngModelOptions]="{standalone: true}" placeholder="e.g. kg" data-test="spec-unit">
                 </td>
                 <td>

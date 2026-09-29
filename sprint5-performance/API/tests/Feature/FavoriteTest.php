@@ -96,9 +96,8 @@ function addFavorite(Model|Collection $user): Collection|Model
 {
     $product = addProduct();
 
-    $favorite = Favorite::factory()->create([
+    return Favorite::factory()->create([
         'user_id' => $user->id,
         'product_id' => $product->id
     ]);
-    return $favorite;
 }

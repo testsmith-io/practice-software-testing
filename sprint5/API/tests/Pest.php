@@ -46,5 +46,5 @@ expect()->extend('toBeOne', function () {
 
 function something()
 {
-    // ..
+    // Intentionally empty: Pest scaffold placeholder for shared test helpers.
 }

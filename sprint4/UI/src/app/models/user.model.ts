@@ -7,11 +7,11 @@ export interface User {
   last_name?: string;
   dob?: string;
   address?: string;
-  city?: boolean;
-  state?: boolean;
-  country?: boolean;
-  postcode?: boolean;
-  phone?: boolean;
-  email: boolean;
-  password: boolean;
+  city?: string;
+  state?: string;
+  country?: string;
+  postcode?: string;
+  phone?: string;
+  email: string;
+  password: string;
 }

@@ -16,8 +16,11 @@ use Tests\TestCase;
 class BrandTest extends TestCase {
     use DatabaseMigrations;
 
+    private const BRANDS = '/brands';
+    private const BRANDS_PREFIX = '/brands/';
+
     public function testRetrieveBrands(): void {
-        $response = $this->get('/brands');
+        $response = $this->get(self::BRANDS);
 
         $response->assertStatus(ResponseAlias::HTTP_OK)
             ->assertJsonStructure([
@@ -46,7 +49,7 @@ class BrandTest extends TestCase {
             'slug' => $this->faker->slug
         ];
 
-        $response = $this->post('/brands', $payload);
+        $response = $this->post(self::BRANDS, $payload);
 
         $response->assertStatus(ResponseAlias::HTTP_CREATED)
             ->assertJsonStructure([
@@ -57,7 +60,7 @@ class BrandTest extends TestCase {
     }
 
     public function testAddBrandRequiredFields(): void {
-        $response = $this->post('/brands');
+        $response = $this->post(self::BRANDS);
 
         $response
             ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
@@ -70,7 +73,7 @@ class BrandTest extends TestCase {
     public function testDeleteBrandUnauthorized() {
         $brand = Brand::factory()->create();
 
-        $this->json('DELETE', '/brands/' . $brand->id)
+        $this->json('DELETE', self::BRANDS_PREFIX . $brand->id)
             ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
     }
 
@@ -79,7 +82,7 @@ class BrandTest extends TestCase {
 
         $brand = Brand::factory()->create();
 
-        $this->json('DELETE', '/brands/' . $brand->id, [], $this->headers($admin))
+        $this->json('DELETE', self::BRANDS_PREFIX . $brand->id, [], $this->headers($admin))
             ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
     }
 
@@ -106,7 +109,7 @@ class BrandTest extends TestCase {
             'product_image_id' => $productImage->id]);
 
 
-        $this->json('DELETE', '/brands/' . $brand->id, [], $this->headers($admin))
+        $this->json('DELETE', self::BRANDS_PREFIX . $brand->id, [], $this->headers($admin))
             ->assertStatus(ResponseAlias::HTTP_CONFLICT);
     }
 
@@ -115,7 +118,7 @@ class BrandTest extends TestCase {
 
         $payload = ['name' => 'new name'];
 
-        $this->put('/brands/' . $brand->id, $payload)
+        $this->put(self::BRANDS_PREFIX . $brand->id, $payload)
             ->assertStatus(ResponseAlias::HTTP_OK)
             ->assertJson([
                 'success' => true

@@ -43,7 +43,7 @@ class PaymentController extends Controller
         }
 
         if ($paymentMethod === 'cash-on-delivery') {
-
+            // Cash on delivery: nothing to validate up front.
         }
 
         if ($paymentMethod === 'credit-card') {

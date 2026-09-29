@@ -22,9 +22,9 @@ import {PaginationComponent} from "../../pagination/pagination.component";
   styleUrls: []
 })
 export class UsersListComponent implements OnInit {
-  private userService = inject(UserService);
-  private toastr = inject(ToastrService);
-  private formBuilder = inject(FormBuilder);
+  private readonly userService = inject(UserService);
+  private readonly toastr = inject(ToastrService);
+  private readonly formBuilder = inject(FormBuilder);
 
   currentPage: number = 1;
   results: Pagination<User>;

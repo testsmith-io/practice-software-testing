@@ -10,6 +10,25 @@ import {RouterLink} from "@angular/router";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {UpperCasePipe} from "@angular/common";
 
+// State object stored on window for the injected guide / bug-hunting training
+// scripts to read. Only written from here; consumed by external scripts.
+interface SplitScreenState {
+  [key: string]: unknown;
+  escapeHandler?: (e: KeyboardEvent) => void;
+}
+
+declare global {
+  interface Window {
+    opera?: string;
+    initializeGuide?: () => void;
+    closeTesting?: () => void;
+    initializeBugHunting?: () => void;
+    closeBugHunting?: () => void;
+    testingSplitScreen?: SplitScreenState;
+    bugHuntingSplitScreen?: SplitScreenState;
+  }
+}
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -22,13 +41,13 @@ import {UpperCasePipe} from "@angular/common";
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnDestroy, OnInit {
-  private auth = inject(CustomerAccountService);
-  private cartService = inject(CartService);
-  private changeDetectorRef = inject(ChangeDetectorRef);
-  private translocoService = inject(TranslocoService);
+  private readonly auth = inject(CustomerAccountService);
+  private readonly cartService = inject(CartService);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly translocoService = inject(TranslocoService);
 
   activeLanguage: string;
-  items: any;
+  items: number;
   role: string = '';
   name: string = '';
   isLoggedIn: boolean;
@@ -157,7 +176,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
   }
 
   private isMobileDevice(): boolean {
-    const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
     // Check for mobile user agents
     const mobileRegex = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
@@ -225,7 +244,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
 
     // Close modal functionality
     const closeModal = () => {
-      document.body.removeChild(modal);
+      modal.remove();
     };
 
     content.querySelector('#closeMobileModal')?.addEventListener('click', closeModal);
@@ -363,8 +382,8 @@ export class HeaderComponent implements OnDestroy, OnInit {
         console.log('Guide content loaded successfully');
 
         // Initialize the guide after scripts are loaded
-        if ((window as any).initializeGuide) {
-          (window as any).initializeGuide();
+        if (window.initializeGuide) {
+          window.initializeGuide();
         }
       })
       .catch(error => {
@@ -492,7 +511,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
     console.log('Testing close button added with event listener');
 
     // Also store the handler globally for emergency access
-    (window as any).closeTesting = closeHandler;
+    window.closeTesting = closeHandler;
 
     // Add onclick as backup (in case addEventListener fails)
     closeButton.onclick = closeHandler;
@@ -539,7 +558,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
     const handleMouseDown = (e: MouseEvent) => {
       isResizing = true;
       startX = e.clientX;
-      startWidth = parseInt(window.getComputedStyle(guidePanel).width, 10);
+      startWidth = Number.parseInt(window.getComputedStyle(guidePanel).width, 10);
 
       // Add visual feedback
       resizeHandle.style.background = '#0056b3';
@@ -600,8 +619,8 @@ export class HeaderComponent implements OnDestroy, OnInit {
       document.body.style.userSelect = '';
 
       // Remove all event listeners
-      document.removeEventListener('mousemove', handleMouseMove, { capture: true } as any);
-      document.removeEventListener('mouseup', handleMouseUp, { capture: true } as any);
+      document.removeEventListener('mousemove', handleMouseMove, { capture: true });
+      document.removeEventListener('mouseup', handleMouseUp, { capture: true });
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
 
@@ -617,7 +636,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
       const touch = e.touches[0];
       isResizing = true;
       startX = touch.clientX;
-      startWidth = parseInt(window.getComputedStyle(guidePanel).width, 10);
+      startWidth = Number.parseInt(window.getComputedStyle(guidePanel).width, 10);
 
       resizeHandle.style.background = '#0056b3';
       e.preventDefault();
@@ -658,7 +677,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
     // Don't add close button to container - add to body instead
 
     // Store original state
-    (window as any).testingSplitScreen = {
+    window.testingSplitScreen = {
       originalBodyChildren,
       originalStyles,
       originalBodyClasses,
@@ -679,7 +698,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
       }
     };
     document.addEventListener('keydown', handleEscape);
-    (window as any).testingSplitScreen.escapeHandler = handleEscape;
+    window.testingSplitScreen.escapeHandler = handleEscape;
 
     // Re-initialize Angular app in the app panel if needed
     this.reinitializeAngularInPanel(appContent);
@@ -816,8 +835,8 @@ export class HeaderComponent implements OnDestroy, OnInit {
         console.log('Bug hunting guide content loaded successfully');
 
         // Initialize the bug hunting guide if function exists
-        if ((window as any).initializeBugHunting) {
-          (window as any).initializeBugHunting();
+        if (window.initializeBugHunting) {
+          window.initializeBugHunting();
         }
       })
       .catch(error => {
@@ -972,7 +991,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
     console.log('Bug hunting close button added with event listener');
 
     // Also store the handler globally for emergency access
-    (window as any).closeBugHunting = closeHandler;
+    window.closeBugHunting = closeHandler;
 
     // Add onclick as backup (in case addEventListener fails)
     closeButton.onclick = closeHandler;
@@ -1019,7 +1038,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
     const handleMouseDown = (e: MouseEvent) => {
       isResizing = true;
       startX = e.clientX;
-      startWidth = parseInt(window.getComputedStyle(guidePanel).width, 10);
+      startWidth = Number.parseInt(window.getComputedStyle(guidePanel).width, 10);
 
       // Add visual feedback
       resizeHandle.style.background = '#c82333';
@@ -1075,8 +1094,8 @@ export class HeaderComponent implements OnDestroy, OnInit {
       document.body.style.userSelect = '';
 
       // Remove all event listeners
-      document.removeEventListener('mousemove', handleMouseMove, { capture: true } as any);
-      document.removeEventListener('mouseup', handleMouseUp, { capture: true } as any);
+      document.removeEventListener('mousemove', handleMouseMove, { capture: true });
+      document.removeEventListener('mouseup', handleMouseUp, { capture: true });
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
 
@@ -1095,7 +1114,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
     // Don't add close button to container - add to body instead
 
     // Store original state
-    (window as any).bugHuntingSplitScreen = {
+    window.bugHuntingSplitScreen = {
       originalBodyChildren,
       originalStyles,
       originalBodyClasses,
@@ -1116,7 +1135,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
       }
     };
     document.addEventListener('keydown', handleEscape);
-    (window as any).bugHuntingSplitScreen.escapeHandler = handleEscape;
+    window.bugHuntingSplitScreen.escapeHandler = handleEscape;
   }
 
   private closeBugHuntingSplitScreenMode(): void {

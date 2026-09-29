@@ -3,6 +3,7 @@
 
 import {Component, inject, OnInit} from '@angular/core';
 import {ReportService} from "../../../_services/report.service";
+import {CustomerPerCountry, SalesPerCountry, TopPurchasedProduct, TopSellingCategory} from "../../../models/report";
 
 @Component({
   selector: 'app-statistics',
@@ -12,10 +13,10 @@ import {ReportService} from "../../../_services/report.service";
 export class StatisticsComponent implements OnInit {
   private readonly reportService = inject(ReportService);
 
-  top10BestSellingCategories: any;
-  top10PurchasedProducts: any;
-  customerByCountry: any;
-  totalSalesPerCountry: any;
+  top10BestSellingCategories: TopSellingCategory[] = [];
+  top10PurchasedProducts: TopPurchasedProduct[] = [];
+  customerByCountry: CustomerPerCountry[] = [];
+  totalSalesPerCountry: SalesPerCountry[] = [];
 
   ngOnInit(): void {
     this.reportService.getTop10BestSellingCategories().subscribe(res => {

@@ -102,14 +102,6 @@ use Spatie\ArrayToXml\ArrayToXml;
  */
 class Controller extends BaseController
 {
-//    use AuthorizesRequests, ValidatesRequests;
-
-//    protected function jsonResponse($data, $code = 200)
-//    {
-//        return response()->json($data, $code,
-//            ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
-//    }
-
     private function makeXML($xml, $status = 200, array $headers = [], $xmlRoot = 'response', $encoding = null)
     {
         if (is_array($xml)) {

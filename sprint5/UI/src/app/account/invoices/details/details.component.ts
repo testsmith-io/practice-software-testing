@@ -61,7 +61,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         ))
       )
       .subscribe((response) => {
-        if (response && response.status === 'COMPLETED') {
+        if (response?.status === 'COMPLETED') {
           this.isDownloadReady = true;
         }
       });
@@ -95,7 +95,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  fadeOutMessage(): any {
+  fadeOutMessage(): void {
     setTimeout(() => {
       this.hideAlert = true;
     }, 3000);

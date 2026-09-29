@@ -27,9 +27,9 @@ import {PostcodeService} from "../../_services/postcode.service";
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  private formBuilder = inject(FormBuilder);
-  private accountService = inject(CustomerAccountService);
-  private postcodeService = inject(PostcodeService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly accountService = inject(CustomerAccountService);
+  private readonly postcodeService = inject(PostcodeService);
 
   register: FormGroup | any;
   submitted: boolean;

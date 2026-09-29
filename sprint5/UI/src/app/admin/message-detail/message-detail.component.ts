@@ -32,7 +32,7 @@ export class MessageDetailComponent implements OnInit {
   isUpdated: boolean = false;
   hideAlert: boolean = false;
   error: string;
-  messageState: any = MessageState;
+  messageState: typeof MessageState = MessageState;
   id: string;
 
   ngOnInit(): void {
@@ -59,8 +59,8 @@ export class MessageDetailComponent implements OnInit {
   }
 
   statusUpdate() {
-    let status = this.statusForm.controls['status'].value;
-    if (this.message.status == this.statusForm.controls['status'].value) {
+    const status = this.statusForm.controls['status'].value;
+    if (this.message.status === this.statusForm.controls['status'].value) {
       this.error = 'No new status selected.';
       return;
     }
@@ -88,7 +88,7 @@ export class MessageDetailComponent implements OnInit {
   }
 
   private addReply() {
-    let messageId = this.message.id;
+    const messageId = this.message.id;
 
     const payload: ContactMessage = {
       message: this.form.value.message
@@ -102,7 +102,7 @@ export class MessageDetailComponent implements OnInit {
           this.getMessage();
           this.reset();
         }, error: (err) => {
-          this.error = Object.values(err).join('\r\n');
+          this.error = Object.values(err as Record<string, string[] | string>).map(v => Array.isArray(v) ? v.join('\r\n') : v).join('\r\n');
         }, complete: () => {
           this.hideAlert = false;
         }
@@ -110,7 +110,7 @@ export class MessageDetailComponent implements OnInit {
   }
 
   private reset() {
-    for (let name in this.form.controls) {
+    for (const name in this.form.controls) {
       this.form.controls[name].setValue('');
       this.form.controls[name].setErrors(null);
     }

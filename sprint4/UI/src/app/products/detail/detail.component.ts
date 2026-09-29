@@ -63,7 +63,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   minus() {
-    if (this.quantity != 1) {
+    if (this.quantity !== 1) {
       this.quantity = this.quantity - 1;
     }
   }
@@ -84,17 +84,19 @@ export class DetailComponent implements OnInit, OnDestroy {
       });
   }
 
-  addToFavorites(product: any) {
-    let payload = {product_id: product.id}
+  addToFavorites(product: Product) {
+    const payload = {product_id: product.id}
     this.favoriteService.addFavorite(payload)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.toastService.show('Product added to your favorites list.', {classname: 'bg-success text-light'})
-      }, (response) => {
-        if (response.error.message === 'Duplicate Entry') {
-          this.toastService.show('Product already in your favorites list.', {classname: 'bg-warning text-dark'})
-        } else if (response.error.message === 'Unauthorized') {
-          this.toastService.show('Unauthorized, can not add product to your favorite list.', {classname: 'bg-danger text-light'})
+      .subscribe({
+        next: () => {
+          this.toastService.show('Product added to your favorites list.', {classname: 'bg-success text-light'})
+        }, error: (response) => {
+          if (response.error.message === 'Duplicate Entry') {
+            this.toastService.show('Product already in your favorites list.', {classname: 'bg-warning text-dark'})
+          } else if (response.error.message === 'Unauthorized') {
+            this.toastService.show('Unauthorized, can not add product to your favorite list.', {classname: 'bg-danger text-light'})
+          }
         }
       });
   }
@@ -102,7 +104,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   addToCart(product: Product) {
     if (this.quantity >= 1) {
       const price = (product.discount_price) ? product.discount_price : product.price;
-      let item = {
+      const item = {
         'id': product.id,
         'is_rental': product.is_rental,
         'name': product.name,

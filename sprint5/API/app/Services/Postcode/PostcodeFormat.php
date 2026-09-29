@@ -17,33 +17,36 @@ namespace App\Services\Postcode;
  */
 class PostcodeFormat
 {
+    private const PATTERN_4_DIGITS = '/^\d{4}$/';
+    private const PATTERN_5_DIGITS = '/^\d{5}$/';
+
     private const PATTERNS = [
-        'AL' => '/^\d{4}$/',
-        'AT' => '/^\d{4}$/',
-        'AU' => '/^\d{4}$/',
-        'BE' => '/^\d{4}$/',
+        'AL' => self::PATTERN_4_DIGITS,
+        'AT' => self::PATTERN_4_DIGITS,
+        'AU' => self::PATTERN_4_DIGITS,
+        'BE' => self::PATTERN_4_DIGITS,
         'BR' => '/^\d{5}-?\d{3}$/',
         'CA' => '/^[A-Za-z]\d[A-Za-z]\s?\d[A-Za-z]\d$/',
-        'CH' => '/^\d{4}$/',
+        'CH' => self::PATTERN_4_DIGITS,
         'CN' => '/^\d{6}$/',
         'CZ' => '/^\d{3}\s?\d{2}$/',
-        'DE' => '/^\d{5}$/',
-        'DK' => '/^\d{4}$/',
-        'ES' => '/^\d{5}$/',
-        'FI' => '/^\d{5}$/',
-        'FR' => '/^\d{5}$/',
+        'DE' => self::PATTERN_5_DIGITS,
+        'DK' => self::PATTERN_4_DIGITS,
+        'ES' => self::PATTERN_5_DIGITS,
+        'FI' => self::PATTERN_5_DIGITS,
+        'FR' => self::PATTERN_5_DIGITS,
         'GB' => '/^[A-Za-z]{1,2}\d[A-Za-z\d]?\s?\d[A-Za-z]{2}$/',
         'IE' => '/^[A-Za-z]\d{2}\s?[A-Za-z\d]{4}$/',
-        'IT' => '/^\d{5}$/',
+        'IT' => self::PATTERN_5_DIGITS,
         'JP' => '/^\d{3}-?\d{4}$/',
         'NL' => '/^\d{4}\s?[A-Za-z]{2}$/',
-        'NO' => '/^\d{4}$/',
-        'NZ' => '/^\d{4}$/',
+        'NO' => self::PATTERN_4_DIGITS,
+        'NZ' => self::PATTERN_4_DIGITS,
         'PL' => '/^\d{2}-\d{3}$/',
         'PT' => '/^\d{4}(-\d{3})?$/',
         'RU' => '/^\d{6}$/',
         'SE' => '/^\d{3}\s?\d{2}$/',
-        'TR' => '/^\d{5}$/',
+        'TR' => self::PATTERN_5_DIGITS,
         'US' => '/^\d{5}(-\d{4})?$/',
     ];
 

@@ -6,6 +6,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Observable, of, Subject, throwError} from 'rxjs';
 import {catchError, map, switchMap, tap} from 'rxjs/operators';
+import {Cart, CartItem} from '../models/cart';
 
 @Injectable({
   providedIn: 'root'
@@ -57,15 +58,15 @@ export class CartService {
     }
   }
 
-  private calculateCartQuantity(cartItems: any[]): number {
+  private calculateCartQuantity(cartItems: CartItem[]): number {
     return cartItems.reduce((total, item) => total + item.quantity, 0);
   }
 
-  getCart(): Observable<any> {
+  getCart(): Observable<Cart | null> {
     const cartId = sessionStorage.getItem('cart_id');
     if (!cartId) return of(null);
 
-    return this.httpClient.get<any>(`${this.apiURL}/${cartId}`).pipe(
+    return this.httpClient.get<Cart>(`${this.apiURL}/${cartId}`).pipe(
       tap(cart => {
         const quantity = this.calculateCartQuantity(cart.cart_items || []);
         sessionStorage.setItem('cart_quantity', JSON.stringify(quantity));
@@ -74,7 +75,7 @@ export class CartService {
     );
   }
 
-  addItem(item: any): Observable<any> {
+  addItem(item: { id: string | number; quantity: number }): Observable<unknown> {
     return this.getOrCreateCartId().pipe(
       switchMap(cartId =>
         this.httpClient.post(`${this.apiURL}/${cartId}`, {
@@ -91,13 +92,13 @@ export class CartService {
     );
   }
 
-  replaceQuantity(productId: number, quantity: number): Observable<any> {
+  replaceQuantity(productId: number | string, quantity: number): Observable<unknown> {
     const cartId = sessionStorage.getItem('cart_id');
     if (!cartId) return throwError(() => new Error('No cart ID'));
     return this.httpClient.put(`${this.apiURL}/${cartId}/product/quantity`, { product_id: productId, quantity });
   }
 
-  deleteItem(productId: number): Observable<any> {
+  deleteItem(productId: number): Observable<unknown> {
     const cartId = sessionStorage.getItem('cart_id');
     if (!cartId) return throwError(() => new Error('No cart ID'));
     this.storageSub.next('changed');

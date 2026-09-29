@@ -7,7 +7,7 @@
 <div class="row my-4" *transloco="let t">
   <a class="btn btn-secondary d-block d-md-none btn-block mb-3" data-bs-toggle="collapse" data-test="filters"
      href="#filters"
-     role="button" aria-expanded="false" aria-controls="collapseExample">
+     aria-expanded="false" aria-controls="collapseExample">
     <fa-icon [icon]="['fas', 'filter']"></fa-icon> {{ t('pages.overview.filters') }}
   </a>
   <div data-test="filters" id="filters" class="collapse d-md-block col-md-3 mb-3">
@@ -15,7 +15,7 @@
     <hr>
     <form autocomplete=off>
       <div class="input-group mb-3">
-        <select data-test="sort" (change)="changeSorting($event)" class="form-select">
+        <select data-test="sort" (change)="changeSorting($event)" class="form-select" aria-label="Sort products">
           <option value=""></option>
           <option value="name,asc">{{ t('pages.overview.sort-options.name-asc') }}</option>
           <option value="name,desc">{{ t('pages.overview.sort-options.name-desc') }}</option>
@@ -93,7 +93,7 @@
              class="card" style="text-decoration: none; color: black;">
             <div class="card-img-wrapper">
               <img class="card-img-top"
-                   src="assets/img/products/{{item.product_image.file_name}}">
+                   src="assets/img/products/{{item.product_image.file_name}}" alt="{{item.name}}">
               @if (item.is_eco_friendly && isEcoBadgeEnabled()) {
                 <span class="eco-badge position-absolute top-0 end-0 m-2" data-test="eco-badge">
                   <fa-icon [icon]="['fas', 'leaf']"></fa-icon> ECO

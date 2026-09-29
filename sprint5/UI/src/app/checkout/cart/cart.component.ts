@@ -12,6 +12,7 @@ import {TranslocoDirective, TranslocoService} from "@jsverse/transloco";
 import {Router} from "@angular/router";
 import {GaService} from "../../_services/ga.service";
 import {FormsModule} from "@angular/forms";
+import {Cart, CartItem} from "../../models/cart";
 
 @Component({
   selector: 'app-cart',
@@ -27,15 +28,15 @@ import {FormsModule} from "@angular/forms";
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
-  private cartService = inject(CartService);
-  private toastr = inject(ToastrService);
-  private customerAccountService = inject(CustomerAccountService);
-  private router = inject(Router);
-  private gaService = inject(GaService);
-  private translocoService = inject(TranslocoService);
+  private readonly cartService = inject(CartService);
+  private readonly toastr = inject(ToastrService);
+  private readonly customerAccountService = inject(CustomerAccountService);
+  private readonly router = inject(Router);
+  private readonly gaService = inject(GaService);
+  private readonly translocoService = inject(TranslocoService);
 
   readonly MAX_QUANTITY = 99;
-  cart: any;
+  cart: Cart | null = null;
   isLoggedIn: boolean = false;
   discount: number = 0;
   ecoDiscount: number = 0;
@@ -50,18 +51,19 @@ export class CartComponent implements OnInit {
   fetchCartItems(): void {
     this.cartService.getCart().subscribe(cart => {
       this.cart = cart;
+      if (!cart) return;
       this.total = this.calculateTotal(cart.cart_items);
       this.subtotal = this.total;
-      this.discount = this.calculateDiscount(cart.additional_discount_percentage);
+      this.discount = this.calculateDiscount(cart.additional_discount_percentage ?? 0);
       this.ecoDiscount = this.calculateEcoDiscount(cart.cart_items);
     });
   }
 
-  updateQuantity(event: Event, item: any): void {
+  updateQuantity(event: Event, item: CartItem): void {
     let quantity = item.quantity;
 
     // Validate the quantity
-    if (isNaN(quantity) || quantity < 1) {
+    if (Number.isNaN(quantity) || quantity < 1) {
       quantity = 1;
       item.quantity = quantity;
     } else if (quantity > this.MAX_QUANTITY) {
@@ -71,7 +73,7 @@ export class CartComponent implements OnInit {
     }
 
     if (quantity >= 1 && quantity <= this.MAX_QUANTITY) {
-      this.cartService.replaceQuantity(item.product.id, quantity).subscribe({
+      this.cartService.replaceQuantity(item.product.id!, quantity).subscribe({
         next: () => {
           this.fetchCartItems();
           this.toastr.success(this.translocoService.translate('toasts.product-quantity-updated'), null, { progressBar: true });
@@ -90,7 +92,7 @@ export class CartComponent implements OnInit {
     });
   }
 
-  private calculateTotal(items: any[]): number {
+  private calculateTotal(items: CartItem[]): number {
     return items.reduce((sum, cartItem) => {
       const quantity = cartItem.quantity || 0;
       const price = cartItem.discount_percentage ? cartItem.discounted_price : cartItem.product?.price || 0;
@@ -108,7 +110,7 @@ export class CartComponent implements OnInit {
     return discountAmount;
   }
 
-  private calculateEcoDiscount(items: any[]): number {
+  private calculateEcoDiscount(items: CartItem[]): number {
     // Count eco-friendly products (CO2 rating A or B)
     let ecoFriendlyCount = 0;
     let totalProductCount = 0;
@@ -141,7 +143,7 @@ export class CartComponent implements OnInit {
   beginCheckout(): void {
     if (!this.cart?.cart_items?.length) return;
 
-    const items = this.cart.cart_items.map((cartItem: any) => ({
+    const items = this.cart.cart_items.map((cartItem: CartItem) => ({
       item_id: cartItem.product.id,
       item_name: cartItem.product.name,
       item_category: cartItem.product.category?.name || 'Unknown',

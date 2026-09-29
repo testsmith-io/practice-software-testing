@@ -39,7 +39,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   error: string;
   hideAlert: boolean = false;
   isDownloadReady = false;
-  private pollingSubscription?: Subscription;
+  private readonly pollingSubscription?: Subscription;
 
   ngOnInit(): void {
     this.invoiceService.getInvoice(this.route.snapshot.params["id"])
@@ -63,7 +63,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         ))
       )
       .subscribe((response) => {
-        if (response && response.status === 'COMPLETED') {
+        if (response?.status === 'COMPLETED') {
           this.isDownloadReady = true;
         }
       });
@@ -71,8 +71,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   downloadPDF() {
     this.invoiceService.downloadPDF(this.invoice.invoice_number).pipe(first())
-      .subscribe(
-        (response: HttpResponse<Blob>) => {
+      .subscribe({
+        next: (response: HttpResponse<Blob>) => {
           const file = new Blob([response.body], {type: 'application/pdf'});
           const fileURL = URL.createObjectURL(file);
           const contentDisposition = response.headers.get('Content-Disposition');
@@ -85,13 +85,14 @@ export class DetailsComponent implements OnInit, OnDestroy {
           document.body.appendChild(a);
           a.click();
         },
-        () => {
+        error: () => {
           this.hideAlert = false;
           this.error = 'Document not created. Try again later.';
-        });
+        }
+      });
   }
 
-  fadeOutMessage(): any {
+  fadeOutMessage(): void {
     setTimeout(() => {
       this.hideAlert = true;
     }, 3000);

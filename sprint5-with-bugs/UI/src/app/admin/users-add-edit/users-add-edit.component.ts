@@ -51,7 +51,7 @@ export class UsersAddEditComponent implements OnInit {
       postcode: ['', []],
       phone: ['', []],
       enabled: ['', []],
-      email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+      email: ['', [Validators.required, Validators.pattern(String.raw`^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$`)]],
       password: ['', []],
     });
 

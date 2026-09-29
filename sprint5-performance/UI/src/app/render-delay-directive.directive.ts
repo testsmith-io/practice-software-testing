@@ -1,18 +1,19 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-import {AfterViewInit, Directive, ElementRef, Input, OnDestroy, Renderer2} from '@angular/core';
+import {AfterViewInit, Directive, ElementRef, inject, Input, OnDestroy, Renderer2} from '@angular/core';
 
 @Directive({
   selector: '[appRenderDelay]'
 })
 export class RenderDelayDirective implements AfterViewInit, OnDestroy {
+  private readonly el = inject(ElementRef);
+  private readonly renderer = inject(Renderer2);
+
   @Input() delayMs?: number;
   @Input() delayRandomRange?: [number, number];
 
-  private unlisteners: (() => void)[] = [];
-
-  constructor(private el: ElementRef, private renderer: Renderer2) {}
+  private readonly unlisteners: (() => void)[] = [];
 
   ngAfterViewInit(): void {
     const native = this.el.nativeElement;

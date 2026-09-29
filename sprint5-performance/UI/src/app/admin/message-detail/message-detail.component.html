@@ -17,7 +17,7 @@
       </div>
       <div class="card-footer">
         <form [formGroup]="statusForm">
-          <select id="status" data-test="status" formControlName="status" class="form-select-sm me-3"
+          <select id="status" data-test="status" formControlName="status" class="form-select-sm me-3" aria-label="Message status"
                   (ngModelChange)="statusUpdate()">
             @for (status of statuses;track status) {
               <option [disabled]="messageState[status] <= messageState[message?.status]"
@@ -46,7 +46,7 @@
       <div class="card-header">Add Reply</div>
       <div class="card-body">
         <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
-          <textarea class="form-control" formControlName="message" data-test="message" id="message" rows="5"></textarea>
+          <textarea class="form-control" formControlName="message" data-test="message" id="message" rows="5" aria-label="Message"></textarea>
           <button type="submit" class="btn btn-primary mt-2" data-test="reply-submit">Reply</button>
         </form>
       </div>

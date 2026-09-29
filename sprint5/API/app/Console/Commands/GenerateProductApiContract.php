@@ -14,6 +14,11 @@ use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class GenerateProductApiContract extends Command
 {
+    private const BRAND_ID = '01J7WPNDFK1F9KXNVPSVQP6EHY';
+    private const BRAND_NAME = 'ForgeFlex Tools';
+    private const CATEGORY_ID = '01J7WPNDFV9R4DPXFANQ2GZ1MH';
+    private const PARENT_CATEGORY_ID = '01J7WPNDFRR91AASPVXMCASW42';
+
     /**
      * The name and signature of the console command.
      *
@@ -83,8 +88,8 @@ class GenerateProductApiContract extends Command
                             'parent_id' => '01J7WPNDFRR91AASPVXMCASW41'
                         ],
                         'brand' => [
-                            'id' => '01J7WPNDFK1F9KXNVPSVQP6EHY',
-                            'name' => 'ForgeFlex Tools',
+                            'id' => self::BRAND_ID,
+                            'name' => self::BRAND_NAME,
                             'slug' => 'forgeflex-tools'
                         ]
                     ],
@@ -112,8 +117,8 @@ class GenerateProductApiContract extends Command
                             'parent_id' => '01J7WPNDFRR91AASPVXMCASW41'
                         ],
                         'brand' => [
-                            'id' => '01J7WPNDFK1F9KXNVPSVQP6EHY',
-                            'name' => 'ForgeFlex Tools',
+                            'id' => self::BRAND_ID,
+                            'name' => self::BRAND_NAME,
                             'slug' => 'forgeflex-tools'
                         ]
                     ]
@@ -161,14 +166,14 @@ class GenerateProductApiContract extends Command
                             'title' => 'Excavator'
                         ],
                         'category' => [
-                            'id' => '01J7WPNDFV9R4DPXFANQ2GZ1MH',
+                            'id' => self::CATEGORY_ID,
                             'name' => 'Drill',
                             'slug' => 'drill',
-                            'parent_id' => '01J7WPNDFRR91AASPVXMCASW42'
+                            'parent_id' => self::PARENT_CATEGORY_ID
                         ],
                         'brand' => [
-                            'id' => '01J7WPNDFK1F9KXNVPSVQP6EHY',
-                            'name' => 'ForgeFlex Tools',
+                            'id' => self::BRAND_ID,
+                            'name' => self::BRAND_NAME,
                             'slug' => 'forgeflex-tools'
                         ]
                     ],
@@ -190,14 +195,14 @@ class GenerateProductApiContract extends Command
                             'title' => 'Bulldozer'
                         ],
                         'category' => [
-                            'id' => '01J7WPNDFV9R4DPXFANQ2GZ1MH',
+                            'id' => self::CATEGORY_ID,
                             'name' => 'Drill',
                             'slug' => 'drill',
-                            'parent_id' => '01J7WPNDFRR91AASPVXMCASW42'
+                            'parent_id' => self::PARENT_CATEGORY_ID
                         ],
                         'brand' => [
-                            'id' => '01J7WPNDFK1F9KXNVPSVQP6EHY',
-                            'name' => 'ForgeFlex Tools',
+                            'id' => self::BRAND_ID,
+                            'name' => self::BRAND_NAME,
                             'slug' => 'forgeflex-tools'
                         ]
                     ],
@@ -219,10 +224,10 @@ class GenerateProductApiContract extends Command
                             'title' => 'Crane'
                         ],
                         'category' => [
-                            'id' => '01J7WPNDFV9R4DPXFANQ2GZ1MH',
+                            'id' => self::CATEGORY_ID,
                             'name' => 'Drill',
                             'slug' => 'drill',
-                            'parent_id' => '01J7WPNDFRR91AASPVXMCASW42'
+                            'parent_id' => self::PARENT_CATEGORY_ID
                         ],
                         'brand' => [
                             'id' => '01J7WPNDFK1F9KXNVPSVQP6EHZ',

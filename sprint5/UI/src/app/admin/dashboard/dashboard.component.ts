@@ -93,10 +93,10 @@ export class DashboardComponent implements OnInit {
    this.getNewInvoices();
 
     this.reportService.getTotalSalesPerYear().subscribe(res => {
-      let labels = res.map((item) => {
+      const labels = res.map((item) => {
         return item['year'];
       });
-      let data = res.map((item) => {
+      const data = res.map((item) => {
         return item['total'].toFixed(2);
       });
 
@@ -107,9 +107,9 @@ export class DashboardComponent implements OnInit {
             label: "",
             data: data,
             backgroundColor: () => {
-              let r = Math.floor(Math.random() * 255);
-              let g = Math.floor(Math.random() * 255);
-              let b = Math.floor(Math.random() * 255);
+              const r = Math.floor(Math.random() * 255);
+              const g = Math.floor(Math.random() * 255);
+              const b = Math.floor(Math.random() * 255);
               return "rgba(" + r + "," + g + "," + b + ", 0.5)";
             },
           }]

@@ -9,7 +9,7 @@ import {Observable} from "rxjs";
   providedIn: 'root'
 })
 export class PaymentService {
-  private httpClient = inject(HttpClient);
+  private readonly httpClient = inject(HttpClient);
 
   validate(api_url: any, payload: any): Observable<any> {
     return this.httpClient.post(api_url, payload, {responseType: 'json'});

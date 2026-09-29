@@ -31,15 +31,17 @@ export class InvoicesComponent implements OnInit {
   ngOnInit(): void {
     this.customerAccountService.getDetails()
       .pipe(first())
-      .subscribe((profile) => {
+      .subscribe({
+        next: (profile) => {
           this.id = profile.id;
         },
-        (error) => {
+        error: (error) => {
           if (error.status === 401 || error.status === 403) {
             window.localStorage.removeItem('TOKEN_KEY');
             window.location.href = '/#/auth/login';
           }
-        });
+        }
+      });
 
     this.getInvoices();
   }
@@ -47,15 +49,17 @@ export class InvoicesComponent implements OnInit {
   getInvoices() {
     this.invoiceService.getInvoices(this.p)
       .pipe(first())
-      .subscribe((invoices) => {
+      .subscribe({
+        next: (invoices) => {
           this.results = invoices
         },
-        (error) => {
+        error: (error) => {
           if (error.status === 401 || error.status === 403) {
             window.localStorage.removeItem('TOKEN_KEY');
             window.location.href = '/#/auth/login';
           }
-        });
+        }
+      });
   }
 
   handlePageChange(event: number): void {

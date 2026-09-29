@@ -6,6 +6,8 @@ use App\Models\Invoice;
 use App\Models\User;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
+const NETHERLANDS = 'The Netherlands';
+
 //covers(ReportController::class);
 
 beforeEach(function () {
@@ -17,12 +19,12 @@ beforeEach(function () {
     // Arrange: Create test invoices
     Invoice::factory()->create([
         'total' => 100.00,
-        'billing_country' => 'The Netherlands'
+        'billing_country' => NETHERLANDS
     ]);
 
     Invoice::factory()->create([
         'total' => 150.00,
-        'billing_country' => 'The Netherlands'
+        'billing_country' => NETHERLANDS
     ]);
 
     Invoice::factory()->create([
@@ -38,7 +40,7 @@ test('it returns total sales per country', function () {
     // Assert: Check if the response is as expected
     $response->assertStatus(ResponseAlias::HTTP_OK);
     $response->assertJsonFragment(
-        ['billing_country' => 'The Netherlands', 'total_sales' => 250.00]
+        ['billing_country' => NETHERLANDS, 'total_sales' => 250.00]
     );
     $response->assertJsonFragment(
         ['billing_country' => 'USA', 'total_sales' => 200.00]

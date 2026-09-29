@@ -26,7 +26,7 @@ export class BrandsListComponent implements OnInit {
   private readonly toastr = inject(ToastrService);
 
   brands!: Brand[];
-  searchForm: FormGroup | any;
+  searchForm: FormGroup;
   ngOnInit(): void {
     this.getBrands();
 
@@ -37,7 +37,7 @@ export class BrandsListComponent implements OnInit {
   }
 
   search() {
-    let query = this.searchForm.controls['query'].value;
+    const query = this.searchForm.controls['query'].value;
     this.brandService.searchBrands(query)
       .pipe(first())
       .subscribe((brands) => this.brands = brands);

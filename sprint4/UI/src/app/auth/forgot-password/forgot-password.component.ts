@@ -19,7 +19,7 @@ export class ForgotPasswordComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   private readonly accountService = inject(CustomerAccountService);
 
-  form: FormGroup | any;
+  form: FormGroup;
   isUpdated: boolean = false;
   hideAlert: boolean = false;
   submitted = false;
@@ -28,7 +28,7 @@ export class ForgotPasswordComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.formBuilder.group(
       {
-        email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]]
+        email: ['', [Validators.required, Validators.pattern(String.raw`^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$`)]]
       }
     );
   }
@@ -48,7 +48,7 @@ export class ForgotPasswordComponent implements OnInit {
       return;
     }
 
-    const payload: any = {
+    const payload: { email: string } = {
       email: this.form.value.email
     };
 
@@ -57,14 +57,14 @@ export class ForgotPasswordComponent implements OnInit {
         this.isUpdated = true;
         this.error = "";
       }, error: (err) => {
-        this.error = Object.values(err).join('\r\n');
+        this.error = (Object.values(err) as string[][]).flat().join('\r\n');
       }, complete: () => {
         this.hideAlert = false;
       }
     });
   }
 
-  fadeOutMessage(): any {
+  fadeOutMessage(): void {
     setTimeout(() => {
       this.hideAlert = true;
     }, 3000);

@@ -237,7 +237,7 @@
         <div class="float-end">
           <button data-test="finish" [disabled]="!cusPayment.valid" type="button" class="btn btn-success"
                   (click)="finishFunction()">
-            {{ t('pages.checkout.payment.confirm-btn') }}
+            {{ state ? t('pages.checkout.payment.confirm-btn') : t('pages.checkout.payment.check-payment-btn') }}
           </button>
         </div>
       </div>

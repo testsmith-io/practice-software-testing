@@ -9,6 +9,7 @@ import {BrandService} from "../../_services/brand.service";
 import {CategoryService} from "../../_services/category.service";
 import {ActivatedRoute, RouterLink} from "@angular/router";
 import {Product} from "../../models/product";
+import {Category} from "../../models/category";
 import DiscountUtil from "../../_helpers/discount.util";
 import {ProductService} from "../../_services/product.service";
 import {Pagination} from "../../models/pagination";
@@ -37,24 +38,24 @@ import {ProductSpecService, SpecNameGroup} from "../../_services/product-spec.se
   styleUrls: ['./category.component.css']
 })
 export class CategoryComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
-  private productService = inject(ProductService);
-  private formBuilder = inject(FormBuilder);
-  private route = inject(ActivatedRoute);
-  private brandService = inject(BrandService);
-  private categoryService = inject(CategoryService);
-  public browserDetect = inject(BrowserDetectorService);
-  private titleService = inject(Title);
-  public comparisonService = inject(ComparisonService);
-  private specService = inject(ProductSpecService);
-  search: FormGroup | any;
+  private readonly destroy$ = new Subject<void>();
+  private readonly productService = inject(ProductService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
+  private readonly brandService = inject(BrandService);
+  private readonly categoryService = inject(CategoryService);
+  public readonly browserDetect = inject(BrowserDetectorService);
+  private readonly titleService = inject(Title);
+  public readonly comparisonService = inject(ComparisonService);
+  private readonly specService = inject(ProductSpecService);
+  search: FormGroup;
   resultState: string = '';
   currentPage: number = 1;
   results: Pagination<Product>;
   brands: Brand[];
-  categories: any;
+  categories: Category[];
   slug: string;
-  private brandsFilter: Array<number> = [];
+  private brandsFilter: Array<string> = [];
   private categoriesFilter: Array<number> = [];
   private sorting: string = '';
   private ecoFriendlyFilter: boolean = false;
@@ -112,12 +113,13 @@ export class CategoryComponent implements OnInit, OnDestroy {
     });
   }
 
-  filterByBrand(event: any) {
+  filterByBrand(event: Event) {
+    const input = event.target as HTMLInputElement;
     this.resultState = 'filter_started';
-    if (event.target.checked) {
-      this.brandsFilter.push(event.target.value);
+    if (input.checked) {
+      this.brandsFilter.push(input.value);
     } else {
-      this.brandsFilter = this.brandsFilter.filter(item => item !== event.target.value);
+      this.brandsFilter = this.brandsFilter.filter(item => item !== input.value);
     }
     this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter, this.buildSpecFilterString()).subscribe(res => {
       this.resultState = 'filter_completed';
@@ -130,9 +132,9 @@ export class CategoryComponent implements OnInit, OnDestroy {
     });
   }
 
-  filterByCategory(event: any, categoryId: number, parentId?: number) {
+  filterByCategory(event: Event, categoryId: number, parentId?: number) {
     this.resultState = 'filter_started';
-    const isChecked = event.target.checked;
+    const isChecked = (event.target as HTMLInputElement).checked;
 
     // Update the checkbox state
     this.categoryCheckboxState.set(categoryId, isChecked);
@@ -150,7 +152,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
       // If this is a parent being checked, check all children
       const category = this.findCategoryById(categoryId, this.categories);
-      if (category && category.sub_categories && category.sub_categories.length > 0) {
+      if (category?.sub_categories && category.sub_categories.length > 0) {
         this.checkAllChildren(category);
       }
     } else {
@@ -163,7 +165,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
       // If this is a parent being unchecked, uncheck all children
       const category = this.findCategoryById(categoryId, this.categories);
-      if (category && category.sub_categories && category.sub_categories.length > 0) {
+      if (category?.sub_categories && category.sub_categories.length > 0) {
         this.uncheckAllChildren(category);
       }
     }
@@ -185,8 +187,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this.getProductsByCategory(this.slug);
   }
 
-  changeSorting(event: any) {
-    this.sorting = event.target.value;
+  changeSorting(event: Event) {
+    this.sorting = (event.target as HTMLSelectElement).value;
 
     this.resultState = 'sorting_started';
     this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter, this.buildSpecFilterString()).subscribe(res => {
@@ -204,7 +206,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this.titleService.setTitle(`${categoryName} - Practice Software Testing - Toolshop - v5.0`);
   }
 
-  private findCategoryById(id: number, categories: any[]): any {
+  private findCategoryById(id: number, categories: Category[]): Category | null {
     for (const category of categories) {
       if (category.id === id) {
         return category;
@@ -217,9 +219,9 @@ export class CategoryComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  private checkAllChildren(category: any) {
+  private checkAllChildren(category: Category) {
     if (category.sub_categories) {
-      category.sub_categories.forEach((child: any) => {
+      category.sub_categories.forEach((child: Category) => {
         this.categoryCheckboxState.set(child.id, true);
         if (!this.categoriesFilter.includes(child.id)) {
           this.categoriesFilter.push(child.id);
@@ -229,9 +231,9 @@ export class CategoryComponent implements OnInit, OnDestroy {
     }
   }
 
-  private uncheckAllChildren(category: any) {
+  private uncheckAllChildren(category: Category) {
     if (category.sub_categories) {
-      category.sub_categories.forEach((child: any) => {
+      category.sub_categories.forEach((child: Category) => {
         this.categoryCheckboxState.set(child.id, false);
         this.categoriesFilter = this.categoriesFilter.filter(item => item !== child.id);
         this.uncheckAllChildren(child);
@@ -241,8 +243,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   private checkParentIfAllChildrenChecked(parentId: number) {
     const parent = this.findCategoryById(parentId, this.categories);
-    if (parent && parent.sub_categories) {
-      const allChildrenChecked = parent.sub_categories.every((child: any) =>
+    if (parent?.sub_categories) {
+      const allChildrenChecked = parent.sub_categories.every((child: Category) =>
         this.categoryCheckboxState.get(child.id) === true
       );
 
@@ -257,8 +259,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   private uncheckParentIfNoChildrenChecked(parentId: number) {
     const parent = this.findCategoryById(parentId, this.categories);
-    if (parent && parent.sub_categories) {
-      const anyChildChecked = parent.sub_categories.some((child: any) =>
+    if (parent?.sub_categories) {
+      const anyChildChecked = parent.sub_categories.some((child: Category) =>
         this.categoryCheckboxState.get(child.id) === true
       );
 
@@ -278,9 +280,9 @@ export class CategoryComponent implements OnInit, OnDestroy {
     return this.categoryCheckboxState.get(categoryId) || false;
   }
 
-  filterByEcoFriendly(event: any) {
+  filterByEcoFriendly(event: Event) {
     this.resultState = 'filter_started';
-    this.ecoFriendlyFilter = event.target.checked;
+    this.ecoFriendlyFilter = (event.target as HTMLInputElement).checked;
 
     this.productService.getProductsByCategoryAndBrand(this.categoriesFilter.toString(), this.brandsFilter.toString(), this.sorting, this.slug, this.ecoFriendlyFilter, this.buildSpecFilterString()).subscribe(res => {
       this.resultState = 'filter_completed';
@@ -293,12 +295,12 @@ export class CategoryComponent implements OnInit, OnDestroy {
     });
   }
 
-  filterBySpec(event: any, specName: string, specValue: string) {
+  filterBySpec(event: Event, specName: string, specValue: string) {
     if (!this.specFilters.has(specName)) {
       this.specFilters.set(specName, new Set());
     }
     const values = this.specFilters.get(specName)!;
-    if (event.target.checked) {
+    if ((event.target as HTMLInputElement).checked) {
       values.add(specValue);
     } else {
       values.delete(specValue);

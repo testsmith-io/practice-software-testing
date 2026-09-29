@@ -39,14 +39,14 @@ import {ProductSpecService, SpecNameGroup} from "../../_services/product-spec.se
   styleUrls: ['./overview.component.css']
 })
 export class OverviewComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
-  private productService = inject(ProductService);
-  private formBuilder = inject(FormBuilder);
-  private brandService = inject(BrandService);
-  private categoryService = inject(CategoryService);
-  public browserDetect = inject(BrowserDetectorService);
-  public comparisonService = inject(ComparisonService);
-  private specService = inject(ProductSpecService);
+  private readonly destroy$ = new Subject<void>();
+  private readonly productService = inject(ProductService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly brandService = inject(BrandService);
+  private readonly categoryService = inject(CategoryService);
+  public readonly browserDetect = inject(BrowserDetectorService);
+  public readonly comparisonService = inject(ComparisonService);
+  private readonly specService = inject(ProductSpecService);
 
   @ViewChildren("checkboxes") checkboxes: QueryList<ElementRef>;
 

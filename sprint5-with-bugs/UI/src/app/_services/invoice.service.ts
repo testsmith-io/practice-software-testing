@@ -12,7 +12,7 @@ const API_URL = environment.apiUrl;
   providedIn: 'root'
 })
 export class InvoiceService {
-  private httpClient = inject(HttpClient);
+  private readonly httpClient = inject(HttpClient);
 
   getInvoices(page:any): Observable<any> {
     let params = new HttpParams().set('page', page);

@@ -117,7 +117,6 @@ class User extends Authenticatable implements JWTSubject
         'totp_enabled' => 'boolean',
     );
 
-//    protected $appends = ['admin_details'];
     protected $appends = ['address'];
 
     public function getAddressAttribute()
@@ -165,24 +164,9 @@ class User extends Authenticatable implements JWTSubject
                 $array['failed_login_attempts'] = $this->failed_login_attempts;
             }
         } catch (JWTException $e) {
+            // No valid token (e.g. public request): expose no admin-only fields.
         }
 
         return $array;
     }
-
-//    public function getAdminDetailsAttribute()
-//    {
-//        try {
-//            $role = app('auth')->parseToken()->getPayload()->get('role');
-//            if ($role == "admin") {
-//                return [
-//                    'enabled' => $this->enabled,
-//                    'failed_login_attempts' => $this->failed_login_attempts,
-//                ];
-//            }
-//        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-//        }
-//
-//        return null;
-//    }
 }

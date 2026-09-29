@@ -13,7 +13,7 @@ const TOKEN_HEADER_KEY = 'Authorization';
 export class AuthInterceptor implements HttpInterceptor {
   private readonly token = inject(TokenStorageService);
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     let authReq = req;
     const token = this.token.getToken();
     if (token != null && !req.url.includes('payment/validate')) {

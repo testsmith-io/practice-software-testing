@@ -20,6 +20,12 @@ class UserTest extends TestCase
 {
     use DatabaseMigrations;
 
+    private const STREET = 'Street 1';
+    private const USER_EMAIL = 'john@doe.example';
+    private const LOGIN = '/users/login';
+    private const CHANGE_PASSWORD = '/users/change-password';
+    private const FORGOT_PASSWORD = '/users/forgot-password';
+
     protected $user;
 
     public function setUp(): void
@@ -38,14 +44,14 @@ class UserTest extends TestCase
         $userData = [
             'first_name' => 'John',
             'last_name' => 'Doe',
-            'address' => 'Street 1',
+            'address' => self::STREET,
             'city' => 'City',
             'state' => 'State',
             'country' => 'Country',
             'postcode' => '1234AA',
             'phone' => '0987654321',
             'dob' => '1970-01-01',
-            'email' => 'john@doe.example',
+            'email' => self::USER_EMAIL,
             'password' => 'super-secret'
         ];
 
@@ -65,14 +71,14 @@ class UserTest extends TestCase
         $userData = [
             'first_name' => 'John',
             'last_name' => 'Doe',
-            'address' => 'Street 1',
+            'address' => self::STREET,
             'city' => 'City',
             'state' => 'State',
             'country' => 'Country',
             'postcode' => '1234AA',
             'phone' => '0987654321',
             'dob' => '1970-01-01',
-            'email' => 'john@doe.example',
+            'email' => self::USER_EMAIL,
             'password' => 'super-secret'
         ];
 
@@ -85,7 +91,7 @@ class UserTest extends TestCase
 
     public function test_successful_login()
     {
-        $response = $this->post('/users/login', [
+        $response = $this->post(self::LOGIN, [
             'email' => $this->user->email,
             'password' => 'welcome01',
         ]);
@@ -95,7 +101,7 @@ class UserTest extends TestCase
 
     public function test_failed_login()
     {
-        $response = $this->post('/users/login', [
+        $response = $this->post(self::LOGIN, [
             'email' => $this->user->email,
             'password' => 'wrong-password',
         ]);
@@ -109,7 +115,7 @@ class UserTest extends TestCase
         $this->user->failed_login_attempts = 2;
         $this->user->save();
 
-        $response = $this->post('/users/login', [
+        $response = $this->post(self::LOGIN, [
             'email' => $this->user->email,
             'password' => 'welcome01',
         ]);
@@ -123,7 +129,7 @@ class UserTest extends TestCase
         $this->user->enabled = false;
         $this->user->save();
 
-        $response = $this->post('/users/login', [
+        $response = $this->post(self::LOGIN, [
             'email' => $this->user->email,
             'password' => 'welcome01',
         ]);
@@ -250,10 +256,10 @@ class UserTest extends TestCase
         $newData = [
             'first_name' => 'UpdatedName',
             'last_name' => 'Doe',
-            'address' => 'Street 1',
+            'address' => self::STREET,
             'city' => 'City',
             'country' => 'Country',
-            'email' => 'john@doe.example',
+            'email' => self::USER_EMAIL,
         ];
 
         // Make a PUT request to update user information
@@ -277,10 +283,10 @@ class UserTest extends TestCase
         $newData = [
             'first_name' => 'UpdatedByAdmin',
             'last_name' => 'Doe',
-            'address' => 'Street 1',
+            'address' => self::STREET,
             'city' => 'City',
             'country' => 'Country',
-            'email' => 'john@doe.example',
+            'email' => self::USER_EMAIL,
         ];
 
         // Make a PUT request to update the other user's information
@@ -301,10 +307,10 @@ class UserTest extends TestCase
         $newData = [
             'first_name' => 'John',
             'last_name' => 'Doe',
-            'address' => 'Street 1',
+            'address' => self::STREET,
             'city' => 'City',
             'country' => 'Country',
-            'email' => 'john@doe.example',
+            'email' => self::USER_EMAIL,
         ];
         // Create two users
         $otherUser = User::factory()->create();
@@ -368,7 +374,7 @@ class UserTest extends TestCase
 
     public function testCurrentPasswordIncorrect()
     {
-        $response = $this->postJson('/users/change-password', [
+        $response = $this->postJson(self::CHANGE_PASSWORD, [
             'current_password' => 'wrongpassword',
             'new_password' => 'newpassword',
             'new_password_confirmation' => 'newpassword'
@@ -383,7 +389,7 @@ class UserTest extends TestCase
 
     public function testNewPasswordSameAsCurrent()
     {
-        $response = $this->postJson('/users/change-password', [
+        $response = $this->postJson(self::CHANGE_PASSWORD, [
             'current_password' => 'welcome01',
             'new_password' => 'welcome01',
             'new_password_confirmation' => 'welcome01'
@@ -399,7 +405,7 @@ class UserTest extends TestCase
     public function testNewPasswordValidationFailure()
     {
         // Test with a new password that is too short
-        $response = $this->postJson('/users/change-password', [
+        $response = $this->postJson(self::CHANGE_PASSWORD, [
             'current_password' => 'welcome01',
             'new_password' => 'short',
             'new_password_confirmation' => 'short'
@@ -411,7 +417,7 @@ class UserTest extends TestCase
 
     public function testPasswordChangeSuccess()
     {
-        $response = $this->postJson('/users/change-password', [
+        $response = $this->postJson(self::CHANGE_PASSWORD, [
             'current_password' => 'welcome01',
             'new_password' => 'newstrongpassword',
             'new_password_confirmation' => 'newstrongpassword'
@@ -425,7 +431,7 @@ class UserTest extends TestCase
     {
         $this->app['env'] = 'local';
 
-        $response = $this->postJson('/users/forgot-password', [
+        $response = $this->postJson(self::FORGOT_PASSWORD, [
             'email' => $this->user->email,
         ]);
 
@@ -441,7 +447,7 @@ class UserTest extends TestCase
     {
         $this->app['env'] = 'testing';
 
-        $response = $this->postJson('/users/forgot-password', [
+        $response = $this->postJson(self::FORGOT_PASSWORD, [
             'email' => $this->user->email,
         ]);
 
@@ -453,7 +459,7 @@ class UserTest extends TestCase
 
     public function testEmailDoesNotExist()
     {
-        $response = $this->postJson('/users/forgot-password', [
+        $response = $this->postJson(self::FORGOT_PASSWORD, [
             'email' => 'nonexistent@example.com',
         ]);
 

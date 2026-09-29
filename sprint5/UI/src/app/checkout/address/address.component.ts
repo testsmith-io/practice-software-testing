@@ -30,7 +30,7 @@ export class AddressComponent implements OnInit, OnDestroy {
 
   @Output() cusAddressChange = new EventEmitter<FormGroup>();
   @Input() address: FormGroup;
-  cusAddress: FormGroup | any;
+  cusAddress: FormGroup;
   postcodeLookupPending = false;
   postcodeLookupError: string | null = null;
   countries = countriesList;

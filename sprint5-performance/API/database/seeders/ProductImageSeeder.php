@@ -10,6 +10,9 @@ use Illuminate\Support\Str;
 
 class ProductImageSeeder extends Seeder
 {
+    private const CLAW_HAMMER = 'Claw Hammer';
+    private const TEKTON_URL = 'https://unsplash.com/@tekton_tools';
+    private const CORDLESS_DRILL = 'Cordless Drill';
     /**
      * Run the database seeds.
      */
@@ -62,7 +65,7 @@ class ProductImageSeeder extends Seeder
             'source_name' => 'Unsplash',
             'source_url' => 'https://unsplash.com/photos/jaLaLQdkBOE',
             'file_name' => 'hammer01.avif',
-            'title' => 'Claw Hammer'
+            'title' => self::CLAW_HAMMER
         ], [
             'id' => Str::ulid()->toBase32(),
             'by_name' => 'Jozsef Hocza',
@@ -78,7 +81,7 @@ class ProductImageSeeder extends Seeder
             'source_name' => 'Unsplash',
             'source_url' => 'https://unsplash.com/photos/YU2mCvXR0wA',
             'file_name' => 'hammer03.avif',
-            'title' => 'Claw Hammer'
+            'title' => self::CLAW_HAMMER
         ], [
             'id' => Str::ulid()->toBase32(),
             'by_name' => 'ANIRUDH',
@@ -102,7 +105,7 @@ class ProductImageSeeder extends Seeder
             'source_name' => 'Unsplash',
             'source_url' => 'https://unsplash.com/photos/ARaYGFeuwpU',
             'file_name' => 'hammer06.avif',
-            'title' => 'Claw Hammer'
+            'title' => self::CLAW_HAMMER
         ], [
             'id' => Str::ulid()->toBase32(),
             'by_name' => 'Wesley Tingey',
@@ -130,7 +133,7 @@ class ProductImageSeeder extends Seeder
         ], [
             'id' => Str::ulid()->toBase32(),
             'by_name' => 'Tekton',
-            'by_url' => 'https://unsplash.com/@tekton_tools',
+            'by_url' => self::TEKTON_URL,
             'source_name' => 'Unsplash',
             'source_url' => 'https://unsplash.com/photos/9z7t48S5C_g',
             'file_name' => 'wrench02.avif',
@@ -146,7 +149,7 @@ class ProductImageSeeder extends Seeder
         ], [
             'id' => Str::ulid()->toBase32(),
             'by_name' => 'Tekton',
-            'by_url' => 'https://unsplash.com/@tekton_tools',
+            'by_url' => self::TEKTON_URL,
             'source_name' => 'Unsplash',
             'source_url' => 'https://unsplash.com/photos/jlY6nV_STIw',
             'file_name' => 'screwdriver01.avif',
@@ -198,7 +201,7 @@ class ProductImageSeeder extends Seeder
             'source_name' => 'Unsplash',
             'source_url' => 'https://unsplash.com/photos/MXeDE_yCdHQ',
             'file_name' => 'drill01.avif',
-            'title' => 'Cordless Drill'
+            'title' => self::CORDLESS_DRILL
         ], [
             'id' => Str::ulid()->toBase32(),
             'by_name' => 'NeONBRAND',
@@ -206,7 +209,7 @@ class ProductImageSeeder extends Seeder
             'source_name' => 'Unsplash',
             'source_url' => 'https://unsplash.com/photos/CuDoRFyTkAQ',
             'file_name' => 'drill02.avif',
-            'title' => 'Cordless Drill'
+            'title' => self::CORDLESS_DRILL
         ], [
             'id' => Str::ulid()->toBase32(),
             'by_name' => 'Jonathan Cooper',
@@ -222,7 +225,7 @@ class ProductImageSeeder extends Seeder
             'source_name' => 'Unsplash',
             'source_url' => 'https://unsplash.com/photos/_UGTrlvki_A',
             'file_name' => 'drill04.avif',
-            'title' => 'Cordless Drill'
+            'title' => self::CORDLESS_DRILL
         ], [
             'id' => Str::ulid()->toBase32(),
             'by_name' => 'Ade Adebowale',
@@ -402,7 +405,7 @@ class ProductImageSeeder extends Seeder
         ], [
             'id' => Str::ulid()->toBase32(),
             'by_name' => 'Tekton',
-            'by_url' => 'https://unsplash.com/@tekton_tools',
+            'by_url' => self::TEKTON_URL,
             'source_name' => 'Unsplash',
             'source_url' => 'https://unsplash.com/photos/black-and-gray-metal-tool-LtphNTXHQAc',
             'file_name' => 'toolcabinet02.avif',

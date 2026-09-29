@@ -4,7 +4,7 @@
 
 <form [formGroup]="searchForm" class="col-lg-4 mb-3" data-test="order-search-form">
   <div class="input-group">
-    <input type="text" class="form-control" formControlName="query" data-test="order-search-query">
+    <input type="text" class="form-control" formControlName="query" data-test="order-search-query" aria-label="Search orders">
     <button class="btn btn-warning" (click)="search()" type="submit" data-test="order-search-submit">Search</button>
     <button class="btn btn-secondary" (click)="reset()" type="reset" data-test="order-search-reset">Reset</button>
   </div>

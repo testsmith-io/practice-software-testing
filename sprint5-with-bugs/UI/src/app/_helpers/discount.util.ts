@@ -3,7 +3,7 @@
 
 export default class DiscountUtil {
 
-  private static coordinates: any = {
+  private static readonly coordinates: any = {
     "new york": {
       lat: 41,
       lng: 74,

@@ -34,9 +34,9 @@ export class ComparisonService {
   private readonly graphqlService = inject(GraphqlService);
   private readonly MAX_ITEMS = 4;
 
-  private selectedIds = new BehaviorSubject<string[]>(this.loadFromStorage());
-  selectedIds$ = this.selectedIds.asObservable();
-  count$ = this.selectedIds$.pipe(map(ids => ids.length));
+  private readonly selectedIds = new BehaviorSubject<string[]>(this.loadFromStorage());
+  readonly selectedIds$ = this.selectedIds.asObservable();
+  readonly count$ = this.selectedIds$.pipe(map(ids => ids.length));
 
   toggle(productId: string): void {
     const current = this.selectedIds.value;

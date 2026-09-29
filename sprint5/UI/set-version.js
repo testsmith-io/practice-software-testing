@@ -1,7 +1,7 @@
 // Runs before ng build / ng serve to stamp version info into src/environments/version.ts
-const { execSync } = require('child_process');
-const { writeFileSync } = require('fs');
-const path = require('path');
+const { execSync } = require('node:child_process');
+const { writeFileSync } = require('node:fs');
+const path = require('node:path');
 
 let gitTag = process.env.APP_VERSION;
 if (!gitTag) {

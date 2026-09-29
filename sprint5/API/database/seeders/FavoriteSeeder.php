@@ -10,6 +10,8 @@ use Illuminate\Support\Str;
 
 class FavoriteSeeder extends Seeder
 {
+    private const CUSTOMER_EMAIL = 'customer@practicesoftwaretesting.com';
+
     /**
      * Run the database seeds.
      */
@@ -17,15 +19,15 @@ class FavoriteSeeder extends Seeder
     {
         DB::table('favorites')->insert([[
             'id' => Str::ulid()->toBase32(),
-            'user_id' => DB::table('users')->where('email', '=', 'customer@practicesoftwaretesting.com')->first()->id,
+            'user_id' => DB::table('users')->where('email', '=', self::CUSTOMER_EMAIL)->first()->id,
             'product_id' => DB::table('products')->where('name', '=', 'Combination Pliers')->first()->id
         ], [
             'id' => Str::ulid()->toBase32(),
-            'user_id' => DB::table('users')->where('email', '=', 'customer@practicesoftwaretesting.com')->first()->id,
+            'user_id' => DB::table('users')->where('email', '=', self::CUSTOMER_EMAIL)->first()->id,
             'product_id' => DB::table('products')->where('name', '=', 'Slip Joint Pliers')->first()->id
         ], [
             'id' => Str::ulid()->toBase32(),
-            'user_id' => DB::table('users')->where('email', '=', 'customer@practicesoftwaretesting.com')->first()->id,
+            'user_id' => DB::table('users')->where('email', '=', self::CUSTOMER_EMAIL)->first()->id,
             'product_id' => DB::table('products')->where('name', '=', 'Belt Sander')->first()->id
         ]]);
     }

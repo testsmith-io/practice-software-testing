@@ -13,8 +13,8 @@ import {Pagination} from "../models/pagination";
   providedIn: 'root'
 })
 export class UserService {
-  private httpClient = inject(HttpClient);
-  apiURL = environment.apiUrl;
+  private readonly httpClient = inject(HttpClient);
+  readonly apiURL = environment.apiUrl;
 
   getUsers(page: any): Observable<Pagination<User>> {
     let params = new HttpParams().set('page', page);
@@ -55,7 +55,7 @@ export class UserService {
   }
 
   errorHandler(error: HttpErrorResponse) {
-    return throwError(error.error || "server error.");
+    return throwError(() => error.error || "server error.");
   }
 
   private extractData = (res: any) => res;

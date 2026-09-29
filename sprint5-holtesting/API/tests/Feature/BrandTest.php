@@ -12,10 +12,13 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 uses(DatabaseMigrations::class);
 
+const BRANDS_PATH = '/brands';
+const NEW_NAME = 'new name';
+
 //covers(BrandController::class);
 
 test('retrieve brands', function () {
-    $response = $this->getJson('/brands');
+    $response = $this->getJson(BRANDS_PATH);
 
     $response->assertStatus(ResponseAlias::HTTP_OK)
         ->assertJsonStructure([
@@ -44,7 +47,7 @@ test('add brand', function () {
         'slug' => $this->faker->slug
     ];
 
-    $response = $this->postJson('/brands', $payload);
+    $response = $this->postJson(BRANDS_PATH, $payload);
 
     $response->assertStatus(ResponseAlias::HTTP_CREATED)
         ->assertJsonStructure([
@@ -55,7 +58,7 @@ test('add brand', function () {
 });
 
 test('add brand required fields', function () {
-    $response = $this->postJson('/brands');
+    $response = $this->postJson(BRANDS_PATH);
 
     $response
         ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
@@ -112,7 +115,7 @@ test('delete brand that is in use', function () {
 test('update brand', function () {
     $brand = Brand::factory()->create();
 
-    $payload = ['name' => 'new name'];
+    $payload = ['name' => NEW_NAME];
 
     $this->putJson("/brands/{$brand->id}", $payload)
         ->assertStatus(ResponseAlias::HTTP_OK)
@@ -124,7 +127,7 @@ test('update brand', function () {
 test('partial update brand', function () {
     $brand = Brand::factory()->create();
 
-    $payload = ['name' => 'new name'];
+    $payload = ['name' => NEW_NAME];
 
     $this->patchJson("/brands/{$brand->id}", $payload)
         ->assertStatus(ResponseAlias::HTTP_OK)
@@ -134,7 +137,7 @@ test('partial update brand', function () {
 
     $this->assertDatabaseHas('brands', [
         'id' => $brand->id,
-        'name' => 'new name'
+        'name' => NEW_NAME
     ]);
 });
 

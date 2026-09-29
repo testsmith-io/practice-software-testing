@@ -15,10 +15,10 @@ export class CategoryService {
   private readonly httpClient = inject(HttpClient);
   private readonly apiURL = `${environment.apiUrl}/categories`;
 
-  searchCategories(query: string): Observable<any> {
+  searchCategories(query: string): Observable<Category[]> {
     const params = new HttpParams().set('q', query);
 
-    return this.httpClient.get<any>(`${this.apiURL}/search`, { params })
+    return this.httpClient.get<Category[]>(`${this.apiURL}/search`, { params })
       .pipe(catchError(this.handleError));
   }
 
@@ -59,7 +59,7 @@ export class CategoryService {
       .pipe(catchError(this.handleError));
   }
 
-  private handleError = (error: HttpErrorResponse): Observable<never> => {
+  private readonly handleError = (error: HttpErrorResponse): Observable<never> => {
     console.error('CategoryService Error:', error);
 
     const errorMessage = error.error?.message ||

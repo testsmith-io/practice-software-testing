@@ -45,6 +45,7 @@
               <label for="total" class="col-sm-3 col-form-label">{{ t('pages.checkout.cart.subtotal') }}</label>
               <div class="col-sm-9">
                 <input type="text" readonly class="form-control-plaintext" data-test="total" id="subtotal"
+                       aria-label="Subtotal"
                        value="{{invoice.subtotal != null ? '$ ' + invoice.subtotal.toFixed(2) : '—'}}">
               </div>
             </div>
@@ -56,6 +57,7 @@
               <div class="col-sm-9">
                 <input type="text" readonly class="form-control-plaintext" data-test="total"
                        id="additional_discount_percentage"
+                       aria-label="Discount amount"
                        value="{{invoice.additional_discount_amount != null ? '$ ' + invoice.additional_discount_amount.toFixed(2) : '—'}}">
               </div>
             </div>
@@ -67,6 +69,7 @@
               <div class="col-sm-9">
                 <input type="text" readonly class="form-control-plaintext text-success" data-test="eco-discount"
                        id="eco_discount"
+                       aria-label="Eco-friendly discount amount"
                        value="{{invoice.eco_discount_amount != null ? '$ ' + invoice.eco_discount_amount.toFixed(2) : '—'}}">
               </div>
             </div>

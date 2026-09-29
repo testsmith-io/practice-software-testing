@@ -23,7 +23,7 @@ import {RouterLink} from "@angular/router";
   styleUrls: []
 })
 export class MessagesComponent implements OnInit {
-  private messageService = inject(ContactService);
+  private readonly messageService = inject(ContactService);
 
   p: number = 1;
   results: Pagination<ContactMessage>;

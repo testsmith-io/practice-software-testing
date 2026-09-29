@@ -6,7 +6,7 @@
       <h3>Login</h3>
       <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete=off data-test="login-form">
         <div class="input-group mb-3">
-          <input formControlName="email"
+          <input formControlName="email" aria-label="Email"
             class="form-control"
             id="email"
             data-test="email"
@@ -30,7 +30,7 @@
           </div>
         }
         <div class="input-group mb-3">
-          <input formControlName="password"
+          <input formControlName="password" aria-label="Password"
             class="form-control"
             id="password"
             data-test="password"

@@ -68,7 +68,7 @@ export class CheckoutComponent implements OnInit {
 
     this.cusForm = this.formBuilder.group(
       {
-        email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+        email: ['', [Validators.required, Validators.pattern(String.raw`^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$`)]],
         password: ['', [Validators.required,
           Validators.minLength(6),
           Validators.maxLength(40)]],
@@ -155,18 +155,21 @@ export class CheckoutComponent implements OnInit {
       'password': this.cusForm.value.password
     };
 
-    this.customerAccountService.login(payload).pipe().subscribe(res => {
-      this.tokenStorage.saveToken(res.access_token);
+    this.customerAccountService.login(payload).pipe().subscribe({
+      next: res => {
+        this.tokenStorage.saveToken(res.access_token);
 
-      this.setAddress();
-      this.isLoginFailed = false;
-      this.isLoggedIn = true;
-      this.customerAccountService.authSub.next('changed');
-      this.roles = this.customerAccountService.getRole();
-    }, err => {
-      if (err.error === 'Unauthorized') {
-        this.customerError = 'Invalid email or password';
-        this.isLoginFailed = true;
+        this.setAddress();
+        this.isLoginFailed = false;
+        this.isLoggedIn = true;
+        this.customerAccountService.authSub.next('changed');
+        this.roles = this.customerAccountService.getRole();
+      },
+      error: err => {
+        if (err.error === 'Unauthorized') {
+          this.customerError = 'Invalid email or password';
+          this.isLoginFailed = true;
+        }
       }
     });
 
@@ -196,11 +199,14 @@ export class CheckoutComponent implements OnInit {
 
     this.checkPayment().subscribe(result => {
       if (result === true) {
-        this.invoiceService.createInvoice(payload).subscribe(res => {
-          this.paid = true;
-          this.invoice_number = res['invoice_number'];
-          this.cartService.emptyCart();
-        }, () => {
+        this.invoiceService.createInvoice(payload).subscribe({
+          next: res => {
+            this.paid = true;
+            this.invoice_number = res['invoice_number'];
+            this.cartService.emptyCart();
+          },
+          error: () => {
+          }
         });
       }
     })
@@ -218,14 +224,17 @@ export class CheckoutComponent implements OnInit {
         'account_number': this.cusPayment.value.account_number
       }
       const endpoint = (window.localStorage.getItem('PAYMENT_ENDPOINT')) ? window.localStorage.getItem('PAYMENT_ENDPOINT') : environment.apiUrl + '/payment/check';
-      this.paymentService.validate(endpoint, payload).subscribe(res => {
-        this.paymentError = null;
-        this.paymentMessage = res.message;
-        this.state = true;
-      }, err => {
-        this.state = null;
-        this.paymentError = err.error.error;
-        this.state = false;
+      this.paymentService.validate(endpoint, payload).subscribe({
+        next: res => {
+          this.paymentError = null;
+          this.paymentMessage = res.message;
+          this.state = true;
+        },
+        error: err => {
+          this.state = null;
+          this.paymentError = err.error.error;
+          this.state = false;
+        }
       });
     }
     return of(this.state);

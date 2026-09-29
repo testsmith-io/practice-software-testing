@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class UserController extends Controller
 {
@@ -256,7 +257,6 @@ class UserController extends Controller
     {
         $current = $request->get('current_password');
         $new = $request->get('new_password');
-        $confirm = $request->get('new_password_confirmation');
 
         if (!(Hash::check($current, Auth::user()->password))) {
             return $this->preferredFormat([

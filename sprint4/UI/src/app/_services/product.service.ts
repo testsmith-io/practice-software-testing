@@ -13,48 +13,48 @@ import {Pagination} from "../models/pagination";
   providedIn: 'root'
 })
 export class ProductService {
-  private httpClient = inject(HttpClient);
-  private apiURL = environment.apiUrl;
+  private readonly httpClient = inject(HttpClient);
+  private readonly apiURL = environment.apiUrl;
 
-  getProducts(page: any): Observable<Pagination<Product>> {
-    let params = new HttpParams().set('page', page);
+  getProducts(page: number): Observable<Pagination<Product>> {
+    const params = new HttpParams().set('page', page);
 
-    return this.httpClient.get(this.apiURL + `/products`, {params: params})
+    return this.httpClient.get<Pagination<Product>>(this.apiURL + `/products`, {params: params})
       .pipe(map(this.extractData));
   }
 
   getProductRentals(): Observable<Pagination<Product>> {
-    let params = new HttpParams().set('is_rental', true);
+    const params = new HttpParams().set('is_rental', true);
 
-    return this.httpClient.get(this.apiURL + `/products`, {params: params})
+    return this.httpClient.get<Pagination<Product>>(this.apiURL + `/products`, {params: params})
       .pipe(map(this.extractData));
   }
 
-  getProductsByCategory(slug: string, page: any): Observable<Pagination<Product>> {
-    let params = new HttpParams()
+  getProductsByCategory(slug: string, page: number): Observable<Pagination<Product>> {
+    const params = new HttpParams()
       .set('page', page)
       .set('by_category_slug', slug);
-    return this.httpClient.get(this.apiURL + `/products`, {params: params})
+    return this.httpClient.get<Pagination<Product>>(this.apiURL + `/products`, {params: params})
       .pipe(map(this.extractData));
   }
 
   searchProducts(query: string): Observable<Pagination<Product>> {
-    let params = new HttpParams().set('q', query);
+    const params = new HttpParams().set('q', query);
 
-    return this.httpClient.get(this.apiURL + `/products/search`, {params: params})
+    return this.httpClient.get<Pagination<Product>>(this.apiURL + `/products/search`, {params: params})
       .pipe(map(this.extractData));
   }
 
 
-  getProduct(id: number): Observable<any> {
-    return this.httpClient.get(this.apiURL + `/products/${id}`);
+  getProduct(id: number): Observable<Product> {
+    return this.httpClient.get<Product>(this.apiURL + `/products/${id}`);
   }
 
-  getRelatedProducts(id: number): Observable<any> {
-    return this.httpClient.get(this.apiURL + `/products/${id}/related`);
+  getRelatedProducts(id: number): Observable<Product[]> {
+    return this.httpClient.get<Product[]>(this.apiURL + `/products/${id}/related`);
   }
 
-  getProductsByCategoryAndBrand(categoryIds: any, brandIds: any, sorting: string, slug?: string): Observable<Pagination<Product>> {
+  getProductsByCategoryAndBrand(categoryIds: string, brandIds: string, sorting: string, slug?: string): Observable<Pagination<Product>> {
     let params = new HttpParams();
     if (categoryIds.length) {
       params = params.set('by_category', categoryIds);
@@ -68,7 +68,7 @@ export class ProductService {
     if (slug) {
       params = params.set('by_category_slug', slug);
     }
-    return this.httpClient.get(this.apiURL + '/products', {params: params})
+    return this.httpClient.get<Pagination<Product>>(this.apiURL + '/products', {params: params})
       .pipe(map(this.extractData));
   }
 
@@ -76,8 +76,8 @@ export class ProductService {
     return this.httpClient.get<Product>(environment.apiUrl + `/products/${id}`);
   }
 
-  create(category: Product): Observable<any> {
-    return this.httpClient.post(this.apiURL + '/products', JSON.stringify(category), {responseType: 'json'})
+  create(category: Product): Observable<Product> {
+    return this.httpClient.post<Product>(this.apiURL + '/products', JSON.stringify(category), {responseType: 'json'})
       .pipe(
         catchError(this.errorHandler)
       )
@@ -98,9 +98,9 @@ export class ProductService {
   }
 
   errorHandler(error: HttpErrorResponse) {
-    return throwError(error.error || "server error.");
+    return throwError(() => error.error || "server error.");
   }
 
-  private extractData = (res: any) => res;
+  private extractData = <T>(res: T): T => res;
 
 }

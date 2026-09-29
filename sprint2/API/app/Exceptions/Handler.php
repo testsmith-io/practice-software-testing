@@ -36,19 +36,16 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * Report or log an exception.
-     *
-     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param Throwable $e
-     * @return void
-     *
-     * @throws Exception|Throwable
+     * Simple exception-type -> [message, HTTP status] mappings that all render
+     * as a JSON message body. Order matters: the first matching type wins.
      */
-    public function report(Throwable $e)
-    {
-        parent::report($e);
-    }
+    private const SIMPLE_ERROR_RESPONSES = [
+        TokenExpiredException::class => ['Token has expired and can no longer be refreshed', ResponseAlias::HTTP_UNAUTHORIZED],
+        MethodNotAllowedHttpException::class => ['Method is not allowed for the requested route', ResponseAlias::HTTP_METHOD_NOT_ALLOWED],
+        TokenBlacklistedException::class => ['Token is not valid', ResponseAlias::HTTP_UNAUTHORIZED],
+        NotFoundHttpException::class => ['Resource not found', ResponseAlias::HTTP_NOT_FOUND],
+        ModelNotFoundException::class => ['Requested item not found', ResponseAlias::HTTP_NOT_FOUND],
+    ];
 
     /**
      * Render an exception into an HTTP response.
@@ -61,43 +58,17 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
-        if ($e instanceof TokenExpiredException) {
-            return response()->json([
-                'message' => 'Token has expired and can no longer be refreshed',
-            ], ResponseAlias::HTTP_UNAUTHORIZED);
+        foreach (self::SIMPLE_ERROR_RESPONSES as $type => [$message, $status]) {
+            if ($e instanceof $type) {
+                return response()->json(['message' => $message], $status);
+            }
         }
-        if ($e instanceof MethodNotAllowedHttpException) {
-            return response()->json([
-                'message' => 'Method is not allowed for the requested route',
-            ], ResponseAlias::HTTP_METHOD_NOT_ALLOWED);
-        }
-        if ($e instanceof TokenBlacklistedException) {
-            return response()->json([
-                'message' => 'Token is not valid',
-            ], ResponseAlias::HTTP_UNAUTHORIZED);
-        }
-        if ($e instanceof NotFoundHttpException) {
-            return response()->json([
-                'message' => 'Resource not found'
-            ], ResponseAlias::HTTP_NOT_FOUND);
-        }
-        if ($e instanceof ModelNotFoundException) {
-            return response()->json([
-                'message' => 'Requested item not found'
-            ], ResponseAlias::HTTP_NOT_FOUND);
-        }
+
         if ($e instanceof QueryException) {
-            $errorCode = $e->errorInfo[1];
-            return match ($errorCode) {
-                1062 => response([
-                    'message' => 'Duplicate Entry'
-                ], ResponseAlias::HTTP_CONFLICT),
-                1364 => response([
-                    'message' => 'Something went wrong'
-                ], ResponseAlias::HTTP_NOT_FOUND),
-                default => response()->json([
-                    'message' => 'Something went wrong'
-                ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR),
+            return match ($e->errorInfo[1]) {
+                1062 => response(['message' => 'Duplicate Entry'], ResponseAlias::HTTP_CONFLICT),
+                1364 => response(['message' => 'Something went wrong'], ResponseAlias::HTTP_NOT_FOUND),
+                default => response()->json(['message' => 'Something went wrong'], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR),
             };
         }
 

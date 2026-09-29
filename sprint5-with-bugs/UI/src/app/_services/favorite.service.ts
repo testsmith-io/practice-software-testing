@@ -12,7 +12,7 @@ const API_URL = environment.apiUrl;
   providedIn: 'root'
 })
 export class FavoriteService {
-  private httpClient = inject(HttpClient);
+  private readonly httpClient = inject(HttpClient);
 
   addFavorite(payload: any): Observable<any> {
     return this.httpClient.post(API_URL + '/favorites', payload, {responseType: 'json'});

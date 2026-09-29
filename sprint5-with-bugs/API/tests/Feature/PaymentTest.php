@@ -13,9 +13,12 @@ use Tests\TestCase;
 class PaymentTest extends TestCase {
     use DatabaseMigrations;
 
+    private const PAYMENT_CHECK = '/payment/check';
+    private const PAYMENT_SUCCESS = 'Payment was successful';
+
     public function testBankTransferWithValidDetailsReturnsSuccess()
     {
-        $response = $this->postJson('/payment/check', [
+        $response = $this->postJson(self::PAYMENT_CHECK, [
             'payment_method' => 'Bank Transfer',
             'payment_details' => [
                 'bank_name' => 'Test Bank',
@@ -25,22 +28,22 @@ class PaymentTest extends TestCase {
         ]);
 
         $response->assertStatus(ResponseAlias::HTTP_OK);
-        $response->assertJson(['message' => 'Payment was successful']);
+        $response->assertJson(['message' => self::PAYMENT_SUCCESS]);
     }
 
     public function testCashOnDeliveryReturnsSuccess()
     {
-        $response = $this->postJson('/payment/check', [
+        $response = $this->postJson(self::PAYMENT_CHECK, [
             'payment_method' => 'Cash on Delivery',
         ]);
 
         $response->assertStatus(ResponseAlias::HTTP_OK);
-        $response->assertJson(['message' => 'Payment was successful']);
+        $response->assertJson(['message' => self::PAYMENT_SUCCESS]);
     }
 
     public function testCreditCardWithValidDetailsReturnsSuccess()
     {
-        $response = $this->postJson('/payment/check', [
+        $response = $this->postJson(self::PAYMENT_CHECK, [
             'payment_method' => 'Credit Card',
             'payment_details' => [
                 'credit_card_number' => '1234-5678-9101-1121',
@@ -51,12 +54,12 @@ class PaymentTest extends TestCase {
         ]);
 
         $response->assertStatus(ResponseAlias::HTTP_OK);
-        $response->assertJson(['message' => 'Payment was successful']);
+        $response->assertJson(['message' => self::PAYMENT_SUCCESS]);
     }
 
     public function testBuyNowPayLaterWithValidDetailsReturnsSuccess()
     {
-        $response = $this->postJson('/payment/check', [
+        $response = $this->postJson(self::PAYMENT_CHECK, [
             'payment_method' => 'Buy Now Pay Later',
             'payment_details' => [
                 'monthly_installments' => 5,
@@ -64,12 +67,12 @@ class PaymentTest extends TestCase {
         ]);
 
         $response->assertStatus(ResponseAlias::HTTP_OK);
-        $response->assertJson(['message' => 'Payment was successful']);
+        $response->assertJson(['message' => self::PAYMENT_SUCCESS]);
     }
 
     public function testGiftCardWithValidDetailsReturnsSuccess()
     {
-        $response = $this->postJson('/payment/check', [
+        $response = $this->postJson(self::PAYMENT_CHECK, [
             'payment_method' => 'Gift Card',
             'payment_details' => [
                 'gift_card_number' => '1234567890123456',
@@ -78,23 +81,23 @@ class PaymentTest extends TestCase {
         ]);
 
         $response->assertStatus(ResponseAlias::HTTP_OK);
-        $response->assertJson(['message' => 'Payment was successful']);
+        $response->assertJson(['message' => self::PAYMENT_SUCCESS]);
     }
 
     public function testInvalidPaymentMethodReturnsError()
     {
-        $response = $this->postJson('/payment/check', [
+        $response = $this->postJson(self::PAYMENT_CHECK, [
             'payment_method' => 'Invalid Method',
         ]);
         $response->assertStatus(ResponseAlias::HTTP_OK);
-        $response->assertJson(['message' => 'Payment was successful']);
+        $response->assertJson(['message' => self::PAYMENT_SUCCESS]);
     }
 
     public function testMissingPaymentMethodAndDetailsReturnsError()
     {
-        $response = $this->postJson('/payment/check', [
+        $response = $this->postJson(self::PAYMENT_CHECK, [
         ]);
         $response->assertStatus(ResponseAlias::HTTP_OK);
-        $response->assertJson(['message' => 'Payment was successful']);
+        $response->assertJson(['message' => self::PAYMENT_SUCCESS]);
     }
 }

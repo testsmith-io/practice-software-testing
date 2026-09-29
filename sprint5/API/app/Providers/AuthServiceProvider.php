@@ -24,10 +24,6 @@ class AuthServiceProvider extends ServiceProvider
     ];
     public function boot()
     {
-//        DB::listen(function ($query) {
-//            Log::info($query->sql, ['Bindings' => $query->bindings, 'Time' => $query->time]);
-//        });
-
         $this->app['auth']->provider('cached-auth-user',
             function ($app, $config) {
                 return new CachedAuthUserProvider(

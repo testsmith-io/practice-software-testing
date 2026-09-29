@@ -23,7 +23,7 @@
               }</td>
               <td class="col-md-2"></td>
               <td class="col-md-2 align-middle">
-                <input type="number" min="1" max="99" class="form-control quantity" (change)="updateQuantity($event, item)"
+                <input type="number" min="1" max="99" class="form-control quantity" aria-label="Quantity" (change)="updateQuantity($event, item)"
                   value="{{item.quantity}}">
               </td>
               <td class="col-md-2 align-middle">${{item.price | number: '1.2-2'}}</td>
@@ -62,7 +62,7 @@
           <div><h3>Customer login</h3>
           <form [formGroup]="cusForm" (ngSubmit)="onCusSubmit()">
             <div class="input-group mb-3">
-              <input formControlName="email"
+              <input formControlName="email" aria-label="Email"
                 data-test="email"
                 class="form-control"
                 id="email"
@@ -86,7 +86,7 @@
               </div>
             }
             <div class="input-group mb-3">
-              <input formControlName="password"
+              <input formControlName="password" aria-label="Password"
                 data-test="password"
                 class="form-control"
                 id="password"
@@ -142,7 +142,7 @@
         <h3>Billing Address</h3>
         <form [formGroup]="cusAddress">
           <div class="input-group mb-3">
-            <input formControlName="address"
+            <input formControlName="address" aria-label="Address"
               data-test="address"
               class="form-control"
               id="address"
@@ -161,7 +161,7 @@
             </div>
           }
           <div class="input-group mb-3">
-            <input formControlName="city"
+            <input formControlName="city" aria-label="City"
               data-test="city"
               class="form-control"
               id="city"
@@ -180,7 +180,7 @@
             </div>
           }
           <div class="input-group mb-3">
-            <input formControlName="state"
+            <input formControlName="state" aria-label="State"
               data-test="state"
               class="form-control"
               id="state"
@@ -199,7 +199,7 @@
             </div>
           }
           <div class="input-group mb-3">
-            <input formControlName="country"
+            <input formControlName="country" aria-label="Country"
               data-test="country"
               class="form-control"
               id="country"
@@ -218,7 +218,7 @@
             </div>
           }
           <div class="input-group mb-3">
-            <input formControlName="postcode"
+            <input formControlName="postcode" aria-label="Postcode"
               data-test="postcode"
               class="form-control"
               id="postcode"
@@ -258,7 +258,7 @@
           <h3>Payment</h3>
           <form [formGroup]="cusPayment">
             <div class="input-group mb-3">
-              <select data-test="payment-method" id="payment-method" class="form-select" formControlName="payment_method">
+              <select data-test="payment-method" id="payment-method" class="form-select" formControlName="payment_method" aria-label="Payment method">
                 <option value="" disabled>Choose your payment method</option>
                 @for (method of PaymentMethods; track method) {
                   <option [ngValue]="method">{{method}}</option>
@@ -276,7 +276,7 @@
               </div>
             }
             <div class="input-group mb-3">
-              <input formControlName="account_name"
+              <input formControlName="account_name" aria-label="Account name"
                 data-test="account-name"
                 class="form-control"
                 id="account-name"
@@ -295,7 +295,7 @@
               </div>
             }
             <div class="input-group mb-3">
-              <input formControlName="account_number"
+              <input formControlName="account_number" aria-label="Account number"
                 data-test="account-number"
                 class="form-control"
                 id="account-number"

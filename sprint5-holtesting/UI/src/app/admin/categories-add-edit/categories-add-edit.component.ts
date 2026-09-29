@@ -20,9 +20,9 @@ import {NgClass} from "@angular/common";
   styleUrls: []
 })
 export class CategoriesAddEditComponent implements OnInit {
-  private formBuilder = inject(FormBuilder);
-  private route = inject(ActivatedRoute);
-  private categoryService = inject(CategoryService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
+  private readonly categoryService = inject(CategoryService);
 
   form: FormGroup;
   categories!: Category[];

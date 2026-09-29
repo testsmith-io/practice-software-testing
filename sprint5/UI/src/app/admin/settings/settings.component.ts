@@ -95,7 +95,7 @@ export class SettingsComponent implements OnInit {
     this.isUpdated = true;
   }
 
-  fadeOutMessage(): any {
+  fadeOutMessage(): void {
     setTimeout(() => {
       this.hideAlert = true;
       this.isUpdated = false;

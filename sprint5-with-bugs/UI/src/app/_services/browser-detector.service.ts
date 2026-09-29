@@ -49,13 +49,13 @@ export class BrowserDetectorService {
   }
 
   private getBrowserName(): string {
-    return this.agent.indexOf('edge') > -1 ? 'Microsoft Edge'
-      : this.agent.indexOf('edg') > -1 ? 'Microsoft Edge'
-        : this.agent.indexOf('opr') > -1 ? 'Opera'
-          : this.agent.indexOf('chrome') > -1 ? 'Chrome'
-            : this.agent.indexOf('trident') > -1 ? 'Internet Explorer'
-              : this.agent.indexOf('firefox') > -1 ? 'Firefox'
-                : this.agent.indexOf('safari') > -1 ? 'Safari'
+    return this.agent.includes('edge') ? 'Microsoft Edge'
+      : this.agent.includes('edg') ? 'Microsoft Edge'
+        : this.agent.includes('opr') ? 'Opera'
+          : this.agent.includes('chrome') ? 'Chrome'
+            : this.agent.includes('trident') ? 'Internet Explorer'
+              : this.agent.includes('firefox') ? 'Firefox'
+                : this.agent.includes('safari') ? 'Safari'
                   : 'other';
   }
 

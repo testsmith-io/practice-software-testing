@@ -28,6 +28,8 @@ class GenerateProductApiContract extends Command
      */
     protected $description = 'Generate the Pact contract for the ProductAPI provider.';
 
+    private const BRAND_NAME_1 = 'Brand name 1';
+
     /**
      * Execute the console command.
      *
@@ -84,7 +86,7 @@ class GenerateProductApiContract extends Command
                         ],
                         'brand' => [
                             'id' => 1,
-                            'name' => 'Brand name 1',
+                            'name' => self::BRAND_NAME_1,
                             'slug' => 'brand-name-1'
                         ]
                     ],
@@ -113,7 +115,7 @@ class GenerateProductApiContract extends Command
                         ],
                         'brand' => [
                             'id' => 1,
-                            'name' => 'Brand name 1',
+                            'name' => self::BRAND_NAME_1,
                             'slug' => 'brand-name-1'
                         ]
                     ]
@@ -168,7 +170,7 @@ class GenerateProductApiContract extends Command
                         ],
                         'brand' => [
                             'id' => 1,
-                            'name' => 'Brand name 1',
+                            'name' => self::BRAND_NAME_1,
                             'slug' => 'brand-name-1'
                         ]
                     ],
@@ -197,7 +199,7 @@ class GenerateProductApiContract extends Command
                         ],
                         'brand' => [
                             'id' => 1,
-                            'name' => 'Brand name 1',
+                            'name' => self::BRAND_NAME_1,
                             'slug' => 'brand-name-1'
                         ]
                     ],
@@ -226,7 +228,7 @@ class GenerateProductApiContract extends Command
                         ],
                         'brand' => [
                             'id' => 1,
-                            'name' => 'Brand name 1',
+                            'name' => self::BRAND_NAME_1,
                             'slug' => 'brand-name-1'
                         ]
                     ]

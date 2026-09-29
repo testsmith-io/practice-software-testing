@@ -14,6 +14,7 @@ import {PaymentService} from '../_services/payment.service';
 import {CustomerAccountService} from '../shared/customer-account.service';
 import {environment} from '../../environments/environment';
 import {ChatMessage, ChatAction, ChatFlowStep, ChatProduct, SupportTicketData, OrderData, CheckoutData} from '../models/chat';
+import {CartItem} from '../models/cart';
 
 @Component({
   selector: 'app-chat-widget',
@@ -25,13 +26,13 @@ export class ChatWidgetComponent implements OnInit {
   @ViewChild('messagesContainer') private messagesContainer: ElementRef;
   @ViewChild('fileInput') private fileInput: ElementRef;
 
-  private productService = inject(ProductService);
-  private cartService = inject(CartService);
-  private contactService = inject(ContactService);
-  private invoiceService = inject(InvoiceService);
-  private paymentService = inject(PaymentService);
-  private customerAccountService = inject(CustomerAccountService);
-  private router = inject(Router);
+  private readonly productService = inject(ProductService);
+  private readonly cartService = inject(CartService);
+  private readonly contactService = inject(ContactService);
+  private readonly invoiceService = inject(InvoiceService);
+  private readonly paymentService = inject(PaymentService);
+  private readonly customerAccountService = inject(CustomerAccountService);
+  private readonly router = inject(Router);
 
   isOpen = false;
   messages: ChatMessage[] = [];
@@ -231,8 +232,10 @@ export class ChatWidgetComponent implements OnInit {
       action: 'select-quantity',
       data: qty
     }));
-    actions.push({label: 'chat.order-product.other-quantity', action: 'custom-quantity'});
-    actions.push({label: 'chat.back', action: 'back-to-menu'});
+    actions.push(
+      {label: 'chat.order-product.other-quantity', action: 'custom-quantity'},
+      {label: 'chat.back', action: 'back-to-menu'}
+    );
     return actions;
   }
 
@@ -263,177 +266,136 @@ export class ChatWidgetComponent implements OnInit {
     return actions;
   }
 
-  onActionClick(action: ChatAction): void {
-    switch (action.action) {
-      case 'find-product':
-        this.currentStep = 'find-product';
-        this.addBotMessage('chat.find-product.prompt', this.getBackAction());
-        break;
-
-      case 'order-product':
-        this.resetOrderData();
-        this.currentStep = 'order-product';
-        this.addBotMessage('chat.order-product.search-prompt', this.getBackAction());
-        break;
-
-      case 'support-ticket':
-        this.resetSupportTicket();
-        this.startSupportTicketFlow();
-        break;
-
-      case 'back-to-menu':
-        this.currentStep = 'main-menu';
-        this.resetOrderData();
-        this.resetSupportTicket();
-        this.addBotMessage('chat.welcome', this.getMainMenuActions());
-        break;
-
-      case 'view-product':
-        if (action.data?.id) {
-          this.router.navigate(['/product', action.data.id]);
-          this.closeChat();
-        }
-        break;
-
-      case 'select-order-product':
-        if (action.data) {
-          this.orderData.product = action.data;
-          this.selectedProduct = action.data;
-          this.currentStep = 'order-product-quantity';
-          this.addBotMessage(`chat.order-product.selected`);
-          this.addBotMessage(`${action.data.name} - $${action.data.price}`);
-          this.addBotMessage('chat.order-product.quantity-prompt', this.getQuantityActions());
-        }
-        break;
-
-      case 'select-quantity':
-        if (action.data) {
-          this.orderData.quantity = action.data;
-          this.addUserMessage(action.data.toString());
-          this.showOrderConfirmation();
-        }
-        break;
-
-      case 'custom-quantity':
+  // Action name -> handler. Replaces a large switch to keep per-method
+  // cyclomatic complexity low; unknown actions are simply ignored.
+  private readonly actionHandlers: Record<string, (action: ChatAction) => void> = {
+    'find-product': () => {
+      this.currentStep = 'find-product';
+      this.addBotMessage('chat.find-product.prompt', this.getBackAction());
+    },
+    'order-product': () => {
+      this.resetOrderData();
+      this.currentStep = 'order-product';
+      this.addBotMessage('chat.order-product.search-prompt', this.getBackAction());
+    },
+    'support-ticket': () => {
+      this.resetSupportTicket();
+      this.startSupportTicketFlow();
+    },
+    'back-to-menu': () => {
+      this.currentStep = 'main-menu';
+      this.resetOrderData();
+      this.resetSupportTicket();
+      this.addBotMessage('chat.welcome', this.getMainMenuActions());
+    },
+    'view-product': (action) => {
+      if (action.data?.id) {
+        this.router.navigate(['/product', action.data.id]);
+        this.closeChat();
+      }
+    },
+    'select-order-product': (action) => {
+      if (action.data) {
+        this.orderData.product = action.data;
+        this.selectedProduct = action.data;
         this.currentStep = 'order-product-quantity';
-        this.addBotMessage('chat.order-product.enter-quantity', this.getBackAction());
-        break;
-
-      case 'confirm-order':
-        this.addToCart();
-        break;
-
-      case 'change-quantity':
-        this.currentStep = 'order-product-quantity';
+        this.addBotMessage(`chat.order-product.selected`);
+        this.addBotMessage(`${action.data.name} - $${action.data.price}`);
         this.addBotMessage('chat.order-product.quantity-prompt', this.getQuantityActions());
-        break;
-
-      case 'continue-shopping':
-        this.resetOrderData();
-        this.currentStep = 'order-product';
-        this.addBotMessage('chat.order-product.search-prompt', this.getBackAction());
-        break;
-
-      case 'view-cart':
-        this.router.navigate(['/checkout']);
-        this.closeChat();
-        break;
-
-      case 'checkout':
-        this.startCheckoutFlow();
-        break;
-
-      case 'select-subject':
-        if (action.data) {
-          this.supportTicket.subject = action.data;
-          this.addUserMessage(action.data);
-          this.currentStep = 'support-message';
-          this.addBotMessage('chat.support.message-prompt', this.getBackAction());
-        }
-        break;
-
-      case 'skip-attachment':
-        this.submitSupportTicket();
-        break;
-
-      case 'add-attachment':
-        this.triggerFileInput();
-        break;
-
-      case 'submit-ticket':
-        this.submitSupportTicket();
-        break;
-
-      // Checkout flow actions
-      case 'start-checkout':
-        this.startCheckoutFlow();
-        break;
-
-      case 'checkout-login':
-        this.currentStep = 'checkout-login';
-        this.addBotMessage('chat.checkout.login-email-prompt', this.getBackAction());
-        break;
-
-      case 'checkout-guest':
-        this.checkoutData.isGuest = true;
-        this.currentStep = 'checkout-guest-email';
-        this.addBotMessage('chat.checkout.guest-email-prompt', this.getBackAction());
-        break;
-
-      case 'checkout-address-confirm':
-        this.showAddressConfirmation();
-        break;
-
-      case 'checkout-edit-address':
-        this.currentStep = 'checkout-address-street';
-        this.addBotMessage('chat.checkout.address-street-prompt', this.getBackAction());
-        break;
-
-      case 'checkout-confirm-address':
-        this.currentStep = 'checkout-payment-method';
-        this.addBotMessage('chat.checkout.payment-method-prompt', this.getPaymentMethodActions());
-        break;
-
-      case 'select-payment-method':
-        if (action.data) {
-          this.checkoutData.paymentMethod = action.data;
-          this.checkoutData.paymentDetails = {};
-          this.handlePaymentMethodSelected(action.data);
-        }
-        break;
-
-      case 'select-bnpl-months':
-        if (action.data) {
-          this.checkoutData.paymentDetails.monthlyInstallments = action.data;
-          this.showCheckoutConfirmation();
-        }
-        break;
-
-      case 'checkout-confirm-order':
-        this.processCheckout();
-        break;
-
-      case 'checkout-edit-payment':
-        this.currentStep = 'checkout-payment-method';
-        this.addBotMessage('chat.checkout.payment-method-prompt', this.getPaymentMethodActions());
-        break;
-
-      case 'checkout-back-to-payment':
-        this.currentStep = 'checkout-payment-method';
-        this.addBotMessage('chat.checkout.payment-method-prompt', this.getPaymentMethodActions());
-        break;
-
-      case 'checkout-new-order':
-        this.resetCheckoutData();
-        this.currentStep = 'main-menu';
-        this.addBotMessage('chat.welcome', this.getMainMenuActions());
-        break;
-
-      case 'checkout-view-orders':
-        this.router.navigate(['/account/invoices']);
-        this.closeChat();
-        break;
+      }
+    },
+    'select-quantity': (action) => {
+      if (action.data) {
+        this.orderData.quantity = action.data;
+        this.addUserMessage(action.data.toString());
+        this.showOrderConfirmation();
+      }
+    },
+    'custom-quantity': () => {
+      this.currentStep = 'order-product-quantity';
+      this.addBotMessage('chat.order-product.enter-quantity', this.getBackAction());
+    },
+    'confirm-order': () => this.addToCart(),
+    'change-quantity': () => {
+      this.currentStep = 'order-product-quantity';
+      this.addBotMessage('chat.order-product.quantity-prompt', this.getQuantityActions());
+    },
+    'continue-shopping': () => {
+      this.resetOrderData();
+      this.currentStep = 'order-product';
+      this.addBotMessage('chat.order-product.search-prompt', this.getBackAction());
+    },
+    'view-cart': () => {
+      this.router.navigate(['/checkout']);
+      this.closeChat();
+    },
+    'checkout': () => this.startCheckoutFlow(),
+    'select-subject': (action) => {
+      if (action.data) {
+        this.supportTicket.subject = action.data;
+        this.addUserMessage(action.data);
+        this.currentStep = 'support-message';
+        this.addBotMessage('chat.support.message-prompt', this.getBackAction());
+      }
+    },
+    'skip-attachment': () => this.submitSupportTicket(),
+    'add-attachment': () => this.triggerFileInput(),
+    'submit-ticket': () => this.submitSupportTicket(),
+    // Checkout flow actions
+    'start-checkout': () => this.startCheckoutFlow(),
+    'checkout-login': () => {
+      this.currentStep = 'checkout-login';
+      this.addBotMessage('chat.checkout.login-email-prompt', this.getBackAction());
+    },
+    'checkout-guest': () => {
+      this.checkoutData.isGuest = true;
+      this.currentStep = 'checkout-guest-email';
+      this.addBotMessage('chat.checkout.guest-email-prompt', this.getBackAction());
+    },
+    'checkout-address-confirm': () => this.showAddressConfirmation(),
+    'checkout-edit-address': () => {
+      this.currentStep = 'checkout-address-street';
+      this.addBotMessage('chat.checkout.address-street-prompt', this.getBackAction());
+    },
+    'checkout-confirm-address': () => {
+      this.currentStep = 'checkout-payment-method';
+      this.addBotMessage('chat.checkout.payment-method-prompt', this.getPaymentMethodActions());
+    },
+    'select-payment-method': (action) => {
+      if (action.data) {
+        this.checkoutData.paymentMethod = action.data;
+        this.checkoutData.paymentDetails = {};
+        this.handlePaymentMethodSelected(action.data);
+      }
+    },
+    'select-bnpl-months': (action) => {
+      if (action.data) {
+        this.checkoutData.paymentDetails.monthlyInstallments = action.data;
+        this.showCheckoutConfirmation();
+      }
+    },
+    'checkout-confirm-order': () => this.processCheckout(),
+    'checkout-edit-payment': () => {
+      this.currentStep = 'checkout-payment-method';
+      this.addBotMessage('chat.checkout.payment-method-prompt', this.getPaymentMethodActions());
+    },
+    'checkout-back-to-payment': () => {
+      this.currentStep = 'checkout-payment-method';
+      this.addBotMessage('chat.checkout.payment-method-prompt', this.getPaymentMethodActions());
+    },
+    'checkout-new-order': () => {
+      this.resetCheckoutData();
+      this.currentStep = 'main-menu';
+      this.addBotMessage('chat.welcome', this.getMainMenuActions());
+    },
+    'checkout-view-orders': () => {
+      this.router.navigate(['/account/invoices']);
+      this.closeChat();
     }
+  };
+
+  onActionClick(action: ChatAction): void {
+    this.actionHandlers[action.action]?.(action);
   }
 
   private showOrderConfirmation(): void {
@@ -480,6 +442,147 @@ export class ChatWidgetComponent implements OnInit {
     }
   }
 
+  // Back button shown while collecting payment details.
+  private readonly paymentBackAction: ChatAction[] = [{label: 'chat.back', action: 'checkout-back-to-payment'}];
+
+  // Flow step -> input handler. Unknown steps fall back to the main menu.
+  private readonly submitHandlers: Record<string, (input: string) => void> = {
+    'find-product': (input) => this.searchProducts(input, 'find-product-results'),
+    'order-product': (input) => this.searchProducts(input, 'order-product-results'),
+    'order-product-quantity': (input) => this.handleQuantityInput(input),
+    'support-first-name': (input) => {
+      this.supportTicket.firstName = input;
+      this.currentStep = 'support-last-name';
+      this.addBotMessage('chat.support.last-name-prompt', this.getBackAction());
+    },
+    'support-last-name': (input) => {
+      this.supportTicket.lastName = input;
+      this.currentStep = 'support-email';
+      this.addBotMessage('chat.support.email-prompt', this.getBackAction());
+    },
+    'support-email': (input) => {
+      if (!this.isValidEmail(input)) {
+        this.addBotMessage('chat.support.email-invalid', this.getBackAction());
+        return;
+      }
+      this.supportTicket.email = input;
+      this.currentStep = 'support-subject';
+      this.addBotMessage('chat.support.subject-prompt', this.getSubjectActions());
+    },
+    'support-message': (input) => {
+      if (input.length < 50) {
+        this.addBotMessage('chat.support.message-too-short', this.getBackAction());
+        return;
+      }
+      this.supportTicket.message = input;
+      this.currentStep = 'support-attachment';
+      this.addBotMessage('chat.support.attachment-prompt', [
+        {label: 'chat.support.add-attachment', action: 'add-attachment'},
+        {label: 'chat.support.skip-attachment', action: 'skip-attachment'}
+      ]);
+    },
+    // Checkout flow input handling
+    'checkout-login': (input) => this.handleLoginEmail(input),
+    'checkout-login-password': (input) => this.handleLoginPassword(input),
+    'checkout-guest-email': (input) => {
+      if (!this.isValidEmail(input)) {
+        this.addBotMessage('chat.checkout.invalid-email', this.getBackAction());
+        return;
+      }
+      this.checkoutData.email = input;
+      this.currentStep = 'checkout-guest-first-name';
+      this.addBotMessage('chat.checkout.guest-first-name-prompt', this.getBackAction());
+    },
+    'checkout-guest-first-name': (input) => {
+      this.checkoutData.firstName = input;
+      this.currentStep = 'checkout-guest-last-name';
+      this.addBotMessage('chat.checkout.guest-last-name-prompt', this.getBackAction());
+    },
+    'checkout-guest-last-name': (input) => {
+      this.checkoutData.lastName = input;
+      this.currentStep = 'checkout-address-street';
+      this.addBotMessage('chat.checkout.address-street-prompt', this.getBackAction());
+    },
+    'checkout-address-street': (input) => {
+      this.checkoutData.address.street = input;
+      this.currentStep = 'checkout-address-city';
+      this.addBotMessage('chat.checkout.address-city-prompt', this.getBackAction());
+    },
+    'checkout-address-city': (input) => {
+      this.checkoutData.address.city = input;
+      this.currentStep = 'checkout-address-state';
+      this.addBotMessage('chat.checkout.address-state-prompt', this.getBackAction());
+    },
+    'checkout-address-state': (input) => {
+      this.checkoutData.address.state = input;
+      this.currentStep = 'checkout-address-country';
+      this.addBotMessage('chat.checkout.address-country-prompt', this.getBackAction());
+    },
+    'checkout-address-country': (input) => {
+      this.checkoutData.address.country = input;
+      this.currentStep = 'checkout-address-postcode';
+      this.addBotMessage('chat.checkout.address-postcode-prompt', this.getBackAction());
+    },
+    'checkout-address-postcode': (input) => {
+      this.checkoutData.address.postcode = input;
+      this.showAddressConfirmation();
+    },
+    // Credit card inputs
+    'checkout-payment-card-number': (input) => {
+      if (!this.validatePaymentInput(input, /^\d{4}-\d{4}-\d{4}-\d{4}$/, 'chat.checkout.invalid-card-number')) return;
+      this.checkoutData.paymentDetails.cardNumber = input;
+      this.currentStep = 'checkout-payment-card-expiry';
+      this.addBotMessage('chat.checkout.card-expiry-prompt', this.paymentBackAction);
+    },
+    'checkout-payment-card-expiry': (input) => {
+      if (!this.validatePaymentInput(input, /^(0[1-9]|1[0-2])\/\d{4}$/, 'chat.checkout.invalid-expiry')) return;
+      this.checkoutData.paymentDetails.expiryDate = input;
+      this.currentStep = 'checkout-payment-card-cvv';
+      this.addBotMessage('chat.checkout.card-cvv-prompt', this.paymentBackAction);
+    },
+    'checkout-payment-card-cvv': (input) => {
+      if (!this.validatePaymentInput(input, /^\d{3,4}$/, 'chat.checkout.invalid-cvv')) return;
+      this.checkoutData.paymentDetails.cvv = input;
+      this.currentStep = 'checkout-payment-card-name';
+      this.addBotMessage('chat.checkout.card-name-prompt', this.paymentBackAction);
+    },
+    'checkout-payment-card-name': (input) => {
+      if (!this.validatePaymentInput(input, /^[a-zA-Z ]+$/, 'chat.checkout.invalid-card-name')) return;
+      this.checkoutData.paymentDetails.cardHolderName = input;
+      this.showCheckoutConfirmation();
+    },
+    // Bank transfer inputs
+    'checkout-payment-bank-name': (input) => {
+      if (!this.validatePaymentInput(input, /^[a-zA-Z ]+$/, 'chat.checkout.invalid-bank-name')) return;
+      this.checkoutData.paymentDetails.bankName = input;
+      this.currentStep = 'checkout-payment-account-name';
+      this.addBotMessage('chat.checkout.account-name-prompt', this.paymentBackAction);
+    },
+    'checkout-payment-account-name': (input) => {
+      if (!this.validatePaymentInput(input, /^[a-zA-Z0-9 .'-]+$/, 'chat.checkout.invalid-account-name')) return;
+      this.checkoutData.paymentDetails.accountName = input;
+      this.currentStep = 'checkout-payment-account-number';
+      this.addBotMessage('chat.checkout.account-number-prompt', this.paymentBackAction);
+    },
+    'checkout-payment-account-number': (input) => {
+      if (!this.validatePaymentInput(input, /^\d+$/, 'chat.checkout.invalid-account-number')) return;
+      this.checkoutData.paymentDetails.accountNumber = input;
+      this.showCheckoutConfirmation();
+    },
+    // Gift card inputs
+    'checkout-payment-giftcard-number': (input) => {
+      if (!this.validatePaymentInput(input, /^[a-zA-Z0-9]+$/, 'chat.checkout.invalid-giftcard-number')) return;
+      this.checkoutData.paymentDetails.giftCardNumber = input;
+      this.currentStep = 'checkout-payment-giftcard-code';
+      this.addBotMessage('chat.checkout.giftcard-code-prompt', this.paymentBackAction);
+    },
+    'checkout-payment-giftcard-code': (input) => {
+      if (!this.validatePaymentInput(input, /^[a-zA-Z0-9]+$/, 'chat.checkout.invalid-giftcard-code')) return;
+      this.checkoutData.paymentDetails.validationCode = input;
+      this.showCheckoutConfirmation();
+    }
+  };
+
   onSubmit(): void {
     const input = this.userInput.trim();
     if (!input) return;
@@ -487,218 +590,35 @@ export class ChatWidgetComponent implements OnInit {
     this.addUserMessage(input);
     this.userInput = '';
 
-    switch (this.currentStep) {
-      case 'find-product':
-        this.searchProducts(input, 'find-product-results');
-        break;
-
-      case 'order-product':
-        this.searchProducts(input, 'order-product-results');
-        break;
-
-      case 'order-product-quantity':
-        const quantity = parseInt(input, 10);
-        if (isNaN(quantity) || quantity < 1) {
-          this.addBotMessage('chat.order-product.invalid-quantity', this.getBackAction());
-          return;
-        }
-        if (quantity > 999) {
-          this.addBotMessage('chat.order-product.quantity-too-high', this.getBackAction());
-          return;
-        }
-        this.orderData.quantity = quantity;
-        this.showOrderConfirmation();
-        break;
-
-      case 'support-first-name':
-        this.supportTicket.firstName = input;
-        this.currentStep = 'support-last-name';
-        this.addBotMessage('chat.support.last-name-prompt', this.getBackAction());
-        break;
-
-      case 'support-last-name':
-        this.supportTicket.lastName = input;
-        this.currentStep = 'support-email';
-        this.addBotMessage('chat.support.email-prompt', this.getBackAction());
-        break;
-
-      case 'support-email':
-        if (!this.isValidEmail(input)) {
-          this.addBotMessage('chat.support.email-invalid', this.getBackAction());
-          return;
-        }
-        this.supportTicket.email = input;
-        this.currentStep = 'support-subject';
-        this.addBotMessage('chat.support.subject-prompt', this.getSubjectActions());
-        break;
-
-      case 'support-message':
-        if (input.length < 50) {
-          this.addBotMessage('chat.support.message-too-short', this.getBackAction());
-          return;
-        }
-        this.supportTicket.message = input;
-        this.currentStep = 'support-attachment';
-        this.addBotMessage('chat.support.attachment-prompt', [
-          {label: 'chat.support.add-attachment', action: 'add-attachment'},
-          {label: 'chat.support.skip-attachment', action: 'skip-attachment'}
-        ]);
-        break;
-
-      // Checkout flow input handling
-      case 'checkout-login':
-        this.handleLoginEmail(input);
-        break;
-
-      case 'checkout-login-password':
-        this.handleLoginPassword(input);
-        break;
-
-      case 'checkout-guest-email':
-        if (!this.isValidEmail(input)) {
-          this.addBotMessage('chat.checkout.invalid-email', this.getBackAction());
-          return;
-        }
-        this.checkoutData.email = input;
-        this.currentStep = 'checkout-guest-first-name';
-        this.addBotMessage('chat.checkout.guest-first-name-prompt', this.getBackAction());
-        break;
-
-      case 'checkout-guest-first-name':
-        this.checkoutData.firstName = input;
-        this.currentStep = 'checkout-guest-last-name';
-        this.addBotMessage('chat.checkout.guest-last-name-prompt', this.getBackAction());
-        break;
-
-      case 'checkout-guest-last-name':
-        this.checkoutData.lastName = input;
-        this.currentStep = 'checkout-address-street';
-        this.addBotMessage('chat.checkout.address-street-prompt', this.getBackAction());
-        break;
-
-      case 'checkout-address-street':
-        this.checkoutData.address.street = input;
-        this.currentStep = 'checkout-address-city';
-        this.addBotMessage('chat.checkout.address-city-prompt', this.getBackAction());
-        break;
-
-      case 'checkout-address-city':
-        this.checkoutData.address.city = input;
-        this.currentStep = 'checkout-address-state';
-        this.addBotMessage('chat.checkout.address-state-prompt', this.getBackAction());
-        break;
-
-      case 'checkout-address-state':
-        this.checkoutData.address.state = input;
-        this.currentStep = 'checkout-address-country';
-        this.addBotMessage('chat.checkout.address-country-prompt', this.getBackAction());
-        break;
-
-      case 'checkout-address-country':
-        this.checkoutData.address.country = input;
-        this.currentStep = 'checkout-address-postcode';
-        this.addBotMessage('chat.checkout.address-postcode-prompt', this.getBackAction());
-        break;
-
-      case 'checkout-address-postcode':
-        this.checkoutData.address.postcode = input;
-        this.showAddressConfirmation();
-        break;
-
-      // Credit card inputs
-      case 'checkout-payment-card-number':
-        if (!/^\d{4}-\d{4}-\d{4}-\d{4}$/.test(input)) {
-          this.addBotMessage('chat.checkout.invalid-card-number', [{label: 'chat.back', action: 'checkout-back-to-payment'}]);
-          return;
-        }
-        this.checkoutData.paymentDetails.cardNumber = input;
-        this.currentStep = 'checkout-payment-card-expiry';
-        this.addBotMessage('chat.checkout.card-expiry-prompt', [{label: 'chat.back', action: 'checkout-back-to-payment'}]);
-        break;
-
-      case 'checkout-payment-card-expiry':
-        if (!/^(0[1-9]|1[0-2])\/\d{4}$/.test(input)) {
-          this.addBotMessage('chat.checkout.invalid-expiry', [{label: 'chat.back', action: 'checkout-back-to-payment'}]);
-          return;
-        }
-        this.checkoutData.paymentDetails.expiryDate = input;
-        this.currentStep = 'checkout-payment-card-cvv';
-        this.addBotMessage('chat.checkout.card-cvv-prompt', [{label: 'chat.back', action: 'checkout-back-to-payment'}]);
-        break;
-
-      case 'checkout-payment-card-cvv':
-        if (!/^\d{3,4}$/.test(input)) {
-          this.addBotMessage('chat.checkout.invalid-cvv', [{label: 'chat.back', action: 'checkout-back-to-payment'}]);
-          return;
-        }
-        this.checkoutData.paymentDetails.cvv = input;
-        this.currentStep = 'checkout-payment-card-name';
-        this.addBotMessage('chat.checkout.card-name-prompt', [{label: 'chat.back', action: 'checkout-back-to-payment'}]);
-        break;
-
-      case 'checkout-payment-card-name':
-        if (!/^[a-zA-Z ]+$/.test(input)) {
-          this.addBotMessage('chat.checkout.invalid-card-name', [{label: 'chat.back', action: 'checkout-back-to-payment'}]);
-          return;
-        }
-        this.checkoutData.paymentDetails.cardHolderName = input;
-        this.showCheckoutConfirmation();
-        break;
-
-      // Bank transfer inputs
-      case 'checkout-payment-bank-name':
-        if (!/^[a-zA-Z ]+$/.test(input)) {
-          this.addBotMessage('chat.checkout.invalid-bank-name', [{label: 'chat.back', action: 'checkout-back-to-payment'}]);
-          return;
-        }
-        this.checkoutData.paymentDetails.bankName = input;
-        this.currentStep = 'checkout-payment-account-name';
-        this.addBotMessage('chat.checkout.account-name-prompt', [{label: 'chat.back', action: 'checkout-back-to-payment'}]);
-        break;
-
-      case 'checkout-payment-account-name':
-        if (!/^[a-zA-Z0-9 .'-]+$/.test(input)) {
-          this.addBotMessage('chat.checkout.invalid-account-name', [{label: 'chat.back', action: 'checkout-back-to-payment'}]);
-          return;
-        }
-        this.checkoutData.paymentDetails.accountName = input;
-        this.currentStep = 'checkout-payment-account-number';
-        this.addBotMessage('chat.checkout.account-number-prompt', [{label: 'chat.back', action: 'checkout-back-to-payment'}]);
-        break;
-
-      case 'checkout-payment-account-number':
-        if (!/^\d+$/.test(input)) {
-          this.addBotMessage('chat.checkout.invalid-account-number', [{label: 'chat.back', action: 'checkout-back-to-payment'}]);
-          return;
-        }
-        this.checkoutData.paymentDetails.accountNumber = input;
-        this.showCheckoutConfirmation();
-        break;
-
-      // Gift card inputs
-      case 'checkout-payment-giftcard-number':
-        if (!/^[a-zA-Z0-9]+$/.test(input)) {
-          this.addBotMessage('chat.checkout.invalid-giftcard-number', [{label: 'chat.back', action: 'checkout-back-to-payment'}]);
-          return;
-        }
-        this.checkoutData.paymentDetails.giftCardNumber = input;
-        this.currentStep = 'checkout-payment-giftcard-code';
-        this.addBotMessage('chat.checkout.giftcard-code-prompt', [{label: 'chat.back', action: 'checkout-back-to-payment'}]);
-        break;
-
-      case 'checkout-payment-giftcard-code':
-        if (!/^[a-zA-Z0-9]+$/.test(input)) {
-          this.addBotMessage('chat.checkout.invalid-giftcard-code', [{label: 'chat.back', action: 'checkout-back-to-payment'}]);
-          return;
-        }
-        this.checkoutData.paymentDetails.validationCode = input;
-        this.showCheckoutConfirmation();
-        break;
-
-      default:
-        this.addBotMessage('chat.welcome', this.getMainMenuActions());
-        this.currentStep = 'main-menu';
+    const handler = this.submitHandlers[this.currentStep];
+    if (handler) {
+      handler(input);
+    } else {
+      this.addBotMessage('chat.welcome', this.getMainMenuActions());
+      this.currentStep = 'main-menu';
     }
+  }
+
+  private handleQuantityInput(input: string): void {
+    const quantity = Number.parseInt(input, 10);
+    if (Number.isNaN(quantity) || quantity < 1) {
+      this.addBotMessage('chat.order-product.invalid-quantity', this.getBackAction());
+      return;
+    }
+    if (quantity > 999) {
+      this.addBotMessage('chat.order-product.quantity-too-high', this.getBackAction());
+      return;
+    }
+    this.orderData.quantity = quantity;
+    this.showOrderConfirmation();
+  }
+
+  private validatePaymentInput(input: string, pattern: RegExp, invalidKey: string): boolean {
+    if (!pattern.test(input)) {
+      this.addBotMessage(invalidKey, this.paymentBackAction);
+      return false;
+    }
+    return true;
   }
 
   private handleLoginEmail(email: string): void {
@@ -790,7 +710,7 @@ export class ChatWidgetComponent implements OnInit {
       },
       error: (err) => {
         this.isLoading = false;
-        const errorMsg = typeof err === 'object' ? Object.values(err).join(' ') : 'Unknown error';
+        const errorMsg = typeof err === 'object' ? Object.values(err as Record<string, string[] | string>).map(v => Array.isArray(v) ? v.join('\r\n') : v).join(' ') : 'Unknown error';
         this.addBotMessage('chat.support.error');
         this.addBotMessage(errorMsg, this.getBackAction());
       }
@@ -864,7 +784,7 @@ export class ChatWidgetComponent implements OnInit {
     this.resetCheckoutData();
     this.cartService.getCart().subscribe({
       next: (cart) => {
-        if (!cart.cart_items || cart.cart_items.length === 0) {
+        if (!cart?.cart_items || cart.cart_items.length === 0) {
           this.addBotMessage('chat.checkout.cart-empty', this.getBackAction());
           return;
         }
@@ -888,11 +808,11 @@ export class ChatWidgetComponent implements OnInit {
     });
   }
 
-  private calculateCartTotal(items: any[]): number {
+  private calculateCartTotal(items: CartItem[]): number {
     return items.reduce((sum, cartItem) => {
       const quantity = cartItem.quantity || 0;
       const price = cartItem.discount_percentage ? cartItem.discounted_price : cartItem.product?.price || 0;
-      return sum + (quantity * price);
+      return sum + (quantity * (price ?? 0));
     }, 0);
   }
 
@@ -967,7 +887,7 @@ export class ChatWidgetComponent implements OnInit {
 
     const cartId = sessionStorage.getItem('cart_id');
 
-    let paymentDetails: any = {};
+    let paymentDetails: Record<string, unknown> = {};
     switch (this.checkoutData.paymentMethod) {
       case 'bank-transfer':
         paymentDetails = {
@@ -1009,7 +929,7 @@ export class ChatWidgetComponent implements OnInit {
 
     this.paymentService.validate(endpoint, paymentPayload).subscribe({
       next: () => {
-        const invoicePayload: any = {
+        const invoicePayload: Record<string, unknown> = {
           billing_street: this.checkoutData.address.street,
           billing_city: this.checkoutData.address.city,
           billing_state: this.checkoutData.address.state,
@@ -1022,9 +942,9 @@ export class ChatWidgetComponent implements OnInit {
 
         // Add guest info for guest checkout
         if (this.checkoutData.isGuest) {
-          invoicePayload.guest_email = this.checkoutData.email;
-          invoicePayload.guest_first_name = this.checkoutData.firstName;
-          invoicePayload.guest_last_name = this.checkoutData.lastName;
+          invoicePayload['guest_email'] = this.checkoutData.email;
+          invoicePayload['guest_first_name'] = this.checkoutData.firstName;
+          invoicePayload['guest_last_name'] = this.checkoutData.lastName;
         }
 
         this.invoiceService.createInvoice(invoicePayload).subscribe({
@@ -1074,33 +994,38 @@ export class ChatWidgetComponent implements OnInit {
     }, 100);
   }
 
+  // Steps that expect free-text input from the user (vs. action buttons).
+  private static readonly INPUT_STEPS: ReadonlySet<ChatFlowStep> = new Set<ChatFlowStep>([
+    'find-product',
+    'order-product',
+    'order-product-quantity',
+    'support-first-name',
+    'support-last-name',
+    'support-email',
+    'support-message',
+    // Checkout flow input steps
+    'checkout-login',
+    'checkout-login-password',
+    'checkout-guest-email',
+    'checkout-guest-first-name',
+    'checkout-guest-last-name',
+    'checkout-address-street',
+    'checkout-address-city',
+    'checkout-address-state',
+    'checkout-address-country',
+    'checkout-address-postcode',
+    'checkout-payment-card-number',
+    'checkout-payment-card-expiry',
+    'checkout-payment-card-cvv',
+    'checkout-payment-card-name',
+    'checkout-payment-bank-name',
+    'checkout-payment-account-name',
+    'checkout-payment-account-number',
+    'checkout-payment-giftcard-number',
+    'checkout-payment-giftcard-code'
+  ]);
+
   showInput(): boolean {
-    return this.currentStep === 'find-product' ||
-           this.currentStep === 'order-product' ||
-           this.currentStep === 'order-product-quantity' ||
-           this.currentStep === 'support-first-name' ||
-           this.currentStep === 'support-last-name' ||
-           this.currentStep === 'support-email' ||
-           this.currentStep === 'support-message' ||
-           // Checkout flow input steps
-           this.currentStep === 'checkout-login' ||
-           this.currentStep === 'checkout-login-password' ||
-           this.currentStep === 'checkout-guest-email' ||
-           this.currentStep === 'checkout-guest-first-name' ||
-           this.currentStep === 'checkout-guest-last-name' ||
-           this.currentStep === 'checkout-address-street' ||
-           this.currentStep === 'checkout-address-city' ||
-           this.currentStep === 'checkout-address-state' ||
-           this.currentStep === 'checkout-address-country' ||
-           this.currentStep === 'checkout-address-postcode' ||
-           this.currentStep === 'checkout-payment-card-number' ||
-           this.currentStep === 'checkout-payment-card-expiry' ||
-           this.currentStep === 'checkout-payment-card-cvv' ||
-           this.currentStep === 'checkout-payment-card-name' ||
-           this.currentStep === 'checkout-payment-bank-name' ||
-           this.currentStep === 'checkout-payment-account-name' ||
-           this.currentStep === 'checkout-payment-account-number' ||
-           this.currentStep === 'checkout-payment-giftcard-number' ||
-           this.currentStep === 'checkout-payment-giftcard-code';
+    return ChatWidgetComponent.INPUT_STEPS.has(this.currentStep);
   }
 }

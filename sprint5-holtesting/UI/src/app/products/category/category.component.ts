@@ -37,16 +37,16 @@ import {ProductSpecService, SpecNameGroup} from "../../_services/product-spec.se
   styleUrls: ['./category.component.css']
 })
 export class CategoryComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
-  private productService = inject(ProductService);
-  private formBuilder = inject(FormBuilder);
-  private route = inject(ActivatedRoute);
-  private brandService = inject(BrandService);
-  private categoryService = inject(CategoryService);
-  public browserDetect = inject(BrowserDetectorService);
-  private titleService = inject(Title);
-  public comparisonService = inject(ComparisonService);
-  private specService = inject(ProductSpecService);
+  private readonly destroy$ = new Subject<void>();
+  private readonly productService = inject(ProductService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
+  private readonly brandService = inject(BrandService);
+  private readonly categoryService = inject(CategoryService);
+  public readonly browserDetect = inject(BrowserDetectorService);
+  private readonly titleService = inject(Title);
+  public readonly comparisonService = inject(ComparisonService);
+  private readonly specService = inject(ProductSpecService);
   search: FormGroup | any;
   resultState: string = '';
   currentPage: number = 1;

@@ -15,10 +15,13 @@ use Tests\TestCase;
 class ProductTest extends TestCase {
     use DatabaseMigrations;
 
-    public function testRetrieveProducts() {
-        $product = $this->addProduct();
+    private const PRODUCTS = '/products';
+    private const PRODUCTS_PREFIX = '/products/';
 
-        $response = $this->get('/products');
+    public function testRetrieveProducts() {
+        $this->addProduct();
+
+        $response = $this->get(self::PRODUCTS);
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
@@ -103,7 +106,7 @@ class ProductTest extends TestCase {
     public function testRetrieveProduct() {
         $product = $this->addProduct();
 
-        $response = $this->get('/products/' . $product->id);
+        $response = $this->get(self::PRODUCTS_PREFIX . $product->id);
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
@@ -129,7 +132,7 @@ class ProductTest extends TestCase {
             'is_rental' => false,
             'product_image_id' => $productImage->id];
 
-        $response = $this->post('/products', $payload);
+        $response = $this->post(self::PRODUCTS, $payload);
 
         $response
             ->assertStatus(ResponseAlias::HTTP_CREATED)
@@ -143,7 +146,7 @@ class ProductTest extends TestCase {
     }
 
     public function testAddProductRequiredFields() {
-        $response = $this->post('/products');
+        $response = $this->post(self::PRODUCTS);
 
         $response
             ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
@@ -158,7 +161,7 @@ class ProductTest extends TestCase {
     public function testDeleteProduct() {
         $product = $this->addProduct();
 
-        $this->delete('/products/' . $product->id)
+        $this->delete(self::PRODUCTS_PREFIX . $product->id)
             ->assertStatus(ResponseAlias::HTTP_NO_CONTENT);
     }
 
@@ -182,7 +185,7 @@ class ProductTest extends TestCase {
             'product_image_id' => $product->product_image_id,
         ];
 
-        $this->put('/products/' . $product->id, $payload)
+        $this->put(self::PRODUCTS_PREFIX . $product->id, $payload)
             ->assertStatus(ResponseAlias::HTTP_OK)
             ->assertJson([
                 'success' => true
@@ -192,7 +195,7 @@ class ProductTest extends TestCase {
     public function testRetrieveRelatedProducts() {
         $product = $this->addProduct();
 
-        $response = $this->get('/products/' . $product->id . '/related');
+        $response = $this->get(self::PRODUCTS_PREFIX . $product->id . '/related');
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
@@ -220,12 +223,11 @@ class ProductTest extends TestCase {
         ]);
         $productImage = ProductImage::factory()->create();
 
-        $product = Product::factory()->create([
+        return Product::factory()->create([
             'brand_id' => $brand->id,
             'category_id' => $category->id,
             'product_image_id' => $productImage->id,
             'name' => 'test-product']);
-        return $product;
     }
 
 }

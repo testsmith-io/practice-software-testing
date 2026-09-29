@@ -46,7 +46,7 @@ export class BrandService {
       .pipe(catchError(this.handleError));
   }
 
-  private handleError = (error: HttpErrorResponse): Observable<never> => {
+  private readonly handleError = (error: HttpErrorResponse): Observable<never> => {
     console.error('BrandService Error:', error);
 
     // Return user-friendly error message
