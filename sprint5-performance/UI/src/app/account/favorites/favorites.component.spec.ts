@@ -2,6 +2,7 @@
 // See LICENSE for details.
 
 import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {HttpErrorResponse} from '@angular/common/http';
 import {of, throwError} from 'rxjs';
 import {FavoritesComponent} from './favorites.component';
 import {FavoriteService} from '../../_services/favorite.service';
@@ -107,7 +108,7 @@ describe('FavoritesComponent', () => {
         of(mockFavorites),
         of(updatedFavorites)
       );
-      favoriteService.deleteFavorite.and.returnValue(of({}));
+      favoriteService.deleteFavorite.and.returnValue(of(undefined));
 
       component.ngOnInit();
       component.deleteFavorite(favoriteToDelete);
@@ -188,21 +189,21 @@ describe('FavoritesComponent', () => {
 
   describe('handleError', () => {
     it('should handle 401 error', () => {
-      component['handleError']({ status: 401 });
+      component['handleError']({ status: 401 } as unknown as HttpErrorResponse);
 
       expect(tokenStorageService.removeToken).toHaveBeenCalled();
       expect(redirectService.redirectTo).toHaveBeenCalledWith('/auth/login');
     });
 
     it('should handle 403 error', () => {
-      component['handleError']({ status: 403 });
+      component['handleError']({ status: 403 } as unknown as HttpErrorResponse);
 
       expect(tokenStorageService.removeToken).toHaveBeenCalled();
       expect(redirectService.redirectTo).toHaveBeenCalledWith('/auth/login');
     });
 
     it('should not redirect for other error statuses', () => {
-      component['handleError']({ status: 500 });
+      component['handleError']({ status: 500 } as unknown as HttpErrorResponse);
 
       expect(tokenStorageService.removeToken).not.toHaveBeenCalled();
       expect(redirectService.redirectTo).not.toHaveBeenCalled();
