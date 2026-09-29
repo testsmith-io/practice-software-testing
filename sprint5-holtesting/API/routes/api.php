@@ -21,11 +21,10 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
-const ID_PARAM = '/{id}';
-const SEARCH_PATH = '/search';
-const SPEC_PATH = '/products/{productId}/specs/{specId}';
-const CACHE_HEADERS = 'cache.headers:public;max_age=120;etag';
-
+defined('ID_PARAM') || define('ID_PARAM', '/{id}');
+defined('SEARCH_PATH') || define('SEARCH_PATH', '/search');
+defined('SPEC_PATH') || define('SPEC_PATH', '/products/{productId}/specs/{specId}');
+defined('CACHE_HEADERS') || define('CACHE_HEADERS', 'cache.headers:public;max_age=120;etag');
 /*
 |--------------------------------------------------------------------------
 | API Routes

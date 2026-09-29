@@ -8,8 +8,7 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
-const ID_PARAM = '/{id}';
-
+defined('ID_PARAM') || define('ID_PARAM', '/{id}');
 /*
 |--------------------------------------------------------------------------
 | API Routes

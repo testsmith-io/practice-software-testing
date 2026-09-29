@@ -174,6 +174,8 @@ test('successful quantity update', function () {
     ]);
 
 
+    $updatedQuantity = 3;
+
     $response = $this->putJson("/carts/{$cart->id}/product/quantity", [
         'product_id' => $product->id,
         'quantity' => $updatedQuantity

@@ -22,15 +22,14 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
-const REFRESH = '/refresh';
-const CACHE_HEADERS = 'cache.headers:public;max_age=120;etag';
-const SEARCH = '/search';
-const ID_PARAM = '/{id}';
-const TREE = '/tree';
-const ID_STATUS = '/{id}/status';
-const SPECS = '/products/{productId}/specs';
-const SPEC_ID = '/products/{productId}/specs/{specId}';
-
+defined('REFRESH') || define('REFRESH', '/refresh');
+defined('CACHE_HEADERS') || define('CACHE_HEADERS', 'cache.headers:public;max_age=120;etag');
+defined('SEARCH') || define('SEARCH', '/search');
+defined('ID_PARAM') || define('ID_PARAM', '/{id}');
+defined('TREE') || define('TREE', '/tree');
+defined('ID_STATUS') || define('ID_STATUS', '/{id}/status');
+defined('SPECS') || define('SPECS', '/products/{productId}/specs');
+defined('SPEC_ID') || define('SPEC_ID', '/products/{productId}/specs/{specId}');
 /*
 |--------------------------------------------------------------------------
 | API Routes
