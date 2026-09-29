@@ -16,10 +16,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
-const CACHE_HEADERS = 'cache.headers:public;max_age=120;etag';
-const SEARCH_PATH = '/search';
-const ID_PARAM = '/{id}';
-
+defined('CACHE_HEADERS') || define('CACHE_HEADERS', 'cache.headers:public;max_age=120;etag');
+defined('SEARCH_PATH') || define('SEARCH_PATH', '/search');
+defined('ID_PARAM') || define('ID_PARAM', '/{id}');
 /*
 |--------------------------------------------------------------------------
 | API Routes

@@ -15,9 +15,8 @@ use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-const ID_PARAM = '/{id}';
-const SEARCH_PATH = '/search';
-
+defined('ID_PARAM') || define('ID_PARAM', '/{id}');
+defined('SEARCH_PATH') || define('SEARCH_PATH', '/search');
 /*
 |--------------------------------------------------------------------------
 | API Routes
