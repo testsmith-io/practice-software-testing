@@ -38,7 +38,7 @@ export class OrdersAddEditComponent implements OnInit {
   isUpdated: boolean = false;
   hideAlert: boolean = false;
   error: string;
-  orderState: typeof OrderState = OrderState;
+  orderState: any = OrderState;
 
   ngOnInit(): void {
     this.invoiceForm = this.formBuilder.group(
@@ -79,7 +79,7 @@ export class OrdersAddEditComponent implements OnInit {
       });
   }
 
-  fadeOutMessage(): void {
+  fadeOutMessage(): any {
     setTimeout(() => {
       this.hideAlert = true;
     }, 3000);

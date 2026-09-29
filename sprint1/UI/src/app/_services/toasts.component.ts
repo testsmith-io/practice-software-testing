@@ -18,7 +18,7 @@ import {ToastService, Toast} from "./toast.service";
         (hidden)="toastService.remove(toast)"
         >
         @if (isTemplate(toast)) {
-          <ng-template [ngTemplateOutlet]="toast.textOrTpl"></ng-template>
+          <ng-template [ngTemplateOutlet]="$any(toast.textOrTpl)"></ng-template>
         } @else {
           {{ toast.textOrTpl }}
         }

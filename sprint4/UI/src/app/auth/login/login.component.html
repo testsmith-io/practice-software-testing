@@ -17,7 +17,7 @@
         @if (email.invalid && submitted) {
           <div data-test="email-error"
             class="alert alert-danger">
-            @if (email.errors?.required) {
+            @if (email.errors?.['required']) {
               <div>
                 E-mail is required.
               </div>
@@ -40,7 +40,7 @@
         @if (password.invalid && submitted) {
           <div data-test="password-error"
             class="alert alert-danger">
-            @if (password.errors?.required) {
+            @if (password.errors?.['required']) {
               <div>
                 Password is required.
               </div>

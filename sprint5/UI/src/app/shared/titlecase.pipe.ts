@@ -5,7 +5,7 @@ import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({name: 'titleCase'})
 export class TitleCasePipe implements PipeTransform {
-  transform(value: string): string {
+  transform(value: any): string {
     if (!value) return '';
     return value
       .toLowerCase()
