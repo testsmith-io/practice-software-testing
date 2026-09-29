@@ -16,9 +16,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 
-const ID_PARAM = ID_PARAM;
-const SEARCH_PATH = SEARCH_PATH;
-const CACHE_HEADERS = CACHE_HEADERS;
+const ID_PARAM = '/{id}';
+const SEARCH_PATH = '/search';
+const CACHE_HEADERS = 'cache.headers:public;max_age=120;etag';
 
 /*
 |--------------------------------------------------------------------------

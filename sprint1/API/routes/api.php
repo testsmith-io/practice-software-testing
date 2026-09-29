@@ -8,7 +8,7 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
-const ID_PARAM = ID_PARAM;
+const ID_PARAM = '/{id}';
 
 /*
 |--------------------------------------------------------------------------
