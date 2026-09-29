@@ -39,7 +39,7 @@ export class OrdersAddEditComponent implements OnInit {
   isUpdated: boolean = false;
   hideAlert: boolean = false;
   error: string;
-  orderState: typeof OrderState = OrderState;
+  orderState: any = OrderState;
 
   ngOnInit(): void {
     this.invoiceForm = this.formBuilder.group(

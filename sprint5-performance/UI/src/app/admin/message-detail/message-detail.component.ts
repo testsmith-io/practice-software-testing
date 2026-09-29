@@ -33,7 +33,7 @@ export class MessageDetailComponent implements OnInit {
   isUpdated: boolean = false;
   hideAlert: boolean = false;
   error: string;
-  messageState: typeof MessageState = MessageState;
+  messageState: any = MessageState;
   id: string;
 
   ngOnInit(): void {

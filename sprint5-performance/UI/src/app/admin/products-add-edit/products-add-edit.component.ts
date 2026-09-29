@@ -196,13 +196,13 @@ export class ProductsAddEditComponent implements OnInit {
       });
   }
 
-  fadeOutMessage(): void {
+  fadeOutMessage(): any {
     setTimeout(() => {
       this.hideAlert = true;
     }, 3000);
   }
 
-  setImage(image: Image) {
+  setImage(event: Event) {
     this.selectedImage = this.images.find((el: Image) => {
       return el?.id === this.selectedImageId;
     });

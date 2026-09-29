@@ -65,7 +65,7 @@
               data-test="first-name"
               class="form-control"
               id="first_name"
-              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.first_name?.errors }" type="text"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('first_name')?.errors }" type="text"
               aria-label="First name" placeholder="Your first name *"
               value=""/>
           </div>
@@ -84,7 +84,7 @@
               data-test="last-name"
               class="form-control"
               id="last_name"
-              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.last_name?.errors }" type="text"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('last_name')?.errors }" type="text"
               aria-label="Last name" placeholder="Your last name *"
               value=""/>
           </div>
@@ -103,7 +103,7 @@
               data-test="email"
               class="form-control"
               id="email"
-              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.email?.errors }"  type="email"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('email')?.errors }"  type="email"
               aria-label="Email" placeholder="Your Email *"
               value=""/>
           </div>
@@ -128,7 +128,7 @@
               data-test="address"
               class="form-control"
               id="address"
-              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.address?.errors }" type="text"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('address')?.errors }" type="text"
               aria-label="Address" placeholder="Your Address *"
               value=""/>
           </div>
@@ -147,7 +147,7 @@
               data-test="city"
               class="form-control"
               id="city"
-              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.city?.errors }" type="text"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('city')?.errors }" type="text"
               aria-label="City" placeholder="Your City *"
               value=""/>
           </div>
@@ -176,7 +176,7 @@
               data-test="state"
               class="form-control"
               id="state"
-              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.state?.errors }" type="text"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('state')?.errors }" type="text"
               aria-label="State" placeholder="Your State *"
               value=""/>
           </div>
@@ -195,7 +195,7 @@
               data-test="country"
               class="form-control"
               id="country"
-              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.country?.errors }" type="text"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('country')?.errors }" type="text"
               aria-label="Country" placeholder="Your Country *"
               value=""/>
           </div>
@@ -214,7 +214,7 @@
               data-test="postcode"
               class="form-control"
               id="postcode"
-              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.postcode?.errors }" type="text"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('postcode')?.errors }" type="text"
               aria-label="Postcode" placeholder="Your Postcode *"
               value=""/>
           </div>
@@ -272,7 +272,7 @@
                 data-test="account-name"
                 class="form-control"
                 id="account-name"
-                [ngClass]="{ 'is-invalid': cusPayment && cusPayment['account_name']?.errors }" type="text"
+                [ngClass]="{ 'is-invalid': cusPayment && cusPayment.get('account_name')?.errors }" type="text"
                 aria-label="Account name" placeholder="Your Account name *"
                 value=""/>
             </div>
@@ -291,7 +291,7 @@
                 data-test="account-number"
                 class="form-control"
                 id="account-number"
-                [ngClass]="{ 'is-invalid': cusPayment && cusPayment['account_number']?.errors }" type="text"
+                [ngClass]="{ 'is-invalid': cusPayment && cusPayment.get('account_number')?.errors }" type="text"
                 aria-label="Account number" placeholder="Your Account number *"
                 value=""/>
             </div>

@@ -5,6 +5,8 @@ import {Injectable, TemplateRef} from '@angular/core';
 
 export interface Toast {
   textOrTpl: string | TemplateRef<unknown>;
+  classname?: string;
+  delay?: number;
   [key: string]: unknown;
 }
 

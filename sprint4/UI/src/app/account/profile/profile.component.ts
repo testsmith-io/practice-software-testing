@@ -132,7 +132,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  fadeOutMessage(): void {
+  fadeOutMessage(): any {
     setTimeout(() => {
       this.hideProfileAlert = true;
       this.hidePasswordAlert = true;
