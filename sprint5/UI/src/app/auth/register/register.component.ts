@@ -2,7 +2,7 @@
 // See LICENSE for details.
 
 import {Component, inject, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators, ValidatorFn} from "@angular/forms";
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {CustomerAccountService} from "../../shared/customer-account.service";
 import countriesList from '../../../assets/countries.json';
@@ -13,6 +13,40 @@ import {PasswordInputComponent} from "../../shared/password-input/password-input
 import {TranslocoDirective} from "@jsverse/transloco";
 import { DateValidators } from 'src/app/shared/validators/date.validators';
 import {PostcodeService} from "../../_services/postcode.service";
+
+// Postcode shape check per country. This MUST stay in sync with the backend
+// source of truth, sprint5/API/app/Services/Postcode/PostcodeFormat.php, so the
+// client and server never disagree about what a valid postcode is. Countries
+// absent here are left unconstrained, exactly like the backend.
+const postcodePatterns: Record<string, RegExp> = {
+  AL: /^\d{4}$/,
+  AT: /^\d{4}$/,
+  AU: /^\d{4}$/,
+  BE: /^\d{4}$/,
+  BR: /^\d{5}-?\d{3}$/,
+  CA: /^[A-Za-z]\d[A-Za-z]\s?\d[A-Za-z]\d$/,
+  CH: /^\d{4}$/,
+  CN: /^\d{6}$/,
+  CZ: /^\d{3}\s?\d{2}$/,
+  DE: /^\d{5}$/,
+  DK: /^\d{4}$/,
+  ES: /^\d{5}$/,
+  FI: /^\d{5}$/,
+  FR: /^\d{5}$/,
+  GB: /^[A-Za-z]{1,2}\d[A-Za-z\d]?\s?\d[A-Za-z]{2}$/,
+  IE: /^[A-Za-z]\d{2}\s?[A-Za-z\d]{4}$/,
+  IT: /^\d{5}$/,
+  JP: /^\d{3}-?\d{4}$/,
+  NL: /^\d{4}\s?[A-Za-z]{2}$/,
+  NO: /^\d{4}$/,
+  NZ: /^\d{4}$/,
+  PL: /^\d{2}-\d{3}$/,
+  PT: /^\d{4}(-\d{3})?$/,
+  RU: /^\d{6}$/,
+  SE: /^\d{3}\s?\d{2}$/,
+  TR: /^\d{5}$/,
+  US: /^\d{5}(-\d{4})?$/,
+};
 
 @Component({
   selector: 'app-register',
@@ -52,7 +86,7 @@ export class RegisterComponent implements OnInit {
         // country, postal_code and house_number update on keystroke (not blur)
         // so the postcode lookup can fire as soon as all three have a value.
         country: new FormControl('', {validators: [Validators.required], updateOn: 'change'}),
-        postal_code: new FormControl('', {validators: [Validators.required], updateOn: 'change'}),
+        postal_code: new FormControl('', {validators: [Validators.required, this.postalCodeValidator()], updateOn: 'change'}),
         house_number: new FormControl('', {validators: [Validators.required], updateOn: 'change'}),
         phone: ['', [Validators.required, Validators.pattern(/^\d\d*$/)]],
         email: ['', [Validators.required, Validators.pattern("^(?=.{1,256}$)[a-zA-Z0-9._%+-]{1,64}@[a-zA-Z0-9.-]{1,255}$")]],
@@ -78,14 +112,39 @@ export class RegisterComponent implements OnInit {
       .subscribe(() => this.tryPostcodeLookup());
     this.register.get('country').valueChanges
       .pipe(distinctUntilChanged())
-      .subscribe(() => this.tryPostcodeLookup());
+      .subscribe(() => {
+        this.register.get('postal_code').updateValueAndValidity();
+        this.tryPostcodeLookup();
+  });
   }
 
+  private postalCodeValidator(): ValidatorFn {
+  return (control: AbstractControl) => {
+    if (!this.register) {
+      return null;
+    }
+
+    const country = (this.register.get('country')?.value ?? '').toString().trim().toUpperCase();
+    const postalCode = (control.value ?? '').toString().trim();
+
+    if (!country || !postalCode) {
+      return null;
+    }
+
+    const pattern = postcodePatterns[country];
+
+    if (!pattern) {
+      return null;
+    }
+
+    return pattern.test(postalCode) ? null : { pattern: true };
+  };
+}
   private tryPostcodeLookup(): void {
     const country = this.register.get('country').value;
     const postcode = this.register.get('postal_code').value;
     const houseNumber = this.register.get('house_number').value;
-    if (!country || !postcode || !houseNumber) {
+    if (!country || !postcode || !houseNumber || this.register.get('postal_code').invalid) {
       return;
     }
 
@@ -173,12 +232,21 @@ export class RegisterComponent implements OnInit {
       next: () => {
         this.accountService.redirectToLogin();
       }, error: (err) => {
-        if (err.error === 'Duplicate Entry') {
-          this.error = 'Email is already in use.';
-        } else {
-          this.error = Object.values(err as Record<string, string[]>)
-            .map((fieldErrors) => fieldErrors.join('\n'))
+        // The service's errorHandler rethrows `error.error` (the response body),
+        // but be defensive and also accept a raw HttpErrorResponse. Support both
+        // a flat {field: string[]} map and Laravel's {message, errors} envelope,
+        // and always fall back to a readable message so nothing is swallowed.
+        const body = err?.error ?? err;
+        const fieldErrors = body?.errors ?? body;
+
+        if (fieldErrors && typeof fieldErrors === 'object') {
+          this.error = Object.values(fieldErrors as Record<string, unknown>)
+            .map((messages) => Array.isArray(messages) ? messages.join('\n') : String(messages))
             .join('\n');
+        } else if (typeof body === 'string' && body && body !== 'server error.') {
+          this.error = body === 'Duplicate Entry' ? 'Email is already in use.' : body;
+        } else {
+          this.error = 'Registration failed. Please try again.';
         }
       }
     });

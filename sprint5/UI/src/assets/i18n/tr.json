@@ -189,7 +189,7 @@
       "placeholder": "Posta Kodunuz",
       "errors": {
         "required": "Posta kodu gereklidir",
-        "format": "Sadece 5 rakam girilebilir."
+        "format": "Lütfen seçilen ülke için geçerli bir posta kodu girin."
       }
     },
     "city": {

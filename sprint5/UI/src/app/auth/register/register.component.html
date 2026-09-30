@@ -140,15 +140,15 @@
                      id="postal_code"
                      data-test="postal_code"
                      class="form-control"
-                     [ngClass]="{ 'is-invalid': submitted && f['postal_code'].errors }"
-                     [attr.aria-invalid]="(submitted && f['postal_code'].errors) ? 'true' : 'false'"
-                     [attr.aria-describedby]="(submitted && f['postal_code'].errors) ? 'postal_code-error' : null"
+                     [ngClass]="{ 'is-invalid': (submitted || f['postal_code'].dirty) && f['postal_code'].errors }"
+                     [attr.aria-invalid]="((submitted || f['postal_code'].dirty) && f['postal_code'].errors) ? 'true' : 'false'"
+                     [attr.aria-describedby]="((submitted || f['postal_code'].dirty) && f['postal_code'].errors) ? 'postal_code-error' : null"
                      aria-required="true"
                      type="text"
                      placeholder="{{ t('fields.postal_code.placeholder') }} *"
                      value=""/>
             </div>
-            @if (f['postal_code'].invalid && submitted) {
+            @if (f['postal_code'].invalid && (submitted || f['postal_code'].dirty)) {
               <div data-test="postal_code-error"
                    id="postal_code-error"
                    role="alert"

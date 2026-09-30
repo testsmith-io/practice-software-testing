@@ -189,7 +189,7 @@
       "placeholder": "Ihre Postleitzahl",
       "errors": {
         "required": "Postleitzahl ist verpflichtend",
-        "format": "Max. 5 Nummern nur erlaubt."
+        "format": "Bitte geben Sie eine gültige Postleitzahl für das ausgewählte Land ein."
       }
     },
     "city": {
