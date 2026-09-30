@@ -14,25 +14,38 @@ import {TranslocoDirective} from "@jsverse/transloco";
 import { DateValidators } from 'src/app/shared/validators/date.validators';
 import {PostcodeService} from "../../_services/postcode.service";
 
+// Postcode shape check per country. This MUST stay in sync with the backend
+// source of truth, sprint5/API/app/Services/Postcode/PostcodeFormat.php, so the
+// client and server never disagree about what a valid postcode is. Countries
+// absent here are left unconstrained, exactly like the backend.
 const postcodePatterns: Record<string, RegExp> = {
-  // DACH
-  AT: /^\d{4}$/,
-  DE: /^\d{5}$/,
-  CH: /^\d{4}$/,
-
-  // CEE
   AL: /^\d{4}$/,
-  BG: /^\d{4}$/,
-  HR: /^\d{5}$/,
+  AT: /^\d{4}$/,
+  AU: /^\d{4}$/,
+  BE: /^\d{4}$/,
+  BR: /^\d{5}-?\d{3}$/,
+  CA: /^[A-Za-z]\d[A-Za-z]\s?\d[A-Za-z]\d$/,
+  CH: /^\d{4}$/,
+  CN: /^\d{6}$/,
   CZ: /^\d{3}\s?\d{2}$/,
-  EE: /^\d{5}$/,
-  HU: /^\d{4}$/,
-  LT: /^(LT-?)?\d{5}$/i,
-  LV: /^(LV-?)?\d{4}$/i,
-  PL: /^\d{2}-?\d{3}$/,
-  RO: /^\d{6}$/,
-  SI: /^\d{4}$/,
-  SK: /^\d{3}\s?\d{2}$/,
+  DE: /^\d{5}$/,
+  DK: /^\d{4}$/,
+  ES: /^\d{5}$/,
+  FI: /^\d{5}$/,
+  FR: /^\d{5}$/,
+  GB: /^[A-Za-z]{1,2}\d[A-Za-z\d]?\s?\d[A-Za-z]{2}$/,
+  IE: /^[A-Za-z]\d{2}\s?[A-Za-z\d]{4}$/,
+  IT: /^\d{5}$/,
+  JP: /^\d{3}-?\d{4}$/,
+  NL: /^\d{4}\s?[A-Za-z]{2}$/,
+  NO: /^\d{4}$/,
+  NZ: /^\d{4}$/,
+  PL: /^\d{2}-\d{3}$/,
+  PT: /^\d{4}(-\d{3})?$/,
+  RU: /^\d{6}$/,
+  SE: /^\d{3}\s?\d{2}$/,
+  TR: /^\d{5}$/,
+  US: /^\d{5}(-\d{4})?$/,
 };
 
 @Component({
@@ -111,8 +124,8 @@ export class RegisterComponent implements OnInit {
       return null;
     }
 
-    const country = this.register.get('country')?.value;
-    const postalCode = control.value;
+    const country = (this.register.get('country')?.value ?? '').toString().trim().toUpperCase();
+    const postalCode = (control.value ?? '').toString().trim();
 
     if (!country || !postalCode) {
       return null;
@@ -220,12 +233,21 @@ export class RegisterComponent implements OnInit {
       next: () => {
         this.accountService.redirectToLogin();
       }, error: (err) => {
-        if (err.error === 'Duplicate Entry') {
-          this.error = 'Email is already in use.';
-        } else {
-          this.error = Object.values(err)
-            .map((fieldErrors: any) => fieldErrors.join('\n'))
+        // The service's errorHandler rethrows `error.error` (the response body),
+        // but be defensive and also accept a raw HttpErrorResponse. Support both
+        // a flat {field: string[]} map and Laravel's {message, errors} envelope,
+        // and always fall back to a readable message so nothing is swallowed.
+        const body = err?.error ?? err;
+        const fieldErrors = body?.errors ?? body;
+
+        if (fieldErrors && typeof fieldErrors === 'object') {
+          this.error = Object.values(fieldErrors)
+            .map((messages: any) => Array.isArray(messages) ? messages.join('\n') : String(messages))
             .join('\n');
+        } else if (typeof body === 'string' && body && body !== 'server error.') {
+          this.error = body === 'Duplicate Entry' ? 'Email is already in use.' : body;
+        } else {
+          this.error = 'Registration failed. Please try again.';
         }
       }
     });
