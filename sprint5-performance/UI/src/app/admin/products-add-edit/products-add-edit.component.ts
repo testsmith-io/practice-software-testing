@@ -40,7 +40,7 @@ export class ProductsAddEditComponent implements OnInit {
   images!: Image[];
   id: string;
   selectedImageId: number;
-  selectedImage: any;
+  selectedImage: Image;
   isAddMode: boolean;
   submitted: boolean = false;
   isUpdated: boolean = false;
@@ -113,7 +113,7 @@ export class ProductsAddEditComponent implements OnInit {
 
               this.selectedImageId = x.product_image?.id || x.product_image_id;
               this.selectedImage = this.images.find((el: Image) => {
-                return el?.id == this.selectedImageId;
+                return el?.id === this.selectedImageId;
               });
 
               // Set initial stock validation based on is_rental value
@@ -169,7 +169,7 @@ export class ProductsAddEditComponent implements OnInit {
           this.isUpdated = true;
           this.reset();
         }, error: (err) => {
-          this.error = Object.values(err).join('\r\n');
+          this.error = (Object.values(err) as string[]).join('\r\n');
         }, complete: () => {
           this.hideAlert = false;
         }
@@ -189,7 +189,7 @@ export class ProductsAddEditComponent implements OnInit {
         next: () => {
           this.isUpdated = true;
         }, error: (err) => {
-          this.error = Object.values(err).join('\r\n');
+          this.error = (Object.values(err) as string[]).join('\r\n');
         }, complete: () => {
           this.hideAlert = false;
         }
@@ -202,14 +202,14 @@ export class ProductsAddEditComponent implements OnInit {
     }, 3000);
   }
 
-  setImage(image: any) {
+  setImage(event: Event) {
     this.selectedImage = this.images.find((el: Image) => {
-      return el?.id == this.selectedImageId;
+      return el?.id === this.selectedImageId;
     });
   }
 
   private reset() {
-    for (let name in this.form.controls) {
+    for (const name in this.form.controls) {
       this.form.controls[name].setValue('');
       this.form.controls[name].setErrors(null);
     }

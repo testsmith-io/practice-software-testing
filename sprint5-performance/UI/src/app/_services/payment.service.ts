@@ -11,7 +11,7 @@ import {Observable} from "rxjs";
 export class PaymentService {
   private readonly httpClient = inject(HttpClient);
 
-  validate(api_url: string, payload: any): Observable<any> {
-    return this.httpClient.post(api_url, payload);
+  validate(api_url: string, payload: Record<string, unknown>): Observable<{ message?: string }> {
+    return this.httpClient.post<{ message?: string }>(api_url, payload);
   }
 }

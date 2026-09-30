@@ -15,12 +15,13 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 uses(DatabaseMigrations::class);
 
-//covers(ProductController::class);
+const PRODUCT_ROUTE = '/products';
+
 
 test('retrieve products', function () {
-    $product = addProduct();
+    addProduct();
 
-    $response = $this->getJson('/products');
+    $response = $this->getJson(PRODUCT_ROUTE);
 
     $response
         ->assertStatus(ResponseAlias::HTTP_OK)
@@ -160,9 +161,8 @@ test('add product', function () {
         'is_rental' => false,
         'product_image_id' => $productImage->id];
 
-    $response = $this->postJson('/products', $payload);
+    $response = $this->postJson(PRODUCT_ROUTE, $payload);
 
-    //        $response->dump();
     $response
         ->assertStatus(ResponseAlias::HTTP_CREATED)
         ->assertJsonStructure([
@@ -175,7 +175,7 @@ test('add product', function () {
 });
 
 test('add product required fields', function () {
-    $response = $this->postJson('/products');
+    $response = $this->postJson(PRODUCT_ROUTE);
 
     $response
         ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
@@ -311,10 +311,9 @@ function addProduct(): Collection|Model
     ]);
     $productImage = ProductImage::factory()->create();
 
-    $product = Product::factory()->create([
+    return Product::factory()->create([
         'brand_id' => $brand->id,
         'category_id' => $category->id,
         'product_image_id' => $productImage->id,
         'name' => 'test-product']);
-    return $product;
 }

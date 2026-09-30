@@ -7,7 +7,7 @@
         <div class="card-img-wrapper">
           <img src="assets/img/products/{{product.product_image.file_name}}" class="figure-img img-fluid"
                loading="lazy"
-               alt="A generic square placeholder image with rounded corners in a figure.">
+               alt="{{ product.name }}">
         </div>
         <figcaption class="figure-caption">Photo by <a target="_blank"
                                                        href="{{product.product_image.by_url}}">{{ product.product_image.by_name }}</a>
@@ -47,14 +47,14 @@
                   id="btn-decrease-quantity" (click)="minus()"><i class="fa fa-minus"></i>
           </button>
           <input type="number" min="1" class="form-control" data-test="quantity"
-                 [(ngModel)]="quantity">
+                 aria-label="Quantity" [(ngModel)]="quantity">
           <button class="btn btn-secondary" data-test="increase-quantity"
                   id="btn-increase-quantity" (click)="plus()"><i class="fa fa-plus"></i></button>
         </div>
       }
       @if (product.is_rental) {
         <div>
-          <label class="form-label">Duration (<span id="duration">{{ quantity }}</span> hour(s))</label>
+          <div class="form-label">Duration (<span id="duration">{{ quantity }}</span> hour(s))</div>
           <ngx-slider [(value)]="quantity" [options]="sliderOptions"></ngx-slider>
         </div>
       }

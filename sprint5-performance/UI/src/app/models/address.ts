@@ -3,8 +3,8 @@
 
 export interface Address {
   street?: string;
-  city?: boolean;
-  state?: boolean;
-  country?: boolean;
-  postal_code?: boolean;
+  city?: string;
+  state?: string;
+  country?: string;
+  postal_code?: string;
 }

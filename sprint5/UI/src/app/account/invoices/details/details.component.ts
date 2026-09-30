@@ -61,7 +61,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         ))
       )
       .subscribe((response) => {
-        if (response && response.status === 'COMPLETED') {
+        if (response?.status === 'COMPLETED') {
           this.isDownloadReady = true;
         }
       });

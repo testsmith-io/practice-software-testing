@@ -15,6 +15,9 @@ use Tests\TestCase;
 
 uses(DatabaseMigrations::class);
 
+const INVOICES_PATH = '/invoices';
+const INVOICES_PREFIX = '/invoices/';
+
 //covers(InvoiceController::class);
 
 beforeEach(function () {
@@ -30,7 +33,7 @@ test('admin user can retrieve all invoices', function () {
     Invoice::factory()->count(10)->create();
 
     // Make a GET request to the endpoint
-    $response = $this->getJson('/invoices', $this->headers($this->admin));
+    $response = $this->getJson(INVOICES_PATH, $this->headers($this->admin));
 
     // Assert the correct status and structure of response
     $response->assertStatus(ResponseAlias::HTTP_OK);
@@ -45,7 +48,7 @@ test('regular user can retrieve only their invoices', function () {
     Invoice::factory()->count(5)->create();
 
     // Make a GET request to the endpoint
-    $response = $this->getJson('/invoices', $this->headers($this->customer));
+    $response = $this->getJson(INVOICES_PATH, $this->headers($this->customer));
 
     // Assert the correct status and response structure
     $response->assertStatus(ResponseAlias::HTTP_OK);
@@ -55,7 +58,7 @@ test('regular user can retrieve only their invoices', function () {
 
 test('unauthenticated user cannot retrieve invoices', function () {
     // Make a GET request to the endpoint without authentication
-    $response = $this->getJson('/invoices');
+    $response = $this->getJson(INVOICES_PATH);
 
     // Assert the unauthorized status
     $response->assertStatus(ResponseAlias::HTTP_UNAUTHORIZED);
@@ -104,21 +107,21 @@ test('it creates new invoice successfully bank transfer', function () {
 });
 
 test('admin can retrieve any invoice', function () {
-    $response = $this->getJson('/invoices/' . $this->invoice->id, $this->headers($this->admin));
+    $response = $this->getJson(INVOICES_PREFIX . $this->invoice->id, $this->headers($this->admin));
 
     $response->assertStatus(200);
     $response->assertJson(['id' => $this->invoice->id]);
 });
 
 test('user can retrieve their own invoice', function () {
-    $response = $this->getJson('/invoices/' . $this->invoice->id, $this->headers($this->customer));
+    $response = $this->getJson(INVOICES_PREFIX . $this->invoice->id, $this->headers($this->customer));
 
     $response->assertStatus(200);
     $response->assertJson(['id' => $this->invoice->id]);
 });
 
 test('unauthenticated user cannot retrieve invoice', function () {
-    $response = $this->getJson('/invoices/' . $this->invoice->id);
+    $response = $this->getJson(INVOICES_PREFIX . $this->invoice->id);
 
     $response->assertStatus(ResponseAlias::HTTP_UNAUTHORIZED);
 });
@@ -278,7 +281,7 @@ function createsNewInvoiceSuccessfully(TestCase $testCase, string $paymentMethod
         'billing_postal_code' => '12345'
     ];
 
-    $response = $testCase->postJson('/invoices', $requestData, $testCase->headers($user));
+    $response = $testCase->postJson(INVOICES_PATH, $requestData, $testCase->headers($user));
 
     $response->assertStatus(ResponseAlias::HTTP_CREATED);
 }

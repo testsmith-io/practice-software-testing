@@ -33,7 +33,7 @@ class UpdateCustomer extends BaseFormRequest
             'state' => 'nullable|string|max:40',
             'country' => 'required|string|max:40',
             'postcode' => 'nullable|string|max:10',
-            'phone' => 'nullable|string|max:24',
+            'phone' => 'nullable|string|max:24|regex:/^\+?[0-9\s().-]{7,24}$/',
             'email' => 'required|string|max:60'
         ];
     }

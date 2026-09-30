@@ -3,6 +3,7 @@
 
 import {Injectable} from '@angular/core';
 import {Subject} from "rxjs";
+import {CartItem} from "../models/cart";
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +15,14 @@ export class CartService {
     return JSON.parse(<string>sessionStorage.getItem('cart'))
   }
 
-  addItem(item: any) {
+  addItem(item: CartItem) {
     if (sessionStorage.getItem('cart') == null) {
-      let items: any = [];
+      const items: CartItem[] = [];
       items[0] = item;
       sessionStorage.setItem('cart', JSON.stringify(items));
     } else {
-      let itemsFromStorage = JSON.parse(<string>sessionStorage.getItem('cart'));
-      let itemFound = itemsFromStorage.find((p: { id: any; }) => p.id == item.id);
+      const itemsFromStorage = JSON.parse(<string>sessionStorage.getItem('cart'));
+      const itemFound = itemsFromStorage.some((p: CartItem) => p.id === item.id);
       if (!itemFound) {
         itemsFromStorage.push(item);
         sessionStorage.setItem('cart', JSON.stringify(itemsFromStorage));
@@ -38,7 +39,7 @@ export class CartService {
         if (item.id === id) {
           item.quantity = quantity;
         }
-        item.total = item.id === id ? item.quantity * item.price : item.quantity * item.price;
+        item.total = item.quantity * item.price;
         return item;
       }
     );
@@ -52,7 +53,7 @@ export class CartService {
         if (item.id === id) {
           item.quantity += quantity;
         }
-        item.total = item.id === id ? item.quantity * item.price : item.quantity * item.price;
+        item.total = item.quantity * item.price;
         return item;
       }
     );
@@ -62,19 +63,19 @@ export class CartService {
 
   deleteItem(id: number) {
     let itemsFromStorage = JSON.parse(<string>sessionStorage.getItem('cart'));
-    itemsFromStorage = itemsFromStorage.filter((item: { id: number; }) => item.id != id);
+    itemsFromStorage = itemsFromStorage.filter((item: { id: number; }) => item.id !== id);
     sessionStorage.setItem('cart', JSON.stringify(itemsFromStorage));
     this.storageSub.next('changed');
   }
 
   isItemInCart(id: number) {
-    let itemsFromStorage = JSON.parse(<string>sessionStorage.getItem('cart'));
-    return (itemsFromStorage) ? itemsFromStorage.find((p: { id: number; }) => p.id == id) : false;
+    const itemsFromStorage = JSON.parse(<string>sessionStorage.getItem('cart'));
+    return (itemsFromStorage) ? itemsFromStorage.find((p: { id: number; }) => p.id === id) : false;
   }
 
   getQuantityFromItemInCart(id: number) {
-    let itemsFromStorage = JSON.parse(<string>sessionStorage.getItem('cart'));
-    return (itemsFromStorage) ? itemsFromStorage.find((p: { id: number; }) => p.id == id)?.quantity : 1;
+    const itemsFromStorage = JSON.parse(<string>sessionStorage.getItem('cart'));
+    return (itemsFromStorage) ? itemsFromStorage.find((p: { id: number; }) => p.id === id)?.quantity : 1;
   }
 
   emptyCart() {

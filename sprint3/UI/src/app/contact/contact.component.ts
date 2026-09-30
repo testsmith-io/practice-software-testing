@@ -19,7 +19,7 @@ export class ContactComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   public readonly browserDetect = inject(BrowserDetectorService);
 
-  contact: FormGroup | any;
+  contact: FormGroup;
   submitted: boolean;
   error: string;
   showConfirmation: boolean = false;
@@ -31,7 +31,7 @@ export class ContactComponent implements OnInit {
       {
         first_name: ['', []],
         last_name: ['', []],
-        email: ['', [Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+        email: ['', [Validators.pattern(String.raw`^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$`)]],
         subject: ['', [Validators.required]],
         message: ['', [Validators.required, Validators.minLength(50)]]
       },

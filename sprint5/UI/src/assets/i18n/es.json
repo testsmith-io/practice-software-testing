@@ -402,6 +402,7 @@
       "payment": {
         "title": "Pago",
         "confirm-btn": "Confirmar",
+        "check-payment-btn": "Verificar pago",
         "confirm": "¡Gracias por tu pedido! Tu número de factura es <span id=\"invoice-number\">{{ invoice_number }}</span>.",
         "method-label": "Método de pago",
         "method-required": "El método de pago es obligatorio.",

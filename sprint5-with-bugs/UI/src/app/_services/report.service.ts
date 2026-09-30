@@ -11,8 +11,8 @@ import {Image} from "../models/image";
   providedIn: 'root'
 })
 export class ReportService {
-  private httpClient = inject(HttpClient);
-  private apiURL = environment.apiUrl;
+  private readonly httpClient = inject(HttpClient);
+  private readonly apiURL = environment.apiUrl;
 
   getTotalSalesPerYear(): Observable<any[]> {
     return this.httpClient.get<Image[]>(this.apiURL + `/reports/total-sales-of-years?years=5`)

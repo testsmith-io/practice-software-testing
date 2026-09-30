@@ -1,0 +1,25 @@
+/* Copyright (c) 2024-2026 Testsmith. All rights reserved. See LICENSE for details. */
+
+.ptt-explore-heading {
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+}
+
+/* Whole card is a link, but styled like body text so it reads as part of the
+   app rather than a marketing CTA. Only a subtle underline-on-hover. */
+.ptt-explore-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ptt-explore-link:hover .ptt-explore-title,
+.ptt-explore-link:focus-visible .ptt-explore-title {
+  text-decoration: underline;
+}
+
+.ptt-explore-icon {
+  flex: none;
+  width: 1.1rem;
+  font-size: 1rem;
+  margin-top: 0.15rem;
+}

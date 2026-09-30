@@ -27,9 +27,10 @@ abstract class TestCase extends BaseTestCase
 
     public function __get($key)
     {
-        if ($key === 'faker')
+        if ($key === 'faker') {
             return $this->faker;
-        throw new Exception('Unknown Key Requested');
+        }
+        throw new \InvalidArgumentException('Unknown Key Requested');
     }
 
     protected function headers($user = null): array

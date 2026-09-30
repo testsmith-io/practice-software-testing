@@ -18,10 +18,10 @@ import {NgClass} from "@angular/common";
   styleUrls: []
 })
 export class ForgotPasswordComponent implements OnInit {
-  private formBuilder = inject(FormBuilder);
-  private accountService = inject(CustomerAccountService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly accountService = inject(CustomerAccountService);
 
-  form: FormGroup | any;
+  form: FormGroup;
   isUpdated: boolean = false;
   hideAlert: boolean = false;
   submitted = false;
@@ -50,7 +50,7 @@ export class ForgotPasswordComponent implements OnInit {
       return;
     }
 
-    const payload: any = {
+    const payload: { email: string } = {
       email: this.form.value.email
     };
 

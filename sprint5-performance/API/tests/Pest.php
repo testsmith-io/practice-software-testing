@@ -46,5 +46,5 @@ expect()->extend('toBeOne', function () {
 
 function something()
 {
-    // ..
+    // Intentionally empty: placeholder for shared Pest helpers.
 }

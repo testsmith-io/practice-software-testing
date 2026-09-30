@@ -44,7 +44,7 @@ class PaymentController extends Controller
         }
 
         if ($paymentMethod === 'cash-on-delivery') {
-
+            // No online payment validation required for cash on delivery.
         }
 
         if ($paymentMethod === 'credit-card') {

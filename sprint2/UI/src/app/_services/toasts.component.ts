@@ -3,7 +3,7 @@
 
 import {Component, inject, TemplateRef} from '@angular/core';
 
-import {ToastService} from './toast.service';
+import {ToastService, Toast} from './toast.service';
 import {NgbToast} from "@ng-bootstrap/ng-bootstrap";
 import {NgTemplateOutlet} from "@angular/common";
 
@@ -18,7 +18,7 @@ import {NgTemplateOutlet} from "@angular/common";
         (hidden)="toastService.remove(toast)"
         >
         @if (isTemplate(toast)) {
-          <ng-template [ngTemplateOutlet]="toast.textOrTpl"></ng-template>
+          <ng-template [ngTemplateOutlet]="$any(toast.textOrTpl)"></ng-template>
         } @else {
           {{ toast.textOrTpl }}
         }
@@ -34,7 +34,7 @@ import {NgTemplateOutlet} from "@angular/common";
 export class ToastsComponent {
   toastService = inject(ToastService);
 
-  isTemplate(toast: any) {
+  isTemplate(toast: Toast) {
     return toast.textOrTpl instanceof TemplateRef;
   }
 }

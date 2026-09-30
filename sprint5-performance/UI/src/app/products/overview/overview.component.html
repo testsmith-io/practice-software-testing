@@ -13,7 +13,7 @@
 <div class="row" *transloco="let t">
   <a class="btn btn-secondary d-block d-md-none btn-block mb-3" data-bs-toggle="collapse" data-test="filters"
      href="#filters"
-     role="button" aria-expanded="false" aria-controls="collapseExample">
+     aria-expanded="false" aria-controls="collapseExample">
     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
     {{ t('pages.overview.filters') }}
   </a>
@@ -195,7 +195,7 @@
     } @else {
       <div class="container">
         @for (loader of itemsToLoad; track loader.id) {
-          <div class="card skeleton">
+          <div class="card skeleton" aria-hidden="true">
             <div class="card-img-wrapper">
             </div>
             <div class="card-body">

@@ -37,16 +37,16 @@ export class InvoicesComponent implements OnInit {
   getInvoices() {
     this.invoiceService.getInvoices(this.currentPage)
       .pipe(first())
-      .subscribe(
-        (invoices) => {
+      .subscribe({
+        next: (invoices) => {
           this.results = invoices;
         },
-        (error) => {
+        error: (error) => {
           if (error.status === 401 || error.status === 403) {
             this.navigationService.redirectToLogin();
           }
         }
-      );
+      });
   }
 
   onPageChange(page: number) {

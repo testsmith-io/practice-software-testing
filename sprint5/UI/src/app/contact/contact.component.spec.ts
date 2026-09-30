@@ -97,7 +97,7 @@ describe('ContactComponent', () => {
   it('should set errors for invalid file type and size', () => {
     component.ngOnInit();
     const file = new File([''], 'test.pdf', { type: 'application/pdf' });
-    const event = { target: { files: [file] } };
+    const event = { target: { files: [file] } } as unknown as Event;
 
     component.changeFile(event);
     expect(component.contact.controls['attachment'].errors).toEqual({ incorrectType: true });

@@ -49,12 +49,11 @@ abstract class TestCase extends BaseTestCase
         $category = Category::factory()->create();
         $productImage = ProductImage::factory()->create();
 
-        $product = Product::factory()->create([
+        return Product::factory()->create([
             'brand_id' => $brand->id,
             'category_id' => $category->id,
             'product_image_id' => $productImage->id,
             'is_location_offer' => true]);
-        return $product;
     }
 
     public function addRental(): Collection|Model
@@ -63,11 +62,10 @@ abstract class TestCase extends BaseTestCase
         $category = Category::factory()->create();
         $productImage = ProductImage::factory()->create();
 
-        $product = Product::factory()->create([
+        return Product::factory()->create([
             'brand_id' => $brand->id,
             'category_id' => $category->id,
             'product_image_id' => $productImage->id,
             'is_rental' => true]);
-        return $product;
     }
 }

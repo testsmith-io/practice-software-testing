@@ -27,12 +27,12 @@ import {NgClass} from "@angular/common";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  private formBuilder = inject(FormBuilder);
-  private accountService = inject(CustomerAccountService);
-  private tokenStorage = inject(TokenStorageService);
-  private activatedRoute = inject(ActivatedRoute);
-  private totpAuthService = inject(TotpAuthService);
-  private browser = inject(BrowserService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly accountService = inject(CustomerAccountService);
+  private readonly tokenStorage = inject(TokenStorageService);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly totpAuthService = inject(TotpAuthService);
+  private readonly browser = inject(BrowserService);
 
   form: FormGroup;
   submitted = false;

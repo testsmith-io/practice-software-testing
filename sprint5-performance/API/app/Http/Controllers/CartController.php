@@ -203,7 +203,7 @@ class CartController extends Controller
         ]);
 
         try {
-            $success = $this->cartService->updateCartItemQuantity(
+            $this->cartService->updateCartItemQuantity(
                 $cartId,
                 $request->input('product_id'),
                 $request->input('quantity')

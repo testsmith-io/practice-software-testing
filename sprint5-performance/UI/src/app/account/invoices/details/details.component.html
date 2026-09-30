@@ -47,7 +47,7 @@
               <div class="form-group row">
                 <label for="total" class="col-sm-3 col-form-label">{{ t('pages.checkout.cart.subtotal') }}</label>
                 <div class="col-sm-9">
-                  <input type="text" readonly class="form-control-plaintext" data-test="total" id="subtotal"
+                  <input type="text" readonly class="form-control-plaintext" data-test="total" id="subtotal" aria-label="Subtotal"
                     value="$ {{invoice.subtotal.toFixed(2)}}">
                 </div>
               </div>
@@ -58,7 +58,7 @@
                 ({{ invoice.additional_discount_percentage }}%)</label>
                 <div class="col-sm-9">
                   <input type="text" readonly class="form-control-plaintext" data-test="total"
-                    id="additional_discount_percentage"
+                    id="additional_discount_percentage" aria-label="Additional discount"
                     value="$ {{invoice.additional_discount_amount.toFixed(2)}}">
                 </div>
               </div>
@@ -68,7 +68,7 @@
                 <label for="eco-discount" class="col-sm-3 col-form-label">Eco-Friendly Discount
                 ({{ invoice.eco_discount_percentage }}%)</label>
                 <div class="col-sm-9">
-                  <input type="text" readonly class="form-control-plaintext text-success" data-test="eco-discount"
+                  <input type="text" readonly class="form-control-plaintext text-success" data-test="eco-discount" aria-label="Eco discount"
                     id="eco_discount"
                     value="$ {{invoice.eco_discount_amount.toFixed(2)}}">
                 </div>

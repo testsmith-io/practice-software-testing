@@ -12,29 +12,29 @@ import {Category} from "../models/category";
   providedIn: 'root'
 })
 export class CategoryService {
-  private httpClient = inject(HttpClient);
-  private apiURL = environment.apiUrl;
+  private readonly httpClient = inject(HttpClient);
+  private readonly apiURL = environment.apiUrl;
   private categories$: Observable<Category[]> | null = null;
   private categoriesTree$: Observable<Category[]> | null = null;
 
-  searchCategories(query: string): Observable<any> {
-    let params = new HttpParams()
+  searchCategories(query: string): Observable<Category[]> {
+    const params = new HttpParams()
       .set('q', query);
 
-    return this.httpClient.get(this.apiURL + '/categories/search', {responseType: 'json', params: params});
+    return this.httpClient.get<Category[]>(this.apiURL + '/categories/search', {responseType: 'json', params: params});
   }
 
   getCategoriesTree(): Observable<Category[]> {
     if (!this.categoriesTree$) {
-      this.categoriesTree$ = this.httpClient.get(this.apiURL + `/categories/tree`)
+      this.categoriesTree$ = this.httpClient.get<Category[]>(this.apiURL + `/categories/tree`)
         .pipe(map(this.extractData), shareReplay(1));
     }
     return this.categoriesTree$;
   }
 
   getSubCategoriesTreeBySlug(slug: string): Observable<Category[]> {
-    let params = new HttpParams().set('by_category_slug', slug);
-    return this.httpClient.get(this.apiURL + `/categories/tree`, {params: params})
+    const params = new HttpParams().set('by_category_slug', slug);
+    return this.httpClient.get<Category[]>(this.apiURL + `/categories/tree`, {params: params})
       .pipe(map(this.extractData));
   }
 
@@ -55,8 +55,8 @@ export class CategoryService {
     return this.httpClient.get<Category>(this.apiURL + `/categories/tree/${id}`);
   }
 
-  create(category: Category): Observable<any> {
-    return this.httpClient.post(this.apiURL + '/categories', JSON.stringify(category), {responseType: 'json'})
+  create(category: Category): Observable<Category> {
+    return this.httpClient.post<Category>(this.apiURL + '/categories', JSON.stringify(category), {responseType: 'json'})
       .pipe(
         tap(() => this.invalidateCategoriesCache()),
         catchError(this.errorHandler)
@@ -80,9 +80,9 @@ export class CategoryService {
   }
 
   errorHandler(error: HttpErrorResponse) {
-    return throwError(error.error || "server error.");
+    return throwError(() => error.error || "server error.");
   }
 
-  private extractData = (res: any) => res;
+  private extractData = (res: Category[]): Category[] => res;
 
 }

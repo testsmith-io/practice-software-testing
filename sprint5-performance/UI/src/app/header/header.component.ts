@@ -28,7 +28,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
   private readonly translocoService = inject(TranslocoService);
 
   activeLanguage: string;
-  items: any;
+  items: number;
   role: string = '';
   name: string = '';
   isLoggedIn: boolean;

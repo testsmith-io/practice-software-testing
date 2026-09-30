@@ -21,7 +21,7 @@
             </div>
             @if (cus_email.invalid && cusSubmitted) {
               <div id="email-error" data-test="email-error" class="alert alert-danger">
-                @if (cus_email.errors?.required) {
+                @if (cus_email.errors?.['required']) {
                   <div>{{t('fields.email.errors.required')}}</div>
                 }
                 @if (cus_email.errors?.['email']) {
@@ -43,7 +43,7 @@
             </div>
             @if (cus_password.invalid && cusSubmitted) {
               <div id="password-error" data-test="password-error" class="alert alert-danger">
-                @if (cus_password.errors?.required) {
+                @if (cus_password.errors?.['required']) {
                   <div>{{t('fields.password.errors.required')}}</div>
                 }
                 @if (cus_password.errors?.['minlength'] || cus_password.errors?.['maxlength']) {

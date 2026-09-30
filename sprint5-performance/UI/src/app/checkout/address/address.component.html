@@ -12,7 +12,7 @@
                    data-test="street"
                    class="form-control"
                    id="street"
-                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.street?.errors }" type="text"
+                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('street')?.errors }" type="text"
                    placeholder="{{t('fields.street.placeholder')}} *"/>
           </div>
 
@@ -22,7 +22,7 @@
                    data-test="city"
                    class="form-control"
                    id="city"
-                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.city?.errors }" type="text"
+                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('city')?.errors }" type="text"
                    placeholder="{{t('fields.city.placeholder')}} *"/>
           </div>
 
@@ -32,7 +32,7 @@
                    data-test="state"
                    class="form-control"
                    id="state"
-                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.state?.errors }" type="text"
+                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('state')?.errors }" type="text"
                    placeholder="{{t('fields.state.label')}} *"/>
           </div>
 
@@ -42,7 +42,7 @@
                    data-test="country"
                    class="form-control"
                    id="country"
-                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.country?.errors }" type="text"
+                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('country')?.errors }" type="text"
                    placeholder="{{t('fields.country.placeholder')}} *"/>
           </div>
 
@@ -52,7 +52,7 @@
                    data-test="postal_code"
                    class="form-control"
                    id="postal_code"
-                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.postal_code?.errors }" type="text"
+                   [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('postal_code')?.errors }" type="text"
                    placeholder="{{t('fields.postal_code.placeholder')}} *"/>
           </div>
         </div>

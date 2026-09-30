@@ -15,7 +15,10 @@ use Tests\TestCase;
 
 uses(DatabaseMigrations::class);
 
-//covers(InvoiceController::class);
+const INVOICE_ROUTE = '/invoices';
+const INVOICE_ROUTE_SLASH = '/invoices/';
+const INVOICE_POSTCODE = '1011AB';
+
 
 beforeEach(function () {
     $this->admin = User::factory()->create(['role' => 'admin']);
@@ -30,7 +33,7 @@ test('admin user can retrieve all invoices', function () {
     Invoice::factory()->count(10)->create();
 
     // Make a GET request to the endpoint
-    $response = $this->getJson('/invoices', $this->headers($this->admin));
+    $response = $this->getJson(INVOICE_ROUTE, $this->headers($this->admin));
 
     // Assert the correct status and structure of response
     $response->assertStatus(ResponseAlias::HTTP_OK);
@@ -45,7 +48,7 @@ test('regular user can retrieve only their invoices', function () {
     Invoice::factory()->count(5)->create();
 
     // Make a GET request to the endpoint
-    $response = $this->getJson('/invoices', $this->headers($this->customer));
+    $response = $this->getJson(INVOICE_ROUTE, $this->headers($this->customer));
 
     // Assert the correct status and response structure
     $response->assertStatus(ResponseAlias::HTTP_OK);
@@ -55,7 +58,7 @@ test('regular user can retrieve only their invoices', function () {
 
 test('unauthenticated user cannot retrieve invoices', function () {
     // Make a GET request to the endpoint without authentication
-    $response = $this->getJson('/invoices');
+    $response = $this->getJson(INVOICE_ROUTE);
 
     // Assert the unauthorized status
     $response->assertStatus(ResponseAlias::HTTP_UNAUTHORIZED);
@@ -88,9 +91,9 @@ test('it does not process an order paid with an invalid gift card', function () 
     ]);
 
     // Valid, consistent billing address so the only failure is the gift card.
-    $expected = app(\App\Services\Postcode\PostcodeService::class)->lookup('NL', '1011AB');
+    $expected = app(\App\Services\Postcode\PostcodeService::class)->lookup('NL', INVOICE_POSTCODE);
 
-    $response = $this->postJson('/invoices', [
+    $response = $this->postJson(INVOICE_ROUTE, [
         'cart_id' => $cart->id,
         'payment_method' => 'gift-card',
         'payment_details' => [
@@ -101,7 +104,7 @@ test('it does not process an order paid with an invalid gift card', function () 
         'billing_city' => $expected->city,
         'billing_country' => 'NL',
         'billing_state' => $expected->state,
-        'billing_postal_code' => '1011AB'
+        'billing_postal_code' => INVOICE_POSTCODE
     ], $this->headers($user));
 
     $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
@@ -123,8 +126,6 @@ test('it creates new invoice successfully credit card', function () {
 });
 
 test('it creates new invoice successfully cash', function () {
-    $paymentDetails = [
-    ];
     createsNewInvoiceSuccessfully($this, 'cash-on-delivery', []);
 });
 
@@ -162,7 +163,7 @@ test('it rejects an invoice whose address does not match the selected country', 
         'billing_postal_code' => '1020'
     ];
 
-    $response = $this->postJson('/invoices', $requestData, $this->headers($user));
+    $response = $this->postJson(INVOICE_ROUTE, $requestData, $this->headers($user));
 
     // BaseFormRequest returns validation errors at the top level (not wrapped
     // in an "errors" key), so assert the key directly.
@@ -190,31 +191,31 @@ test('it rejects an invoice whose postcode format does not fit the country', fun
         'billing_city' => 'Wien',
         'billing_country' => 'AT',
         'billing_state' => 'Wien',
-        'billing_postal_code' => '1011AB'
+        'billing_postal_code' => INVOICE_POSTCODE
     ];
 
-    $response = $this->postJson('/invoices', $requestData, $this->headers($user));
+    $response = $this->postJson(INVOICE_ROUTE, $requestData, $this->headers($user));
 
     $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY);
     $response->assertJsonStructure(['billing_country']);
 });
 
 test('admin can retrieve any invoice', function () {
-    $response = $this->getJson('/invoices/' . $this->invoice->id, $this->headers($this->admin));
+    $response = $this->getJson(INVOICE_ROUTE_SLASH . $this->invoice->id, $this->headers($this->admin));
 
     $response->assertStatus(200);
     $response->assertJson(['id' => $this->invoice->id]);
 });
 
 test('user can retrieve their own invoice', function () {
-    $response = $this->getJson('/invoices/' . $this->invoice->id, $this->headers($this->customer));
+    $response = $this->getJson(INVOICE_ROUTE_SLASH . $this->invoice->id, $this->headers($this->customer));
 
     $response->assertStatus(200);
     $response->assertJson(['id' => $this->invoice->id]);
 });
 
 test('unauthenticated user cannot retrieve invoice', function () {
-    $response = $this->getJson('/invoices/' . $this->invoice->id);
+    $response = $this->getJson(INVOICE_ROUTE_SLASH . $this->invoice->id);
 
     $response->assertStatus(ResponseAlias::HTTP_UNAUTHORIZED);
 });
@@ -248,7 +249,7 @@ test('it returns not found if pdf does not exist', function () {
 
 test('it retrieves status for existing invoice', function () {
     $invoiceNumber = 'INV-12345';
-    $download = Download::create([
+    Download::create([
         'name' => $invoiceNumber,
         'status' => 'COMPLETED',
         'type' => 'INVOICE'
@@ -366,7 +367,7 @@ function createsNewInvoiceSuccessfully(TestCase $testCase, string $paymentMethod
     // The city/state must be consistent with the selected country, so derive
     // them from the same postcode lookup the checkout uses (see
     // AddressMatchesCountry).
-    $expected = app(\App\Services\Postcode\PostcodeService::class)->lookup('NL', '1011AB');
+    $expected = app(\App\Services\Postcode\PostcodeService::class)->lookup('NL', INVOICE_POSTCODE);
 
     $requestData = [
         'cart_id' => $cart->id,
@@ -376,10 +377,10 @@ function createsNewInvoiceSuccessfully(TestCase $testCase, string $paymentMethod
         'billing_city' => $expected->city,
         'billing_country' => 'NL',
         'billing_state' => $expected->state,
-        'billing_postal_code' => '1011AB'
+        'billing_postal_code' => INVOICE_POSTCODE
     ];
 
-    $response = $testCase->postJson('/invoices', $requestData, $testCase->headers($user));
+    $response = $testCase->postJson(INVOICE_ROUTE, $requestData, $testCase->headers($user));
 
     $response->assertStatus(ResponseAlias::HTTP_CREATED);
 }

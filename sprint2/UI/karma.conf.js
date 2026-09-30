@@ -1,7 +1,7 @@
 // Copyright (c) 2024-2026 Testsmith. All rights reserved.
 // See LICENSE for details.
 
-module.exports = function (config) {
+module.exports = function karmaConfig(config) {
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
@@ -24,7 +24,7 @@ module.exports = function (config) {
       suppressAll: true
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/my-angular-project'),
+      dir: require('node:path').join(__dirname, './coverage/my-angular-project'),
       subdir: '.',
       reporters: [
         { type: 'html' },

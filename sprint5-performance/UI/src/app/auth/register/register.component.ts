@@ -28,7 +28,7 @@ export class RegisterComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   private readonly accountService = inject(CustomerAccountService);
 
-  register: FormGroup | any;
+  register: FormGroup;
   submitted: boolean;
 
   countries = countriesList;
@@ -47,7 +47,7 @@ export class RegisterComponent implements OnInit {
         state: ['', [Validators.required]],
         country: ['', [Validators.required]],
         postal_code: ['', [Validators.required]],
-        phone: ['', [Validators.required, Validators.pattern(/^[0-9]\d*$/)]],
+        phone: ['', [Validators.required, Validators.pattern(/^\d\d*$/)]],
         email: ['', [Validators.required, Validators.pattern("^(?=.{1,256}$)[a-zA-Z0-9._%+-]{1,64}@[a-zA-Z0-9.-]{1,255}$")]],
         password: ['', [Validators.required,
           PasswordValidators.minLength(8),
@@ -82,7 +82,7 @@ export class RegisterComponent implements OnInit {
     if (/[a-z]/.test(password)) strength += 1;
     if (/[A-Z]/.test(password)) strength += 1;
     if (/\d/.test(password)) strength += 1;
-    if (/[!\"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]/.test(password)) strength += 1;
+    if (/[!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]/.test(password)) strength += 1;
 
     switch (strength) {
       case 1: return 'Weak';
@@ -101,7 +101,6 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
 
-    let newDate = this.register.value.dob.split("-").reverse().join("-");
 
     if (this.register.invalid) {
       return;
@@ -131,8 +130,8 @@ export class RegisterComponent implements OnInit {
         if (err.error === 'Duplicate Entry') {
           this.error = 'Email is already in use.';
         } else {
-          this.error = Object.values(err)
-            .map((fieldErrors: any) => fieldErrors.join('\n'))
+          this.error = Object.values(err as Record<string, string[]>)
+            .map((fieldErrors) => fieldErrors.join('\n'))
             .join('\n');
         }
       }

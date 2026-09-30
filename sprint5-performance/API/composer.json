@@ -92,5 +92,11 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": {
+        "shift-filter-querystring": {
+            "type": "vcs",
+            "url": "https://github.com/laravel-shift/laravel-filter-querystring.git"
+        }
+    }
 }

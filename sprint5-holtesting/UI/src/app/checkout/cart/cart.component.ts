@@ -27,12 +27,12 @@ import {FormsModule} from "@angular/forms";
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
-  private cartService = inject(CartService);
-  private toastr = inject(ToastrService);
-  private customerAccountService = inject(CustomerAccountService);
-  private router = inject(Router);
-  private gaService = inject(GaService);
-  private translocoService = inject(TranslocoService);
+  private readonly cartService = inject(CartService);
+  private readonly toastr = inject(ToastrService);
+  private readonly customerAccountService = inject(CustomerAccountService);
+  private readonly router = inject(Router);
+  private readonly gaService = inject(GaService);
+  private readonly translocoService = inject(TranslocoService);
   readonly MAX_QUANTITY = 99;
   private readonly DELIVERY_COST = 7.90;
   cart: any;

@@ -12,6 +12,8 @@ use Tests\TestCase;
 
 class ContactTest extends TestCase {
     use DatabaseMigrations;
+
+    private const MESSAGES = '/messages';
     public function testSendMessageAsGuest() {
         $user = User::factory()->create();
         $response = $this->addMessage($user);
@@ -37,7 +39,7 @@ class ContactTest extends TestCase {
             'message' => $this->faker->text(55)
         ];
 
-        $response = $this->json('post', '/messages', $payload, $this->headers($user));
+        $response = $this->json('post', self::MESSAGES, $payload, $this->headers($user));
 
         $response->assertStatus(ResponseAlias::HTTP_OK)
             ->assertJsonStructure([
@@ -60,9 +62,9 @@ class ContactTest extends TestCase {
             'message' => $this->faker->text(55)
         ];
 
-        $this->json('post', '/messages', $payload, $this->headers($user));
+        $this->json('post', self::MESSAGES, $payload, $this->headers($user));
 
-        $response = $this->json('get', '/messages', [], $this->headers($user));
+        $response = $this->json('get', self::MESSAGES, [], $this->headers($user));
 
         $response->assertStatus(ResponseAlias::HTTP_OK)
             ->assertJsonStructure([
@@ -90,7 +92,7 @@ class ContactTest extends TestCase {
             'message' => $this->faker->text(55)
         ];
 
-        $message = $this->json('post', '/messages', $payload, $this->headers($user));
+        $message = $this->json('post', self::MESSAGES, $payload, $this->headers($user));
 
         $response = $this->json('get', '/messages/' . $message->json('id'), [], $this->headers($user));
 
@@ -117,8 +119,7 @@ class ContactTest extends TestCase {
             'message' => $this->faker->text(55)
         ];
 
-        $response = $this->post('/messages', $payload, [], $this->headers($user));
-        return $response;
+        return $this->post(self::MESSAGES, $payload, [], $this->headers($user));
     }
 
 }

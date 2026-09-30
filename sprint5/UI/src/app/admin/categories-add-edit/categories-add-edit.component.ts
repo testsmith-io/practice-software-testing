@@ -20,9 +20,9 @@ import {NgClass} from "@angular/common";
   styleUrls: []
 })
 export class CategoriesAddEditComponent implements OnInit {
-  private formBuilder = inject(FormBuilder);
-  private route = inject(ActivatedRoute);
-  private categoryService = inject(CategoryService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
+  private readonly categoryService = inject(CategoryService);
 
   form: FormGroup;
   categories!: Category[];
@@ -87,7 +87,7 @@ export class CategoriesAddEditComponent implements OnInit {
         next: () => {
           this.isUpdated = true;
         }, error: (err) => {
-          this.error = Object.values(err).join('\r\n');
+          this.error = Object.values(err as Record<string, string[] | string>).map(v => Array.isArray(v) ? v.join('\r\n') : v).join('\r\n');
         }, complete: () => {
           this.hideAlert = false;
         }
@@ -101,7 +101,7 @@ export class CategoriesAddEditComponent implements OnInit {
         next: () => {
           this.isUpdated = true;
         }, error: (err) => {
-          this.error = Object.values(err).join('\r\n');
+          this.error = Object.values(err as Record<string, string[] | string>).map(v => Array.isArray(v) ? v.join('\r\n') : v).join('\r\n');
         }, complete: () => {
           this.hideAlert = false;
         }
@@ -115,7 +115,7 @@ export class CategoriesAddEditComponent implements OnInit {
   }
 
   private reset() {
-    for (let name in this.form.controls) {
+    for (const name in this.form.controls) {
       this.form.controls[name].setValue('');
       this.form.controls[name].setErrors(null);
     }

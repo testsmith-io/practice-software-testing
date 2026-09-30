@@ -15,7 +15,15 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 uses(DatabaseMigrations::class);
 
-//covers(UserController::class);
+const USER_STREET = 'Street 1';
+const USER_POSTCODE = '1234AA';
+const USER_EMAIL = 'john@doe.example';
+const USER_PASSWORD = 'Test3r01!';
+const USER_REGISTER_ROUTE = '/users/register';
+const USER_LOGIN_ROUTE = '/users/login';
+const USER_CHANGE_PASSWORD_ROUTE = '/users/change-password';
+const USER_FORGOT_PASSWORD_ROUTE = '/users/forgot-password';
+
 
 beforeEach(function () {
     $this->user = User::factory()->create([
@@ -30,19 +38,19 @@ test('user creation', function () {
         'first_name' => 'John',
         'last_name' => 'Doe',
         'address' => [
-            'street' => 'Street 1',
+            'street' => USER_STREET,
             'city' => 'City',
             'state' => 'State',
             'country' => 'Country',
-            'postal_code' => '1234AA'
+            'postal_code' => USER_POSTCODE
         ],
         'phone' => '0987654321',
         'dob' => '1970-01-01',
-        'email' => 'john@doe.example',
-        'password' => 'Test3r01!'
+        'email' => USER_EMAIL,
+        'password' => USER_PASSWORD
     ];
 
-    $response = $this->postJson('/users/register', $userData);
+    $response = $this->postJson(USER_REGISTER_ROUTE, $userData);
 
     $response->assertStatus(ResponseAlias::HTTP_CREATED)
         ->assertJson([
@@ -64,15 +72,15 @@ test('user creation persists house_number', function () {
             'city' => fake()->city(),
             'state' => fake()->state(),
             'country' => 'NL',
-            'postal_code' => '1234AA',
+            'postal_code' => USER_POSTCODE,
         ],
         'phone' => fake()->numerify('##########'),
         'dob' => '1990-01-15',
         'email' => fake()->unique()->safeEmail(),
-        'password' => 'Test3r01!',
+        'password' => USER_PASSWORD,
     ];
 
-    $response = $this->postJson('/users/register', $userData);
+    $response = $this->postJson(USER_REGISTER_ROUTE, $userData);
 
     $response->assertStatus(ResponseAlias::HTTP_CREATED)
         ->assertJsonPath('address.street', $street)
@@ -108,19 +116,19 @@ test('email sent in local environment', function () {
         'first_name' => 'John',
         'last_name' => 'Doe',
         'address' => [
-            'street' => 'Street 1',
+            'street' => USER_STREET,
             'city' => 'City',
             'state' => 'State',
             'country' => 'Country',
-            'postal_code' => '1234AA'
+            'postal_code' => USER_POSTCODE
         ],
         'phone' => '0987654321',
         'dob' => '1970-01-01',
-        'email' => 'john@doe.example',
-        'password' => 'Test3r01!'
+        'email' => USER_EMAIL,
+        'password' => USER_PASSWORD
     ];
 
-    $this->postJson('/users/register', $userData);
+    $this->postJson(USER_REGISTER_ROUTE, $userData);
 
     Mail::assertQueued(Register::class, function ($mail) use ($userData) {
         return $mail->hasTo($userData['email']);
@@ -128,7 +136,7 @@ test('email sent in local environment', function () {
 });
 
 test('successful login', function () {
-    $response = $this->post('/users/login', [
+    $response = $this->post(USER_LOGIN_ROUTE, [
         'email' => $this->user->email,
         'password' => 'welcome01', // NOSONAR
     ]);
@@ -137,7 +145,7 @@ test('successful login', function () {
 });
 
 test('failed login', function () {
-    $response = $this->post('/users/login', [
+    $response = $this->post(USER_LOGIN_ROUTE, [
         'email' => $this->user->email,
         'password' => 'wrong-password',
     ]);
@@ -150,7 +158,7 @@ test('locked account', function () {
     $this->user->failed_login_attempts = UserController::MAX_LOGIN_ATTEMPTS;
     $this->user->save();
 
-    $response = $this->post('/users/login', [
+    $response = $this->post(USER_LOGIN_ROUTE, [
         'email' => $this->user->email,
         'password' => 'welcome01', // NOSONAR
     ]);
@@ -163,7 +171,7 @@ test('disabled account', function () {
     $this->user->enabled = false;
     $this->user->save();
 
-    $response = $this->post('/users/login', [
+    $response = $this->post(USER_LOGIN_ROUTE, [
         'email' => $this->user->email,
         'password' => 'welcome01', // NOSONAR
     ]);
@@ -284,11 +292,11 @@ test('user can update own information', function () {
         'first_name' => 'UpdatedName',
         'last_name' => 'Doe',
         'address' => [
-            'street' => 'Street 1',
+            'street' => USER_STREET,
             'city' => 'City',
             'country' => 'Country'
         ],
-        'email' => 'john@doe.example',
+        'email' => USER_EMAIL,
     ];
 
     // Make a PUT request to update user information
@@ -301,6 +309,49 @@ test('user can update own information', function () {
     $this->assertDatabaseHas('users', [
         'id' => $this->user->id,
         'first_name' => 'UpdatedName'
+    ]);
+});
+
+test('user cannot update own profile with a non-numeric phone', function () {
+    $newData = [
+        'first_name' => 'UpdatedName',
+        'last_name' => 'Doe',
+        'address' => [
+            'street' => USER_STREET,
+            'city' => 'City',
+            'country' => 'Country'
+        ],
+        'phone' => 'Test',
+        'email' => USER_EMAIL,
+    ];
+
+    $response = $this->putJson("/users/{$this->user->id}", $newData, $this->headers($this->user));
+
+    $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
+        ->assertJsonStructure(['phone']);
+});
+
+test('user can update own profile with a valid phone', function () {
+    $newData = [
+        'first_name' => 'UpdatedName',
+        'last_name' => 'Doe',
+        'address' => [
+            'street' => USER_STREET,
+            'city' => 'City',
+            'country' => 'Country'
+        ],
+        'phone' => '+1 (555) 123-4567',
+        'email' => USER_EMAIL,
+    ];
+
+    $response = $this->putJson("/users/{$this->user->id}", $newData, $this->headers($this->user));
+
+    $response->assertStatus(ResponseAlias::HTTP_OK)
+        ->assertExactJson(['success' => true]);
+
+    $this->assertDatabaseHas('users', [
+        'id' => $this->user->id,
+        'phone' => '+1 (555) 123-4567'
     ]);
 });
 
@@ -331,11 +382,11 @@ test('admin can update any user information', function () {
         'first_name' => 'UpdatedByAdmin',
         'last_name' => 'Doe',
         'address' => [
-            'street' => 'Street 1',
+            'street' => USER_STREET,
             'city' => 'City',
             'country' => 'Country'
         ],
-        'email' => 'john@doe.example',
+        'email' => USER_EMAIL,
     ];
 
     // Make a PUT request to update the other user's information
@@ -356,11 +407,11 @@ test('user cannot update another users information', function () {
         'first_name' => 'John',
         'last_name' => 'Doe',
         'address' => [
-            'street' => 'Street 1',
+            'street' => USER_STREET,
             'city' => 'City',
             'country' => 'Country'
         ],
-        'email' => 'john@doe.example',
+        'email' => USER_EMAIL,
     ];
 
     // Create two users
@@ -369,7 +420,6 @@ test('user cannot update another users information', function () {
     // Make a PUT request to attempt to update the other user's information
     $response = $this->putJson("/users/{$otherUser->id}", $newData, $this->headers($this->user));
 
-    //        dd($response);
     $response->assertStatus(ResponseAlias::HTTP_FORBIDDEN);
 });
 
@@ -422,7 +472,7 @@ test('deletion prevented when user is in use', function () {
 });
 
 test('current password incorrect', function () {
-    $response = $this->postJson('/users/change-password', [
+    $response = $this->postJson(USER_CHANGE_PASSWORD_ROUTE, [
         'current_password' => 'wrongpassword',
         'new_password' => 'newpassword',
         'new_password_confirmation' => 'newpassword'
@@ -436,7 +486,7 @@ test('current password incorrect', function () {
 });
 
 test('new password same as current', function () {
-    $response = $this->postJson('/users/change-password', [
+    $response = $this->postJson(USER_CHANGE_PASSWORD_ROUTE, [
         'current_password' => 'welcome01', // NOSONAR
         'new_password' => 'welcome01', // NOSONAR
         'new_password_confirmation' => 'welcome01' // NOSONAR
@@ -451,7 +501,7 @@ test('new password same as current', function () {
 
 test('new password validation failure', function () {
     // Test with a new password that is too short
-    $response = $this->postJson('/users/change-password', [
+    $response = $this->postJson(USER_CHANGE_PASSWORD_ROUTE, [
         'current_password' => 'welcome01', // NOSONAR
         'new_password' => 'short',
         'new_password_confirmation' => 'short'
@@ -462,10 +512,10 @@ test('new password validation failure', function () {
 });
 
 test('password change success', function () {
-    $response = $this->postJson('/users/change-password', [
+    $response = $this->postJson(USER_CHANGE_PASSWORD_ROUTE, [
         'current_password' => 'welcome01', // NOSONAR
-        'new_password' => 'Test3r01!',
-        'new_password_confirmation' => 'Test3r01!'
+        'new_password' => USER_PASSWORD,
+        'new_password_confirmation' => USER_PASSWORD
     ], $this->headers($this->user));
 
     $response->assertOk()
@@ -475,7 +525,7 @@ test('password change success', function () {
 test('password reset in local environment', function () {
     $this->app['env'] = 'local';
 
-    $response = $this->postJson('/users/forgot-password', [
+    $response = $this->postJson(USER_FORGOT_PASSWORD_ROUTE, [
         'email' => $this->user->email,
     ]);
 
@@ -490,7 +540,7 @@ test('password reset in local environment', function () {
 test('password reset in non local environment', function () {
     $this->app['env'] = 'testing';
 
-    $response = $this->postJson('/users/forgot-password', [
+    $response = $this->postJson(USER_FORGOT_PASSWORD_ROUTE, [
         'email' => $this->user->email,
     ]);
 
@@ -501,7 +551,7 @@ test('password reset in non local environment', function () {
 });
 
 test('email does not exist', function () {
-    $response = $this->postJson('/users/forgot-password', [
+    $response = $this->postJson(USER_FORGOT_PASSWORD_ROUTE, [
         'email' => 'nonexistent@example.com',
     ]);
 

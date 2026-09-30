@@ -26,8 +26,8 @@ export class AddressComponent implements OnInit, OnDestroy {
 
   @Output() cusAddressChange = new EventEmitter<FormGroup>();
   @Input() address: FormGroup;
-  cusAddress: FormGroup | any;
-  private subscription: Subscription = new Subscription();
+  cusAddress: FormGroup;
+  private readonly subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
     this.initializeForm();

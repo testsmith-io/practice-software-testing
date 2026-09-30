@@ -85,6 +85,9 @@
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
+                    "409": {
+                        "$ref": "#/components/responses/DuplicateConflictResponse"
+                    },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
@@ -169,6 +172,9 @@
                     },
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/DuplicateConflictResponse"
                     },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntityResponse"
@@ -370,6 +376,9 @@
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
+                    "409": {
+                        "$ref": "#/components/responses/DuplicateConflictResponse"
+                    },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
@@ -454,6 +463,9 @@
                     },
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/DuplicateConflictResponse"
                     },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntityResponse"
@@ -866,13 +878,13 @@
                                 "properties": {
                                     "status": {
                                         "type": "string",
+                                        "example": "IN_PROGRESS",
                                         "enum": [
                                             "NEW",
                                             "ON_HOLD",
                                             "IN_PROGRESS",
                                             "RESOLVED"
-                                        ],
-                                        "example": "IN_PROGRESS"
+                                        ]
                                     }
                                 },
                                 "type": "object"
@@ -976,6 +988,9 @@
                     },
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
+                    },
+                    "409": {
+                        "$ref": "#/components/responses/DuplicateConflictResponse"
                     },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntityResponse"
@@ -1366,9 +1381,9 @@
                                     "status_message": {
                                         "description": "A message describing the status",
                                         "type": "string",
+                                        "nullable": true,
                                         "maxLength": 50,
-                                        "minLength": 5,
-                                        "nullable": true
+                                        "minLength": 5
                                     }
                                 },
                                 "type": "object"
@@ -2467,6 +2482,9 @@
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedResponse"
                     },
+                    "409": {
+                        "$ref": "#/components/responses/DuplicateConflictResponse"
+                    },
                     "403": {
                         "description": "Forbidden"
                     }
@@ -2824,6 +2842,9 @@
                     "405": {
                         "$ref": "#/components/responses/MethodNotAllowedResponse"
                     },
+                    "409": {
+                        "$ref": "#/components/responses/DuplicateConflictResponse"
+                    },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableEntityResponse"
                     },
@@ -2977,6 +2998,10 @@
                         "description": "URL part, words separated by hyphen",
                         "type": "string",
                         "example": "new-category"
+                    },
+                    "parent_id": {
+                        "type": "string",
+                        "nullable": true
                     }
                 },
                 "type": "object"
@@ -2988,7 +3013,8 @@
                         "type": "integer"
                     },
                     "parent_id": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                     },
                     "name": {
                         "type": "string",
@@ -3014,7 +3040,8 @@
                         "type": "integer"
                     },
                     "parent_id": {
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "name": {
                         "type": "string",
@@ -3050,28 +3077,33 @@
             "ContactRequest": {
                 "title": "ContactRequest",
                 "required": [
-                    "name"
+                    "subject",
+                    "message"
                 ],
                 "properties": {
                     "name": {
-                        "description": "If set, Authorization header is required",
+                        "description": "Sender name",
                         "type": "string",
-                        "example": "John Doe"
+                        "example": "John Doe",
+                        "maxLength": 120
                     },
                     "email": {
-                        "description": "",
+                        "description": "Required when not authenticated",
                         "type": "string",
-                        "example": "john@doe.example"
+                        "example": "john@doe.example",
+                        "maxLength": 120
                     },
                     "subject": {
                         "description": "",
                         "type": "string",
-                        "example": "website"
+                        "example": "website",
+                        "maxLength": 120
                     },
                     "message": {
                         "description": "",
                         "type": "string",
-                        "example": "Something is wrong with the website."
+                        "example": "Something is wrong with the website.",
+                        "maxLength": 250
                     }
                 },
                 "type": "object"
@@ -3245,16 +3277,17 @@
             "FavoriteResponse": {
                 "title": "FavoriteResponse",
                 "properties": {
-                    "product": {
-                        "type": "string",
-                        "example": "new-brand"
+                    "product_id": {
+                        "type": "integer",
+                        "example": 1234
                     },
-                    "created_at": {
-                        "type": "string",
-                        "example": "2022-08-01 08:24:56"
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1234
                     },
                     "id": {
-                        "$ref": "#/components/schemas/ProductResponse"
+                        "type": "integer",
+                        "example": 1234
                     }
                 },
                 "type": "object"
@@ -3447,12 +3480,23 @@
                         "example": 1
                     },
                     "is_location_offer": {
-                        "type": "boolean",
+                        "type": "integer",
                         "example": 1
                     },
                     "is_rental": {
-                        "type": "boolean",
+                        "type": "integer",
                         "example": 0
+                    },
+                    "co2_rating": {
+                        "type": "string",
+                        "example": "B",
+                        "enum": [
+                            "A",
+                            "B",
+                            "C",
+                            "D",
+                            "E"
+                        ]
                     }
                 },
                 "type": "object"
@@ -3477,12 +3521,27 @@
                         "example": 9.99
                     },
                     "is_location_offer": {
-                        "type": "boolean",
+                        "type": "integer",
                         "example": 1
                     },
                     "is_rental": {
-                        "type": "boolean",
+                        "type": "integer",
                         "example": 0
+                    },
+                    "co2_rating": {
+                        "type": "string",
+                        "example": "B",
+                        "enum": [
+                            "A",
+                            "B",
+                            "C",
+                            "D",
+                            "E"
+                        ]
+                    },
+                    "is_eco_friendly": {
+                        "type": "boolean",
+                        "example": true
                     },
                     "brand": {
                         "$ref": "#/components/schemas/BrandResponse"
@@ -3569,6 +3628,10 @@
                     "email": {
                         "type": "string",
                         "example": "john@doe.example"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "super-secret"
                     }
                 },
                 "type": "object"
@@ -3714,6 +3777,42 @@
             },
             "UnprocessableEntityResponse": {
                 "description": "Returns when the server was not able to process the content"
+            },
+            "DuplicateConflictResponse": {
+                "description": "The resource conflicts with an existing one (e.g. unique slug already taken). Body is either a field-level MessageBag (when caught by validation) or a single message (when caught by the Handler from a race / FormRequest bypass).",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "oneOf": [
+                                {
+                                    "description": "Field-level conflict from the unique: validator rule",
+                                    "type": "object",
+                                    "example": {
+                                        "slug": [
+                                            "A brand already exists with this slug."
+                                        ]
+                                    },
+                                    "additionalProperties": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                {
+                                    "description": "Generic conflict from the global Handler (race / bypass)",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Duplicate Entry"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            ]
+                        }
+                    }
+                }
             }
         },
         "securitySchemes": {
@@ -3724,5 +3823,47 @@
                 "scheme": "bearer"
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Brand",
+            "description": "Brand"
+        },
+        {
+            "name": "Category",
+            "description": "Category"
+        },
+        {
+            "name": "Contact",
+            "description": "Contact"
+        },
+        {
+            "name": "Favorite",
+            "description": "Favorite"
+        },
+        {
+            "name": "Image",
+            "description": "Image"
+        },
+        {
+            "name": "Invoice",
+            "description": "Invoice"
+        },
+        {
+            "name": "Payment",
+            "description": "Payment"
+        },
+        {
+            "name": "Product",
+            "description": "Product"
+        },
+        {
+            "name": "Report",
+            "description": "Report"
+        },
+        {
+            "name": "User",
+            "description": "User"
+        }
+    ]
 }

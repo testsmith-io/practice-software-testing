@@ -83,7 +83,7 @@ export class CustomerAccountService {
   }
 
   errorHandler(error: HttpErrorResponse) {
-    return throwError(error.error || "server error.");
+    return throwError(() => error.error || "server error.");
   }
 
   redirectToAccount() {

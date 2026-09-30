@@ -59,6 +59,10 @@ curl -X QUERY http://localhost:8091/products \
   QUERY support and the accepted query format.
 - QUERY is not a CORS-safelisted method, so browsers send an `OPTIONS`
   preflight first; the API's CORS configuration allows it.
+- Every endpoint also answers a direct (non-preflight) `OPTIONS` request —
+  e.g. `curl -X OPTIONS http://localhost:8091/products` — with **204 No
+  Content** and an `Allow` header listing its supported methods, including
+  `QUERY` where applicable.
 
 ## Where it is implemented
 

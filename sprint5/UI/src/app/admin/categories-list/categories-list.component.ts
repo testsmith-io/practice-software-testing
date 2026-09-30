@@ -24,7 +24,7 @@ export class CategoriesListComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
 
   categories!: Category[];
-  searchForm: FormGroup | any;
+  searchForm: FormGroup;
 
   ngOnInit(): void {
     this.getCategories();
@@ -36,7 +36,7 @@ export class CategoriesListComponent implements OnInit {
   }
 
   search() {
-    let query = this.searchForm.controls['query'].value;
+    const query = this.searchForm.controls['query'].value;
     this.categoryService.searchCategories(query)
       .pipe(first())
       .subscribe((categories) => this.categories = categories);

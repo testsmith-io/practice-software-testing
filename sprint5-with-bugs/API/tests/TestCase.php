@@ -31,8 +31,9 @@ abstract class TestCase extends BaseTestCase
 
     public function __get($key)
     {
-        if ($key === 'faker')
+        if ($key === 'faker') {
             return $this->faker;
+        }
         throw new Exception('Unknown Key Requested');
     }
 
@@ -57,12 +58,11 @@ abstract class TestCase extends BaseTestCase
         $category = Category::factory()->create();
         $productImage = ProductImage::factory()->create();
 
-        $product = Product::factory()->create([
+        return Product::factory()->create([
             'brand_id' => $brand->id,
             'category_id' => $category->id,
             'product_image_id' => $productImage->id,
             'is_location_offer' => true]);
-        return $product;
     }
 
     public function addRental(): \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model {
@@ -70,11 +70,10 @@ abstract class TestCase extends BaseTestCase
         $category = Category::factory()->create();
         $productImage = ProductImage::factory()->create();
 
-        $product = Product::factory()->create([
+        return Product::factory()->create([
             'brand_id' => $brand->id,
             'category_id' => $category->id,
             'product_image_id' => $productImage->id,
             'is_rental' => true]);
-        return $product;
     }
 }

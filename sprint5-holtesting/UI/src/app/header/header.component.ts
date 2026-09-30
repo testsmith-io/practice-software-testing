@@ -22,10 +22,10 @@ import {UpperCasePipe} from "@angular/common";
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnDestroy, OnInit {
-  private auth = inject(CustomerAccountService);
-  private cartService = inject(CartService);
-  private changeDetectorRef = inject(ChangeDetectorRef);
-  private translocoService = inject(TranslocoService);
+  private readonly auth = inject(CustomerAccountService);
+  private readonly cartService = inject(CartService);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly translocoService = inject(TranslocoService);
 
   activeLanguage: string;
   items: any;

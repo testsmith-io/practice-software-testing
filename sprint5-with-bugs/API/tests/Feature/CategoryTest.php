@@ -17,10 +17,12 @@ use Tests\TestCase;
 class CategoryTest extends TestCase {
     use DatabaseMigrations;
 
+    private const CATEGORIES = '/categories';
+
     public function testRetrieveCategories() {
         Category::factory()->create();
 
-        $response = $this->getJson('/categories');
+        $response = $this->getJson(self::CATEGORIES);
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
@@ -81,7 +83,7 @@ class CategoryTest extends TestCase {
         $payload = ['name' => 'new',
             'slug' => 'some description'];
 
-        $response = $this->postJson('/categories', $payload);
+        $response = $this->postJson(self::CATEGORIES, $payload);
 
         $response
             ->assertStatus(ResponseAlias::HTTP_CREATED)
@@ -93,7 +95,7 @@ class CategoryTest extends TestCase {
     }
 
     public function testAddCategoryRequiredFields() {
-        $response = $this->postJson('/categories');
+        $response = $this->postJson(self::CATEGORIES);
 
         $response
             ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)

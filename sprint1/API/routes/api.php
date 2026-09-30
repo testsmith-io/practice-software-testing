@@ -8,6 +8,7 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
+defined('ID_PARAM') || define('ID_PARAM', '/{id}');
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -46,7 +47,7 @@ Route::get('/status', function () {
 Route::middleware('cache.headers:public;max_age=120;etag')->group(function () {
     Route::controller(BrandController::class)->prefix('brands')->group(function () {
         Route::get('', 'index');
-        Route::get('/{id}', 'show');
+        Route::get(ID_PARAM, 'show');
     });
 
     Route::controller(CategoryController::class)->prefix('categories')->group(function () {
@@ -61,26 +62,26 @@ Route::middleware('cache.headers:public;max_age=120;etag')->group(function () {
 
     Route::controller(ProductController::class)->prefix('products')->group(function () {
         Route::get('', 'index');
-        Route::get('/{id}', 'show');
+        Route::get(ID_PARAM, 'show');
         Route::get('/{id}/related', 'showRelated');
     });
 });
 
 Route::controller(BrandController::class)->prefix('brands')->group(function () {
     Route::post('', 'store');
-    Route::put('/{id}', 'update');
-    Route::delete('/{id}', 'destroy');
+    Route::put(ID_PARAM, 'update');
+    Route::delete(ID_PARAM, 'destroy');
 });
 
 Route::controller(CategoryController::class)->prefix('categories')->group(function () {
     Route::post('', 'store');
-    Route::put('/{id}', 'update');
-    Route::delete('/{id}', 'destroy');
+    Route::put(ID_PARAM, 'update');
+    Route::delete(ID_PARAM, 'destroy');
 });
 
 Route::controller(ProductController::class)->prefix('products')->group(function () {
     Route::post('', 'store');
-    Route::put('/{id}', 'update');
-    Route::delete('/{id}', 'destroy');
+    Route::put(ID_PARAM, 'update');
+    Route::delete(ID_PARAM, 'destroy');
 });
 

@@ -35,12 +35,12 @@ export class ProductSpecService {
     return this.httpClient.post<ProductSpec>(`${this.apiUrl}/products/${productId}/specs`, spec);
   }
 
-  updateSpec(productId: string, specId: string, spec: Partial<ProductSpec>): Observable<any> {
-    return this.httpClient.put(`${this.apiUrl}/products/${productId}/specs/${specId}`, spec);
+  updateSpec(productId: string, specId: string, spec: Partial<ProductSpec>): Observable<ProductSpec> {
+    return this.httpClient.put<ProductSpec>(`${this.apiUrl}/products/${productId}/specs/${specId}`, spec);
   }
 
-  deleteSpec(productId: string, specId: string): Observable<any> {
-    return this.httpClient.delete(`${this.apiUrl}/products/${productId}/specs/${specId}`);
+  deleteSpec(productId: string, specId: string): Observable<void> {
+    return this.httpClient.delete<void>(`${this.apiUrl}/products/${productId}/specs/${specId}`);
   }
 
   getSpecNames(): Observable<SpecNameGroup[]> {

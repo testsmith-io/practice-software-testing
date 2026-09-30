@@ -6,7 +6,7 @@
       <h3>Login</h3>
       <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete=off data-test="login-form">
         <div class="input-group mb-3">
-          <input formControlName="email"
+          <input formControlName="email" aria-label="Email"
             class="form-control"
             id="email"
             data-test="email"
@@ -17,7 +17,7 @@
         @if (email.invalid && submitted) {
           <div data-test="email-error"
             class="alert alert-danger">
-            @if (email.errors?.required) {
+            @if (email.errors?.['required']) {
               <div>
                 E-mail is required.
               </div>
@@ -30,7 +30,7 @@
           </div>
         }
         <div class="input-group mb-3">
-          <input formControlName="password"
+          <input formControlName="password" aria-label="Password"
             class="form-control"
             id="password"
             data-test="password"
@@ -40,7 +40,7 @@
         @if (password.invalid && submitted) {
           <div data-test="password-error"
             class="alert alert-danger">
-            @if (password.errors?.required) {
+            @if (password.errors?.['required']) {
               <div>
                 Password is required.
               </div>

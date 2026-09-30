@@ -102,7 +102,7 @@ export class UsersAddEditComponent implements OnInit {
         next: () => {
           this.isUpdated = true;
         }, error: (err) => {
-          this.error = Object.values(err).join('\r\n');
+          this.error = (Object.values(err) as string[]).join('\r\n');
         }, complete: () => {
           this.hideAlert = false;
           this.reset();
@@ -120,7 +120,7 @@ export class UsersAddEditComponent implements OnInit {
         next: () => {
           this.isUpdated = true;
         }, error: (err) => {
-          this.error = Object.values(err).join('\r\n');
+          this.error = (Object.values(err) as string[]).join('\r\n');
         }, complete: () => {
           this.hideAlert = false;
         }
@@ -134,7 +134,7 @@ export class UsersAddEditComponent implements OnInit {
   }
 
   private reset() {
-    for (let name in this.form.controls) {
+    for (const name in this.form.controls) {
       this.form.controls[name].setValue('');
       this.form.controls[name].setErrors(null);
     }

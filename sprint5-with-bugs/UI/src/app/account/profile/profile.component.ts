@@ -33,16 +33,18 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.customerAccountService.getDetails()
       .pipe(first())
-      .subscribe((profile) => {
+      .subscribe({
+        next: (profile) => {
           this.id = profile.id;
           this.profileForm.patchValue(profile);
         },
-        (error) => {
+        error: (error) => {
           if (error.status === 401 || error.status === 403) {
             window.localStorage.removeItem('TOKEN_KEY');
             window.location.href = '/#/auth/login';
           }
-        });
+        }
+      });
 
     this.profileForm = new FormGroup({
       first_name: new FormControl('', [Validators.required]),

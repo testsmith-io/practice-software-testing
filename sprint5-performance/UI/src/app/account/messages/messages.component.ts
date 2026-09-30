@@ -47,17 +47,17 @@ export class MessagesComponent implements OnInit {
   getMessages() {
     this.messageService.getMessages(this.currentPage)
       .pipe(first())
-      .subscribe(
-        (messages) => {
+      .subscribe({
+        next: (messages) => {
           this.results = messages
         },
-        (error) => {
+        error: (error) => {
           if (error.status === 401 || error.status === 403) {
             window.localStorage.removeItem('TOKEN_KEY');
             window.location.href = '/auth/login';
           }
         }
-      );
+      });
   }
 
   onPageChange(page: number) {
@@ -68,7 +68,7 @@ export class MessagesComponent implements OnInit {
 
   handleLinkClick(event: Event) {
     const target = event.target as HTMLElement;
-    if (target && target.id === 'contact-link') {
+    if (target?.id === 'contact-link') {
       this.router.navigate(['/contact']);
     }
   }

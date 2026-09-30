@@ -3,6 +3,7 @@
 
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Subject, takeUntil} from 'rxjs';
+import {HttpErrorResponse} from '@angular/common/http';
 import {FavoriteService} from "../../_services/favorite.service";
 import {Favorite} from "../../models/favorite";
 import {RedirectService} from "../../_services/redirect.service";
@@ -58,7 +59,7 @@ export class FavoritesComponent implements OnInit, OnDestroy {
       });
   }
 
-  private handleError(error: any): void {
+  private handleError(error: HttpErrorResponse): void {
     if (error.status === 401 || error.status === 403) {
       this.tokenStorage.removeToken();
       this.redirectService.redirectTo('/auth/login');

@@ -5,17 +5,17 @@
   <h2 data-test="page-title">{{ t('pages.overview.category') }}: {{ slug.replace('-', ' ') | titlecase }}</h2>
 </div>
 <div class="row my-4" *transloco="let t">
-  <a class="btn btn-secondary d-block d-md-none btn-block mb-3" data-bs-toggle="collapse" data-test="filters"
-     href="#filters"
-     role="button" aria-expanded="false" aria-controls="collapseExample">
+  <button type="button" class="btn btn-secondary d-block d-md-none btn-block mb-3" data-bs-toggle="collapse" data-test="filters"
+     data-bs-target="#filters"
+     aria-expanded="false" aria-controls="collapseExample">
     <fa-icon [icon]="['fas', 'filter']"></fa-icon> {{ t('pages.overview.filters') }}
-  </a>
+  </button>
   <div data-test="filters" id="filters" class="collapse d-md-block col-md-3 mb-3">
     <h4 class="grid-title"><fa-icon [icon]="['fas', 'arrows-up-down']"></fa-icon> {{ t('pages.overview.sort') }}</h4>
     <hr>
     <form autocomplete=off>
       <div class="input-group mb-3">
-        <select data-test="sort" (change)="changeSorting($event)" class="form-select">
+        <select data-test="sort" (change)="changeSorting($event)" class="form-select" aria-label="Sort products">
           <option value=""></option>
           <option value="name,asc">{{ t('pages.overview.sort-options.name-asc') }}</option>
           <option value="name,desc">{{ t('pages.overview.sort-options.name-desc') }}</option>

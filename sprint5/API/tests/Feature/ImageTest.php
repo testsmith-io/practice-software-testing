@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 uses(DatabaseMigrations::class);
 
-//covers(ImageController::class);
 
 test('retrieve images', function () {
     ProductImage::factory()->create();

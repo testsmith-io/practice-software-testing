@@ -9,8 +9,8 @@ import {catchError} from "rxjs/operators";
 
 @Injectable()
 export class AdminAuthGuard implements CanActivate {
-  constructor(private auth: CustomerAccountService,
-              private router: Router) {
+  constructor(private readonly auth: CustomerAccountService,
+              private readonly router: Router) {
   }
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {

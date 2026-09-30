@@ -395,6 +395,7 @@
       "payment": {
         "title": "Payment",
         "confirm-btn": "Confirm",
+        "check-payment-btn": "Check payment",
         "confirm": "Thanks for your order! Your invoice number is <span id=\"invoice-number\">{{ invoice_number }}</span>.",
         "method-label": "Payment Method",
         "method-required": "Payment method is required.",

@@ -10,12 +10,12 @@
 
 </div>
 <div class="row" *transloco="let t">
-  <a class="btn btn-secondary d-block d-md-none btn-block mb-3" data-bs-toggle="collapse" data-test="filters"
-     href="#filters"
-     role="button" aria-expanded="false" aria-controls="collapseExample">
+  <button type="button" class="btn btn-secondary d-block d-md-none btn-block mb-3" data-bs-toggle="collapse" data-test="filters"
+     data-bs-target="#filters"
+     aria-expanded="false" aria-controls="collapseExample">
     <fa-icon [icon]="['fas', 'filter']"></fa-icon>
     {{ t('pages.overview.filters') }}
-  </a>
+  </button>
   <div data-test="filters" id="filters" class="collapse d-md-block col-md-3 mb-3">
     <h4 class="grid-title">
       <fa-icon [icon]="['fas', 'arrows-up-down']"></fa-icon>

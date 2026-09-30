@@ -101,19 +101,19 @@ export class AverageSalesWeekComponent implements OnInit {
     this.getData('2025')
   }
 
-  selectYear(year: any) {
-    this.getData(year.target.value)
+  selectYear(year: Event) {
+    this.getData((year.target as HTMLSelectElement).value)
   }
 
   getData(year: string) {
     this.reportService.getAverageSalesPerWeek(year).subscribe(res => {
-      let labels = res.map((item) => {
+      const labels = res.map((item) => {
         return item['week'];
       });
-      let data = res.map((item) => {
+      const data = res.map((item) => {
         return item['average'].toFixed(2);
       });
-      let amount = res.map((item) => {
+      const amount = res.map((item) => {
         return item['amount'];
       });
 

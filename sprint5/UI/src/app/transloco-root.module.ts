@@ -16,7 +16,7 @@ function getDefaultLanguage(): string {
   }
 
   // Detect browser language
-  const browserLang = navigator.language || (navigator as any).userLanguage;
+  const browserLang = navigator.language || (navigator as Navigator & { userLanguage?: string }).userLanguage;
   if (browserLang) {
     // Extract the primary language code (e.g., 'en-US' -> 'en')
     const langCode = browserLang.split('-')[0].toLowerCase();

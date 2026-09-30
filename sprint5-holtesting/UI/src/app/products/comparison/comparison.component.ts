@@ -23,8 +23,8 @@ import {FormsModule} from "@angular/forms";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ComparisonComponent implements OnInit {
-  private comparisonService = inject(ComparisonService);
-  private cdr = inject(ChangeDetectorRef);
+  private readonly comparisonService = inject(ComparisonService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   products: ComparisonProduct[] = [];
   loading = true;

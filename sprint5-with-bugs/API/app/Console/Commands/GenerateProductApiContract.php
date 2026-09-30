@@ -14,6 +14,7 @@ use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class GenerateProductApiContract extends Command
 {
+    private const BRAND_NAME_1 = 'Brand name 1';
     /**
      * The name and signature of the console command.
      *
@@ -87,7 +88,7 @@ class GenerateProductApiContract extends Command
                         ],
                         'brand' => [
                             'id' => 1,
-                            'name' => 'Brand name 1',
+                            'name' => self::BRAND_NAME_1,
                             'slug' => 'brand-name-1'
                         ]
                     ],
@@ -119,7 +120,7 @@ class GenerateProductApiContract extends Command
                         ],
                         'brand' => [
                             'id' => 1,
-                            'name' => 'Brand name 1',
+                            'name' => self::BRAND_NAME_1,
                             'slug' => 'brand-name-1'
                         ]
                     ]
@@ -177,7 +178,7 @@ class GenerateProductApiContract extends Command
                         ],
                         'brand' => [
                             'id' => 1,
-                            'name' => 'Brand name 1',
+                            'name' => self::BRAND_NAME_1,
                             'slug' => 'brand-name-1'
                         ]
                     ],
@@ -209,7 +210,7 @@ class GenerateProductApiContract extends Command
                         ],
                         'brand' => [
                             'id' => 1,
-                            'name' => 'Brand name 1',
+                            'name' => self::BRAND_NAME_1,
                             'slug' => 'brand-name-1'
                         ]
                     ],
@@ -241,7 +242,7 @@ class GenerateProductApiContract extends Command
                         ],
                         'brand' => [
                             'id' => 1,
-                            'name' => 'Brand name 1',
+                            'name' => self::BRAND_NAME_1,
                             'slug' => 'brand-name-1'
                         ]
                     ]

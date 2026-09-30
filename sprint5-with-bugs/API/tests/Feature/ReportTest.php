@@ -11,25 +11,26 @@ use Tests\TestCase;
 
 class ReportTest extends TestCase
 {
+    private const NETHERLANDS = 'The Netherlands';
 
     public function setUp(): void
     {
         parent::setUp();
 
         $this->admin = User::factory()->create([
-            'password' => bcrypt($password = 'welcome01'),
+            'password' => bcrypt('welcome01'),
             'role' => 'admin'
         ]);
 
         // Arrange: Create test invoices
         Invoice::factory()->create([
             'total' => 100.00,
-            'billing_country' => 'The Netherlands'
+            'billing_country' => self::NETHERLANDS
         ]);
 
         Invoice::factory()->create([
             'total' => 150.00,
-            'billing_country' => 'The Netherlands'
+            'billing_country' => self::NETHERLANDS
         ]);
 
         Invoice::factory()->create([
@@ -45,7 +46,7 @@ class ReportTest extends TestCase
         // Assert: Check if the response is as expected
         $response->assertStatus(ResponseAlias::HTTP_OK);
         $response->assertJsonFragment(
-            ['billing_country' => 'The Netherlands', 'total_sales' => 250.00]
+            ['billing_country' => self::NETHERLANDS, 'total_sales' => 250.00]
         );
         $response->assertJsonFragment(
             ['billing_country' => 'USA', 'total_sales' => 200.00]

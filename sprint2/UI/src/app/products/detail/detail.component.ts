@@ -3,6 +3,7 @@
 
 import {Component, inject, OnInit} from '@angular/core';
 import {ActivatedRoute, RouterLink} from "@angular/router";
+import {Subscription} from "rxjs";
 import {Product} from "../../models/product";
 import {ProductService} from "../../_services/product.service";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
@@ -24,7 +25,7 @@ export class DetailComponent implements OnInit {
   product: Product;
   quantity: number = 1;
   relatedProducts: Product[];
-  private sub: any;
+  private sub: Subscription;
   private id: number;
 
   ngOnInit(): void {

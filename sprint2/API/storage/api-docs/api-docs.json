@@ -1305,5 +1305,23 @@
                 }
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Brand",
+            "description": "Brand"
+        },
+        {
+            "name": "Category",
+            "description": "Category"
+        },
+        {
+            "name": "Image",
+            "description": "Image"
+        },
+        {
+            "name": "Product",
+            "description": "Product"
+        }
+    ]
 }

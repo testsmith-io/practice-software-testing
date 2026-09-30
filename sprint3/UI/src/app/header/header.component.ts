@@ -19,7 +19,7 @@ export class HeaderComponent implements OnDestroy, OnInit {
   private readonly cartService = inject(CartService);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
-  items: any;
+  items: number;
   role: string = '';
   name: string = '';
   isLoggedIn: boolean;
@@ -40,10 +40,11 @@ export class HeaderComponent implements OnDestroy, OnInit {
     this.subscription.unsubscribe();
   }
 
-  getCartItems() {
-    let items = this.cartService.getItems();
-    if (items != null && items.length) {
-      return items.map((item: { is_rental: number, quantity: number }) => (item.is_rental === 1) ? 1 : item.quantity).reduce((acc: any, item: any) => item + acc);
+  getCartItems(): number | undefined {
+    const items = this.cartService.getItems();
+    if (items?.length) {
+      return items.map((item: { is_rental: number, quantity: number }) => (item.is_rental === 1) ? 1 : item.quantity).reduce((acc: number, item: number) => item + acc);
     }
+    return undefined;
   }
 }

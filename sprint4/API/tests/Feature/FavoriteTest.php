@@ -90,11 +90,10 @@ class FavoriteTest extends TestCase {
     public function addFavorite(\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection $user): \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model {
         $product = $this->addProduct();
 
-        $favorite = Favorite::factory()->create([
+        return Favorite::factory()->create([
             'user_id' => $user->id,
             'product_id' => $product->id
         ]);
-        return $favorite;
     }
 
     /**
@@ -105,11 +104,10 @@ class FavoriteTest extends TestCase {
         $category = Category::factory()->create();
         $productImage = ProductImage::factory()->create();
 
-        $product = Product::factory()->create([
+        return Product::factory()->create([
             'brand_id' => $brand->id,
             'category_id' => $category->id,
             'product_image_id' => $productImage->id]);
-        return $product;
     }
 
 }

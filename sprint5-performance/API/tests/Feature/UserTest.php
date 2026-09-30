@@ -15,7 +15,13 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 uses(DatabaseMigrations::class);
 
-//covers(UserController::class);
+
+const USERS_CHANGE_PW = '/users/change-password';
+const USERS_FORGOT_PW = '/users/forgot-password';
+const USERS_LOGIN = '/users/login';
+const USER_EMAIL = 'john@doe.example';
+const STREET_1 = 'Street 1';
+const USER_PW = 'Test3r01!';
 
 beforeEach(function () {
     $this->user = User::factory()->create([
@@ -30,7 +36,7 @@ test('user creation', function () {
         'first_name' => 'John',
         'last_name' => 'Doe',
         'address' => [
-            'street' => 'Street 1',
+            'street' => STREET_1,
             'city' => 'City',
             'state' => 'State',
             'country' => 'Country',
@@ -38,8 +44,8 @@ test('user creation', function () {
         ],
         'phone' => '0987654321',
         'dob' => '1970-01-01',
-        'email' => 'john@doe.example',
-        'password' => 'Test3r01!'
+        'email' => USER_EMAIL,
+        'password' => USER_PW
     ];
 
     $response = $this->postJson('/users/register', $userData);
@@ -58,7 +64,7 @@ test('email sent in local environment', function () {
         'first_name' => 'John',
         'last_name' => 'Doe',
         'address' => [
-            'street' => 'Street 1',
+            'street' => STREET_1,
             'city' => 'City',
             'state' => 'State',
             'country' => 'Country',
@@ -66,8 +72,8 @@ test('email sent in local environment', function () {
         ],
         'phone' => '0987654321',
         'dob' => '1970-01-01',
-        'email' => 'john@doe.example',
-        'password' => 'Test3r01!'
+        'email' => USER_EMAIL,
+        'password' => USER_PW
     ];
 
     $this->postJson('/users/register', $userData);
@@ -78,7 +84,7 @@ test('email sent in local environment', function () {
 });
 
 test('successful login', function () {
-    $response = $this->post('/users/login', [
+    $response = $this->post(USERS_LOGIN, [
         'email' => $this->user->email,
         'password' => 'welcome01', // NOSONAR
     ]);
@@ -87,7 +93,7 @@ test('successful login', function () {
 });
 
 test('failed login', function () {
-    $response = $this->post('/users/login', [
+    $response = $this->post(USERS_LOGIN, [
         'email' => $this->user->email,
         'password' => 'wrong-password',
     ]);
@@ -100,7 +106,7 @@ test('locked account', function () {
     $this->user->failed_login_attempts = UserController::MAX_LOGIN_ATTEMPTS;
     $this->user->save();
 
-    $response = $this->post('/users/login', [
+    $response = $this->post(USERS_LOGIN, [
         'email' => $this->user->email,
         'password' => 'welcome01', // NOSONAR
     ]);
@@ -113,7 +119,7 @@ test('disabled account', function () {
     $this->user->enabled = false;
     $this->user->save();
 
-    $response = $this->post('/users/login', [
+    $response = $this->post(USERS_LOGIN, [
         'email' => $this->user->email,
         'password' => 'welcome01', // NOSONAR
     ]);
@@ -234,11 +240,11 @@ test('user can update own information', function () {
         'first_name' => 'UpdatedName',
         'last_name' => 'Doe',
         'address' => [
-            'street' => 'Street 1',
+            'street' => STREET_1,
             'city' => 'City',
             'country' => 'Country'
         ],
-        'email' => 'john@doe.example',
+        'email' => USER_EMAIL,
     ];
 
     // Make a PUT request to update user information
@@ -251,6 +257,49 @@ test('user can update own information', function () {
     $this->assertDatabaseHas('users', [
         'id' => $this->user->id,
         'first_name' => 'UpdatedName'
+    ]);
+});
+
+test('user cannot update own profile with a non-numeric phone', function () {
+    $newData = [
+        'first_name' => 'UpdatedName',
+        'last_name' => 'Doe',
+        'address' => [
+            'street' => STREET_1,
+            'city' => 'City',
+            'country' => 'Country'
+        ],
+        'phone' => 'Test',
+        'email' => USER_EMAIL,
+    ];
+
+    $response = $this->putJson("/users/{$this->user->id}", $newData, $this->headers($this->user));
+
+    $response->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
+        ->assertJsonStructure(['phone']);
+});
+
+test('user can update own profile with a valid phone', function () {
+    $newData = [
+        'first_name' => 'UpdatedName',
+        'last_name' => 'Doe',
+        'address' => [
+            'street' => STREET_1,
+            'city' => 'City',
+            'country' => 'Country'
+        ],
+        'phone' => '+1 (555) 123-4567',
+        'email' => USER_EMAIL,
+    ];
+
+    $response = $this->putJson("/users/{$this->user->id}", $newData, $this->headers($this->user));
+
+    $response->assertStatus(ResponseAlias::HTTP_OK)
+        ->assertExactJson(['success' => true]);
+
+    $this->assertDatabaseHas('users', [
+        'id' => $this->user->id,
+        'phone' => '+1 (555) 123-4567'
     ]);
 });
 
@@ -281,11 +330,11 @@ test('admin can update any user information', function () {
         'first_name' => 'UpdatedByAdmin',
         'last_name' => 'Doe',
         'address' => [
-            'street' => 'Street 1',
+            'street' => STREET_1,
             'city' => 'City',
             'country' => 'Country'
         ],
-        'email' => 'john@doe.example',
+        'email' => USER_EMAIL,
     ];
 
     // Make a PUT request to update the other user's information
@@ -306,11 +355,11 @@ test('user cannot update another users information', function () {
         'first_name' => 'John',
         'last_name' => 'Doe',
         'address' => [
-            'street' => 'Street 1',
+            'street' => STREET_1,
             'city' => 'City',
             'country' => 'Country'
         ],
-        'email' => 'john@doe.example',
+        'email' => USER_EMAIL,
     ];
 
     // Create two users
@@ -319,7 +368,6 @@ test('user cannot update another users information', function () {
     // Make a PUT request to attempt to update the other user's information
     $response = $this->putJson("/users/{$otherUser->id}", $newData, $this->headers($this->user));
 
-    //        dd($response);
     $response->assertStatus(ResponseAlias::HTTP_FORBIDDEN);
 });
 
@@ -372,7 +420,7 @@ test('deletion prevented when user is in use', function () {
 });
 
 test('current password incorrect', function () {
-    $response = $this->postJson('/users/change-password', [
+    $response = $this->postJson(USERS_CHANGE_PW, [
         'current_password' => 'wrongpassword',
         'new_password' => 'newpassword',
         'new_password_confirmation' => 'newpassword'
@@ -386,7 +434,7 @@ test('current password incorrect', function () {
 });
 
 test('new password same as current', function () {
-    $response = $this->postJson('/users/change-password', [
+    $response = $this->postJson(USERS_CHANGE_PW, [
         'current_password' => 'welcome01', // NOSONAR
         'new_password' => 'welcome01', // NOSONAR
         'new_password_confirmation' => 'welcome01' // NOSONAR
@@ -401,7 +449,7 @@ test('new password same as current', function () {
 
 test('new password validation failure', function () {
     // Test with a new password that is too short
-    $response = $this->postJson('/users/change-password', [
+    $response = $this->postJson(USERS_CHANGE_PW, [
         'current_password' => 'welcome01', // NOSONAR
         'new_password' => 'short',
         'new_password_confirmation' => 'short'
@@ -412,10 +460,10 @@ test('new password validation failure', function () {
 });
 
 test('password change success', function () {
-    $response = $this->postJson('/users/change-password', [
+    $response = $this->postJson(USERS_CHANGE_PW, [
         'current_password' => 'welcome01', // NOSONAR
-        'new_password' => 'Test3r01!',
-        'new_password_confirmation' => 'Test3r01!'
+        'new_password' => USER_PW,
+        'new_password_confirmation' => USER_PW
     ], $this->headers($this->user));
 
     $response->assertOk()
@@ -425,7 +473,7 @@ test('password change success', function () {
 test('password reset in local environment', function () {
     $this->app['env'] = 'local';
 
-    $response = $this->postJson('/users/forgot-password', [
+    $response = $this->postJson(USERS_FORGOT_PW, [
         'email' => $this->user->email,
     ]);
 
@@ -440,7 +488,7 @@ test('password reset in local environment', function () {
 test('password reset in non local environment', function () {
     $this->app['env'] = 'testing';
 
-    $response = $this->postJson('/users/forgot-password', [
+    $response = $this->postJson(USERS_FORGOT_PW, [
         'email' => $this->user->email,
     ]);
 
@@ -451,7 +499,7 @@ test('password reset in non local environment', function () {
 });
 
 test('email does not exist', function () {
-    $response = $this->postJson('/users/forgot-password', [
+    $response = $this->postJson(USERS_FORGOT_PW, [
         'email' => 'nonexistent@example.com',
     ]);
 

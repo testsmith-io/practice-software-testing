@@ -20,6 +20,16 @@
     RewriteRule ^ index.php [L]
 </IfModule>
 
+# Server-Sent Events (/sales-stream): never compress this response. gzip/brotli
+# buffer the whole body, which would hold the stream back until it ends instead
+# of delivering events one by one. Apache has no X-Accel-Buffering equivalent, so
+# turning compression off for this path is what keeps it flowing.
+<IfModule mod_setenvif.c>
+    SetEnvIf Request_URI "^/sales-stream" no-gzip=1
+    SetEnvIf Request_URI "^/sales-stream" no-brotli=1
+    SetEnvIf Request_URI "^/sales-stream" dont-vary=1
+</IfModule>
+
 # Enable gzip compression for text-based responses
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE application/javascript

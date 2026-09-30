@@ -23,12 +23,12 @@ import {tap} from "rxjs/operators";
   styleUrls: []
 })
 export class ContactComponent implements OnInit {
-  private formBuilder = inject(FormBuilder);
-  private contactService = inject(ContactService);
-  private auth = inject(CustomerAccountService);
-  public browserDetect = inject(BrowserDetectorService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly contactService = inject(ContactService);
+  private readonly auth = inject(CustomerAccountService);
+  public readonly browserDetect = inject(BrowserDetectorService);
 
-  contact: FormGroup | any;
+  contact: FormGroup;
   submitted: boolean;
   error: string;
   showConfirmation: boolean = false;
@@ -72,8 +72,8 @@ export class ContactComponent implements OnInit {
     return this.contact.controls;
   }
 
-  changeFile(fileEvent: any) {
-    const file: File = fileEvent.target.files[0];
+  changeFile(fileEvent: Event) {
+    const file: File = (fileEvent.target as HTMLInputElement).files![0];
     if (file.type !== 'text/plain') {
       this.contact.controls['attachment'].setErrors({'incorrectType': true});
     }
@@ -104,7 +104,7 @@ export class ContactComponent implements OnInit {
       next: () => {
         this.showConfirmation = true;
       }, error: (err) => {
-        this.error = Object.values(err).join('\r\n');
+        this.error = Object.values(err as Record<string, string[] | string>).map(v => Array.isArray(v) ? v.join('\r\n') : v).join('\r\n');
       }
     });
   }

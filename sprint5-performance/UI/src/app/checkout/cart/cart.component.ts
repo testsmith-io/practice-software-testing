@@ -10,6 +10,7 @@ import {DecimalPipe, NgClass} from "@angular/common";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {ArchwizardModule} from "@y3krulez/angular-archwizard";
 import {FormsModule} from "@angular/forms";
+import {Cart, CartItem} from "../../models/cart";
 
 @Component({
   selector: 'app-cart',
@@ -29,7 +30,7 @@ export class CartComponent implements OnInit {
   private readonly toastr = inject(ToastrService);
   private readonly customerAccountService = inject(CustomerAccountService);
 
-  cart: any;
+  cart: Cart | null = null;
   isLoggedIn: boolean = false;
   discount: number = 0;
   ecoDiscount: number = 0;
@@ -44,18 +45,19 @@ export class CartComponent implements OnInit {
   fetchCartItems(): void {
     this.cartService.getCart().subscribe(cart => {
       this.cart = cart;
+      if (!cart) return;
       this.total = this.calculateTotal(cart.cart_items);
       this.subtotal = this.total;
-      this.discount = this.calculateDiscount(cart.additional_discount_percentage);
+      this.discount = this.calculateDiscount(cart.additional_discount_percentage ?? 0);
       this.ecoDiscount = this.calculateEcoDiscount(cart.cart_items);
     });
   }
 
-  updateQuantity(event: Event, item: any): void {
+  updateQuantity(event: Event, item: CartItem): void {
     let quantity = item.quantity;
 
     // Validate the quantity
-    if (isNaN(quantity) || quantity < 1) {
+    if (Number.isNaN(quantity) || quantity < 1) {
       quantity = 1;
       item.quantity = quantity;
     } else if (quantity > 99) {
@@ -64,11 +66,14 @@ export class CartComponent implements OnInit {
     }
 
     if (quantity >= 1) {
-      this.cartService.replaceQuantity(item.product.id, quantity).subscribe(() => {
-        this.fetchCartItems();
-        this.toastr.success('Product quantity updated.', null, {progressBar: true});
-      }, (response) => {
-        this.toastr.error(response.error.message, null, {progressBar: true});
+      this.cartService.replaceQuantity(item.product.id, quantity).subscribe({
+        next: () => {
+          this.fetchCartItems();
+          this.toastr.success('Product quantity updated.', null, {progressBar: true});
+        },
+        error: (response) => {
+          this.toastr.error(response.error.message, null, {progressBar: true});
+        }
       });
     }
   }
@@ -80,7 +85,7 @@ export class CartComponent implements OnInit {
     });
   }
 
-  private calculateTotal(items: any[]): number {
+  private calculateTotal(items: CartItem[]): number {
     return items.reduce((sum, cartItem) => {
       const quantity = cartItem.quantity || 0;
       const price = cartItem.discount_percentage ? cartItem.discounted_price : cartItem.product?.price || 0;
@@ -98,7 +103,7 @@ export class CartComponent implements OnInit {
     return discountAmount;
   }
 
-  private calculateEcoDiscount(items: any[]): number {
+  private calculateEcoDiscount(items: CartItem[]): number {
     // Count eco-friendly products (CO2 rating A or B)
     let ecoFriendlyCount = 0;
     let totalProductCount = 0;

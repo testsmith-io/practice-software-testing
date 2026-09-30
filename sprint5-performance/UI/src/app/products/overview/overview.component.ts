@@ -14,7 +14,7 @@ import {BrowserDetectorService} from "../../_services/browser-detector.service";
 import {Category} from "../../models/category";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {TranslocoDirective} from "@jsverse/transloco";
-import {NgxSliderModule} from "@angular-slider/ngx-slider";
+import {NgxSliderModule, Options} from "@angular-slider/ngx-slider";
 import {PaginationComponent} from "../../pagination/pagination.component";
 import {NgClass, NgTemplateOutlet} from "@angular/common";
 import {RouterLink} from "@angular/router";
@@ -36,22 +36,22 @@ import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
   styleUrls: ['./overview.component.css']
 })
 export class OverviewComponent implements OnInit {
-  private productService = inject(ProductService);
-  private formBuilder = inject(FormBuilder);
-  private brandService = inject(BrandService);
-  private categoryService = inject(CategoryService);
+  private readonly productService = inject(ProductService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly brandService = inject(BrandService);
+  private readonly categoryService = inject(CategoryService);
   public browserDetect = inject(BrowserDetectorService);
 
   @ViewChildren("checkboxes") checkboxes: QueryList<ElementRef>;
 
-  search: FormGroup | any;
+  search: FormGroup;
   resultState: string = '';
   currentPage: number = 1;
   results: Pagination<Product>;
   itemsToLoad = Array.from({ length: 8 }, (_, i) => ({ id: i }));
   brands: Brand[];
-  categories: any;
-  private brandsFilter: Array<number> = [];
+  categories: Category[];
+  private brandsFilter: Array<string> = [];
   private categoriesFilter: Array<number> = [];
   private sorting: string = '';
   private ecoFriendlyFilter: boolean = false;
@@ -59,7 +59,7 @@ export class OverviewComponent implements OnInit {
   searchQuery: string;
   minPrice: number = 1;
   maxPrice: number = 100;
-  sliderOptions: any = {
+  sliderOptions: Options = {
     floor: 0,
     ceil: 200
   };
@@ -106,12 +106,13 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  filterByBrand(event: any) {
+  filterByBrand(event: Event) {
+    const input = event.target as HTMLInputElement;
     this.resultState = 'filter_started';
-    if (event.target.checked) {
-      this.brandsFilter.push(event.target.value);
+    if (input.checked) {
+      this.brandsFilter.push(input.value);
     } else {
-      this.brandsFilter = this.brandsFilter.filter(item => item !== event.target.value);
+      this.brandsFilter = this.brandsFilter.filter(item => item !== input.value);
     }
     this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0, this.ecoFriendlyFilter).subscribe(res => {
       this.resultState = 'filter_completed';
@@ -125,8 +126,8 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  selectParentWithSubcategories(parentCategory: any, event: any) {
-    const isChecked = event.target.checked;
+  selectParentWithSubcategories(parentCategory: Category, event: Event) {
+    const isChecked = (event.target as HTMLInputElement).checked;
 
     this.categoryCheckboxState.set(parentCategory.id, isChecked);
     this.updateCategoryFilter(parentCategory.id, isChecked);
@@ -172,10 +173,11 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  filterByCategory(event: any, categoryId?: number, parentId?: number) {
+  filterByCategory(event: Event, categoryId?: number, parentId?: number) {
     this.resultState = 'filter_started';
-    const isChecked = event.target.checked;
-    const catId = categoryId || Number(event.target.value);
+    const input = event.target as HTMLInputElement;
+    const isChecked = input.checked;
+    const catId = categoryId || Number(input.value);
 
     this.categoryCheckboxState.set(catId, isChecked);
 
@@ -191,7 +193,7 @@ export class OverviewComponent implements OnInit {
 
       // If this is a parent being checked, check all children
       const category = this.findCategoryById(catId);
-      if (category && category.sub_categories && category.sub_categories.length > 0) {
+      if (category?.sub_categories && category.sub_categories.length > 0) {
         this.updateSubcategories(category, true);
       }
     } else {
@@ -204,7 +206,7 @@ export class OverviewComponent implements OnInit {
 
       // If this is a parent being unchecked, uncheck all children
       const category = this.findCategoryById(catId);
-      if (category && category.sub_categories && category.sub_categories.length > 0) {
+      if (category?.sub_categories && category.sub_categories.length > 0) {
         this.updateSubcategories(category, false);
       }
     }
@@ -257,8 +259,8 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  changeSorting(event: any) {
-    this.sorting = event.target.value;
+  changeSorting(event: Event) {
+    this.sorting = (event.target as HTMLSelectElement).value;
 
     this.resultState = 'sorting_started';
     this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0, this.ecoFriendlyFilter).subscribe(res => {
@@ -272,9 +274,9 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  filterByEcoFriendly(event: any) {
+  filterByEcoFriendly(event: Event) {
     this.resultState = 'filter_started';
-    this.ecoFriendlyFilter = event.target.checked;
+    this.ecoFriendlyFilter = (event.target as HTMLInputElement).checked;
 
     this.productService.getProductsNew(this.searchQuery, this.sorting, this.minPrice.toString(), this.maxPrice.toString(), this.categoriesFilter.toString(), this.brandsFilter.toString(), 0, this.ecoFriendlyFilter).subscribe(res => {
       this.resultState = 'filter_completed';
@@ -324,7 +326,7 @@ export class OverviewComponent implements OnInit {
 
   private checkParentIfAllChildrenChecked(parentId: number) {
     const parent = this.findCategoryById(parentId);
-    if (parent && parent.sub_categories) {
+    if (parent?.sub_categories) {
       const allChildrenChecked = parent.sub_categories.every((child: Category) =>
         this.categoryCheckboxState.get(child.id) === true
       );
@@ -340,7 +342,7 @@ export class OverviewComponent implements OnInit {
 
   private uncheckParentIfNoChildrenChecked(parentId: number) {
     const parent = this.findCategoryById(parentId);
-    if (parent && parent.sub_categories) {
+    if (parent?.sub_categories) {
       const anyChildChecked = parent.sub_categories.some((child: Category) =>
         this.categoryCheckboxState.get(child.id) === true
       );

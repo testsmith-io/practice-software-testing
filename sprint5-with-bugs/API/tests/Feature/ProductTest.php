@@ -17,10 +17,12 @@ use Tests\TestCase;
 class ProductTest extends TestCase {
     use DatabaseMigrations;
 
-    public function testRetrieveProducts() {
-        $product = $this->addProduct();
+    private const PRODUCTS = '/products';
 
-        $response = $this->getJson('/products');
+    public function testRetrieveProducts() {
+        $this->addProduct();
+
+        $response = $this->getJson(self::PRODUCTS);
 
         $response
             ->assertStatus(ResponseAlias::HTTP_OK)
@@ -160,7 +162,7 @@ class ProductTest extends TestCase {
             'is_rental' => false,
             'product_image_id' => $productImage->id];
 
-        $response = $this->postJson('/products', $payload);
+        $response = $this->postJson(self::PRODUCTS, $payload);
 
 //        $response->dump();
 
@@ -176,7 +178,7 @@ class ProductTest extends TestCase {
     }
 
     public function testAddProductRequiredFields() {
-        $response = $this->postJson('/products');
+        $response = $this->postJson(self::PRODUCTS);
 
         $response
             ->assertStatus(ResponseAlias::HTTP_UNPROCESSABLE_ENTITY)
@@ -288,12 +290,11 @@ class ProductTest extends TestCase {
         ]);
         $productImage = ProductImage::factory()->create();
 
-        $product = Product::factory()->create([
+        return Product::factory()->create([
             'brand_id' => $brand->id,
             'category_id' => $category->id,
             'product_image_id' => $productImage->id,
             'name' => 'test-product']);
-        return $product;
     }
 
 }

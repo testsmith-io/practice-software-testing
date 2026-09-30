@@ -11,14 +11,14 @@ import {Image} from "../models/image";
   providedIn: 'root'
 })
 export class ImageService {
-  private httpClient = inject(HttpClient);
-  private apiURL = environment.apiUrl;
+  private readonly httpClient = inject(HttpClient);
+  private readonly apiURL = environment.apiUrl;
 
   getImages(): Observable<Image[]> {
     return this.httpClient.get<Image[]>(this.apiURL + `/images`)
       .pipe(map(this.extractData));
   }
 
-  private extractData = (res: any) => res;
+  private readonly extractData = <T>(res: T): T => res;
 
 }

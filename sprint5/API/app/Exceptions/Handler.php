@@ -37,18 +37,7 @@ class Handler extends ExceptionHandler
         ValidationException::class,
     ];
 
-    /**
-     * Report or log an exception.
-     *
-     * @param Throwable $e
-     * @return void
-     *
-     * @throws Exception|Throwable
-     */
-    public function report(Throwable $e)
-    {
-        parent::report($e);
-    }
+    private const GENERIC_ERROR = 'Something went wrong';
 
     /**
      * Render an exception into an HTTP response.
@@ -122,7 +111,7 @@ class Handler extends ExceptionHandler
             if ($sqlState === '22003' || $sqlState === 'HY000') {
                 // Numeric value out of range
                 return response()->json([
-                    'message' => 'Something went wrong'
+                    'message' => self::GENERIC_ERROR
                 ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
             }
 
@@ -131,13 +120,13 @@ class Handler extends ExceptionHandler
                     'message' => 'Duplicate Entry'
                 ], ResponseAlias::HTTP_CONFLICT),
                 1264 => response()->json([
-                    'message' => 'Something went wrong'
+                    'message' => self::GENERIC_ERROR
                 ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR),
                 1364 => response([
-                    'message' => 'Something went wrong'
+                    'message' => self::GENERIC_ERROR
                 ], ResponseAlias::HTTP_NOT_FOUND),
                 default => response()->json([
-                    'message' => 'Something went wrong'
+                    'message' => self::GENERIC_ERROR
                 ], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR),
             };
         }

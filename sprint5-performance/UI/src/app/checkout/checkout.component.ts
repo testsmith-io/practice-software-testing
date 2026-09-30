@@ -28,14 +28,14 @@ export class CheckoutComponent {
   @ViewChild(AddressComponent) addressComponent: AddressComponent;
 
   canExitStep3 = true;
-  addressData: FormGroup;
+  addressData: any;
 
   handleCusAddressChange(cusAddress: FormGroup) {
     this.addressData = cusAddress.value.address;
     this.canExitStep3 = cusAddress.valid;
   }
 
-  enterAddressStep($event: any) {
+  enterAddressStep($event: unknown) {
     this.addressComponent.setAddress();
   }
 

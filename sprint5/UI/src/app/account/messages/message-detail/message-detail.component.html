@@ -37,7 +37,7 @@
       <div class="card-header">{{ t('pages.my-account.messages.add-reply') }}</div>
       <div class="card-body">
         <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
-          <textarea class="form-control" formControlName="message" data-test="message" id="message" rows="5"></textarea>
+          <textarea class="form-control" formControlName="message" data-test="message" id="message" rows="5" aria-label="Message"></textarea>
           <button type="submit" class="btn btn-primary mt-2" data-test="reply-submit">{{ t('pages.my-account.messages.reply-btn') }}</button>
         </form>
       </div>

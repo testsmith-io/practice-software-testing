@@ -2,6 +2,7 @@
 // See LICENSE for details.
 
 import {Component, inject, OnInit} from '@angular/core';
+import {Subscription} from "rxjs";
 import {CartService} from "../../_services/cart.service";
 import {FavoriteService} from "../../_services/favorite.service";
 import {ActivatedRoute, RouterLink} from "@angular/router";
@@ -40,11 +41,11 @@ export class DetailComponent implements OnInit {
   private readonly titleService = inject(Title);
 
   product: Product;
-  discount_percentage: any;
+  discount_percentage: number;
   quantity: number = 1;
   readonly MAX_QUANTITY = 99;
   relatedProducts: Product[];
-  private sub: any;
+  private sub: Subscription;
   private id: string;
   sliderOptions: Options = {
     floor: 1,
@@ -69,16 +70,16 @@ export class DetailComponent implements OnInit {
   }
 
   minus() {
-    if (this.quantity != 1) {
+    if (this.quantity !== 1) {
       this.quantity = this.quantity - 1;
     }
   }
 
   validateQuantity(event: Event): void {
     const target = event.target as HTMLInputElement;
-    let value = parseInt(target.value, 10);
+    let value = Number.parseInt(target.value, 10);
 
-    if (isNaN(value) || value < 1) {
+    if (Number.isNaN(value) || value < 1) {
       value = 1;
     } else if (value > this.MAX_QUANTITY) {
       value = this.MAX_QUANTITY;
@@ -110,15 +111,18 @@ export class DetailComponent implements OnInit {
     });
   }
 
-  addToFavorites(product: any) {
-    let payload = {product_id: product.id}
-    this.favoriteService.addFavorite(payload).subscribe(() => {
-      this.toastr.success('Product added to your favorites list.', null, {progressBar: true});
-    }, (response) => {
-      if (response.error.message === 'Duplicate Entry') {
-        this.toastr.error('Product already in your favorites list.', null, {progressBar: true});
-      } else if (response.error.message === 'Unauthorized') {
-        this.toastr.error('Unauthorized, can not add product to your favorite list.', null, {progressBar: true});
+  addToFavorites(product: Product) {
+    const payload = {product_id: product.id}
+    this.favoriteService.addFavorite(payload).subscribe({
+      next: () => {
+        this.toastr.success('Product added to your favorites list.', null, {progressBar: true});
+      },
+      error: (response) => {
+        if (response.error.message === 'Duplicate Entry') {
+          this.toastr.error('Product already in your favorites list.', null, {progressBar: true});
+        } else if (response.error.message === 'Unauthorized') {
+          this.toastr.error('Unauthorized, can not add product to your favorite list.', null, {progressBar: true});
+        }
       }
     });
   }
@@ -126,16 +130,19 @@ export class DetailComponent implements OnInit {
   addToCart(product: Product) {
     if (this.quantity >= 1) {
       const price = (product.discount_price) ? product.discount_price : product.price;
-      let item = {
+      const item = {
         'id': product.id,
         'quantity': this.quantity,
         'price': price,
         'total': this.quantity * price
       }
-      this.cartService.addItem(item).subscribe(() => {
-        this.toastr.success('Product added to shopping cart.', null, {progressBar: true});
-      }, (response) => {
-        this.toastr.error(response.error.message, null, {progressBar: true});
+      this.cartService.addItem(item).subscribe({
+        next: () => {
+          this.toastr.success('Product added to shopping cart.', null, {progressBar: true});
+        },
+        error: (response) => {
+          this.toastr.error(response.error.message, null, {progressBar: true});
+        }
       });
     }
   }

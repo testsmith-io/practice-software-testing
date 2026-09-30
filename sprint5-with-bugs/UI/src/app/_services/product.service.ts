@@ -13,8 +13,8 @@ import {Pagination} from "../models/pagination";
   providedIn: 'root'
 })
 export class ProductService {
-  private httpClient = inject(HttpClient);
-  private apiURL = environment.apiUrl;
+  private readonly httpClient = inject(HttpClient);
+  private readonly apiURL = environment.apiUrl;
 
   getProducts(page: any): Observable<Pagination<Product>> {
     let params = new HttpParams().set('page', page);
@@ -126,7 +126,7 @@ export class ProductService {
   }
 
   errorHandler(error: HttpErrorResponse) {
-    return throwError(error.error || "server error.");
+    return throwError(() => error.error || "server error.");
   }
 
   private extractData = (res: any) => res;

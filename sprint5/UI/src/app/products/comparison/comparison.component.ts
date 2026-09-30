@@ -23,8 +23,8 @@ import {FormsModule} from "@angular/forms";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ComparisonComponent implements OnInit {
-  private comparisonService = inject(ComparisonService);
-  private cdr = inject(ChangeDetectorRef);
+  private readonly comparisonService = inject(ComparisonService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   products: ComparisonProduct[] = [];
   loading = true;
@@ -86,6 +86,6 @@ export class ComparisonComponent implements OnInit {
     products.forEach(p => {
       p.specs?.forEach(s => names.add(s.spec_name));
     });
-    return Array.from(names).sort();
+    return Array.from(names).sort((a, b) => a.localeCompare(b));
   }
 }

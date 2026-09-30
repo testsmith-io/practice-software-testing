@@ -38,7 +38,7 @@ export class ContactComponent implements OnInit {
       {
         first_name: ['', []],
         last_name: ['', []],
-        email: ['', [Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+        email: ['', [Validators.pattern(String.raw`^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$`)]],
         attachment: ['', []],
         subject: ['', [Validators.required]],
         message: ['', [Validators.required, Validators.minLength(50)]]
@@ -49,16 +49,19 @@ export class ContactComponent implements OnInit {
   }
 
   getSignedInUser() {
-    this.auth.getDetails().subscribe(res => {
-      this.role = this.auth.getRole();
-      this.name = res.first_name + ' ' + res.last_name;
-    }, () => {
-      this.contact.get('first_name').setValidators(Validators.required);
-      this.contact.get('last_name').setValidators(Validators.required);
-      this.contact.get('email').setValidators(Validators.required);
-      this.contact.controls['first_name'].updateValueAndValidity();
-      this.contact.controls['last_name'].updateValueAndValidity();
-      this.contact.controls['email'].updateValueAndValidity();
+    this.auth.getDetails().subscribe({
+      next: res => {
+        this.role = this.auth.getRole();
+        this.name = res.first_name + ' ' + res.last_name;
+      },
+      error: () => {
+        this.contact.get('first_name').setValidators(Validators.required);
+        this.contact.get('last_name').setValidators(Validators.required);
+        this.contact.get('email').setValidators(Validators.required);
+        this.contact.controls['first_name'].updateValueAndValidity();
+        this.contact.controls['last_name'].updateValueAndValidity();
+        this.contact.controls['email'].updateValueAndValidity();
+      }
     })
   }
 

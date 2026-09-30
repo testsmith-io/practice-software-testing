@@ -14,7 +14,7 @@ import {RouterLink} from "@angular/router";
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnDestroy {
-  items: any;
+  items: number;
   role: string = '';
   name: string = '';
   isLoggedIn: boolean;

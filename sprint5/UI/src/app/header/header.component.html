@@ -99,7 +99,6 @@
         <li class="nav-item" role="menuitem">
           <a class="nav-link" data-test="nav-contact" routerLink="/contact">{{ t('header.menu.contact') }}</a>
         </li>
-        <!--        <li class="nav-item" *ngIf="!isLoggedIn">-->
         @if (!name && role !== 'user') {
           <li class="nav-item" role="menuitem">
             <a class="nav-link" data-test="nav-sign-in" routerLink="/auth/login">{{ t('header.menu.sign-in') }}</a>

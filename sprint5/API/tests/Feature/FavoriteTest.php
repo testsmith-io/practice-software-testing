@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 uses(DatabaseMigrations::class);
 
-//covers(FavoriteController::class);
 
 test('retrieve favorites', function () {
     $user = User::factory()->create();
@@ -96,9 +95,8 @@ function addFavorite(Model|Collection $user): Collection|Model
 {
     $product = addProduct();
 
-    $favorite = Favorite::factory()->create([
+    return Favorite::factory()->create([
         'user_id' => $user->id,
         'product_id' => $product->id
     ]);
-    return $favorite;
 }

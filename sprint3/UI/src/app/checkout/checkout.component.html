@@ -23,7 +23,7 @@
               }</td>
               <td class="col-md-2"></td>
               <td class="col-md-2 align-middle">
-                <input type="number" min="1" max="99" class="form-control quantity" (change)="updateQuantity($event, item)"
+                <input type="number" min="1" max="99" class="form-control quantity" aria-label="Quantity" (change)="updateQuantity($event, item)"
                   value="{{item.quantity}}">
               </td>
               <td class="col-md-2 align-middle">${{item.price | number: '1.2-2'}}</td>
@@ -65,8 +65,8 @@
               data-test="first-name"
               class="form-control"
               id="first_name"
-              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.first_name?.errors }" type="text"
-              placeholder="Your first name *"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('first_name')?.errors }" type="text"
+              aria-label="First name" placeholder="Your first name *"
               value=""/>
           </div>
           @if (f['first_name'].invalid && (f['first_name'].dirty || f['first_name'].touched)) {
@@ -84,8 +84,8 @@
               data-test="last-name"
               class="form-control"
               id="last_name"
-              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.last_name?.errors }" type="text"
-              placeholder="Your last name *"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('last_name')?.errors }" type="text"
+              aria-label="Last name" placeholder="Your last name *"
               value=""/>
           </div>
           @if (f['last_name'].invalid && (f['last_name'].dirty || f['last_name'].touched)) {
@@ -103,8 +103,8 @@
               data-test="email"
               class="form-control"
               id="email"
-              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.email?.errors }"  type="email"
-              placeholder="Your Email *"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('email')?.errors }"  type="email"
+              aria-label="Email" placeholder="Your Email *"
               value=""/>
           </div>
           @if (f['email'].invalid && (f['email'].dirty || f['email'].touched)) {
@@ -128,8 +128,8 @@
               data-test="address"
               class="form-control"
               id="address"
-              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.address?.errors }" type="text"
-              placeholder="Your Address *"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('address')?.errors }" type="text"
+              aria-label="Address" placeholder="Your Address *"
               value=""/>
           </div>
           @if (f['address'].invalid && (f['address'].dirty || f['address'].touched)) {
@@ -147,8 +147,8 @@
               data-test="city"
               class="form-control"
               id="city"
-              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.city?.errors }" type="text"
-              placeholder="Your City *"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('city')?.errors }" type="text"
+              aria-label="City" placeholder="Your City *"
               value=""/>
           </div>
           @if (f['city'].invalid && (f['city'].dirty || f['city'].touched)) {
@@ -176,8 +176,8 @@
               data-test="state"
               class="form-control"
               id="state"
-              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.state?.errors }" type="text"
-              placeholder="Your State *"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('state')?.errors }" type="text"
+              aria-label="State" placeholder="Your State *"
               value=""/>
           </div>
           @if (f['state'].invalid && (f['state'].dirty || f['state'].touched)) {
@@ -195,8 +195,8 @@
               data-test="country"
               class="form-control"
               id="country"
-              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.country?.errors }" type="text"
-              placeholder="Your Country *"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('country')?.errors }" type="text"
+              aria-label="Country" placeholder="Your Country *"
               value=""/>
           </div>
           @if (f['country'].invalid && (f['country'].dirty || f['country'].touched)) {
@@ -214,8 +214,8 @@
               data-test="postcode"
               class="form-control"
               id="postcode"
-              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.postcode?.errors }" type="text"
-              placeholder="Your Postcode *"
+              [ngClass]="{ 'is-invalid': cusAddress && cusAddress.get('postcode')?.errors }" type="text"
+              aria-label="Postcode" placeholder="Your Postcode *"
               value=""/>
           </div>
           @if (f['postcode'].invalid && (f['postcode'].dirty || f['postcode'].touched)) {
@@ -250,7 +250,7 @@
           <h3>Payment</h3>
           <form [formGroup]="cusPayment">
             <div class="input-group mb-3">
-              <select data-test="payment-method" id="payment-method" class="form-select" formControlName="payment_method">
+              <select data-test="payment-method" id="payment-method" aria-label="Payment method" class="form-select" formControlName="payment_method">
                 <option value="" disabled>Choose your payment method</option>
                 @for (method of PaymentMethods; track method) {
                   <option [ngValue]="method">{{method}}</option>
@@ -272,8 +272,8 @@
                 data-test="account-name"
                 class="form-control"
                 id="account-name"
-                [ngClass]="{ 'is-invalid': cusPayment && cusPayment['account_name']?.errors }" type="text"
-                placeholder="Your Account name *"
+                [ngClass]="{ 'is-invalid': cusPayment && cusPayment.get('account_name')?.errors }" type="text"
+                aria-label="Account name" placeholder="Your Account name *"
                 value=""/>
             </div>
             @if (p['account_name'].invalid && (p['account_name'].dirty || p['account_name'].touched)) {
@@ -291,8 +291,8 @@
                 data-test="account-number"
                 class="form-control"
                 id="account-number"
-                [ngClass]="{ 'is-invalid': cusPayment && cusPayment['account_number']?.errors }" type="text"
-                placeholder="Your Account number *"
+                [ngClass]="{ 'is-invalid': cusPayment && cusPayment.get('account_number')?.errors }" type="text"
+                aria-label="Account number" placeholder="Your Account number *"
                 value=""/>
             </div>
             @if (p['account_number'].invalid && (p['account_number'].dirty || p['account_number'].touched)) {

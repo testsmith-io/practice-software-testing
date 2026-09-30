@@ -1217,9 +1217,9 @@
                                     "status_message": {
                                         "description": "A message describing the status",
                                         "type": "string",
+                                        "nullable": true,
                                         "maxLength": 50,
-                                        "minLength": 5,
-                                        "nullable": true
+                                        "minLength": 5
                                     }
                                 },
                                 "type": "object"
@@ -2540,26 +2540,26 @@
                     "name": {
                         "description": "Sender name",
                         "type": "string",
-                        "maxLength": 120,
-                        "example": "John"
+                        "example": "John",
+                        "maxLength": 120
                     },
                     "email": {
                         "description": "Required when not authenticated",
                         "type": "string",
-                        "maxLength": 120,
-                        "example": "john@doe.example"
+                        "example": "john@doe.example",
+                        "maxLength": 120
                     },
                     "subject": {
                         "description": "",
                         "type": "string",
-                        "maxLength": 120,
-                        "example": "website"
+                        "example": "website",
+                        "maxLength": 120
                     },
                     "message": {
                         "description": "",
                         "type": "string",
-                        "maxLength": 250,
-                        "example": "Something is wrong with the website."
+                        "example": "Something is wrong with the website.",
+                        "maxLength": 250
                     }
                 },
                 "type": "object"
@@ -3232,5 +3232,43 @@
                 "scheme": "bearer"
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "Brand",
+            "description": "Brand"
+        },
+        {
+            "name": "Category",
+            "description": "Category"
+        },
+        {
+            "name": "Contact",
+            "description": "Contact"
+        },
+        {
+            "name": "Favorite",
+            "description": "Favorite"
+        },
+        {
+            "name": "Image",
+            "description": "Image"
+        },
+        {
+            "name": "Invoice",
+            "description": "Invoice"
+        },
+        {
+            "name": "Payment",
+            "description": "Payment"
+        },
+        {
+            "name": "Product",
+            "description": "Product"
+        },
+        {
+            "name": "User",
+            "description": "User"
+        }
+    ]
 }

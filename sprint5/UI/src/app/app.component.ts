@@ -8,6 +8,7 @@ import {filter, map} from 'rxjs/operators';
 import {HeaderComponent} from "./header/header.component";
 import {FooterComponent} from "./footer/footer.component";
 import {ChatWidgetComponent} from "./chat-widget/chat-widget.component";
+import {LiveActivityWidgetComponent} from "./live-activity-widget/live-activity-widget.component";
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 import {faGlobe, faLeaf, faShoppingCart} from '@fortawesome/free-solid-svg-icons';
 
@@ -18,7 +19,8 @@ import {faGlobe, faLeaf, faShoppingCart} from '@fortawesome/free-solid-svg-icons
     HeaderComponent,
     RouterOutlet,
     FooterComponent,
-    ChatWidgetComponent
+    ChatWidgetComponent,
+    LiveActivityWidgetComponent
   ],
   styleUrls: []
 })
@@ -26,9 +28,9 @@ export class AppComponent implements OnInit {
   private readonly library = inject(FaIconLibrary);
 
   title = 'Toolshop';
-  private titleService = inject(Title);
-  private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
+  private readonly titleService = inject(Title);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
 
   constructor() {
     this.library.addIcons(faGlobe, faShoppingCart, faLeaf);

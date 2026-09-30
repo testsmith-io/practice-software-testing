@@ -82,8 +82,6 @@ class InvoiceItemSeeder extends Seeder
             shuffle($shuffledProducts);
             $selectedProducts = array_slice($shuffledProducts, 0, $itemsCount);
 
-            $invoiceItems = [];
-
             foreach ($selectedProducts as $product) {
                 $quantity = mt_rand(1, 3);
                 $lineTotal = $product['price'] * $quantity;
