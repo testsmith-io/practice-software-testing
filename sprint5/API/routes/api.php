@@ -66,29 +66,48 @@ Route::get('/status', function () {
 });
 
 Route::post(REFRESH, function () {
-    $exitCode = Artisan::call('migrate:fresh', [
-        '--seed' => true,
-        // Required outside the 'local' environment: migrate:fresh is a
-        // prohibitable command and silently aborts (non-zero exit, no
-        // exception) when run non-interactively in production/staging.
-        '--force' => true,
-    ]);
+    // migrate:fresh --seed is expensive: it drops, recreates and reseeds every
+    // table. Guard it with a single-flight lock so concurrent/looping requests
+    // can't stack multiple runs and exhaust CPU/memory (and so callers don't see
+    // the transient "table doesn't exist" window of an overlapping run).
+    $lock = Cache::lock('refresh-database', 600);
 
-    Artisan::call('invoice:remove');
-
-    // The DB is wiped — flush all caches so we don't serve stale records
-    // pointing to IDs that no longer exist after the seed.
-    Cache::flush();
-
-    if ($exitCode !== 0) {
-        return response()->json(
-            ['result' => 'refresh failed', 'output' => Artisan::output()],
-            500
-        );
+    if (! $lock->get()) {
+        return response()->json(['result' => 'refresh already in progress'], 429);
     }
 
-    return response()->json(['result' => 'refresh done']);
-});
+    try {
+        // A full rebuild can outlast the default web timeout; don't let PHP abort
+        // it mid-migration and leave the schema half-dropped.
+        set_time_limit(0);
+
+        $exitCode = Artisan::call('migrate:fresh', [
+            '--seed' => true,
+            // Required outside the 'local' environment: migrate:fresh is a
+            // prohibitable command and silently aborts (non-zero exit, no
+            // exception) when run non-interactively in production/staging.
+            '--force' => true,
+        ]);
+
+        Artisan::call('invoice:remove');
+
+        // The DB is wiped — flush all caches so we don't serve stale records
+        // pointing to IDs that no longer exist after the seed.
+        Cache::flush();
+
+        if ($exitCode !== 0) {
+            return response()->json(
+                ['result' => 'refresh failed', 'output' => Artisan::output()],
+                500
+            );
+        }
+
+        return response()->json(['result' => 'refresh done']);
+    } finally {
+        // Cache::flush() above also clears the lock key, so this is best-effort.
+        $lock->release();
+    }
+})->middleware('throttle:1,5'); // at most one refresh per 5 minutes
 
 Route::options('/status', $respondOptions);
 Route::options(REFRESH, $respondOptions);
