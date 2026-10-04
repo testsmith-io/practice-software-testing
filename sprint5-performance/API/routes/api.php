@@ -38,14 +38,47 @@ Route::get('/status', function () {
 });
 
 Route::post('/refresh', function () {
-    Artisan::call('migrate:fresh', [
-        '--seed' => null
-    ]);
+    // migrate:fresh --seed is expensive: it drops, recreates and reseeds every
+    // table. Guard it with a single-flight lock so concurrent/looping requests
+    // can't stack multiple runs and exhaust CPU/memory.
+    $lock = Cache::lock('refresh-database', 600);
 
-    Artisan::call('invoice:remove');
+    if (! $lock->get()) {
+        return response()->json(['result' => 'refresh already in progress'], 429);
+    }
 
-    return response()->json(['result' => 'refresh done']);
-});
+    try {
+        // A full rebuild can outlast the default web timeout; don't let PHP abort
+        // it mid-migration and leave the schema half-dropped.
+        set_time_limit(0);
+
+        $exitCode = Artisan::call('migrate:fresh', [
+            '--seed' => true,
+            // Required outside the 'local' environment: migrate:fresh is a
+            // prohibitable command and silently aborts (non-zero exit, no
+            // exception) when run non-interactively in production/staging.
+            '--force' => true,
+        ]);
+
+        Artisan::call('invoice:remove');
+
+        // The DB is wiped — flush all caches so we don't serve stale records
+        // pointing to IDs that no longer exist after the seed.
+        Cache::flush();
+
+        if ($exitCode !== 0) {
+            return response()->json(
+                ['result' => 'refresh failed', 'output' => Artisan::output()],
+                500
+            );
+        }
+
+        return response()->json(['result' => 'refresh done']);
+    } finally {
+        // Cache::flush() above also clears the lock key, so this is best-effort.
+        $lock->release();
+    }
+})->middleware('throttle:1,5'); // at most one refresh per 5 minutes
 
 Route::controller(BrandController::class)->prefix('brands')->group(function () {
     Route::get('', 'index')
