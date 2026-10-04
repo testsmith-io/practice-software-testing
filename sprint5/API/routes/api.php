@@ -66,8 +66,12 @@ Route::get('/status', function () {
 });
 
 Route::post(REFRESH, function () {
-    Artisan::call('migrate:fresh', [
-        '--seed' => null
+    $exitCode = Artisan::call('migrate:fresh', [
+        '--seed' => true,
+        // Required outside the 'local' environment: migrate:fresh is a
+        // prohibitable command and silently aborts (non-zero exit, no
+        // exception) when run non-interactively in production/staging.
+        '--force' => true,
     ]);
 
     Artisan::call('invoice:remove');
@@ -75,6 +79,13 @@ Route::post(REFRESH, function () {
     // The DB is wiped — flush all caches so we don't serve stale records
     // pointing to IDs that no longer exist after the seed.
     Cache::flush();
+
+    if ($exitCode !== 0) {
+        return response()->json(
+            ['result' => 'refresh failed', 'output' => Artisan::output()],
+            500
+        );
+    }
 
     return response()->json(['result' => 'refresh done']);
 });
