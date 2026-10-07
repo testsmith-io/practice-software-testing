@@ -32,7 +32,12 @@ defined('CACHE_HEADERS') || define('CACHE_HEADERS', 'cache.headers:public;max_ag
 
 Route::get('/status', function () {
     return response()->json(['version' => config('app.version'), 'environment' => env('APP_ENV'), 'app_name' => env('APP_NAME')], 200,
-        ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
+        ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE)->withHeaders([
+        'X-CTF-Flag' => 'EXAMPLE',
+        'X-CTF-Vulnerability-Description' => 'This is just an example of how the headers will look like if you found something.',
+        'X-CTF-Sequence' => '0',
+        'X-CTF-Code' => '00000000'
+    ]);;
 });
 
 Route::get('/logs/laravel.log', function () {
@@ -44,7 +49,13 @@ Route::get('/logs/laravel.log', function () {
         $logContents = 'Log file not found.';
     }
 
-    return nl2br(e($logContents));
+    // CTF Flag: Logs exposed vulnerability - add flag to headers
+    return response(nl2br(e($logContents)))->withHeaders([
+        'X-CTF-Flag' => 'API8_2023_SECURITY_MISCONFIGURATION_LOG_EXPOSURE',
+        'X-CTF-Vulnerability-Description' => 'Application logs are publicly accessible via the web. Logs may contain sensitive information like API keys, user data, and internal system details. This endpoint should be disabled or properly secured.',
+        'X-CTF-Sequence' => '10',
+        'X-CTF-Code' => '01101001'
+    ]);
 });
 
 Route::controller(BrandController::class)->prefix('brands')->group(function () {
