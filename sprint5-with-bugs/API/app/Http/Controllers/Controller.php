@@ -127,8 +127,11 @@ class Controller extends BaseController
         if (strcmp(app('request')->headers->get('Accept'), 'text/xml') == 0) {
             return $this->makeXML($data, $status, array_merge($headers, ['Content-Type' => app('request')->headers->get('Accept')]), $xmlRoot);
         } else {
+            // Merge caller-supplied headers (e.g. the X-CTF-* security-testing
+            // flags) into the JSON response.
+            $defaultHeaders = ['Content-Type' => 'application/json'];
             return response()->json($data, $status,
-                ['Content-Type' => 'application/json'], JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+                array_merge($defaultHeaders, $headers), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
         }
     }
 
