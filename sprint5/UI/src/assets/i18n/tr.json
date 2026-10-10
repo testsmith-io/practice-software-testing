@@ -260,6 +260,10 @@
     "demo-purpose": "yazılım testi eğitimi amacıyla kullanılır."
   },
   "pages": {
+    "course-promo": {
+      "message": "Bu uygulamayı test etmeyi sevdin mi? Uygulamalı yazılım test kurslarıyla kendini geliştir.",
+      "cta": "Kursları keşfet"
+    },
     "overview": {
       "filters": "Filtreler",
       "sort": "Sırala",

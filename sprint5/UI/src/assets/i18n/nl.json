@@ -260,6 +260,10 @@
     "demo-purpose": "die wordt gebruikt voor trainingsdoeleinden in softwaretesten."
   },
   "pages": {
+    "course-promo": {
+      "message": "Vond je het testen van deze app leuk? Til je skills naar een hoger niveau met praktische software-testcursussen.",
+      "cta": "Cursussen bekijken"
+    },
     "overview": {
       "filters": "Filter",
       "sort": "Sorteren",

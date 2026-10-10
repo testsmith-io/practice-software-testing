@@ -253,6 +253,10 @@
     "demo-purpose": "used for software testing training purpose."
   },
   "pages": {
+    "course-promo": {
+      "message": "Enjoyed testing this app? Level up with hands-on software testing courses.",
+      "cta": "Explore courses"
+    },
     "overview": {
       "filters": "Filters",
       "sort": "Sort",

@@ -37,7 +37,7 @@ Route::get('/status', function () {
         'X-CTF-Vulnerability-Description' => 'This is just an example of how the headers will look like if you found something.',
         'X-CTF-Sequence' => '0',
         'X-CTF-Code' => '00000000'
-    ]);;
+    ]);
 });
 
 Route::get('/logs/laravel.log', function () {

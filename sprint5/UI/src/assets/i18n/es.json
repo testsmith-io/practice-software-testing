@@ -260,6 +260,10 @@
     "demo-purpose": "utilizada para propósitos de formación en pruebas de software."
   },
   "pages": {
+    "course-promo": {
+      "message": "¿Te gustó probar esta aplicación? Mejora tus habilidades con cursos prácticos de testing de software.",
+      "cta": "Explorar cursos"
+    },
     "overview": {
       "filters": "Filtros",
       "sort": "Ordenar",

@@ -260,6 +260,10 @@
     "demo-purpose": "utilisée à des fins de formation aux tests logiciels."
   },
   "pages": {
+    "course-promo": {
+      "message": "Vous avez aimé tester cette application ? Montez en compétences avec des cours pratiques de test logiciel.",
+      "cta": "Découvrir les cours"
+    },
     "overview": {
       "filters": "Filtres",
       "sort": "Trier",

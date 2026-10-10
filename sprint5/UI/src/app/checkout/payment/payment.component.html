@@ -6,6 +6,14 @@
       <div id="order-confirmation" class="col-md-6 offset-md-3 login-form-1"
            [innerHTML]="t('pages.checkout.payment.confirm', {invoice_number})">
       </div>
+      @if (isProduction) {
+        <div class="col-md-6 offset-md-3 alert alert-info mt-3 text-center" data-test="course-promo">
+          <span>{{ t('pages.course-promo.message') }}</span>
+          <a class="alert-link ms-1"
+             href="https://onlinecourses.testsmith.io/?utm_source=pst&utm_medium=checkout&utm_campaign=app_promo"
+             target="_blank" rel="noopener" data-test="course-promo-link">{{ t('pages.course-promo.cta') }}</a>
+        </div>
+      }
     }
     @if (!paid) {
       <div class="col-md-6 offset-md-3 login-form-1">
