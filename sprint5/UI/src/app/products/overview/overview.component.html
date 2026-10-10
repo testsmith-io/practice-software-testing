@@ -5,6 +5,14 @@
     <img fetchpriority="high" class="img-fluid" alt="Banner" src="../assets/img/barn-2400x1600.avif"/>
   </p>
   <hr class="my-4">
+  @if (isProduction) {
+    <div class="alert alert-info text-center mb-0" data-test="course-promo" *transloco="let t">
+      <span>{{ t('pages.course-promo.message') }}</span>
+      <a class="alert-link ms-1"
+         href="https://onlinecourses.testsmith.io/?utm_source=pst&utm_medium=homepage&utm_campaign=app_promo"
+         target="_blank" rel="noopener" data-test="course-promo-link">{{ t('pages.course-promo.cta') }}</a>
+    </div>
+  }
 </div>
 <div class="row">
 

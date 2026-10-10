@@ -50,6 +50,9 @@ export class PaymentComponent implements OnInit {
   invoice_number: string;
   cart: Cart | null = null;
 
+  // Course promo only renders on the deployed production build (hidden in local/dev).
+  readonly isProduction = environment.production;
+
   ngOnInit(): void {
     this.cusPayment = this.formBuilder.group({
       payment_method: ['', [Validators.required]],

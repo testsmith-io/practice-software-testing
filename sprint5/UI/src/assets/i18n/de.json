@@ -260,6 +260,10 @@
     "demo-purpose": "um Software Test Workshops zu unterstützen."
   },
   "pages": {
+    "course-promo": {
+      "message": "Hat dir das Testen dieser App gefallen? Bring deine Fähigkeiten mit praxisnahen Softwaretesting-Kursen voran.",
+      "cta": "Kurse entdecken"
+    },
     "overview": {
       "filters": "Filter",
       "sort": "Sortieren",

@@ -21,6 +21,7 @@ import {NgxSliderModule, Options} from "@angular-slider/ngx-slider";
 import {TranslocoDirective} from "@jsverse/transloco";
 import {ComparisonService} from "../../_services/comparison.service";
 import {ProductSpecService, SpecNameGroup} from "../../_services/product-spec.service";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-overview',
@@ -49,6 +50,9 @@ export class OverviewComponent implements OnInit, OnDestroy {
   private readonly specService = inject(ProductSpecService);
 
   @ViewChildren("checkboxes") checkboxes: QueryList<ElementRef>;
+
+  // Course promo only renders on the deployed production build (hidden in local/dev).
+  readonly isProduction = environment.production;
 
   search: FormGroup;
   resultState: string = '';
