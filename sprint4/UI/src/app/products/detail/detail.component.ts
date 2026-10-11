@@ -12,6 +12,7 @@ import {Product} from "../../models/product";
 import {ProductService} from "../../_services/product.service";
 import {NgxSliderModule, Options} from "@angular-slider/ngx-slider";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
+import {SeoService} from "../../_services/seo.service";
 
 import {FormsModule} from "@angular/forms";
 
@@ -32,6 +33,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   private readonly toastService = inject(ToastService);
   private readonly productService = inject(ProductService);
   public readonly browserDetect = inject(BrowserDetectorService);
+  private readonly seoService = inject(SeoService);
 
   product: Product;
   quantity: number = 1;
@@ -73,6 +75,7 @@ export class DetailComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(response => {
         this.product = response;
+        this.seoService.setDescription(this.product?.description);
       });
   }
 

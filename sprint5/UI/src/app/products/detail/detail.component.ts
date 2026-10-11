@@ -10,6 +10,7 @@ import {Product} from "../../models/product";
 import DiscountUtil from "../../_helpers/discount.util";
 import {ProductService} from "../../_services/product.service";
 import {BrowserDetectorService} from "../../_services/browser-detector.service";
+import {SeoService} from "../../_services/seo.service";
 import {Title} from "@angular/platform-browser";
 import {NgxSliderModule, Options} from "@angular-slider/ngx-slider";
 import {ToastrService} from "ngx-toastr";
@@ -43,6 +44,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   private readonly productService = inject(ProductService);
   public readonly browserDetect = inject(BrowserDetectorService);
   private readonly titleService = inject(Title);
+  private readonly seoService = inject(SeoService);
   private readonly gaService = inject(GaService);
   public readonly comparisonService = inject(ComparisonService);
   private readonly translocoService = inject(TranslocoService);
@@ -170,6 +172,7 @@ export class DetailComponent implements OnInit, OnDestroy {
 
   private updateTitle(productName: string) {
     this.titleService.setTitle(`${productName} - Practice Software Testing - Toolshop - v5.0`);
+    this.seoService.setDescription(this.product?.description);
   }
 
   private trackProductView(): void {

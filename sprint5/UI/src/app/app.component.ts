@@ -11,6 +11,7 @@ import {ChatWidgetComponent} from "./chat-widget/chat-widget.component";
 import {LiveActivityWidgetComponent} from "./live-activity-widget/live-activity-widget.component";
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 import {faGlobe, faLeaf, faShoppingCart} from '@fortawesome/free-solid-svg-icons';
+import {SeoService} from './_services/seo.service';
 
 @Component({
   selector: 'app-root',
@@ -29,6 +30,7 @@ export class AppComponent implements OnInit {
 
   title = 'Toolshop';
   private readonly titleService = inject(Title);
+  private readonly seoService = inject(SeoService);
   private readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
 
@@ -54,6 +56,8 @@ export class AppComponent implements OnInit {
       const baseTitle = 'Practice Software Testing - Toolshop - v5.0';
       const title = data['title'] ? `${data['title']} - ${baseTitle}` : baseTitle;
       this.titleService.setTitle(title);
+      this.seoService.setDescription(data['description']);
+      this.seoService.setCanonicalUrl(this.router.url);
     });
   }
 

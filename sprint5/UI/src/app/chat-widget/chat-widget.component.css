@@ -300,14 +300,15 @@
 
 /* Responsive */
 @media (max-width: 420px) {
+  /* Keep the toggle button anchored bottom-right so it does not collide with
+     the live-activity button in the bottom-left corner. */
   .chat-widget {
     bottom: 10px;
     right: 10px;
-    left: 10px;
   }
 
   .chat-window {
-    width: 100%;
+    width: calc(100vw - 20px);
     height: calc(100vh - 80px);
     max-height: 600px;
   }

@@ -35,7 +35,9 @@
               "src/mstile-150x150.png",
               "src/safari-pinned-tab.svg",
               "src/assets",
-              "src/.htaccess"
+              "src/.htaccess",
+              "src/robots.txt",
+              "src/sitemap.xml"
             ],
             "styles": [
               "node_modules/@y3krulez/angular-archwizard/styles/archwizard.scss",
