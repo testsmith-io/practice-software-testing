@@ -1,0 +1,11 @@
+# Practice Software Testing - Toolshop
+# A learning platform for software testing / test automation.
+
+User-agent: *
+Allow: /
+Disallow: /account
+Disallow: /admin
+Disallow: /auth
+Disallow: /checkout
+
+Sitemap: https://practicesoftwaretesting.com/sitemap.xml
