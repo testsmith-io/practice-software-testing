@@ -1,23 +1,17 @@
 import { test, expect, Page } from '@playwright/test';
 
-// Casos de Checkout (Flujo B, CB-1 a CB-5).
-// Precondiciones: app en localhost:4200, BD sembrada (migrate:fresh --seed), locale en-US.
 test.use({ locale: 'en-US' });
 
 const CUSTOMER_EMAIL = 'customer@practicesoftwaretesting.com';
-const CUSTOMER_PASSWORD = 'welcome01'; // UserSeeder
+const CUSTOMER_PASSWORD = 'welcome01';
 const PRODUCTO = 'Combination Pliers';
-// Precio sembrado (ProductSeeder). En la UI el cart-total sale sin eco-descuento ($14.15).
 const PRECIO = 14.15;
 const TOTAL_CARRITO = `$${PRECIO.toFixed(2)}`;
 
 const DIRECCION = {
   country: 'CO',
   postal_code: '760001',
-  // † house_number no está en el caso de diseño; el formulario lo exige (address.component.ts)
   house_number: '10',
-  // † street/city/state del caso (Calle 5…, Cali, Valle) no se fuerzan: AddressMatchesCountry
-  // exige que coincidan con el postcode-lookup (faker). Se usan los valores autocompletados.
 };
 
 const TARJETA = {
@@ -27,7 +21,6 @@ const TARJETA = {
   holder: 'Iker Mainguez',
 };
 
-/** Inicia sesión con el usuario semilla y espera llegar a /account. */
 async function iniciarSesion(page: Page) {
   await page.goto('/auth/login');
   await page.getByTestId('email').fill(CUSTOMER_EMAIL);
@@ -40,7 +33,6 @@ async function iniciarSesion(page: Page) {
   await expect(page).toHaveURL(/\/account$/);
 }
 
-/** Abre Combination Pliers y lo agrega al carrito (cantidad 1). */
 async function agregarProductoAlCarrito(page: Page) {
   await page.goto('/');
   await page.getByTestId('product-name').first().waitFor();
@@ -55,11 +47,6 @@ async function agregarProductoAlCarrito(page: Page) {
   await expect(page.getByTestId('cart-quantity')).toHaveText('1');
 }
 
-/**
- * Completa la dirección de facturación con país + CP + house number.
- * Street/city/state los rellena el postcode-lookup; no se sobrescriben
- * (StoreInvoice + AddressMatchesCountry exige consistencia con el lookup).
- */
 async function completarDireccion(page: Page) {
   await page.getByTestId('country').selectOption(DIRECCION.country);
   await page.getByTestId('postal_code').fill(DIRECCION.postal_code);
@@ -74,52 +61,36 @@ async function completarDireccion(page: Page) {
   await page.getByTestId('proceed-3').click();
 }
 
-// ---------------------------------------------------------------------------
-// TC-CHK-001: partición de equivalencia válida (flujo principal / smoke)
-// ---------------------------------------------------------------------------
 test('TC-CHK-001 Compra E2E con tarjeta de crédito', async ({ page }) => {
-  // Paso 1: iniciar sesión
   await iniciarSesion(page);
-
-  // Paso 2: agregar Combination Pliers x1
   await agregarProductoAlCarrito(page);
 
-  // Paso 3: carrito → Proceed to checkout
   await page.getByTestId('nav-cart').click();
   await expect(page.getByTestId('product-title')).toContainText(PRODUCTO);
-  // Total del carrito = precio × cantidad (lo que muestra cart-total en sprint5)
   await expect(page.getByTestId('cart-total')).toHaveText(TOTAL_CARRITO);
   await page.getByTestId('proceed-1').click();
 
-  // Paso 4: identificación (ya autenticado) → Proceed to checkout
   await expect(page.getByTestId('proceed-2')).toBeVisible();
   await page.getByTestId('proceed-2').click();
 
-  // Paso 5: dirección de facturación
   await completarDireccion(page);
 
-  // Paso 6: Credit Card + datos
   await page.getByTestId('payment-method').selectOption('credit-card');
   await page.getByTestId('credit_card_number').fill(TARJETA.number);
   await page.getByTestId('expiration_date').fill(TARJETA.expiration);
   await page.getByTestId('cvv').fill(TARJETA.cvv);
   await page.getByTestId('card_holder_name').fill(TARJETA.holder);
 
-  // Paso 7a: primer clic = Check payment (payment.component.ts: checkPayment)
   const pago = page.waitForResponse(
     (r) => r.url().includes('/payment/check') && r.request().method() === 'POST',
   );
   await page.getByTestId('finish').click();
   const respPago = await pago;
-  // Esperado 3: API de pago exitosa (2xx)
   expect(respPago.status()).toBe(200);
   expect((await respPago.json()).message).toBe('Payment was successful');
-  // Esperado 1: mensaje de pago exitoso
   await expect(page.getByTestId('payment-success-message')).toHaveText('Payment was successful');
-  // Evidencia del caso: captura del mensaje de pago exitoso (antes del 2.º clic)
   await page.screenshot({ path: 'evidence/TC-CHK-001-pago-exitoso.png', fullPage: true });
 
-  // Paso 7b: segundo clic = Confirm + POST /invoices (finishFunction cuando state === true)
   const factura = page.waitForResponse(
     (r) => new URL(r.url()).pathname === '/invoices' && r.request().method() === 'POST',
   );
@@ -133,16 +104,12 @@ test('TC-CHK-001 Compra E2E con tarjeta de crédito', async ({ page }) => {
   const invoiceNumber = body.invoice_number as string;
   expect(invoiceNumber).toMatch(/^INV-/);
 
-  // Esperado 2: se muestra el número de factura
-  // Angular sanitiza el id del <span> dentro de [innerHTML]; el número queda en el texto de #order-confirmation
   await expect(page.locator('#order-confirmation')).toBeVisible();
   await expect(page.locator('#order-confirmation')).toContainText(invoiceNumber);
 
-  // Postcondición: carrito vacío (DELETE + header sin badge)
   await carritoBorrado;
   await expect(page.getByTestId('cart-quantity')).toHaveCount(0);
 
-  // Esperado 4: Mi cuenta > Invoices; total de la fila = total persistido en POST /invoices
   const totalFactura = `$${Number(body.total).toFixed(2)}`;
   await page.getByTestId('nav-menu').click();
   await page.getByTestId('nav-my-invoices').click();
@@ -150,6 +117,5 @@ test('TC-CHK-001 Compra E2E con tarjeta de crédito', async ({ page }) => {
   const fila = page.locator('table tbody tr').filter({ hasText: invoiceNumber });
   await expect(fila).toBeVisible();
   await expect(fila.locator('td').nth(3)).toHaveText(totalFactura);
-  // Criterio del caso: total factura == total del carrito (si diverge, es inconsistencia UI vs API)
-  expect(totalFactura, 'total factura vs cart-total').toBe(TOTAL_CARRITO);
+  expect(totalFactura).toBe(TOTAL_CARRITO);
 });
