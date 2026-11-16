@@ -7,9 +7,9 @@ test.use({ locale: 'en-US' });
 const CUSTOMER_EMAIL = 'customer@practicesoftwaretesting.com';
 const CUSTOMER_PASSWORD = 'welcome01'; // UserSeeder
 const PRODUCTO = 'Combination Pliers';
+// Precio sembrado (ProductSeeder). En la UI el cart-total sale sin eco-descuento ($14.15).
 const PRECIO = 14.15;
-// Motivación de código: InvoiceService / CartComponent — >50% eco (A/B) aplica 5%
-const TOTAL_ESPERADO = Number((PRECIO * 0.95).toFixed(2)); // 13.44
+const TOTAL_CARRITO = `$${PRECIO.toFixed(2)}`;
 
 const DIRECCION = {
   country: 'CO',
@@ -87,8 +87,8 @@ test('TC-CHK-001 Compra E2E con tarjeta de crédito', async ({ page }) => {
   // Paso 3: carrito → Proceed to checkout
   await page.getByTestId('nav-cart').click();
   await expect(page.getByTestId('product-title')).toContainText(PRODUCTO);
-  // Esperado auxiliar: total del carrito con eco-descuento 5%
-  await expect(page.getByTestId('cart-total')).toHaveText(`$${TOTAL_ESPERADO.toFixed(2)}`);
+  // Total del carrito = precio × cantidad (lo que muestra cart-total en sprint5)
+  await expect(page.getByTestId('cart-total')).toHaveText(TOTAL_CARRITO);
   await page.getByTestId('proceed-1').click();
 
   // Paso 4: identificación (ya autenticado) → Proceed to checkout
@@ -143,5 +143,6 @@ test('TC-CHK-001 Compra E2E con tarjeta de crédito', async ({ page }) => {
   await expect(page.getByTestId('page-title')).toHaveText('Invoices');
   const fila = page.locator('table tbody tr').filter({ hasText: invoiceNumber });
   await expect(fila).toBeVisible();
-  await expect(fila.locator('td').nth(3)).toHaveText(`$${TOTAL_ESPERADO.toFixed(2)}`);
+  // Esperado 4: total en Invoices igual al del carrito
+  await expect(fila.locator('td').nth(3)).toHaveText(TOTAL_CARRITO);
 });
