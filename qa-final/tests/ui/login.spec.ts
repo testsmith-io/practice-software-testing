@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { registerUser, PASSWORD, WRONG_PASSWORD } from '../support/api';
+import { registerUser, enableTotp, totpCode, PASSWORD, WRONG_PASSWORD } from '../support/api';
 
 // Casos de Login. Diseño: docs/diseno-catalogo-login.md, secciones 2.4, 2.5 y 3.
 // Cada caso registra su propio usuario por API, así no se bloquean las cuentas sembradas.
@@ -57,4 +57,31 @@ test.describe('TC-LOG-001 Bloqueo de cuenta al pasar el umbral de 3 intentos fal
       }
     });
   }
+});
+
+// ---------------------------------------------------------------------------
+// TC-LOG-002: caja blanca, ramas D6 y D10
+// ---------------------------------------------------------------------------
+test('TC-LOG-002 Un código TOTP inválido se rechaza y el usuario no entra', async ({ page, request }) => {
+  const email = await registerUser(request, 'qa.log002');
+  const secreto = await enableTotp(request, email);
+  await page.goto('/auth/login');
+
+  const codigoLogin = await intentarLogin(page, email, PASSWORD);
+  // Esperado 1: la API responde 200 y aparece el campo TOTP Code
+  expect(codigoLogin).toBe(200);
+  await expect(page.getByTestId('totp-code')).toBeVisible();
+
+  // Código inválido: el válido + 1 (módulo 1 000 000), así nunca coincide por suerte
+  const valido = await totpCode(secreto);
+  const invalido = String((Number(valido) + 1) % 1_000_000).padStart(6, '0');
+  await page.getByTestId('totp-code').fill(invalido);
+  const respuesta = page.waitForResponse((r) => r.url().endsWith('/users/login') && r.request().method() === 'POST');
+  await page.getByTestId('verify-totp').click();
+
+  // Esperado 2: sale "Invalid TOTP" y la API responde 401
+  expect((await respuesta).status()).toBe(401);
+  await expect(page.getByTestId('login-error')).toHaveText('Invalid TOTP');
+  // Esperado 3: la URL sigue en /auth/login
+  await expect(page).toHaveURL(/\/auth\/login$/);
 });
