@@ -60,7 +60,7 @@ test.describe('TC-LOG-001 Bloqueo de cuenta al pasar el umbral de 3 intentos fal
 });
 
 // ---------------------------------------------------------------------------
-// TC-LOG-002: caja blanca, ramas D6 y D10
+// TC-LOG-002 y TC-LOG-003: caja blanca, ramas D6 y D10
 // ---------------------------------------------------------------------------
 test('TC-LOG-002 Un código TOTP inválido se rechaza y el usuario no entra', async ({ page, request }) => {
   const email = await registerUser(request, 'qa.log002');
@@ -84,4 +84,36 @@ test('TC-LOG-002 Un código TOTP inválido se rechaza y el usuario no entra', as
   await expect(page.getByTestId('login-error')).toHaveText('Invalid TOTP');
   // Esperado 3: la URL sigue en /auth/login
   await expect(page).toHaveURL(/\/auth\/login$/);
+});
+
+test('TC-LOG-003 Con contraseña correcta y código TOTP válido el usuario entra a su cuenta', async ({ page, request }) => {
+  const email = await registerUser(request, 'qa.log003');
+  const secreto = await enableTotp(request, email);
+  await page.goto('/auth/login');
+
+  const codigoLogin = await intentarLogin(page, email, PASSWORD);
+  // Esperado 1: aparece el campo TOTP Code (200)
+  expect(codigoLogin).toBe(200);
+  await expect(page.getByTestId('totp-code')).toBeVisible();
+
+  // La UI navega a /account apenas recibe el token, así que la respuesta se captura al pasar por el navegador
+  let capturar!: (v: { status: number; body: Record<string, unknown> }) => void;
+  const verificacion = new Promise<{ status: number; body: Record<string, unknown> }>((res) => (capturar = res));
+  await page.route('**/users/login', async (route) => {
+    const resp = await route.fetch();
+    capturar({ status: resp.status(), body: await resp.json() });
+    await route.fulfill({ response: resp });
+  });
+  await page.getByTestId('totp-code').fill(await totpCode(secreto));
+  await page.getByTestId('verify-totp').click();
+  const { status, body } = await verificacion;
+
+  // Esperado 2: la API responde 200 con un access_token
+  expect(status).toBe(200);
+  expect(body).toHaveProperty('access_token');
+  // Esperado 3: va a /account y sale el título "My account"
+  await expect(page).toHaveURL(/\/account$/);
+  await expect(page.getByTestId('page-title')).toHaveText('My account');
+  // Esperado 4: no sale ningún mensaje de error
+  await expect(page.getByTestId('login-error')).toHaveCount(0);
 });
