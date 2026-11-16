@@ -109,3 +109,24 @@ test.describe('TC-CAT-001 Filtros combinados: categoría, marca, precio y orden'
     });
   }
 });
+
+// ---------------------------------------------------------------------------
+// TC-CAT-002: partición de equivalencia, partición de salida P4 (sección 2.2)
+// ---------------------------------------------------------------------------
+test('TC-CAT-002 Una búsqueda válida sin coincidencias muestra el estado vacío', async ({ page }) => {
+  const consulta = 'xyzqwe';
+  await page.goto('/');
+  await page.getByTestId('product-name').first().waitFor(); // espera a que cargue el catálogo
+
+  await page.getByTestId('search-query').fill(consulta);
+  await page.getByTestId('search-submit').click();
+
+  // Esperado 1: sale "Searched for: xyzqwe"
+  await expect(page.getByTestId('search-caption')).toHaveText(`Searched for: ${consulta}`);
+  // Esperado 2: el contador dice "0 products found for 'xyzqwe'"
+  await expect(page.getByTestId('search-result-count')).toHaveText(`0 products found for '${consulta}'`);
+  // Esperado 3: sale "There are no products found."
+  await expect(page.getByTestId('no-results')).toHaveText('There are no products found.');
+  // Esperado 4: no hay ninguna tarjeta de producto
+  await expect(page.getByTestId('product-name')).toHaveCount(0);
+});
