@@ -123,6 +123,9 @@ test('TC-CHK-001 Compra E2E con tarjeta de crédito', async ({ page }) => {
   const factura = page.waitForResponse(
     (r) => new URL(r.url()).pathname === '/invoices' && r.request().method() === 'POST',
   );
+  const carritoBorrado = page.waitForResponse(
+    (r) => /\/carts\/[^/?]+$/.test(new URL(r.url()).pathname) && r.request().method() === 'DELETE',
+  );
   await page.getByTestId('finish').click();
   const respFactura = await factura;
   expect(respFactura.status()).toBe(201);
@@ -131,18 +134,22 @@ test('TC-CHK-001 Compra E2E con tarjeta de crédito', async ({ page }) => {
   expect(invoiceNumber).toMatch(/^INV-/);
 
   // Esperado 2: se muestra el número de factura
+  // Angular sanitiza el id del <span> dentro de [innerHTML]; el número queda en el texto de #order-confirmation
   await expect(page.locator('#order-confirmation')).toBeVisible();
-  await expect(page.locator('#invoice-number')).toHaveText(invoiceNumber);
+  await expect(page.locator('#order-confirmation')).toContainText(invoiceNumber);
 
-  // Postcondición: carrito vacío
-  await expect(page.getByTestId('cart-quantity')).toHaveText('0');
+  // Postcondición: carrito vacío (DELETE + header sin badge)
+  await carritoBorrado;
+  await expect(page.getByTestId('cart-quantity')).toHaveCount(0);
 
-  // Esperado 4: Mi cuenta > Invoices con total igual al del carrito
+  // Esperado 4: Mi cuenta > Invoices; total de la fila = total persistido en POST /invoices
+  const totalFactura = `$${Number(body.total).toFixed(2)}`;
   await page.getByTestId('nav-menu').click();
   await page.getByTestId('nav-my-invoices').click();
   await expect(page.getByTestId('page-title')).toHaveText('Invoices');
   const fila = page.locator('table tbody tr').filter({ hasText: invoiceNumber });
   await expect(fila).toBeVisible();
-  // Esperado 4: total en Invoices igual al del carrito
-  await expect(fila.locator('td').nth(3)).toHaveText(TOTAL_CARRITO);
+  await expect(fila.locator('td').nth(3)).toHaveText(totalFactura);
+  // Criterio del caso: total factura == total del carrito (si diverge, es inconsistencia UI vs API)
+  expect(totalFactura, 'total factura vs cart-total').toBe(TOTAL_CARRITO);
 });
