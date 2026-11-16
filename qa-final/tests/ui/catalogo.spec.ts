@@ -130,3 +130,38 @@ test('TC-CAT-002 Una búsqueda válida sin coincidencias muestra el estado vací
   // Esperado 4: no hay ninguna tarjeta de producto
   await expect(page.getByTestId('product-name')).toHaveCount(0);
 });
+
+// ---------------------------------------------------------------------------
+// TC-CAT-003: valores límite en el cambio de página, posiciones 8, 9 y 10 (sección 2.3)
+// ---------------------------------------------------------------------------
+test('TC-CAT-003 El orden por precio ascendente se mantiene al pasar de la página 1 a la 2', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('product-name').first().waitFor(); // espera a que cargue el catálogo
+
+  await conRespuesta(page, () => page.getByTestId('sort').selectOption({ label: 'Price (Low - High)' }));
+  await page.getByTestId('product-name').nth(8).filter({ hasText: 'Slip Joint Pliers' }).waitFor(); // espera el reordenamiento
+  const pagina1 = await leerTarjetas(page);
+
+  // Esperado 1: la página 1 tiene 9 productos ordenados; 8.º Cross-head screws $7.99 y 9.º Slip Joint Pliers $9.17
+  expect(pagina1.precios).toHaveLength(9);
+  expect(pagina1.precios).toEqual([...pagina1.precios].sort((a, b) => a - b));
+  expect([pagina1.nombres[7], pagina1.precios[7]]).toEqual(['Cross-head screws', 7.99]);
+  expect([pagina1.nombres[8], pagina1.precios[8]]).toEqual(['Slip Joint Pliers', 9.17]);
+
+  await conRespuesta(page, () => page.getByRole('button', { name: 'Page-2', exact: true }).click());
+  await page.getByTestId('product-name').first().filter({ hasText: 'Measuring Tape' }).waitFor(); // espera la página 2
+  const pagina2 = await leerTarjetas(page);
+
+  // Esperado 2: la página 2 tiene 9 productos ordenados; el 1.º es Measuring Tape $10.07, no menor que $9.17
+  expect(pagina2.precios).toHaveLength(9);
+  expect(pagina2.precios).toEqual([...pagina2.precios].sort((a, b) => a - b));
+  expect([pagina2.nombres[0], pagina2.precios[0]]).toEqual(['Measuring Tape', 10.07]);
+  expect(pagina2.precios[0]).toBeGreaterThanOrEqual(pagina1.precios[8]);
+
+  // Esperado 3: Sort sigue en Price (Low - High)
+  await expect(page.getByTestId('sort')).toHaveValue('price,asc');
+
+  // Esperado 4: existe el botón de página 5 y no el de página 6
+  await expect(page.getByRole('button', { name: 'Page-5', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Page-6', exact: true })).toHaveCount(0);
+});
