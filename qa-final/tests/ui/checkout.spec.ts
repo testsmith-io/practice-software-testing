@@ -16,9 +16,8 @@ const DIRECCION = {
   postal_code: '760001',
   // † house_number no está en el caso de diseño; el formulario lo exige (address.component.ts)
   house_number: '10',
-  street: 'Calle 5 #10-20',
-  city: 'Cali',
-  state: 'Valle',
+  // † street/city/state del caso (Calle 5…, Cali, Valle) no se fuerzan: AddressMatchesCountry
+  // exige que coincidan con el postcode-lookup (faker). Se usan los valores autocompletados.
 };
 
 const TARJETA = {
@@ -57,18 +56,19 @@ async function agregarProductoAlCarrito(page: Page) {
 }
 
 /**
- * Completa la dirección de facturación.
- * El lookup de CP puede sobrescribir street/city/state: se espera a que termine y luego se fijan los datos del caso.
+ * Completa la dirección de facturación con país + CP + house number.
+ * Street/city/state los rellena el postcode-lookup; no se sobrescriben
+ * (StoreInvoice + AddressMatchesCountry exige consistencia con el lookup).
  */
 async function completarDireccion(page: Page) {
   await page.getByTestId('country').selectOption(DIRECCION.country);
   await page.getByTestId('postal_code').fill(DIRECCION.postal_code);
   await page.getByTestId('house_number').fill(DIRECCION.house_number);
-  await expect(page.getByTestId('postcode-lookup-loading')).toHaveCount(0, { timeout: 10_000 });
 
-  await page.getByTestId('street').fill(DIRECCION.street);
-  await page.getByTestId('city').fill(DIRECCION.city);
-  await page.getByTestId('state').fill(DIRECCION.state);
+  await expect(page.getByTestId('postcode-lookup-loading')).toHaveCount(0, { timeout: 10_000 });
+  await expect(page.getByTestId('postcode-lookup-error')).toHaveCount(0);
+  await expect(page.getByTestId('street')).not.toBeEmpty();
+  await expect(page.getByTestId('city')).not.toBeEmpty();
 
   await expect(page.getByTestId('proceed-3')).toBeEnabled();
   await page.getByTestId('proceed-3').click();
