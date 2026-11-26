@@ -3207,6 +3207,9 @@
                     },
                     "403": {
                         "description": "Forbidden"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntityResponse"
                     }
                 }
             }
@@ -3270,6 +3273,18 @@
                                 }
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Invalid or expired token"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "403": {
+                        "description": "Account disabled"
+                    },
+                    "423": {
+                        "description": "Account locked, too many failed attempts"
                     }
                 }
             }
