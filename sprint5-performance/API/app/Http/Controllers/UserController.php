@@ -102,7 +102,8 @@ class UserController extends Controller
      *          response=403,
      *          description="Forbidden"
      *      ),
-     *      @OA\Response(response="409", ref="#/components/responses/DuplicateConflictResponse")
+     *      @OA\Response(response="409", ref="#/components/responses/DuplicateConflictResponse"),
+     *      @OA\Response(response="422", ref="#/components/responses/UnprocessableEntityResponse")
      * )
      */
     public function store(StoreCustomer $request)
@@ -159,7 +160,11 @@ class UserController extends Controller
      *                    )
      *             )
      *         )
-     *     )
+     *     ),
+     *     @OA\Response(response="400", description="Invalid or expired token"),
+     *     @OA\Response(response="401", ref="#/components/responses/UnauthorizedResponse"),
+     *     @OA\Response(response="403", description="Account disabled"),
+     *     @OA\Response(response="423", description="Account locked, too many failed attempts")
      * )
      */
     public function login(Request $request)
